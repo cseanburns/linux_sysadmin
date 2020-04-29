@@ -1,0 +1,7 @@
+franfort, ky
+nashville, tn
+albany, ny
+lansing, mi
+sacramento, ca
+montgomery, al
+jefferson city, mo
