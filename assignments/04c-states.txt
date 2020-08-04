@@ -1,7 +1,0 @@
-lexington, ky, 383780, 1775
-knoxville, tn, 178874, 1791
-new york city, ny, 8623000, 1624
-lansing, mi, 116986, 1859
-san diego, ca, 1420000, 1769
-huntsville, al, 194585, 1809
-columbia, mo, 121717, 1821
