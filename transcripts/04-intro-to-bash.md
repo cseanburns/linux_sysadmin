@@ -1,3 +1,66 @@
+# SSH
+
+To get started, we need to connect to the SISED server. Open up a terminal application, and type:
+
+``ssh username@sised.is.uky.edu``
+
+And then enter your password at the prompt. The password will not be echoed back to you as you type.
+
+If it helps to remember, just think that it's no accident that the above looks like an email address.
+
+# Some Bash Basics
+
+The link at the bottom was used as a reference for this page. Visit that link
+for more info. The author, Ryan Chadwick, has some nice tutorials on Linux.
+
+Text formatted like ``this`` indicates that this is a command line utility. Text following a command and within square brackets indicate parameters for that utility: ``command [parameter]``.
+
+## Navigation
+- ``pwd``
+- ``ls``
+- ``cd``
+- relative paths
+- absolute paths
+
+## File names 
+- everything is a file: ``file``
+- case sensative
+- spaces in names
+    - quoting
+    - backslash
+- hidden files
+
+## Manual pages
+- ``man ls``
+- ``man -k [search term]`` 
+- ``info`` e.g., ``info sed``
+
+## File manipulation
+- ``mkdir``
+- ``rmdir``
+- ``touch``
+- ``cp [source] [destination]``
+- move and/or rename a file: ``mv [source] [destination]``
+- ``rm`` remove a file
+- ``rm -rf`` for removing a directory with content
+
+## Reading Files
+- ``less``
+- ``more``
+- ``cat``
+
+## Writing info
+- ``echo``
+
+## Text editors
+- ``ed``
+- ``vim``
+- ``nano``
+
+Please visit: [https://ryanstutorials.net/linuxtutorial/][1] for additional
+info:
+
+[1]:https://ryanstutorials.net/linuxtutorial/
 # Bash Intermediate
 ## Date: Tue Sep  3 08:38:50 EDT 2019
 
@@ -237,3 +300,212 @@ file is updated, are two separate files:
 
 [1]: http://tldp.org/LDP/abs/html/process-sub.html
 [2]: http://wiki.bash-hackers.org/syntax/expansion/proc_subst
+Today we'll examine and write out the following three scripts:
+
+Script 1 is titled **studentcount.sh**:
+
+```
+#!/bin/bash
+
+# Date: Thu Sep 12 2019
+# Get a count of all members of the sis_students group
+
+totalstudents=$(grep "sis_students" /etc/group | sed -e 's/:/\n/g' | tail -n1 | sed -s 's/,/\n/g' | wc -l)
+printf "\nThere are $totalstudents student accounts.\n"
+printf "\nThey include the following:\n"
+printf "\n"
+grep "sis_students" /etc/group | sed -e 's/:/\n/g' | tail -n1 | sed -e 's/,/\n/g' | pr -T -3
+printf "\n"
+```
+
+Script 2 is titled **facstaffcount.sh**:
+
+```
+#!/bin/bash
+
+# Date: Thu Sep 12 2019
+# Get a count of all members of the sis_students group
+
+totalfacstaff=$(grep "sis_fac_staff" /etc/group | sed -e 's/:/\n/g' | tail -n1 | sed -e 's/,/\n/g' | wc -l)
+printf "\n"
+printf "There are $totalfacstaff faculty or staff accounts.\n"
+printf "\n"
+printf "They include the following:\n"
+grep "sis_fac_staff" /etc/group | sed -e 's/:/\n/g' | tail -n1 | sed -e 's/,/\n/g'
+printf "\n"
+```
+
+Script 3 is titled **emailwho.sh**. The purpose of this script is to
+help us avoid having to remember user account names when sending local
+email via ``s-nail``. The script looks like this:
+
+```
+#!/bin/bash
+
+# Search email addresses to get user account for specific person
+# Date: Thu Sep 12 15:24:07 EDT 2019
+
+# To use:
+# s-nail -s "subject message" $(emailwho.sh [grep string])
+
+lookup="/home/dropbox/addresses.csv"
+
+grep -i "$1" "$lookup" | awk -F, '{ print $3}' | sed 's/"//g'
+```
+
+Importantly, the script searches the file **addresses.csv** that is
+located in **/home/dropbox/**, a directory which you all have access to
+and can use. The **addresses.csv** file looks like this:
+
+```
+"Allen, Brian David","bdal225"
+"Bacon, Joshua R","jrba254"
+"Carpenter, Eric Clark","ecca235"
+"Carter Jr, Terald Ladon","tlca244"
+"Dang, Thang Phuoc","tpda224"
+"Edwards, Jonathan Tyler","jted222"
+"Harrington, Andrew S","asha246"
+"Johnson, Sydney McRae","smjo254"
+"Kane, Cheick ","cka238"
+"Karlen, Chase A","caka236"
+"Kelly, Jalen T","jtke243"
+"Lane, Derek", "drlane"
+"Robinson, Wesley Scott","wsro223"
+"Scholl, Samuel T","stsc227"
+"Trivison, Dominic ","dtr227"
+```
+
+When we are on the *sised* server, we can use the above script with what's
+called **Command Substitution** (search the Bash man page for details). That
+is, we enclose our script command within ``$()`` and Bash will evaluate that
+command first and use the output in the ``s-nail`` command. For example, to
+email Cheick, we can do:
+
+```
+s-nail -s "test message" $(emailwho.sh cheick)
+```
+
+In preparation for additional Bash scripting, read through the links provided
+in the Outline on this page:
+[https://ryanstutorials.net/bash-scripting-tutorial/][1].
+
+[1]:https://ryanstutorials.net/bash-scripting-tutorial/
+
+In preparation for additional Bash scripting, read through the links provided
+in the Outline on this page:
+[https://ryanstutorials.net/bash-scripting-tutorial/][1].
+
+[1]:https://ryanstutorials.net/bash-scripting-tutorial/
+To read about the ``test`` command:
+
+```
+help test | less
+```
+
+This will print "yes" because the second command runs regardless of the output
+of the first command:
+
+```
+[[ -a homework.txt ]] ; echo "yes"
+```
+
+To make the second command run **if and only if** the first command succeeds, we use the Boolean **AND** operator, which is implemented with two ampersands: ``&&``:
+
+```
+[[ -a homework.txt ]] && echo "yes"
+```
+
+Test if one file is newer or older than an other:
+
+```
+[[ file.txt -nt file2.txt ]] && echo "yes"
+```
+
+To test if a number is greater or lesser than another number:
+
+```
+[[ $(expr 4 + 3) -gt $(expr 2 + 1) ]] && echo "yes"
+```
+
+To test the Boolean **NOT** operator, we use two vertical bars: ``||``. This
+will create the file *homework.txt* if and only if the file **does not** exist:
+
+```
+[[ -a homework.txt ]] || touch homework.txt
+```
+# Grep and Regular Expressions 
+
+The file I'll demo for this video is at the bottom.
+
+See ``man grep`` for documentation.
+
+## Whole words, case sensitive by default
+ 
+```
+grep "yesterday" example.txt
+grep "Yesterday" example.txt
+grep -i "yesterday" example.txt
+```
+
+## Character Classes and Bracket Expressions
+
+```
+grep [a-d] example.txt
+grep [1-3] example.txt
+grep [^a-d] example.txt
+grep [^1-3] example.txt
+grep [[:alpha:]] example.txt
+grep [[:lower:]] example.txt
+```
+
+## Anchoring
+
+```
+grep "^I" example.txt
+grep "\"$" example.txt
+```
+
+## Repetition
+
+```
+grep "l*" example.txt
+grep -E "x = [0-9]" example.xt
+grep -E "x = -?[0-9]" example.xt
+# grep 'l{2,}' example.txt doesn't work because Bash needs us to escape
+# the curly braces, so:
+grep 'l\{2,\}' example.txt
+```
+
+## Concatenation
+
+```
+grep [yY] example.txt
+```
+
+## Alternation
+
+```
+grep "six\|done" example.txt
+```
+
+## Example file
+
+```
+Oct 2, 2019
+
+Yesterday was a busy day. I got a lot of work done.
+
+I like to walk.
+
+"What do you get if you multiply six by nine?"
+
+"Six by nine. Forty two."
+
+"That's it. That's all there is."
+
+"I always thought something was fundamentally wrong with the universe."
+
+x = -12345
+
+x = 45678
+```
