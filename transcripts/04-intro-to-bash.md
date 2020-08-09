@@ -358,21 +358,9 @@ located in **/home/dropbox/**, a directory which you all have access to
 and can use. The **addresses.csv** file looks like this:
 
 ```
-"Allen, Brian David","bdal225"
-"Bacon, Joshua R","jrba254"
-"Carpenter, Eric Clark","ecca235"
-"Carter Jr, Terald Ladon","tlca244"
-"Dang, Thang Phuoc","tpda224"
-"Edwards, Jonathan Tyler","jted222"
-"Harrington, Andrew S","asha246"
-"Johnson, Sydney McRae","smjo254"
-"Kane, Cheick ","cka238"
-"Karlen, Chase A","caka236"
-"Kelly, Jalen T","jtke243"
-"Lane, Derek", "drlane"
-"Robinson, Wesley Scott","wsro223"
-"Scholl, Samuel T","stsc227"
-"Trivison, Dominic ","dtr227"
+"LName1, FName1","username1"
+"LName2, FName2","username2"
+"LName3, FName3","username3"
 ```
 
 When we are on the *sised* server, we can use the above script with what's
