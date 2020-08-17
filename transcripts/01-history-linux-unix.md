@@ -1,14 +1,14 @@
-# History of Unix and Linux
+## History of Unix and Linux
 
 ## Location: Bell Labs, part of AT&T (New Jersey), late 1960s through early 1970s
 - Multics, a time sharing system (that is, more than one person could use it at
   once)
 - Multics had issues and was slowly abandoned
-- Ken Thompson found an old PDP-7. Started to write UNIX.
+- [Ken Thompson][1] found an old PDP-7. Started to write UNIX.
 - Also, the ``ed`` text editor was written. Pronounced e.d. but generally
   sounded out.
 - This version of UNIX would later be referred to as *Research Unix*
-- Dennis Ritchie joined him and created the C language (In October 2011, Steve
+- [Dennis Ritchie][2] joined him and created the C language (In October 2011, Steve
   Jobs passed away a week before Dennis Ritchie, but the world mourned Jobs and
   Ritchie's death went largely unnoticed).
 
@@ -30,22 +30,24 @@
   commercial UNIX.
 
 ## Location: Boston, MA (MIT), early 1980s through early 1990s
-- In the late 1970s, Richard Stallman began to notice that software began to
+- In the late 1970s, [Richard Stallman][3] began to notice that software began to
   become commoditized and as a result, hardware vendors were no longer sharing
   the code they developed to make their hardware work. During much of his
   education, software code was not eligible for copyright protection (changed
   under the Copyright Act of 1976).
 - Stallman, who thrived in a *hacker culture* (Wikipedia page on Stallman),
   began to wage battles against this. 
-- Stallman created the GNU project and philosophy (also the creator of GNU
+- Stallman created the [GNU project][4] and philosophy (also the creator of GNU
   Emacs). The project is an attempt to create a completely **free** operating
   system, that was Unix-like, called GNU.
 - By the early 1990s, Stallman and others had developed all the utilities
   needed to have a full operating system, except for a kernel.
+- This includes the Bash shell, written by [Brian Fox][14].
 - The philosophy includes several propositions that define free software:
 
 ### The four freedoms, per GNU Project
-(https://www.gnu.org/philosophy/free-sw.html):
+
+https://www.gnu.org/philosophy/free-sw.html
 
 0. The freedom to run the program as you wish, for any purpose (freedom 0).
 1. The freedom to study how the program works, and change it so it does your
@@ -66,7 +68,7 @@
 - USL ultimately lost the case.
 
 ## The Rise of Linux, Linus Torvalds, University of Helsinki, Finland
-- On August 25, 1991 (28 years ago this last Sunday), Linux Torvalds announced
+- On August 25, 1991 (28 years ago this last Sunday), [Linus][5] [Torvalds][6] announced
   that he had started working on a **free** operating system kernel for the 386
   CPU architecture and for the specific hard drives that he had. This kernel
   would later be named Linux.
@@ -101,14 +103,14 @@
 - NetBSD split into another project: OpenBSD.
 - All three of these BSDs are still in active development. From a bird's eye
   point of view, they each have different foci:
-    - NetBSD focuses on portability (MacOS, NASA)
-    - FreeBSD focuses on wide applicability (WhatsApp, Netflix, PlayStation 4,
+    - [NetBSD][7] focuses on portability (MacOS, NASA)
+    - [FreeBSD][8] focuses on wide applicability (WhatsApp, Netflix, PlayStation 4,
       MacOS)
-    - OpenBSD focuses on security (has contributed a number of very important
+    - [OpenBSD][9] focuses on security (has contributed a number of very important
       applications)
 
-Note: MacOS is based on Darwin, is technically UNIX, and is largely based on
-FreeBSD with some code coming from the other BSDs. 
+Note: MacOS is based on [Darwin][10], is [technically UNIX][11], and is partly
+based on FreeBSD with some code coming from the other BSDs. 
 
 ## What happened with GNU?
 
@@ -117,6 +119,20 @@ FreeBSD with some code coming from the other BSDs.
   GNU Hurd can be downloaded and ran.
 
 ## Licensing
-- GNU
-- BSD
+- [GNU General Public License (GPL)][13]
+- [BSD License][14]
 
+[1]:http://cs.bell-labs.co/who/ken/
+[2]:https://www.bell-labs.com/usr/dmr/www/
+[3]:https://en.wikipedia.org/wiki/Richard_Stallman
+[4]:https://www.gnu.org/gnu/gnu.html
+[5]:https://www.cs.helsinki.fi/u/torvalds/
+[6]:https://www.kernel.org/
+[7]:https://www.netbsd.org/
+[8]:https://www.openbsd.org/
+[9]:https://www.freebsd.org/
+[10]:http://www.puredarwin.org/
+[11]:https://www.opengroup.org/membership/forums/platform/unix
+[12]:https://www.gnu.org/software/hurd/
+[13]:https://opensource.org/licenses/BSD-3-Clause
+[14]:https://opuslogica.com/
