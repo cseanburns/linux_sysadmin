@@ -31,7 +31,7 @@ The GNU Coreutils, or the GNU Core Utilities, "are the basic file, shell and tex
 
 In order to do good work on the command line, it's essential that we become familiar with these utilities that cover a range of commands. 
 
-The online manual is located at [https://www.gnu.org/software/coreutils/manual/coreutils.html][3]. Read through it and practice! Look for examples on the web. The commands below were picked from the above online manual. Their descriptions were copied from the man page. E.g.:
+The online manual is located at [GNU Coreutils Manual][3]. Read through it and practice! Look for examples on the web. The commands below were picked from the above online manual. Their descriptions were copied from the man page. E.g.:
 
 ```
 man -f cat
