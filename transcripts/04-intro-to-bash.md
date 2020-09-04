@@ -164,14 +164,14 @@ grep [a-d] cities.txt # matches any characters in the range a,b,c,d
 grep [^a-d] cities.txt # matches any characters not in the range a,b,c,d
 grep [1-3] cities.txt # matches any numbers in the range 1,2,3
 grep [^1-3] cities.txt # matches any numbers not in the range 1,2,3
-grep [[:alpha:]] example.txt
-grep [^[:alpha:]] example.txt
-grep [[:lower:]] example.txt
-grep [^[:lower:]] example.txt
-grep [[:upper:]] example.txt
-grep [^[:upper:]] example.txt
-grep [[:digit:]] example.txt
-grep [^[:digit:]] example.txt
+grep [[:alpha:]] cities.txt
+grep [^[:alpha:]] cities.txt
+grep [[:lower:]] cities.txt
+grep [^[:lower:]] cities.txt
+grep [[:upper:]] cities.txt
+grep [^[:upper:]] cities.txt
+grep [[:digit:]] cities.txt
+grep [^[:digit:]] cities.txt
 ```
 
 ### Anchoring
@@ -203,7 +203,7 @@ Here we search for either **lexington** or **lansing**. Since they both appear
 in the file, both lines that contain them are returned:
 
 ```
-grep "lexington\|lansing" example.txt
+grep "lexington\|lansing" cities.txt
 ```
 
 This alternation works like a Boolean OR statement, which means it'll return
@@ -213,7 +213,7 @@ one that is, then it'll return the city name that is in the file since at least
 that is True:
 
 ```
-grep "lexington\|london" example.txt
+grep "lexington\|london" cities.txt
 ```
 
 
@@ -318,7 +318,7 @@ to the current time, and if that's successful, because of the double ampersands
 if [[ cities.txt -nt capitals.txt ]] ; then
   echo "cities.txt is newer than capitals.txt"
 else
-  touch cities.txt && echo "cities.txt is now newer than cities.txt"
+  touch cities.txt && echo "cities.txt is now newer than capitals.txt"
 fi
 ```
 
