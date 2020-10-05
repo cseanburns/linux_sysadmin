@@ -4,37 +4,37 @@
 
 ### ARP (Address Resolution Protocol)
 
-*ARP* or Address Resolution Protocol is used to map a network address like the
-IP address to the ethernet address (MAC, Media Access Control address or
-hardware address). Routers use MAC addresses to enable communication inside
-networks (w/in subnets) so that computers within a local area network talk to
-each other. 
+*ARP* or Address Resolution Protocol is a protocol used to map a network
+address like the IP address to the ethernet address (MAC, Media Access Control
+address or hardware address). Routers use MAC addresses to enable communication
+inside networks (w/in subnets) so that computers within a local area network
+talk to each other. But also, networks are designed so that IP addresses must be associated with MAC addresses before systems can communicate over a network.
 
-Here's the ARP output and routing table on my Fedora virtual machine
-(**10.163.34.118**) running on my desktop via a bridged connection:
+In order to get ARP info for a system, we can use the ``ip`` command. Here's
+the ARP output and routing table on my Fedora virtual machine (**10.0.2.15**)
+running on my desktop via a bridged connection:
 
 ```
 $ ip neigh show
-10.163.34.59 dev enp0s3 lladdr fc:4d:d4:39:f8:e8 REACHABLE
-10.163.34.1 dev enp0s3 lladdr 2c:5a:0f:26:2d:c0 REACHABLE
+10.0.2.2 dev enp0s3 lladdr 52:54:00:12:35:02 REACHABLE
+10.0.2.3 dev enp0s3 lladdr 52:54:00:12:35:03 STALE
 $ ip route show
-default via 10.163.34.1 dev enp0s3 proto dhcp metric 100 
-10.163.34.0/24 dev enp0s3 proto kernel scope link src 10.163.34.118 metric 100
+default via 10.0.2.2 dev enp0s3 proto dhcp metric 100 
+10.0.2.0/24 dev enp0s3 proto kernel scope link src 10.0.2.15 metric 100
 ```
 
 Where:
 
-- **10.163.34.59** is the IP address of my physical desktop, and **fc:4d...**
-  is the hardware address for that machine
-- **10.163.34.1** is the first usable address on subnet, and is likely the
-  router; likewise, **2c:5a...** is the hardware address for that router
-- **10.163.34.0** is called the **network address**, which is a unique
+- **10.0.2.15** is the IP address of my fedora server **10.0.2.2** is the first
+- usable address on subnet, and is likely the
+  router; likewise, **52...02** is the hardware address for that virtual router
+- **10.0.2.0** is called the **network address**, which is a unique
   identifier IP address for the subnet
 
 
 In short, for network traffic to get to the internet, the Fedora machine must
 know where the router (another computer) is located on the network and must
-know what hardware address that router's has.
+know what the router's hardware (MAC) address.
 
 ## Internet Layer
 
@@ -54,19 +54,19 @@ default subnet or private addresses ranges include:
 | 192.168.0.0   | 192.168.255.255 |
 
 If you have a router at home, and look at the IP address for your phone or
-computer that's connected to that router, then it will likely have an IP
-address beginning with **192.168.X.X**. This a standard IP address range for
-a home router. The **10.X.X.X** private range can, by design, can assign many
-more IP addresses, which is why you'll see that IP range on bigger networks,
-like UK's.
+computer that's connected to that router, then it will have an address within
+one of the ranges above, and perhaps it will have an IP address beginning with
+**192.168.X.X**. This a standard IP address range for a home router. The
+**10.X.X.X** private range can, by design, assign many more IP addresses, which
+is why you'll see that IP range on bigger networks, like UK's.
 
-At work, my IP address on my desktop is **10.163.34.59/24** (``ip a``), via
-a wired connection (eno1) and my office neighbor's IP address is
-**10.163.34.65/24**. We're both on the same subnet, but if we both, using our
-respective wired connected computers, Google 'what's my IP address', then we
-both get back a public IP address of **128.163.8.25**. This is the same for the
-virtual machine I'm using that's running Fedora 30, connected via a bridge
-network.
+At work, my IP address on my desktop was **10.163.34.59/24** (``ip a``), via
+a wired connection (eno1) and my office neighbor's IP address was
+**10.163.34.65/24**. This shows that we're both on the same subnet, but if we
+both, using our respective wired connected computers, Google 'what's my IP
+address', then we both get back a public IP address of **128.163.8.25**. This
+is the same for the virtual machine I'm using that's running Fedora 30,
+connected via a bridge network.
 
 Thus, w/o any additional information, we know that all traffic coming from our
 computers and going out to the Internet looks like it's coming from the same IP
@@ -74,68 +74,35 @@ address (**128.163.8.25**). And in reverse, all traffic coming from outside our
 network first goes to **128.163.8.25** before it's routed to our respective
 computers.
 
-On the other hand, my laptop, just a few feet away from me, is connected to UK
-wireless (eduroam), and not wired, and has this IP address: **10.47.34.150/16**
-(wlp3s0). You can see there's a different pattern with this IP address. The
-reason it has a different pattern is because this laptop is on an different
-subnet and it's one that allows more hosts to connect to it, which makes sense,
-since we can't necessarily predict how many wireless devices will need to
-connect via it. In the meantime, if I use a browser on this laptop and ask
-Google for my IP address, it tells me: **128.163.238.148**, which shares the
-same IP pattern as the one above.
+On the other hand, my laptop, just a few feet away from me, was, when
+I originally wrote this, connected to UK wireless (eduroam), and not wired, and
+had this IP address: **10.47.34.150/16** (wlp3s0). You can see there's
+a different pattern with this IP address. The reason it has a different pattern
+is because this laptop is on an different subnet and it's one that allows more
+hosts to connect to it, which makes sense, since we can't necessarily predict
+how many wireless devices will need to connect via it. In the meantime, if
+I use a browser on this laptop and ask Google for my IP address, it tells me:
+**128.163.238.148**, which shares the same IP pattern as the one above.
 
 ### Routing
 
-On my virtual machine on my desktop (bridge connection), I can see the network
+On my virtual machine on my desktop (NAT connection), I can see the network
 information for my machine (some output removed / truncated for clarity) with
 the ``ip`` command:
 
 ```
 $ ip a
 2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 08:00:27:d8:4a:29 brd ff:ff:ff:ff:ff:ff
-    inet 10.163.34.118/24 brd 10.163.34.255 scope global dynamic noprefixroute enp0s3
+    link/ether 08:00:27:e1:b5:c8 brd ff:ff:ff:ff:ff:ff
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic noprefixroute enp0s3
        valid_lft 690726sec preferred_lft 690726sec
-    inet6 fe80::7eb3:b403:91d5:c491/64 scope link dadfailed tentative noprefixroute 
+    inet6 fe80::22da:ba7f:d634:2493/64 scope link dadfailed tentative noprefixroute 
        valid_lft forever preferred_lft forever
     inet6 fe80::f084:e92e:908e:2d0c/64 scope link noprefixroute 
        valid_lft forever preferred_lft forever
 ```
 
-Alternatively, we can use ``ifconfig``, but this command is slowly being
-replaced by the ``ip`` command and is not available by default on Ubuntu
-anymore:
-
-```
-$ ifconfig
-enp0s3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 10.163.34.118  netmask 255.255.255.0  broadcast 10.163.34.255
-        inet6 fe80::f084:e92e:908e:2d0c  prefixlen 64  scopeid 0x20<link>
-        inet6 fe80::7eb3:b403:91d5:c491  prefixlen 64  scopeid 0x20<link>
-        ether 08:00:27:d8:4a:29  txqueuelen 1000  (Ethernet)
-        RX packets 23713  bytes 6743999 (6.4 MiB)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 3270  bytes 306122 (298.9 KiB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-```
-
-The above two commands report IP information a little differently. The ``ip a``
-reports that my IP address is:
-
-``inet 10.163.34.118/24``
-
-That information includes both the IP address, the netmask information, and the
-broadcast information. That is, that **/24** is important info.
-
-With ``ifconfig``, the information is reported in three parts:
-
-- inet 10.163.34.118
-- netmask 255.255.255.0
-- broadcast 10.163.34.255
-
-We'll learn how to interpret and derive this information next week.
-
-In the meantime, here's the routing table on my Fedora Bridge VM:
+In the meantime, here's the routing table on my Fedora VM via a bridged connection (not NAT):
 
 ```
 $ ip route
@@ -171,10 +138,10 @@ Here's kind of visual diagram of what this network looks like:
 ### Using the ``ip`` command
 
 The ``ip`` command can do more than simply provide us information about our
-network. We can also use it to turn a connection to the network on or off
-Here's how to disable and then enable a connection on a machine. Note that
-**enp0s3** is the name of my network card/device. You'd have to replace it with
-the name of yours. If it's a wireless card, it should begin with a 'w':
+network. We can also use it to turn a connection to the network on or off (and
+more). Here's how to disable and then enable a connection on a machine. Note
+that **enp0s3** is the name of my network card/device. You'd have to replace it
+with the name of yours. If it's a wireless card, it might begin with a 'w':
 
 ```
 sudo ip link set enp0s3 down
@@ -192,24 +159,33 @@ this is a nice article: [IPv6 subnetting overview][3]
 messages, e.g., to check if a host is down. When we use *ping*, we're using the
 ICMP protocol. Data is not usually sent over this protocol.
 
+```
+ping google.com
+```
+
 ## Transport Layer
 
 *TCP* or Transmission Control Protocol is responsible for the transmission of
 data and for making sure the data arrives at its destination w/o errors.
 
 *UDP* or User Datagram Protocol performs a similar function as TCP, but it
-doesn't error check. If data is lost, then it's lost but it's still sent. UDP
-is useful for conducting voice over internet calls or for streaming video, such
-as through YouTube. In fact, YouTube uses a type of UDP transmission called
-QUIC, which adds a level of encryption to the protocol. QUIC was developed by
-Google and is the main part of the next generation of [HTTP/3][4]. In the near
-future, we'll all be using IP/UDP instead of IP/TCP as the primary method of
-exchanging data over the Internet.
+doesn't error check. If data is lost, then it's lost but is still sent. UDP is
+useful for conducting voice over internet calls or for streaming video, such as
+through YouTube. In fact, YouTube uses a type of UDP transmission called QUIC,
+which adds a level of encryption to the protocol. QUIC was developed by Google
+and is the main part of the next generation of [HTTP/3][4]. In the near future,
+it seems that we'll all be using IP/UDP instead of IP/TCP as the primary method
+of exchanging data over the Internet.
 
 The above protocols, as well as others, each contain [header][5] information.
-The first part of the header contains the source address, then comes the
-destination address, and so forth. Aside from a few other parts, this is the
-primary information in an IP header.
+We can see a lot of this information using the ``tcpdump`` command, which
+requires ``sudo`` or being **root** to use. The first part of the IP header
+contains the source address, then comes the destination address, and so forth.
+Aside from a few other parts, this is the primary information in an IP header.
+
+```
+sudo tcpdump host IP-NUMBER
+```
 
 TCP and UDP headers will contain a bit more information, including port 
 information for both source and destination, sequence (SYN) information for 
@@ -219,8 +195,8 @@ data and error checking if it's TCP.
 A *port* associates a process with a network service. Ports provide a way to
 distinguish and filter all traffic through an IP address. E.g., all traffic
 going to IP address X.X.X.X:80 indicates that this is http traffic for the http
-service. Note that the port info is attached to the end of the IP address via
-a colon. Other common ports include:
+web service. Note that the port info is attached to the end of the IP address
+via a colon. Other common ports include:
 
 - 21: FTP
 - 22: SSH
@@ -262,7 +238,9 @@ Remember, when subnetting, we primarily will work with private IP ranges:
 An IP address is 32 bits (8 x 4), or four bytes, in size. In human readable
 context, it's usually expressed in the following notation style:
 
-**192.168.1.6**
+- **192.168.1.6**
+- **172.16.3.44**
+
 
 Each set of numbers separated by a dot is referred to as an **octet**, and an
 **octet** is a group of 8 **bits**. Eight **bits** also equal a single
@@ -274,10 +252,13 @@ Each set of numbers separated by a dot is referred to as an **octet**, and an
 | byte  | B      |
 | octet | *o*    |
 
-Each bit is represented by either a 1 or a 0. E.g., the above address in binary
-is:
+Each bit is represented by either a 1 or a 0. For example, the first address
+above in binary is:
 
-**11000000.10101000.00000001.00000110**
+- 11000000.10101000.00000001.00000110
+- 192.168.1.6
+
+Or:
 
 - 11000000 = 192
 - 10101000 = 168
@@ -321,14 +302,14 @@ way to convert binary to decimal is to multiple each bit by the power of base
 two and to the power of its placeholder:
 
 ```
-(0 * 2^0) +
-(0 * 2^1) +
-(0 * 2^2) +
-(0 * 2^3) +
-(0 * 2^4) +
-(0 * 2^5) +
-(1 * 2^6) +
-(1 * 2^7) = 192
+(0 * 2^0) = 0 +
+(0 * 2^1) = 0 +
+(0 * 2^2) = 0 +
+(0 * 2^3) = 0 +
+(0 * 2^4) = 0 +
+(0 * 2^5) = 0 +
+(1 * 2^6) = 64 +
+(1 * 2^7) = 128 = 192
 ```
 
 Another way: to convert to binary, simply subtract the numbers from each value.
@@ -341,9 +322,11 @@ of the previous subtraction, then the bit equals 1. So:
 
 Since there is nothing remaining, the rest of the bits equal 0.
 
+**NOTE**: show more examples
+
 ## Subnetting
 
-Subnetting involves dividing a network into two more more subnets. When we
+Subnetting involves dividing a network into two or more subnets. When we
 subnet, we need to first identify the number of hosts we will require on the
 subnet. For starters, let's assume that we need a subnet that can assign at
 most 254 IP addresses to the devices attached to it via the router. 
@@ -356,7 +339,7 @@ exist on a network. Both the **network address** and the **subnet mask** can be
 written as IP addresses, but they cannot be assigned to computers on a network.
 
 Finally, when we have these IPs, we will also know the **broadcast address**.
-This is the last IP address in a subnet range, and also cannot be assigned to
+This is the last IP address in a subnet range, and it cannot be assigned to
 a connected device. The **broadcast address** is used by a router, for
 instance, to communicate to all connected devices, and is comparable to the MAC
 address that we learned about in our discussion on the link layer and ARP.
