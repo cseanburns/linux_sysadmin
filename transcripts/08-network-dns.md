@@ -1,7 +1,7 @@
-# DNS
+# Introduction to DNS, the Domain Name System
 
 ## DNS Intro Videos
-  
+
 Two helpful YouTube videos. The first one provides an overview of the DNS
 system:
 
@@ -11,45 +11,14 @@ The second video illustrates how to use a GUI to create and manage DNS records.
 
 [DNS Records](https://www.youtube.com/watch?v=cwT82ibOM2Q)
 
-## DNS Basics
+Here is a nice intro to recursive DNS:
 
-In order to resolve IP address to domain names, we need some kind of system
-that will map these two identifiers to each other.
-
-## /etc/hosts: The Hosts File
-
-``/etc/hosts``: let's modify this so that our IP address is mapped to the name
-**mywebsite**. To do that, let's add the following line just after the two
-localhost lines:
-
-```bash
-$ sudo nano /etc/hosts
-10.163.36.69 mywebsite
-```
-
-Replace the IP address in the file with your IP address. After adding that
-line, save the file and exit. Let's install the Apache2 web server and then
-enter that IP address in ``w3m`` and test whether it 10.163.36.69 resolves to
-the domain name **mywebsite**:
-
-```bash
-$ sudo dnf updateinfo # update repository information
-$ sudo dnf update # udpate machine before installing new software
-$ sudo dnf install httpd
-$ w3m mywebsite
-```
-
-This is one way to create a kind of intranet that uses actual names instead of
-just IP addresses. Say that you have a home network and one of the computers on
-your network is running a web server. If you assign a static IP to this
-computer using the software on your home router, modify the ``/etc/hosts``
-files on each of those three computers to point to that static IP via a domain
-name, then you have basic DNS system for your intranet.
+[https://www.cloudflare.com/learning/dns/what-is-recursive-dns/](https://www.cloudflare.com/learning/dns/what-is-recursive-dns/)
 
 ## FQDN: The Fully Qualified Domain Name
 
-The structure of the domain name system is just like the structure of the
-UNIX/Linux file hierarchy. It's like an inverted tree.
+The structure of the domain name system is like the structure of the UNIX/Linux
+file hierarchy. It's like an inverted tree.
 
 The fully qualified domain name includes a period at the end of the top-level
 domain. Your browser is able to supply that dot since we often don't use it
@@ -86,13 +55,14 @@ This is not common, but it happens. Read about a few of them here:
 * opennic: [https://www.opennicproject.org/](https://www.opennicproject.org/)
 * alternic: [https://en.wikipedia.org/wiki/AlterNIC](https://en.wikipedia.org/wiki/AlterNIC)
 
-Russia is planning to use it's own alternate internet based on a different DNS
-root system. You can read about in this [IEEE Spectrum
+Russia might be planning to use it's own alternate internet based on
+a different DNS root system. This would essentially create a large, second
+internet. You can read about in this [IEEE Spectrum
 article](https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet).
 
 ## Top level domain (TLD)
 
-Some examples of top level domains that we are all familiar with include:
+Some examples of top level domains that we are familiar with include:
 
 * examples include: .org, .com, .net, .mil, .gov
 * country code: .us, .uk, .ca
@@ -106,8 +76,8 @@ $ wc -l tlds-alpha-by-domain.txt
 1528 tlds-alpha-by-domain.txt
 ```
 
-The first line in that file is a title, and so there are 1527 top level domains
-currently in existence.
+The first line in that file is a title, which means there are 1527 top level
+domains currently in existence.
 
 ## Second-level domain names
 
@@ -122,7 +92,7 @@ When you've purchased (leased) a top and second level domain like
 getfedora.org, you, as an admin, can choose whether you employ third level
 domains. For example: www is a third level domain. If you owned
 ``example.org``, you could also have ``www.example.org`` resolve to a different
-location. Or, ``www.example.org`` could resolve to the second-level domain
+location, or, ``www.example.org`` could resolve to the second-level domain
 itself. That is:
 
 - www.debian.org points to debian.org
@@ -142,15 +112,15 @@ For example, with hostnames that are not ``www``:
 ## Recursive and Forward DNS Servers
 
 Recursive DNS is the first DNS server to be queried in the DNS system. This is
-the resolver server in the first video I showed. This server queries itself
-(recursive) to see if the domain to IP mapping has been cached in its system.
+the resolver server in the first video above. This server queries itself
+(recursive) to check if the domain to IP mapping has been cached in its system.
 
 If it hasn't been cached, then the DNS query is *forwarded* to a root server
 and and so forth down the line.
 
 ## DNS servers
 
-Root name servers contain the root zone file, and also point to the primary DNS
+Root name servers contain the root zone file and point to the primary DNS
 servers. You can read the root files here:
 
 [https://www.iana.org/domains/root/files](https://www.iana.org/domains/root/files)
@@ -163,8 +133,10 @@ servers. You can read the root files here:
 - A:      Address records: provides mapping hostname to IPv4 address
 - AAAA:   Address records: provides mapping hostname to IPv6 address
 
-    $ dig google.com
-    google.com.     IN      A       216.58.192.142
+```
+dig google.com
+google.com.     IN      A       216.58.192.142
+```
 
 - PTR:    Pointer Record: provides mapping form IP Address to Hostname
 - MX:     Mail exchanger: the MX record maps your email server.
@@ -175,38 +147,38 @@ servers. You can read the root files here:
 ## DNS Toolbox
 
 It's important to be able to troubleshoot DNS issues. To do that, we have a few
-utilities available. Here are a few examples and you should read the ``man``
-pages for each one:
+utilities available. Here are examples and you should read the ``man`` pages
+for each one:
 
 ``host``: resolve hostnames to IP Address; or IP addresses to hostnames
 
 ```
-$ man -f host
+man -f host
 host (1) - DNS lookup utility
-$ host uky.edu
-$ host 128.163.111.50
-$ host -t MX uky.edu
-$ host -t MX dropbox.com
-$ host -t MX netflix.com
-$ host -t MX wikipedia.org
+host uky.edu
+host 128.163.35.46
+host -t MX uky.edu
+host -t MX dropbox.com
+host -t MX netflix.com
+host -t MX wikipedia.org
 ```
 
 ``dig``: domain information gopher -- get info on DNS servers
 
 ```
-$ man -f dig
+man -f dig
 dig (1) - DNS lookup utility
-$ dig uky.edu
-$ dig uky.edu MX
-$ dig www.uky.edu CNAME
+dig uky.edu
+dig uky.edu MX
+dig www.uky.edu CNAME
 ```
 
 ``nslookup``: query internet name servers
 
 ```
-$ man -f nslookup
+man -f nslookup
 nslookup (1) - query Internet name servers interactively
-$ nslookup 
+nslookup 
 > uky.edu
 > yahoo.com
 > exit
@@ -215,58 +187,317 @@ $ nslookup
 ``whois``: determine ownership of a domain
 
 ```
-$ man -f whois
+man -f whois
 whois (1) - client for the whois directory services
-$ whois uky.edu | less
+whois uky.edu | less
 ```
 
 ``resolve.conf``: local resolver info; what's your DNS info
 
 ```
-$ man -f  resolv.conf
+man -f  resolv.conf
 resolv.conf (5) - resolver configuration file
-$ cat /etc/resolv.conf
+cat /etc/resolv.conf
+resolvectl status
 ```
 
-## Install Bind9
+# Install DNS Server
 
-In addition to troubleshooting DNS issues, we can also set up a local DNS
-resolver using the **bind9** software:
+We will set up a DNS server and a client machine that uses the DNS server with Virtualbox. I've made some modifications, but overall I'm drawing upon the nice tutorial at [fedora Magazine][2].
 
-```
-$ sudo dnf install bind bind-utils
-$ named -V # check the version number and build options
-$ systemctl status named.service # check if running
-$ sudo systemctl start named.service # start service
-$ sudo systemctl enable named.service # enable on startup
-$ sudo netstat -lnptu | grep named # check what protocols/ports named listens to
-$ sudo rndc status # check the status of the BIND named server ; see ``man rndc`` for more info
-```
+## VirtualBox Setup:
 
-Recursive DNS is on by default in Fedora. Recursive DNS is the opposite of
-Authoritative DNS. With authoritative DNS, others use DNS to resolve our
-domain. We use recursive DNS to resolve other people's domains. Basically, we
-are using this system as a DNS server. Here's a nice explanation:
+In Virtualbox:
 
-[https://dyn.com/labs/dyn-internet-guide/](https://dyn.com/labs/dyn-internet-guide/)
+1. Click on your original Fedora OS install
+2. Click on Settings -> Network
+3. Switch NAT to Bridged
 
-Let's make our DNS resolver our default and turn on and check logging:
+## Update Server
+
+Start and login to Fedora:
+
+Switch to root account and update machine:
 
 ```
-$ systemd-resolve status # check if set
-$ sudo nano /etc/systemd/resolved.conf # open file
-$ # now set DNS to the IP address for localhost; then save and close the file
-DNS=127.0.0.1
-$ sudo systemctl restart systemd-resolved
-$ systemd-resolve status # check if set
-$ sudo rndc querylog # turn on logging
-$ sudo tail /var/log/messages
+sudo su
+dnf -y upgrade
 ```
 
-In addition to setting up a DNS server, we could use **bind9** to create DNS
-records, just as the second video linked to at the top of this lecture
-illustrates via a GUI.
+After finished upgrading, power down the machine:
 
-Here is nice tutorial on setting up a [DNS resolver for Ubuntu](https://www.linuxbabe.com/ubuntu/set-up-local-dns-resolver-ubuntu-18-04-16-04-bind9)
+```
+poweroff
+```
 
-[1]: https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
+## Clone Server
+
+Next, in VirtualBox, clone your Fedora server two times and give them meaningful names. 
+
+1. Call the first one **Fedora-DNS-Server**.
+2. Call the second one **Fedora-DNS-Client**.
+
+## Fedora-DNS-Client
+
+Login to **Fedora-DNS-Client** and get the IP address:
+
+```
+ip a
+192.168.245.72/24
+```
+
+## Fedora-DNS-Server
+### Set up DNS
+
+Keep that machine on but minimize it, and now login to **Fedora-DNS-Server**,
+get the IP address. Write these IP addresses down correctly.
+
+```
+ip a
+192.168.245.73/24
+```
+
+On the **Fedora-DNS-Server** machine, install the DNS server software and utilities:
+
+```
+sudo su
+dnf install -y bind bind-utils
+```
+
+Let's create a new hostname for this server. I'll name my DNS server after
+a Star Trek ship:
+
+```
+hostname
+hostnamectl set-hostname enterprise
+hostname
+```
+
+Now we need to edit some Bind configuration files. First we'll edit
+**named.conf**:
+
+```
+nano /etc/named.conf
+```
+
+Go to this line:
+
+```
+listen-on port 53 { 127.0.0.1; };
+```
+
+Add the IP address for **Fedora-DNS-Server**. It should look like this, but
+you'll have to use the IP address you got from ``ip a`` above, so that it looks
+like this. MAKE SURE you add the semicolons correctly--syntax is very important
+here:
+
+```
+listen-on port 53 { 127.0.0.1; 192.168.254.73; };
+```
+
+Next, go to this line:
+
+```
+allow-query { localhost; };
+```
+
+And add your network info:
+
+```
+allow-query { localhost; 192.168.254.0/24; };
+```
+
+Now we will set up forward and reverse zones. Forward zones map hostnames to IP
+addresses. Reverse zones map IP addresses to hostnames.
+
+Go to this line:
+
+```
+include "/etc/named.rfc1912.zones";
+```
+
+Directly **above that line**, add the following info. Substitute
+**enterprrise** for the hostname you created for your system. Note that the
+second zone is based on the IP address for **Fedora-DNS-Server**, but that it's
+written in reverse and only the first three octets are used. You'll have to do
+the same with the IP address for your **Fedora-DNS-Server**:
+
+```
+zone "dns01.enterprise" IN {
+type master;
+file "forward.enterprise";
+allow-update { none; };
+};
+
+zone "254.168.192.in-addr.arpa" IN {
+type master;
+file "reverse.enterprise";
+allow-update { none; };
+};
+```
+
+Save and exit the file
+
+### Set up zone files
+
+The above modification refers to two zone files that are located in a different
+part of the filesystem. We'll create these zone files:
+
+Creat/open the forward zone file, but substitute **enterprise** for the
+hostname of your **Fedora-DNS-Server**:
+
+```
+nano /var/named/forward.enterprise
+```
+
+And add the following info to that file. Again, you'll have to substitute
+**enterprise** for the hostname of your server. For the IP addresses, you'll
+need to use the IP address for your **Fedora-DNS-Server** and your
+**Fedora-DNS-Client**. My server has the IP address of **192.168.254.73** and
+my client has the address **192.168.254.72**:
+
+```
+$TTL 86400
+@     IN          SOA     dns01.enterprise. root.enterprise. (
+      2011071001  ;Serial
+      3600        ;Refresh
+      1800        ;Retry
+      604800      ;Expire
+      86400       ;Minimum TTL
+)
+; Name Server Info
+@      IN          NS      dns01.enterprise.
+; IP Address for Name Server
+@      IN          A       192.168.254.73
+
+dns01  IN          A       193.168.254.73
+client IN          A       193.168.254.72
+```
+
+Save and exit.
+
+Repeat this process for the reverse zone file:
+
+```
+nano /var/named/reverse.enterprise
+```
+
+And add, again substituting the hostname and IP addresses with your hostname
+and respective IP addresses:
+
+```
+$TTL 86400
+@   IN  SOA     dns01.enterprise. root.enterprise. (
+        2011071001  ;Serial
+        3600        ;Refresh
+        1800        ;Retry
+        604800      ;Expire
+        86400       ;Minimum TTL
+)
+; Name Server Info
+@       IN  NS          dns01.enterprise.
+; Reverse lookup for Name Server
+@       IN  PTR         enterprise.local.
+
+dns01           IN  A   192.168.254.73
+client          IN  A   192.168.245.72
+160     IN  PTR         dns01.enterprise.
+136     IN  PTR         client.enterprise.
+```
+
+Save and exit.
+
+We'll cover SELinux soon, but to take of that now, configure SELinux and fix
+ownership of the files:
+
+```
+chgrp named -R /var/named
+chown -v root:named /etc/named.conf
+restorecon -rv /var/named
+restorecon /etc/named.conf
+```
+
+We'll cover firewalls soon, but for now, update the firewall:
+
+```
+firewall-cmd --add-service=dns --perm
+firewall-cmd --reload
+```
+
+We need to check for syntax errors in the configuration file. If there are no
+errors in the file, lothing will echo back. If there are errors, read the error
+message closely and fix the file after opening it in ``nano``:
+
+```
+named-checkconf /etc/named.conf
+```
+
+Likewise, check for errors in the zone files:
+
+```
+named-checkzone dns01.enterprise /var/named/reverse.enterprise
+named-checkzone dns01.enterprise /var/named/forward.enterprise
+```
+
+Enable and start the DNS server:
+
+```
+systemctl enable named
+systemctl start named
+```
+
+Edit the **resolv.conf** (see ``man resolv.conf``) and add the IP address for
+the server:
+
+```
+nano /etc/resolv.conf
+nameserver 192.168.254.73
+```
+
+If there are nother nameservers listed in that file, comment them out by prepending the lines with a pound sign: ``#``.
+
+We can now check if our DNS server is working by examining the output of the
+``dig`` command:
+
+```
+dig fedoramazine.org
+```
+
+## On the client machine
+
+They are likely already installed, but in case it's not, install the Bind
+utilities only:
+
+```
+sudo dnf install -y bind-utils
+```
+
+Edit **resolv.conf** so that nameserver points to the IP address of your **Fedora-DNS-Server**:
+
+```
+sudo nano /etc/resolv.conf
+nameserver 192.168.254.73
+```
+
+Examine output of the ``dig`` command, which should show that it's querying 192.168.254.73 for DNS:
+
+```
+dig fedoramagazine.org
+```
+
+We can also check the reverse DNS lookup:
+
+```
+dig 35.196.109.67
+```
+
+## Make Permanent
+
+As the [fedora Magazine] article points out, the **/etc/resolv.conf** file will get reset upon reboot. To make sure the file doesn't get altered, you can use the ``chattr`` command on both the server and client machines (and any other client machines). So run this command on both virtual machines:
+
+```
+chattr +i /etc/resolv.conf
+```
+
+[1]:https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
+[2]:https://fedoramagazine.org/how-to-setup-a-dns-server-with-bind/
