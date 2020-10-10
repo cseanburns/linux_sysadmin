@@ -493,7 +493,10 @@ dig 35.196.109.67
 
 ## Make Permanent
 
-As the [fedora Magazine] article points out, the **/etc/resolv.conf** file will get reset upon reboot. To make sure the file doesn't get altered, you can use the ``chattr`` command on both the server and client machines (and any other client machines). So run this command on both virtual machines:
+As the [fedora Magazine][2] article points out, the **/etc/resolv.conf** file
+will get reset upon reboot. To make sure the file doesn't get altered, you can
+use the ``chattr`` command on both the server and client machines (and any
+other client machines). So run this command on both virtual machines:
 
 ```
 chattr +i /etc/resolv.conf
