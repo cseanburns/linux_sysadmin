@@ -499,7 +499,7 @@ use the ``chattr`` command on both the server and client machines (and any
 other client machines). So run this command on both virtual machines:
 
 ```
-chattr +i /etc/resolv.conf
+sudo chattr +i /etc/resolv.conf
 ```
 
 [1]:https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
