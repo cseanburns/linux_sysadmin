@@ -1,20 +1,41 @@
 # Local Security: ``chroot`` example
 
+``chroot`` is a technology that can be used to change the "apparent" root ``/``
+directory for a user or a process. A user or process that is confined to the
+``chroot`` cannot see or access the rest of the file system and will have
+limited access to the binaries (executables/apps/utilities) on the system. From
+its ``man`` page:
+
+```
+chroot (8) - run command or interactive shell with special root directory
+```
+
+It has some useful use cases for security, although it is not entirely safe
+from tampering. I've read that some people have used ``chroot`` for DNS
+servers, for example.
+
+``chroot`` is also the conceptual basis for some kinds of virtualization
+technologies that are common today. In this sense, it's been used to control
+and provide a stable developmental environment for devops like work.
+
+
 ## ``chroot`` a current user
+
+In this tutorial, we are going to create a ``chroot`` for a human user account.
 
 **Step 1**: Let's create a user first. We're imagining that we have a
 preexisting user and that we need to ``chroot`` that user going forward.
 
 ```
-$ sudo su
-# useradd -m -U -s /bin/bash omicron
-# passwd omicron
+sudo su
+useradd -m -U -s /bin/bash omicron
+passwd omicron
 ```
 
 **Step 2**: We'll ``chroot`` *omicron* in a new directory ``/var/chroot``.
 
 ```
-# mkdir /var/chroot
+mkdir /var/chroot
 ```
 
 **Step 3**: Set up available binaries for the user. We'll only allow ``bash``
@@ -22,47 +43,48 @@ for now.  To do that, we'll create a ``bin/`` directory, and copy bash to that
 directory.
 
 ```
-# mkdir /var/chroot/bin
-# which bash
+mkdir /var/chroot/bin
+which bash
 /usr/bin/bash
-# cp /usr/bin/bash /var/chroot/bin/
+cp /usr/bin/bash /var/chroot/bin/
 ```
 
 **Step 4**: Copy the libraries for the bash binary.
 
 ```
-# ldd /usr/bin/bash
-## comment: because we see that these are all lib64
-# mkdir /var/chroot/lib64       
-# cp /lib64/libtinfo.so.6 lib64/
-# cp /lib64/libdl.so.2 lib64/
-# cp /lib64/libc.so.6 lib64/
-# cp /lib64/ld-linux-x86-64.so.2 lib64/
+# Identify libraries needed by Bash
+ldd /usr/bin/bash
+## comment: name it lib64 since these are all lib64 libraries
+mkdir /var/chroot/lib64       
+cp /lib64/libtinfo.so.6 /var/chroot/lib64/
+cp /lib64/libdl.so.2 /var/chroot/lib64/
+cp /lib64/libc.so.6 /var/chroot/lib64/
+cp /lib64/ld-linux-x86-64.so.2 /var/chroot/lib64/
 ```
 
 **Step 5**: Create and test the ``chroot``
 
 ```
-# chroot /var/chroot/
-bash-4.4# ls
+chroot /var/chroot/
+bash-5.0# ls
 bash: ls: command not found
-bash-4.4# help
-bash-4.4# dirs
-bash-4.4# cd bin/
-bash-4.4# dirs
-bash-4.4# cd ../lib64/
-bash-4.4# dirs
-bash-4.4# cd ..
-bash-4.4# exit
+bash-5.0# help
+bash-5.0# dirs
+bash-5.0# cd bin/
+bash-5.0# dirs
+bash-5.0# cd ../lib64/
+bash-5.0# dirs
+bash-5.0# cd ..
+bash-5.0# exit
 ```
 
 **Step 6**: Create a new group called *chrootjail*. We can add users to this
 group that we want to jail. Instructions are based on [linuxconfig.org][1].
 
 ```
-# groupadd chrootjail
-# usermod -a -G chrootjail omicron
-# groups omicron
+groupadd chrootjail
+usermod -a -G chrootjail omicron
+groups omicron
 ```
 
 **Step 7**: Edit ``/etc/ssh/sshd_config`` to direct users in ``chrootjail``
@@ -77,151 +99,142 @@ Match group chrootjail
 
 Exit ``nano``.
 
+Restart ``ssh``:
+
+```
+systemctl restart sshd
+```
+
+The logout of the server altogether:
+
+```
+exit
+```
 
 **Step 8**: Test ``ssh``.
 
-Before restarting ssh, let's log out of the server and ``ssh``
-back in as the user *omicron*:
+Connect to the Fedora server via ``ssh`` as the user *omicron*:
 
 ```
-# exit
-$ exit
-$ ssh omicron@relevant_ip_address
-$ exit
+ssh omicron@relevant_ip_address
+-bash-5.0$ ls
+-bash: ls: command not found
+exit
 ```
 
-**Step 9**: Restart ssh and test ``chroot``.
-
-That works as expected. Now ssh back in as your main user. Become root ,
-restart ``ssh``, exit, and then ``ssh`` back in as *omicron*. The user should
-be in the ``chroot`` directory.
-
-```
-$ exit
-$ sudo su
-# systemctl reload sshd
-# exit
-$ exit
-```
+That works as expected. The user *omicron* is now restricted to a special
+directory and has limited access to the system or to any utilities on that
+system.
 
 ## Exercise
 
-Copy the libraries for the ``ls`` command so that the user *omicron* and use
-``ls`` after logging into their account.
+By using the ``ldd`` command, you can add additional binaries for this user. As
+an exercise, use the ``ldd`` command to locate the libraries for the ``nano``
+editor, and make ``nano`` available to the user *omicron* in the chrooted
+directory. 
+
 
 [1]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins
+
 # Linux Firewalls
 
-Netfilter is a suite of applications that help manage how packets flow into and
-out of a server or internet connected device. Included within **netfilter** is
-an application called ``iptables``, which is one of the main firewall
-applications on many Linux distributions.
+Netfilter is a part of the kernel that includes a suite of applications that
+help manage how packets flow in and out of a server or internet connected
+device. ``iptables`` is the command line user interface to **netfilter** and is
+one of the main firewall applications on many Linux distributions.
 
 Fedora/RedHat offers a more user friendly interface to ``iptables`` called
 ``firewall-cmd`` that I'll discuss below. Ubuntu offers its own more user
-firendly interface called ``ufw``. In this lecture, I'll discuss ``iptables``
-and ``firewall-cmd`` and a little bit of ``ufw``.
+friendly interface called ``ufw``. In this lecture, I'll discuss ``iptables``
+and ``firewall-cmd``.
 
 ## iptables 
 
-Five predifined tables (*operations*) and chains.
+There are five predefined tables (*operations*) and five chains that come with
+``iptables``. Tables define the kinds of operations that you can use to control
+the firewall and therefore the packets that come in and out of the system or
+through a system. The *filter* and *nat* tables are the most commonly used
+ones.
 
-Tables include:
+The five *chains* are lists of rules that act on packets flowing through the
+system. Finally, there are also *targets*. These are the actions to be
+performed on packets. The main targets include **ACCEPT**, **DROP**, and
+**RETURN**.
 
+From ``man iptable``, the tables and respective chains include:
+
+- filter (the default table)
+    - INPUT: for packets destined to local sockets
+    - FORWARD: for packets being routed through the box
+    - OUTPUT: for locally-generated packets
 - nat
+    - PREROUTING: for altering packets as soon as they come in
+    - INPUT: for altering packets destined for local sockets
+    - OUTPUT: for altering locally-generated packets
+    - POSTROUTING: for altering packets as they are about to go out
 - mangle
+    - PREROUTING
+    - OUTPUT
+    - INPUT
+    - FORWARD
+    - POSTROUTING
 - raw
-- filter
+    - PREROUTING
+    - OUTPUT
 - security
+    - INPUT
+    - OUTPUT
+    - FORWARD
 
-*chain*: a list of rules that act on a packet flowing through the system.
 
-Chains include:
+We'll cover the filter tables and the nat tables.
 
-- prerouting
-- forward
-- postrouting
-- input
-- output
+## Usage
 
-We'll cover the filter tables and the nat tables. As applied:
-
-- filter table, the default table
-  - forward: for packets destined to be routed through local
-  - input: for packets destined to local
-  - output: for locally generated packets
-- nat table, when a packet that creates a new connection is encountered
-  - prerouting: for altering packets as soon as they come in
-  - postrouting: for altering packets as they are about to go out
-  - output: for altering locally-generated packets before routing
-
-## usage
+First, we can look at the default parameters for the *filter* table. You need
+to be root to run this commands, or use ``sudo``:
 
 ```
-# iptables -L -v | less
-# iptables -L | grep policy
+sudo su
+# -L: List all rules in the selected chain;
+# if no chain is selected, then list all chains; and,
+# -v: be verbose
+iptables -L -v | less
+iptables -L | grep policy
 ```
-
-Let's change the default policy for the FORWARD chain:
-
-```
-# iptables --policy FORWARD DROP
-# iptables -L | grep policy
-```
-
-1. To locate the IP address for FB.
-2. To locate the CIDR value or IP range for FB.
-3. To block the IP range for FB.
-
-```
-$ host www.facebook.com
-$ whois 157.240.18.35 | grep CIDR
-$ sudo su
-# iptables -A OUTPUT -p tcp -d 157.240.0.0/16 -j DROP
-# iptables -A INPUT -p tcp -d 157.240.0.0/16 -j DROP
-# w3m facebook.com
-# ping facebook.com
-```
-
-1. since table isn't added, this uses the default table, which is the filter
-   table
-2. -A OUTPUT: append to table 
-3. -p tcp: the protocol for the rule
-4. -d IP address: destination address
-5. -j DROP: specifies the target of the rule -- what to do if the packet
-   matches. In this case, the target is to drop the package. Usual options
-   include:
-
-- ACCEPT : allow the connection
-- DROP   : drop and ignore the connection 
-- REJECT : do not allow the connect and return error to source
 
 ## Allow connections only from subnet
 
+We can change the firewall to only allow communication on a subnet. Of course,
+in order to do this, we need the subnet **Network ID** and the **CIDR** number:
+
 ```
-# comment: first, set policy to drop all incoming
-$ sudo iptables --policy INPUT DROP
-# comment: second, set policy to drop all forwarding 
-$ sudo iptables --policy FORWARD DROP
-# comment: thir , set policy to drop all outgoing 
-$ sudo iptables --policy OUTPUT DROP
+ip a
+```
+
+Now that we have the Network ID and the CIDR number, we can set the firewall:
+
+```
+# comment: first, set policy to drop all incoming, forwarding, and outgoing packets; this means we're starting from a baseline
+iptables --policy INPUT DROP
+iptables --policy FORWARD DROP
+iptables --policy OUTPUT DROP
+
 # comment: review new policies for the above chains
-$ sudo iptables -L | grep policy
+iptables -L | grep policy
+
 # comment: now accept only input, forwarding, and output from the following
-# network ranges:
-$ sudo iptables -A INPUT -s 10.163.34.0/24 -j ACCEPT
-$ sudo iptables -A FORWARD -s 10.163.34.0/24 -j ACCEPT
-$ sudo iptables -A OUTPUT -s 10.163.34.0/24 -j ACCEPT
+# comment: network ranges:
+
+iptables -A INPUT -s 10.163.34.0/24 -j ACCEPT
+iptables -A FORWARD -s 10.163.34.0/24 -j ACCEPT
+iptables -A OUTPUT -s 10.163.34.0/24 -j ACCEPT
 ```
 
-## Saving changes
-
-Save changes permanently, otherwise on restart, iptables reverts to default
-settings:
+To test this, we can try to connect to a remote server:
 
 ```
-$ sudo su
-# /sbin/service iptabels save
+w3m https://www.google.com
 ```
 
 There are lots of examples on the web. Examples from:
@@ -231,15 +244,20 @@ There are lots of examples on the web. Examples from:
 
 ## PREROUTING
 
-Forward all traffice to port 25 to port 2525: 
+Here is another example where we forward all traffic to port 25 to port 2525.
+Here we use the **NAT** table, since NAT is responsible for network address
+translation:
 
 ```
-# iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525
 ```
 
 ## OUTPUT
 
-Disable outgoing eamil:
+Here is another example where we disable outgoing email by disabling the ports
+that are commonly associated with email. Of course, this could be bypassed by
+using non-standard ports for email, but for out cases, it's a decent
+demonstration:
 
 ```
 # iptables -A OUTPUT -p tcp --dports 25,465,587 -j REJECT
@@ -249,10 +267,10 @@ Disable outgoing eamil:
 
 [firewall-cmd documentation](https://docs.fedoraproject.org/en-US/Fedora/19/html/Security_Guide/sect-Security_Guide-Using_Firewalls.html)
 
-**firewalld** is a slightly more user friendly interface to netfilters in Red
-Hat based distros.
+**firewalld** is a slightly more user friendly izghhterface to netfilters/iptables
+in Red Hat based distros.
 
-Zones are important concept in firewalld. Some predefined zones:
+Zones are an important concept in firewalld. Some predefined zones:
 
 - DROP : strictest. All incoming network packets are dropped
 - BLOCK : all very strict
@@ -303,12 +321,3 @@ To change default zone:
 # firewall-cmd --permanent --set-default-zone=public
 ```
 
-## ufw
-
-```
-$ host www.facebook.com
-$ whois 157.240.2.35 | grep CIDR
-$ sudo su
-# sudo ufw reject out to 157.240.0.0/16
-# sudo ufw reject in to 157.240.0.0/16
-```
