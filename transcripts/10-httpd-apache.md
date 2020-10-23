@@ -151,6 +151,7 @@ firewall-cmd --list-all
 firewall-cmd --get-active-zones
 firewall-cmd --zone=FedoraServer --add-service=http
 firewall-cmd --zone=FedoraServer --add-service=https
+firewall-cmd --runtime-to-permanent
 ```
 
 
