@@ -3,8 +3,8 @@
 Let's install our first web server. First, make sure your machine is up to date
 before installing Apache2.
 
-First, be sure to switch to Bridged mode in VirtualBox network seetings and
-refresh MAC address in Virtualbox.
+First, be sure to switch to Bridged mode in VirtualBox network settings and
+refresh MAC address in VirtualBox.
 
 ## Update system first
 
