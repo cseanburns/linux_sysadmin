@@ -138,6 +138,8 @@ directory.
 
 # Linux Firewalls
 
+## NOTE TO SELF: NEXT UPDATE -- COVER NFTABLES
+
 Netfilter is a part of the kernel that includes a suite of applications that
 help manage how packets flow in and out of a server or internet connected
 device. ``iptables`` is the command line user interface to **netfilter** and is
