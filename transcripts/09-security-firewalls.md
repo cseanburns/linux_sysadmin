@@ -133,6 +133,42 @@ an exercise, use the ``ldd`` command to locate the libraries for the ``nano``
 editor, and make ``nano`` available to the user *omicron* in the chrooted
 directory. 
 
+### Nano in chroot
+
+After making Bash available in ``chroot``:
+
+```
+# which nano 
+/usr/bin/nano
+# ldd /usr/bin/nano
+linux-vdso.so.1 (0x00007fff5bdd5000)
+	libmagic.so.1 => /lib64/libmagic.so.1 (0x00007f0ce11a7000)
+	libncursesw.so.6 => /lib64/libncursesw.so.6 (0x00007f0ce1167000)
+	libtinfo.so.6 => /lib64/libtinfo.so.6 (0x00007f0ce1138000)
+	libc.so.6 => /lib64/libc.so.6 (0x00007f0ce0f6e000)
+	libz.so.1 => /lib64/libz.so.1 (0x00007f0ce0f54000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x00007f0ce0f4d000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007f0ce1232000)
+# cp /lib64/libmagic.so.1 /var/chroot/lib64/
+# cp /lib64/libncursesw.so.6 /var/chroot/lib64/
+# cp /lib64/libtinfo.so.6 /var/chroot/lib64/
+# cp /lib64/libc.so.6 /var/chroot/lib64/
+# cp /lib64/libz.so.1 /var/chroot/lib64/
+# cp /lib64/libdl.so.2 /var/chroot/lib64/
+# cp /lib64/ld-linux-x86-64.so.2 /var/chroot/lib64/
+# chroot /var/chroot/
+bash-5.0# nano
+Error opening terminal: xterm-256color.
+bash-5.0# exit
+# locate xterm-256color
+/usr/share/terminfo/s/screen.xterm-256color
+/usr/share/terminfo/x/xterm-256color
+# mkdir -p /var/chroot/etc/
+# cp /usr/share/terminfo/x/* /var/chroot/etc/
+# chroot /var/chroot
+# nano
+```
+
 
 [1]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins
 
