@@ -16,7 +16,7 @@ to date first.
 
 ```
 sudo su
-dnf -y update
+dnf -y upgrade
 dnf search php | less
 dnf info php
 ... (not displaying output)
@@ -100,6 +100,7 @@ can tell Apache to reload its config files:
 
 ```
 systemctl reload httpd.service
+systemctl restart httpd.service
 ```
 
 Now let's create a basic PHP page. Let's ``cd`` back to the base HTTP directory

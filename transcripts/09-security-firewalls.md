@@ -137,9 +137,12 @@ directory.
 
 After making Bash available in ``chroot``:
 
+(Side note: I'm using the **#** sign below to indicate the root prompt.)
+
 ```
 # which nano 
 /usr/bin/nano
+# cp /usr/bin/nano /var/chroot/bin/
 # ldd /usr/bin/nano
 linux-vdso.so.1 (0x00007fff5bdd5000)
 	libmagic.so.1 => /lib64/libmagic.so.1 (0x00007f0ce11a7000)
@@ -160,11 +163,17 @@ linux-vdso.so.1 (0x00007fff5bdd5000)
 bash-5.0# nano
 Error opening terminal: xterm-256color.
 bash-5.0# exit
+```
+
+To fix this, install ``ncurses-term`` and copy over additional files:
+
+```
+# dnf install -y ncurses-term
 # locate xterm-256color
 /usr/share/terminfo/s/screen.xterm-256color
 /usr/share/terminfo/x/xterm-256color
-# mkdir -p /var/chroot/etc/
-# cp /usr/share/terminfo/x/* /var/chroot/etc/
+# mkdir -p /var/chroot/etc/terminfo/x/
+# cp /usr/share/terminfo/x/* /var/chroot/etc/terminfo/x/
 # chroot /var/chroot
 # nano
 ```
