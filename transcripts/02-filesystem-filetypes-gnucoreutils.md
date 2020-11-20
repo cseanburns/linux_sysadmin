@@ -23,15 +23,22 @@
 - ``/tmp`` : temp files used by applications
 - ``/var`` : variable files, used often for system logs
 
-Source: [Linux Filesystem Explained/][1]
+Source: [Linux Filesystem Explained][linux_filesystem]
 
 ## GNU Coreutils
 
-The GNU Coreutils, or the GNU Core Utilities, "are the basic file, shell and text manipulation utilities of the GNU operating system. These are the core utilities which are expected to exist on every operating system" ([Coreutils, GNU][2]).
+The GNU Coreutils, or the GNU Core Utilities, "are the basic file, shell and
+text manipulation utilities of the GNU operating system. These are the core
+utilities which are expected to exist on every operating system" ([Coreutils,
+GNU][gnu_coreutils]).
 
-In order to do good work on the command line, it's essential that we become familiar with these utilities that cover a range of commands. 
+In order to do good work on the command line, it's essential that we become
+familiar with these utilities that cover a range of commands. 
 
-The online manual is located at [GNU Coreutils Manual][3]. Read through it and practice! Look for examples on the web. The commands below were picked from the above online manual. Their descriptions were copied from the man page. E.g.:
+The online manual is located at [GNU Coreutils Manual][gnu_coreutils_manual].
+Read through it and practice! Look for examples on the web. The commands below
+were picked from the above online manual. Their descriptions were copied from
+the man page. E.g.:
 
 ```
 man -f cat
@@ -64,7 +71,7 @@ montgomery, al
 jefferson city, mo
 ```
 
-## Practice and examples
+### Practice and examples
 
 Now you can test some of these commands on these files. Be sure to read their
 respective manual pages for their available options. In order to read the
@@ -72,7 +79,7 @@ manual page, you type the command ``man`` followed by the name of the command
 that you're interested in reading about, like ``man cat``. You can navigate the
 manual pages using your cursor keys and to exit them, you press ``q``.
 
-### Output entire files
+#### Output entire files
 
 - ``cat`` :  concatenate files and print on the standard output
   - ``cat cities.txt``
@@ -82,13 +89,13 @@ manual pages using your cursor keys and to exit them, you press ``q``.
 - ``nl`` :  add line numbers to files
   - ``nl capitals.txt``
 
-### Formatting file contents
+#### Formatting file contents
 
 - ``fmt`` : simple optimal text formatter
   - ``man fmt``
   - ``fmt -w 50 file.txt``
 
-### Output of parts of files
+#### Output of parts of files
 
 - ``head`` : output the first part of files
   - ``head file.txt``
@@ -99,7 +106,7 @@ manual pages using your cursor keys and to exit them, you press ``q``.
   - ``tail -n1 file.txt``
   - ``fmt -w 50 file.txt | tail -n1``
 
-### Summarizing files
+#### Summarizing files
 
 - ``wc`` : print newline, word, and byte counts for each file
   - ``wc -w cities.txt``
@@ -107,13 +114,16 @@ manual pages using your cursor keys and to exit them, you press ``q``.
 - ``md5sum`` : compute and check MD5 message digest
 - ``sha256sum`` : compute and check SHA256 message digest
 
-### Operating on sorted files
+#### Operating on sorted files
 
 - ``sort`` : sort lines of text files
   - ``sort cities.txt``
 
 This does a numerical sort of the cities.txt file by the fourth column, which
-is date founded column. Specifically: ``-t`` declares the field separator (,). ``-k`` declares the key (the sorting ID). So we'll sort by first column, second column, third column, and then fourth column, where column is defined by the comma key:
+is date founded column. Specifically: ``-t`` declares the field separator (,).
+``-k`` declares the key (the sorting ID). So we'll sort by first column, second
+column, third column, and then fourth column, where column is defined by the
+comma key:
 
 ```
 sort -t , -k 1 cities.txt
@@ -127,11 +137,14 @@ sort -t , -k 4 cities.txt
   - ``sort file2.txt | uniq -c``
   - ``sort -u file2.txt`` # skipping sort
 
-### Operating on fields
+#### Operating on fields
 
 - ``cut`` : remove sections from each line of files
 
-This establishes the comma as the deliminator (field separator) and prints out the second field of the cities.txt file, which is the list of states. Here the field separator is ``-d`` and the key indicator is declared with ``-f``. This line cuts the second field out:
+This establishes the comma as the deliminator (field separator) and prints out
+the second field of the cities.txt file, which is the list of states. Here the
+field separator is ``-d`` and the key indicator is declared with ``-f``. This
+line cuts the second field out:
 
 ```
 cut -d, -f2 cities.txt
@@ -139,7 +152,10 @@ cut -d, -f2 cities.txt
 
 - ``paste`` : merge lines of files
 
-Our goal here is to create output that only reports the city and state names. In the fourth line, I use what's called [process substitution][4]. This applies the ``fmt`` command on the output of the command (or process) in the parentheses.
+Our goal here is to create output that only reports the city and state names.
+In the fourth line, I use what's called [process substitution][process_sub].
+This applies the ``fmt`` command on the output of the command (or process) in
+the parentheses.
 
 ```
 cut -d, -f1 cities.txt > city_names.txt
@@ -149,7 +165,8 @@ fmt <(paste city_names.txt state_names.txt)
 rm city_names.txt state_names.txt
 ```
 
-Again using **process substitution**, we can do the above with one line and avoid creating extra files like *city_names.txt* and *state_names.txt*:
+Again using **process substitution**, we can do the above with one line and
+avoid creating extra files like *city_names.txt* and *state_names.txt*:
 
 ```
 paste -d, <(cut -d, -f1 cities.txt) <(cut -d, -f2 cities.txt)
@@ -180,11 +197,12 @@ a long line:
 join -t, -1 2 -2 2 <(sort -t, -k2 cities.txt) <(sort -t, -k2 capitals.txt) > tables.txt
 ```
 
-### Operating on characters
+#### Operating on characters
 
 - ``tr`` : translate or delete characters
 
-The ``tr`` command requires that we redirect standard input from a file, but we can also do it from the screen. 
+The ``tr`` command requires that we redirect standard input from a file, but we
+can also do it from the screen. 
 
 Capitalize all the words in a file called 'tables.txt':
 
@@ -192,7 +210,9 @@ Capitalize all the words in a file called 'tables.txt':
 tr a-z A-Z < tables.txt
 ```
 
-Or, capitalize all the words after we them in on the screen. After you've written the last line (below it's 'thanks'), press control-D and the output will be converted:
+Or, capitalize all the words after we them in on the screen. After you've
+written the last line (below it's 'thanks'), press control-D and the output
+will be converted:
 
 ```
 tr a-z A-Z | cat
@@ -229,7 +249,7 @@ tr -d '\t' < tables2.txt   # these are tabs so they're deleted
 tr -d '\t' < tables3.txt   # these aren't tab so not deleted
 ```
 
-[1]:https://www.linux.com/tutorials/linux-filesystem-explained/
-[2]:https://www.gnu.org/software/coreutils/
-[3]:https://www.gnu.org/software/coreutils/manual/coreutils.html
-[4]:https://tldp.org/LDP/abs/html/process-sub.html
+[linux_filesystem]:https://www.linux.com/tutorials/linux-filesystem-explained/
+[gnu_coreutils]:https://www.gnu.org/software/coreutils/
+[gnu_coreutils_manual]:https://www.gnu.org/software/coreutils/manual/coreutils.html
+[process_sub]:https://tldp.org/LDP/abs/html/process-sub.html

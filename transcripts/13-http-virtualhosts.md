@@ -218,10 +218,10 @@ desktop machine (i.e., my **host** machine):
 
 ## References
 
-- [Name-based Virtual Host Support][1]
-- [VirtualHost Examples][3]
-- [How to set up Apache Virtual Hosts on CentOS 7][2]
+- [Name-based Virtual Host Support][name_vhost]
+- [VirtualHost Examples][vhost_ex]
+- [How to set up Apache Virtual Hosts on CentOS 7][vhost_apache2]
 
-[1]:https://httpd.apache.org/docs/2.2/vhosts/name-based.html
-[2]:https://www.rosehosting.com/blog/apache-virtual-hosts-on-centos/
-[3]:https://httpd.apache.org/docs/2.4/vhosts/examples.html
+[name_vhost]:https://httpd.apache.org/docs/2.2/vhosts/name-based.html
+[vhost_ex]:https://httpd.apache.org/docs/2.4/vhosts/examples.html
+[vhost_apache2]:https://www.rosehosting.com/blog/apache-virtual-hosts-on-centos/

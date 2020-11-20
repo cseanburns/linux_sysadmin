@@ -1,15 +1,16 @@
-## Installing and Setting Up Our Own Server Installations
+# Installing and Setting Up Our Own Server Installations
 
-### Download and Install fedora and VirtualBox:
+## Download and Install fedora and VirtualBox:
 
-1. Download fedora Server Edition. We'll install the x86x64 netinstall
-   ISO image because it's a smaller download, and then we can
-   install other items once Fedora is running.
-  - [https://getfedora.org/](https://getfedora.org/)
-  - [https://getfedora.org/en/server/download/](https://getfedora.org/en/server/download/)
-2. Download VirtualBox. This will vary depending on whether you run
-macOS or Windows. If you have issues here, please seek tutorials elsewhere, like YouTube.
-  - [https://www.virtualbox.org/](https://www.virtualbox.org/)
+1. Download fedora Server Edition. We'll install the x86x64 netinstall ISO
+   image because it's a smaller download, and then we can install other items
+   once Fedora is running.
+  - [https://getfedora.org/][get_fedora]
+  - [https://getfedora.org/en/server/download/][get_fedora_download]
+2. Download VirtualBox. This will vary depending on whether you run macOS or
+Windows. If you have issues here, please seek tutorials elsewhere, like
+YouTube.
+  - Download VirtualBox: [https://www.virtualbox.org/][virtualbox]
 
 ## Set up in VirtualBox:
 
@@ -33,7 +34,7 @@ macOS or Windows. If you have issues here, please seek tutorials elsewhere, like
 The settings box should close. Now highlight the virtual machine in the left
 pane of the VirtualBox menu, and click on Start.
 
-### Install Fedora 32 Server Edition:
+## Install Fedora 32 Server Edition:
 
 1. When you start, a window will pop up and ask you to select a virtual optical
    disk. This is the fedora 32 ISO that you downloaded. We have to select the
@@ -95,14 +96,14 @@ pane of the VirtualBox menu, and click on Start.
     machine. Do not click on **Reboot**. Instead, click on Machine, and the
     Power off. Save state.
 
-### VirtualBox settings
+## VirtualBox settings
 
 1. Click on **Settings**. Under the **System** option, deselect **Floppy** and
    **Optical**. Then click **Okay**. 
 2. Now, **Start** your server again. When it starts, you should be able to
    login with the user account that you created.
 
-### VirtualBox Login
+## VirtualBox Login
 
 The first thing we want to do is to update the software on the machine. To do
 that, we use the ``dnf`` command. Login with your user account, and run the
@@ -130,16 +131,16 @@ choose **Full clone**.
 That's good for now. Congratulations! You have just completed your first
 installation of a Linux server.
 
-## Logical Volume Management
+# Logical Volume Management
 
-### Some background reading and documentation
+## Background Reading and Documentation
 
-These notes follow the steps outlined in book ([Soyinka][2]), chapter 7, pp.
+These notes follow the steps outlined in book ([Soyinka][soyinka]), chapter 7, pp.
 200-211. Also, some helpful additional reading, with alternate examples, are
 at:
 
-- [An Introduction to LVM Concepts, Terminology, and Operations][3]
-- [A Linux User's Guide to Logical Volume Management][4]
+- [An Introduction to LVM Concepts, Terminology, and Operations][lvm_1]
+- [A Linux User's Guide to Logical Volume Management][lvm_2]
 
 Additionally, you should review some helpful ``man`` or ``info`` pages:
 
@@ -162,7 +163,7 @@ Additionally, you should review some helpful ``man`` or ``info`` pages:
 The second link above demonstrates some other logical volume commands that we
 are not using here. Give the ``man`` or ``info`` pages for those a read, too.
 
-### Our motivation
+## Our motivation
 
 When we installed Fedora in VirtualBox, we told VirtualBox that our hard drive
 would be a 100 GB in size. However, when we partitioned our hard drive, we only
@@ -175,9 +176,9 @@ Briefly:
 - Volume group (the *vg* commands) organize the physical and logical volumes.
 - Logical volumes (the *lv* commands) are about partitions.
 
-### Procedure
+## Procedure
 
-#### Administrative commands
+### Administrative commands
 
 We either need to use the ``sudo`` command to run many of the commands below or
 to login as root. Either way, be careful about running commands with ``sudo``
@@ -199,7 +200,7 @@ Or:
 $ sudo su
 ```
 
-#### Gather information
+### Gather information
 
 Take a look at what you have before you start. Pay some attention to the
 details:
@@ -209,7 +210,7 @@ lsblk
 fdisk -l
 ```
 
-#### Create a Partition
+### Create a Partition
 
 Note: *parted* is a program that manipulates disk partitions. Go ahead and read
 the man page on parted before you start.
@@ -227,7 +228,7 @@ the man page on parted before you start.
 (parted) quit 
 ```
 
-#### Creating a Physical Volume
+### Creating a Physical Volume
 
 Note: It's important to read the man pages for *pvdisplay* and *pvcreate*
 before you start so that you get a better idea of what you're doing, above and
@@ -239,7 +240,7 @@ pvcreate /dev/sda3
 pvdisplay
 ```
 
-#### Add a Physical Volume to a Volume Group
+### Add a Physical Volume to a Volume Group
 
 Usage note: ``vgextend VG PV``. (See man page, of course :)
 
@@ -293,9 +294,9 @@ Now reboot the machine:
 # reboot
 ```
 
-## Backups with ``rsync``
+# Backups with ``rsync``
 
-### Create a secondary hard drive in VirtualBox
+## Create a secondary hard drive in VirtualBox
 
 In VirtualBox, we'll create a second hard drive (we're mimicking a scenario
 where we would physically add a new hard drive to the system).
@@ -319,7 +320,7 @@ In VirtualBox:
 9. Then choose **Create**.
 10. Close Settings and start your OS as normal.
 
-### Partition the new hard drive
+## Partition the new hard drive
 
 Now that we've added a new hard drive, we need to partition it and create
 a filesystem. We'll do that in the command line. We're not going to use LVM,
@@ -346,7 +347,7 @@ lsblk
 cd /mnt
 ```
 
-### Backup with ``rsync``
+## Backup with ``rsync``
 
 Now we'll use ``rsync`` to backup the home directories to the new hard drive.
 See ``man rsync`` for documentation. The basic syntax is:
@@ -394,12 +395,117 @@ it was no longer needed), then it will be deleted from the destination
 directory when the ``--delete`` option is used.
 
 See other options and functionality for ``rsync`` here:
-[https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/][5].
+[https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/][rsync].
 One of the most important options is the ability to backup up to remote
 machines over a network.
 
-[1]:https://www.virtualbox.org/manual/ch06.html
-[2]:https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
-[3]:https://www.digitalocean.com/community/tutorials/an-introduction-to-lvm-concepts-terminology-and-operations
-[4]:https://opensource.com/business/16/9/linux-users-guide-lvm
-[5]:https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/
+# Managing Software
+
+Many modern Linux distros offer some kind of package management for
+installing, managing, and removing software. On RedHat based systems, package
+management is based on RPM (the RedHat Package Manager). On Debian based
+systems, package management is based on **dpkg**. 
+
+There are some advanced things you can do with these base package management
+systems, but most of the time it will be easier to use their front ends. For
+RedHat systems, the current front end is called **dnf**, and for Debian systems,
+it's **apt** or **apt-get**. Let's look at a few of the basic **dnf** commands:
+
+To see a history of how *dnf* has been used on the system:
+
+``$ sudo dnf history``
+
+To get info on the history of a specific package:
+
+``$ sudo dnf history mosh``
+
+To get information on a specific package:
+
+``$ sudo dnf info bash``
+
+To search by tag, which you can see listed in the info search:
+
+``$ sudo dnf repoquery --queryformat "%{arch}" bash``
+
+``$ sudo dnf repoquery --queryformat "%{reponame}" mosh``
+
+## Let's install something:
+
+```bash
+$ dnf search tmux
+$ dnf info tmux
+$ sudo dnf install tmux
+$ echo "set-option -g prefix C-a" > .tmux.conf
+$ tmux
+```
+
+## dnf basics
+
+Here are the basic ``dnf`` commands. See ``man dnf`` for details:
+
+- ``dnf search [name]```
+- ``dnf install [name]```
+- ``dnf remove [name]```
+- ``dnf repolist```
+- ``dnf list installed```
+- ``dnf list available```
+- ``dnf provides /bin/bash```
+- ``dnf info [name]```
+- ``dnf update [name]```
+- ``dnf check-update```
+- ``dnf update OR dnf upgrade```
+- ``dnf autoremove```
+- ``dnf clean all```
+- ``dnf help clean```
+- ``dnf help```
+- ``dnf history```
+- ``dnf grouplist | less```
+- ``dnf groupinstall 'Python Science'```
+- ``dnf groupupdate 'Python Science'```
+- ``dnf groupremove 'Python Science'```
+
+# NAT (Network Address Translation)
+
+## Set up NAT
+
+If we want to SSH into our machines without having to use the VirtualBox GUI,
+we can do so by setting up NAT in VirtualBox. If we were on a wired connection
+(not wireless), we could set up a bridged connection, but that's not simple
+when we're connected to a router via wireless. To set up NAT: 
+
+Go to Settings, Network, Advanced, Port Forwarding, and enter the following in 
+the table:
+
+| Name | Protocol | Host IP      | Host Port | Guest IP  | Guest Port |
+|:-----|:--------:|:------------:|:---------:|:---------:|-----------:|
+| SSH  | TCP      | 10.163.0.2   | 2222      | 10.0.2.15 | 22         |
+
+The Host IP should be the IP address for your physical machine. You can find
+this in your system settings on your Windows or Mac computers, or by opening up
+a terminal session and typing ``ifconfig`` or the equivalent for your operating
+system. Once you have that IP, start your Fedora clone in headless mode, and
+SSH into your virtual machine using the terminal of your choice (e.g., the one
+you used to connect to SISED). From a command line (or via PuTTY settings), we
+are going to SSH through port 2222 via our Host IP address:
+
+```
+$ ssh -p 2222 user@10.163.0.2
+```
+
+Read about NAT and VirtualBox here: [https://www.virtualbox.org/manual/ch06.html][vb_manual]
+
+Two ``VBoxManage`` commands that you can run from your **Host** machine:
+
+```
+VBoxManage list vms
+VBoxManage startvm "Name of VMS" --type headless
+```
+
+[get_fedora]:https://getfedora.org/
+[get_fedora_download]:https://getfedora.org/en/server/download/
+[virtualbox]:https://www.virtualbox.org/
+[vb_manual]:https://www.virtualbox.org/manual/ch06.html
+[soyinka]:https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
+[lvm_1]:https://www.digitalocean.com/community/tutorials/an-introduction-to-lvm-concepts-terminology-and-operations
+[lvm_2]:https://opensource.com/business/16/9/linux-users-guide-lvm
+[rsync]:https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/

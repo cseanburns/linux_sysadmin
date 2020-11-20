@@ -8,7 +8,8 @@
 address like the IP address to the ethernet address (MAC, Media Access Control
 address or hardware address). Routers use MAC addresses to enable communication
 inside networks (w/in subnets) so that computers within a local area network
-talk to each other. But also, networks are designed so that IP addresses must be associated with MAC addresses before systems can communicate over a network.
+talk to each other. But also, networks are designed so that IP addresses must
+be associated with MAC addresses before systems can communicate over a network.
 
 In order to get ARP info for a system, we can use the ``ip`` command. Here's
 the ARP output and routing table on my Fedora virtual machine (**10.0.2.15**)
@@ -126,7 +127,7 @@ Since both machines are on the same network, they both state the following path:
    **10.163.34.59** (for physical machine) are routed through **10.163.34.1**
    on the subnet defined as **10.163.34.0/24**.
 2. In the second ``ip route`` output, you'll notice the IP address
-   **169.254.0.0/16**. This is called the [link-local][2] address. This is
+   **169.254.0.0/16**. This is called the [link-local][rfc3927] address. This is
    a local address that is assigned to a device in the absence of either static
    or dynamic IP assignment (via, e.g., a router).
 3. The **192.168.122.0/24** info is from VirtualBox.
@@ -151,7 +152,7 @@ sudo ip link set enp0s3 up
 ### IPv6 subnetting
 
 We're not going to get into subnetting with IPv6, but if you're interested,
-this is a nice article: [IPv6 subnetting overview][3]
+this is a nice article: [IPv6 subnetting overview][ipv6_subnetting]
 
 ### ICMP
 
@@ -173,11 +174,11 @@ doesn't error check. If data is lost, then it's lost but is still sent. UDP is
 useful for conducting voice over internet calls or for streaming video, such as
 through YouTube. In fact, YouTube uses a type of UDP transmission called QUIC,
 which adds a level of encryption to the protocol. QUIC was developed by Google
-and is the main part of the next generation of [HTTP/3][4]. In the near future,
+and is the main part of the next generation of [HTTP/3][http3]. In the near future,
 it seems that we'll all be using IP/UDP instead of IP/TCP as the primary method
 of exchanging data over the Internet.
 
-The above protocols, as well as others, each contain [header][5] information.
+The above protocols, as well as others, each contain [header][http_headers] information.
 We can see a lot of this information using the ``tcpdump`` command, which
 requires ``sudo`` or being **root** to use. The first part of the IP header
 contains the source address, then comes the destination address, and so forth.
@@ -214,13 +215,8 @@ and it's located in the following file:
 less /etc/services
 ```
 
-See also the Wikipedia page: [List of TCP and UDP port numbers][1]
+See also the Wikipedia page: [List of TCP and UDP port numbers][port_numbers]
 
-[1]:https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
-[2]:https://tools.ietf.org/html/rfc3927.html
-[3]:https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study
-[4]:https://en.wikipedia.org/wiki/HTTP/3
-[5]:https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
 # Some basic IP subnetting
 
 ## Private IP Ranges
@@ -353,7 +349,7 @@ private IP addresses that exist on two separate subnets:
 - 192.168.1.6/24:  Some Desktop 1, Subnet A
 - 10.160.38.75/24: Some Desktop 1, Subnet B
 
-### 192.168.1.6 : Desktop 1, Subnet A
+### Example 1: 192.168.1.6 : Desktop 1, Subnet A
 
 Let's derive the network mask and the network address (or ID) from this IP
 address.
@@ -370,7 +366,7 @@ notation, so:
 
 192.168.1.6/24
 
-### 10.160.38.75 : Desktop 1, Subnet B
+### Example 2: 10.160.38.75 : Desktop 1, Subnet B
 
 ```
 00001010.10100000.00100110.01001011 IP               10.160.38.75
@@ -399,7 +395,7 @@ For Desktop 1, Subnet B, we have the following
 | End Range    | 10.163.38.254 |
 | Broadcast    | 10.163.38.255 |
 
-## Final example:
+### Example 3: 172.16.1.62/24
 
 Derive the network information for 172.16.1.62/24:
 
@@ -417,21 +413,10 @@ Derive the network information for 172.16.1.62/24:
 | Start Range  | 172.16.1.1    |
 | End Range    | 172.16.1.254  |
 | Broadcast    | 172.16.1.255  |
-# Some basic IP subnetting
 
-## Private IP Ranges
+### Example 4: 10.0.5.23/16
 
-Remember, when subnetting, we primarily will work with private IP ranges:
-
-| Start Address | End Address     |
-|---------------|-----------------|
-| 10.0.0.0      | 10.255.255.255  |
-| 172.16.0.0    | 172.31.255.255  |
-| 192.168.0.0   | 192.168.255.255 |
-
-## Bigger Subnets
-
-### 10.0.5.23/16
+This is an example of a subnet with more possible hosts.
 
 | base-2 | Output |
 |--------|--------|
@@ -476,5 +461,9 @@ Hosts:
 - Subtract Network ID (1) and Broadcast (1) = 2 IP addresses
 - Number of Usable Hosts = 256 x 256 - 2 = 65534
 
-
+[rfc3927]:https://tools.ietf.org/html/rfc3927.html
+[ipv6_subnetting]:https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study
+[http3]:https://en.wikipedia.org/wiki/HTTP/3
+[http_headers]:https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+[port_numbers]:https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 

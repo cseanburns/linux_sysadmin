@@ -79,7 +79,8 @@ bash-5.0# exit
 ```
 
 **Step 6**: Create a new group called *chrootjail*. We can add users to this
-group that we want to jail. Instructions are based on [linuxconfig.org][1].
+group that we want to jail. Instructions are based on
+[linuxconfig.org][chroot_jail].
 
 ```
 groupadd chrootjail
@@ -178,12 +179,9 @@ To fix this, install ``ncurses-term`` and copy over additional files:
 # nano
 ```
 
-
-[1]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins
-
 # Linux Firewalls
 
-## NOTE TO SELF: NEXT UPDATE -- COVER NFTABLES
+**See NFTABLES for changes to the firewall software**
 
 Netfilter is a part of the kernel that includes a suite of applications that
 help manage how packets flow in and out of a server or internet connected
@@ -236,7 +234,7 @@ From ``man iptable``, the tables and respective chains include:
 
 We'll cover the filter tables and the nat tables.
 
-## Usage
+### Usage
 
 First, we can look at the default parameters for the *filter* table. You need
 to be root to run this commands, or use ``sudo``:
@@ -250,7 +248,7 @@ iptables -L -v | less
 iptables -L | grep policy
 ```
 
-## Allow connections only from subnet
+### Allow connections only from subnet
 
 We can change the firewall to only allow communication on a subnet. Of course,
 in order to do this, we need the subnet **Network ID** and the **CIDR** number:
@@ -289,7 +287,7 @@ There are lots of examples on the web. Examples from:
 - http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/
 - https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/
 
-## PREROUTING
+### PREROUTING
 
 Here is another example where we forward all traffic to port 25 to port 2525.
 Here we use the **NAT** table, since NAT is responsible for network address
@@ -299,7 +297,7 @@ translation:
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525
 ```
 
-## OUTPUT
+### OUTPUT
 
 Here is another example where we disable outgoing email by disabling the ports
 that are commonly associated with email. Of course, this could be bypassed by
@@ -312,9 +310,9 @@ demonstration:
 
 ## firewall-cmd
 
-[firewall-cmd documentation](https://docs.fedoraproject.org/en-US/Fedora/19/html/Security_Guide/sect-Security_Guide-Using_Firewalls.html)
+[firewall-cmd documentation][firewall_cmd]
 
-**firewalld** is a slightly more user friendly izghhterface to netfilters/iptables
+**firewalld** is a slightly more user friendly interface to netfilters/iptables
 in Red Hat based distros.
 
 Zones are an important concept in firewalld. Some predefined zones:
@@ -368,3 +366,5 @@ To change default zone:
 # firewall-cmd --permanent --set-default-zone=public
 ```
 
+[chroot_jail]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins
+[firewall_cmd]:https://docs.fedoraproject.org/en-US/Fedora/19/html/Security_Guide/sect-Security_Guide-Using_Firewalls.html

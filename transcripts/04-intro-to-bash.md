@@ -1,4 +1,70 @@
-# Bash Scripting, Part 3
+# Learning Bash
+
+Let's cover some basic commands. I'll list them and go through each one below.
+
+## Navigation
+
+- ``pwd`` : print working directory
+- ``ls`` : list directory contents
+- ``cd`` : change the shell working directory
+- absolute paths: ``/home/sean/public_html/``
+- relative paths: 
+
+```
+pwd
+/home/sean/
+mkdir testdir
+cd testdir
+pwd
+/home/sean/testdir
+cd /home/sean/public_html/ # changing directory using absolute paths
+cd ../testdir/ # changing directory using relative paths
+```
+
+## File names 
+
+- everything is a file: ``file``
+- case sensitive
+- no spaces in names
+    - if do, then quote
+    - if do, then use backslashes
+- hidden files: ``ls -a``
+
+## Manual pages
+
+- ``man ls``
+- ``man -k [search term]`` 
+- ``info`` e.g., ``info sed``
+
+## File manipulation
+
+- ``mkdir`` : make or create a directory
+- ``rmdir`` : remove or delete empty directories
+- ``touch`` : change file timestamps (also, create an empty file)
+- ``cp [source] [destination]`` : copy files and directories
+- ``mv [source] [destination]`` : move (rename) files
+- ``rm`` remove files or directories
+- ``rm -rf`` for removing a directory with content
+
+## Reading Files
+
+- ``more`` : file perusal filter for viewing
+- ``less`` : opposite of more
+- ``cat`` : concatenate files and print on the standard output
+
+## Creating Output
+
+- ``echo`` : display a line of text
+
+### Practice
+
+Try using all the commands above this week.
+
+Please visit: [https://ryanstutorials.net/linuxtutorial/][ryan_tutorials] for
+some good additional tutorials if you want to keep exploring. For now, practice
+the above and we'll extend on these commands next week.
+
+# Bash Scripting
 
 In this demo, I'll discuss the following three topics:
 
@@ -60,9 +126,14 @@ to right:
 
 -rw-rw-r--
 
-- The first ``rw-`` states that the user who owns the file has **Read** and **Write** access but not ``x`` execute access since this is marked with a ``-``
-- The second ``rw-`` states that the group that owns the file has **Read** and **Write** access but not ``x`` execute access since this is marked with a ``-``
-- The third ``r--`` states that all others have **Read** access but not ``wx`` **Write** or **Execute** access since this is marked with ``--``
+- The first ``rw-`` states that the user who owns the file has **Read** and
+  **Write** access but not ``x`` execute access since this is marked with
+  a ``-``
+- The second ``rw-`` states that the group that owns the file has **Read** and
+  **Write** access but not ``x`` execute access since this is marked with
+  a ``-``
+- The third ``r--`` states that all others have **Read** access but not ``wx``
+  **Write** or **Execute** access since this is marked with ``--``
 
 
 In order to change ownership of the file, we use the ``chown`` command, and to
@@ -216,7 +287,6 @@ that is True:
 grep "lexington\|london" cities.txt
 ```
 
-
 ## Test Command and ``if`` Statements
 
 ### Test
@@ -322,7 +392,8 @@ else
 fi
 ```
 
-When we add this in ``nano``, let's save the file as **filecomp.sh** in ``nano`` and make it executable. 
+When we add this in ``nano``, let's save the file as **filecomp.sh** in
+``nano`` and make it executable. 
 
 ```
 chmod u+x filecomp.sh
@@ -343,3 +414,5 @@ In this lesson I demoed the following three topics:
 - Test command and ``if`` Statements
 
 Now it's your turn to practice these.
+
+[ryan_tutorials]:https://ryanstutorials.net/linuxtutorial/

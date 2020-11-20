@@ -112,7 +112,7 @@ nano index.php
 ```
 
 Let's add some HTML and PHP that will detect our browser to the **index.php**
-([Source code link][2]):
+([Source code link][get_browser_example]):
 
 ```
 <p>You are using the following browser to view this site:</p>
@@ -140,13 +140,13 @@ our URL:
 w3m http://seanburns/
 ```
 
-## Your goal:
+**Your goal:**
 
   - Create an **index.php** file in your **userdir**
   - Add some PHP and submit screenshots, like last week, showing both the code
     and the output.
 
-Get some sample PHP code from here: [https://www.w3schools.com/php/php_syntax.asp][1]
+Get some sample PHP code from here: [https://www.w3schools.com/php/php_syntax.asp][php_syntax]
 
-[1]:https://www.w3schools.com/php/php_syntax.asp
-[2]:https://stackoverflow.com/questions/8754080/how-to-get-exact-browser-name-and-version
+[get_browser_example]:https://stackoverflow.com/questions/8754080/how-to-get-exact-browser-name-and-version
+[php_syntax]:https://www.w3schools.com/php/php_syntax.asp

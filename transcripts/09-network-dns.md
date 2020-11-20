@@ -5,15 +5,15 @@
 Two helpful YouTube videos. The first one provides an overview of the DNS
 system:
 
-[How a DNS Server (Domain Name System) works](https://www.youtube.com/watch?v=mpQZVYPuDGU)
+[How a DNS Server (Domain Name System) works][how_dns]
 
 The second video illustrates how to use a GUI to create and manage DNS records.
 
-[DNS Records](https://www.youtube.com/watch?v=cwT82ibOM2Q)
+[DNS Records][dns_records]
 
 Here is a nice intro to recursive DNS:
 
-[https://www.cloudflare.com/learning/dns/what-is-recursive-dns/](https://www.cloudflare.com/learning/dns/what-is-recursive-dns/)
+[https://www.cloudflare.com/learning/dns/what-is-recursive-dns/][recursive_dns]
 
 ## FQDN: The Fully Qualified Domain Name
 
@@ -51,14 +51,14 @@ servers manage the root domain, alternatively referred to as the zone.
 It's possible to have alternate internets by using outside root name servers.
 This is not common, but it happens. Read about a few of them here:
 
-* sdf: [https://web.archive.org/web/20081121061730/http://www.smtpnic.org/](https://web.archive.org/web/20081121061730/http://www.smtpnic.org/)
-* opennic: [https://www.opennicproject.org/](https://www.opennicproject.org/)
-* alternic: [https://en.wikipedia.org/wiki/AlterNIC](https://en.wikipedia.org/wiki/AlterNIC)
+* sdf: [https://web.archive.org/web/20081121061730/http://www.smtpnic.org/][sdf]
+* opennic: [https://www.opennicproject.org/][opennic]
+* alternic: [https://en.wikipedia.org/wiki/AlterNIC][alternic]
 
 Russia might be planning to use it's own alternate internet based on
 a different DNS root system. This would essentially create a large, second
 internet. You can read about in this [IEEE Spectrum
-article](https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet).
+article][ieee_russia].
 
 ## Top level domain (TLD)
 
@@ -83,7 +83,7 @@ domains currently in existence.
 
 In the Google example, the second level domain is **google**. Other examples
 include: **redhat** in **redhat.com** and **debian** in **debian.org**.
-[Soyinka, (2016)][1] refers to this part of the FQDN as that which makes up the
+[Soyinka, (2016)][soyinka_2] refers to this part of the FQDN as that which makes up the
 "organizational boundary of the namespace" (p. 425). 
 
 ## Third-level domain names / hostnames / subdomains
@@ -203,7 +203,9 @@ resolvectl status
 
 # Install DNS Server
 
-We will set up a DNS server and a client machine that uses the DNS server with Virtualbox. I've made some modifications, but overall I'm drawing upon the nice tutorial at [fedora Magazine][2].
+We will set up a DNS server and a client machine that uses the DNS server with
+Virtualbox. I've made some modifications, but overall I'm drawing upon the nice
+tutorial at [fedora Magazine][fedora_bind].
 
 ## VirtualBox Setup:
 
@@ -247,7 +249,8 @@ ip a
 ```
 
 ## Fedora-DNS-Server
-### Set up DNS
+
+### Install and Configure DNS
 
 Keep that machine on but minimize it, and now login to **Fedora-DNS-Server**,
 get the IP address. Write these IP addresses down correctly.
@@ -454,7 +457,8 @@ nano /etc/resolv.conf
 nameserver 192.168.254.73
 ```
 
-If there are nother nameservers listed in that file, comment them out by prepending the lines with a pound sign: ``#``.
+If there are nother nameservers listed in that file, comment them out by
+prepending the lines with a pound sign: ``#``.
 
 We can now check if our DNS server is working by examining the output of the
 ``dig`` command:
@@ -493,7 +497,7 @@ dig 35.196.109.67
 
 ## Make Permanent
 
-As the [fedora Magazine][2] article points out, the **/etc/resolv.conf** file
+As the [fedora Magazine][fedora_bind] article points out, the **/etc/resolv.conf** file
 will get reset upon reboot. To make sure the file doesn't get altered, you can
 use the ``chattr`` command on both the server and client machines (and any
 other client machines). So run this command on both virtual machines:
@@ -502,5 +506,13 @@ other client machines). So run this command on both virtual machines:
 sudo chattr +i /etc/resolv.conf
 ```
 
-[1]:https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
-[2]:https://fedoramagazine.org/how-to-setup-a-dns-server-with-bind/
+[how_dns]:https://www.youtube.com/watch?v=mpQZVYPuDGU)
+[dns_records]:https://www.youtube.com/watch?v=cwT82ibOM2Q
+[recursive_dns]:https://www.cloudflare.com/learning/dns/what-is-recursive-dns/
+[sdf]:https://web.archive.org/web/20081121061730/http://www.smtpnic.org/
+[opennic]:https://www.opennicproject.org/
+[alternic]:https://en.wikipedia.org/wiki/AlterNIC
+[ieee_russia]:https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet
+[soyinka_2]:https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
+[fedora_bind]:https://fedoramagazine.org/how-to-setup-a-dns-server-with-bind/
+

@@ -22,13 +22,14 @@ use a package management system, such as ``dnf`` on Fedora and ``apt`` on
 Ubuntu, we can use those systems to install the relevant software and
 dependencies. However, different distributions use different names for the
 packages. Fedora refers to the Apache2 software as ``httpd`` while Ubuntu
-refers to it as ``Apache2``. We can use ``dnf`` to search for the appropriate package name:
+refers to it as ``Apache2``. We can use ``dnf`` to search for the appropriate
+package name:
 
 ```
 dnf search apache | grep "httpd"
 ```
 
-Apache2 is not the only web server available. [nginx][3] is another popular web
+Apache2 is not the only web server available. [nginx][nginx] is another popular web
 server, and you should explore or learn about other options on your own. 
 For now, let's get some basic info on the ``httpd`` package:
 
@@ -46,7 +47,7 @@ server, like Apache2, and it might be the case that Drupal or WordPress require
 a certain minimum version of Apache2. Second, some Linux operating systems
 focus on stability and thus do not update to the most recent version of
 a package instead opting for the most stable version of the software. The
-[latest stable release of Apache2][1] is 2.4.46. But it's not always likely
+[latest stable release of Apache2][apache2] is 2.4.46. But it's not always likely
 that Fedora or some other distribution will use that or some newer version
 until the next distribution upgrade, for example, from Fedora 32 to Fedora 33.
 For now, however, this is fine, and we can proceed with the install:
@@ -200,7 +201,7 @@ After you've completed the above steps, do the following:
 
 1. On your host machine, find your OS's version of ``/etc/hosts``. For example,
    it seems Windows users can follow these instructions:
-   [https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992][4].
+   [https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992][windows_hosts].
    macOS users can follow these instructions also have an ``/etc/hosts``.
 2. Map your guest IP address to your new hostname:
 
@@ -213,11 +214,6 @@ Then, in your Firefox, Chrome, or whatever browser, visit your new website and r
 ```
 http://seanburns
 ```
-
-[1]:https://httpd.apache.org/
-[2]:https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
-[3]:https://nginx.org/en/
-[4]:https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992
 
 # Apache2 User Directories
 
@@ -243,15 +239,16 @@ After saving and exiting, restart ``httpd.service``:
 systemctl restart httpd.service
 ```
 
-## Tasks
+### Tasks
 
 1. Exit out of root account
 2. Go to your regular user's home directory
 3. Make a directory titled ``public_html``
-4. Change ``public_html`` directory permissions to 755: ``chmod 755 public_html``
+4. Change ``public_html`` directory permissions to 755: ``chmod 755
+   public_html``
 5. Change user director permissions to 711: ``chmod 711 /home/sean``
 
-## SELinux
+### SELinux
 
 Now, because of SELinux, we need to set some SELinux switches. Using ``sudo``
 or logging in as ``root``:
@@ -265,7 +262,7 @@ In the last line above, replace ``/home/sean/public_html`` with the correct
 path for your regular user (i.e., you're not *sean*). Exit out of root if you
 need to.
 
-## Test
+### Test
 
 Now test to see if your ``public_html`` site is operational by simply visiting
 the site. For me, I use the following command:
@@ -275,3 +272,8 @@ cd ~/public_html/
 echo "<p>Hello world</p>" >> index.html
 w3m http://127.0.0.1/~sean
 ```
+
+[nginx]:https://nginx.org/en/
+[apache2]:https://httpd.apache.org/
+[windows_hosts]:https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992
+

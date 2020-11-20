@@ -1,8 +1,9 @@
-## systemd
+# systemd
 
-* **systemd** is an init system that aims to provide better boot time and a better
-  way to manage services and processes.
-* **systemd** includes additional utilities to help manage services on a Linux system
+* **systemd** is an init system that aims to provide better boot time and
+  a better way to manage services and processes.
+* **systemd** includes additional utilities to help manage services on a Linux
+  system
 
 There are only two aspects of **systemd** that I want to cover in this lesson,
 but know that **systemd** is a big, complicated suite of software that provides
@@ -11,7 +12,7 @@ a lot of functions. In this lesson, though, we will cover using **systemd** to:
 1. manage services
 2. examine logs
 
-### Manage Services
+## Manage Services
 
 When we install a complicated piece of software like a web server (e.g.,
 Apache2), a SSH server (e.g., openssh-server), or a database server (e.g.,
@@ -82,7 +83,7 @@ sudo systemctl reload sshd.service
 
 Now, when you log into your Fedora system, you will see that new banner displayed.
 
-### Examine Logs
+## Examine Logs
 
 The ``journalctl`` command is also part of the **systemd** software suite and
 is used to monitor logs on the system.
@@ -100,7 +101,7 @@ However, it's much better to use various options. If you ``tab tab`` after
 typing ``journalctl``, command line completion will provide additional fields
 (see man page: ``man 7 systemd.journal-fields`` and see ``man man`` for
 numbering options) to examine logs for. There are many, but as an example, we
-see that there is an option called **_UID=**, which allows us to examine the
+see that there is an option called \_UID=, which allows us to examine the
 logs for a user with a specific user id. For example, on our independent Fedora
 systems, our user ID numbers are 1000. So that means I can see the logs for my
 account by:
@@ -140,7 +141,7 @@ view):
 journalctl -f
 ```
 
-### Various useful commands
+## Useful Systemd Commands
 
 You can see more of what ``systemctl`` or ``journalctl`` can do by reading
 through their documentation:
@@ -233,9 +234,9 @@ systemctl list-unit-files -t service
 systemd-analyze
 ```
 
-### Managing Users and Groups
+# Managing Users and Groups
 
-#### The passwd file
+## The passwd file
 
 On my Fedora 32 virtual machine, I can see the following information about my
 user account in the **passwd** file:
@@ -281,7 +282,7 @@ the distribution. For example, the user id may start at a different point
 depending on the system. However, nowadays both Ubuntu and Fedora set the
 starting UID and group ID for new users at 1000.
 
-#### The shadow file
+## The shadow file
 
 The **/etc/passwd** file does not contain any passwords but a simple **x** to
 mark the password field. Passwords on Linux are stored in **/etc/shadow** and
@@ -314,7 +315,7 @@ The fields are (see ``man 5 passwd``):
 - account expiration date
 - a reserved field 
 
-#### The group file
+## The group file
 
 This file holds group information about the entire system (see ``man group``).
 In the following command, you can see that I'm a member of the **wheel** group
@@ -337,7 +338,7 @@ The fields are:
 - group ID (GID)
 - group members (user list)
 
-### Management Tools
+## Management Tools
 
 Other user and group utilities include:
 
@@ -401,7 +402,7 @@ passwd -n 90 linus
 passwd -x 180 linus
 ```
 
-#### Creat a new group; add users to the group
+### Create a new group; add users to the group
 
 Let's now create a new group; add users to group:
 
@@ -459,7 +460,7 @@ sean wheel project1
 
 Now let's delete the new user's account:
 
-#### User account and group deletion
+### User account and group deletion
 
 ```
 userdel -r linus
@@ -475,3 +476,52 @@ grep "project*" /etc/group
 groupdel project1
 grep "project*" /etc/group
 ```
+
+### Another Group Example
+
+Basic steps to:
+
+1. create a new user
+2. create a new group
+3. create a shared directory for the new group
+
+```
+# become root user
+sudo su      
+
+# create user account
+useradd bfox
+
+# create password for user bfox
+passwd bfox
+
+# create new group
+groupadd bashclub
+
+# add user sean to 'bashclub' group
+usermod -aG bashclub sean
+
+# add user bfox to 'bashclub' group
+usermod -aG bashclub bfox
+
+# check if sean is part of 'bashclub' group
+groups sean
+
+# check if bfox is part of 'bashclub' group
+groups bfox
+
+# change to /home directory
+cd /home
+
+# create the directory to be shared by bashclub 
+mkdir bashclubfolder
+
+# make bashclub group owner of bashclubfolder
+chgrp -R bashclub bashclubfolder
+chmod -R 2775 bashclubfolder
+
+# check ownership
+ls -l 
+```
+
+Now you can log in as either user and work in that shared directory!
