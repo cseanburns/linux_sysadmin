@@ -232,7 +232,7 @@ $db_password = "an0ldP4ssPhrase!";
 ?>
 ```
 
-Now, in a separate file, which will be **index.php**, I'll add the following
+Now, in a separate file, which will be **pets.php**, I'll add the following
 PHP to test our database connection and return some results:
 
 ```
@@ -321,21 +321,8 @@ second command, HTML should be outputted:
 
 ```
 php -f login.php
-php -f index.php
+php -f pets.php
 chmod g+r \*php
-```
-
-
-Next we need to update our configuration file for our linuxsysadmin
-virtualhost, and reverse the order of the **DirectoryIndex** field so that
-**index.php** is listed before **index.html**. Then restart **httpd.service**.
-
-```
-cd /etc/httpd/conf.d/
-nano linuxsysadmin.conf
-...
-httpd -t
-systemctl restart httpd.service
 ```
 
 ## Check IP and Hostname
