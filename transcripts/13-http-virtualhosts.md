@@ -15,10 +15,10 @@ then user websites at **/home/\$\{USER\}/public\_html/**. Websites that are
 stored at **/var/www/html** can eventually have a domain name like
 **example.org** or **biguniversity.edu**. And then websites at
 **/home/\$\{USER\}/public\_html/** would have URLs like
-**http://biguniversity.edu/~USER**. The problem with creating a website at
+``http://biguniversity.edu/~USER``. The problem with creating a website at
 **/var/www/html** is that, by default, we can only use our machines to create
 the one main site, so either **example.org** or **biguniversity.edu** but not
-both. 
+both.
 
 *VirtualHosts* solve this problem and allow a single server, with a single IP
 address, to host websites linked to multiple domain names, and all of them
@@ -30,7 +30,9 @@ about which files we can edit to include this information.
 
 First choice, we can add virtual host information to the following file:
 
-**/etc/httpd/conf/httpd.conf**
+```
+/etc/httpd/conf/httpd.conf
+```
 
 However, that same file includes a line (the ``IncludeOptional conf.d/*.conf``
 line) that tells the Apache service to look for additional configuration files
@@ -120,8 +122,8 @@ mkdir /var/www/html/{linuxsysadmins,websysadmins}
 
 The above command creates:
 
-  - /var/www/html/linuxsysadmins
-  - /var/www/html/websysadmins
+* /var/www/html/linuxsysadmins
+* /var/www/html/websysadmins
 
 Now let's create some basic web pages in each domain directory:
 
@@ -168,7 +170,8 @@ more extensively, but here we'll do something more basic.
 The ``/etc/hosts`` file is like a basic DNS system and we can use it as
 a "static table lookup for hostnames" (from ``man hosts``). Let's modify this
 so that our IP address is mapped to the our domain names. To do that, let's add
-the following line just after the two localhost lines: (**USE YOUR IP NOT MINE**) 
+the following line just after the two localhost lines: (**USE YOUR IP NOT
+MINE**)
 
 ```
 ip a
@@ -205,22 +208,22 @@ Success!
 
 If you change the ``/etc/hosts`` file on your **host** machine (i.e., your
 laptop) per the instructions in the last lecture, then you should be able to
-visit **http://linuxsysadmins.com** and **http://websysadmins.com** in your
+visit ``http://linuxsysadmins.com`` and ``http://websysadmins.com`` in your
 browser. Here is a snippet of what my ``/etc/hosts`` file looks like on my
 desktop machine (i.e., my **host** machine):
 
 ```
-127.0.0.1	      localhost
-127.0.1.1	      desktop
+127.0.0.1      localhost
+127.0.1.1      desktop
 192.168.4.32    linuxsysadmins.com
 192.168.4.32    websysadmins.com
 ```
 
 ## References
 
-- [Name-based Virtual Host Support][name_vhost]
-- [VirtualHost Examples][vhost_ex]
-- [How to set up Apache Virtual Hosts on CentOS 7][vhost_apache2]
+* [Name-based Virtual Host Support][name_vhost]
+* [VirtualHost Examples][vhost_ex]
+* [How to set up Apache Virtual Hosts on CentOS 7][vhost_apache2]
 
 [name_vhost]:https://httpd.apache.org/docs/2.2/vhosts/name-based.html
 [vhost_ex]:https://httpd.apache.org/docs/2.4/vhosts/examples.html

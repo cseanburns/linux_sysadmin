@@ -1,9 +1,12 @@
-## The Linux/Unix File System and File Types
+# The Linux/Unix File System and File Types
+
+## Visualizing the Tree Structure
 
 - ``tree`` : list contents of directories in a tree-like format
   - ``tree -dfL 1`` : dir only, full path, one level
 
-### The root directories
+## The root directories
+
 - ``/bin`` : binary files needed to use the system
 - ``/boot``  : files needed to boot the system
 - ``/dev`` : device files -- all hardware has a file
@@ -13,13 +16,13 @@
 - ``/media`` : external storage is mounted
 - ``/mnt`` : other file systems may be mounted
 - ``/opt`` : store software code to compile software
-- ``/proc`` : files containing info about your computer 
+- ``/proc`` : files containing info about your computer
 - ``/root`` : home directory of superuser
 - ``/run`` : used by system processes
 - ``/sbin`` : like ``/bin``, binary files that require superuser privs
 - ``/usr`` : user binaries, etc that might be installed by users
-- ``/srv`` : contains data for servers 
-- ``/sys`` : contains info about devices 
+- ``/srv`` : contains data for servers
+- ``/sys`` : contains info about devices
 - ``/tmp`` : temp files used by applications
 - ``/var`` : variable files, used often for system logs
 
@@ -33,7 +36,7 @@ utilities which are expected to exist on every operating system" ([Coreutils,
 GNU][gnu_coreutils]).
 
 In order to do good work on the command line, it's essential that we become
-familiar with these utilities that cover a range of commands. 
+familiar with these utilities that cover a range of commands.
 
 The online manual is located at [GNU Coreutils Manual][gnu_coreutils_manual].
 Read through it and practice! Look for examples on the web. The commands below
@@ -47,7 +50,7 @@ cat (1)              - concatenate files and print on the standard output
 
 We'll use the **cities.txt** file and the **capitals.txt** files in this
 tutorial. You will find both of these files in the home directory on our remote
-server. 
+server.
 
 Here are what the files look like:
 
@@ -71,7 +74,7 @@ montgomery, al
 jefferson city, mo
 ```
 
-### Practice and examples
+## Practice and examples
 
 Now you can test some of these commands on these files. Be sure to read their
 respective manual pages for their available options. In order to read the
@@ -79,7 +82,7 @@ manual page, you type the command ``man`` followed by the name of the command
 that you're interested in reading about, like ``man cat``. You can navigate the
 manual pages using your cursor keys and to exit them, you press ``q``.
 
-#### Output entire files
+### Output entire files
 
 - ``cat`` :  concatenate files and print on the standard output
   - ``cat cities.txt``
@@ -89,13 +92,13 @@ manual pages using your cursor keys and to exit them, you press ``q``.
 - ``nl`` :  add line numbers to files
   - ``nl capitals.txt``
 
-#### Formatting file contents
+### Formatting file contents
 
 - ``fmt`` : simple optimal text formatter
   - ``man fmt``
   - ``fmt -w 50 file.txt``
 
-#### Output of parts of files
+### Output of parts of files
 
 - ``head`` : output the first part of files
   - ``head file.txt``
@@ -106,7 +109,7 @@ manual pages using your cursor keys and to exit them, you press ``q``.
   - ``tail -n1 file.txt``
   - ``fmt -w 50 file.txt | tail -n1``
 
-#### Summarizing files
+### Summarizing files
 
 - ``wc`` : print newline, word, and byte counts for each file
   - ``wc -w cities.txt``
@@ -114,7 +117,7 @@ manual pages using your cursor keys and to exit them, you press ``q``.
 - ``md5sum`` : compute and check MD5 message digest
 - ``sha256sum`` : compute and check SHA256 message digest
 
-#### Operating on sorted files
+### Operating on sorted files
 
 - ``sort`` : sort lines of text files
   - ``sort cities.txt``
@@ -137,7 +140,7 @@ sort -t , -k 4 cities.txt
   - ``sort file2.txt | uniq -c``
   - ``sort -u file2.txt`` # skipping sort
 
-#### Operating on fields
+### Operating on fields
 
 - ``cut`` : remove sections from each line of files
 
@@ -180,7 +183,7 @@ files and then joining them based on the unique column of data in each one,
 which is the state column, happens to be column two in both **cities.txt** and
 **capitals.txt**. The ``join`` command declares the first file with ``-1`` and
 the second column in that file with ``2``. Then the second file with ``-2`` and
-the second column in the second file with ``2``. 
+the second column in the second file with ``2``.
 
 ```
 sort -t, -k2 cities.txt > cities_sorted.txt
@@ -197,12 +200,12 @@ a long line:
 join -t, -1 2 -2 2 <(sort -t, -k2 cities.txt) <(sort -t, -k2 capitals.txt) > tables.txt
 ```
 
-#### Operating on characters
+### Operating on characters
 
 - ``tr`` : translate or delete characters
 
 The ``tr`` command requires that we redirect standard input from a file, but we
-can also do it from the screen. 
+can also do it from the screen.
 
 Capitalize all the words in a file called 'tables.txt':
 

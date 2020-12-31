@@ -65,9 +65,9 @@ w3m http://localhost/info.php
 
 By default, if both an **index.html** file and an **index.php** file exist in
 the same directory, the Apache web server will display the **index.html** file
-if a user visits the directory (e.g., http://example.com/ or
-http://localhost/). So we need to configure Apache to display *index.php* files
-before displaying *index.html* files in case both files exist in the same
+if a user visits the directory (e.g., ``http://example.com/`` or
+``http://localhost/``). So we need to configure Apache to display *index.php*
+files before displaying *index.html* files in case both files exist in the same
 directory:
 
 ```
@@ -142,9 +142,9 @@ w3m http://seanburns/
 
 **Your goal:**
 
-  - Create an **index.php** file in your **userdir**
-  - Add some PHP and submit screenshots, like last week, showing both the code
-    and the output.
+- Create an **index.php** file in your **userdir**
+- Add some PHP and submit screenshots, like last week, showing both the code
+  and the output.
 
 Get some sample PHP code from here: [https://www.w3schools.com/php/php_syntax.asp][php_syntax]
 

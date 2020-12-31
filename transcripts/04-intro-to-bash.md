@@ -8,7 +8,7 @@ Let's cover some basic commands. I'll list them and go through each one below.
 - ``ls`` : list directory contents
 - ``cd`` : change the shell working directory
 - absolute paths: ``/home/sean/public_html/``
-- relative paths: 
+- relative paths:
 
 ```
 pwd
@@ -21,19 +21,19 @@ cd /home/sean/public_html/ # changing directory using absolute paths
 cd ../testdir/ # changing directory using relative paths
 ```
 
-## File names 
+## File names
 
 - everything is a file: ``file``
 - case sensitive
 - no spaces in names
-    - if do, then quote
-    - if do, then use backslashes
+  - if do, then quote
+  - if do, then use backslashes
 - hidden files: ``ls -a``
 
 ## Manual pages
 
 - ``man ls``
-- ``man -k [search term]`` 
+- ``man -k [search term]``
 - ``info`` e.g., ``info sed``
 
 ## File manipulation
@@ -64,11 +64,11 @@ Please visit: [https://ryanstutorials.net/linuxtutorial/][ryan_tutorials] for
 some good additional tutorials if you want to keep exploring. For now, practice
 the above and we'll extend on these commands next week.
 
-# Bash Scripting
+## Bash Scripting
 
 In this demo, I'll discuss the following three topics:
 
-- File Ownership and Permissions 
+- File Ownership and Permissions
 - Grep and Regular Expressions
 - Test command and ``if`` Statements
 
@@ -135,9 +135,8 @@ to right:
 - The third ``r--`` states that all others have **Read** access but not ``wx``
   **Write** or **Execute** access since this is marked with ``--``
 
-
 In order to change ownership of the file, we use the ``chown`` command, and to
-change file permissions, we use the ``chmod`` command. 
+change file permissions, we use the ``chmod`` command.
 
 If I want to change the group ownership of the **capitals.txt** file so that
 members of my faculty group can access it, then the command to do so is:
@@ -147,7 +146,7 @@ chown sean:sis_fac_staff capitals.txt
 ```
 
 ```
-ls -l 
+ls -l
 ```
 
 And the new output is:
@@ -194,7 +193,7 @@ I can also combine letters. If I want to make the file **w**ritable by the
 chmod ug+w capitals.txt
 ```
 
-## Grep and Regular Expressions 
+## Grep and Regular Expressions
 
 Oftentimes, as systems administrators, we will need to search the contents of
 a file. The command that we use to do that is the ``grep`` command. Using the
@@ -393,7 +392,7 @@ fi
 ```
 
 When we add this in ``nano``, let's save the file as **filecomp.sh** in
-``nano`` and make it executable. 
+``nano`` and make it executable.
 
 ```
 chmod u+x filecomp.sh
@@ -409,7 +408,7 @@ Then run the script:
 
 In this lesson I demoed the following three topics:
 
-- File Ownership and Permissions 
+- File Ownership and Permissions
 - Grep and Regular Expressions
 - Test command and ``if`` Statements
 

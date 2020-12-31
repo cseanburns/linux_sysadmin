@@ -20,7 +20,7 @@ $ ip neigh show
 10.0.2.2 dev enp0s3 lladdr 52:54:00:12:35:02 REACHABLE
 10.0.2.3 dev enp0s3 lladdr 52:54:00:12:35:03 STALE
 $ ip route show
-default via 10.0.2.2 dev enp0s3 proto dhcp metric 100 
+default via 10.0.2.2 dev enp0s3 proto dhcp metric 100
 10.0.2.0/24 dev enp0s3 proto kernel scope link src 10.0.2.15 metric 100
 ```
 
@@ -31,7 +31,6 @@ Where:
   router; likewise, **52...02** is the hardware address for that virtual router
 - **10.0.2.0** is called the **network address**, which is a unique
   identifier IP address for the subnet
-
 
 In short, for network traffic to get to the internet, the Fedora machine must
 know where the router (another computer) is located on the network and must
@@ -97,17 +96,18 @@ $ ip a
     link/ether 08:00:27:e1:b5:c8 brd ff:ff:ff:ff:ff:ff
     inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic noprefixroute enp0s3
        valid_lft 690726sec preferred_lft 690726sec
-    inet6 fe80::22da:ba7f:d634:2493/64 scope link dadfailed tentative noprefixroute 
+    inet6 fe80::22da:ba7f:d634:2493/64 scope link dadfailed tentative noprefixroute
        valid_lft forever preferred_lft forever
-    inet6 fe80::f084:e92e:908e:2d0c/64 scope link noprefixroute 
+    inet6 fe80::f084:e92e:908e:2d0c/64 scope link noprefixroute
        valid_lft forever preferred_lft forever
 ```
 
-In the meantime, here's the routing table on my Fedora VM via a bridged connection (not NAT):
+In the meantime, here's the routing table on my Fedora VM via a bridged
+connection (not NAT):
 
 ```
 $ ip route
-default via 10.163.34.1 dev enp0s3 proto dhcp metric 100 
+default via 10.163.34.1 dev enp0s3 proto dhcp metric 100
 10.163.34.0/24 dev enp0s3 proto kernel scope link src 10.163.34.118 metric 100
 ```
 
@@ -115,9 +115,9 @@ And then on my physical machine:
 
 ```
 $ ip route
-default via 10.163.34.1 dev eno1 proto dhcp metric 100 
-10.163.34.0/24 dev eno1 proto kernel scope link src 10.163.34.59 metric 100 
-169.254.0.0/16 dev eno1 scope link metric 1000 
+default via 10.163.34.1 dev eno1 proto dhcp metric 100
+10.163.34.0/24 dev eno1 proto kernel scope link src 10.163.34.59 metric 100
+169.254.0.0/16 dev eno1 scope link metric 1000
 192.168.122.0/24 dev virbr0 proto kernel scope link src 192.168.122.1 linkdown
 ```
 
@@ -126,11 +126,11 @@ Since both machines are on the same network, they both state the following path:
 1. all packets originating at **10.163.34.118** (for Fedora VM) or
    **10.163.34.59** (for physical machine) are routed through **10.163.34.1**
    on the subnet defined as **10.163.34.0/24**.
-2. In the second ``ip route`` output, you'll notice the IP address
+1  In the second ``ip route`` output, you'll notice the IP address
    **169.254.0.0/16**. This is called the [link-local][rfc3927] address. This is
    a local address that is assigned to a device in the absence of either static
    or dynamic IP assignment (via, e.g., a router).
-3. The **192.168.122.0/24** info is from VirtualBox.
+1. The **192.168.122.0/24** info is from VirtualBox.
 
 Here's kind of visual diagram of what this network looks like:
 
@@ -188,9 +188,9 @@ Aside from a few other parts, this is the primary information in an IP header.
 sudo tcpdump host IP-NUMBER
 ```
 
-TCP and UDP headers will contain a bit more information, including port 
-information for both source and destination, sequence (SYN) information for 
-data packets, acknowledgment (ACK) information for the ACK number, as well as 
+TCP and UDP headers will contain a bit more information, including port
+information for both source and destination, sequence (SYN) information for
+data packets, acknowledgment (ACK) information for the ACK number, as well as
 data and error checking if it's TCP.
 
 A *port* associates a process with a network service. Ports provide a way to
@@ -217,9 +217,9 @@ less /etc/services
 
 See also the Wikipedia page: [List of TCP and UDP port numbers][port_numbers]
 
-# Some basic IP subnetting
+## Some basic IP subnetting
 
-## Private IP Ranges
+### Private IP Ranges
 
 Remember, when subnetting, we primarily will work with private IP ranges:
 
@@ -229,14 +229,13 @@ Remember, when subnetting, we primarily will work with private IP ranges:
 | 172.16.0.0    | 172.31.255.255  |
 | 192.168.0.0   | 192.168.255.255 |
 
-## IP Meaning
+### IP Meaning
 
 An IP address is 32 bits (8 x 4), or four bytes, in size. In human readable
 context, it's usually expressed in the following notation style:
 
 - **192.168.1.6**
 - **172.16.3.44**
-
 
 Each set of numbers separated by a dot is referred to as an **octet**, and an
 **octet** is a group of 8 **bits**. Eight **bits** also equal a single
@@ -261,12 +260,14 @@ Or:
 - 00000001 = 1
 - 00000110 = 6
 
-## IP Math
+### IP Math
 
 When doing IP math, one easy way to do it is to simply remember that each bit
 in each of the above bytes is a placeholder for the following values:
 
-**128 64 32 16 8 4 2 1**
+```
+128 64 32 16 8 4 2 1
+```
 
 Alternatively, from low to high:
 
@@ -289,6 +290,7 @@ do not exceed 8 bits or places:
 1 * 2^7 = 128
 1 * 2^6 =  64 (128 + 64 = 192)
 ```
+
 STOP: There are no values left, and so the rest are zeroes.
 
 So: 11000000
@@ -320,12 +322,12 @@ Since there is nothing remaining, the rest of the bits equal 0.
 
 **NOTE**: show more examples
 
-## Subnetting
+### Subnetting
 
 Subnetting involves dividing a network into two or more subnets. When we
 subnet, we need to first identify the number of hosts we will require on the
 subnet. For starters, let's assume that we need a subnet that can assign at
-most 254 IP addresses to the devices attached to it via the router. 
+most 254 IP addresses to the devices attached to it via the router.
 
 We also need two additional IP addresses: the **subnet mask** and the **network
 address/ID**. The **network address** identifies the network and the **subnet
@@ -349,7 +351,7 @@ private IP addresses that exist on two separate subnets:
 - 192.168.1.6/24:  Some Desktop 1, Subnet A
 - 10.160.38.75/24: Some Desktop 1, Subnet B
 
-### Example 1: 192.168.1.6 : Desktop 1, Subnet A
+#### Example 1: 192.168.1.6 : Desktop 1, Subnet A
 
 Let's derive the network mask and the network address (or ID) from this IP
 address.
@@ -366,7 +368,7 @@ notation, so:
 
 192.168.1.6/24
 
-### Example 2: 10.160.38.75 : Desktop 1, Subnet B
+#### Example 2: 10.160.38.75 : Desktop 1, Subnet B
 
 ```
 00001010.10100000.00100110.01001011 IP               10.160.38.75
@@ -395,7 +397,7 @@ For Desktop 1, Subnet B, we have the following
 | End Range    | 10.163.38.254 |
 | Broadcast    | 10.163.38.255 |
 
-### Example 3: 172.16.1.62/24
+#### Example 3: 172.16.1.62/24
 
 Derive the network information for 172.16.1.62/24:
 
@@ -414,7 +416,7 @@ Derive the network information for 172.16.1.62/24:
 | End Range    | 172.16.1.254  |
 | Broadcast    | 172.16.1.255  |
 
-### Example 4: 10.0.5.23/16
+#### Example 4: 10.0.5.23/16
 
 This is an example of a subnet with more possible hosts.
 
@@ -428,7 +430,6 @@ This is an example of a subnet with more possible hosts.
 | 2^5    | 32     |
 | 2^6    | 64     |
 | 2^7    | 128    |
-
 
 ```
 10.0.5.23/16

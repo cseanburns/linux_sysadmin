@@ -22,7 +22,8 @@ between the two, you should be able to figure it out:
 
 - [How to enable and install Built-in SSH in Windows 10 using the windows
   command prompt or powershell][ssh_windows10]
-- [How to Enable and Use Windows 10’s New Built-in SSH Commands][ssh_windows10_bi] 
+- [How to Enable and Use Windows 10’s New Built-in SSH
+  Commands][ssh_windows10_bi]
 
 If neither of those work for you, then you should install [PuTTY][putty]. This is
 a great app, and since it's available on Linux, I will show you how to use it
@@ -55,7 +56,7 @@ want. The default font size is too small for me, and so that's something I'd
 change right away. To change the font size, in the PuTTY window:
 
 - Click on *Fonts* under the *Window* category
-- Click on *Change...* next to the item labeled *Font used for ordinary text*. 
+- Click on *Change...* next to the item labeled *Font used for ordinary text*.
 - Select the font and size that you prefer
 
 That's all for today. Keep these notes and next week we start to connect to our

@@ -29,8 +29,8 @@ package name:
 dnf search apache | grep "httpd"
 ```
 
-Apache2 is not the only web server available. [nginx][nginx] is another popular web
-server, and you should explore or learn about other options on your own. 
+Apache2 is not the only web server available. [nginx][nginx] is another popular
+web server, and you should explore or learn about other options on your own.
 For now, let's get some basic info on the ``httpd`` package:
 
 ```
@@ -155,7 +155,6 @@ firewall-cmd --zone=FedoraServer --add-service=https
 firewall-cmd --runtime-to-permanent
 ```
 
-
 ## Changing the ``hostname``
 
 The ``hostname`` of a system is the label it uses to identify itself to others
@@ -194,7 +193,6 @@ We can access our site by hostname rather than by IP:
 w3m seanburns
 ```
 
-
 ## Optional
 
 After you've completed the above steps, do the following:
@@ -203,23 +201,25 @@ After you've completed the above steps, do the following:
    it seems Windows users can follow these instructions:
    [https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992][windows_hosts].
    macOS users can follow these instructions also have an ``/etc/hosts``.
-2. Map your guest IP address to your new hostname:
+1. Map your guest IP address to your new hostname:
 
 ```
 192.168.4.31 seanburns
 ```
 
-Then, in your Firefox, Chrome, or whatever browser, visit your new website and replace 'seanburns' with the hostname that you chose for your guest OS:
+Then, in your Firefox, Chrome, or whatever browser, visit your new website and
+replace 'seanburns' with the hostname that you chose for your guest OS:
 
 ```
 http://seanburns
 ```
 
-# Apache2 User Directories
+## Apache2 User Directories
 
-We can enable Apache2 so that users on our systems can run websites from their home directories.
+We can enable Apache2 so that users on our systems can run websites from their
+home directories.
 
-## Enable userdir (``$HOME/public_html`` sites)
+### Enable userdir (``$HOME/public_html`` sites)
 
 Edit the ``userdir.conf`` file.
 
@@ -242,11 +242,11 @@ systemctl restart httpd.service
 ### Tasks
 
 1. Exit out of root account
-2. Go to your regular user's home directory
-3. Make a directory titled ``public_html``
-4. Change ``public_html`` directory permissions to 755: ``chmod 755
+1. Go to your regular user's home directory
+1. Make a directory titled ``public_html``
+1. Change ``public_html`` directory permissions to 755: ``chmod 755
    public_html``
-5. Change user director permissions to 711: ``chmod 711 /home/sean``
+1. Change user director permissions to 711: ``chmod 711 /home/sean``
 
 ### SELinux
 

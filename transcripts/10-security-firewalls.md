@@ -18,7 +18,6 @@ servers, for example.
 technologies that are common today. In this sense, it's been used to control
 and provide a stable developmental environment for devops like work.
 
-
 ## ``chroot`` a current user
 
 In this tutorial, we are going to create a ``chroot`` for a human user account.
@@ -55,7 +54,7 @@ cp /usr/bin/bash /var/chroot/bin/
 # Identify libraries needed by Bash
 ldd /usr/bin/bash
 ## comment: name it lib64 since these are all lib64 libraries
-mkdir /var/chroot/lib64       
+mkdir /var/chroot/lib64
 cp /lib64/libtinfo.so.6 /var/chroot/lib64/
 cp /lib64/libdl.so.2 /var/chroot/lib64/
 cp /lib64/libc.so.6 /var/chroot/lib64/
@@ -132,7 +131,7 @@ system.
 By using the ``ldd`` command, you can add additional binaries for this user. As
 an exercise, use the ``ldd`` command to locate the libraries for the ``nano``
 editor, and make ``nano`` available to the user *omicron* in the chrooted
-directory. 
+directory.
 
 ### Nano in chroot
 
@@ -141,18 +140,18 @@ After making Bash available in ``chroot``:
 (Side note: I'm using the **#** sign below to indicate the root prompt.)
 
 ```
-# which nano 
+# which nano
 /usr/bin/nano
 # cp /usr/bin/nano /var/chroot/bin/
 # ldd /usr/bin/nano
 linux-vdso.so.1 (0x00007fff5bdd5000)
-	libmagic.so.1 => /lib64/libmagic.so.1 (0x00007f0ce11a7000)
-	libncursesw.so.6 => /lib64/libncursesw.so.6 (0x00007f0ce1167000)
-	libtinfo.so.6 => /lib64/libtinfo.so.6 (0x00007f0ce1138000)
-	libc.so.6 => /lib64/libc.so.6 (0x00007f0ce0f6e000)
-	libz.so.1 => /lib64/libz.so.1 (0x00007f0ce0f54000)
-	libdl.so.2 => /lib64/libdl.so.2 (0x00007f0ce0f4d000)
-	/lib64/ld-linux-x86-64.so.2 (0x00007f0ce1232000)
+  libmagic.so.1 => /lib64/libmagic.so.1 (0x00007f0ce11a7000)
+  libncursesw.so.6 => /lib64/libncursesw.so.6 (0x00007f0ce1167000)
+  libtinfo.so.6 => /lib64/libtinfo.so.6 (0x00007f0ce1138000)
+  libc.so.6 => /lib64/libc.so.6 (0x00007f0ce0f6e000)
+  libz.so.1 => /lib64/libz.so.1 (0x00007f0ce0f54000)
+  libdl.so.2 => /lib64/libdl.so.2 (0x00007f0ce0f4d000)
+  /lib64/ld-linux-x86-64.so.2 (0x00007f0ce1232000)
 # cp /lib64/libmagic.so.1 /var/chroot/lib64/
 # cp /lib64/libncursesw.so.6 /var/chroot/lib64/
 # cp /lib64/libtinfo.so.6 /var/chroot/lib64/
@@ -179,9 +178,9 @@ To fix this, install ``ncurses-term`` and copy over additional files:
 # nano
 ```
 
-# Linux Firewalls
+## Linux Firewalls
 
-**See NFTABLES for changes to the firewall software**
+See NFTABLES for changes to the firewall software
 
 Netfilter is a part of the kernel that includes a suite of applications that
 help manage how packets flow in and out of a server or internet connected
@@ -193,7 +192,7 @@ Fedora/RedHat offers a more user friendly interface to ``iptables`` called
 friendly interface called ``ufw``. In this lecture, I'll discuss ``iptables``
 and ``firewall-cmd``.
 
-## iptables 
+## iptables
 
 There are five predefined tables (*operations*) and five chains that come with
 ``iptables``. Tables define the kinds of operations that you can use to control
@@ -209,28 +208,27 @@ performed on packets. The main targets include **ACCEPT**, **DROP**, and
 From ``man iptable``, the tables and respective chains include:
 
 - filter (the default table)
-    - INPUT: for packets destined to local sockets
-    - FORWARD: for packets being routed through the box
-    - OUTPUT: for locally-generated packets
+  - INPUT: for packets destined to local sockets
+  - FORWARD: for packets being routed through the box
+  - OUTPUT: for locally-generated packets
 - nat
-    - PREROUTING: for altering packets as soon as they come in
-    - INPUT: for altering packets destined for local sockets
-    - OUTPUT: for altering locally-generated packets
-    - POSTROUTING: for altering packets as they are about to go out
+  - PREROUTING: for altering packets as soon as they come in
+  - INPUT: for altering packets destined for local sockets
+  - OUTPUT: for altering locally-generated packets
+  - POSTROUTING: for altering packets as they are about to go out
 - mangle
-    - PREROUTING
-    - OUTPUT
-    - INPUT
-    - FORWARD
-    - POSTROUTING
+  - PREROUTING
+  - OUTPUT
+  - INPUT
+  - FORWARD
+  - POSTROUTING
 - raw
-    - PREROUTING
-    - OUTPUT
+  - PREROUTING
+  - OUTPUT
 - security
-    - INPUT
-    - OUTPUT
-    - FORWARD
-
+  - INPUT
+  - OUTPUT
+  - FORWARD
 
 We'll cover the filter tables and the nat tables.
 
@@ -260,7 +258,8 @@ ip a
 Now that we have the Network ID and the CIDR number, we can set the firewall:
 
 ```
-# comment: first, set policy to drop all incoming, forwarding, and outgoing packets; this means we're starting from a baseline
+# comment: first, set policy to drop all incoming, forwarding, and outgoing
+# packets; this means we're starting from a baseline
 iptables --policy INPUT DROP
 iptables --policy FORWARD DROP
 iptables --policy OUTPUT DROP
@@ -284,8 +283,8 @@ w3m https://www.google.com
 
 There are lots of examples on the web. Examples from:
 
-- http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/
-- https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/
+- [http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/][iptables-examples]
+- [https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/][iptables-beginners]
 
 ### PREROUTING
 
@@ -322,9 +321,9 @@ Zones are an important concept in firewalld. Some predefined zones:
 - PUBLIC : only selected incoming connections are accepted. Good zone for web
   server, email server, etc.
 - EXTERNAL : external networks (useful for NAT)
-- DMZ : computers located in DMZ 
+- DMZ : computers located in DMZ
 - work : trust most computers in network and accept some services
-- home : trust most computers in network and accept some services 
+- home : trust most computers in network and accept some services
 - trusted : trust all machines in network
 
 Check if running:
@@ -368,3 +367,5 @@ To change default zone:
 
 [chroot_jail]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins
 [firewall_cmd]:https://docs.fedoraproject.org/en-US/Fedora/19/html/Security_Guide/sect-Security_Guide-Using_Firewalls.html
+[iptables-examples]:http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/
+[iptables-beginners]:https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/

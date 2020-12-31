@@ -1,6 +1,6 @@
-## History of Unix and Linux
+# History of Unix and Linux
 
-### Location: Bell Labs, part of AT&T (New Jersey), late 1960s through early 1970s
+## Location: Bell Labs, part of AT&T (New Jersey), late 1960s through early 1970s
 
 - Multics, a time sharing system (that is, more than one person could use it at
   once)
@@ -9,21 +9,21 @@
 - Also, the ``ed`` text editor was written. Pronounced e.d. but generally
   sounded out.
 - This version of UNIX would later be referred to as *Research Unix*
-- [Dennis Ritchie][ritchie] joined him and created the C language (In October 2011, Steve
-  Jobs passed away a week before Dennis Ritchie, but the world mourned Jobs and
-  Ritchie's death went largely unnoticed).
+- [Dennis Ritchie][ritchie] joined him and created the C language (In October
+  2011, Steve Jobs passed away a week before Dennis Ritchie, but the world
+  mourned Jobs and Ritchie's death went largely unnoticed).
 
-### Location: Berkeley, CA (University of California, Berkeley), early to mid 1970s
+## Location: Berkeley, CA (University of California, Berkeley), early to mid 1970s
 
-- The code for UNIX was not 'free' but low cost and easily shared. 
+- The code for UNIX was not 'free' but low cost and easily shared.
 - Ken Thompson visited Berkeley and helped install Version 6 of UNIX
-  (https://en.wikipedia.org/wiki/Berkeley_Software_Distribution).
+  [https://en.wikipedia.org/wiki/Berkeley_Software_Distribution][BSD].
 - Bill Joy and others contributed heavily (Joy created vi, which Vim descends
   from).
 - This installation of UNIX would eventually become known as the Berkeley
   Software Distribution, or BSD.
 
-### AT&T
+## AT&T
 
 - Until its breakup in 1984, AT&T was not allowed to profit off of patents that
   were not directly related to its telecommunications businesses.
@@ -32,38 +32,38 @@
 - This changed after the breakup. System V UNIX became the standard bearer of
   commercial UNIX.
 
-### Location: Boston, MA (MIT), early 1980s through early 1990s
+## Location: Boston, MA (MIT), early 1980s through early 1990s
 
-- In the late 1970s, [Richard Stallman][stallman] began to notice that software began to
-  become commoditized and as a result, hardware vendors were no longer sharing
-  the code they developed to make their hardware work. During much of his
-  education, software code was not eligible for copyright protection (changed
-  under the Copyright Act of 1976).
+- In the late 1970s, [Richard Stallman][stallman] began to notice that software
+  began to become commoditized and as a result, hardware vendors were no longer
+  sharing the code they developed to make their hardware work. During much of
+  his education, software code was not eligible for copyright protection
+  (changed under the Copyright Act of 1976).
 - Stallman, who thrived in a *hacker culture* (Wikipedia page on Stallman),
-  began to wage battles against this. 
-- Stallman created the [GNU project][gnu_project] and philosophy (also the creator of GNU
-  Emacs). The project is an attempt to create a completely **free** operating
-  system, that was Unix-like, called GNU.
+  began to wage battles against this.
+- Stallman created the [GNU project][gnu_project] and philosophy (also the
+  creator of GNU Emacs). The project is an attempt to create a completely
+  **free** operating system, that was Unix-like, called GNU.
 - By the early 1990s, Stallman and others had developed all the utilities
   needed to have a full operating system, except for a kernel.
 - This includes the Bash shell, written by [Brian Fox][bfox].
 - The philosophy includes several propositions that define free software:
 
-### The four freedoms, per GNU Project
+## The four freedoms, per GNU Project
 
 [https://www.gnu.org/philosophy/free-sw.html][four_freedoms]
 
 > 0. The freedom to run the program as you wish, for any purpose (freedom 0).
 > 1. The freedom to study how the program works, and change it so it does your
->    computing as you wish (freedom 1). Access to the source code is
->    a precondition for this.
+>   computing as you wish (freedom 1). Access to the source code is
+>   a precondition for this.
 > 2. The freedom to redistribute copies so you can help others (freedom 2).
 > 3. The freedom to distribute copies of your modified versions to others
->    (freedom 3). By doing this you can give the whole community a chance to
->    benefit from your changes. Access to the source code is a precondition for
->    this.
+>   (freedom 3). By doing this you can give the whole community a chance to
+>   benefit from your changes. Access to the source code is a precondition for
+>   this.
 
-### The Unix wars and the lawsuit
+## The Unix wars and the lawsuit
 
 - Differences in AT&T Unix and BSD Unix arose. The former was aimed at
   commercialization and the latter aimed at researchers and academics.
@@ -72,7 +72,7 @@
   copyright and trademark violations.
 - USL ultimately lost the case.
 
-### The Rise of Linux, Linus Torvalds, University of Helsinki, Finland
+## The Rise of Linux, Linus Torvalds, University of Helsinki, Finland
 
 - On August 25, 1991 (28 years ago this last Sunday), [Linus][linux_torvalds]
   [Torvalds][torvalds_linus] announced that he had started working on
@@ -88,16 +88,16 @@
 - But Torvalds and others took the GNU utilities and created what is now called
   Linux, or GNU/Linux.
 
-### Distributions
+## Distributions
 
 - Soon after Linux development, people would create their own Linux and GNU
   based operating systems and would distribute.
 - As such, they became referred to as *distributions*.
 - The two oldest distributions that are still in active development include:
-    - Slackware
-    - Debian
+  - Slackware
+  - Debian
 
-### What happened to BSD?
+## Short History of BSD
 
 - Unix version numbers 1-6 eventually led to BSD 1-4.
 - At BSD 4.3, all versions had some AT&T code. Desire to remove this code led
@@ -106,27 +106,27 @@
 - BSD Net/2 was ported to the Intel 386 processor. This became 386BSD and was
   made available a year after the Linux kernel was released, in 1992.
 - 386BSD split into two projects:
-    - NetBSD
-    - FreeBSd
+  - NetBSD
+  - FreeBSd
 - NetBSD split into another project: OpenBSD.
 - All three of these BSDs are still in active development. From a bird's eye
   point of view, they each have different foci:
-    - [NetBSD][netbsd] focuses on portability (MacOS, NASA)
-    - [FreeBSD][freebsd] focuses on wide applicability (WhatsApp, Netflix,
-      PlayStation 4, MacOS)
-    - [OpenBSD][openbsd] focuses on security (has contributed a number of very
-      important applications)
+  - [NetBSD][netbsd] focuses on portability (MacOS, NASA)
+  - [FreeBSD][freebsd] focuses on wide applicability (WhatsApp, Netflix,
+    PlayStation 4, MacOS)
+  - [OpenBSD][openbsd] focuses on security (has contributed a number of very
+    important applications)
 
 Note: MacOS is based on [Darwin][puredarwin], is [technically UNIX][unix], and
-is partly based on FreeBSD with some code coming from the other BSDs. 
+is partly based on FreeBSD with some code coming from the other BSDs.
 
-### What happened with GNU?
+## Short History of GNU
 
 - The GNU Hurd is still being developed, but it's only in the pre-production
   state. The last release was 0.9 on December 2016. A complete OS based on the
   GNU Hurd can be downloaded and ran.
 
-### Free and Open Source Licenses
+## Free and Open Source Licenses
 
 - [GNU General Public License (GPL)][gnu_gpl]
 - [BSD License][bsd_license]
@@ -146,3 +146,4 @@ is partly based on FreeBSD with some code coming from the other BSDs.
 [unix]:https://www.opengroup.org/membership/forums/platform/unix
 [gnu_gpl]:https://www.gnu.org/software/hurd/
 [bsd_license]:https://opensource.org/licenses/BSD-3-Clause
+[BSD]:https://en.wikipedia.org/wiki/Berkeley_Software_Distribution]

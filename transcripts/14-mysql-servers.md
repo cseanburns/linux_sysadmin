@@ -185,10 +185,10 @@ mysql> \q
 ## References and Read More
 
 1. [MySQL: Getting Started with MySQL][mysql_getstarted]
-2. [How to Create a New User and Grant Permissions in MySQL][mysql_newuser]
-3. [MySQL: MySQL 5.7 Reference Manual: 13 SQL Statement Syntax][mysql_syntax]
+1. [How to Create a New User and Grant Permissions in MySQL][mysql_newuser]
+1. [MySQL: MySQL 5.7 Reference Manual: 13 SQL Statement Syntax][mysql_syntax]
 
-# Install PHP and MySQL Support 
+## Install PHP and MySQL Support
 
 The goal here is to complete the connection between PHP and MySQL so that we
 can use both for our websites.
@@ -205,12 +205,12 @@ systemctl restart mysqld.service
 systemctl restart httpd.service
 ```
 
-## Create PHP Scripts
+### Create PHP Scripts
 
 Let's move to the base web directory and create our login file, which will
 contain the credentials for our *MySQL* account. In the previous week,
 I demonstrated virtualhosts. We'll use one of our virtual domains to connect to
-our MySQL server with PHP. 
+our MySQL server with PHP.
 
 ```
 cd /var/www/html/linuxsysadmins/
@@ -247,11 +247,11 @@ require_once 'login.php';
 
 // Establish connection
 $conn = mysqli_connect($db_hostname, $db_username, $db_password) or
-	die("Unable to connect");
+  die("Unable to connect");
 
 // Open database
 mysqli_select_db($conn, $db_database) or
-	die("Could not open database '$db_database'");
+  die("Could not open database '$db_database'");
 
 // QUERY 1
 $query1 = "show tables from $db_database";
@@ -259,14 +259,14 @@ $result1 = mysqli_query($conn, $query1);
 
 $tblcnt = 0;
 while($tbl = mysqli_fetch_array($result1)) {
-	$tblcnt++;
+  $tblcnt++;
 }
 
 if (!$tblcnt) {
-	echo "<p>There are no tables</p>\n";
+  echo "<p>There are no tables</p>\n";
 }
 else {
-	echo "<p>There are $tblcnt tables</p>\n";
+  echo "<p>There are $tblcnt tables</p>\n";
 }
 
 // Free result1 set
@@ -283,7 +283,7 @@ echo "<br/>";
 $row = mysqli_fetch_array($result2, MYSQLI_ASSOC);
 printf ("%s (%s)\n", $row["name"], $row["owner"]);
 
-// Free result2 set  
+// Free result2 set
 mysqli_free_result($result2);
 
 // Query 3
@@ -291,17 +291,17 @@ $query3 = "select * from cats";
 $result3 = mysqli_query($conn, $query3);
 
 while($row = $result3->fetch_assoc()) {
-	echo "<p>Owner " . $row["owner"] . " has pet " . $row["name"] . ".</p>";
+  echo "<p>Owner " . $row["owner"] . " has pet " . $row["name"] . ".</p>";
 }
 
 mysqli_free_result($result3);
 
 $result4 = mysqli_query($conn, $query3);
 while($row = $result4->fetch_assoc()) {
-	echo "<p>Pet " . $row["name"] . " was born on " . $row["birth"] . ".</p>";
+  echo "<p>Pet " . $row["name"] . " was born on " . $row["birth"] . ".</p>";
 }
 
-// Free result4 set  
+// Free result4 set
 mysqli_free_result($result4);
 
 /* Close connection */
@@ -325,7 +325,7 @@ php -f pets.php
 chmod g+r \*php
 ```
 
-## Check IP and Hostname
+### Check IP and Hostname
 
 We want to make sure that ``/etc/hosts`` has the correct IP address for **linuxsysadmin**:
 
@@ -334,13 +334,13 @@ ip a
 nano /etc/hosts # update IP address if changed
 ```
 
-**Tasks**
+### Tasks
 
 Copy the *login.php* and *pets.php* to your ``public_html`` directory (you
 should still have *userdir* enabled). Figure out what you need to change in
 order to get your script to work there.
 
-## References
+### References
 
 - [How to Test PHP MySQL Database Connection Using Script][php_mysql]
 - [Install Apache/PHP 7.2.12 on Fedora 29/28, CentOS/RHEL 7.5/6.10][apache_php]

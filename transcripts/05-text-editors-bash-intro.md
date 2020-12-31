@@ -55,7 +55,7 @@ Line editors like ``ed`` are command driven. There is no menu to select from at
 the top of the *window*. Instead, if a user wants to delete a word, the user
 first has to direct the line editor to the relevant line by its address and
 then command the line editor to delete the word on that line. Line editors can
-also work on ranges of line, including all the lines in the file. 
+also work on ranges of line, including all the lines in the file.
 
 Commands are cryptic in line editors and usually are called by a single letter.
 For example, to delete a line in ``ed``, we use the **d** command. To print
@@ -91,7 +91,6 @@ following sentence:
 ```
 I use linux.
 ```
-
 
 Now imagine that I am editing the file and realize that the word **linux** is
 a proper noun and should be capitalized. The substitute command requires that
@@ -209,7 +208,6 @@ also because the line editing technology developed for it is still in use
 today, and is a basic part of the ``vim`` text editor, which is a very widely
 used application.
 
-
 ## ``vim``
 
 The ``vim`` text editor is a take on the ``vi`` text editor and is in fact
@@ -229,7 +227,7 @@ To enter **insert mode**, I can type **i** or **a** for **insert** or
 **append** mode. The difference is that **i** will start **insert** mode where
 the cursor lies, and **a** will start **insert** mode right-adjacent to the
 cursor. Once in **insert** mode, you can type text as you normally would and
-use the arrow keys to navigate around the file. 
+use the arrow keys to navigate around the file.
 
 To get into **command mode** in ``vim``, you can press the **Esc** key. And
 then you can enter commands like you would with ``ed``, using the same syntax:
@@ -273,7 +271,7 @@ are the **j,k,l,h** keystrokes:
 Like the other commands, you can precede this with addresses. To move 2 lines
 down in ``vim``, you type ``2j``, and so forth. Vi/Vim have had such a powerful
 impact on software development that you can in fact use these same keystrokes
-to navigate a number of sites such as Gmail and Facebook. 
+to navigate a number of sites such as Gmail and Facebook.
 
 To save the file and exit ``vim``, we go into **command mode** by pressing the
 **Esc** key, and then:

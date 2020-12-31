@@ -83,8 +83,8 @@ domains currently in existence.
 
 In the Google example, the second level domain is **google**. Other examples
 include: **redhat** in **redhat.com** and **debian** in **debian.org**.
-[Soyinka, (2016)][soyinka_2] refers to this part of the FQDN as that which makes up the
-"organizational boundary of the namespace" (p. 425). 
+[Soyinka, (2016)][soyinka_2] refers to this part of the FQDN as that which
+makes up the "organizational boundary of the namespace" (p. 425).
 
 ## Third-level domain names / hostnames / subdomains
 
@@ -95,17 +95,17 @@ domains. For example: www is a third level domain. If you owned
 location, or, ``www.example.org`` could resolve to the second-level domain
 itself. That is:
 
-- www.debian.org points to debian.org
+* www.debian.org points to debian.org
 
 But it could also point to a separate server, such that **debian.org** and
 **www.debian.org** would be two separate servers with two separate websites or
 services. Although this is not common with third-level domains that start with
-**www**, it is common with others. 
+**www**, it is common with others.
 
 For example, with hostnames that are not ``www``:
 
-- although google.com resolves to www.google.com
-- google.com does not resolve to drive.google.com or maps.google.com or
+* although google.com resolves to www.google.com
+* google.com does not resolve to drive.google.com or maps.google.com or
   mail.google.com because those other three provide different, but specific
   services
 
@@ -127,20 +127,20 @@ servers. You can read the root files here:
 
 ## DNS Record types
 
-- SOA:    Start of Authority: describes the site's DNS entries
-  - IN:     Internet Record
-- NS:     Name Server: state which name server provides DNS resolution
-- A:      Address records: provides mapping hostname to IPv4 address
-- AAAA:   Address records: provides mapping hostname to IPv6 address
+* SOA:    Start of Authority: describes the site's DNS entries
+  * IN:     Internet Record
+* NS:     Name Server: state which name server provides DNS resolution
+* A:      Address records: provides mapping hostname to IPv4 address
+* AAAA:   Address records: provides mapping hostname to IPv6 address
 
 ```
 dig google.com
 google.com.     IN      A       216.58.192.142
 ```
 
-- PTR:    Pointer Record: provides mapping form IP Address to Hostname
-- MX:     Mail exchanger: the MX record maps your email server.
-- CNAME:  Canonical name: used so that a domain name may act as an alias for
+* PTR:    Pointer Record: provides mapping form IP Address to Hostname
+* MX:     Mail exchanger: the MX record maps your email server.
+* CNAME:  Canonical name: used so that a domain name may act as an alias for
   another domain name. Thus, say someone visits www.example.org, but if no
   subdomain is set up for www, then the CNAME can point to example.org.
 
@@ -178,7 +178,7 @@ dig www.uky.edu CNAME
 ```
 man -f nslookup
 nslookup (1) - query Internet name servers interactively
-nslookup 
+nslookup
 > uky.edu
 > yahoo.com
 > exit
@@ -201,21 +201,21 @@ cat /etc/resolv.conf
 resolvectl status
 ```
 
-# Install DNS Server
+## Install DNS Server
 
 We will set up a DNS server and a client machine that uses the DNS server with
 Virtualbox. I've made some modifications, but overall I'm drawing upon the nice
 tutorial at [fedora Magazine][fedora_bind].
 
-## VirtualBox Setup:
+### VirtualBox Setup
 
 In Virtualbox:
 
 1. Click on your original Fedora OS install
-2. Click on Settings -> Network
-3. Switch NAT to Bridged
+1. Click on Settings -> Network
+1. Switch NAT to Bridged
 
-## Update Server
+### Update Server
 
 Start and login to Fedora:
 
@@ -232,14 +232,15 @@ After finished upgrading, power down the machine:
 poweroff
 ```
 
-## Clone Server
+### Clone Server
 
-Next, in VirtualBox, clone your Fedora server two times and give them meaningful names. 
+Next, in VirtualBox, clone your Fedora server two times and give them
+meaningful names.
 
 1. Call the first one **Fedora-DNS-Server**.
-2. Call the second one **Fedora-DNS-Client**.
+1. Call the second one **Fedora-DNS-Client**.
 
-## Fedora-DNS-Client
+### Fedora-DNS-Client
 
 Login to **Fedora-DNS-Client** and get the IP address:
 
@@ -248,9 +249,9 @@ ip a
 192.168.245.72/24
 ```
 
-## Fedora-DNS-Server
+### Fedora-DNS-Server
 
-### Install and Configure DNS
+#### Install and Configure DNS
 
 Keep that machine on but minimize it, and now login to **Fedora-DNS-Server**,
 get the IP address. Write these IP addresses down correctly.
@@ -341,7 +342,7 @@ allow-update { none; };
 
 Save and exit the file
 
-### Set up zone files
+#### Set up zone files
 
 The above modification refers to two zone files that are located in a different
 part of the filesystem. We'll create these zone files:
@@ -467,7 +468,7 @@ We can now check if our DNS server is working by examining the output of the
 dig fedoramazine.org
 ```
 
-## On the client machine
+### On the client machine
 
 They are likely already installed, but in case it's not, install the Bind
 utilities only:
@@ -483,7 +484,8 @@ sudo nano /etc/resolv.conf
 nameserver 192.168.254.73
 ```
 
-Examine output of the ``dig`` command, which should show that it's querying 192.168.254.73 for DNS:
+Examine output of the ``dig`` command, which should show that it's querying
+192.168.254.73 for DNS:
 
 ```
 dig fedoramagazine.org
@@ -495,12 +497,13 @@ We can also check the reverse DNS lookup:
 dig 35.196.109.67
 ```
 
-## Make Permanent
+### Make Permanent
 
-As the [fedora Magazine][fedora_bind] article points out, the **/etc/resolv.conf** file
-will get reset upon reboot. To make sure the file doesn't get altered, you can
-use the ``chattr`` command on both the server and client machines (and any
-other client machines). So run this command on both virtual machines:
+As the [fedora Magazine][fedora_bind] article points out, the
+**/etc/resolv.conf** file will get reset upon reboot. To make sure the file
+doesn't get altered, you can use the ``chattr`` command on both the server and
+client machines (and any other client machines). So run this command on both
+virtual machines:
 
 ```
 sudo chattr +i /etc/resolv.conf

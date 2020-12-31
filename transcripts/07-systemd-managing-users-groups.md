@@ -1,4 +1,6 @@
-# systemd
+# systemd and Managing Users
+
+## systemd
 
 * **systemd** is an init system that aims to provide better boot time and
   a better way to manage services and processes.
@@ -10,14 +12,14 @@ but know that **systemd** is a big, complicated suite of software that provides
 a lot of functions. In this lesson, though, we will cover using **systemd** to:
 
 1. manage services
-2. examine logs
+1. examine logs
 
-## Manage Services
+### Manage Services
 
 When we install a complicated piece of software like a web server (e.g.,
 Apache2), a SSH server (e.g., openssh-server), or a database server (e.g.,
 MySQL), then it's helpful if we have some commands that will help us manager
-that service (the web service/server, the SSH service/server, etc). 
+that service (the web service/server, the SSH service/server, etc).
 
 For example, after installing a SSH server, we might like to know if it's
 running, or we might want to stop it if it's running, or start it if it's not.
@@ -83,7 +85,7 @@ sudo systemctl reload sshd.service
 
 Now, when you log into your Fedora system, you will see that new banner displayed.
 
-## Examine Logs
+### Examine Logs
 
 The ``journalctl`` command is also part of the **systemd** software suite and
 is used to monitor logs on the system.
@@ -141,7 +143,7 @@ view):
 journalctl -f
 ```
 
-## Useful Systemd Commands
+### Useful Systemd Commands
 
 You can see more of what ``systemctl`` or ``journalctl`` can do by reading
 through their documentation:
@@ -153,20 +155,19 @@ man journalctl
 
 But here are a few other useful commands to explore:
 
-
-- list units in memory 
+* list units in memory
 
 ```
 systemctl list-units
 ```
 
-- list sockets in memory
+* list sockets in memory
 
 ```
 systemctl list-sockets
 ```
 
-- get status, start, stop, reload, restart a unit, e.g., sshd
+* get status, start, stop, reload, restart a unit, e.g., sshd
 
 ```
 systemctl status sshd.service
@@ -177,20 +178,20 @@ systemctl restart sshd.service
 systemctl reload-or-restart sshd.service
 ```
 
-- enable, disable sshd 
+* enable, disable sshd
 
 ```
 systemctl enable sshd.service
 systemctl disable sshd.service
 ```
 
-- ask systemctl if enabled
+* ask systemctl if enabled
 
 ```
 systemctl is-enabled sshd.service
 ```
 
-- System: reboot, poweroff, or suspend
+* System: reboot, poweroff, or suspend
 
 ```
 systemctl reboot
@@ -198,45 +199,45 @@ systemctl poweroff
 systemctl suspend
 ```
 
-- to show changes to the system
+* to show changes to the system
 
 ```
-systemd-delta 
+systemd-delta
 ```
 
-- to list control groups and processes
+* to list control groups and processes
 
 ```
 systemd-cgls
 ```
 
-- to list real-time control group process, resource usage, and memory usage
+* to list real-time control group process, resource usage, and memory usage
 
 ```
 systemd-cgtop
 ```
 
-- to search failed processes/services:
+* to search failed processes/services:
 
 ```
 systemctl --state failed
 ```
 
-- to list services
+* to list services
 
 ```
 systemctl list-unit-files -t service
 ```
 
-- to examine boot time:
+* to examine boot time:
 
 ```
 systemd-analyze
 ```
 
-# Managing Users and Groups
+### Managing Users and Groups
 
-## The passwd file
+#### The passwd file
 
 On my Fedora 32 virtual machine, I can see the following information about my
 user account in the **passwd** file:
@@ -253,7 +254,8 @@ sean:x:1000:1000:sean:/home/sean:/bin/bash
 grep "sean" /etc/passwd | sed 's/:/\n/g'
 ```
 
-The latter command returns the following output, which shows the various fields on each line:
+The latter command returns the following output, which shows the various fields
+on each line:
 
 ```
 sean
@@ -267,13 +269,13 @@ sean
 
 The fields represent the following information:
 
-- username
-- password indicator
-- user id
-- group id
-- user name or comment
-- home directory
-- default shell
+* username
+* password indicator
+* user id
+* group id
+* user name or comment
+* home directory
+* default shell
 
 Note that you can read about this using ``man 5 passwd``. [ EXPLAIN THE 5 ]
 
@@ -282,7 +284,7 @@ the distribution. For example, the user id may start at a different point
 depending on the system. However, nowadays both Ubuntu and Fedora set the
 starting UID and group ID for new users at 1000.
 
-## The shadow file
+### The shadow file
 
 The **/etc/passwd** file does not contain any passwords but a simple **x** to
 mark the password field. Passwords on Linux are stored in **/etc/shadow** and
@@ -304,18 +306,18 @@ ENCRYPTED_PASSWORD
 
 The fields are (see ``man 5 passwd``):
 
-- login name (username)
-- encrypted password
-- days since 1/1/1970 since password was last changed
-- days after which password must be changed
-- minimum password age
-- maximum password age
-- password warning period
-- password inactivity period
-- account expiration date
-- a reserved field 
+* login name (username)
+* encrypted password
+* days since 1/1/1970 since password was last changed
+* days after which password must be changed
+* minimum password age
+* maximum password age
+* password warning period
+* password inactivity period
+* account expiration date
+* a reserved field
 
-## The group file
+### The group file
 
 This file holds group information about the entire system (see ``man group``).
 In the following command, you can see that I'm a member of the **wheel** group
@@ -333,21 +335,21 @@ sean:x:1000:
 
 The fields are:
 
-- group name
-- group password 
-- group ID (GID)
-- group members (user list)
+* group name
+* group password
+* group ID (GID)
+* group members (user list)
 
-## Management Tools
+### Management Tools
 
 Other user and group utilities include:
 
-- ``/usr/sbin/useradd``
-- ``/usr/sbin/usermod``
-- ``/usr/sbin/userdel``
-- ``/usr/sbin/groupadd``
-- ``/usr/sbin/groupdel``
-- ``/usr/sbin/groupmod``
+* ``/usr/sbin/useradd``
+* ``/usr/sbin/usermod``
+* ``/usr/sbin/userdel``
+* ``/usr/sbin/groupadd``
+* ``/usr/sbin/groupdel``
+* ``/usr/sbin/groupmod``
 
 ## Practice
 
@@ -363,7 +365,8 @@ sudo su
 nano /etc/skel/.bashrc
 ```
 
-Now we're in ``nano``, and we want to add these lines at the end. Feel free to add the comments:
+Now we're in ``nano``, and we want to add these lines at the end. Feel free to
+add the comments:
 
 ```
 # make "c" a shortcut for "clear"
@@ -466,7 +469,7 @@ Now let's delete the new user's account:
 userdel -r linus
 grep "linus" /etc/passwd
 grep "linus" /etc/shadow
-cd /home ; ls -l 
+cd /home ; ls -l
 ```
 
 Group deletion:
@@ -482,12 +485,12 @@ grep "project*" /etc/group
 Basic steps to:
 
 1. create a new user
-2. create a new group
-3. create a shared directory for the new group
+1. create a new group
+1. create a shared directory for the new group
 
 ```
 # become root user
-sudo su      
+sudo su
 
 # create user account
 useradd bfox
@@ -513,7 +516,7 @@ groups bfox
 # change to /home directory
 cd /home
 
-# create the directory to be shared by bashclub 
+# create the directory to be shared by bashclub
 mkdir bashclubfolder
 
 # make bashclub group owner of bashclubfolder
@@ -521,7 +524,7 @@ chgrp -R bashclub bashclubfolder
 chmod -R 2775 bashclubfolder
 
 # check ownership
-ls -l 
+ls -l
 ```
 
 Now you can log in as either user and work in that shared directory!
