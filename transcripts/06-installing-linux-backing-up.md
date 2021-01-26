@@ -444,26 +444,26 @@ tmux
 
 Here are the basic ``dnf`` commands. See ``man dnf`` for details:
 
-- ``dnf search [name]```
-- ``dnf install [name]```
-- ``dnf remove [name]```
-- ``dnf repolist```
-- ``dnf list installed```
-- ``dnf list available```
-- ``dnf provides /bin/bash```
-- ``dnf info [name]```
-- ``dnf update [name]```
-- ``dnf check-update```
-- ``dnf update OR dnf upgrade```
-- ``dnf autoremove```
-- ``dnf clean all```
-- ``dnf help clean```
-- ``dnf help```
-- ``dnf history```
-- ``dnf grouplist | less```
-- ``dnf groupinstall 'Python Science'```
-- ``dnf groupupdate 'Python Science'```
-- ``dnf groupremove 'Python Science'```
+- ``dnf search [name]``
+- ``dnf install [name]``
+- ``dnf remove [name]``
+- ``dnf repolist``
+- ``dnf list installed``
+- ``dnf list available``
+- ``dnf provides /bin/bash``
+- ``dnf info [name]``
+- ``dnf update [name]``
+- ``dnf check-update``
+- ``dnf update OR dnf upgrade``
+- ``dnf autoremove``
+- ``dnf clean all``
+- ``dnf help clean``
+- ``dnf help``
+- ``dnf history``
+- ``dnf grouplist | less``
+- ``dnf groupinstall 'Python Science'``
+- ``dnf groupupdate 'Python Science'``
+- ``dnf groupremove 'Python Science'``
 
 ## NAT (Network Address Translation)
 
