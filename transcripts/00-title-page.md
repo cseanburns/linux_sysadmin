@@ -3,4 +3,4 @@
 **Date:** Fall 2020  
 **Email:** sean.burns@uky.edu
 
-Demonstration transcripts for my Fall 2020 Linux Systems Administration Course
+Demonstration transcripts for my Fall 2020 Linux Systems Administration Course.
