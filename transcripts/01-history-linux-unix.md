@@ -74,7 +74,7 @@
 
 ## The Rise of Linux, Linus Torvalds, University of Helsinki, Finland
 
-- On August 25, 1991 (28 years ago this last Sunday), [Linus][linux_torvalds]
+- On August 25, 1991 (30 years ago), [Linus][linux_torvalds]
   [Torvalds][torvalds_linus] announced that he had started working on
   a **free** operating system kernel for the 386 CPU architecture and for the
   specific hard drives that he had. This kernel would later be named Linux.
