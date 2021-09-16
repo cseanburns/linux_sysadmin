@@ -203,3 +203,19 @@ grep -o "Invalid user [a-zA-Z]* from" auth.log |\
 ```
 
 And from there we can investigate whether any of these users truly exist on the system and conduct other security checks.
+
+### Addendum
+
+The goal in this lesson is to learn a bit about regular expressions, but there are a number of ways to get a list of users from the **auth.log** file and also avoid using complicated regular expressions. We can ``grep`` for a multistring and take more advantage of ``awk``. For example:
+
+```
+grep "Invalid user " auth.log | awk '{ print $8 }' | sort | uniq -c | sort
+```
+
+We can also not ``grep`` at all, and use only ``awk``, because ``awk`` can search. To search in ``awk``, we insert the search string within forward slashes, i.e., ``/search string/``:
+
+```
+awk '/Invalid user / { print $8 }' auth.log | sort | uniq -c | sort
+```
+
+In both examples above, we depend on the default behavior of ``awk`` to treat spaces as a field separator. Hence, in order for me to know that the users are listed in field 8 (``$8``), I had to count the columns.
