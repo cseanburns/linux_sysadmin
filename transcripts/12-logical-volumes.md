@@ -111,7 +111,7 @@ We create a logical volume to allow us to mount the partition and make it access
 lvdisplay | less
 lsblk
 vgdisplay # note Free PE / Size space
-lvcreate -L +13.97GiB --name projects fedora_fedora
+lvcreate -L +15GiB --name projects fedora_fedora
 lvdisplay
 ```
 
