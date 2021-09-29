@@ -24,13 +24,14 @@ sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
 Any of those commands can be piped through ``sed`` to look at the individual fields, one line at a time:
 
 ```
+grep "sean" /etc/passwd | sed 's/:/\n/g'
 sean
 x
 1000
 1000
 
 /home/sean
-/bin/bash
+/usr/bin/bash
 ```
 
 The fields represent the following information:
@@ -43,9 +44,15 @@ The fields represent the following information:
 * home directory
 * default shell
 
-Note that you can read about this using ``man 5 passwd``. [ EXPLAIN THE 5 ]
+You can read about these fields via ``man 5 passwd``. [ EXPLAIN THE 5 ]
 
-This is a pretty standard Linux file, but some things will change depending on the distribution. For example, the user id may start at a different point depending on the system. However, nowadays both Ubuntu and Fedora set the starting UID and group ID for new users at 1000.
+Note that the **user name or comment** line is blank. We can add a comment using the ``chfn``, and there are multiple options to use. If I use the ``-f`` option, I can set my full name to appear here. See ``man chfn`` for more options to set:
+
+```
+sudo chfn -f "Sean Burns" sean
+```
+
+The **/etc/passwd** file is a pretty standard Linux file, but some things will change depending on the distribution. For example, the user id may start at a different point depending on the system. However, nowadays both Ubuntu and Fedora set the starting UID and group ID for new users at 1000.
 
 ## The shadow file
 
@@ -104,6 +111,7 @@ Other user and group utilities include:
 * ``/usr/sbin/groupadd``
 * ``/usr/sbin/groupdel``
 * ``/usr/sbin/groupmod``
+* ``/usr/sbin/gpasswd``
 
 ## Practice
 
@@ -113,25 +121,17 @@ In today's demo, we will modify some default user account settings for new users
 
 Before we proceed, let's review several important configuration files that establish some default settings:
 
-- **/etc/login.defs**
+- **/etc/login.defs** : see ``man login.defs``
 - **/etc/skel**
 - **/etc/default/useradd**
 
-Let's change some defaults. We can either user ``sudo`` or become ``su``. Here I both to become root:
+Let's change some defaults. We can either user ``sudo`` or become ``su``. Here I use ``sudo`` to become root:
 
 ```
 sudo su
 ```
 
-First, let's edit **/etc/default/useradd** and make **/usr/bin/bash** the default shell path:
-
-```
-nano /etc/default/useradd
-```
-
-And then change the line: **/bin/bash** to **/usr/bin/bash**.
-
-Now, let's edit the default **.bashrc** file:
+Let's edit the default **.bashrc** file:
 
 ```
 nano /etc/skel/.bashrc
@@ -141,10 +141,12 @@ We want to add these lines at the end of the file:
 
 ```
 # Dear New User,
-# I have added these to make your life a bit easier:
+#
+# I have made the following settings to make your life a bit easier:
 #
 # make "c" a shortcut for "clear"
 alias c='clear'
+#
 # make vi the default command line keybinding
 set -o vi
 ```
@@ -157,19 +159,23 @@ nano /etc/skel/README
 
 ### Add new user account
 
-After writing (saving) and exiting ``nano``, we can go ahead and create the new user:
+After writing (saving) and exiting ``nano``, we can go ahead and create a new user named **linus**. The ``-m`` option creats the user's home directory, the ``-U`` option creates a group with the same name as the user, and the ``-s`` option sets the default shell to ``/usr/bin/bash``.
 
 ```
-useradd linus
+useradd -m -U -s /usr/bin/bash linus
 grep "linus" /etc/passwd
-linus:x:1002:1003::/home/linus:/bin/bash
+```
+
+Let's add the user's full name:
+
+```
+chfn -f "Linus Torvalds" linux
+```
+
+The user does not yet have a password set. Let's create a password for *linus*:
+
+```
 grep "linus" /etc/shadow
-linus:!!:18186:0:99999:7:::
-```
-
-Let's create a password for *linus*:
-
-```
 passwd linus
 grep "linus" /etc/shadow
 ```
@@ -187,53 +193,53 @@ Let's now create a new group, and then I will add my account and my new user's a
 
 ```
 grep "linus" /etc/group
-linus:x:1001:
-groupadd project1
-grep "project1" /etc/group
-project1:x:1002:
-usermod -aG project1 linus
-usermod -aG project1 sean
-grep "project1" /etc/group
-project1:x:1002:linus,sean
+groupadd developers
+grep "developers" /etc/group
+gpasswd -a linus developers
+gpasswd -a sean developers
+grep "developers" /etc/group
 ```
 
 Exit out of root if logged in as root.
 
-Now login as user linus:
+Now login as user linus and examine the user's group memberships:
 
 ```
 su linus
-Password:
 groups
-linus project1
 ```
 
-Let's make the **/projects** directory a shared directory:
-
-```
-cd /
-ls -ld projects
-drwxr-xr-x. 3 root root 4096 Sep 28 14:18 projects/
-chmod 2770 projects
-ls -ld projects
-drwxrwx---. 2 root root 4096 Sep 28 14:19 projects/
-chown linus:project1 ourproject/
-ls -ld ourproject
-drwxrwx---. 2 linus project1 6 Oct 17 08:52 ourproject/
-exit
-```
-
-Login as our original user (that's sean for me)
+Great! Let's exit out and become root again:
 
 ```
 exit
+sudo su
 ```
 
-And then relogin so that the group mod will take effect
+Let's make the **/projects** directory/logical volume a shared directory:
+
+```
+ls -ld /projects
+# change ownership of the directory to the group developers
+chown :developers /projects
+# allow all group users to add and delete from the folder and read/write to each other's files
+# See this post for various options:
+# https://ubuntuforums.org/showthread.php?t=2138476&p=12616640#post12616640
+chmod 2770 /projects
+exit
+```
+
+Log all the way out and then login again:
+
+```
+exit # from root
+exit # from regular user
+```
+
+And then relogin so that the group modification will take affect. Check with the ``groups`` command:
 
 ```
 groups
-sean wheel project1
 ```
 
 ### User account and group deletion
@@ -250,7 +256,7 @@ cd /home ; ls -l
 And then delete the new group:
 
 ```
-grep "project*" /etc/group
-groupdel project1
-grep "project*" /etc/group
+grep "developers" /etc/group
+groupdel developers
+grep "developers" /etc/group
 ```
