@@ -169,7 +169,7 @@ grep "linus" /etc/passwd
 Let's add the user's full name:
 
 ```
-chfn -f "Linus Torvalds" linux
+chfn -f "Linus Torvalds" linus
 ```
 
 The user does not yet have a password set. Let's create a password for *linus*:
