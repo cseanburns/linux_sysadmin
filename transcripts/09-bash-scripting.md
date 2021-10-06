@@ -80,7 +80,7 @@ echo "${seasons[-1]}"
 
 See [Parameter expansions][8] for more advanced techniques.
 
-## Conditional Execution
+## Conditional Expression
 
 We can include a list of commands on one line in Bash with a semicolon:
 
@@ -88,7 +88,7 @@ We can include a list of commands on one line in Bash with a semicolon:
 cd ; ls -lt
 ```
 
-But we can use [conditional execution][7] and apply logic with ``&&`` (**Logical AND**) or ``||`` (**Logical OR**).
+But we can use [conditional expressions][7] and apply logic with ``&&`` (**Logical AND**) or ``||`` (**Logical OR**).
 
 Here, ``command2`` is executed if and only if ``command1`` is successful:
 
@@ -226,7 +226,7 @@ fi
 In this demo, we learned about:
 
 - creating and referring to variables
-- conditional execution with ``&&`` and ``||``
+- conditional expressions with ``&&`` and ``||``
 - adding the **shebang** or **hashbang** at the beginning of a script
 - looping with the ``for`` statement
 - testing with the ``if`` statement
