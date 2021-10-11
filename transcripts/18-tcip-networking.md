@@ -1,20 +1,21 @@
 # Networking
 
+Wikipedia has a good primer on the [Internet protocol suite][wikiips].
+
+[wikiips]:https://en.wikipedia.org/wiki/Internet_protocol_suite
+
 ## Link Layer
 
 ### ARP (Address Resolution Protocol)
 
 *ARP* or Address Resolution Protocol is a protocol used to map a network address, like the IP address, to the ethernet address (MAC, Media Access Control address or hardware address). Routers use MAC addresses to enable communication inside networks (w/in subnets) so that computers within a local area network can talk to each other. Networks are designed so that IP addresses must be associated with MAC addresses before systems can communicate over a network.
 
-In order to get ARP info for a system, we can use the ``ip`` command. Here's the ARP output and routing table on my Fedora virtual machine (**10.0.2.15**) running on my desktop via a bridged connection:
+In order to get ARP info for a system, we can use the ``ip`` command, which uses regular options (like ``-b``) but also various **objects** (see ``man ip`` for details). Here is the IP info, the ARP output, and the routing table on my Fedora virtual machine (**10.0.2.15**) running on my desktop via a NAT connection:
 
 ```
-$ ip neigh show
-10.0.2.2 dev enp0s3 lladdr 52:54:00:12:35:02 REACHABLE
-10.0.2.3 dev enp0s3 lladdr 52:54:00:12:35:03 STALE
-$ ip route show
-default via 10.0.2.2 dev enp0s3 proto dhcp metric 100
-10.0.2.0/24 dev enp0s3 proto kernel scope link src 10.0.2.15 metric 100
+ip a
+ip neigh show
+ip route show
 ```
 
 Where:
@@ -29,9 +30,9 @@ In short, for network traffic to get to the internet, the Fedora machine must kn
 
 ### IP (Internet Protocol)
 
-*IP* is a way to uniquely identify a host on a network. If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address that will not be directly exposed to the Internet.
+The Internet Protocol, or *IP*, address is a way to uniquely identify a host on a network. If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address that will not be directly exposed to the Internet.
 
-There are IP address ranges that are private by default and by design. The default private address ranges include:
+These IP address ranges are, by design, reserved private address, which means no public internet device will have an IP address within these ranges. The default private address ranges include:
 
 | Start Address | End Address     |
 |---------------|-----------------|
@@ -39,7 +40,7 @@ There are IP address ranges that are private by default and by design. The defau
 | 172.16.0.0    | 172.31.255.255  |
 | 192.168.0.0   | 192.168.255.255 |
 
-If you have a router at home, and look at the IP address for your devices connected to that router, like your phone or computer, you will see that it will definitely have an address within one of the ranges above. For example, it might have an IP address beginning with **192.168.X.X**. This a standard IP address range for a home router. The **10.X.X.X** private range can, by design, assign many more IP addresses, which is why you'll see that IP range on bigger networks, like UK's. We'll talk more about subnetwork sizes, shortly.
+If you have a router at home, and look at the IP address for your devices connected to that router, like your phone or computer, you will see that it will definitely have an address within one of the ranges above. For example, it might have an IP address beginning with **192.168.X.X**. This a standard IP address range for a home router. The **10.X.X.X** private range can assign many more IP addresses, which is why you'll see that IP range on bigger networks, like UK's. We'll talk more about subnetwork sizes, shortly.
 
 At work, my IP address on my desktop was **10.163.34.59/24** (using the ``ip a`` command), via a wired connection (eno1). I checked my office neighbor's IP address, and on their desktop it reported **10.163.34.65/24**. (Soon I will show you how this indicates that we are both on the same subnet.) If we both, using our respective wired connected computers, Google *[ what's my IP address ]*, we both will get back the same public IP address of **128.163.8.25**. This is the same for the virtual machine I'm using that's running Fedora 30, connected via a bridge network.
 
@@ -49,45 +50,14 @@ On the other hand, my laptop, just a few feet away from me was connected to UK w
 
 ### Routing
 
-On my Fedora VM on my desktop via a NAT connection, I can see the network information for my machine (some output removed / truncated for clarity) with the ``ip`` command:
+Again, on my Fedora VM on my desktop via a NAT connection, I can see the network information for my machine (some output removed / truncated for clarity) with the ``ip`` command:
 
 ```
-$ ip a
-2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
-    link/ether 08:00:27:e1:b5:c8 brd ff:ff:ff:ff:ff:ff
-    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic noprefixroute enp0s3
-       valid_lft 690726sec preferred_lft 690726sec
-    inet6 fe80::22da:ba7f:d634:2493/64 scope link dadfailed tentative noprefixroute
-       valid_lft forever preferred_lft forever
-    inet6 fe80::f084:e92e:908e:2d0c/64 scope link noprefixroute
-       valid_lft forever preferred_lft forever
+ip a
+ip route
 ```
 
-In the meantime, here's the routing table on my Fedora VM via a bridged connection (not NAT):
-
-```
-$ ip route
-default via 10.163.34.1 dev enp0s3 proto dhcp metric 100
-10.163.34.0/24 dev enp0s3 proto kernel scope link src 10.163.34.118 metric 100
-```
-
-And then on my physical machine:
-
-```
-$ ip route
-default via 10.163.34.1 dev eno1 proto dhcp metric 100
-10.163.34.0/24 dev eno1 proto kernel scope link src 10.163.34.59 metric 100
-169.254.0.0/16 dev eno1 scope link metric 1000
-192.168.122.0/24 dev virbr0 proto kernel scope link src 192.168.122.1 linkdown
-```
-
-Since both machines are on the same network, they both state the following path that internet packets take when between systems:
-
-1. all packets originating at **10.163.34.118** (for Fedora VM) or **10.163.34.59** (for physical machine) are routed through **10.163.34.1** on the subnet defined as **10.163.34.0/24**.
-1  In the second ``ip route`` output, you'll notice the IP address **169.254.0.0/16**. This is called the [link-local][rfc3927] address. This is a local address that is assigned to a device in the absence of either static or dynamic IP assignment from a router.
-1. The **192.168.122.0/24** info is from VirtualBox.
-
-[rfc3927]:https://tools.ietf.org/html/rfc3927.html
+Since both machines are on the same network, they both state the following path that internet packets take when between systems. All packets originating at from my Fedora VM Bridge clonegg are routed through the subnet defined as **10.163.36.0/24**.
 
 Here's kind of visual diagram of what this network looks like:
 
