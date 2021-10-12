@@ -8,9 +8,9 @@ Wikipedia has a good primer on the [Internet protocol suite][wikiips].
 
 ### ARP (Address Resolution Protocol)
 
-*ARP* or Address Resolution Protocol is a protocol used to map a network address, like the IP address, to the ethernet address (MAC, Media Access Control address or hardware address). Routers use MAC addresses to enable communication inside networks (w/in subnets) so that computers within a local area network can talk to each other. Networks are designed so that IP addresses must be associated with MAC addresses before systems can communicate over a network.
+*ARP* or Address Resolution Protocol is a protocol used to map a network address, like the IP address, to the ethernet address (aka, the MAC or Media Access Control address, or the hardware address). Routers use MAC addresses to enable communication inside networks (w/in subnets) so that computers within a local network can talk to each other. Networks are designed so that IP addresses must be associated with MAC addresses before systems can communicate over a network.
 
-In order to get ARP info for a system, we can use the ``ip`` command, which uses regular options (like ``-b``) but also various **objects** (see ``man ip`` for details). Here is the IP info, the ARP output, and the routing table on my Fedora virtual machine (**10.0.2.15**) running on my desktop via a NAT connection:
+To get ARP info for a system, we can use the ``ip`` command, which uses regular options (like ``-b``) but also various **objects** (see ``man ip`` for details). Here is the IP info, the ARP output, and the routing table on my Fedora virtual machine (**10.0.2.15**) running on my desktop via a NAT connection:
 
 ```
 ip a
@@ -24,15 +24,15 @@ Where:
 - **10.0.2.2** is the first usable address on subnet, and is likely the virtual router; likewise, **52:54:00:12:35:02** is the MAC/hardware address for that virtual router
 - **10.0.2.0** is called the **network address (signified by the /24 part)**, which is a unique identifier IP address for the subnet
 
-In short, for network traffic to get to the internet, the Fedora machine must know where the router (another computer) is located on the network and must know the router's hardware (MAC) address.
+The above information is used or created in the following way: A router gets configured to use a specific **network address**, when it's brought online, it searches the network for connected MAC addresses that are assigned to wireless or ethernet cards, it assigns to each of those MAC addresses an available IP address based on the network address,
 
 ## Internet Layer
 
 ### IP (Internet Protocol)
 
-The Internet Protocol, or *IP*, address is a way to uniquely identify a host on a network. If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address that will not be directly exposed to the Internet.
+The Internet Protocol, or *IP*, address is used to uniquely identify a host on a network and place that host at a specific location (its IP **address**). If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address that will not be directly exposed to the Internet.
 
-These IP address ranges are, by design, reserved private address, which means no public internet device will have an IP address within these ranges. The default private address ranges include:
+These IP address ranges are reserved, private address ranges, which means no public internet device will have an IP address within these ranges. The private address ranges include:
 
 | Start Address | End Address     |
 |---------------|-----------------|
@@ -40,82 +40,69 @@ These IP address ranges are, by design, reserved private address, which means no
 | 172.16.0.0    | 172.31.255.255  |
 | 192.168.0.0   | 192.168.255.255 |
 
-If you have a router at home, and look at the IP address for your devices connected to that router, like your phone or computer, you will see that it will definitely have an address within one of the ranges above. For example, it might have an IP address beginning with **192.168.X.X**. This a standard IP address range for a home router. The **10.X.X.X** private range can assign many more IP addresses, which is why you'll see that IP range on bigger networks, like UK's. We'll talk more about subnetwork sizes, shortly.
+If you have a router at home, and look at the IP address for at any of your devices connected to that router, like your phone or computer, you will see that it will have an address within one of the ranges above. For example, it might have an IP address beginning with **192.168.X.X**. This a standard IP address range for a home router. The **10.X.X.X** private range can assign many more IP addresses on its network. This is why you'll see that IP range on bigger networks, like UK's. We'll talk more about subnetwork sizes, shortly.
 
-At work, my IP address on my desktop was **10.163.34.59/24** (using the ``ip a`` command), via a wired connection (eno1). I checked my office neighbor's IP address, and on their desktop it reported **10.163.34.65/24**. (Soon I will show you how this indicates that we are both on the same subnet.) If we both, using our respective wired connected computers, Google *[ what's my IP address ]*, we both will get back the same public IP address of **128.163.8.25**. This is the same for the virtual machine I'm using that's running Fedora 30, connected via a bridge network.
+#### Example Private IP Usage
 
-Thus, w/o any additional information, we know that all traffic coming from our computers and going out to the Internet looks like it's coming from the same IP address (**128.163.8.25**). And in reverse, all traffic coming from outside our network first goes to **128.163.8.25** before it's routed to our respective computers via the router.
+At work, at one time, the IP address on my desktop was **10.163.34.59/24** (using the ``ip a`` command), via a wired connection (eno1). I checked my office neighbor's IP address, and on their desktop it reported **10.163.34.65/24**. These are on the same subnet, and later I will show you how this works.
 
-On the other hand, my laptop, just a few feet away from me was connected to UK wireless (eduroam), and had this IP address: **10.47.34.150/16** (wlp3s0). You can see there's a different pattern with this IP address. The reason it has a different pattern is because this laptop is on an different subnet. This wireless subnet allows more hosts to connect to it, which makes sense, since it must allow for more devices (i.e., laptops, phones, etc) to connect via it. In the meantime, if I use a browser on this laptop and ask Google for my IP address, it tells me: **128.163.238.148**, which shares the same IP pattern, even though it's not an exact match, as the public IP address reported above. 
+If we both, using our respective wired connected computers, search Google for *[ what's my IP address ]*, we both will get back the same public IP address of **128.163.8.25**.
 
-### Routing
+Thus, without any additional information, we know that all traffic coming from our computers and going out to the internet looks like it's coming from the same IP address (**128.163.8.25**). And in reverse, all traffic coming from outside our network first goes to **128.163.8.25** before it's routed to our respective computers via the router.
 
-Again, on my Fedora VM on my desktop via a NAT connection, I can see the network information for my machine (some output removed / truncated for clarity) with the ``ip`` command:
-
-```
-ip a
-ip route
-```
-
-Since both machines are on the same network, they both state the following path that internet packets take when between systems. All packets originating at from my Fedora VM Bridge clonegg are routed through the subnet defined as **10.163.36.0/24**.
+My laptop tells a different story because it is connected to UK wireless (eduroam). The laptop has this IP address: **10.47.34.150/16** (wlp3s0). You can see there's a different pattern with this IP address. The reason it has a different pattern is because this laptop is on an different subnet. This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc). If I use a browser on this laptop and search Google for my IP address, it tells me: **128.163.238.148**. Even though this is not an exact match as the example above, it does share the same IP pattern.
 
 Here's kind of visual diagram of what this network looks like:
 
 ![network diagram](network.png)
 
-### Using the ``ip`` command
+#### Using the ``ip`` Command
 
-The ``ip`` command can do more than simply provide us information about our network. We can also use it to turn a connection to the network on or off (and more). Here's how to disable and then enable a connection on a machine. Note that **enp0s3** is the name of my network card/device. You'd have to replace it with the name of yours. If it's a wireless card, it might begin with a 'w':
+The ``ip`` command can do more than provide us information about our network. We can also use it to turn a connection to the network on or off (and more). Here is how to disable and then enable a connection on a machine. Note that **enp0s3** is the name of my network card/device. Yours might have a different name.
 
 ```
 sudo ip link set enp0s3 down
 sudo ip link set enp0s3 up
 ```
 
-### IPv6 subnetting
-
-We're not going to get into subnetting with IPv6, but if you're interested, this is a nice article: [IPv6 subnetting overview][ipv6_subnetting]
-
-[ipv6_subnetting]:https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study
-
-### ICMP
-
-*ICMP* or Internet Control Message Protocol is a protocol used to send error messages, e.g., to check if a host is down. When we use *ping*, we're using the ICMP protocol. Data is not usually sent over this protocol. To ping a remote server, like *google.com*, we can do:
-
-```
-ping -c3 google.com
-```
-
 ## Transport Layer
 
-*TCP* or Transmission Control Protocol is responsible for the transmission of data and for making sure the data arrives at its destination w/o errors. If there are errors, the data is re-transmitted or halted in case of some failure.
+### UDP, User Datagram Protocol
 
-*UDP* or User Datagram Protocol performs a similar function as TCP, but it doesn't error check. If data is lost, then it's lost but is still sent. UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube, because the human brain can tolerate some video and audio loss without losing too much information. In fact, YouTube uses a type of UDP transmission called QUIC, which adds a level of encryption to the protocol. QUIC was developed by Google and is the main part of the next generation of [HTTP/3][http3]. In the near future, it seems that we'll all be using IP/UDP instead of IP/TCP as the primary method of exchanging data over the Internet.
+*UDP* or User Datagram Protocol performs a similar function as TCP, but it does not error check and data may get lost. UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube, which uses a type of UDP transmission called QUIC that has builtin encryption. 
+ 
+### TCP, Transmission Control Protocol
 
-[http3]:https://en.wikipedia.org/wiki/HTTP/3
+*TCP* or Transmission Control Protocol is responsible for the transmission of data and for making sure the data arrives at its destination w/o errors. If there are errors, the data is re-transmitted or halted in case of some failure. Much of the data sent over the internet is sent using TCP.
 
-The above protocols, as well as others, each contain [header][http_headers] information. We can see a lot of this information using the ``tcpdump`` command, which requires ``sudo`` or being **root** to use. The first part of the IP header contains the source address, then comes the destination address, and so forth. Aside from a few other parts, this is the primary information in an IP header.
+### TCP and UDP Headers
 
-[http_headers]:https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+The above protocols send data in data packets (TCP) or datagrams (UDP), but [these terms may be used interchangeably][headers]. Packets for both protocols include header information to help route the data across the internet. TCP includes [ten fields][tcpfields] of header data, and UDP includes [four fields][udpfields].
+
+[headers]:https://www.cloudflare.com/learning/network-layer/what-is-a-packet/
+[tcpfields]:https://www.imperva.com/learn/ddos/tcp-transmission-control-protocol/
+[udpfields]:https://www.imperva.com/learn/ddos/udp-user-datagram-protocol/
+
+We can see this header data using the ``tcpdump`` command, which requires ``sudo`` or being **root** to use. The first part of the IP header contains the source address, then comes the destination address, and so forth. Aside from a few other parts, this is the primary information in an IP header.
+
+To use ``tcpdump``, we first identify the IP number of a host, which we can do with the ``ping`` command, and then run ``tcpdump``:
 
 ```
-sudo tcpdump host IP-NUMBER
+ping -c1 www.uky.edu
+sudo tcpdump host 128.163.35.46
 ```
 
-To use it, we first identify the IP number of a host, which we can do with the ``ping`` command, and then run ``tcpdump``:
+While that's running, we can type that IP address in our web browser, or enter **www.uky.edu**, and watch the output of ``tcpdump``.
 
-```
-ping -c1 www.google.com
-sudo tcpdump host 142.250.191.196
-```
-
-While that's running, we can put that IP address in our web browser and watch the output of ``tcpdump``.
-
-TCP and UDP headers will contain more information in those headers. They also include port information and other mandatory fields for both source and destination servers. The SYN, or synchronize, message is sent when a source or client requests a connection. The ACK, or acknowledgment, message is sent in response, along with a SYN message, to acknowledge the request for a connection. Then the client responds with an additional ACK message. This is referred to as the [TCP three-way handshake][tcphandshake]. In addition to the header info, TCP and UDP packets include the data that's being sent (e.g., a webpage) and error checking if it's TCP.
+TCP headers include port information and other mandatory fields for both source and destination servers. The SYN, or synchronize, message is sent when a source or client requests a connection. The ACK, or acknowledgment, message is sent in response, along with a SYN message, to acknowledge the request for a connection. Then the client responds with an additional ACK message. This is referred to as the [TCP three-way handshake][tcphandshake]. In addition to the header info, TCP and UDP packets include the data that's being sent (e.g., a webpage) and error checking if it's TCP.
 
 [tcphandshake]:https://www.geeksforgeeks.org/tcp-3-way-handshake-process/
 
-A *port* associates a process with a network service, such as a web service. Ports provide a way to distinguish and filter all traffic through an IP address. E.g., all traffic going to IP address X.X.X.X:80, where the Xs indicate the IP address and the **:80** indicates the port number, indicates that this is http traffic for the http web service, since http is commonly associated with port 80. Note that the port info is attached to the end of the IP address via a colon. Other common ports include:
+### Ports
+
+TCP and UDP connections use ports to bind internet traffic to specific IP addresses. Specifically, a *port* associates a process with an application, such as a web service or outgoing email. That is, ports provide a way to distinguish and filter internet traffic through an IP address. E.g., all traffic going to IP address 10.0.5.33:80 means that this is **http** traffic for the http web service, since http is commonly associated with port 80. Note that the port info is attached to the end of the IP address via a colon. 
+
+Common ports include:
 
 - 21: FTP
 - 22: SSH
@@ -146,7 +133,7 @@ See also the Wikipedia page: [List of TCP and UDP port numbers][port_numbers]
 
 ### Private IP Ranges
 
-Remember, when subnetting, we primarily work with the following private IP ranges:
+When subnetting, we generally work with private IP ranges:
 
 | Start Address | End Address     |
 |---------------|-----------------|
@@ -161,7 +148,7 @@ An IP address is 32 bits (8 x 4), or four bytes, in size. In human readable cont
 - **192.168.1.6**
 - **172.16.3.44**
 
-Each set of numbers separated by a dot is referred to as an **octet**. An **octet** is a group of 8 **bits**. Eight **bits** equal a single **byte**. Thus, 1 gigabyte equals 8 gigabits, and 1 megabyte equals 8 megabits, just as 1 byte equals 8 bits. We use the symbols to note the terms:
+Each set of numbers separated by a dot is referred to as an **octet**. An **octet** is a group of 8 **bits**. Eight **bits** equal a single **byte**. By implication, 8 gigabits equals 1 gigabyte, and 8 megabits equals 1 megabyte. We use these symbols to note the terms:
 
 | Term  | Symbol |
 |-------|--------|
@@ -209,11 +196,9 @@ In binary, 192 is equal to 11000000. It's helpful to work backward. For IP addre
 1 * 2^6 =  64 (128 + 64 = 192)
 ```
 
-STOP: There are no values left, and so the rest are zeroes.
+STOP: There are no values left, and so the rest are zeroes. So: 11000000
 
-So: 11000000
-
-Our everyday counting system is base-10, but binary is base-2, and thus another way to convert binary to decimal is to multiple each bit by the power of base two and to the power of its placeholder:
+Our everyday counting system is base-10, but binary is base-2, and thus another way to convert binary to decimal is to multiple each bit (1 or 0) by the power of base two of its placeholder:
 
 ```
 (0 * 2^0) = 0 +
@@ -226,7 +211,7 @@ Our everyday counting system is base-10, but binary is base-2, and thus another 
 (1 * 2^7) = 128 = 192
 ```
 
-Another way: to convert to binary, simply subtract the numbers from each value. As long as there is something remaining or the placeholder equals the remainder of the previous subtraction, then the bit equals 1. So:
+Another way to convert to binary: simply subtract the numbers from each value. As long as there is something remaining or the placeholder equals the remainder of the previous subtraction, then the bit equals 1. So:
 
 - 192 - 128 = 64 -- therefore the first bit is equal to 1.
 - Now take the leftover and subtract it:
@@ -234,24 +219,17 @@ Another way: to convert to binary, simply subtract the numbers from each value. 
 
 Since there is nothing remaining, the rest of the bits equal 0.
 
-**NOTE**: show more examples
-
 ### Subnetting Examples
 
-Subnetting involves dividing a network into two or more subnets. When we subnet, we need to first identify the number of hosts we will require on the subnet. For starters, let's assume that we need a subnet that can assign at most 254 IP addresses to the devices attached to it via the router.
+Subnetting involves dividing a network into two or more subnets. When we subnet, we first identify the number of hosts we will require on the subnet. For starters, let's assume that we need a subnet that can assign at most 254 IP addresses to the devices attached to it via the router.
 
-We also need two additional IP addresses: the **subnet mask** and the **network address/ID**. The **network address** identifies the network and the **subnet mask** marks the boundary between the network and the hosts. Knowing or determining the **subnet mask** will allow us to determine how many hosts can exist on a network. Both the **network address** and the **subnet mask** can be written as IP addresses, but they cannot be assigned to computers on a network.
+We need two additional IP addresses: the **subnet mask** and the **network address/ID**. The **network address** identifies the network and the **subnet mask** marks the boundary between the network and the hosts. Knowing or determining the **subnet mask** will allow us to determine how many hosts can exist on a network. Both the **network address** and the **subnet mask** can be written as IP addresses, but they cannot be assigned to computers on a network.
 
-Finally, when we have these IPs, we will also know the **broadcast address**. This is the last IP address in a subnet range, and it cannot be assigned to a connected device. The **broadcast address** is used by a router, for instance, to communicate to all connected devices.
+When we have determined these IPs, we will know the **broadcast address**. This is the last IP address in a subnet range, and it cannot be assigned to a connected device. The **broadcast address** is used by a router, for instance, to communicate to all connected devices.
 
-For our sake, let's work backwards. We want to identify and describe a network that we are connected to. Let's work with two example private IP addresses that exist on two separate subnets:
+For our sake, let's work backwards. We want to identify and describe a network that we are connected to. Let's work with two example private IP addresses that exist on two separate subnets.
 
-**IP addresses:**
-
-- 192.168.1.6/24:  Some Desktop 1, Subnet A
-- 10.160.38.75/24: Some Desktop 1, Subnet B
-
-#### Example 1: 192.168.1.6 : Desktop 1, Subnet A
+#### Example 1: 192.168.1.6
 
 Let's derive the network mask and the network address (or ID) from this IP address.
 
@@ -262,20 +240,11 @@ Let's derive the network mask and the network address (or ID) from this IP addre
 11000000.10101000.00000001.00000000 Network Address 192.168.1.0
 ```
 
-Note the mask has 24 ones followed by 8 zeroes. That 24 is used as CIDR notation, so:
+Note the mask has 24 ones followed by 8 zeroes. That 24 is used as CIDR notation:
 
 192.168.1.6/24
 
-#### Example 2: 10.160.38.75 : Desktop 1, Subnet B
-
-```
-00001010.10100000.00100110.01001011 IP               10.160.38.75
-11111111.11111111.11111111.00000000 Mask            255.255.255.0
------------------------------------
-00001010.10100000.00100110.00000000 Network Address   10.160.38.0
-```
-
-For Desktop 1, Subnet A, we have the following:
+For Example 1, we have the following subnet information:
 
 | Type         | IP            |
 |--------------|---------------|
@@ -285,7 +254,16 @@ For Desktop 1, Subnet A, we have the following:
 | End Range    | 192.168.1.254 |
 | Broadcast    | 192.168.1.255 |
 
-For Desktop 1, Subnet B, we have the following
+#### Example 2: 10.160.38.75
+
+For example 2:
+
+```
+00001010.10100000.00100110.01001011 IP               10.160.38.75
+11111111.11111111.11111111.00000000 Mask            255.255.255.0
+-----------------------------------
+00001010.10100000.00100110.00000000 Network Address   10.160.38.0
+```
 
 | Type         | IP            |
 |--------------|---------------|
@@ -297,7 +275,7 @@ For Desktop 1, Subnet B, we have the following
 
 #### Example 3: 172.16.1.62/24
 
-Derive the network information for 172.16.1.62/24:
+For example 3:
 
 ```
 10101100 00010000 00000001 00100111 IP                172.16.1.62
@@ -314,24 +292,15 @@ Derive the network information for 172.16.1.62/24:
 | End Range    | 172.16.1.254  |
 | Broadcast    | 172.16.1.255  |
 
+To determine the number of hosts on a CIDR /24 subnet, we look at the start and end ranges. In all three of the above examples, the start range begins with X.X.X.1 and ends with X.X.X.254. Therefore, there are 254 maximum hosts allowed on these subnets.
+
 #### Example 4: 10.0.5.23/16
 
-This is an example of a subnet with more possible hosts.
+The first three examples show instances where the CIDR is set to /24. This only allows 254 maximum hosts on a subnet. If the CIDR is set to /16, then we can theoretically allow 65,534 hosts on a subnet. 
 
-| base-2 | Output |
-|--------|--------|
-| 2^0    | 1      |
-| 2^1    | 2      |
-| 2^2    | 4      |
-| 2^3    | 8      |
-| 2^4    | 16     |
-| 2^5    | 32     |
-| 2^6    | 64     |
-| 2^7    | 128    |
+For example 4, then: 10.0.5.23/16
 
 ```
-10.0.5.23/16
-
 00001010.00000000.00000101.00010111 IP Address: 10.0.5.23
 11111111.11111111.00000000.00000000 Mask:       255.255.0.0
 -----------------------------------------------------------
@@ -359,3 +328,9 @@ Hosts:
 - Number of Hosts = 256 x 256 = 65536
 - Subtract Network ID (1) and Broadcast (1) = 2 IP addresses
 - Number of Usable Hosts = 256 x 256 - 2 = 65534
+
+### IPv6 subnetting
+
+We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: [IPv6 subnetting overview][ipv6_subnetting]
+
+[ipv6_subnetting]:https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study
