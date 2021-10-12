@@ -272,7 +272,7 @@ Note the mask has 24 ones followed by 8 zeroes. That 24 is used as CIDR notation
 00001010.10100000.00100110.01001011 IP               10.160.38.75
 11111111.11111111.11111111.00000000 Mask            255.255.255.0
 -----------------------------------
-00001010.10100000.00100110.00000000 Network Address   10.163.38.0
+00001010.10100000.00100110.00000000 Network Address   10.160.38.0
 ```
 
 For Desktop 1, Subnet A, we have the following:
@@ -290,10 +290,10 @@ For Desktop 1, Subnet B, we have the following
 | Type         | IP            |
 |--------------|---------------|
 | Netmask/Mask | 255.255.255.0 |
-| Network ID   | 10.163.38.0   |
-| Start Range  | 10.163.38.1   |
-| End Range    | 10.163.38.254 |
-| Broadcast    | 10.163.38.255 |
+| Network ID   | 10.160.38.0   |
+| Start Range  | 10.160.38.1   |
+| End Range    | 10.160.38.254 |
+| Broadcast    | 10.160.38.255 |
 
 #### Example 3: 172.16.1.62/24
 
