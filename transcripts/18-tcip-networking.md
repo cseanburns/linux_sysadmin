@@ -44,13 +44,13 @@ If you have a router at home, and look at the IP address for at any of your devi
 
 #### Example Private IP Usage
 
-At work, at one time, the IP address on my desktop was **10.163.34.59/24** (using the ``ip a`` command), via a wired connection (eno1). I checked my office neighbor's IP address, and on their desktop it reported **10.163.34.65/24**. These are on the same subnet, and later I will show you how this works.
+At work, at one time, the IP address on my desktop was **10.163.34.59/24** via a wired connection. I checked with my office neighbor and found that their desktop reported an IP address of **10.163.34.65/24**. These are on the same subnet, and later I will show you how this works.
 
-If we both, using our respective wired connected computers, search Google for *[ what's my IP address ]*, we both will get back the same public IP address of **128.163.8.25**.
+At the time, if we both, using our respective wired connected computers, searched Google for *[ what's my IP address ]*, we will see that we share the same public IP address of **128.163.8.25**.
 
-Thus, without any additional information, we know that all traffic coming from our computers and going out to the internet looks like it's coming from the same IP address (**128.163.8.25**). And in reverse, all traffic coming from outside our network first goes to **128.163.8.25** before it's routed to our respective computers via the router.
+Without any additional information, this tells us that we know that all traffic coming from our computers and going out to the internet looks like it's coming from the same IP address (**128.163.8.25**). And in reverse, all traffic coming from outside our network first goes to **128.163.8.25** before it's routed to our respective computers via the router.
 
-My laptop tells a different story because it is connected to UK wireless (eduroam). The laptop has this IP address: **10.47.34.150/16** (wlp3s0). You can see there's a different pattern with this IP address. The reason it has a different pattern is because this laptop is on an different subnet. This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc). If I use a browser on this laptop and search Google for my IP address, it tells me: **128.163.238.148**. Even though this is not an exact match as the example above, it does share the same IP pattern.
+My laptop tells a different story because it is connected to UK wireless (eduroam). At the time of this writing, the laptop had the IP address **10.47.34.150/16**. You can see there's a different pattern with this IP address. The reason it has a different pattern is because this laptop is on an different subnet. This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc). When I searched Google for my IP address from this laptop, it reported **128.163.238.148**, indicating that UK owns a range of public IP address spaces.
 
 Here's kind of visual diagram of what this network looks like:
 
