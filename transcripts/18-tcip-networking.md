@@ -225,7 +225,7 @@ Subnetting involves dividing a network into two or more subnets. When we subnet,
 
 We need two additional IP addresses: the **subnet mask** and the **network address/ID**. The **network address** identifies the network and the **subnet mask** marks the boundary between the network and the hosts. Knowing or determining the **subnet mask** will allow us to determine how many hosts can exist on a network. Both the **network address** and the **subnet mask** can be written as IP addresses, but they cannot be assigned to computers on a network.
 
-When we have determined these IPs, we will know the **broadcast address**. This is the last IP address in a subnet range, and it cannot be assigned to a connected device. The **broadcast address** is used by a router, for instance, to communicate to all connected devices.
+When we have determined these IPs, we will know the **broadcast address**. This is the last IP address in a subnet range, and it cannot be assigned to a connected device. The **broadcast address** is used by a router or other devices to communicate to all connected devices on the subnet.
 
 For our sake, let's work backwards. We want to identify and describe a network that we are connected to. Let's work with two example private IP addresses that exist on two separate subnets.
 
