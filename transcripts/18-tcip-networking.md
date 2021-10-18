@@ -54,7 +54,7 @@ My laptop tells a different story because it is connected to UK wireless (eduroa
 
 Here's kind of visual diagram of what this network looks like:
 
-| ![network diagram](network.png) |
+| ![network diagram](18-network.png) |
 |:--:|
 | <b>Fig. 1. This figure contains a network switch, which is used to route traffic within a subnet. It relies solely on MAC addresses and not IP addresses to determine the location of devices on its subnet. The router is capable of transferring data across networks.</b>|
 
