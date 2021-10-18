@@ -105,4 +105,4 @@ Note: MacOS is based on [Darwin][puredarwin], is [technically UNIX][unix], and i
 [unix]:https://www.opengroup.org/membership/forums/platform/unix
 [gnu_gpl]:https://www.gnu.org/software/hurd/
 [bsd_license]:https://opensource.org/licenses/BSD-3-Clause
-[BSD]:https://en.wikipedia.org/wiki/Berkeley_Software_Distribution]
+[BSD]:https://en.wikipedia.org/wiki/Berkeley_Software_Distribution
