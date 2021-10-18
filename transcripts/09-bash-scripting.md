@@ -1,13 +1,13 @@
-# Bash Scripting
+## Bash Scripting
 
-## Resources
+### Resources
 
 Here are some useful guides and cheat sheets on Bash scripting:
 
 - [Bash scripting cheatsheet][1]
 - [Bash shellcheck][2]
 
-## Variables
+### Variables
 
 Declare a variable with the name of the variable, an equal sign, and then the value of the variable within double quotes. Do not insert spaces:
 
@@ -80,7 +80,7 @@ echo "${seasons[-1]}"
 
 See [Parameter expansions][8] for more advanced techniques.
 
-## Conditional Expression
+### Conditional Expression
 
 We can include a list of commands on one line in Bash with a semicolon:
 
@@ -113,12 +113,12 @@ mkdir test
 cd test && pwd || echo "no such directory"
 ```
 
-## Shebang or Hashbang
+### Shebang or Hashbang
 
 When we start to write scripts, the first thing we add is a [shebang][6] at line one. We can do so a couple of ways:
 
 ```
-#!/usr/bin/env bash
+##!/usr/bin/env bash
 ```
 
 The first one should be more portable, but alternatively, you could put the direct path to Bash:
@@ -127,7 +127,7 @@ The first one should be more portable, but alternatively, you could put the dire
 #!/usr/bin/bash
 ```
 
-## Looping
+### Looping
 
 There are several looping methods Bash, including: ``for``, ``while``, ``until``, and ``select``. The ``for`` loop is often very useful. 
 
@@ -153,7 +153,7 @@ for i in ${seasons[@]} ; do
 done
 ```
 
-## Testing
+### Testing
 
 Sometimes we will want to test certain conditions. There are two parts to this, we can use ``if; then ; else`` commands, and we can also use the double square brackets: ``[[``. There are a few ways to get documentation on these functions. See the following:
 
@@ -221,7 +221,7 @@ else
 fi
 ```
 
-## Summary
+### Summary
 
 In this demo, we learned about:
 

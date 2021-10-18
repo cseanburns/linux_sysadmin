@@ -1,6 +1,6 @@
-# MySQL Server Administration
+## MySQL Server Administration
 
-## Install and Set Up MySQL
+### Install and Set Up MySQL
 
 This week we'll learn how to install, setup, secure, and configure the MySQL
 relational database so that it works with the Apache2 web server. First,
@@ -51,14 +51,14 @@ mysql> alter user 'root'@'localhost' identified by 'aNewPassword4!';
 mysql> \q
 ```
 
-## Secure MySQL Server
+### Secure MySQL Server
 
 Now we use a MySQL program called ``mysql_secure_installation`` to help secure
 the MySQL installation. From the Bash shell, run the following command as the
 **Linux root user**, and then respond to the command line prompts as follows:
 
 ```
-# mysql_secure_installation
+## mysql_secure_installation
 Enter password for user root: aNewPassword4!
 Validate Password: Y
 Password Strength: 1
@@ -69,7 +69,7 @@ Remove test database: y
 Reload privilege tables now: y
 ```
 
-## Create and Set Up a Regular User Account
+### Create and Set Up a Regular User Account
 
 Now, log back into the MySQL shell as the *MySQL root* user. Here the command
 is a bit different from the first one that we used to login to MySQL because we
@@ -86,7 +86,7 @@ therefore does not have **root** privileges:
 mysql> create user 'sean'@'localhost' identified by 'an0ldP4ssPhrase!';
 ```
 
-## Create a Practice Database
+### Create a Practice Database
 
 Now let's create a pet database for user 'sean'. This user will be granted all
 privileges on this database, including all tables in it. Other than granting
@@ -111,7 +111,7 @@ mysql> show databases;
 mysql> \q
 ```
 
-### Logging in as Regular User and Creating Tables
+#### Logging in as Regular User and Creating Tables
 
 Now, we can start doing MySQL work. As **root**, we've created a new MySQL user
 named **sean** and a new database for **sean** that is called **pets**. Let's
@@ -140,7 +140,7 @@ Congratulations! If you haven't used MySQL or like technology before, then
 you've created your first database and a table in that database. Let's create
 some records for that table.
 
-### Adding records into the table
+#### Adding records into the table
 
 We'll use the INSERT command to add records:
 
@@ -182,13 +182,13 @@ mysql> select name, gender from cats where birth < '2015-01-01';
 mysql> \q
 ```
 
-## References and Read More
+### References and Read More
 
 1. [MySQL: Getting Started with MySQL][mysql_getstarted]
 1. [How to Create a New User and Grant Permissions in MySQL][mysql_newuser]
 1. [MySQL: MySQL 5.7 Reference Manual: 13 SQL Statement Syntax][mysql_syntax]
 
-## Install PHP and MySQL Support
+### Install PHP and MySQL Support
 
 The goal here is to complete the connection between PHP and MySQL so that we
 can use both for our websites.
@@ -205,7 +205,7 @@ systemctl restart mysqld.service
 systemctl restart httpd.service
 ```
 
-### Create PHP Scripts
+#### Create PHP Scripts
 
 Let's move to the base web directory and create our login file, which will
 contain the credentials for our *MySQL* account. In the previous week,
@@ -325,7 +325,7 @@ php -f pets.php
 chmod g+r \*php
 ```
 
-### Check IP and Hostname
+#### Check IP and Hostname
 
 We want to make sure that ``/etc/hosts`` has the correct IP address for **linuxsysadmin**:
 
@@ -334,13 +334,13 @@ ip a
 nano /etc/hosts # update IP address if changed
 ```
 
-### Tasks
+#### Tasks
 
 Copy the *login.php* and *pets.php* to your ``public_html`` directory (you
 should still have *userdir* enabled). Figure out what you need to change in
 order to get your script to work there.
 
-### References
+#### References
 
 - [How to Test PHP MySQL Database Connection Using Script][php_mysql]
 - [Install Apache/PHP 7.2.12 on Fedora 29/28, CentOS/RHEL 7.5/6.10][apache_php]

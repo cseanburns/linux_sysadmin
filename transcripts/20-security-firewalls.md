@@ -1,4 +1,4 @@
-# Local Security: ``chroot`` example
+## Local Security: ``chroot`` example
 
 ``chroot`` is a technology that can be used to change the "apparent" root ``/``
 directory for a user or a process. A user or process that is confined to the
@@ -18,7 +18,7 @@ servers, for example.
 technologies that are common today. In this sense, it's been used to control
 and provide a stable developmental environment for devops like work.
 
-## ``chroot`` a current user
+### ``chroot`` a current user
 
 In this tutorial, we are going to create a ``chroot`` for a human user account.
 
@@ -53,7 +53,7 @@ cp /usr/bin/bash /var/chroot/bin/
 ```
 # Identify libraries needed by Bash
 ldd /usr/bin/bash
-## comment: name it lib64 since these are all lib64 libraries
+# comment: name it lib64 since these are all lib64 libraries
 mkdir /var/chroot/lib64
 cp /lib64/libtinfo.so.6 /var/chroot/lib64/
 cp /lib64/libdl.so.2 /var/chroot/lib64/
@@ -126,14 +126,14 @@ That works as expected. The user *omicron* is now restricted to a special
 directory and has limited access to the system or to any utilities on that
 system.
 
-## Exercise
+### Exercise
 
 By using the ``ldd`` command, you can add additional binaries for this user. As
 an exercise, use the ``ldd`` command to locate the libraries for the ``nano``
 editor, and make ``nano`` available to the user *omicron* in the chrooted
 directory.
 
-### Nano in chroot
+#### Nano in chroot
 
 After making Bash available in ``chroot``:
 
@@ -178,7 +178,7 @@ To fix this, install ``ncurses-term`` and copy over additional files:
 # nano
 ```
 
-## Linux Firewalls
+### Linux Firewalls
 
 See NFTABLES for changes to the firewall software
 
@@ -192,7 +192,7 @@ Fedora/RedHat offers a more user friendly interface to ``iptables`` called
 friendly interface called ``ufw``. In this lecture, I'll discuss ``iptables``
 and ``firewall-cmd``.
 
-## iptables
+### iptables
 
 There are five predefined tables (*operations*) and five chains that come with
 ``iptables``. Tables define the kinds of operations that you can use to control
@@ -232,7 +232,7 @@ From ``man iptable``, the tables and respective chains include:
 
 We'll cover the filter tables and the nat tables.
 
-### Usage
+#### Usage
 
 First, we can look at the default parameters for the *filter* table. You need
 to be root to run this commands, or use ``sudo``:
@@ -246,7 +246,7 @@ iptables -L -v | less
 iptables -L | grep policy
 ```
 
-### Allow connections only from subnet
+#### Allow connections only from subnet
 
 We can change the firewall to only allow communication on a subnet. Of course,
 in order to do this, we need the subnet **Network ID** and the **CIDR** number:
@@ -286,7 +286,7 @@ There are lots of examples on the web. Examples from:
 - [http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/][iptables-examples]
 - [https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/][iptables-beginners]
 
-### PREROUTING
+#### PREROUTING
 
 Here is another example where we forward all traffic to port 25 to port 2525.
 Here we use the **NAT** table, since NAT is responsible for network address
@@ -296,7 +296,7 @@ translation:
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525
 ```
 
-### OUTPUT
+#### OUTPUT
 
 Here is another example where we disable outgoing email by disabling the ports
 that are commonly associated with email. Of course, this could be bypassed by
@@ -304,10 +304,10 @@ using non-standard ports for email, but for out cases, it's a decent
 demonstration:
 
 ```
-# iptables -A OUTPUT -p tcp --dports 25,465,587 -j REJECT
+## iptables -A OUTPUT -p tcp --dports 25,465,587 -j REJECT
 ```
 
-## firewall-cmd
+### firewall-cmd
 
 [firewall-cmd documentation][firewall_cmd]
 
@@ -329,15 +329,15 @@ Zones are an important concept in firewalld. Some predefined zones:
 Check if running:
 
 ```
-# firewall-cmd --state
+firewall-cmd --state
 ```
 
 Get active zones and interfaces attached to them:
 
 ```
-# firewall-cmd --get-zones
-# firewall-cmd --get-default-zone
-# firewall-cmd --get-active-zones
+firewall-cmd --get-zones
+firewall-cmd --get-default-zone
+firewall-cmd --get-active-zones
 FedoraServer
   interfaces: enp0s3
 ```
@@ -345,24 +345,24 @@ FedoraServer
 Allow port 22, list ports, remove services by name, add services by name:
 
 ```
-# firewall-cmd --zone=FedoraServer --add-port=22/tcp
-# firewall-cmd --zone=FedoraServer --list-ports
-# firewall-cmd --zone=FedoraServer --remove-service=ssh --permanent
-# firewall-cmd --zone=FedoraServer --add-service=smtp --permanent
-# firewall-cmd --reload
+firewall-cmd --zone=FedoraServer --add-port=22/tcp
+firewall-cmd --zone=FedoraServer --list-ports
+firewall-cmd --zone=FedoraServer --remove-service=ssh --permanent
+firewall-cmd --zone=FedoraServer --add-service=smtp --permanent
+firewall-cmd --reload
 ```
 
 Go into panic mode (drop all incoming/outgoing packets):
 
 ```
-# firewall-cmd --panic-on
-# firewall-cmd --panic-off
+firewall-cmd --panic-on
+firewall-cmd --panic-off
 ```
 
 To change default zone:
 
 ```
-# firewall-cmd --permanent --set-default-zone=public
+firewall-cmd --permanent --set-default-zone=public
 ```
 
 [chroot_jail]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins

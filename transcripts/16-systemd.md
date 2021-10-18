@@ -1,4 +1,4 @@
-# systemd
+## systemd
 
 * **systemd** is an init system that aims to provide better boot time and a better way to manage services and processes.
 * **systemd** is a replacement of the **System V like init** system that most Linux distributions used.
@@ -9,7 +9,7 @@ There are only two basic aspects of **systemd** that I want to cover in this les
 1. manage services
 1. examine logs
 
-## Manage Services
+### Manage Services
 
 When we install a complicated piece of software like a web server (e.g., Apache2), a SSH server (e.g., openssh-server), or a database server (e.g., MySQL), then it's helpful if we have some commands that will help us manage that service (the web service/server, the SSH service/server, etc).
 
@@ -62,7 +62,7 @@ sudo systemctl reload sshd.service
 
 Now, when you log into your Fedora system, you will see that new banner displayed.
 
-## Examine Logs
+### Examine Logs
 
 The ``journalctl`` command is also part of the **systemd** software suite and is used to monitor logs on the system.
 
@@ -103,7 +103,7 @@ Or I can follow the logs in real-time (press **ctrl-c** to quit the real-time vi
 journalctl -f
 ```
 
-## Useful Systemd Commands
+### Useful Systemd Commands
 
 You can see more of what ``systemctl`` or ``journalctl`` can do by reading through their documentation:
 

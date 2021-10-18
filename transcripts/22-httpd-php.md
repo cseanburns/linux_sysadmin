@@ -1,4 +1,4 @@
-# Installing and Setting PHP for Apache
+## Installing and Setting PHP for Apache
 
 PHP is a server-side programming language, which means that unlike client-side
 programming languages, like JavaScript, PHP code must be installed on the

@@ -1,6 +1,6 @@
-# NAT (Network Address Translation)
+## NAT (Network Address Translation)
 
-## Set up NAT
+### Set up NAT
 
 We will want to SSH into our machines without having to use the VirtualBox GUI, and later connect to these virtual machines using other protocols. We can do so by setting up NAT in VirtualBox.
 

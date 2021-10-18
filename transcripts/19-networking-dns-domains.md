@@ -1,6 +1,6 @@
-# Introduction to DNS, the Domain Name System
+## Introduction to DNS, the Domain Name System
 
-## DNS Intro Videos
+### DNS Intro Videos
 
 Two helpful YouTube videos. The first one provides an overview of the DNS system:
 
@@ -14,7 +14,7 @@ Here is a nice intro to recursive DNS:
 
 [https://www.cloudflare.com/learning/dns/what-is-recursive-dns/][recursivedns]
 
-## FQDN: The Fully Qualified Domain Name
+### FQDN: The Fully Qualified Domain Name
 
 The structure of the domain name system is like the structure of the UNIX/Linux file hierarchy; that is, it is like an inverted tree.
 
@@ -35,11 +35,11 @@ www.        third-level domain
 
 This is important to know so that you understand how the **Domain Name System** works and which DNS servers are responsible for their part of the network.
 
-### Root domain
+#### Root domain
 
 The root domain is managed by root name servers. These servers are listed on the [IANA][rootiana], the Internet Assigned Numbers Authority, website, but are managed by multiple operators. The root servers manage the root domain, alternatively referred to as the zone, or the ``.`` at the end of the ``.com.``, ``.edu.``, etc.
 
-#### Alternative DNS root systems
+##### Alternative DNS root systems
 
 Aside: It's possible to have alternate internets by using outside root name servers. This is not common, but it happens. Read about a few of them here:
 
@@ -49,7 +49,7 @@ Aside: It's possible to have alternate internets by using outside root name serv
 
 Russia, as an example, has threated to use it's own alternate internet based on a different DNS root system. This would essentially create a large, second internet. You can read about in this [IEEE Spectrum article][ieee_russia].
 
-### Top level domain (TLD)
+#### Top level domain (TLD)
 
 We are all familiar with top level domains. Specific examples include:
 
@@ -64,11 +64,11 @@ sed '1d' tlds-alpha-by-domain.txt | wc -l
 1495
 ```
 
-### Second-level domain names
+#### Second-level domain names
 
 In the Google example, the second level domain is **google**. Other examples include: **redhat** in **redhat.com** and **debian** in **debian.org**. [Soyinka, (2016)][soyinka2] refers to this part of the FQDN as that which makes up the "organizational boundary of the namespace" (p. 425).
 
-### Third-level domain names / hostnames / subdomains
+#### Third-level domain names / hostnames / subdomains
 
 When you've purchased (leased) a top and second level domain like getfedora.org, you can choose whether you employ third level domains. For example: www is a third level domain. If you owned ``example.org``, you could also have ``www.example.org`` resolve to a different location, or, ``www.example.org`` could resolve to the second-level domain itself. That is:
 
@@ -86,7 +86,7 @@ For example, with hostnames that are not ``www``:
 
 This is because those other three provide different, but specific services.
 
-## DNS Paths 
+### DNS Paths 
 
 Recursive DNS is the first DNS server to be queried in the DNS system. This is the resolver server in the first video above. This server queries itself (recursive) to check if the domain to IP mapping has been cached in its system.
 
@@ -112,7 +112,7 @@ dig @216.239.34.10 google.com
 
 And now we finally get our answer, which is that **google.com** resolves to 142.250.190.78, at least for me and at this instant.
 
-### DNS Record types
+#### DNS Record types
 
 * SOA:    Start of Authority: describes the site's DNS entries
     * IN:     Internet Record
@@ -129,7 +129,7 @@ google.com.     IN      A       142.251.32.78
 * MX:     Mail exchanger: the MX record maps your email server.
 * CNAME:  Canonical name: used so that a domain name may act as an alias for another domain name. Thus, say someone visits www.example.org, but if no subdomain is set up for www, then the CNAME can point to example.org.
 
-## DNS Toolbox
+### DNS Toolbox
 
 It's important to be able to troubleshoot DNS issues. To do that, we have a few utilities available. Here are examples and you should read the ``man`` pages for each one:
 

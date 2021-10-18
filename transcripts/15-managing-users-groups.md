@@ -1,6 +1,6 @@
-# Managing Users
+## Managing Users
 
-## The passwd file
+### The passwd file
 
 On my Fedora 34 virtual machine, I can see the following information about my user account in the **passwd** file:
 
@@ -54,7 +54,7 @@ sudo chfn -f "Sean Burns" sean
 
 The **/etc/passwd** file is a pretty standard Linux file, but some things will change depending on the distribution. For example, the user id may start at a different point depending on the system. However, nowadays both Ubuntu and Fedora set the starting UID and group ID for new users at 1000.
 
-## The shadow file
+### The shadow file
 
 The **/etc/passwd** file does not contain any passwords but a simple **x** to mark the password field. Passwords on Linux are stored in **/etc/shadow** and are hashed with **sha512**, which is indicated by **$6$**. You need to be root to examine the shadow file or use ``sudo``:
 
@@ -84,7 +84,7 @@ The fields are (see ``man 5 passwd``):
 * account expiration date
 * a reserved field
 
-## The group file
+### The group file
 
 The **/etc/group** file holds group information about the entire system (see ``man group``). In the following command, you can see that I'm a member of the **wheel** group (which allows my account to use the ``sudo`` command) and that there's a group name that is also the name of my user account. The **sean** at the end of the **wheel** line indicates that I am a member of the **wheel** group. Although user **sean** is a member of group **sean**, users do not have to be listed as members of their own group.
 
@@ -101,7 +101,7 @@ The fields are:
 * group ID (GID)
 * group members (user list)
 
-## Management Tools
+### Management Tools
 
 Other user and group utilities include:
 
@@ -113,9 +113,9 @@ Other user and group utilities include:
 * ``/usr/sbin/groupmod``
 * ``/usr/sbin/gpasswd``
 
-## Practice
+### Practice
 
-### Modify default new user setttings
+#### Modify default new user setttings
 
 In today's demo, we will modify some default user account settings for new users, and then we'll create a new user account.
 
@@ -157,7 +157,7 @@ Now use ``nano`` again to create a README file. This file will be added to the h
 nano /etc/skel/README
 ```
 
-### Add new user account
+#### Add new user account
 
 After writing (saving) and exiting ``nano``, we can go ahead and create a new user named **linus**. The ``-m`` option creats the user's home directory, the ``-U`` option creates a group with the same name as the user, and the ``-s`` option sets the default shell to ``/usr/bin/bash``.
 
@@ -187,7 +187,7 @@ passwd -n 90 linus
 passwd -x 180 linus
 ```
 
-### Create a new group; add users to the group
+#### Create a new group; add users to the group
 
 Let's now create a new group, and then I will add my account and my new user's account to the group:
 
@@ -242,7 +242,7 @@ And then relogin so that the group modification will take affect. Check with the
 groups
 ```
 
-### User account and group deletion
+#### User account and group deletion
 
 If we want to delete the new user's account:
 

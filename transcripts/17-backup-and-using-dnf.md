@@ -1,14 +1,14 @@
-# Backing up and Managing Software
+## Backing up and Managing Software
 
-## Backup with ``rsync``
+### Backup with ``rsync``
 
-### Using our /backups directory
+#### Using our /backups directory
 
 To complete this assignment, you must have successfully completed **Assignment 5: Logical Volumes**.
 
 In **Assignment 5: Logical Volumes**, we created an additional volume at **/backups**. In a real production scenario, we'd use separate drives and remote machines to store backups in order to full prepare for and recover from data loss. But for us, this **/backups** partition will work just fine.
 
-### Backup with ``rsync``
+#### Backup with ``rsync``
 
 In the **Managing Users and Groups** forum, we created a new user for our system. This means that we have at least two user accounts to backup: ours and the new uers.
 
@@ -50,7 +50,7 @@ ls /backups
 linus sean
 ```
 
-### Delete Option
+#### Delete Option
 
 The ``--delete`` option is important. Without it, ``rsync`` will add new files to the destination directory when it backs up the source directory. With it, ``rsync`` truly syncs. Thus, if a file that was previously backed up to the destination directory and later deleted in the source directory (e.g., because it was no longer needed), then it will be deleted from the destination directory when the ``--delete`` option is used. This is how services like Dropbox work.
 
@@ -58,7 +58,7 @@ See other options and functionality for ``rsync`` here: [https://www.linux.com/t
 
 [rsync]:https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/
 
-## Managing Software
+### Managing Software
 
 Many modern Linux distros offer some kind of package management for installing, managing, and removing software. On RedHat based systems, package management is based on ``rpm`` (the RedHat Package Manager). On Debian based systems, package management is based on ``dpkg``.
 
@@ -68,7 +68,7 @@ Let's look at a few of the basic ``dnf`` commands.
 
 [dnfdocs]:https://dnf.readthedocs.io/en/latest/command_ref.html
 
-### dnf info and search commands
+#### dnf info and search commands
 
 To see a history of how ``dnf`` has been used on the system:
 
@@ -131,7 +131,7 @@ If we want to install the default packages with a group, then:
 sudo dnf group install "System Tools"
 ```
 
-### dnf install process and commands
+#### dnf install process and commands
 
 It's pretty simple to install a software package. The hard part will involve configuring a package after it's installed, if it's a complicated piece of software. For now, let's install ``tmux``, which is a terminal multiplexer that we can use to open and manage multiple terminals in a single window.
 
@@ -156,7 +156,7 @@ tmux
 
 When done, just type ``exit``.
 
-### Updating the system
+#### Updating the system
 
 It's easy to update the entire system:
 
@@ -167,7 +167,7 @@ sudo dnf clean all
 
 The ``dnf clean all`` command removes the downloaded files, thereby freeing up storage space, used to update the system. It does not reverse the update.
 
-### dnf basics
+#### dnf basics
 
 Here are the basic ``dnf`` commands. See ``man dnf`` for details:
 

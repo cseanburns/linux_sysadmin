@@ -1,6 +1,6 @@
-# Apache2 VirtualHosts
+## Apache2 VirtualHosts
 
-## Update OS
+### Update OS
 
 As always, let's update Fedora:
 
@@ -8,7 +8,7 @@ As always, let's update Fedora:
 dnf upgrade
 ```
 
-## Create new configurations
+### Create new configurations
 
 So far we have learned how to create a main website at **/var/www/html** and
 then user websites at **/home/\$\{USER\}/public\_html/**. Websites that are
@@ -108,7 +108,7 @@ You should get an error stating that the sites don't exist at the
 **DocumentRoot**, but we'll fix that in a second. For now, you want to get
 a ``Syntax OK`` message.
 
-## Creating the sites
+### Creating the sites
 
 Now, the above two files tell Apache2 to look for the respective websites in
 ``/var/www/html/your_domain``. This is our **DocumentRoot**, i.e., the base
@@ -161,7 +161,7 @@ You can run ``ls -l`` on those directories and files to confirm that the
 ``apache`` owner owns them. You can also run ``httpd -t`` or ``apachectl
 configtest`` again to confirm that all the syntax is good.
 
-## The Hosts File: ``/etc/hosts``
+### The Hosts File: ``/etc/hosts``
 
 In order to resolve IP address to domain names, we need some kind of system
 that will map these two identifiers to each other. We have already covered DNS
@@ -219,7 +219,7 @@ desktop machine (i.e., my **host** machine):
 192.168.4.32    websysadmins.com
 ```
 
-## References
+### References
 
 * [Name-based Virtual Host Support][name_vhost]
 * [VirtualHost Examples][vhost_ex]

@@ -1,6 +1,6 @@
-# Processing Data: Grep, Sed, Awk (Part 2)
+## Processing Data: Grep, Sed, Awk (Part 2)
 
-## Introduction
+### Introduction
 
 Hi Class -- in this demo, I will cover three additional utilities for processing text: ``grep``, ``sed``, and ``awk``. This page contains the entire transcript for the three programs, but I will break the video up into the three respective parts.
 
@@ -15,11 +15,11 @@ We have learned about the ``>`` and ``>>`` redirect operators. They work like th
 
 The real magic of the Linux command line (and other Unix-like OSes) is this ability to use the pipe and redirect operators to string together multiple commands like the ones that we have covered and to redirect output to files.
 
-## Grep, Sed, and Awk
+### Grep, Sed, and Awk
 
 In addition to the above commands (or utilities) described above, we have additional, and very powerful, programs available to us for processing data. In this demo, I will introduce us to these, and they include ``grep``, ``sed``, and ``awk``. I use these more than I use some of the utilities we have covered so far.
 
-### Grep
+#### Grep
 
 The ``grep`` command is one of my most often used commands. Basically, ``grep`` "prints lines that match patterns" (see ``man grep``). In other words, it's search, and it's super powerful.
 
@@ -71,7 +71,7 @@ grep -io "proprietary" operating-systems.csv
 
 ```
 
-### Sed
+#### Sed
 
 I spoke about the ``ed`` command. That and editors like ``vi`` or ``vim`` all belong to the same family of programs. ``sed`` belongs to this family, too. Specifically, ``sed`` is a "stream editor ... used to perform basic text transformations on an input stream (a file or input from a pipeline") (see ``man sed``). By default, ``sed`` works on **standard output**, but it can be used to edit and write to files.
 
@@ -129,7 +129,7 @@ For example, say I forgot to add the **shebang** at the top of a script named **
 sed -i '1i #!/usr/bin/bash' test.sh
 ```
 
-### Awk
+#### Awk
 
 ``awk`` or ``gawk`` is a complete scripting language for "pattern scanning and processing" text (see ``man awk``). It's a powerful language, and its focus is on columns of structured data.
 
@@ -230,7 +230,7 @@ systemctl status --user mbsync.timer |\
          /Trigger:/ && $2 != "" { print "Time left to sync: " $2}'
 ```
 
-## Conclusion
+### Conclusion
 
 The Linux (and other Unix-like OSes) command line offers a lot of utilities to examine data. Prior to this lesson, we covered a few of them that help us get parts of a file and then pipe those parts through other commands or redirect output to files. We can use pipes and redirects with ``grep``, ``sed``, and ``awk``, also, if needed, but we may be able to avoid using the basic utilities like ``cut``, ``wc``, etc if want to learn more powerful programs like ``grep``, ``sed``, and ``awk``.
 

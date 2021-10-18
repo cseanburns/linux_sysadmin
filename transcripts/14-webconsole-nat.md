@@ -1,4 +1,4 @@
-# Web Console and NAT
+## Web Console and NAT
 
 We set NAT to allow SSH traffic between the Host computer (our computers) and the Guest computer (the virtual machines).
 

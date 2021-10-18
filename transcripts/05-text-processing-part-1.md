@@ -1,6 +1,6 @@
-# Processing Data: GNU Coreutils (Part 1)
+## Processing Data: GNU Coreutils (Part 1)
 
-## Text Processing
+### Text Processing
 
 We've touched on a few of these commands already, such as:
 

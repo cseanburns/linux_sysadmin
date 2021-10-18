@@ -1,4 +1,4 @@
-# Text editors
+## Text editors
 
 In addition to writing commands at the command prompt, we can also write commands (and other kinds of text) in text editors, save those files as scripts, and then execute the files so that the commands in the script run. This process can save lots of time, especially when we find ourselves writing longer commands. We can enter long commands at the command prompt, but it is difficult to fix errors when writing multi-line commands there.
 
@@ -6,7 +6,7 @@ It's important to have some familiarity with command line text editors not just 
 
 In this demo, I am going to address three text editor programs and I will start with the most difficult one to learn (``ed``) and end with the easiest one to learn (``nano``). For this course, I suggest that you use ``nano``, but the first two text editors, ``ed`` and ``vim``, are very much a part of Unix and Linux culture. I want you to be familiar with them for that reason but also because their basic designs have influenced a lot of other common technologies.
 
-## ``ed``
+### ``ed``
 
 ``ed`` is specifically a line editor, and it's the most likely text editor to be installed on a Linux distribution (``nano`` is installed by default on Fedora now). ``ed``, or an early version of it, is also the first text editor for the Unix operating system and was developed by Ken Thompson, one of the Unix creators, in the late 1960s. It was written without computer monitors in mind, because those were still uncommon, and instead for [teletypewriters (TTYs)][ttys] and [printers][printers]. If you visit that second link, what you will essentially see is the terminal interface from those earlier days, and it is the same basic interface you're using when you use your terminal applications, which are now virtualised versions of those old teletypewriters. It's a testament of the power of the terminal that advanced computer users still use the same basic technology today.
 
@@ -115,7 +115,7 @@ Q
 
 It's good to know something about ``ed`` not just for cultural reasons, but also because the line editing technology developed for it is still in use today, and is a basic part of the ``vim`` text editor, which is a very widely used application.
 
-## ``vim``
+### ``vim``
 
 The ``vim`` text editor is a take on the ``vi`` text editor and is in fact called **Vi IMproved**. Although ``vim`` is not a line editor, but a screen-oriented editor, it is multi-modal like ``ed`` and in fact is its direct descendant through [vi][vi].  Due to this genealogy, ``vim`` can use many of the same commands as ``ed`` does when ``vim`` is in command mode. Like ``ed``, we can start ``vim`` at the Bash prompt with or without a file name. Here I will open the **letters.txt** file with ``vim``, and will automatically be in **command mode**:
 
@@ -161,7 +161,7 @@ To save the file and exit ``vim``, we go into **command mode** by pressing the *
 
 The above only barely scratches the surface and there are whole books on these editors as well as websites, videos, etc that explore them, and especially ``vim`` in more detail. But now that you have some familiarity with them, you might find this hilarious: [Ed, man! !man ed][man_ed].
 
-## ``nano``
+### ``nano``
 
 The ``nano`` text editor is the user-friendliest of these text editors but still requires some adjustment as a new command line user. The friendliest thing about ``nano`` is that it is modeless, which is what you're already accustomed to using, because it can be used to enter text and manipulate the text without changing to insert or command mode. It is also friendly because, like many graphical text editors and other graphical software, it uses control keys to perform its operations. The tricky part is that the control keys are assigned to different keystroke combinations than what many graphical editors (or word processors) use. For example, instead of Ctrl-c or Cmd-c to copy, in ``nano`` you press the **Alt-6** keys (press **Alt** and **6**). Then to paste, you press **Ctrl-u** instead of the more common **Ctrl-v**. Fortunately, ``nano`` lists the shortcuts at the bottom of the screen.
 

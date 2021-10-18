@@ -1,4 +1,4 @@
-# Revisiting Paths
+## Revisiting Paths
 
 Here's a video on using the command line to navigate the file system or the paths. This is not a transcript, but in this video, I use commands like:
 

@@ -1,4 +1,4 @@
-# Quick SSH Connect
+## Quick SSH Connect
 
 Later in the semester, each of you will install virtual machine software so
 that you can install a Linux operating system and manage it on your own
@@ -29,7 +29,7 @@ If neither of those work for you, then you should install [PuTTY][putty]. This i
 a great app, and since it's available on Linux, I will show you how to use it
 in this video.
 
-## Linux and macOS
+### Linux and macOS
 
 - Open terminal
 - type: ``ssh username@ip-address``
@@ -38,7 +38,7 @@ in this video.
 - press ``q``
 - type ``exit`` to exit the session
 
-## Windows with PuTTY
+### Windows with PuTTY
 
 - Open PuTTY
 - Enter IP Address in field marked *Host Name (or IP address)*
@@ -49,7 +49,7 @@ in this video.
 - press ``q``
 - type ``exit`` to exit the session
 
-## PuTTY Configuration
+### PuTTY Configuration
 
 If you use PuTTY, then you can configure font size and screen colors, if you
 want. The default font size is too small for me, and so that's something I'd

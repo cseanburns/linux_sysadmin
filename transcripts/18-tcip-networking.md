@@ -1,12 +1,12 @@
-# Networking
+## Networking
 
 Wikipedia has a good primer on the [Internet protocol suite][wikiips].
 
 [wikiips]:https://en.wikipedia.org/wiki/Internet_protocol_suite
 
-## Link Layer
+### Link Layer
 
-### ARP (Address Resolution Protocol)
+#### ARP (Address Resolution Protocol)
 
 *ARP* or Address Resolution Protocol is a protocol used to map a network address, like the IP address, to the ethernet address (aka, the MAC or Media Access Control address, or the hardware address). Routers use MAC addresses to enable communication inside networks (w/in subnets) so that computers within a local network can talk to each other. Networks are designed so that IP addresses must be associated with MAC addresses before systems can communicate over a network.
 
@@ -26,9 +26,9 @@ Where:
 
 The above information is used or created in the following way: A router gets configured to use a specific **network address**, when it's brought online, it searches the network for connected MAC addresses that are assigned to wireless or ethernet cards, it assigns to each of those MAC addresses an available IP address based on the network address,
 
-## Internet Layer
+### Internet Layer
 
-### IP (Internet Protocol)
+#### IP (Internet Protocol)
 
 The Internet Protocol, or *IP*, address is used to uniquely identify a host on a network and place that host at a specific location (its IP **address**). If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address that will not be directly exposed to the Internet.
 
@@ -42,7 +42,7 @@ These IP address ranges are reserved, private address ranges, which means no pub
 
 If you have a router at home, and look at the IP address for at any of your devices connected to that router, like your phone or computer, you will see that it will have an address within one of the ranges above. For example, it might have an IP address beginning with **192.168.X.X**. This a standard IP address range for a home router. The **10.X.X.X** private range can assign many more IP addresses on its network. This is why you'll see that IP range on bigger networks, like UK's. We'll talk more about subnetwork sizes, shortly.
 
-#### Example Private IP Usage
+##### Example Private IP Usage
 
 At work, at one time, the IP address on my desktop was **10.163.34.59/24** via a wired connection. I checked with my office neighbor and found that their desktop reported an IP address of **10.163.34.65/24**. These are on the same subnet, and later I will show you how this works.
 
@@ -58,7 +58,7 @@ Here's kind of visual diagram of what this network looks like:
 |:--:|
 | <b>Fig. 1. This figure contains a network switch, which is used to route traffic within a subnet. It relies solely on MAC addresses and not IP addresses to determine the location of devices on its subnet. The router is capable of transferring data across networks.</b>|
 
-#### Using the ``ip`` Command
+##### Using the ``ip`` Command
 
 The ``ip`` command can do more than provide us information about our network. We can also use it to turn a connection to the network on or off (and more). Here is how to disable and then enable a connection on a machine. Note that **enp0s3** is the name of my network card/device. Yours might have a different name.
 
@@ -67,17 +67,17 @@ sudo ip link set enp0s3 down
 sudo ip link set enp0s3 up
 ```
 
-## Transport Layer
+### Transport Layer
 
-### UDP, User Datagram Protocol
+#### UDP, User Datagram Protocol
 
 *UDP* or User Datagram Protocol performs a similar function as TCP, but it does not error check and data may get lost. UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube, which uses a type of UDP transmission called QUIC that has builtin encryption. 
  
-### TCP, Transmission Control Protocol
+#### TCP, Transmission Control Protocol
 
 *TCP* or Transmission Control Protocol is responsible for the transmission of data and for making sure the data arrives at its destination w/o errors. If there are errors, the data is re-transmitted or halted in case of some failure. Much of the data sent over the internet is sent using TCP.
 
-### TCP and UDP Headers
+#### TCP and UDP Headers
 
 The above protocols send data in data packets (TCP) or datagrams (UDP), but [these terms may be used interchangeably][headers]. Packets for both protocols include header information to help route the data across the internet. TCP includes [ten fields][tcpfields] of header data, and UDP includes [four fields][udpfields].
 
@@ -100,7 +100,7 @@ TCP headers include port information and other mandatory fields for both source 
 
 [tcphandshake]:https://www.geeksforgeeks.org/tcp-3-way-handshake-process/
 
-### Ports
+#### Ports
 
 TCP and UDP connections use ports to bind internet traffic to specific IP addresses. Specifically, a *port* associates a process with an application, such as a web service or outgoing email. That is, ports provide a way to distinguish and filter internet traffic through an IP address. E.g., all traffic going to IP address 10.0.5.33:80 means that this is **http** traffic for the http web service, since http is commonly associated with port 80. Note that the port info is attached to the end of the IP address via a colon. 
 
@@ -131,9 +131,9 @@ See also the Wikipedia page: [List of TCP and UDP port numbers][port_numbers]
 
 [port_numbers]:https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 
-## IP Subnetting
+### IP Subnetting
 
-### Private IP Ranges
+#### Private IP Ranges
 
 When subnetting, we generally work with private IP ranges:
 
@@ -143,7 +143,7 @@ When subnetting, we generally work with private IP ranges:
 | 172.16.0.0    | 172.31.255.255  |
 | 192.168.0.0   | 192.168.255.255 |
 
-### IP Meaning
+#### IP Meaning
 
 An IP address is 32 bits (8 x 4), or four bytes, in size. In human readable context, it's usually expressed in the following, decimal-based, notation style:
 
@@ -170,7 +170,7 @@ Or:
 - 00000001 = 1
 - 00000110 = 6
 
-### IP Math
+#### IP Math
 
 When doing IP math, one easy way to do it is to simply remember that each bit in each of the above bytes is a placeholder for the following values:
 
@@ -221,7 +221,7 @@ Another way to convert to binary: simply subtract the numbers from each value. A
 
 Since there is nothing remaining, the rest of the bits equal 0.
 
-### Subnetting Examples
+#### Subnetting Examples
 
 Subnetting involves dividing a network into two or more subnets. When we subnet, we first identify the number of hosts we will require on the subnet. For starters, let's assume that we need a subnet that can assign at most 254 IP addresses to the devices attached to it via the router.
 
@@ -231,7 +231,7 @@ When we have determined these IPs, we will know the **broadcast address**. This 
 
 For our sake, let's work backwards. We want to identify and describe a network that we are connected to. Let's work with two example private IP addresses that exist on two separate subnets.
 
-#### Example 1: 192.168.1.6
+##### Example 1: 192.168.1.6
 
 Let's derive the network mask and the network address (or ID) from this IP address.
 
@@ -256,7 +256,7 @@ For Example 1, we have the following subnet information:
 | End Range    | 192.168.1.254 |
 | Broadcast    | 192.168.1.255 |
 
-#### Example 2: 10.160.38.75
+##### Example 2: 10.160.38.75
 
 For example 2:
 
@@ -275,7 +275,7 @@ For example 2:
 | End Range    | 10.160.38.254 |
 | Broadcast    | 10.160.38.255 |
 
-#### Example 3: 172.16.1.62/24
+##### Example 3: 172.16.1.62/24
 
 For example 3:
 
@@ -296,7 +296,7 @@ For example 3:
 
 To determine the number of hosts on a CIDR /24 subnet, we look at the start and end ranges. In all three of the above examples, the start range begins with X.X.X.1 and ends with X.X.X.254. Therefore, there are 254 maximum hosts allowed on these subnets.
 
-#### Example 4: 10.0.5.23/16
+##### Example 4: 10.0.5.23/16
 
 The first three examples show instances where the CIDR is set to /24. This only allows 254 maximum hosts on a subnet. If the CIDR is set to /16, then we can theoretically allow 65,534 hosts on a subnet. 
 
@@ -331,7 +331,7 @@ Hosts:
 - Subtract Network ID (1) and Broadcast (1) = 2 IP addresses
 - Number of Usable Hosts = 256 x 256 - 2 = 65534
 
-### IPv6 subnetting
+#### IPv6 subnetting
 
 We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: [IPv6 subnetting overview][ipv6_subnetting]
 

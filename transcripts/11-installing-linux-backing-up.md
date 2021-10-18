@@ -1,6 +1,6 @@
-# Installing and Configuring Fedora 34 Linux Server
+## Installing and Configuring Fedora 34 Linux Server
 
-## Download and Install VirtualBox && download fedora
+### Download and Install VirtualBox && download fedora
 
 1. Download fedora Server Edition. We'll install the x86_64 netinstall ISO image because it's a smaller download, and then we can install other items once Fedora is running.
     - [https://getfedora.org/][getfedora]
@@ -12,13 +12,13 @@
     - Instructions for [Windows 10][vbwin10]. **Note: instructions from this video are only valid until the 2:30 second mark. Do not use these instructions after that point.**
 1. Be aware of the [VirtualBox user manual][vbmanual]. I'm not asking you to read it, but if you have any issues, you should search this documentation.
 
-## Host machine set up
+### Host machine set up
 
 1. Create a directory on your own Windows or macOS computer, and call it **iso**. It's fine to create this directory in your home directory, or in your documents directory, or wherever.
 1. Move the fedora ISO file that you downloaded to your new **iso** directory.
 1. In your **iso** directory, create a new directory called **virtualbox**.
 
-## Set up fedora in VirtualBox
+### Set up fedora in VirtualBox
 
 1. Click on the **New** button
 1. In the **Name:** field, type in **Fedora-Base-34**. As you type this in, VirtualBox should automatically recognize the **Type:** and **Version**. Click **Next >**.
@@ -30,7 +30,7 @@
 
 The settings box should close. Now highlight the virtual machine in the left pane of the VirtualBox menu, and click on Start.
 
-## Install fedora in VirtualBox
+### Install fedora in VirtualBox
 
 1. When you start, a window will pop up and ask you to select a virtual optical disk. This is the fedora 34 ISO that you downloaded and that you saved to your new **iso** folder. We have to select the file icon in the window and then find and select the ISO that we downloaded. Once you do that, click on **Start**.
 1. A terminal will open up. Press **Enter** on the Installing Fedora 34 option. Some setup text will scroll by and soon a graphical installer will launch.
@@ -67,7 +67,7 @@ The settings box should close. Now highlight the virtual machine in the left pan
 1. Deselect the Floppy and Optical options next to **Boot Order**, and then click **Okay**.
 1. Click on **Start** to boot your system back.
 
-## Boot fedora; update system; and create regular user
+### Boot fedora; update system; and create regular user
 
 1. Once your system is running, you will get a login prompt. Login as the user ``root``.
 1. Update your system right away with the following commands:
@@ -99,7 +99,7 @@ The settings box should close. Now highlight the virtual machine in the left pan
     poweroff
     ```
 
-## Clone the machine
+### Clone the machine
 
 In the VirtualBox Manager, right click on our installation, and then select **Clone**. Accept the default name or rename it as you prefer. Be sure to choose **Full clone**.
 

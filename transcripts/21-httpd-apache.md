@@ -1,4 +1,4 @@
-# Installing Apache2
+## Installing Apache2
 
 Let's install our first web server. First, make sure your machine is up to date
 before installing Apache2.
@@ -6,7 +6,7 @@ before installing Apache2.
 First, be sure to switch to Bridged mode in VirtualBox network settings and
 refresh MAC address in VirtualBox.
 
-## Update system first
+### Update system first
 
 Login as root, or switch to the ``root`` user, and update the machine:
 
@@ -15,7 +15,7 @@ sudo su
 dnf update
 ```
 
-## Install ``httpd``
+### Install ``httpd``
 
 Now, that the machine is updated. Let's install Apache2. On distributions that
 use a package management system, such as ``dnf`` on Fedora and ``apt`` on
@@ -56,7 +56,7 @@ For now, however, this is fine, and we can proceed with the install:
 dnf -y install httpd
 ```
 
-## Basic checks
+### Basic checks
 
 One of the things that makes Apache2, and some other web servers, so powerful
 is the library of modules that extend Apache's functionality. We'll come back
@@ -94,7 +94,7 @@ Active: active (running)
 ...
 ```
 
-## Creating a web page
+### Creating a web page
 
 Now that we have it up and running, let's look at the default web page:
 
@@ -155,7 +155,7 @@ firewall-cmd --zone=FedoraServer --add-service=https
 firewall-cmd --runtime-to-permanent
 ```
 
-## Changing the ``hostname``
+### Changing the ``hostname``
 
 The ``hostname`` of a system is the label it uses to identify itself to others
 (humans) on the network. If the hostname is on the web, it may also be referred
@@ -193,7 +193,7 @@ We can access our site by hostname rather than by IP:
 w3m seanburns
 ```
 
-## Optional
+### Optional
 
 After you've completed the above steps, do the following:
 
@@ -214,12 +214,12 @@ replace 'seanburns' with the hostname that you chose for your guest OS:
 http://seanburns
 ```
 
-## Apache2 User Directories
+### Apache2 User Directories
 
 We can enable Apache2 so that users on our systems can run websites from their
 home directories.
 
-### Enable userdir (``$HOME/public_html`` sites)
+#### Enable userdir (``$HOME/public_html`` sites)
 
 Edit the ``userdir.conf`` file.
 
@@ -239,7 +239,7 @@ After saving and exiting, restart ``httpd.service``:
 systemctl restart httpd.service
 ```
 
-### Tasks
+#### Tasks
 
 1. Exit out of root account
 1. Go to your regular user's home directory
@@ -248,7 +248,7 @@ systemctl restart httpd.service
    public_html``
 1. Change user director permissions to 711: ``chmod 711 /home/sean``
 
-### SELinux
+#### SELinux
 
 Now, because of SELinux, we need to set some SELinux switches. Using ``sudo``
 or logging in as ``root``:
@@ -262,7 +262,7 @@ In the last line above, replace ``/home/sean/public_html`` with the correct
 path for your regular user (i.e., you're not *sean*). Exit out of root if you
 need to.
 
-### Test
+#### Test
 
 Now test to see if your ``public_html`` site is operational by simply visiting
 the site. For me, I use the following command:
