@@ -20,11 +20,11 @@ In this tutorial, we are going to create a ``chroot`` for a human user account.
 
 ```
 sudo su
-useradd -m -U -s /usr/bin/bash capilouto
-passwd capilouto
+useradd -m -U -s /usr/bin/bash vader
+passwd vader
 ```
 
-**Step 2**: Next, we ``chroot`` *capilouto* into a new directory. That directory will be located at ``/var/chroot``. Note that the root directory for our regular users is ``/``, but user *capilouto*'s root directory will be different ``/var/chroot``, even if they can't tell.
+**Step 2**: Next, we ``chroot`` *vader* into a new directory. That directory will be located at ``/var/chroot``. Note that the root directory for our regular users is ``/``, but user *vader*'s root directory will be different ``/var/chroot``, even if they can't tell.
 
 ```
 mkdir /var/chroot
@@ -33,10 +33,11 @@ mkdir /var/chroot
 **Step 3**: Now we set up available binaries for the user. We'll only allow ``bash`` for now.  To do that, we'll create a ``bin/`` directory, and copy ``bash`` to that directory.
 
 ```
-mkdir -p /var/chroot/usr/bin
 which bash
-/usr/bin/bash
+mkdir -p /var/chroot/usr/bin
+mkdir -p /var/chroot/bin
 cp /usr/bin/bash /var/chroot/usr/bin/
+cp /usr/bin/bash /var/chroot/bin/
 ```
 
 **Step 4**: Large software applications have dependencies (aka, libraries). Thus, next we copy the libraries that ``bash`` needs to run.
@@ -84,8 +85,8 @@ bash-5.1# exit
 
 ```
 groupadd chrootjail
-usermod -a -G chrootjail capilouto
-groups capilouto
+usermod -a -G chrootjail vader
+groups vader
 ```
 
 **Step 7**: Edit ``/etc/ssh/sshd_config`` to direct users in the ``chrootjail`` group to the ``chroot`` directory. Add the following line at the end of the file. Then restart ssh server.
@@ -110,20 +111,20 @@ exit
 
 **Step 8**: Test ``ssh``.
 
-Connect to the Fedora server via ``ssh`` as the user *capilouto*:
+Connect to the Fedora server via ``ssh`` as the user *vader*:
 
 ```
-ssh capilouto@relevant_ip_address
+ssh vader@relevant_ip_address
 -bash-5.1$ ls
 -bash: ls: command not found
 exit
 ```
 
-That works as expected. The user *capilouto* is now restricted to a special directory and has limited access to the system or to any utilities on that system.
+That works as expected. The user *vader* is now restricted to a special directory and has limited access to the system or to any utilities on that system.
 
 ### Exercise
 
-By using the ``ldd`` command, you can add additional binaries for this user. As an exercise, use the ``ldd`` command to locate the libraries for the ``nano`` editor, and make ``nano`` available to the user *capilouto* in the chrooted directory.
+By using the ``ldd`` command, you can add additional binaries for this user. As an exercise, use the ``ldd`` command to locate the libraries for the ``nano`` editor, and make ``nano`` available to the user *vader* in the chrooted directory.
 
 #### Nano in chroot
 
