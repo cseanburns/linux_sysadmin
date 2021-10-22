@@ -185,5 +185,7 @@ To change default zone:
 firewall-cmd --permanent --set-default-zone=public
 ```
 
-[chrootjail]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins
 
+[firewall_cmd]:https://docs.fedoraproject.org/en-US/Fedora/19/html/Security_Guide/sect-Security_Guide-Using_Firewalls.html
+[iptables-examples]:http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/
+[iptables-beginners]:https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/
