@@ -1,31 +1,30 @@
-## Linux Firewalls
+## Security: Firewalls ``iptables`` and ``firewall-cmd``
 
-See NFTABLES for changes to the firewall software
+Netfilter is a part of the kernel that includes a suite of applications
+that help manage how packets flow in and out of a server or internet
+connected device. ``iptables`` is the command line user interface to
+**netfilter** and is one of the main firewall applications on many
+Linux distributions.
 
-Netfilter is a part of the kernel that includes a suite of applications that
-help manage how packets flow in and out of a server or internet connected
-device. ``iptables`` is the command line user interface to **netfilter** and is
-one of the main firewall applications on many Linux distributions.
-
-Fedora/RedHat offers a more user friendly interface to ``iptables`` called
-``firewall-cmd`` that I'll discuss below. Ubuntu offers its own more user
-friendly interface called ``ufw``. In this lecture, I'll discuss ``iptables``
-and ``firewall-cmd``.
+Fedora/RedHat offers a more user friendly interface to ``iptables``
+called ``firewall-cmd`` that I'll discuss below. Ubuntu offers its own
+user friendly interface called ``ufw``. In this lecture, I'll discuss
+``iptables`` and ``firewall-cmd``.
 
 ### iptables
 
-There are five predefined tables (*operations*) and five chains that come with
-``iptables``. Tables define the kinds of operations that you can use to control
-the firewall and therefore the packets that come in and out of the system or
-through a system. The *filter* and *nat* tables are the most commonly used
-ones.
+There are five predefined tables (*operations*) and five chains that
+come with ``iptables``. Tables define the kinds of operations that you
+use to control the firewall and the packets that come in and out of the
+system or through a system. The *filter* and *nat* tables are the most
+commonly used ones.
 
-The five *chains* are lists of rules that act on packets flowing through the
-system. Finally, there are also *targets*. These are the actions to be
-performed on packets. The main targets include **ACCEPT**, **DROP**, and
-**RETURN**.
+The five *chains* are lists of rules that act on packets flowing through
+the system. Finally, there are also *targets*. These are the actions to
+be performed on packets. The main targets include **ACCEPT**, **DROP**,
+and **RETURN**.
 
-From ``man iptable``, the tables and respective chains include:
+From ``man iptables``, the tables and respective chains include:
 
 - filter (the default table)
   - INPUT: for packets destined to local sockets
@@ -54,8 +53,8 @@ We'll cover the filter tables and the nat tables.
 
 #### Usage
 
-First, we can look at the default parameters for the *filter* table. You need
-to be root to run this commands, or use ``sudo``:
+First, we'll look at the default parameters for the *filter* table. You
+need to be root to run this commands, or use ``sudo``:
 
 ```
 sudo su
@@ -64,21 +63,27 @@ sudo su
 # -v: be verbose
 iptables -L -v | less
 iptables -L | grep policy
+# specify a table
+iptables -t filter -L -v
 ```
 
 #### Allow connections only from subnet
 
-We can change the firewall to only allow communication on a subnet. Of course,
-in order to do this, we need the subnet **Network ID** and the **CIDR** number:
+We can change the firewall to only allow communication on a subnet. Of
+course, in order to do this, we need the subnet **Network ID** and the
+**CIDR** number:
 
 ```
 ip a
 ```
 
-Now that we have the Network ID and the CIDR number, we can set the firewall:
+Now that we have the Network ID and the CIDR number, we can set the
+firewall (don't follow along here if you're connecting via SSH because
+this will end your connection):
 
 ```
-# comment: first, set policy to drop all incoming, forwarding, and outgoing
+# comment: first, set policy to drop all incoming, forwarding, and
+# outgoing
 # packets; this means we're starting from a baseline
 iptables --policy INPUT DROP
 iptables --policy FORWARD DROP
@@ -87,12 +92,13 @@ iptables --policy OUTPUT DROP
 # comment: review new policies for the above chains
 iptables -L | grep policy
 
-# comment: now accept only input, forwarding, and output from the following
+# comment: now accept only input, forwarding, and output from the
+# following
 # comment: network ranges:
 
-iptables -A INPUT -s 10.163.34.0/24 -j ACCEPT
-iptables -A FORWARD -s 10.163.34.0/24 -j ACCEPT
-iptables -A OUTPUT -s 10.163.34.0/24 -j ACCEPT
+iptables -A INPUT -s 10.163.36.0/24 -j ACCEPT
+iptables -A FORWARD -s 10.163.36.0/24 -j ACCEPT
+iptables -A OUTPUT -s 10.163.36.0/24 -j ACCEPT
 ```
 
 To test this, we can try to connect to a remote server:
@@ -103,14 +109,14 @@ w3m https://www.google.com
 
 There are lots of examples on the web. Examples from:
 
-- [http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/][iptables-examples]
-- [https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/][iptables-beginners]
+- [http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/][iptablesexamples]
+- [https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/][iptablesbeginners]
 
 #### PREROUTING
 
-Here is another example where we forward all traffic to port 25 to port 2525.
-Here we use the **NAT** table, since NAT is responsible for network address
-translation:
+Here is an example where we forward all traffic to port 25 to port 2525.
+Here we use the **NAT** table, since NAT is responsible for network
+address translation:
 
 ```
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 2525
@@ -118,10 +124,10 @@ iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 25 -j REDIRECT --to-port 25
 
 #### OUTPUT
 
-Here is another example where we disable outgoing email by disabling the ports
-that are commonly associated with email. Of course, this could be bypassed by
-using non-standard ports for email, but for out cases, it's a decent
-demonstration:
+Here is an example where we disable outgoing email by disabling the
+ports that are commonly associated with email. Of course, this could
+be bypassed by using non-standard ports for email, but for out case,
+it's a decent demonstration:
 
 ```
 ## iptables -A OUTPUT -p tcp --dports 25,465,587 -j REJECT
@@ -129,17 +135,20 @@ demonstration:
 
 ### firewall-cmd
 
-[firewall-cmd documentation][firewall_cmd]
+[firewall-cmd documentation][firewallcmd]
 
-**firewalld** is a slightly more user friendly interface to netfilters/iptables
+**firewalld** is a more user friendly interface to netfilters/iptables
 in Red Hat based distros.
 
-Zones are an important concept in firewalld. Some predefined zones:
+In **firewalld**, we use **zones** to manage internet traffic. It is
+possible to define custom zones with **firewalld**, but it does come
+included with the following predefined zones, and in many cases, these
+might be all that we need:
 
 - DROP : strictest. All incoming network packets are dropped
 - BLOCK : all very strict
-- PUBLIC : only selected incoming connections are accepted. Good zone for web
-  server, email server, etc.
+- PUBLIC : only selected incoming connections are accepted. Good zone
+  for web server, email server, etc.
 - EXTERNAL : external networks (useful for NAT)
 - DMZ : computers located in DMZ
 - work : trust most computers in network and accept some services
@@ -185,7 +194,6 @@ To change default zone:
 firewall-cmd --permanent --set-default-zone=public
 ```
 
-
-[firewall_cmd]:https://docs.fedoraproject.org/en-US/Fedora/19/html/Security_Guide/sect-Security_Guide-Using_Firewalls.html
-[iptables-examples]:http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/
-[iptables-beginners]:https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/
+[firewallcmd]:https://docs.fedoraproject.org/en-US/Fedora/19/html/Security_Guide/sect-Security_Guide-Using_Firewalls.html
+[iptablesexamples]:http://www.tecmint.com/linux-iptables-firewall-rules-examples-commands/
+[iptablesbeginners]:https://www.howtogeek.com/177621/the-beginners-guide-to-iptables-the-linux-firewall/
