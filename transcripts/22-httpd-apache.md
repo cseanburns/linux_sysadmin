@@ -170,12 +170,10 @@ Check the default hostname:
 localhost.localdomain
 ```
 
-To change the default hostname from **localhost**, we'll edit a specific
-file and then use the ``hostnamectl`` command to update the system's
-hostname per the file. I'll comment out the first line by putting a pound
-sign at the beginning and then add an additional line with the name of
-my new hostname: **enterprise**.  You can name your hostname whatever
-you want, but be sure it's a single word with no punctuation.
+To change the default hostname from **localhost**, use the ``hostnamectl``
+command to update the system's hostname per the file. My new hostname
+will be **enterprise**.  You can name your hostname whatever you want,
+but be sure it's a single word with no punctuation.
 
 ```
 hostnamectl set-hostname enterprise
