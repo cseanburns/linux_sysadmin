@@ -26,14 +26,14 @@
 
 - In the late 1970s, [Richard Stallman][stallman] began to notice that software began to become commoditized and as a result, hardware vendors were no longer sharing the code they developed to make their hardware work. During much of his education, software code was not eligible for copyright protection (changed under the Copyright Act of 1976).
 - Stallman, who thrived in a *hacker culture* (Wikipedia page on Stallman), began to wage battles against this.
-- Stallman created the [GNU project][gnu_project] and philosophy (also the creator of GNU Emacs). The project is an attempt to create a completely **free** operating system, that was Unix-like, called GNU.
+- Stallman created the [GNU project][gnuproject] and philosophy (also the creator of GNU Emacs). The project is an attempt to create a completely **free** operating system, that was Unix-like, called GNU.
 - By the early 1990s, Stallman and others had developed all the utilities needed to have a full operating system, except for a kernel.
 - This includes the Bash shell, written by [Brian Fox][bfox].
 - The philosophy includes several propositions that define free software:
 
 ### The four freedoms, per GNU Project
 
-[https://www.gnu.org/philosophy/free-sw.html][four_freedoms]
+[https://www.gnu.org/philosophy/free-sw.html][fourfreedoms]
 
 > 0. The freedom to run the program as you wish, for any purpose (freedom 0).
 > 1. The freedom to study how the program works, and change it so it does your computing as you wish (freedom 1). Access to the source code is a precondition for this.
@@ -49,7 +49,7 @@
 
 ### The Rise of Linux, Linus Torvalds, University of Helsinki, Finland
 
-- On August 25, 1991 (30 years ago), [Linus Torvalds][linus_torvalds] announced that he had started working on a **free** operating system kernel for the 386 CPU architecture and for the specific hard drives that he had. This [kernel][kernel] would later be named Linux.
+- On August 25, 1991 (30 years ago), [Linus Torvalds][linustorvalds] announced that he had started working on a **free** operating system kernel for the 386 CPU architecture and for the specific hard drives that he had. This [kernel][kernel] would later be named Linux.
 - Linux technically refers only to the kernel. An operating system kernel handles startup, devices, memory, resources, etc.
 - His motivation was to learn about OS development but also to have access to a Unix-like system. He already had access to an Unix-like system called
   MINIX, but MINIX had some technical and copyright restrictions.
@@ -87,8 +87,8 @@ Note: MacOS is based on [Darwin][puredarwin], is [technically UNIX][unix], and i
 
 ### Free and Open Source Licenses
 
-- [GNU General Public License (GPL)][gnu_gpl]
-- [BSD License][bsd_license]
+- [GNU General Public License (GPL)][gnugpl]
+- [BSD License][bsdlicense]
 
 [thompson]:http://cs.bell-labs.co/who/ken/
 [ritchie]:https://www.bell-labs.com/usr/dmr/www/

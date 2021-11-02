@@ -4,8 +4,8 @@
 
 Please read the following two articles before proceeding:
 
-- [An Introduction to LVM Concepts, Terminology, and Operations][lvm_1]
-- [A Linux User's Guide to Logical Volume Management][lvm_2]
+- [An Introduction to LVM Concepts, Terminology, and Operations][lvm1]
+- [A Linux User's Guide to Logical Volume Management][lvm2]
 
 Additionally, you should review / skim some helpful ``man`` or ``info`` pages before proceeding:
 
@@ -143,6 +143,6 @@ Now reboot the machine. When you reboot, your new partition should be recognized
 reboot now
 ```
 
-[lvm_1]:https://www.digitalocean.com/community/tutorials/an-introduction-to-lvm-concepts-terminology-and-operations
-[lvm_2]:https://opensource.com/business/16/9/linux-users-guide-lvm
+[lvm1]:https://www.digitalocean.com/community/tutorials/an-introduction-to-lvm-concepts-terminology-and-operations
+[lvm2]:https://opensource.com/business/16/9/linux-users-guide-lvm
 

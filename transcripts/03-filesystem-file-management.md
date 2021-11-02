@@ -9,9 +9,9 @@ Throughout this demonstration, I encourage you to ``ssh`` into our remote server
 
 ### Visualizing the Tree Structure
 
-First, the term **file system** may refer to different concepts. In come cases, it refers to how data is [stored and retrieved][1] on a device like a hard drive, USB drive, etc. For example, macOS uses the [Apple File System (APFS)][2] by default, and Windows uses the [New Technology File System (NTFS)][3]. Linux and other unix-like operating systems use a variety of file systems. Presently, the two major ones include **ext4** and **btrfs**. The former is the default file system on distributions like [Debian][4] and [Ubuntu][5], but the [Fedora][6] distribution recently switched to the latter. [Opensource.com][7] has a nice overview of file systems under this concept, and we will learn how to use some of them later in the semester when we will create partitions, manage disk volumes, and learn about backups.
+First, the term **file system** may refer to different concepts. In come cases, it refers to how data is [stored and retrieved][filesystem] on a device like a hard drive, USB drive, etc. For example, macOS uses the [Apple File System (APFS)][apfs] by default, and Windows uses the [New Technology File System (NTFS)][ntfs]. Linux and other unix-like operating systems use a variety of file systems. Presently, the two major ones include **ext4** and **btrfs**. The former is the default file system on distributions like [Debian][debian] and [Ubuntu][ubuntu], but the [Fedora][fedora] distribution recently switched to the latter. [Opensource.com][ext4] has a nice overview of file systems under this concept, and we will learn how to use some of them later in the semester when we will create partitions, manage disk volumes, and learn about backups.
 
-The other way that the term **file system** might be used is to refer to the directory structure of a system. This concept is not always directly related to the prior concept of a file system. For example, on Windows, the root file system is identified by a letter, like the **C:** drive regardless if the disk has a NTFS file system or a FAT file system. macOS adheres to a root file system like Linux and other unix-like operating systems. In these operating systems, we have a root, top-level directory identified by a **/**, and then sub-directories (or folders in GUI-speak) under that root directory. [Linux.com][8] has a nice overview of the most common directory structure that Linux distributions use along with an explanation for the major bottom level directories.
+The other way that the term **file system** might be used is to refer to the directory structure of a system. This concept is not always directly related to the prior concept of a file system. For example, on Windows, the root file system is identified by a letter, like the **C:** drive regardless if the disk has a NTFS file system or a FAT file system. macOS adheres to a root file system like Linux and other unix-like operating systems. In these operating systems, we have a root, top-level directory identified by a **/**, and then sub-directories (or folders in GUI-speak) under that root directory. [Linux.com][directories] has a nice overview of the most common directory structure that Linux distributions use along with an explanation for the major bottom level directories.
 
 On Linux, we can visualize the filesystem with the ``tree`` command. 
 
@@ -47,12 +47,12 @@ Source: [Linux Filesystem Explained][8]
 
 ### Basic Directory and File commands 
 
-In order to explore the above directories but also to create new ones and work with files, we need to know some basic commands. A lot of these commands are [GNU Coreutils][9], and in this demo, we will specifically cover some of the following:
+In order to explore the above directories but also to create new ones and work with files, we need to know some basic commands. A lot of these commands are [GNU Coreutils][coreutils], and in this demo, we will specifically cover some of the following:
 
-- [Directory Listing][10]
-- [Basic Operations][11]
-- [Special File Types][12]
-- [Printing Text][13]
+- [Directory Listing][directorylisting]
+- [Basic Operations][basicops]
+- [Special File Types][filetypes]
+- [Printing Text][printing]
 
 #### Directory Listing
 
@@ -227,16 +227,16 @@ Basic commands covered in this demo include:
 - ``less`` : display contents of a file by page 
 
 
-[1]:https://en.wikipedia.org/wiki/File_system
-[2]:https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac
-[3]:https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems
-[4]:https://www.debian.org/
-[5]:https://ubuntu.com
-[6]:https://getfedora.org/
-[7]:https://opensource.com/article/18/4/ext4-filesystem
-[8]:https://www.linux.com/tutorials/linux-filesystem-explained/
-[9]:https://www.gnu.org/software/coreutils/manual/coreutils.html
-[10]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Directory-listing
-[11]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations
-[12]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Special-file-types
-[13]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Printing-text
+[filesystem]:https://en.wikipedia.org/wiki/File_system
+[apfs]:https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac
+[ntfs]:https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems
+[debian]:https://www.debian.org/
+[ubuntu]:https://ubuntu.com
+[fedora]:https://getfedora.org/
+[ext4]:https://opensource.com/article/18/4/ext4-filesystem
+[directories]:https://www.linux.com/tutorials/linux-filesystem-explained/
+[coreutils]:https://www.gnu.org/software/coreutils/manual/coreutils.html
+[directorylisting]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Directory-listing
+[basicops]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations
+[filetypes]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Special-file-types
+[printing]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Printing-text

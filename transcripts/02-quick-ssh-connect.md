@@ -21,9 +21,9 @@ a link to some other instructions. I am not sure which one is more current, but
 between the two, you should be able to figure it out:
 
 - [How to enable and install Built-in SSH in Windows 10 using the windows
-  command prompt or powershell][ssh_windows10]
+  command prompt or powershell][sshwindows10]
 - [How to Enable and Use Windows 10’s New Built-in SSH
-  Commands][ssh_windows10_bi]
+  Commands][sshwindows10bi]
 
 If neither of those work for you, then you should install [PuTTY][putty]. This is
 a great app, and since it's available on Linux, I will show you how to use it
@@ -64,6 +64,6 @@ remote Linux server in order to learn some command line basics.
 
 [ssh]:https://en.wikipedia.org/wiki/Secure_Shell
 [openssh]:https://www.openssh.com/
-[ssh_windows10]:https://www.youtube.com/watch?v=xIfzZXHaCzQ
-[ssh_windows10_bi]:https://www.howtogeek.com/336775/how-to-enable-and-use-windows-10s-built-in-ssh-commands/
+[sshwindows10]:https://www.youtube.com/watch?v=xIfzZXHaCzQ
+[sshwindows10bi]:https://www.howtogeek.com/336775/how-to-enable-and-use-windows-10s-built-in-ssh-commands/
 [putty]:https://www.chiark.greenend.org.uk/~sgtatham/putty/

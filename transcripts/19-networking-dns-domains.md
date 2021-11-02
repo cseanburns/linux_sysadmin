@@ -47,7 +47,7 @@ Aside: It's possible to have alternate internets by using outside root name serv
 * opennic: [https://www.opennicproject.org/][opennic]
 * alternic: [https://en.wikipedia.org/wiki/AlterNIC][alternic]
 
-Russia, as an example, has threated to use it's own alternate internet based on a different DNS root system. This would essentially create a large, second internet. You can read about in this [IEEE Spectrum article][ieee_russia].
+Russia, as an example, has threated to use it's own alternate internet based on a different DNS root system. This would essentially create a large, second internet. You can read about in this [IEEE Spectrum article][ieeerussia].
 
 #### Top level domain (TLD)
 
@@ -190,7 +190,7 @@ resolvectl status
 [sdf]:https://web.archive.org/web/20081121061730/http://www.smtpnic.org/
 [opennic]:https://www.opennicproject.org/
 [alternic]:https://en.wikipedia.org/wiki/AlterNIC
-[ieee_russia]:https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet
+[ieeerussia]:https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet
 [soyinka2]:https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364
 [rootiana]:https://www.iana.org/domains/root/servers
 

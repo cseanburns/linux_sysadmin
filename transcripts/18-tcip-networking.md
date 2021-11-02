@@ -127,9 +127,9 @@ And to get a count of the ports, we can invert grep for lines starting with a po
 grep -Ev "^#|^$" /etc/services | wc -l
 ```
 
-See also the Wikipedia page: [List of TCP and UDP port numbers][port_numbers]
+See also the Wikipedia page: [List of TCP and UDP port numbers][portnumbers]
 
-[port_numbers]:https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
+[portnumbers]:https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 
 ### IP Subnetting
 
@@ -333,6 +333,6 @@ Hosts:
 
 #### IPv6 subnetting
 
-We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: [IPv6 subnetting overview][ipv6_subnetting]
+We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: [IPv6 subnetting overview][ipv6subnetting]
 
-[ipv6_subnetting]:https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study
+[ipv6subnetting]:https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study

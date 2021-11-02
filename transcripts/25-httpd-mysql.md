@@ -349,10 +349,10 @@ change in order to get your script to work there.
 
 #### References
 
-- [How to Test PHP MySQL Database Connection Using Script][php_mysql]
-- [Install Apache/PHP 7.2.12 on Fedora 29/28, CentOS/RHEL 7.5/6.10][apache_php]
-- [MySQL Improved Extension][mysql_improved]
-- [PHP 5 MySQLi Functions][php_mysqli]
+- [How to Test PHP MySQL Database Connection Using Script][phpmysql]
+- [Install Apache/PHP 7.2.12 on Fedora 29/28, CentOS/RHEL 7.5/6.10][apachephp]
+- [MySQL Improved Extension][mysqlimproved]
+- [PHP 5 MySQLi Functions][phpmysqli]
 
 Note: this doesn't seem to be a problem now, but in previous times,
 there was an an error with authentication due to an upgrade in MySQL
@@ -367,7 +367,7 @@ ALTER USER 'mysqlUsername'@'localhost' IDENTIFIED WITH mysql_native_password BY 
 [mysqlgetstarted]:https://dev.mysql.com/doc/mysql-getting-started/en/
 [mysqlnewuser]:https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql
 [mysqlsyntax]:https://dev.mysql.com/doc/refman/5.7/en/sql-syntax.html
-[php_mysql]:https://www.tecmint.com/test-php-mysql-database-connection-using-script/
+[phpmysql]:https://www.tecmint.com/test-php-mysql-database-connection-using-script/
 [apachephp]:https://www.if-not-true-then-false.com/2010/install-apache-php-on-fedora-centos-red-hat-rhel/
 [mysqlimproved]:https://secure.php.net/manual/en/book.mysqli.php
 [phpmysqli]:https://www.w3schools.com/PHP/php_ref_mysqli.asp

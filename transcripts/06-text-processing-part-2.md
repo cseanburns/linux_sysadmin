@@ -236,12 +236,12 @@ The Linux (and other Unix-like OSes) command line offers a lot of utilities to e
 
 It's fun to learn and practice these. Despite this, you do not have to become a ``sed`` or an ``awk`` programmer. Like the utilities that we've discussed in prior lectures, the power of programs like these is that their on hand and easy to use as **one-liners**. If you want to get started, the resources below offer nice lists of pre-made one-liners:
 
-- [sed one-liners][1]
-- [awk one-liners][2] : this is part 1 with links to additional parts
-- [compilation of one-liners][3] : this one is good just in that is shows how you can use the pipe operator with a bunch of the utilities we've discussed
+- [sed one-liners][sedoneliners]
+- [awk one-liners][awkoneliners] : this is part 1 with links to additional parts
+- [compilation of one-liners][otheroneliners] : this one is good just in that is shows how you can use the pipe operator with a bunch of the utilities we've discussed
 
-[1]:https://edoras.sdsu.edu/doc/sed-oneliners.html
-[2]:https://catonmat.net/awk-one-liners-explained-part-one
-[3]:https://wikis.utexas.edu/display/bioiteam/Scott%27s+list+of+linux+one-liners
+[sedoneliners]:https://edoras.sdsu.edu/doc/sed-oneliners.html
+[awkoneliners]:https://catonmat.net/awk-one-liners-explained-part-one
+[otheroneliners]:https://wikis.utexas.edu/display/bioiteam/Scott%27s+list+of+linux+one-liners
 
 Please explore and try these out yourselves!

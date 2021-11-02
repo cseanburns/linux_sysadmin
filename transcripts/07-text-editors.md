@@ -2,7 +2,7 @@
 
 In addition to writing commands at the command prompt, we can also write commands (and other kinds of text) in text editors, save those files as scripts, and then execute the files so that the commands in the script run. This process can save lots of time, especially when we find ourselves writing longer commands. We can enter long commands at the command prompt, but it is difficult to fix errors when writing multi-line commands there.
 
-It's important to have some familiarity with command line text editors not just because we may need to write out longer scripts, but also because command line text editors may be the primary way we have of modifying configuration files on a server. We'll learn more about configuration files later in the semester, but these are files, often in the ``/etc/`` directory, which define the parameters of various services on a server, such as how a web server delivers web sites or how a firewall blocks certain kinds of internet connections. Graphical based text editors can be nice, but graphical user environments are not always available on servers because of the computer resources they require, which are better used for the purposes of the server, and because the security bugs that come with graphical user software unnecessarily increase the [attack surface][attack_surface] of the server.
+It's important to have some familiarity with command line text editors not just because we may need to write out longer scripts, but also because command line text editors may be the primary way we have of modifying configuration files on a server. We'll learn more about configuration files later in the semester, but these are files, often in the ``/etc/`` directory, which define the parameters of various services on a server, such as how a web server delivers web sites or how a firewall blocks certain kinds of internet connections. Graphical based text editors can be nice, but graphical user environments are not always available on servers because of the computer resources they require, which are better used for the purposes of the server, and because the security bugs that come with graphical user software unnecessarily increase the [attack surface][attacksurface] of the server.
 
 In this demo, I am going to address three text editor programs and I will start with the most difficult one to learn (``ed``) and end with the easiest one to learn (``nano``). For this course, I suggest that you use ``nano``, but the first two text editors, ``ed`` and ``vim``, are very much a part of Unix and Linux culture. I want you to be familiar with them for that reason but also because their basic designs have influenced a lot of other common technologies.
 
@@ -54,7 +54,7 @@ If I wanted to substitute or replace the word **linux** with **Linux** on lines 
 5,7s/linux/Linux/
 ```
 
-Line editors like ``ed`` are also modal, which means they have separate [modes][modes_ui] for inputting text and for issuing commands on text. Text editors in graphical user environments, like Notepad on Microsoft Windows or TextEdit on macOS, are **modeless**---the user can switch between writing text and editing text without changing the environment and by using keyboard shortcuts (like Ctrl-c or Cmd-c to copy) or using the menu bar. But in modal text editors, ``vim`` included, the user has to enter one mode to write text (the **input mode**) and another mode to run commands on the text (the **command mode**) (``vim`` has many modes but three main ones).
+Line editors like ``ed`` are also modal, which means they have separate [modes][modesui] for inputting text and for issuing commands on text. Text editors in graphical user environments, like Notepad on Microsoft Windows or TextEdit on macOS, are **modeless**---the user can switch between writing text and editing text without changing the environment and by using keyboard shortcuts (like Ctrl-c or Cmd-c to copy) or using the menu bar. But in modal text editors, ``vim`` included, the user has to enter one mode to write text (the **input mode**) and another mode to run commands on the text (the **command mode**) (``vim`` has many modes but three main ones).
 
 To start with ed, I simply type ``ed`` on the Bash prompt followed by an optional file name to work on, which could be a new file or an existing file. Let's say I wanted to create a file called **letter.txt**, then I'd type:
 
@@ -159,7 +159,7 @@ To save the file and exit ``vim``, we go into **command mode** by pressing the *
 :wq
 ```
 
-The above only barely scratches the surface and there are whole books on these editors as well as websites, videos, etc that explore them, and especially ``vim`` in more detail. But now that you have some familiarity with them, you might find this hilarious: [Ed, man! !man ed][man_ed].
+The above only barely scratches the surface and there are whole books on these editors as well as websites, videos, etc that explore them, and especially ``vim`` in more detail. But now that you have some familiarity with them, you might find this hilarious: [Ed, man! !man ed][maned].
 
 ### ``nano``
 
@@ -177,7 +177,7 @@ For the purposes of this class, that's all you really need to know about ``nano`
 
 [ttys]:https://en.wikipedia.org/wiki/Teleprinter
 [printers]:https://www.youtube.com/watch?v=2B-U-5ylvWo
-[attack_surface]:https://en.wikipedia.org/wiki/Attack_surface
-[modes_ui]:https://en.wikipedia.org/wiki/Mode_(user_interface)
+[attacksurface]:https://en.wikipedia.org/wiki/Attack_surface
+[modesui]:https://en.wikipedia.org/wiki/Mode_(user_interface)
 [vi]:https://en.wikipedia.org/wiki/Vi
-[man_ed]:https://www.gnu.org/fun/jokes/ed-msg.en.html
+[maned]:https://www.gnu.org/fun/jokes/ed-msg.en.html
