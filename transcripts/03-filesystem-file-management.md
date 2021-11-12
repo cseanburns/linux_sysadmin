@@ -225,7 +225,7 @@ Basic commands covered in this demo include:
 - ``echo`` : print a line of text
 - ``cat`` : display contents of a file
 - ``less`` : display contents of a file by page 
-
+- ``tree`` : list contents of directories in a tree-like format
 
 [filesystem]:https://en.wikipedia.org/wiki/File_system
 [apfs]:https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac

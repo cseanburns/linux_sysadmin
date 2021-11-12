@@ -175,6 +175,14 @@ For the purposes of this class, that's all you really need to know about ``nano`
 1. Be sure to follow the prompts at the bottom of the screen
 1. Use the arrow keys to navigate around the page/file
 
+### Conclusion
+
+In prior lessons, we learned how to use the Bash interactive shell and how to view, manipulate, and edit files from that shell. In this lesson, we learned how to use several command line text editors. This allows us to save our commands and create scripts. The commands we used in this lesson include:
+
+- ``ed`` : line-oriented text editor
+- ``vim` : Vi IMproved, a programmer's text editor
+- ``nano`` : Nano's ANOther editor, inspired by Pico
+
 [ttys]:https://en.wikipedia.org/wiki/Teleprinter
 [printers]:https://www.youtube.com/watch?v=2B-U-5ylvWo
 [attacksurface]:https://en.wikipedia.org/wiki/Attack_surface

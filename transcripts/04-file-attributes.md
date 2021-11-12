@@ -26,3 +26,12 @@ chown sean:sis_fac_staff file.sh
 # Let's make it read only for the group:
 chmod g-wx+r file.sh
 ```
+
+### Conclusion
+
+In this demo, we looked at two ways to change the attributes of a file. This includes changing the ownership of a file and the read, write, and execute permissions of a file.
+
+The commands we used to change these attributes include:
+
+- ``chmod`` : for changing file permissions (or file mode bits)
+- ``chown`` : for changing file ownwership

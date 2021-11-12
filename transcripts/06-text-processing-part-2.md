@@ -240,6 +240,20 @@ It's fun to learn and practice these. Despite this, you do not have to become a 
 - [awk one-liners][awkoneliners] : this is part 1 with links to additional parts
 - [compilation of one-liners][otheroneliners] : this one is good just in that is shows how you can use the pipe operator with a bunch of the utilities we've discussed
 
+The commands we used in this session incuded:
+
+- ``join`` : join lines of two files on a common field
+- ``paste`` : merge lines of files
+- ``grep`` : print lines that match patterns
+- ``sed`` : stream editor for filtering and transforming text
+- ``awk`` : pattern scanning and text processing language
+
+We also used two types of operators, the pipe and the redirect:
+
+- ``|`` : redirect standard output command1 to standard input of command2
+- ``>`` : redirect to standard output to a file, overwriting
+- ``>>`` : redirect to standard output to a file, appending
+
 [sedoneliners]:https://edoras.sdsu.edu/doc/sed-oneliners.html
 [awkoneliners]:https://catonmat.net/awk-one-liners-explained-part-one
 [otheroneliners]:https://wikis.utexas.edu/display/bioiteam/Scott%27s+list+of+linux+one-liners

@@ -78,3 +78,29 @@ Say we want the license field data but we want to remove that first line, then w
 tail -n +2 operating-system-csv | cut -d, -f2 | sort | uniq > license-data.csv
 ```
 
+### Conclusion
+
+In this lesson, we learned how to process and make sense of data held in a text file. We drew upon some commands we learned in prior lessons that help us navigate the command line and create files and directories. We also added commands that let us sort and view data in different ways. The commands we used in this lesson include:
+
+- ``sort`` : for sorting lines of text files
+- ``uniq`` : for reporting or omitting repeats lines
+- ``cut`` : for removing from each line of files
+- ``head`` : for outputting the first part of files
+- ``tail`` : for outputting the last part of files
+- ``who``  : show who is logged on
+- ``w`` : show who is logged on and what they are doing.
+- ``touch`` : change file timestamps
+- ``cat`` : concatenate files and print on the standard output
+- ``echo`` : display a line of text
+- ``pwd`` : print name of current/working directory
+- ``mkdir`` : show who is logged on
+- ``rmdir`` : remove empty directories
+- ``head`` : output the first part of files
+- ``wc`` : print newline, word, and byte counts for each file
+
+We also used two types of operators, the pipe and the redirect:
+
+- ``|`` : redirect standard output command1 to standard input of command2
+- ``>`` : redirect to standard output to a file, overwriting
+- ``>>`` : redirect to standard output to a file, appending
+
