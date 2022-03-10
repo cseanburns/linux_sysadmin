@@ -5,6 +5,6 @@ Date: 2022-03-09
 Email: [sean.burns@uky.edu](sean.burns@uky.edu)  
 Twitter: [@cseanburns](https://twitter.com/cseanburns)
 
-This short book is based on a series of lectures for my course on electronic resource management.
+This short book is based on a series of lectures for my course on Linux Systems Administration.
 
-Note: This is a very rough draft that covers the Fedora distribution. I plan to change to Ubuntu in the next release.
+This is a very rough draft that covers the Fedora distribution. I plan to change to Ubuntu in the next release during the Fall 2022 semester.
