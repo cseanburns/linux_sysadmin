@@ -1,0 +1,330 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Installing Linux in VirtualBox - Linux Systems Administration</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li class="chapter-item expanded "><a href="p1-system-basics.html"><strong aria-hidden="true">2.</strong> System Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">2.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-quick-ssh-connect.html"><strong aria-hidden="true">2.2.</strong> Connect to a Remote Server</a></li><li class="chapter-item expanded "><a href="03-filesystem-file-management.html"><strong aria-hidden="true">2.3.</strong> Linux Filesystems and File Management</a></li><li class="chapter-item expanded "><a href="04-file-attributes.html"><strong aria-hidden="true">2.4.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="05-text-processing-part-1.html"><strong aria-hidden="true">2.5.</strong> Text Processing, Part 1</a></li><li class="chapter-item expanded "><a href="06-text-processing-part-2.html"><strong aria-hidden="true">2.6.</strong> Text Processing, Part 2</a></li><li class="chapter-item expanded "><a href="07-text-editors.html"><strong aria-hidden="true">2.7.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="08-revisiting-paths.html"><strong aria-hidden="true">2.8.</strong> Revisiting Paths</a></li><li class="chapter-item expanded "><a href="09-bash-scripting.html"><strong aria-hidden="true">2.9.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="10-regular-expressions.html"><strong aria-hidden="true">2.10.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p2-managing-services-software.html"><strong aria-hidden="true">3.</strong> Managing Services and Software</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="11-installing-linux.html" class="active"><strong aria-hidden="true">3.1.</strong> Installing Linux in VirtualBox</a></li><li class="chapter-item expanded "><a href="12-logical-volumes.html"><strong aria-hidden="true">3.2.</strong> Logical Volume Management</a></li><li class="chapter-item expanded "><a href="13-virtualbox-nat.html"><strong aria-hidden="true">3.3.</strong> Using NAT in VirtualBox</a></li><li class="chapter-item expanded "><a href="14-webconsole-nat.html"><strong aria-hidden="true">3.4.</strong> NAT Table in VirtualBox</a></li><li class="chapter-item expanded "><a href="15-managing-users-groups.html"><strong aria-hidden="true">3.5.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="16-systemd.html"><strong aria-hidden="true">3.6.</strong> systemd</a></li><li class="chapter-item expanded "><a href="17-backup-and-using-dnf.html"><strong aria-hidden="true">3.7.</strong> Backups and DNF</a></li></ol></li><li class="chapter-item expanded "><a href="p3-networking-security.html"><strong aria-hidden="true">4.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="18-tcip-networking.html"><strong aria-hidden="true">4.1.</strong> TCIP Networking</a></li><li class="chapter-item expanded "><a href="19-networking-dns-domains.html"><strong aria-hidden="true">4.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="20-security-chroot.html"><strong aria-hidden="true">4.3.</strong> Security and chroot</a></li><li class="chapter-item expanded "><a href="21-security-firewall.html"><strong aria-hidden="true">4.4.</strong> Security and Firewalls</a></li></ol></li><li class="chapter-item expanded "><a href="p4-lamp.html"><strong aria-hidden="true">5.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="22-httpd-apache.html"><strong aria-hidden="true">5.1.</strong> Apache2 Web Server</a></li><li class="chapter-item expanded "><a href="23-httpd-php.html"><strong aria-hidden="true">5.2.</strong> Apache2 and PHP</a></li><li class="chapter-item expanded "><a href="24-httpd-virtualhosts.html"><strong aria-hidden="true">5.3.</strong> Apache2 and Virtual Hosts</a></li><li class="chapter-item expanded "><a href="25-httpd-mysql.html"><strong aria-hidden="true">5.4.</strong> Apache2 and MySQL</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="installing-and-configuring-fedora-34-linux-server"><a class="header" href="#installing-and-configuring-fedora-34-linux-server">Installing and Configuring Fedora 34 Linux Server</a></h1>
+<h2 id="download-and-install-virtualbox--download-fedora"><a class="header" href="#download-and-install-virtualbox--download-fedora">Download and Install VirtualBox &amp;&amp; download fedora</a></h2>
+<ol>
+<li>Download fedora Server Edition. We'll install the x86_64 netinstall ISO image because it's a smaller download, and then we can install other items once Fedora is running.
+<ul>
+<li><a href="https://getfedora.org/">https://getfedora.org/</a></li>
+<li><a href="https://getfedora.org/en/server/download/">https://getfedora.org/en/server/download/</a></li>
+</ul>
+</li>
+<li>Download VirtualBox. This will vary depending on whether you run macOS or Windows. If you have issues here, please seek tutorials elsewhere, like YouTube.
+<ul>
+<li>Download VirtualBox: <a href="https://www.virtualbox.org/">https://www.virtualbox.org/</a></li>
+</ul>
+</li>
+<li>Install VirtualBox however you install software for your operating system. 
+<ul>
+<li>Instructions for <a href="https://www.youtube.com/watch?v=1ASMgibukWI">macOS Big Sur</a>. <strong>Note: instructions from this video are only valid until the 4:20 time. Do not use these instructions after that point of the video.</strong></li>
+<li>Instructions for <a href="https://www.youtube.com/watch?v=8mns5yqMfZk">Windows 10</a>. <strong>Note: instructions from this video are only valid until the 2:30 second mark. Do not use these instructions after that point.</strong></li>
+</ul>
+</li>
+<li>Be aware of the <a href="https://www.virtualbox.org/manual/">VirtualBox user manual</a>. I'm not asking you to read it, but if you have any issues, you should search this documentation.</li>
+</ol>
+<h2 id="host-machine-set-up"><a class="header" href="#host-machine-set-up">Host machine set up</a></h2>
+<ol>
+<li>Create a directory on your own Windows or macOS computer, and call it <strong>iso</strong>. It's fine to create this directory in your home directory, or in your documents directory, or wherever.</li>
+<li>Move the fedora ISO file that you downloaded to your new <strong>iso</strong> directory.</li>
+<li>In your <strong>iso</strong> directory, create a new directory called <strong>virtualbox</strong>.</li>
+</ol>
+<h2 id="set-up-fedora-in-virtualbox"><a class="header" href="#set-up-fedora-in-virtualbox">Set up fedora in VirtualBox</a></h2>
+<ol>
+<li>Click on the <strong>New</strong> button</li>
+<li>In the <strong>Name:</strong> field, type in <strong>Fedora-Base-34</strong>. As you type this in, VirtualBox should automatically recognize the <strong>Type:</strong> and <strong>Version</strong>. Click <strong>Next &gt;</strong>.</li>
+<li><strong>Memory size</strong>: Depending on your laptop's memory capabilities, you can set this higher, but it's not necessary. The default <strong>1024 MB</strong> should be fine.</li>
+<li><strong>Hard disk</strong>: The default is 8.00 GB. We will change this to 100 GB on an upcoming screen. For now, make sure you select the default <strong>Create a virtual hard disk now</strong>, and then click on <strong>Create</strong>.</li>
+<li><strong>Hard disk file type</strong>: Accept the default, which is <strong>VDI</strong>.</li>
+<li><strong>Storage on physical hard disk</strong>: Accept the default, which is <strong>Dynamically allocated</strong></li>
+<li><strong>File location and size</strong>: Here you adjust to the disk size to 100 GB. Note that you will not use all of this space on your hard drive. It's the maximum amount that you can use. Click on <strong>Create</strong>.</li>
+</ol>
+<p>The settings box should close. Now highlight the virtual machine in the left pane of the VirtualBox menu, and click on Start.</p>
+<h2 id="install-fedora-in-virtualbox"><a class="header" href="#install-fedora-in-virtualbox">Install fedora in VirtualBox</a></h2>
+<ol>
+<li>
+<p>When you start, a window will pop up and ask you to select a virtual optical disk. This is the fedora 34 ISO that you downloaded and that you saved to your new <strong>iso</strong> folder. We have to select the file icon in the window and then find and select the ISO that we downloaded. Once you do that, click on <strong>Start</strong>.</p>
+</li>
+<li>
+<p>A terminal will open up. Press <strong>Enter</strong> on the Installing Fedora 34 option. Some setup text will scroll by and soon a graphical installer will launch.</p>
+</li>
+<li>
+<p>In the graphical installer, you'll get a message: &quot;WELCOME TO FEDORA 34.&quot; US English should be the default options in both panes. Click on <strong>Continue</strong>.</p>
+</li>
+<li>
+<p>We only have to configure a few things. Click on <strong>Software Selection</strong>. In
+the right pane, under <strong>Additional software for Selected Environment</strong>, select <strong>Headless Management</strong> and then click on <strong>Done</strong>.</p>
+</li>
+<li>
+<p>Now we have to partition our hard drive. We could accept automatic partitioning, but we want to fine tune this. So click on <strong>Installation Destination</strong>.</p>
+</li>
+<li>
+<p>At the bottom of the window it says <strong>Storage Configuration</strong>. Select <strong>Custom</strong> and then <strong>Done</strong>.</p>
+</li>
+<li>
+<p><strong>Manual Partitioning</strong>: In the next screen, the <strong>LVM</strong> option should already be selected. This stands for <strong>Logical Volume Management</strong>. Make sure that stays selected.</p>
+</li>
+<li>
+<p>Now we create some partitions. Partitioning a drive is a way to slice up a drive into parts so that we better manage the use of the drive. As we create these partitions, note the two pieces of information at the bottom of the screen: the <em>Available Space</em> and the <em>Total Space</em>. The Available Space will change as we add partitions.</p>
+</li>
+<li>
+<p>Click on the <strong>+</strong> icon. In the <strong>Mount Point</strong> box, we'll first create the  <strong>root partition</strong>, which is indicated with the forward slash: <strong>/</strong>. For <strong>Desired Capacity</strong>, we should input <strong>20 GB</strong>. In the next screen, change the <strong>File System</strong> to <strong>ext4</strong>.</p>
+</li>
+<li>
+<p>Next we create our other partitions. These include <strong>/boot</strong>, <strong>/home</strong>, <strong>/var</strong>, <strong>/tmp</strong> partitions and the <strong>swap</strong> file (note the missing slash). Click on the plus sign and repeat the process for these partitions. We'll leave about 34 GB of free disk space available for later use. Altogether, our partition map should look like this, but <strong>fedora</strong> will adjust the sizes a bit:</p>
+<p>| Mount Point/Partition | Size  | File System |
+|-----------------------|-------|-------------|
+| /home                 | 30 GB | ext4        |
+| /                     | 20 GB | ext4        |
+| /tmp                  | 6 GB  | ext4        |
+| /var                  | 10 GB | ext4        |
+| /boot                 | 1 GB  | ext4        |
+| swap                  | 4 GB  | swap        |</p>
+<p>Note that the <strong>/boot</strong> partition is mapped to <strong>sda1</strong>. This is handy to remember.</p>
+<p>Note also that the Available Space listed at the bottom should be about 33.86 GiB.</p>
+<p>After you've inputted the above info, click on <strong>Done</strong>. Then click on <strong>Accept Changes</strong> in the next window.</p>
+</li>
+<li>
+<p>Set up Root Password. Save this password!</p>
+</li>
+<li>
+<p>Click on <strong>Begin Installation</strong>. This might take up to 15 minutes depending on the strength of your internet connection and what kind of hardware you have. </p>
+</li>
+<li>
+<p>Wait until installation is complete and you are able to Reboot System. HOWEVER, do not reboot yet. Instead, choose <strong>Close</strong> from the <strong>File</strong> menu, and then click <strong>Power off the machine.</strong> </p>
+</li>
+<li>
+<p>In VirtualBox settings, click on the settings for this machine.</p>
+</li>
+<li>
+<p>In the window that pops up, click on the <strong>System</strong> tab (this may look different if you're on macOS, especially).</p>
+</li>
+<li>
+<p>Deselect the Floppy and Optical options next to <strong>Boot Order</strong>, and then click <strong>Okay</strong>.</p>
+</li>
+<li>
+<p>Click on <strong>Start</strong> to boot your system back.</p>
+</li>
+</ol>
+<h2 id="boot-fedora-update-system-and-create-regular-user"><a class="header" href="#boot-fedora-update-system-and-create-regular-user">Boot fedora; update system; and create regular user</a></h2>
+<ol>
+<li>
+<p>Once your system is running, you will get a login prompt. Login as the user <code>root</code>.</p>
+</li>
+<li>
+<p>Update your system right away with the following commands:</p>
+<pre><code>dnf updateinfo
+dnf upgrade
+</code></pre>
+<p>The first command will sync your local repository with the remove repositories that manage software updates. The second command will update the software on your system if updates are available.</p>
+</li>
+<li>
+<p>We do not normally want to work in the <code>root</code> account. So next we need to a regular user. To create a new user, do the next command. Instead of <strong>sean</strong>, create a username that you like. Make sure it is one word and that it is all lowercase:</p>
+<pre><code>useradd -m -U -s /usr/bin/bash -G wheel sean
+</code></pre>
+<p>The above command will create a new user named <em>sean</em> and put that user in group of the same name, create a home directory for that user, make <code>bash</code> the default shell for that user, and assign that user to the <strong>wheel</strong> group, which will make that user an administrator of the system. Read <code>man useradd</code> for more details.</p>
+</li>
+<li>
+<p>Next create a password for your new user:</p>
+<pre><code>passwd sean
+</code></pre>
+<p>Once you have completed these steps, you can power off the machine:</p>
+<pre><code>poweroff
+</code></pre>
+</li>
+</ol>
+<h2 id="clone-the-machine"><a class="header" href="#clone-the-machine">Clone the machine</a></h2>
+<p>In the VirtualBox Manager, right click on our installation, and then select <strong>Clone</strong>. Accept the default name or rename it as you prefer. Be sure to choose <strong>Full clone</strong>.</p>
+<p>That's good for now. Congratulations! You have just completed your first installation of a Linux server.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="p2-managing-services-software.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="12-logical-volumes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="p2-managing-services-software.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="12-logical-volumes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>TCIP Networking - Linux Systems Administration</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li class="chapter-item expanded "><a href="p1-system-basics.html"><strong aria-hidden="true">2.</strong> System Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">2.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-quick-ssh-connect.html"><strong aria-hidden="true">2.2.</strong> Connect to a Remote Server</a></li><li class="chapter-item expanded "><a href="03-filesystem-file-management.html"><strong aria-hidden="true">2.3.</strong> Linux Filesystems and File Management</a></li><li class="chapter-item expanded "><a href="04-file-attributes.html"><strong aria-hidden="true">2.4.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="05-text-processing-part-1.html"><strong aria-hidden="true">2.5.</strong> Text Processing, Part 1</a></li><li class="chapter-item expanded "><a href="06-text-processing-part-2.html"><strong aria-hidden="true">2.6.</strong> Text Processing, Part 2</a></li><li class="chapter-item expanded "><a href="07-text-editors.html"><strong aria-hidden="true">2.7.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="08-revisiting-paths.html"><strong aria-hidden="true">2.8.</strong> Revisiting Paths</a></li><li class="chapter-item expanded "><a href="09-bash-scripting.html"><strong aria-hidden="true">2.9.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="10-regular-expressions.html"><strong aria-hidden="true">2.10.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p2-managing-services-software.html"><strong aria-hidden="true">3.</strong> Managing Services and Software</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="11-installing-linux.html"><strong aria-hidden="true">3.1.</strong> Installing Linux in VirtualBox</a></li><li class="chapter-item expanded "><a href="12-logical-volumes.html"><strong aria-hidden="true">3.2.</strong> Logical Volume Management</a></li><li class="chapter-item expanded "><a href="13-virtualbox-nat.html"><strong aria-hidden="true">3.3.</strong> Using NAT in VirtualBox</a></li><li class="chapter-item expanded "><a href="14-webconsole-nat.html"><strong aria-hidden="true">3.4.</strong> NAT Table in VirtualBox</a></li><li class="chapter-item expanded "><a href="15-managing-users-groups.html"><strong aria-hidden="true">3.5.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="16-systemd.html"><strong aria-hidden="true">3.6.</strong> systemd</a></li><li class="chapter-item expanded "><a href="17-backup-and-using-dnf.html"><strong aria-hidden="true">3.7.</strong> Backups and DNF</a></li></ol></li><li class="chapter-item expanded "><a href="p3-networking-security.html"><strong aria-hidden="true">4.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="18-tcip-networking.html" class="active"><strong aria-hidden="true">4.1.</strong> TCIP Networking</a></li><li class="chapter-item expanded "><a href="19-networking-dns-domains.html"><strong aria-hidden="true">4.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="20-security-chroot.html"><strong aria-hidden="true">4.3.</strong> Security and chroot</a></li><li class="chapter-item expanded "><a href="21-security-firewall.html"><strong aria-hidden="true">4.4.</strong> Security and Firewalls</a></li></ol></li><li class="chapter-item expanded "><a href="p4-lamp.html"><strong aria-hidden="true">5.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="22-httpd-apache.html"><strong aria-hidden="true">5.1.</strong> Apache2 Web Server</a></li><li class="chapter-item expanded "><a href="23-httpd-php.html"><strong aria-hidden="true">5.2.</strong> Apache2 and PHP</a></li><li class="chapter-item expanded "><a href="24-httpd-virtualhosts.html"><strong aria-hidden="true">5.3.</strong> Apache2 and Virtual Hosts</a></li><li class="chapter-item expanded "><a href="25-httpd-mysql.html"><strong aria-hidden="true">5.4.</strong> Apache2 and MySQL</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="networking"><a class="header" href="#networking">Networking</a></h1>
+<p>Wikipedia has a good primer on the <a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite</a>.</p>
+<h2 id="link-layer"><a class="header" href="#link-layer">Link Layer</a></h2>
+<h3 id="arp-address-resolution-protocol"><a class="header" href="#arp-address-resolution-protocol">ARP (Address Resolution Protocol)</a></h3>
+<p><em>ARP</em> or Address Resolution Protocol is a protocol used to map a network address, like the IP address, to the ethernet address (aka, the MAC or Media Access Control address, or the hardware address). Routers use MAC addresses to enable communication inside networks (w/in subnets) so that computers within a local network can talk to each other. Networks are designed so that IP addresses must be associated with MAC addresses before systems can communicate over a network.</p>
+<p>To get ARP info for a system, we can use the <code>ip</code> command, which uses regular options (like <code>-b</code>) but also various <strong>objects</strong> (see <code>man ip</code> for details). Here is the IP info, the ARP output, and the routing table on my Fedora virtual machine (<strong>10.0.2.15</strong>) running on my desktop via a NAT connection:</p>
+<pre><code>ip a
+ip neigh show
+ip route show
+</code></pre>
+<p>Where:</p>
+<ul>
+<li><strong>10.0.2.15</strong> is the IP address of my fedora server</li>
+<li><strong>10.0.2.2</strong> is the first usable address on subnet, and is likely the virtual router; likewise, <strong>52:54:00:12:35:02</strong> is the MAC/hardware address for that virtual router</li>
+<li><strong>10.0.2.0</strong> is called the <strong>network address (signified by the /24 part)</strong>, which is a unique identifier IP address for the subnet</li>
+</ul>
+<p>The above information is used or created in the following way: A router gets configured to use a specific <strong>network address</strong>, when it's brought online, it searches the network for connected MAC addresses that are assigned to wireless or ethernet cards, it assigns to each of those MAC addresses an available IP address based on the network address,</p>
+<h2 id="internet-layer"><a class="header" href="#internet-layer">Internet Layer</a></h2>
+<h3 id="ip-internet-protocol"><a class="header" href="#ip-internet-protocol">IP (Internet Protocol)</a></h3>
+<p>The Internet Protocol, or <em>IP</em>, address is used to uniquely identify a host on a network and place that host at a specific location (its IP <strong>address</strong>). If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address that will not be directly exposed to the Internet.</p>
+<p>These IP address ranges are reserved, private address ranges, which means no public internet device will have an IP address within these ranges. The private address ranges include:</p>
+<table><thead><tr><th>Start Address</th><th>End Address</th></tr></thead><tbody>
+<tr><td>10.0.0.0</td><td>10.255.255.255</td></tr>
+<tr><td>172.16.0.0</td><td>172.31.255.255</td></tr>
+<tr><td>192.168.0.0</td><td>192.168.255.255</td></tr>
+</tbody></table>
+<p>If you have a router at home, and look at the IP address for at any of your devices connected to that router, like your phone or computer, you will see that it will have an address within one of the ranges above. For example, it might have an IP address beginning with <strong>192.168.X.X</strong>. This a standard IP address range for a home router. The <strong>10.X.X.X</strong> private range can assign many more IP addresses on its network. This is why you'll see that IP range on bigger networks, like UK's. We'll talk more about subnetwork sizes, shortly.</p>
+<h3 id="example-private-ip-usage"><a class="header" href="#example-private-ip-usage">Example Private IP Usage</a></h3>
+<p>At work, at one time, the IP address on my desktop was <strong>10.163.34.59/24</strong> via a wired connection. I checked with my office neighbor and found that their desktop reported an IP address of <strong>10.163.34.65/24</strong>. These are on the same subnet, and later I will show you how this works.</p>
+<p>At the time, if we both, using our respective wired connected computers, searched Google for <em>[ what's my IP address ]</em>, we will see that we share the same public IP address of <strong>128.163.8.25</strong>.</p>
+<p>Without any additional information, this tells us that we know that all traffic coming from our computers and going out to the internet looks like it's coming from the same IP address (<strong>128.163.8.25</strong>). And in reverse, all traffic coming from outside our network first goes to <strong>128.163.8.25</strong> before it's routed to our respective computers via the router.</p>
+<p>My laptop tells a different story because it is connected to UK wireless (eduroam). At the time of this writing, the laptop had the IP address <strong>10.47.34.150/16</strong>. You can see there's a different pattern with this IP address. The reason it has a different pattern is because this laptop is on an different subnet. This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc). When I searched Google for my IP address from this laptop, it reported <strong>128.163.238.148</strong>, indicating that UK owns a range of public IP address spaces.</p>
+<p>Here's kind of visual diagram of what this network looks like:</p>
+<table><thead><tr><th style="text-align: center"><img src="18-network.png" alt="network diagram" /></th></tr></thead><tbody>
+<tr><td style="text-align: center"><b>Fig. 1. This figure contains a network switch, which is used to route traffic within a subnet. It relies solely on MAC addresses and not IP addresses to determine the location of devices on its subnet. The router is capable of transferring data across networks.</b></td></tr>
+</tbody></table>
+<h3 id="using-the-ip-command"><a class="header" href="#using-the-ip-command">Using the <code>ip</code> Command</a></h3>
+<p>The <code>ip</code> command can do more than provide us information about our network. We can also use it to turn a connection to the network on or off (and more). Here is how to disable and then enable a connection on a machine. Note that <strong>enp0s3</strong> is the name of my network card/device. Yours might have a different name.</p>
+<pre><code>sudo ip link set enp0s3 down
+sudo ip link set enp0s3 up
+</code></pre>
+<h2 id="transport-layer"><a class="header" href="#transport-layer">Transport Layer</a></h2>
+<h3 id="udp-user-datagram-protocol"><a class="header" href="#udp-user-datagram-protocol">UDP, User Datagram Protocol</a></h3>
+<p><em>UDP</em> or User Datagram Protocol performs a similar function as TCP, but it does not error check and data may get lost. UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube, which uses a type of UDP transmission called QUIC that has builtin encryption. </p>
+<h3 id="tcp-transmission-control-protocol"><a class="header" href="#tcp-transmission-control-protocol">TCP, Transmission Control Protocol</a></h3>
+<p><em>TCP</em> or Transmission Control Protocol is responsible for the transmission of data and for making sure the data arrives at its destination w/o errors. If there are errors, the data is re-transmitted or halted in case of some failure. Much of the data sent over the internet is sent using TCP.</p>
+<h3 id="tcp-and-udp-headers"><a class="header" href="#tcp-and-udp-headers">TCP and UDP Headers</a></h3>
+<p>The above protocols send data in data packets (TCP) or datagrams (UDP), but <a href="https://www.cloudflare.com/learning/network-layer/what-is-a-packet/">these terms may be used interchangeably</a>. Packets for both protocols include header information to help route the data across the internet. TCP includes <a href="https://www.imperva.com/learn/ddos/tcp-transmission-control-protocol/">ten fields</a> of header data, and UDP includes <a href="https://www.imperva.com/learn/ddos/udp-user-datagram-protocol/">four fields</a>.</p>
+<p>We can see this header data using the <code>tcpdump</code> command, which requires <code>sudo</code> or being <strong>root</strong> to use. The first part of the IP header contains the source address, then comes the destination address, and so forth. Aside from a few other parts, this is the primary information in an IP header.</p>
+<p>To use <code>tcpdump</code>, we first identify the IP number of a host, which we can do with the <code>ping</code> command, and then run <code>tcpdump</code>:</p>
+<pre><code>ping -c1 www.uky.edu
+sudo tcpdump host 128.163.35.46
+</code></pre>
+<p>While that's running, we can type that IP address in our web browser, or enter <strong>www.uky.edu</strong>, and watch the output of <code>tcpdump</code>.</p>
+<p>TCP headers include port information and other mandatory fields for both source and destination servers. The SYN, or synchronize, message is sent when a source or client requests a connection. The ACK, or acknowledgment, message is sent in response, along with a SYN message, to acknowledge the request for a connection. Then the client responds with an additional ACK message. This is referred to as the <a href="https://www.geeksforgeeks.org/tcp-3-way-handshake-process/">TCP three-way handshake</a>. In addition to the header info, TCP and UDP packets include the data that's being sent (e.g., a webpage) and error checking if it's TCP.</p>
+<h3 id="ports"><a class="header" href="#ports">Ports</a></h3>
+<p>TCP and UDP connections use ports to bind internet traffic to specific IP addresses. Specifically, a <em>port</em> associates a process with an application, such as a web service or outgoing email. That is, ports provide a way to distinguish and filter internet traffic through an IP address. E.g., all traffic going to IP address 10.0.5.33:80 means that this is <strong>http</strong> traffic for the http web service, since http is commonly associated with port 80. Note that the port info is attached to the end of the IP address via a colon. </p>
+<p>Common ports include:</p>
+<ul>
+<li>21: FTP</li>
+<li>22: SSH</li>
+<li>25: SMTP</li>
+<li>53: DNS</li>
+<li>143: IMAP</li>
+<li>443: HTTPS</li>
+<li>587: SMTP Secure</li>
+<li>993: IMAP Secure</li>
+</ul>
+<p>There's a complete list of the 317 default ports on your Linux systems. It's located in the following file:</p>
+<pre><code>less /etc/services
+</code></pre>
+<p>And to get a count of the ports, we can invert grep for lines starting with a pound sign or are empty</p>
+<pre><code>grep -Ev &quot;^#|^$&quot; /etc/services | wc -l
+</code></pre>
+<p>See also the Wikipedia page: <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></p>
+<h2 id="ip-subnetting"><a class="header" href="#ip-subnetting">IP Subnetting</a></h2>
+<h3 id="private-ip-ranges"><a class="header" href="#private-ip-ranges">Private IP Ranges</a></h3>
+<p>When subnetting, we generally work with private IP ranges:</p>
+<table><thead><tr><th>Start Address</th><th>End Address</th></tr></thead><tbody>
+<tr><td>10.0.0.0</td><td>10.255.255.255</td></tr>
+<tr><td>172.16.0.0</td><td>172.31.255.255</td></tr>
+<tr><td>192.168.0.0</td><td>192.168.255.255</td></tr>
+</tbody></table>
+<h4 id="ip-meaning"><a class="header" href="#ip-meaning">IP Meaning</a></h4>
+<p>An IP address is 32 bits (8 x 4), or four bytes, in size. In human readable context, it's usually expressed in the following, decimal-based, notation style:</p>
+<ul>
+<li><strong>192.168.1.6</strong></li>
+<li><strong>172.16.3.44</strong></li>
+</ul>
+<p>Each set of numbers separated by a dot is referred to as an <strong>octet</strong>. An <strong>octet</strong> is a group of 8 <strong>bits</strong>. Eight <strong>bits</strong> equal a single <strong>byte</strong>. By implication, 8 gigabits equals 1 gigabyte, and 8 megabits equals 1 megabyte. We use these symbols to note the terms:</p>
+<table><thead><tr><th>Term</th><th>Symbol</th></tr></thead><tbody>
+<tr><td>bit</td><td><em>b</em></td></tr>
+<tr><td>byte</td><td>B</td></tr>
+<tr><td>octet</td><td><em>o</em></td></tr>
+</tbody></table>
+<p>Each bit is represented by either a 1 or a 0. For example, the first address above in binary is:</p>
+<ul>
+<li>11000000.10101000.00000001.00000110</li>
+<li>192.168.1.6</li>
+</ul>
+<p>Or:</p>
+<ul>
+<li>11000000 = 192</li>
+<li>10101000 = 168</li>
+<li>00000001 = 1</li>
+<li>00000110 = 6</li>
+</ul>
+<h3 id="ip-math"><a class="header" href="#ip-math">IP Math</a></h3>
+<p>When doing IP math, one easy way to do it is to simply remember that each bit in each of the above bytes is a placeholder for the following values:</p>
+<pre><code>128 64 32 16 8 4 2 1
+</code></pre>
+<p>Alternatively, from low to high:</p>
+<table><thead><tr><th>base-2</th><th>Output</th></tr></thead><tbody>
+<tr><td>2^0</td><td>1</td></tr>
+<tr><td>2^1</td><td>2</td></tr>
+<tr><td>2^2</td><td>4</td></tr>
+<tr><td>2^3</td><td>8</td></tr>
+<tr><td>2^4</td><td>16</td></tr>
+<tr><td>2^5</td><td>32</td></tr>
+<tr><td>2^6</td><td>64</td></tr>
+<tr><td>2^7</td><td>128</td></tr>
+</tbody></table>
+<p>In binary, 192 is equal to 11000000. It's helpful to work backward. For IP addresses, all octets are 255 or less (256 total, from 0 to 255) and therefore do not exceed 8 bits or places. To convert the integer 192 to binary:</p>
+<pre><code>1 * 2^7 = 128
+1 * 2^6 =  64 (128 + 64 = 192)
+</code></pre>
+<p>STOP: There are no values left, and so the rest are zeroes. So: 11000000</p>
+<p>Our everyday counting system is base-10, but binary is base-2, and thus another way to convert binary to decimal is to multiple each bit (1 or 0) by the power of base two of its placeholder:</p>
+<pre><code>(0 * 2^0) = 0 +
+(0 * 2^1) = 0 +
+(0 * 2^2) = 0 +
+(0 * 2^3) = 0 +
+(0 * 2^4) = 0 +
+(0 * 2^5) = 0 +
+(1 * 2^6) = 64 +
+(1 * 2^7) = 128 = 192
+</code></pre>
+<p>Another way to convert to binary: simply subtract the numbers from each value. As long as there is something remaining or the placeholder equals the remainder of the previous subtraction, then the bit equals 1. So:</p>
+<ul>
+<li>192 - 128 = 64 -- therefore the first bit is equal to 1.</li>
+<li>Now take the leftover and subtract it:</li>
+<li>64 - 64 = 0 -- therefore the second bit is equal to 1.</li>
+</ul>
+<p>Since there is nothing remaining, the rest of the bits equal 0.</p>
+<h3 id="subnetting-examples"><a class="header" href="#subnetting-examples">Subnetting Examples</a></h3>
+<p>Subnetting involves dividing a network into two or more subnets. When we subnet, we first identify the number of hosts we will require on the subnet. For starters, let's assume that we need a subnet that can assign at most 254 IP addresses to the devices attached to it via the router.</p>
+<p>We need two additional IP addresses: the <strong>subnet mask</strong> and the <strong>network address/ID</strong>. The <strong>network address</strong> identifies the network and the <strong>subnet mask</strong> marks the boundary between the network and the hosts. Knowing or determining the <strong>subnet mask</strong> will allow us to determine how many hosts can exist on a network. Both the <strong>network address</strong> and the <strong>subnet mask</strong> can be written as IP addresses, but they cannot be assigned to computers on a network.</p>
+<p>When we have determined these IPs, we will know the <strong>broadcast address</strong>. This is the last IP address in a subnet range, and it cannot be assigned to a connected device. The <strong>broadcast address</strong> is used by a router or other devices to communicate to all connected devices on the subnet.</p>
+<p>For our sake, let's work backwards. We want to identify and describe a network that we are connected to. Let's work with two example private IP addresses that exist on two separate subnets.</p>
+<h4 id="example-1-19216816"><a class="header" href="#example-1-19216816">Example 1: 192.168.1.6</a></h4>
+<p>Let's derive the network mask and the network address (or ID) from this IP address.</p>
+<pre><code>11000000.10101000.00000001.00000110 IP              192.168.1.6
+11111111.11111111.11111111.00000000 Mask            255.255.255.0
+-----------------------------------
+11000000.10101000.00000001.00000000 Network Address 192.168.1.0
+</code></pre>
+<p>Note the mask has 24 ones followed by 8 zeroes. That 24 is used as CIDR notation:</p>
+<p>192.168.1.6/24</p>
+<p>For Example 1, we have the following subnet information:</p>
+<table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>192.168.1.0</td></tr>
+<tr><td>Start Range</td><td>192.168.1.1</td></tr>
+<tr><td>End Range</td><td>192.168.1.254</td></tr>
+<tr><td>Broadcast</td><td>192.168.1.255</td></tr>
+</tbody></table>
+<h4 id="example-2-101603875"><a class="header" href="#example-2-101603875">Example 2: 10.160.38.75</a></h4>
+<p>For example 2:</p>
+<pre><code>00001010.10100000.00100110.01001011 IP               10.160.38.75
+11111111.11111111.11111111.00000000 Mask            255.255.255.0
+-----------------------------------
+00001010.10100000.00100110.00000000 Network Address   10.160.38.0
+</code></pre>
+<table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>10.160.38.0</td></tr>
+<tr><td>Start Range</td><td>10.160.38.1</td></tr>
+<tr><td>End Range</td><td>10.160.38.254</td></tr>
+<tr><td>Broadcast</td><td>10.160.38.255</td></tr>
+</tbody></table>
+<h4 id="example-3-1721616224"><a class="header" href="#example-3-1721616224">Example 3: 172.16.1.62/24</a></h4>
+<p>For example 3:</p>
+<pre><code>10101100 00010000 00000001 00100111 IP                172.16.1.62
+11111111 11111111 11111111 00000000 Mask            255.255.255.0
+-----------------------------------
+10101100 00010000 00000001 00000000 Network Address    172.16.1.0
+</code></pre>
+<table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>172.16.1.0</td></tr>
+<tr><td>Start Range</td><td>172.16.1.1</td></tr>
+<tr><td>End Range</td><td>172.16.1.254</td></tr>
+<tr><td>Broadcast</td><td>172.16.1.255</td></tr>
+</tbody></table>
+<p>To determine the number of hosts on a CIDR /24 subnet, we look at the start and end ranges. In all three of the above examples, the start range begins with X.X.X.1 and ends with X.X.X.254. Therefore, there are 254 maximum hosts allowed on these subnets.</p>
+<h4 id="example-4-10052316"><a class="header" href="#example-4-10052316">Example 4: 10.0.5.23/16</a></h4>
+<p>The first three examples show instances where the CIDR is set to /24. This only allows 254 maximum hosts on a subnet. If the CIDR is set to /16, then we can theoretically allow 65,534 hosts on a subnet. </p>
+<p>For example 4, then: 10.0.5.23/16</p>
+<pre><code>00001010.00000000.00000101.00010111 IP Address: 10.0.5.23
+11111111.11111111.00000000.00000000 Mask:       255.255.0.0
+-----------------------------------------------------------
+00001010.00000000.00000000.00000000 Network ID: 10.0.0.0
+</code></pre>
+<table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>IP Address</td><td>10.0.5.23</td></tr>
+<tr><td>Netmask/Mask</td><td>255.255.0.0</td></tr>
+<tr><td>Network ID</td><td>10.0.0.0</td></tr>
+<tr><td>Start Range</td><td>10.0.0.1</td></tr>
+<tr><td>End Range</td><td>10.0.255.254</td></tr>
+<tr><td>Broadcast</td><td>10.0.255.255</td></tr>
+</tbody></table>
+<p>Hosts:</p>
+<table><thead><tr><th>IPs</th><th></th></tr></thead><tbody>
+<tr><td>10.0.0.1</td><td></td></tr>
+<tr><td>10.0.0.255</td><td>= 256</td></tr>
+<tr><td>10.0.1.1</td><td></td></tr>
+<tr><td>10.0.255.255</td><td>= 256</td></tr>
+</tbody></table>
+<ul>
+<li>Number of Hosts = 256 x 256 = 65536</li>
+<li>Subtract Network ID (1) and Broadcast (1) = 2 IP addresses</li>
+<li>Number of Usable Hosts = 256 x 256 - 2 = 65534</li>
+</ul>
+<h3 id="ipv6-subnetting"><a class="header" href="#ipv6-subnetting">IPv6 subnetting</a></h3>
+<p>We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="p3-networking-security.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="19-networking-dns-domains.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="p3-networking-security.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="19-networking-dns-domains.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

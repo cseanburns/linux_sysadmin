@@ -1,0 +1,6 @@
+[book]
+authors = ["C. Sean Burns"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Linux Systems Administration"

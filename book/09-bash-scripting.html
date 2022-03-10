@@ -1,0 +1,350 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Bash Scripting - Linux Systems Administration</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li class="chapter-item expanded "><a href="p1-system-basics.html"><strong aria-hidden="true">2.</strong> System Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">2.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-quick-ssh-connect.html"><strong aria-hidden="true">2.2.</strong> Connect to a Remote Server</a></li><li class="chapter-item expanded "><a href="03-filesystem-file-management.html"><strong aria-hidden="true">2.3.</strong> Linux Filesystems and File Management</a></li><li class="chapter-item expanded "><a href="04-file-attributes.html"><strong aria-hidden="true">2.4.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="05-text-processing-part-1.html"><strong aria-hidden="true">2.5.</strong> Text Processing, Part 1</a></li><li class="chapter-item expanded "><a href="06-text-processing-part-2.html"><strong aria-hidden="true">2.6.</strong> Text Processing, Part 2</a></li><li class="chapter-item expanded "><a href="07-text-editors.html"><strong aria-hidden="true">2.7.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="08-revisiting-paths.html"><strong aria-hidden="true">2.8.</strong> Revisiting Paths</a></li><li class="chapter-item expanded "><a href="09-bash-scripting.html" class="active"><strong aria-hidden="true">2.9.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="10-regular-expressions.html"><strong aria-hidden="true">2.10.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p2-managing-services-software.html"><strong aria-hidden="true">3.</strong> Managing Services and Software</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="11-installing-linux.html"><strong aria-hidden="true">3.1.</strong> Installing Linux in VirtualBox</a></li><li class="chapter-item expanded "><a href="12-logical-volumes.html"><strong aria-hidden="true">3.2.</strong> Logical Volume Management</a></li><li class="chapter-item expanded "><a href="13-virtualbox-nat.html"><strong aria-hidden="true">3.3.</strong> Using NAT in VirtualBox</a></li><li class="chapter-item expanded "><a href="14-webconsole-nat.html"><strong aria-hidden="true">3.4.</strong> NAT Table in VirtualBox</a></li><li class="chapter-item expanded "><a href="15-managing-users-groups.html"><strong aria-hidden="true">3.5.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="16-systemd.html"><strong aria-hidden="true">3.6.</strong> systemd</a></li><li class="chapter-item expanded "><a href="17-backup-and-using-dnf.html"><strong aria-hidden="true">3.7.</strong> Backups and DNF</a></li></ol></li><li class="chapter-item expanded "><a href="p3-networking-security.html"><strong aria-hidden="true">4.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="18-tcip-networking.html"><strong aria-hidden="true">4.1.</strong> TCIP Networking</a></li><li class="chapter-item expanded "><a href="19-networking-dns-domains.html"><strong aria-hidden="true">4.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="20-security-chroot.html"><strong aria-hidden="true">4.3.</strong> Security and chroot</a></li><li class="chapter-item expanded "><a href="21-security-firewall.html"><strong aria-hidden="true">4.4.</strong> Security and Firewalls</a></li></ol></li><li class="chapter-item expanded "><a href="p4-lamp.html"><strong aria-hidden="true">5.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="22-httpd-apache.html"><strong aria-hidden="true">5.1.</strong> Apache2 Web Server</a></li><li class="chapter-item expanded "><a href="23-httpd-php.html"><strong aria-hidden="true">5.2.</strong> Apache2 and PHP</a></li><li class="chapter-item expanded "><a href="24-httpd-virtualhosts.html"><strong aria-hidden="true">5.3.</strong> Apache2 and Virtual Hosts</a></li><li class="chapter-item expanded "><a href="25-httpd-mysql.html"><strong aria-hidden="true">5.4.</strong> Apache2 and MySQL</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="bash-scripting"><a class="header" href="#bash-scripting">Bash Scripting</a></h1>
+<h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
+<p>Here are some useful guides and cheat sheets on Bash scripting:</p>
+<ul>
+<li><a href="https://devhints.io/bash">Bash scripting cheatsheet</a></li>
+<li><a href="https://www.shellcheck.net/">Bash shellcheck</a></li>
+</ul>
+<h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
+<p>Declare a variable with the name of the variable, an equal sign, and then the value of the variable within double quotes. Do not insert spaces:</p>
+<pre><code>name=&quot;Sean&quot;
+backup=&quot;/media/&quot;
+# test it out:
+echo &quot;$name&quot;
+echo &quot;$backup&quot;
+cd &quot;$backup&quot;
+cd
+</code></pre>
+<p>Variables may include values that may change given some context. For example, if we want a variable to refer to today's day of week, we can use <a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">command substitution</a>, which &quot;allows the output of a command to replace the command name&quot; (see <code>man bash</code>). Thus, the output at the time this variable is set will differ if it is set on a different day.</p>
+<pre><code>today=&quot;$(date +%A)&quot;
+echo &quot;$today&quot;
+
+</code></pre>
+<p>We can print the variable a number of ways. We can call it with a dollar sign and the name of the variable:</p>
+<pre><code>echo $today
+</code></pre>
+<p>But it's safer to wrap the variable in double quotes:</p>
+<pre><code>echo &quot;$today&quot;
+</code></pre>
+<p>A useful and safe way to print or refer to a variable, is to use the dollar sign plus the variable name and surround these in curly braces and quotations:</p>
+<pre><code>echo &quot;${name}&quot;
+echo &quot;${backup}&quot;
+echo &quot;${today}&quot;
+</code></pre>
+<p>The curly braces are not strictly necessary, but they offer benefits when we start to use things like <a href="https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html">array variables</a>. See:</p>
+<ul>
+<li><a href="https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/">How to use curly braces in Bash</a></li>
+<li><a href="https://wiki.bash-hackers.org/syntax/expansion/brace">Brace Expansion</a></li>
+</ul>
+<p>For example, let's look at basic <strong>brace expansion</strong>, which can be used to generate arbitrary strings:</p>
+<pre><code>echo {1..5}
+echo {5..1}
+echo {a..l}
+echo {l..a}
+</code></pre>
+<p>Another example: generating two sub-directories. Start off in your home directory, and:</p>
+<pre><code>mkdir -p documents/{drafts,notes}
+</code></pre>
+<p>But more than that, they allow us to deal with arrays (or lists):</p>
+<pre><code>seasons=(winter spring summer fall)
+echo &quot;${seasons[1]}&quot;
+echo &quot;${seasons[2]}&quot;
+echo &quot;${seasons[-1]}&quot;
+</code></pre>
+<p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
+<h2 id="conditional-expression"><a class="header" href="#conditional-expression">Conditional Expression</a></h2>
+<p>We can include a list of commands on one line in Bash with a semicolon:</p>
+<pre><code>cd ; ls -lt
+</code></pre>
+<p>But we can use <a href="https://ss64.com/bash/syntax-execute.html">conditional expressions</a> and apply logic with <code>&amp;&amp;</code> (<strong>Logical AND</strong>) or <code>||</code> (<strong>Logical OR</strong>).</p>
+<p>Here, <code>command2</code> is executed if and only if <code>command1</code> is successful:</p>
+<pre><code>command1 &amp;&amp; command2
+</code></pre>
+<p>Here, <code>command2</code> is executed if and only if <code>command1</code> fails:</p>
+<pre><code>command1 || command2
+</code></pre>
+<p>Example:</p>
+<pre><code>cd documents &amp;&amp; echo &quot;success&quot;
+cd documents || echo &quot;failed&quot;
+# combine them:
+cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
+mkdir test
+cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
+</code></pre>
+<h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
+<p>When we start to write scripts, the first thing we add is a [shebang][shebang] at line one. We can do so a couple of ways:</p>
+<pre><code>##!/usr/bin/env bash
+</code></pre>
+<p>The first one should be more portable, but alternatively, you could put the direct path to Bash:</p>
+<pre><code>#!/usr/bin/bash
+</code></pre>
+<h2 id="looping"><a class="header" href="#looping">Looping</a></h2>
+<p>There are several looping methods Bash, including: <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>. The <code>for</code> loop is often very useful. </p>
+<pre><code>for i in {1..5} ; do
+  echo &quot;$i&quot;
+done
+</code></pre>
+<p>With that, we can create a rudimentary timer:</p>
+<pre><code>for i in {1..5} ; do
+  echo &quot;$i&quot; ; sleep 1
+done
+</code></pre>
+<p>We can loop through our <strong>seasons</strong> variable:</p>
+<pre><code>for i in ${seasons[@]} ; do
+  echo &quot;$i&quot;
+done
+</code></pre>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<p>Sometimes we will want to test certain conditions. There are two parts to this, we can use <code>if; then ; else</code> commands, and we can also use the double square brackets: <code>[[</code>. There are a few ways to get documentation on these functions. See the following:</p>
+<pre><code>man test
+help test
+help [
+help [[
+help if
+</code></pre>
+<p>We can test integers:</p>
+<pre><code>if [[ 5 -ge 3 ]] ; then
+  echo &quot;true&quot;
+else
+  echo &quot;false&quot;
+fi
+</code></pre>
+<p>Reverse it to return the else statement:</p>
+<pre><code>if [[ 3 -ge 5 ]] ; then
+  echo &quot;true&quot;
+else
+  echo &quot;false&quot;
+fi
+</code></pre>
+<p>We can test strings:</p>
+<pre><code>if [[ &quot;$HOME&quot; = &quot;$PWD&quot; ]] ; then
+ echo &quot;you are home&quot;
+else
+ echo &quot;you are not home, but I will take you there&quot;
+ cd $HOME
+ pwd
+fi
+</code></pre>
+<p>We can test files. Let's first create a file called <strong>paper.txt</strong> and a file called <strong>paper.bak</strong>. We will add some trivial content to <strong>paper.txt</strong> but not to the second file. The following <code>if</code> statement will test if <strong>paper.txt</strong> has a more recent modification date, and if so, it'll back up the file with the <code>cp</code> and echo back its success:</p>
+<pre><code>if [[ &quot;$HOME/paper.txt&quot; -nt &quot;$HOME/paper.bak&quot; ]] ; then
+  cp &quot;$HOME/paper.txt&quot; &quot;$HOME/paper.bak&quot; &amp;&amp; echo &quot;Paper is backed up.&quot;
+fi
+</code></pre>
+<p>Here's a script that does prints info depending on which day of the week it is:</p>
+<pre><code>day1=&quot;Tue&quot;
+day2=&quot;Thu&quot;
+day3=&quot;$(date +%a)&quot;
+
+if [[ &quot;$day3&quot; = &quot;$day1&quot; ]] ; then
+  printf &quot;\nIf %s is %s, then class is at 9:30am.\n&quot; &quot;$day3&quot; &quot;$day1&quot;
+elif [[ &quot;$day3&quot; = &quot;$day2&quot; ]] ; then
+  printf &quot;\nIf %s is %s, then class is at 9:30am.\n&quot; &quot;$day3&quot; &quot;$day2&quot;
+else
+  printf &quot;\nThere is no class today.&quot;
+fi
+</code></pre>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>In this demo, we learned about:</p>
+<ul>
+<li>creating and referring to variables</li>
+<li>conditional expressions with <code>&amp;&amp;</code> and <code>||</code></li>
+<li>adding the <strong>shebang</strong> or <strong>hashbang</strong> at the beginning of a script</li>
+<li>looping with the <code>for</code> statement</li>
+<li>testing with the <code>if</code> statement</li>
+</ul>
+<p>These are the basics. I'll cover more practical examples in upcoming demos, but note that mastering the basics requires understanding a lot of the commands that we have covered so far in class. So keep practicing.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="08-revisiting-paths.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="10-regular-expressions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="08-revisiting-paths.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="10-regular-expressions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

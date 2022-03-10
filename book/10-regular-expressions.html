@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Regular Expressions - Linux Systems Administration</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li class="chapter-item expanded "><a href="p1-system-basics.html"><strong aria-hidden="true">2.</strong> System Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">2.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-quick-ssh-connect.html"><strong aria-hidden="true">2.2.</strong> Connect to a Remote Server</a></li><li class="chapter-item expanded "><a href="03-filesystem-file-management.html"><strong aria-hidden="true">2.3.</strong> Linux Filesystems and File Management</a></li><li class="chapter-item expanded "><a href="04-file-attributes.html"><strong aria-hidden="true">2.4.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="05-text-processing-part-1.html"><strong aria-hidden="true">2.5.</strong> Text Processing, Part 1</a></li><li class="chapter-item expanded "><a href="06-text-processing-part-2.html"><strong aria-hidden="true">2.6.</strong> Text Processing, Part 2</a></li><li class="chapter-item expanded "><a href="07-text-editors.html"><strong aria-hidden="true">2.7.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="08-revisiting-paths.html"><strong aria-hidden="true">2.8.</strong> Revisiting Paths</a></li><li class="chapter-item expanded "><a href="09-bash-scripting.html"><strong aria-hidden="true">2.9.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="10-regular-expressions.html" class="active"><strong aria-hidden="true">2.10.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p2-managing-services-software.html"><strong aria-hidden="true">3.</strong> Managing Services and Software</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="11-installing-linux.html"><strong aria-hidden="true">3.1.</strong> Installing Linux in VirtualBox</a></li><li class="chapter-item expanded "><a href="12-logical-volumes.html"><strong aria-hidden="true">3.2.</strong> Logical Volume Management</a></li><li class="chapter-item expanded "><a href="13-virtualbox-nat.html"><strong aria-hidden="true">3.3.</strong> Using NAT in VirtualBox</a></li><li class="chapter-item expanded "><a href="14-webconsole-nat.html"><strong aria-hidden="true">3.4.</strong> NAT Table in VirtualBox</a></li><li class="chapter-item expanded "><a href="15-managing-users-groups.html"><strong aria-hidden="true">3.5.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="16-systemd.html"><strong aria-hidden="true">3.6.</strong> systemd</a></li><li class="chapter-item expanded "><a href="17-backup-and-using-dnf.html"><strong aria-hidden="true">3.7.</strong> Backups and DNF</a></li></ol></li><li class="chapter-item expanded "><a href="p3-networking-security.html"><strong aria-hidden="true">4.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="18-tcip-networking.html"><strong aria-hidden="true">4.1.</strong> TCIP Networking</a></li><li class="chapter-item expanded "><a href="19-networking-dns-domains.html"><strong aria-hidden="true">4.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="20-security-chroot.html"><strong aria-hidden="true">4.3.</strong> Security and chroot</a></li><li class="chapter-item expanded "><a href="21-security-firewall.html"><strong aria-hidden="true">4.4.</strong> Security and Firewalls</a></li></ol></li><li class="chapter-item expanded "><a href="p4-lamp.html"><strong aria-hidden="true">5.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="22-httpd-apache.html"><strong aria-hidden="true">5.1.</strong> Apache2 Web Server</a></li><li class="chapter-item expanded "><a href="23-httpd-php.html"><strong aria-hidden="true">5.2.</strong> Apache2 and PHP</a></li><li class="chapter-item expanded "><a href="24-httpd-virtualhosts.html"><strong aria-hidden="true">5.3.</strong> Apache2 and Virtual Hosts</a></li><li class="chapter-item expanded "><a href="25-httpd-mysql.html"><strong aria-hidden="true">5.4.</strong> Apache2 and MySQL</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="grep-and-regular-expressions"><a class="header" href="#grep-and-regular-expressions">Grep and Regular Expressions</a></h1>
+<p>Oftentimes, as systems administrators, we will need to search the contents of a file, like a log. One of the commands that we use to do that is the <code>grep</code> command. We have already discussed using the <code>grep</code> command, which is not unlike doing any kind of search, such as in Google. The command simply involves running <code>grep</code> along with the search string and against a file. So if I wanted to search a file called <strong>cities.txt</strong> for the search string <strong>Lexington</strong>, then I can do this:</p>
+<pre><code>grep &quot;lexington&quot; cities.txt
+</code></pre>
+<h2 id="whole-words-case-sensitive-by-default"><a class="header" href="#whole-words-case-sensitive-by-default">Whole words, case sensitive by default</a></h2>
+<p>However, <code>grep</code> can employ stricter and more powerful syntax than a Google search. Since the contents of <strong>cities.txt</strong> are all in lowercase, if I run the above command with the city named capitalized, then <code>grep</code> will return nothing:</p>
+<pre><code>grep &quot;Lexington&quot; cities.txt
+</code></pre>
+<p>In order to tell grep to ignore case, I need to use the <code>-i</code> option. This is a reminder for you to run <code>man grep</code> and to read through the documentation and see what the various options exit for this command.</p>
+<pre><code>grep -i &quot;Lexington&quot; cities.txt
+</code></pre>
+<h2 id="multiword-strings"><a class="header" href="#multiword-strings">Multiword strings</a></h2>
+<p>If we would search for multiword strings, then we enclose them in quotes:</p>
+<pre><code>grep &quot;lexington, ky&quot; cities.txt
+</code></pre>
+<h2 id="character-classes-and-bracket-expressions"><a class="header" href="#character-classes-and-bracket-expressions">Character Classes and Bracket Expressions</a></h2>
+<p>In conjunction with the <code>grep</code> command, we can also use regular expressions to search the content of text files. For example, we can use what are called <strong>character classes</strong> and <strong>bracket expressions</strong> to search for patterns in the text. Here again <code>man grep</code> is very important.</p>
+<p>Note that the regular expression that marks the beginning of a line is the carat key <code>^</code>, but the carat key serves a different function in bracket expressions. Specifically, it functions like a Logical NOT. Here are examples of bracket expressions and character class searches:</p>
+<pre><code># bracket expressions
+grep [a-d] cities.txt # matches any characters in the range a,b,c,d
+grep [^a-d] cities.txt # matches any characters not in the range a,b,c,d
+grep [1-3] cities.txt # matches any numbers in the range 1,2,3
+grep [^1-3] cities.txt # matches any numbers not in the range 1,2,3
+
+# character classes
+grep [[:alpha:]] cities.txt
+grep [^[:alpha:]] cities.txt
+grep [[:lower:]] cities.txt
+grep [^[:lower:]] cities.txt
+grep [[:upper:]] cities.txt
+grep [^[:upper:]] cities.txt
+grep [[:digit:]] cities.txt
+grep [^[:digit:]] cities.txt
+</code></pre>
+<h2 id="anchoring"><a class="header" href="#anchoring">Anchoring</a></h2>
+<p>Outside of bracket expansions and character classes, we use the caret <code>^</code> to mark the beginning of a line. We can also use the <code>$</code> to match the end of a line:</p>
+<pre><code>grep &quot;^l&quot; cities.txt # all lines beginning with a &quot;l&quot;
+grep &quot;9$&quot; cities.txt # all lines ending with the number &quot;9&quot;
+</code></pre>
+<h2 id="repetition"><a class="header" href="#repetition">Repetition</a></h2>
+<p>If we want to use regular expressions to identify repetitive patterns, then we can use repetition operators. The most useful one is the <code>*</code> asterisk, but there are other options:</p>
+<pre><code>grep &quot;l*&quot; cities.txt # the preceding item &quot;l&quot; matched zero or more times
+
+# In come cases, we need to add the -E option to extend grep's basic functionality:
+grep -E &quot;l?&quot; cities.txt    # the preceding item &quot;l&quot; is matched at most once
+grep -E &quot;l+&quot; cities.txt    # the preceding item &quot;l&quot; is matched one or more times
+grep -E &quot;l{2}&quot; cities.txt  # the preceding item &quot;l&quot; is matched exactly 2 times
+grep -E &quot;l{2,}&quot; cities.txt # the preceding item &quot;l&quot; is matched 2 or more times
+</code></pre>
+<h2 id="or-searches"><a class="header" href="#or-searches">OR searches</a></h2>
+<p>Here we search for either <strong>lexington</strong> or <strong>lansing</strong>. Since they both appear in the file, both lines that contain them are returned:</p>
+<pre><code>grep &quot;lexington\|lansing&quot; cities.txt
+</code></pre>
+<p>This works like a Boolean OR statement, which means it'll return one or the other or both if one is True, the alternate is True, or both are True. If we repeat this line with a city name that is not in the file, but with one that is, then it'll return the city name that is in the file since at least that is True:</p>
+<pre><code>grep &quot;lexington\|london&quot; cities.txt
+</code></pre>
+<h2 id="real-world-example"><a class="header" href="#real-world-example">Real World Example</a></h2>
+<p>The log file at <code>/var/log/auth.log</code> records all attempts to authenticate and login to the server, including &quot;invalid&quot; attempts. Invalid attempts will include actual invalid, malicious attempts but may also capture real user mistakes when logging into the server via <code>ssh</code>. We're interested in the malicious attempts, made by automated bots, on the system. Let's use <code>less</code> to take a quick look at that file:</p>
+<pre><code>less /var/log/auth.log
+Sep 12 00:00:08 sised-summer2020 sshd[78312]: Invalid user uu from 152.231.25.170 port 61921
+Sep 12 00:00:08 sised-summer2020 sshd[78312]: pam_unix(sshd:auth): check pass; user unknown
+Sep 12 00:00:08 sised-summer2020 sshd[78312]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=152.231.25.170 
+Sep 12 00:00:10 sised-summer2020 sshd[78312]: Failed password for invalid user uu from 152.231.25.170 port 61921 ssh2
+Sep 12 00:00:11 sised-summer2020 sshd[78312]: Received disconnect from 152.231.25.170 port 61921:11: Bye Bye [preauth]
+Sep 12 00:00:11 sised-summer2020 sshd[78312]: Disconnected from invalid user uu 152.231.25.170 port 61921 [preauth]
+Sep 12 00:00:40 sised-summer2020 sshd[78314]: User root from 107.170.153.57 not allowed because none of user's groups are listed in AllowGroups
+Sep 12 00:00:40 sised-summer2020 sshd[78314]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=107.170.153.57  user=root
+Sep 12 00:00:42 sised-summer2020 sshd[78314]: Failed password for invalid user root from 107.170.153.57 port 60118 ssh2
+Sep 12 00:00:44 sised-summer2020 sshd[78314]: Received disconnect from 107.170.153.57 port 60118:11: Bye Bye [preauth]
+</code></pre>
+<p>If we continue to peruse that log file, we can also see valid, successful authentications. They follow the pattern below.</p>
+<pre><code>Sep 12 02:20:05 sised-summer2020 sshd[79540]: Accepted password for user1 from 192.128.0.1 port 56000 ssh2
+Sep 12 15:08:10 sised-summer2020 sshd[87434]: Accepted password for user2 from 192.128.0.2 port 43501 ssh2
+Sep 12 17:02:55 sised-summer2020 sshd[89235]: Accepted password for user3 from 192.128.0.3 port 57996 ssh2
+Sep 12 17:03:36 sised-summer2020 sshd[89341]: Accepted password for user4 from 192.128.0.4 port 56188 ssh2
+</code></pre>
+<p>Note: I've obfuscated the usernames and IP addresses in the above snippet. Where it our reports <strong>user1, user2, ...</strong>, it would report our usernames, and the IP addresses are made up:</p>
+<p>As we examine the file, we should look for patterns in the text. For example, we see the following kind of line over and over again:</p>
+<pre><code>Sep 12 00:00:08 sised-summer2020 sshd[78312]: Invalid user uu from 152.231.25.170 port 61921
+</code></pre>
+<p>The user listed here is <code>uu</code>. That's a made up user. So let's grep for one of the fixed parts of that string, which is <code>Invalid user</code>. We can pipe the output through the <code>head</code> command to look the first ten results:</p>
+<pre><code>grep &quot;Invalid user&quot; /var/log/auth.log | head
+Sep 12 00:00:08 sised-summer2020 sshd[78312]: Invalid user uu from 152.231.25.170 port 61921
+Sep 12 00:00:52 sised-summer2020 sshd[78316]: Invalid user reshma from 42.200.109.74 port 33028
+Sep 12 00:02:16 sised-summer2020 sshd[78320]: Invalid user julie from 95.85.43.241 port 50010
+Sep 12 00:02:39 sised-summer2020 sshd[78322]: Invalid user sasha from 113.161.37.216 port 46615
+Sep 12 00:02:49 sised-summer2020 sshd[78324]: Invalid user a from 177.83.39.253 port 39699
+Sep 12 00:05:39 sised-summer2020 sshd[78330]: Invalid user scan from 152.231.25.170 port 64587
+Sep 12 00:06:45 sised-summer2020 sshd[78334]: Invalid user postgres from 95.85.43.241 port 37766
+Sep 12 00:08:48 sised-summer2020 sshd[78341]: Invalid user apidoc from 113.161.37.216 port 32963
+Sep 12 00:09:10 sised-summer2020 sshd[78407]: Invalid user sentry from 124.89.83.117 port 42690
+Sep 12 00:09:15 sised-summer2020 sshd[78414]: Invalid user apidoc from 177.83.39.253 port 10693
+</code></pre>
+<p>Let's apply a brace expression and a asterisk to extract the list of invalid users from that output. I want everything from this log file, but I'll pipe the output through the <code>head</code> command to examine the validity of the results:</p>
+<pre><code># note: we may also not grep for the string &quot;from&quot;
+grep -o &quot;Invalid user [a-zA-Z]* from&quot; auth.log | head
+Invalid user uu from
+Invalid user reshma from
+Invalid user julie from
+Invalid user sasha from
+Invalid user a from
+Invalid user scan from
+Invalid user postgres from
+Invalid user apidoc from
+Invalid user sentry from
+Invalid user apidoc from
+</code></pre>
+<p>This is good progress, but I really just want the list of usernames. Let's modify that to remove the text &quot;Invalid user &quot; and &quot;from &quot;. We can use the <code>cut</code> or the <code>awk</code> command. I'll show both and just a bit of the output. The output is same with both commands:</p>
+<pre><code># Using cut
+grep -o &quot;Invalid user [a-zA-Z]* from&quot; auth.log | cut -d' ' -f3
+
+# Using awk
+grep -o &quot;Invalid user [a-zA-Z]* from&quot; auth.log | awk '{ print $3 }'
+uu
+reshma
+julie
+sasha
+a
+scan
+postgres
+apidoc
+sentry
+apidoc
+</code></pre>
+<p>Goal accomplished, but we can do better. Right now we have an un-ordered list of users. Let's sort them, get a count and list of usernames that are the most commonly used, and then sort those by their counts. We'll continue to use the <code>|</code> pipe operator, along with an assortment of utilities, to create a powerful command:</p>
+<pre><code>grep -o &quot;Invalid user [a-zA-Z]* from&quot; auth.log | awk '{ print $3 }' | sort | uniq -c | sort
+</code></pre>
+<p>Once we have that, we may want to save the data to a file:</p>
+<pre><code>grep -o &quot;Invalid user [a-zA-Z]* from&quot; auth.log | awk '{ print $3 }' | sort | uniq -c | sort &gt; invalid-user-attempts.txt
+</code></pre>
+<p>Or, we may want to save our command as a script in order to automate the process. In the following code snippet, I use the <strong>backslash</strong> to split our single command over multiple lines. This makes the command more readable. I also save the output to a file with the current date as part of the file name. This makes the file name unique, which is good since I only use a single <code>&gt;</code> redirect.</p>
+<pre><code>#!/usr/bin/env bash
+
+# Get sorted list of invalid attempts to ssh into server
+grep -o &quot;Invalid user [a-zA-Z]* from&quot; auth.log |\
+  awk '{ print $3 }' |\
+  sort |\
+  uniq -c |\
+  sort &gt; invalid-user-attempts-&quot;$(date +%Y-%m-%d)&quot;.txt
+</code></pre>
+<p>And from there we can investigate whether any of these users truly exist on the system and conduct other security checks.</p>
+<h2 id="addendum"><a class="header" href="#addendum">Addendum</a></h2>
+<p>The goal in this lesson is to learn a bit about regular expressions, but there are a number of ways to get a list of users from the <strong>auth.log</strong> file and also avoid using complicated regular expressions. We can <code>grep</code> for a multistring and take more advantage of <code>awk</code>. For example:</p>
+<pre><code>grep &quot;Invalid user &quot; auth.log | awk '{ print $8 }' | sort | uniq -c | sort
+</code></pre>
+<p>We can also not <code>grep</code> at all, and use only <code>awk</code>, because <code>awk</code> can search. To search in <code>awk</code>, we insert the search string within forward slashes, i.e., <code>/search string/</code>:</p>
+<pre><code>awk '/Invalid user / { print $8 }' auth.log | sort | uniq -c | sort
+</code></pre>
+<p>In both examples above, we depend on the default behavior of <code>awk</code> to treat spaces as a field separator. Hence, in order for me to know that the users are listed in field 8 (<code>$8</code>), I had to count the columns.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="09-bash-scripting.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="p2-managing-services-software.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="09-bash-scripting.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="p2-managing-services-software.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

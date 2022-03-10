@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Text Editors - Linux Systems Administration</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li class="chapter-item expanded "><a href="p1-system-basics.html"><strong aria-hidden="true">2.</strong> System Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">2.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-quick-ssh-connect.html"><strong aria-hidden="true">2.2.</strong> Connect to a Remote Server</a></li><li class="chapter-item expanded "><a href="03-filesystem-file-management.html"><strong aria-hidden="true">2.3.</strong> Linux Filesystems and File Management</a></li><li class="chapter-item expanded "><a href="04-file-attributes.html"><strong aria-hidden="true">2.4.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="05-text-processing-part-1.html"><strong aria-hidden="true">2.5.</strong> Text Processing, Part 1</a></li><li class="chapter-item expanded "><a href="06-text-processing-part-2.html"><strong aria-hidden="true">2.6.</strong> Text Processing, Part 2</a></li><li class="chapter-item expanded "><a href="07-text-editors.html" class="active"><strong aria-hidden="true">2.7.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="08-revisiting-paths.html"><strong aria-hidden="true">2.8.</strong> Revisiting Paths</a></li><li class="chapter-item expanded "><a href="09-bash-scripting.html"><strong aria-hidden="true">2.9.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="10-regular-expressions.html"><strong aria-hidden="true">2.10.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p2-managing-services-software.html"><strong aria-hidden="true">3.</strong> Managing Services and Software</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="11-installing-linux.html"><strong aria-hidden="true">3.1.</strong> Installing Linux in VirtualBox</a></li><li class="chapter-item expanded "><a href="12-logical-volumes.html"><strong aria-hidden="true">3.2.</strong> Logical Volume Management</a></li><li class="chapter-item expanded "><a href="13-virtualbox-nat.html"><strong aria-hidden="true">3.3.</strong> Using NAT in VirtualBox</a></li><li class="chapter-item expanded "><a href="14-webconsole-nat.html"><strong aria-hidden="true">3.4.</strong> NAT Table in VirtualBox</a></li><li class="chapter-item expanded "><a href="15-managing-users-groups.html"><strong aria-hidden="true">3.5.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="16-systemd.html"><strong aria-hidden="true">3.6.</strong> systemd</a></li><li class="chapter-item expanded "><a href="17-backup-and-using-dnf.html"><strong aria-hidden="true">3.7.</strong> Backups and DNF</a></li></ol></li><li class="chapter-item expanded "><a href="p3-networking-security.html"><strong aria-hidden="true">4.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="18-tcip-networking.html"><strong aria-hidden="true">4.1.</strong> TCIP Networking</a></li><li class="chapter-item expanded "><a href="19-networking-dns-domains.html"><strong aria-hidden="true">4.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="20-security-chroot.html"><strong aria-hidden="true">4.3.</strong> Security and chroot</a></li><li class="chapter-item expanded "><a href="21-security-firewall.html"><strong aria-hidden="true">4.4.</strong> Security and Firewalls</a></li></ol></li><li class="chapter-item expanded "><a href="p4-lamp.html"><strong aria-hidden="true">5.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="22-httpd-apache.html"><strong aria-hidden="true">5.1.</strong> Apache2 Web Server</a></li><li class="chapter-item expanded "><a href="23-httpd-php.html"><strong aria-hidden="true">5.2.</strong> Apache2 and PHP</a></li><li class="chapter-item expanded "><a href="24-httpd-virtualhosts.html"><strong aria-hidden="true">5.3.</strong> Apache2 and Virtual Hosts</a></li><li class="chapter-item expanded "><a href="25-httpd-mysql.html"><strong aria-hidden="true">5.4.</strong> Apache2 and MySQL</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="text-editors"><a class="header" href="#text-editors">Text editors</a></h1>
+<p>In addition to writing commands at the command prompt, we can also write commands (and other kinds of text) in text editors, save those files as scripts, and then execute the files so that the commands in the script run. This process can save lots of time, especially when we find ourselves writing longer commands. We can enter long commands at the command prompt, but it is difficult to fix errors when writing multi-line commands there.</p>
+<p>It's important to have some familiarity with command line text editors not just because we may need to write out longer scripts, but also because command line text editors may be the primary way we have of modifying configuration files on a server. We'll learn more about configuration files later in the semester, but these are files, often in the <code>/etc/</code> directory, which define the parameters of various services on a server, such as how a web server delivers web sites or how a firewall blocks certain kinds of internet connections. Graphical based text editors can be nice, but graphical user environments are not always available on servers because of the computer resources they require, which are better used for the purposes of the server, and because the security bugs that come with graphical user software unnecessarily increase the <a href="https://en.wikipedia.org/wiki/Attack_surface">attack surface</a> of the server.</p>
+<p>In this demo, I am going to address three text editor programs and I will start with the most difficult one to learn (<code>ed</code>) and end with the easiest one to learn (<code>nano</code>). For this course, I suggest that you use <code>nano</code>, but the first two text editors, <code>ed</code> and <code>vim</code>, are very much a part of Unix and Linux culture. I want you to be familiar with them for that reason but also because their basic designs have influenced a lot of other common technologies.</p>
+<h2 id="ed"><a class="header" href="#ed"><code>ed</code></a></h2>
+<p><code>ed</code> is specifically a line editor, and it's the most likely text editor to be installed on a Linux distribution (<code>nano</code> is installed by default on Fedora now). <code>ed</code>, or an early version of it, is also the first text editor for the Unix operating system and was developed by Ken Thompson, one of the Unix creators, in the late 1960s. It was written without computer monitors in mind, because those were still uncommon, and instead for <a href="https://en.wikipedia.org/wiki/Teleprinter">teletypewriters (TTYs)</a> and <a href="https://www.youtube.com/watch?v=2B-U-5ylvWo">printers</a>. If you visit that second link, what you will essentially see is the terminal interface from those earlier days, and it is the same basic interface you're using when you use your terminal applications, which are now virtualised versions of those old teletypewriters. It's a testament of the power of the terminal that advanced computer users still use the same basic technology today.</p>
+<p>In practice, when we use a line editor like <code>ed</code>, the main process of entering text is like any other editor. The big difference is when we need to manipulate the text. In a graphical based text editor, if we want to delete a word or edit some text, we might just backspace over the text or highlight a word and delete it. In a line editor, we manipulate text by referring to lines or across multiple lines and then run commands on the text in those line(s). To operationalize this, this means that each line has an <strong>address</strong>, and the address for line 7 is, for example, <strong>7</strong>, and so forth. Line editors like <code>ed</code> are command driven. There is no menu to select from at the top of the <em>window</em>. Instead, if a user wants to delete a word, the user first has to direct the line editor to the relevant line by its address and then command the line editor to delete the word on that line. Line editors can also work on ranges of line, including all the lines in the file.</p>
+<p>Commands are cryptic in line editors and usually are called by a single letter. For example, to delete a line in <code>ed</code>, we use the <strong>d</strong> command. To print a line, we use the <strong>p</strong> command. To <strong>substitute</strong> (or replace) a word in a line, we use the <strong>s</strong> command. If I wanted to delete line 7 in <code>ed</code>, I'd first enter the address and then the <strong>d</strong> command at the <code>ed</code> prompt:</p>
+<pre><code>7d
+</code></pre>
+<p>And to print it, I would enter the address and then the <strong>p</strong> command:</p>
+<pre><code>7p
+</code></pre>
+<p>Substituting a word is a tiny bit more complicated because it involves first addressing the line and then searching the line for the word to substitute. This process means that there is a bit more to the command. Here the syntax is:</p>
+<pre><code>[ADDRESS[,ADDRESS]]COMMAND[PARAMETERS]
+</code></pre>
+<p>The square brackets in this format example are not used in the actual commands but only to demarcate the parts of the command. The first ADDRESS is required, but the second ADDRESS is optional and would be used only if I wanted to indicate a range of lines. The COMMAND is stated, and if additional parameters are needed, then those are optional. Imagine then that on line 7, I had the following sentence:</p>
+<pre><code>I use linux.
+</code></pre>
+<p>Now imagine that I am editing the file and realize that the word <strong>linux</strong> is a proper noun and should be capitalized. The substitute command requires that I first <strong>address</strong> line 7, then state the command <strong>s</strong>, and then search for the word <strong>linux</strong>, and then replace it with the word <strong>Linux</strong>.</p>
+<pre><code>7s/linux/Linux/
+</code></pre>
+<p>You can see that the operation we're doing is familiar to you already because it's like finding and replacing text in a word processor:</p>
+<pre><code>7s/find/replace/
+</code></pre>
+<p>If I wanted to substitute or replace the word <strong>linux</strong> with <strong>Linux</strong> on lines 5-7, then I'd indicate that on the <strong>address range</strong> by typing <code>5,7</code>, which <code>ed</code> interprets as lines 5, 6, 7 (like <strong>5-7</strong>):</p>
+<pre><code>5,7s/linux/Linux/
+</code></pre>
+<p>Line editors like <code>ed</code> are also modal, which means they have separate <a href="https://en.wikipedia.org/wiki/Mode_(user_interface)">modes</a> for inputting text and for issuing commands on text. Text editors in graphical user environments, like Notepad on Microsoft Windows or TextEdit on macOS, are <strong>modeless</strong>---the user can switch between writing text and editing text without changing the environment and by using keyboard shortcuts (like Ctrl-c or Cmd-c to copy) or using the menu bar. But in modal text editors, <code>vim</code> included, the user has to enter one mode to write text (the <strong>input mode</strong>) and another mode to run commands on the text (the <strong>command mode</strong>) (<code>vim</code> has many modes but three main ones).</p>
+<p>To start with ed, I simply type <code>ed</code> on the Bash prompt followed by an optional file name to work on, which could be a new file or an existing file. Let's say I wanted to create a file called <strong>letter.txt</strong>, then I'd type:</p>
+<pre><code>ed letter.txt
+letter.txt: No such file or directory
+</code></pre>
+<p>Here we see that when <code>ed</code> opens, it's not very forthcoming or user friendly and if the file <strong>letter.txt</strong> does not already exist, it returns an error message informing of us that. Also, by default we are in command mode. To enter <strong>insert</strong> mode so that I an start writing my letter, I can type an <strong>i</strong> for <strong>insert</strong> or an <strong>a</strong> for <strong>append</strong>:</p>
+<pre><code>a
+Dear Students,
+
+I hope you find this really interesting and that you feel free to practice and play on the command line, as well as use tools like ed, the standard editor.
+
+Sincerely,
+Dr. Burns
+.
+</code></pre>
+<p>After I've typed that letter, my goal is to leave <strong>insert</strong> mode and enter <strong>command</strong> mode, which I need to do if I just want to save and exit <code>ed</code>. I do that at the end when I press return to get a new line and typed a period by itself. This is how we tell <code>ed</code> to exit <strong>input</strong> mode and enter <strong>command</strong> mode.</p>
+<p>The first line is line 1, but it's not obvious that this is always so, and it would be hard to know a line number in <code>ed</code> when the file is long. To see line numbers, I can tell <code>ed</code> to show them to me with the following command:</p>
+<pre><code>,n
+</code></pre>
+<p>That will display all the line numbers in the file because the comma is
+shorthand for the entire address space. Or I could tell <code>ed</code> to show me line
+numbers for a range:</p>
+<pre><code>2,3n
+</code></pre>
+<p>And that will print out lines 2 and 3 with line numbers. If I wanted to print those two lines without line numbers, then I switch <strong>n</strong> for <strong>p</strong>:</p>
+<pre><code>2,3p
+</code></pre>
+<p>The non-shorthand way to refer to the entire address space, range 1 to the last line, would be to write <code>1,$n</code>, where <strong>1</strong> marks the first line and <strong>$</strong> marks the last line.</p>
+<p>There's a lot more we can do with this text editor because it's extremely powerful, but for now, let me just show you how to exit. To do so, make sure you're in <strong>command</strong> mode (press enter to get a new line and then press <strong>.</strong> (or period) to enter <strong>command</strong> mode. If you want to save the file and then quit, then type:</p>
+<pre><code>w
+q
+</code></pre>
+<p>If you want to quit without saving, then type:</p>
+<pre><code>Q
+</code></pre>
+<p>It's good to know something about <code>ed</code> not just for cultural reasons, but also because the line editing technology developed for it is still in use today, and is a basic part of the <code>vim</code> text editor, which is a very widely used application.</p>
+<h2 id="vim"><a class="header" href="#vim"><code>vim</code></a></h2>
+<p>The <code>vim</code> text editor is a take on the <code>vi</code> text editor and is in fact called <strong>Vi IMproved</strong>. Although <code>vim</code> is not a line editor, but a screen-oriented editor, it is multi-modal like <code>ed</code> and in fact is its direct descendant through <a href="https://en.wikipedia.org/wiki/Vi">vi</a>.  Due to this genealogy, <code>vim</code> can use many of the same commands as <code>ed</code> does when <code>vim</code> is in command mode. Like <code>ed</code>, we can start <code>vim</code> at the Bash prompt with or without a file name. Here I will open the <strong>letters.txt</strong> file with <code>vim</code>, and will automatically be in <strong>command mode</strong>:</p>
+<pre><code>vim letters.txt
+</code></pre>
+<p>To enter <strong>insert mode</strong>, I can type <strong>i</strong> or <strong>a</strong> for <strong>insert</strong> or <strong>append</strong> mode. The difference is that <strong>i</strong> will start <strong>insert</strong> mode where the cursor lies, and <strong>a</strong> will start <strong>insert</strong> mode right-adjacent to the cursor. Once in <strong>insert</strong> mode, you can type text as you normally would and use the arrow keys to navigate around the file.</p>
+<p>To get into <strong>command mode</strong> in <code>vim</code>, you can press the <strong>Esc</strong> key. And then you can enter commands like you would with <code>ed</code>, using the same syntax:</p>
+<pre><code>[ADDRESS[,ADDRESS]]COMMAND[PARAMETERS]
+</code></pre>
+<p>Unlike <code>ed</code>, when in <strong>command mode</strong>, the commands we type are not wherever the cursor is, but at the bottom of the screen. Let's first turn on line numbers so we know which address is which, and then we'll replace <strong>ed</strong> with <strong>Ed</strong>. Note that I precede these commands with a colon:</p>
+<pre><code>:set number
+:3s/ed/Ed/
+</code></pre>
+<p>One of the more powerful things about both <code>ed</code> and <code>vim</code> is that I can call Bash shell commands from the editors. Let's say that I wanted to add the date to my letter file. To do that, Linux has a command called <code>date</code> that when typed and executed, will return today's date. To call the <code>date</code> command within Vim and insert the output into the file, I press <strong>Esc</strong> to enter <strong>command mode</strong> (if I'm not already in it), enter a colon, and then use the shell escape command, which is an exclamation point <code>!</code>, type a space, then <code>r</code> for the read file into buffer command, and then the Bash shell <code>date</code> command:</p>
+<pre><code>:! r date
+</code></pre>
+<p>Vim/vi users also love the navigation keystrokes to move around <code>vim</code>, which are the <strong>j,k,l,h</strong> keystrokes:</p>
+<ul>
+<li><strong>j</strong> moves down line by line</li>
+<li><strong>k</strong> moves up line by line</li>
+<li><strong>l</strong> moves right letter by letter</li>
+<li><strong>h</strong> moves left letter by letter</li>
+</ul>
+<p>Like the other commands, you can precede this with addresses. To move 2 lines down in <code>vim</code>, you type <code>2j</code>, and so forth. Vi/Vim have had such a powerful impact on software development that you can in fact use these same keystrokes to navigate a number of sites such as Gmail and Facebook.</p>
+<p>To save the file and exit <code>vim</code>, we go into <strong>command mode</strong> by pressing the <strong>Esc</strong> key, and then:</p>
+<pre><code>:wq
+</code></pre>
+<p>The above only barely scratches the surface and there are whole books on these editors as well as websites, videos, etc that explore them, and especially <code>vim</code> in more detail. But now that you have some familiarity with them, you might find this hilarious: <a href="https://www.gnu.org/fun/jokes/ed-msg.en.html">Ed, man! !man ed</a>.</p>
+<h2 id="nano"><a class="header" href="#nano"><code>nano</code></a></h2>
+<p>The <code>nano</code> text editor is the user-friendliest of these text editors but still requires some adjustment as a new command line user. The friendliest thing about <code>nano</code> is that it is modeless, which is what you're already accustomed to using, because it can be used to enter text and manipulate the text without changing to insert or command mode. It is also friendly because, like many graphical text editors and other graphical software, it uses control keys to perform its operations. The tricky part is that the control keys are assigned to different keystroke combinations than what many graphical editors (or word processors) use. For example, instead of Ctrl-c or Cmd-c to copy, in <code>nano</code> you press the <strong>Alt-6</strong> keys (press <strong>Alt</strong> and <strong>6</strong>). Then to paste, you press <strong>Ctrl-u</strong> instead of the more common <strong>Ctrl-v</strong>. Fortunately, <code>nano</code> lists the shortcuts at the bottom of the screen.</p>
+<p>The shortcuts listed need some explanation. The carat mark is shorthand for the keyboard's <strong>Control (Ctrl)</strong> key. Therefore to Save As a file, we <strong>write</strong> out the file by pressing <strong>Ctrl-o</strong> (<strong>Ctrl-s</strong> works but will not return any prompts). The <strong>Alt</strong> key is also important, and the shorthand for that is <strong>M-</strong>. To mark (highlight) text, you press <strong>Alt-a</strong>, which is listed as <strong>M-A</strong> in the shortcut list at the bottom of the screen, then move the cursor over the text that you want to highlight. If your goal is to copy, then press <strong>Alt-6</strong> to copy the marked (highlighted) text. Move to where you want to paste the text, and press <strong>Ctrl-u</strong> to paste.</p>
+<p>For the purposes of this class, that's all you really need to know about <code>nano</code>. Use it and get comfortable writing in it. Some quick tips:</p>
+<ol>
+<li><code>nano file.txt</code> will open the file named file.txt</li>
+<li><code>nano</code> will open to an empty page</li>
+<li>In <code>nano</code>, save a file by pressing <code>Ctrl-o</code> or <code>Ctrl-s</code></li>
+<li>Be sure to follow the prompts at the bottom of the screen</li>
+<li>Use the arrow keys to navigate around the page/file</li>
+</ol>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>In prior lessons, we learned how to use the Bash interactive shell and how to view, manipulate, and edit files from that shell. In this lesson, we learned how to use several command line text editors. This allows us to save our commands and create scripts. The commands we used in this lesson include:</p>
+<ul>
+<li><code>ed</code> : line-oriented text editor</li>
+<li>``vim` : Vi IMproved, a programmer's text editor</li>
+<li><code>nano</code> : Nano's ANOther editor, inspired by Pico</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="06-text-processing-part-2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="08-revisiting-paths.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="06-text-processing-part-2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="08-revisiting-paths.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
