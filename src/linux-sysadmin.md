@@ -4,6 +4,7 @@ Author: C. Sean Burns
 Date: 2022-03-09  
 Email: [sean.burns@uky.edu](sean.burns@uky.edu)  
 Twitter: [@cseanburns](https://twitter.com/cseanburns)
+Website: [cseanburns.net](https://cseanburns.net)
 
 This short book is based on a series of lectures for my course on Linux Systems Administration.
 
