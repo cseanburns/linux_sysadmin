@@ -8,14 +8,14 @@ called [SSH][ssh], or [Secure Shell][openssh].
 
 How you use SSH will depend on which operating system or OS version you are
 using. If you are using a macOS computer, then everything I do in this video
-will be exactly the same for you. Use SpotLight to search for the
-*terminal.app* and open it. You will see a command line prompt similar to mine
-(although by default, I think macOS uses black text on a white background, but
-you can configure this in the app preferences).
+will be exactly the same for you. To get started on macOS, use SpotLight to
+search for the *terminal.app* and open it. You will see a command line prompt
+similar to mine (although by default, I think macOS uses black text on a white
+background, but you can configure this in the app preferences).
 
-If you are on a Windows machine, then I hope you are using version 10. If so,
-then you can install a *SSH client*. I don't use Windows and can't create
-a video for you, but I found one that looks pretty helpful. Follow the
+If you are on a Windows machine, then I hope you are using at version 10. If
+so, then you can install a *SSH client*. I don't use Windows and can't create a
+video for you, but I found one that looks pretty helpful. Follow the
 instructions in that video and see if it works for you. Alternatively, below is
 a link to some other instructions. I am not sure which one is more current, but
 between the two, you should be able to figure it out:

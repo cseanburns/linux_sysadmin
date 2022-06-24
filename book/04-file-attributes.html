@@ -1,170 +1,301 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en">
     <head>
-        <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>File Attributes - Linux Systems Administration</title>
-
-
-        <!-- Custom HTML head -->
-        
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
         <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
-        <!-- Custom theme stylesheets -->
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
 
     </head>
-    <body>
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
-
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
-
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
+    <body class="light">
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
-            if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
-            html.classList.remove('no-js')
-            html.classList.remove('light')
-            html.classList.add(theme);
-            html.classList.add('js');
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
-            }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li class="chapter-item expanded "><a href="p1-system-basics.html"><strong aria-hidden="true">2.</strong> System Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">2.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-quick-ssh-connect.html"><strong aria-hidden="true">2.2.</strong> Connect to a Remote Server</a></li><li class="chapter-item expanded "><a href="03-filesystem-file-management.html"><strong aria-hidden="true">2.3.</strong> Linux Filesystems and File Management</a></li><li class="chapter-item expanded "><a href="04-file-attributes.html" class="active"><strong aria-hidden="true">2.4.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="05-text-processing-part-1.html"><strong aria-hidden="true">2.5.</strong> Text Processing, Part 1</a></li><li class="chapter-item expanded "><a href="06-text-processing-part-2.html"><strong aria-hidden="true">2.6.</strong> Text Processing, Part 2</a></li><li class="chapter-item expanded "><a href="07-text-editors.html"><strong aria-hidden="true">2.7.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="08-revisiting-paths.html"><strong aria-hidden="true">2.8.</strong> Revisiting Paths</a></li><li class="chapter-item expanded "><a href="09-bash-scripting.html"><strong aria-hidden="true">2.9.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="10-regular-expressions.html"><strong aria-hidden="true">2.10.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p2-managing-services-software.html"><strong aria-hidden="true">3.</strong> Managing Services and Software</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="11-installing-linux.html"><strong aria-hidden="true">3.1.</strong> Installing Linux in VirtualBox</a></li><li class="chapter-item expanded "><a href="12-logical-volumes.html"><strong aria-hidden="true">3.2.</strong> Logical Volume Management</a></li><li class="chapter-item expanded "><a href="13-virtualbox-nat.html"><strong aria-hidden="true">3.3.</strong> Using NAT in VirtualBox</a></li><li class="chapter-item expanded "><a href="14-webconsole-nat.html"><strong aria-hidden="true">3.4.</strong> NAT Table in VirtualBox</a></li><li class="chapter-item expanded "><a href="15-managing-users-groups.html"><strong aria-hidden="true">3.5.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="16-systemd.html"><strong aria-hidden="true">3.6.</strong> systemd</a></li><li class="chapter-item expanded "><a href="17-backup-and-using-dnf.html"><strong aria-hidden="true">3.7.</strong> Backups and DNF</a></li></ol></li><li class="chapter-item expanded "><a href="p3-networking-security.html"><strong aria-hidden="true">4.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="18-tcip-networking.html"><strong aria-hidden="true">4.1.</strong> TCIP Networking</a></li><li class="chapter-item expanded "><a href="19-networking-dns-domains.html"><strong aria-hidden="true">4.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="20-security-chroot.html"><strong aria-hidden="true">4.3.</strong> Security and chroot</a></li><li class="chapter-item expanded "><a href="21-security-firewall.html"><strong aria-hidden="true">4.4.</strong> Security and Firewalls</a></li></ol></li><li class="chapter-item expanded "><a href="p4-lamp.html"><strong aria-hidden="true">5.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="22-httpd-apache.html"><strong aria-hidden="true">5.1.</strong> Apache2 Web Server</a></li><li class="chapter-item expanded "><a href="23-httpd-php.html"><strong aria-hidden="true">5.2.</strong> Apache2 and PHP</a></li><li class="chapter-item expanded "><a href="24-httpd-virtualhosts.html"><strong aria-hidden="true">5.3.</strong> Apache2 and Virtual Hosts</a></li><li class="chapter-item expanded "><a href="25-httpd-mysql.html"><strong aria-hidden="true">5.4.</strong> Apache2 and MySQL</a></li></ol></li></ol>
-            </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
-        </nav>
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="./linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><a href="./p1-system-basics.html"><strong>2.</strong> System Basics</a></li><li><ul class="section"><li><a href="./01-history-linux-unix.html"><strong>2.1.</strong> History of Unix and Linux</a></li><li><a href="./02-quick-ssh-connect.html"><strong>2.2.</strong> Connect to a Remote Server</a></li><li><a href="./03-filesystem-file-management.html"><strong>2.3.</strong> Linux Filesystems and File Management</a></li><li><a href="./04-file-attributes.html" class="active"><strong>2.4.</strong> File Attributes</a></li><li><a href="./05-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="./06-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="./07-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="./08-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="./09-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="./10-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="./p2-managing-services-software.html"><strong>3.</strong> Managing Services and Software</a></li><li><ul class="section"><li><a href="./11-installing-linux.html"><strong>3.1.</strong> Installing Linux in VirtualBox</a></li><li><a href="./12-logical-volumes.html"><strong>3.2.</strong> Logical Volume Management</a></li><li><a href="./13-virtualbox-nat.html"><strong>3.3.</strong> Using NAT in VirtualBox</a></li><li><a href="./14-webconsole-nat.html"><strong>3.4.</strong> NAT Table in VirtualBox</a></li><li><a href="./15-managing-users-groups.html"><strong>3.5.</strong> Managing Users and Groups</a></li><li><a href="./16-systemd.html"><strong>3.6.</strong> systemd</a></li><li><a href="./17-backup-and-using-dnf.html"><strong>3.7.</strong> Backups and DNF</a></li></ul></li><li><a href="./p3-networking-security.html"><strong>4.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="./18-tcip-networking.html"><strong>4.1.</strong> TCIP Networking</a></li><li><a href="./19-networking-dns-domains.html"><strong>4.2.</strong> DNS and Domain Names</a></li><li><a href="./20-security-chroot.html"><strong>4.3.</strong> Security and chroot</a></li><li><a href="./21-security-firewall.html"><strong>4.4.</strong> Security and Firewalls</a></li></ul></li><li><a href="./p4-lamp.html"><strong>5.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="./22-httpd-apache.html"><strong>5.1.</strong> Apache2 Web Server</a></li><li><a href="./23-httpd-php.html"><strong>5.2.</strong> Apache2 and PHP</a></li><li><a href="./24-httpd-virtualhosts.html"><strong>5.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="./25-httpd-mysql.html"><strong>5.4.</strong> Apache2 and MySQL</a></li></ul></li></ul>
+        </div>
 
         <div id="page-wrapper" class="page-wrapper">
 
-            <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
-                        </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                        </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
-                        </button>
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
                     </div>
 
                     <h1 class="menu-title">Linux Systems Administration</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
                         </a>
-
                     </div>
                 </div>
-
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
 
                 <div id="content" class="content">
-                    <main>
-                        <h1 id="file-attributes"><a class="header" href="#file-attributes">File Attributes</a></h1>
-<p>Let's take a look at file attributes. Often we'll have to change the file permissions and owners of a file. This will become really important when we create our web servers.</p>
-<ol>
-<li><code>chmod</code> for changing file permissions (or file mode bits)</li>
-<li><code>chown</code> for changing file owner and group</li>
-</ol>
-<p>We use <code>chmod</code> to change the file permissions:</p>
-<pre><code># Make a file readable and writer for user:
-chmod u+rw file.txt
-
-# Make a file executable for user and group:
-chmod ug+x file.sh
-
-# Make a file readable by the world:
-chmod o+r file.html
+                    <a class="header" href="./04-file-attributes.html#file-attributes" id="file-attributes"><h1>File Attributes</h1></a>
+<a class="header" href="./04-file-attributes.html#identifying-ownership-and-permissions" id="identifying-ownership-and-permissions"><h2>Identifying Ownership and Permissions</h2></a>
+<p>In the last section, we saw that the output of the <code>ls -l</code> command
+included a lot extra information besides a listing of file names.
+The output also listed the owners and permissions for each file and directory.
+Ownership and permissions are set in order to manage some level
+of access to those files.
+There are two owners for every file (and directory):</p>
+<ul>
+<li>user owner</li>
+<li>group owner</li>
+</ul>
+<p>And there are three permission <em>modes</em> that restrict or expand
+access to each file (or directory):</p>
+<ul>
+<li>(r)ead</li>
+<li>(w)rite</li>
+<li>e(x)ecute (as in a program)</li>
+</ul>
+<p>Consider the output of <code>ls -l</code> in some <strong>public_html</strong> directory
+that contains a single file called <em>index.html</em>:</p>
+<pre><code>-rw-rw-r-- 1 sean sean 11251 Jun 20 14:41 index.html
 </code></pre>
+<p>According to the above output,
+we can parse the following information about the file:</p>
+<table><thead><tr><th> Attributes             </th><th> <code>ls -l</code> output   </th></tr></thead><tbody>
+<tr><td> File permissions       </td><td> <code>-rw-rw-r--</code>     </td></tr>
+<tr><td> Number of links        </td><td> 1                  </td></tr>
+<tr><td> Owner name             </td><td> sean               </td></tr>
+<tr><td> Group name             </td><td> sean               </td></tr>
+<tr><td> Byte size              </td><td> 11251              </td></tr>
+<tr><td> Last modification date </td><td> Jun 20 14:41       </td></tr>
+<tr><td> File name              </td><td> index.html         </td></tr>
+</tbody></table>
+<p>What's important for us right now are the <strong>File permissions</strong> row,
+the <strong>Owner name</strong> row,
+and the <strong>Group name</strong> row.</p>
+<p>The Owner and Group names of the <strong>index.html</strong> file are <strong>sean</strong> because
+there is a user account named <strong>sean</strong> on the system and
+a group account named <strong>sean</strong> on the system.</p>
+<p>The <strong>File permissions</strong> row shows:</p>
+<pre><code>-rw-rw-r--
+</code></pre>
+<p>Let's ignore the first dash for now.
+The remaining permissions can be broken down as:</p>
+<ul>
+<li>rw- (for the Owner)</li>
+<li>rw- (for the Group)</li>
+<li>r-- (for the World)</li>
+</ul>
+<p>We read the output as such (dashes signify no permissions):</p>
+<ul>
+<li>User <strong>sean</strong> is the Owner and has (r)ead and (w)rite permissions on the file
+but not e(x)ecute permissions (<code>rw-</code>).</li>
+<li>Group <strong>sean</strong> is the Group owner and has (r)ead and (w)rite permissions on
+the file but not e(x)ecute permissions (<code>rw-</code>).</li>
+<li>The <strong>World</strong> can (r)ead the file but cannot (w)rite to the file nor
+e(x)exute the file (<code>r--</code>).</li>
+</ul>
+<blockquote>
+<p>The word <strong>write</strong> is a classical computing term,
+that means, essentially, to edit and save edits of a file.
+Today we usually use the term <strong>save</strong>.</p>
+</blockquote>
+<p>Since this is an HTML page for a website,
+the <strong>World</strong> ownership allows people to view (read) the file but not write
+(save) to it nor execute (run) it.</p>
+<p>Let's take a look at another file.
+In our <code>/bin</code> directory, we can see a listing for this program:</p>
+<pre><code>ls -l /bin/zip
+-rwxr-xr-x 1 root   root    212K Feb  2  2021  zip*
+</code></pre>
+<table><thead><tr><th> Attributes             </th><th> <code>ls -l</code> output   </th></tr></thead><tbody>
+<tr><td> File permissions       </td><td> <code>-rwxr-xr-x</code>     </td></tr>
+<tr><td> Number of links        </td><td> 1                  </td></tr>
+<tr><td> Owner name             </td><td> root               </td></tr>
+<tr><td> Group name             </td><td> root               </td></tr>
+<tr><td> Byte size              </td><td> 212K               </td></tr>
+<tr><td> Last modification date </td><td> Feb  2 2021        </td></tr>
+<tr><td> File name              </td><td> zip*               </td></tr>
+</tbody></table>
+<p>Since <code>zip</code> is a computer program used to package and compress files,
+it needs to be e(x)ecutable.
+That is, users on the system need to be able to run it.
+But notice that the owner and group names of the file point to the user <strong>root</strong>.
+We have already learned that there is a <strong>root</strong> level in our filesystem.
+This is the top level directory in our filesytem and is referenced
+by the forward slash: <code>/</code>.
+But there is also a <strong>root</strong> user account.
+This is the system's <strong>superuser</strong>.
+The <strong>superuser</strong> can run or access anything on the system, and
+this user also owns most of the system files.</p>
+<p>We read the output as such:</p>
+<ul>
+<li>User <strong>root</strong> is the Owner and has (r)ead, (w)rite, and e(x)ecute (<code>rwx</code>) permissions on the file.</li>
+<li>Group <strong>root</strong> is the Group owner and has (r)ead and e(x)ecute permissions
+but not (w)rite permissions (<code>r-x</code>)</li>
+<li>The <strong>World</strong> has (r)ead and e(x)ecute permissions but not (w)rite (<code>r-x</code>). This
+permissions allows other users (like you and me) to use the <code>zip</code>
+program.</li>
+</ul>
+<blockquote>
+<p>The asterisk at the end of the file name (<code>zip*</code>) simply indicates that
+this file is an executable.</p>
+</blockquote>
+<p>Finally, let's take a look at the permissions for a directory.
+On my system, I run the following command in my home directory,
+which will show the permissions for my <code>/home/sean</code> directory:</p>
+<pre><code>ls -ld
+</code></pre>
+<p>And the output is:</p>
+<pre><code>drwx--x--- 51 sean sean 4.0K Jun 23 18:35 ./
+</code></pre>
+<p>This shows that:</p>
+<table><thead><tr><th> Attributes             </th><th> <code>ls -ld</code> output  </th></tr></thead><tbody>
+<tr><td> File permissions       </td><td> <code>drwx--x---</code>     </td></tr>
+<tr><td> Number of links        </td><td> 1                  </td></tr>
+<tr><td> Owner name             </td><td> sean               </td></tr>
+<tr><td> Group name             </td><td> sean               </td></tr>
+<tr><td> Byte size              </td><td> 4.0K               </td></tr>
+<tr><td> Last modification date </td><td> Jun 23             </td></tr>
+<tr><td> File name              </td><td> ./                 </td></tr>
+</tbody></table>
+<p>This is a little different from the previous examples, but let's parse it:</p>
+<ul>
+<li>The initial <strong>d</strong> identifies this as a directory. Directories in Linux are
+simply special types of files.</li>
+<li>User <strong>sean</strong> has read, write, and execute (<code>rwx</code>) permissions.</li>
+<li>Group <strong>sean</strong> has execute (<code>--x</code>) permissions only.</li>
+<li>The <strong>World</strong> has no permissions (<code>---</code>).</li>
+<li><strong>./</strong> signifies the current directory, which happens to be my home
+directory, since I ran that command at the <code>/home/sean</code> path.</li>
+</ul>
+<p>We might ask why the directory has an e(x)ecutable bit set
+for the owner and the group if
+a directory is not an executable file.
+That is, it's not a program or software.
+This is so that the owner and the group can access that directory
+using, for example, the <code>cd</code> (change directory) command.
+If the directory was not executable,
+like it's not for the <strong>World</strong> (<code>---</code>),
+then it would not be accessible.
+In this case, the <strong>World</strong>
+(users who are not me)
+cannot access my home directory.</p>
+<a class="header" href="./04-file-attributes.html#changing-file-permissions-and-ownership" id="changing-file-permissions-and-ownership"><h2>Changing File Permissions and Ownership</h2></a>
+<a class="header" href="./04-file-attributes.html#changing-file-permissions" id="changing-file-permissions"><h3>Changing File Permissions</h3></a>
+<p>All the files and directories a Linux system
+have default ownership and permissions set.
+This includes new files that we might create as
+we use our systems.
+There will be times when we will want to change the defaults,
+for example, the kinds of defaults described above.
+There are several commands available to do that,
+and here I'll introduce you to the two most common ones.</p>
+<ol>
+<li>The <code>chmod</code> command is used to change file (and directories) permissions
+(or file mode bits).</li>
+<li>The <code>chown</code> command is used to change a file's (and directory's) owner and
+group.</li>
+</ol>
+<p>The <code>chmod</code> command changes the <code>-rwxrwxrwx</code> part of a file's attributres.
+Each one of those bits (the <code>r</code>, the <code>w</code>, and the <code>x</code>)
+are assigned the following <a href="https://docs.oracle.com/cd/E19504-01/802-5750/6i9g464pv/index.html">octal</a> values:</p>
+<table><thead><tr><th> permission   </th><th> description    </th><th> octal value   </th></tr></thead><tbody>
+<tr><td> r            </td><td> read           </td><td> 4             </td></tr>
+<tr><td> w            </td><td> write          </td><td> 2             </td></tr>
+<tr><td> x            </td><td> execute        </td><td> 1             </td></tr>
+<tr><td> -            </td><td> no permissions </td><td> 0             </td></tr>
+</tbody></table>
+<p>There are three octals for the three set of permissions
+represeted by <code>-rwxrwxrwx</code>.
+If I bracket the sets (for demonstration purposes only),
+they look like this:</p>
+<pre><code>-[rwx][rwx][rwx]
+</code></pre>
+<p>The first set describes the permissions for the owner.
+The second set describes the permissions for the group.
+The third set descreibes the permissions for the World.</p>
+<p>We use the <code>chmod</code> command and the octal values to change
+a file or directory's permissions.
+For each set, we add up the octal values.
+For example, to make a file read (4), write (2), and executable (1)
+for the owner only,
+and zero out the permissions for the group and World,
+then we use the <code>chmod</code> command like so:</p>
+<pre><code>chmod 700 paper.txt
+</code></pre>
+<p>Because <code>4+2+1=7</code>, and
+zero in the second two places since we're removing
+permissions for group and World.</p>
+<p>If we want to make the file read, write, and executable by
+the owner, the group, and the world, then we repeat this for each set:</p>
+<pre><code>chmod 777 paper.txt
+</code></pre>
+<p>More commonly, we might want to restrict ownership.
+Here we enable <code>rw-</code> for the owner,
+and <code>r--</code> for the group and the World:</p>
+<pre><code>chmod 644 paper.txt
+</code></pre>
+<p>Becuase <code>4+2=6</code> for owner,
+and <code>4</code> is read only for group and World, respectively.</p>
+<a class="header" href="./04-file-attributes.html#changing-file-ownership" id="changing-file-ownership"><h3>Changing File Ownership</h3></a>
 <p>Let's change the ownership of a file so that it's owned by a group we're in:</p>
 <pre><code>chown sean:sis_fac_staff file.sh
 
 # Let's make it read only for the group:
 chmod g-wx+r file.sh
 </code></pre>
-<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<a class="header" href="./04-file-attributes.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
 <p>In this demo, we looked at two ways to change the attributes of a file. This includes changing the ownership of a file and the read, write, and execute permissions of a file.</p>
 <p>The commands we used to change these attributes include:</p>
 <ul>
@@ -172,53 +303,59 @@ chmod g-wx+r file.sh
 <li><code>chown</code> : for changing file ownwership</li>
 </ul>
 
-                    </main>
-
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="03-filesystem-file-management.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-
-                            <a rel="next" href="05-text-processing-part-1.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-
-                        <div style="clear: both"></div>
-                    </nav>
                 </div>
-            </div>
 
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="03-filesystem-file-management.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="./03-filesystem-file-management.html" class="mobile-nav-chapters previous" title="Previous chapter">
                         <i class="fa fa-angle-left"></i>
                     </a>
+                
 
-                    <a rel="next" href="05-text-processing-part-1.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                
+                    <a rel="next" href="./05-text-processing-part-1.html" class="mobile-nav-chapters next" title="Next chapter">
                         <i class="fa fa-angle-right"></i>
                     </a>
-            </nav>
+                
+
+            </div>
+
+            
+                <a href="./03-filesystem-file-management.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="./05-text-processing-part-1.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
 
         </div>
 
 
-
-
-        <script type="text/javascript">
-            window.playground_copyable = true;
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
         </script>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        
 
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        
 
-        <!-- Custom JS scripts -->
+        
 
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
 
     </body>
 </html>

@@ -1,158 +1,145 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en">
     <head>
-        <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Linux Filesystems and File Management - Linux Systems Administration</title>
-
-
-        <!-- Custom HTML head -->
-        
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
         <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
-        <!-- Custom theme stylesheets -->
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
 
     </head>
-    <body>
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
-
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
-
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
+    <body class="light">
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
-            if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
-            html.classList.remove('no-js')
-            html.classList.remove('light')
-            html.classList.add(theme);
-            html.classList.add('js');
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
-            }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li class="chapter-item expanded "><a href="p1-system-basics.html"><strong aria-hidden="true">2.</strong> System Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">2.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-quick-ssh-connect.html"><strong aria-hidden="true">2.2.</strong> Connect to a Remote Server</a></li><li class="chapter-item expanded "><a href="03-filesystem-file-management.html" class="active"><strong aria-hidden="true">2.3.</strong> Linux Filesystems and File Management</a></li><li class="chapter-item expanded "><a href="04-file-attributes.html"><strong aria-hidden="true">2.4.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="05-text-processing-part-1.html"><strong aria-hidden="true">2.5.</strong> Text Processing, Part 1</a></li><li class="chapter-item expanded "><a href="06-text-processing-part-2.html"><strong aria-hidden="true">2.6.</strong> Text Processing, Part 2</a></li><li class="chapter-item expanded "><a href="07-text-editors.html"><strong aria-hidden="true">2.7.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="08-revisiting-paths.html"><strong aria-hidden="true">2.8.</strong> Revisiting Paths</a></li><li class="chapter-item expanded "><a href="09-bash-scripting.html"><strong aria-hidden="true">2.9.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="10-regular-expressions.html"><strong aria-hidden="true">2.10.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p2-managing-services-software.html"><strong aria-hidden="true">3.</strong> Managing Services and Software</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="11-installing-linux.html"><strong aria-hidden="true">3.1.</strong> Installing Linux in VirtualBox</a></li><li class="chapter-item expanded "><a href="12-logical-volumes.html"><strong aria-hidden="true">3.2.</strong> Logical Volume Management</a></li><li class="chapter-item expanded "><a href="13-virtualbox-nat.html"><strong aria-hidden="true">3.3.</strong> Using NAT in VirtualBox</a></li><li class="chapter-item expanded "><a href="14-webconsole-nat.html"><strong aria-hidden="true">3.4.</strong> NAT Table in VirtualBox</a></li><li class="chapter-item expanded "><a href="15-managing-users-groups.html"><strong aria-hidden="true">3.5.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="16-systemd.html"><strong aria-hidden="true">3.6.</strong> systemd</a></li><li class="chapter-item expanded "><a href="17-backup-and-using-dnf.html"><strong aria-hidden="true">3.7.</strong> Backups and DNF</a></li></ol></li><li class="chapter-item expanded "><a href="p3-networking-security.html"><strong aria-hidden="true">4.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="18-tcip-networking.html"><strong aria-hidden="true">4.1.</strong> TCIP Networking</a></li><li class="chapter-item expanded "><a href="19-networking-dns-domains.html"><strong aria-hidden="true">4.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="20-security-chroot.html"><strong aria-hidden="true">4.3.</strong> Security and chroot</a></li><li class="chapter-item expanded "><a href="21-security-firewall.html"><strong aria-hidden="true">4.4.</strong> Security and Firewalls</a></li></ol></li><li class="chapter-item expanded "><a href="p4-lamp.html"><strong aria-hidden="true">5.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="22-httpd-apache.html"><strong aria-hidden="true">5.1.</strong> Apache2 Web Server</a></li><li class="chapter-item expanded "><a href="23-httpd-php.html"><strong aria-hidden="true">5.2.</strong> Apache2 and PHP</a></li><li class="chapter-item expanded "><a href="24-httpd-virtualhosts.html"><strong aria-hidden="true">5.3.</strong> Apache2 and Virtual Hosts</a></li><li class="chapter-item expanded "><a href="25-httpd-mysql.html"><strong aria-hidden="true">5.4.</strong> Apache2 and MySQL</a></li></ol></li></ol>
-            </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
-        </nav>
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="./linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><a href="./p1-system-basics.html"><strong>2.</strong> System Basics</a></li><li><ul class="section"><li><a href="./01-history-linux-unix.html"><strong>2.1.</strong> History of Unix and Linux</a></li><li><a href="./02-quick-ssh-connect.html"><strong>2.2.</strong> Connect to a Remote Server</a></li><li><a href="./03-filesystem-file-management.html" class="active"><strong>2.3.</strong> Linux Filesystems and File Management</a></li><li><a href="./04-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="./05-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="./06-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="./07-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="./08-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="./09-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="./10-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="./p2-managing-services-software.html"><strong>3.</strong> Managing Services and Software</a></li><li><ul class="section"><li><a href="./11-installing-linux.html"><strong>3.1.</strong> Installing Linux in VirtualBox</a></li><li><a href="./12-logical-volumes.html"><strong>3.2.</strong> Logical Volume Management</a></li><li><a href="./13-virtualbox-nat.html"><strong>3.3.</strong> Using NAT in VirtualBox</a></li><li><a href="./14-webconsole-nat.html"><strong>3.4.</strong> NAT Table in VirtualBox</a></li><li><a href="./15-managing-users-groups.html"><strong>3.5.</strong> Managing Users and Groups</a></li><li><a href="./16-systemd.html"><strong>3.6.</strong> systemd</a></li><li><a href="./17-backup-and-using-dnf.html"><strong>3.7.</strong> Backups and DNF</a></li></ul></li><li><a href="./p3-networking-security.html"><strong>4.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="./18-tcip-networking.html"><strong>4.1.</strong> TCIP Networking</a></li><li><a href="./19-networking-dns-domains.html"><strong>4.2.</strong> DNS and Domain Names</a></li><li><a href="./20-security-chroot.html"><strong>4.3.</strong> Security and chroot</a></li><li><a href="./21-security-firewall.html"><strong>4.4.</strong> Security and Firewalls</a></li></ul></li><li><a href="./p4-lamp.html"><strong>5.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="./22-httpd-apache.html"><strong>5.1.</strong> Apache2 Web Server</a></li><li><a href="./23-httpd-php.html"><strong>5.2.</strong> Apache2 and PHP</a></li><li><a href="./24-httpd-virtualhosts.html"><strong>5.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="./25-httpd-mysql.html"><strong>5.4.</strong> Apache2 and MySQL</a></li></ul></li></ul>
+        </div>
 
         <div id="page-wrapper" class="page-wrapper">
 
-            <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
-                        </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                        </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
-                        </button>
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
                     </div>
 
                     <h1 class="menu-title">Linux Systems Administration</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
                         </a>
-
                     </div>
                 </div>
-
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
 
                 <div id="content" class="content">
-                    <main>
-                        <h1 id="the-linuxunix-file-system-and-file-types"><a class="header" href="#the-linuxunix-file-system-and-file-types">The Linux/Unix File System and File Types</a></h1>
+                    <a class="header" href="./03-filesystem-file-management.html#the-linuxunix-file-system-and-file-types" id="the-linuxunix-file-system-and-file-types"><h1>The Linux/Unix File System and File Types</h1></a>
 <p>In this demo, we will cover the:</p>
 <ul>
 <li>the Linux file system and how it is organized, and</li>
 <li>the basic commands to work with directories and files</li>
 </ul>
-<p>Throughout this demonstration, I encourage you to <code>ssh</code> into our remote server and follow along with the commands that I use.</p>
-<h2 id="visualizing-the-tree-structure"><a class="header" href="#visualizing-the-tree-structure">Visualizing the Tree Structure</a></h2>
-<p>First, the term <strong>file system</strong> may refer to different concepts. In come cases, it refers to how data is <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a> on a device like a hard drive, USB drive, etc. For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default, and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>. Linux and other unix-like operating systems use a variety of file systems. Presently, the two major ones include <strong>ext4</strong> and <strong>btrfs</strong>. The former is the default file system on distributions like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>, but the <a href="https://getfedora.org/">Fedora</a> distribution recently switched to the latter. <a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of file systems under this concept, and we will learn how to use some of them later in the semester when we will create partitions, manage disk volumes, and learn about backups.</p>
-<p>The other way that the term <strong>file system</strong> might be used is to refer to the directory structure of a system. This concept is not always directly related to the prior concept of a file system. For example, on Windows, the root file system is identified by a letter, like the <strong>C:</strong> drive regardless if the disk has a NTFS file system or a FAT file system. macOS adheres to a root file system like Linux and other unix-like operating systems. In these operating systems, we have a root, top-level directory identified by a <strong>/</strong>, and then sub-directories (or folders in GUI-speak) under that root directory. <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux.com</a> has a nice overview of the most common directory structure that Linux distributions use along with an explanation for the major bottom level directories.</p>
-<p>On Linux, we can visualize the filesystem with the <code>tree</code> command. </p>
+<blockquote>
+<p>Directories and folders are often used interchangeably, but
+as users of primarily graphical user interfaces,
+you are more likely familiar with the term <strong>folders</strong>.
+I will more often use the term <strong>directories</strong>
+since that is the command line (text user interface) convention.
+I will use the term <strong>folders</strong> when referring to a graphical environment.</p>
+</blockquote>
+<p>Throughout this demonstration,
+I encourage you to <code>ssh</code> into our remote server
+and follow along with the commands that I use.
+See <a href="02-quick-ssh-connect.md">Section 2.2</a>
+for details on connecting to the remote server.</p>
+<a class="header" href="./03-filesystem-file-management.html#visualizing-the-filesystem-as-a-tree" id="visualizing-the-filesystem-as-a-tree"><h2>Visualizing the Filesystem as a Tree</h2></a>
+<p>We will need to work within the filesystem
+quite a lot in this course,
+but the term <strong>filesystem</strong> may refer to different concepts,
+and it's important to clear that up before we start.</p>
+<p>In come cases, filesystem refers to how data is <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
+on a device like a hard drive, USB drive, etc.
+For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default,
+and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>.
+Linux and other unix-like operating systems use a variety of file systems, but
+presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
+The former is the default file system on distributions
+like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
+the latter is the default on the
+<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
+<a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of file systems under this concept,
+and we will learn how to use some of them later in the semester
+when we create partitions, manage disk volumes, and learn about backups.</p>
+<p>The other way that the term <strong>filesystem</strong> might be used is to refer
+to the directory structure of a system.
+This concept is not always directly related to the prior concept of a file system.
+For example, on Windows, the filesystem is identified by a letter, like the <strong>C:</strong> drive,
+regardless if the disk has a NTFS file system or a FAT file system.
+Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.),
+will be assigned their own letters (<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
+macOS adheres to a root file system like Linux and other unix-like operating systems.
+(This is because macOS is UNIX.)
+In these operating systems, we have a top-level <strong>root</strong> directory
+identified by a single forward slash  <strong>/</strong>,
+and then subdirectories under that root directory.
+Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are <strong>mounted</strong>
+under that root hierarchy and not separately like on Windows.
+<a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux.com</a> provides a nice overview of the most common directory structure
+that Linux distributions use along with an explanation for the major bottom level directories.</p>
+<p>On Linux, we can visualize the filesystem with the <code>tree</code> command.</p>
 <ul>
 <li><code>tree</code> : list contents of directories in a tree-like format
 <ul>
@@ -160,8 +147,9 @@
 </ul>
 </li>
 </ul>
-<h3 id="the-root-directory-and-its-base-level-directories"><a class="header" href="#the-root-directory-and-its-base-level-directories">The root Directory and its Base Level Directories</a></h3>
-<p>As explained on the Linux.com page, here are the major sub directories under <strong>/</strong>:</p>
+<a class="header" href="./03-filesystem-file-management.html#the-root-directory-and-its-base-level-directories" id="the-root-directory-and-its-base-level-directories"><h3>The root Directory and its Base Level Directories</h3></a>
+<p>As explained on the Linux.com page, here are the major sub directories under <strong>/</strong> (root)
+and a short description of their main purpose:</p>
 <ul>
 <li><code>/bin</code> : binary files needed to use the system</li>
 <li><code>/boot</code>  : files needed to boot the system</li>
@@ -182,109 +170,308 @@
 <li><code>/tmp</code> : temp files used by applications</li>
 <li><code>/var</code> : variable files, used often for system logs</li>
 </ul>
-<p>Although there are 18 directories listed here and that stem from the root directory, there are some that we'll use much more often than others. For example, since the <strong>/etc</strong> directory contains system configuration files, we will use the contents of this directory, along with the <strong>/var</strong> directory, quite a bit when we set up our web servers, relational database servers, and more. The <strong>/home</strong> directory is where our default home directories are stored, and thus if you manage a multi-user system, like I do for this class, then this will be an important directory. </p>
-<p>Source: [Linux Filesystem Explained][8]</p>
-<h2 id="basic-directory-and-file-commands"><a class="header" href="#basic-directory-and-file-commands">Basic Directory and File commands</a></h2>
-<p>In order to explore the above directories but also to create new ones and work with files, we need to know some basic commands. A lot of these commands are <a href="https://www.gnu.org/software/coreutils/manual/coreutils.html">GNU Coreutils</a>, and in this demo, we will specifically cover some of the following:</p>
+<p>Although there are 18 directories listed here
+that <strong>branch</strong> off from the root directory,
+there are some that we'll use much more often than others.
+For example, since the <strong>/etc</strong> directory contains system configuration files,
+we will use the contents of this directory,
+along with the <strong>/var</strong> directory,
+quite a bit when we set up our web servers, relational database servers,
+and more later in the semester.
+The <strong>/home</strong> directory is where our default home directories are stored,
+and thus if you manage a multi-user system,
+like I do for this class,
+then this will be an important directory to manage.</p>
+<p>Source: <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux Filesystem Explained</a></p>
+<a class="header" href="./03-filesystem-file-management.html#relative-and-absolute-paths" id="relative-and-absolute-paths"><h2>Relative and Absolute Paths</h2></a>
+<p>macOS users have the Finder app to navigate their filesystem,
+to move files to different folders, to copy files, to trash them, etc.
+Window users have File Explorer for these functions.
+Linux users have similar options,
+but all of these functions can be completed on the Linux command line, too,
+and generally more efficiently.
+But to get started, it does take learning two things first:</p>
+<ol>
+<li>how to specify the locations of files and directories in the filesystem</li>
+<li>the commands needed to work with the filesystem</li>
+</ol>
+<p>To help specify the locations of files and directories,
+there are two key concepts to know:</p>
+<ul>
+<li>absolute paths</li>
+<li>relative paths</li>
+</ul>
+<p>In the prior section,
+we learned about the <strong>/</strong> root directory and its subdirectories.
+All sorts of commands,
+especially those that deal with files and directories
+(like copying, moving, deleting),
+require us to specify on the command line
+the locations of the files and directories.
+It's common to specify the location in two different ways,
+by specifying their <strong>absolute</strong> path (or location) on the filesystem,
+or the <strong>relative</strong> location.</p>
+<p>To demonstrate, we might want to move around the filesystem.
+When we first log in to our remote system,
+our default location will be our home directory,
+sometimes referred to as <strong>$HOME</strong>.
+The path (location) to that directory will be:</p>
+<pre><code>/home/USER/
+</code></pre>
+<p>Where <strong>USER</strong> is your username.
+Therefore, since my username is <strong>sean</strong>,
+my home directory is located at:</p>
+<pre><code>/home/sean/
+</code></pre>
+<blockquote>
+<p>When I write <strong>$HOME</strong>,
+I am referring to a default, <strong>environmental</strong> variable
+that points to your home directory.
+It's <strong>variable</strong> because,
+depending on which account we're logged in as,
+<strong>$HOME</strong> will point to a different location.
+For me, then, that will be <code>/home/sean/</code>,
+if I'm logged in as <strong>sean</strong>.
+For you it'll point to your home directory.</p>
+</blockquote>
+<p>In my home directory,
+I have a subdirectory called <strong>public_html</strong>.
+The path to that is:</p>
+<pre><code>/home/sean/public_html/
+</code></pre>
+<p>In a program like Finder (macOS) or File Explorer (Windows),
+if I want to change my location to that subdirectory,
+then I'd double click on its folder icon.
+On the command line, however, I have to write out the command
+and the path to the subdirectory.
+Therefore, <strong>from my home directory</strong>,
+I use the following command to switch to the public_html subdirectory:</p>
+<pre><code>cd public_html
+</code></pre>
+<p>The above is an example of using a relative path, and
+that command would only be successful if I were
+first in my <strong>$HOME</strong> directory.
+That's because I specified the location of <strong>public_html</strong>
+relative to my default ($HOME) location.</p>
+<p>I could have also specified the absolute location,
+but this would be the wordier way.
+Since the <strong>public_html</strong> directory is in my $HOME directory,
+and my $HOME directory is in the <strong>/home</strong> directory,
+then to specify the absolute path in the above command,
+I'd do:</p>
+<pre><code>cd /home/sean/public_html
+</code></pre>
+<p>Again, the relative path specified above would only work if
+I was in my home directory, because
+<code>cd public_html</code> is relative to the location of <code>/home/sean/</code>.
+That is, the subdirectory <strong>public_html</strong> is in <strong>/home/sean/</strong>.
+But specifying the absolute path would work no matter where
+I was located in the filesystem.
+For example, if I was working on a file in the <code>/etc/apache2</code> directory,
+then using the absolute path (<code>cd /home/sean/public_html/</code>) would work.
+But the relative path (<code>cd public_html</code>) command would not since
+there is no subdirectory called <strong>public_html</strong>
+in the <code>/etc/apache2</code> directory.</p>
+<p>Understanding relative and absolute paths is
+one of the more difficult concepts for new command line users to learn,
+but after time, it'll feel natural.
+So just keep practicing, and
+I'll go over this throughout the semester.</p>
+<a class="header" href="./03-filesystem-file-management.html#basic-directory-and-file-commands" id="basic-directory-and-file-commands"><h2>Basic Directory and File commands</h2></a>
+<p>In order to explore the above directories
+but also to create new ones and work with files,
+we need to know some basic terminal commands.
+A lot of these commands are part of the base system
+called <a href="https://www.gnu.org/software/coreutils/manual/coreutils.html">GNU Coreutils</a>,
+and in this demo,
+we will specifically cover some of the following:</p>
 <ul>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Directory-listing">Directory Listing</a></li>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations">Basic Operations</a></li>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Special-file-types">Special File Types</a></li>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Printing-text">Printing Text</a></li>
 </ul>
-<h3 id="directory-listing"><a class="header" href="#directory-listing">Directory Listing</a></h3>
-<p>We have a few options to list directories, but the most common command is the <code>ls</code> command, and we use it like so:</p>
+<a class="header" href="./03-filesystem-file-management.html#directory-listing" id="directory-listing"><h3>Directory Listing</h3></a>
+<p>I have already demonstrated one command,
+the <code>cd</code> (change directory) command.
+This will be one of the most frequently used commands in your toolbox.</p>
+<p>In our current directory, or
+once we have changed to a new directory,
+we will want to learn its contents
+(what files and directories it contains).
+We have a few commands to list contents,
+but the most common command is the <code>ls</code> (list) command.
+We use it by typing the following two letters in the terminal:</p>
 <pre><code>ls
 </code></pre>
-<p>However, most commands can be used with <strong>options</strong>. In order to see what options are available for the <code>ls</code> command, we use look at it's <strong>man(ual) page</strong>:</p>
+<p>Most commands can be combined with <strong>options</strong>.
+Options provide additional functionality to the base command, and
+in order to see what options are available for the <code>ls</code> command,
+we use look at its <strong>man(ual) page</strong>:</p>
 <pre><code>man ls
-
 </code></pre>
-<p>From the <code>ls</code> <strong>man page</strong>, we learn that we can use the <code>-l</code> option to format the output of the <code>ls</code> command as a long-list, or a list that provides more information about the files and directories in the working directory.</p>
-<p>We can use the <code>-a</code> option to list hidden files. In Linux, hidden files are hidden from the default <code>ls</code> command if the files begin with a period. We have a number of those files in hour <strong>$HOME</strong> directories, and we can see them like so:</p>
+<p>From the <code>ls</code> <strong>man page</strong>,
+we learn that we can use the <code>-l</code> option to format
+the output of the <code>ls</code> command as a long-list,
+or a list that provides more information about
+the files and directories in the working directory.
+Later in the semester,
+I will talk more about what the other parts of output of this option mean.</p>
+<pre><code>ls -l
+</code></pre>
+<p>We can use the <code>-a</code> option to list hidden files.
+In Linux, hidden files are hidden from the default <code>ls</code> command
+if the files begin with a period.
+We have a some of those files in our <strong>$HOME</strong> directories,
+and we can see them like so:</p>
 <pre><code>ls -a
 </code></pre>
-<p>We can also combine options. For example, to view all files, including hidden ones, in the long-list format, we can use:</p>
+<p>We can also combine options.
+For example, to view all files,
+including hidden ones,
+in the long-list format,
+we can use:</p>
 <pre><code>ls -al
 </code></pre>
-<h2 id="basic-operations"><a class="header" href="#basic-operations">Basic Operations</a></h2>
-<p>Some basic operation commands include:</p>
+<a class="header" href="./03-filesystem-file-management.html#basic-file-operations" id="basic-file-operations"><h2>Basic File Operations</h2></a>
+<p>Some basic file operation commands include:</p>
 <ul>
 <li><code>cp</code> for copying files and directories</li>
 <li><code>mv</code> for moving (or renaming) files and directories</li>
 <li><code>rm</code> for removing (or deleting) files and directories</li>
 </ul>
-<p>These commands also have various options that can be viewed in their respective <strong>man pages</strong>. See:</p>
+<p>These commands also have various options
+that can be viewed in their respective <strong>man pages</strong>.
+Command options provide additional functionality to the base command,
+and are mostly (but not always) prepended with a dash and a letter or number.
+To see examples, type the following commands,
+which will launch the manual pages for them.
+Press <code>q</code> to exit the manual pages,
+and use your up and down arrow keys to scroll through the manuals:</p>
 <pre><code>man cp
 man mv
 man rm
 </code></pre>
-<p>Here are some ways to use these commands:</p>
-<h3 id="copy"><a class="header" href="#copy">copy</a></h3>
+<p>Here are some ways to use these commands and their options:</p>
+<a class="header" href="./03-filesystem-file-management.html#copying-files-and-directories" id="copying-files-and-directories"><h3>Copying Files and Directories</h3></a>
 <p>To copy an existing file to a new file:</p>
-<pre><code>cp file.txt newfile.txt
+<pre><code>cp file1.txt file2.txt
 </code></pre>
-<h3 id="move"><a class="header" href="#move">move</a></h3>
-<p>To move an existing file in our <strong>$HOME</strong> directory to a subdirectory, like into our <strong>public_html</strong> directory:</p>
-<pre><code>mv file.html public_html/file.html
+<p>Use the <code>-i</code> option to copy that file in interactive mode;
+that is, to prompt you before overwriting an existing file.</p>
+<p>We also use the <code>cp</code> command to copy directories.</p>
+<a class="header" href="./03-filesystem-file-management.html#moving-files-and-directories" id="moving-files-and-directories"><h3>Moving Files and Directories</h3></a>
+<p>The <code>mv</code> command will move an existing file to a different directory,
+and/or rename the file.
+For example, from within our home directory
+(therefore, using relative path names),
+to move a file named &quot;file.docx&quot;
+to a subdirectory named &quot;Documents&quot;:</p>
+<pre><code>mv file.docx Documents/
 </code></pre>
-<h3 id="rename"><a class="header" href="#rename">rename</a></h3>
-<p>To rename a file, we also use the <code>mv</code> command:</p>
-<pre><code>mv file.html newfile.html
+<p>To rename a file only (keeping it in the same directory),
+the command looks like this:</p>
+<pre><code>mv file.docx newName.docx
 </code></pre>
-<h3 id="move-and-rename"><a class="header" href="#move-and-rename">move and rename</a></h3>
-<p>To move and rename a file:</p>
-<pre><code>mv file.html public_html/newfile.html
+<p>To move the file to our Documents/ subdirectory and rename it,
+then we'd do this:</p>
+<pre><code>mv file.docx Documents/newName.docx
 </code></pre>
-<h3 id="remove-or-delete"><a class="header" href="#remove-or-delete">remove or delete</a></h3>
-<p>Finally, to delete a file:</p>
+<p>The <code>man</code> page for the <code>mv</code> command also describes an <code>-i</code> option
+for interactive mode that also helps prevent us from overwriting existing files.
+For example, if we have a file called <strong>paper.docx</strong> in our <strong>$HOME</strong> directory,
+and we have a file named <strong>paper.docx</strong> in our <strong>$HOME/Documents</strong> directory,
+and if these are actually two different papers (or files),
+then moving the file to that directory will overwrite it without asking.
+The <code>-i</code> option will prompt us first:</p>
+<pre><code>mv -i paper.docx Documents/paper.docx
+</code></pre>
+<a class="header" href="./03-filesystem-file-management.html#remove-or-delete" id="remove-or-delete"><h3>Remove or Delete</h3></a>
+<p>Finally, to delete a file, we use the <code>rm</code> command:</p>
 <pre><code>rm file.html
 </code></pre>
-<h2 id="special-file-types"><a class="header" href="#special-file-types">Special File Types</a></h2>
+<a class="header" href="./03-filesystem-file-management.html#special-file-types" id="special-file-types"><h2>Special File Types</h2></a>
 <p>For now, let's only cover two commands here:</p>
 <ul>
-<li><code>mkdir</code> for creating a new directory </li>
+<li><code>mkdir</code> for creating a new directory</li>
 <li><code>rmdir</code> for deleting a directory</li>
 </ul>
-<p>Like the above commands, these commands also have their own set of options that can be viewed in their respective <strong>man pages</strong>:</p>
+<p>Like the above commands,
+these commands also have their own set of options
+that can be viewed in their respective <strong>man pages</strong>:</p>
 <pre><code>man mkdir
 man rmdir
 </code></pre>
-<h3 id="make-or-create-a-new-directory"><a class="header" href="#make-or-create-a-new-directory">make or create a new directory</a></h3>
-<p>We use these commands like we do the ones above. If we are in our <strong>$HOME</strong> directory and we want to create a new directory, we do:</p>
-<pre><code>mkdir documents
+<a class="header" href="./03-filesystem-file-management.html#make-or-create-a-new-directory" id="make-or-create-a-new-directory"><h3>Make or Create a New Directory</h3></a>
+<p>We use these commands like we do the ones above.
+If we are in our <strong>$HOME</strong> directory and we want to create a new directory, we do:</p>
+<pre><code>mkdir bin 
 </code></pre>
+<blockquote>
+<p>The <strong>bin</strong> directory in our <strong>$HOME</strong> directory is a default location
+to store our personal applications, or applications (programs) that
+are only available to us.</p>
+</blockquote>
 <p>And if we run <code>ls</code>, we can see that it was successful.</p>
-<h3 id="delete-a-directory"><a class="header" href="#delete-a-directory">delete a directory</a></h3>
-<p>The <code>rmdir</code> command is a bit weird because it only removes <strong>empty</strong> directories. To remove the directory we just created, we use it like so:</p>
-<pre><code>rmdir documents
+<a class="header" href="./03-filesystem-file-management.html#delete-a-directory" id="delete-a-directory"><h3>Delete a Directory</h3></a>
+<p>The <code>rmdir</code> command is a bit weird because it only removes <strong>empty</strong> directories.
+To remove the directory we just created, we use it like so:</p>
+<pre><code>rmdir bin 
 </code></pre>
-<p>However, if you want to remove a directory that contains files or other sub-directories, then you will have to use the <code>rm</code> command along with the <code>-r</code> option:</p>
-<pre><code>rm -r directory-with-content
+<p>However, if you want to remove a directory that contains files or other subdirectories,
+then you will have to use the <code>rm</code> command along with the <code>-r</code> (recursive) option:</p>
+<pre><code>rm -r directory-with-content/
 </code></pre>
-<h2 id="printing-text"><a class="header" href="#printing-text">Printing Text</a></h2>
-<p>There a number of ways to print text to <strong>standard output</strong>, which is our screen by default in the terminal. We could redirect standard output to a file or to a printer or to a remote shell. We'll get to examples like that later in the semester. Here let's cover two commands:</p>
+<a class="header" href="./03-filesystem-file-management.html#printing-text" id="printing-text"><h2>Printing Text</h2></a>
+<p>There a number of ways to print text to <strong>standard output</strong>,
+which is our screen by default in the terminal.
+We could also redirect standard output to a file, to a printer, or to a remote shell.
+We'll see examples like that later in the semester.
+Here let's cover two commands:</p>
 <ul>
 <li><code>echo</code> to print a line of text to standard output</li>
 <li><code>cat</code> to concatenate and write files</li>
 </ul>
-<h3 id="print-to-screen"><a class="header" href="#print-to-screen">print to screen</a></h3>
+<blockquote>
+<p><strong>Standard output</strong> is by default the screen.
+When we <strong>print</strong> to standard output,
+then by default we print to the screen.
+However, standard output can be <strong>redirected</strong>
+to other files, programs, or devices, like actual printers.</p>
+</blockquote>
+<a class="header" href="./03-filesystem-file-management.html#print-to-screen" id="print-to-screen"><h3>Print to Screen</h3></a>
 <p>To use <code>echo</code>:</p>
 <pre><code>echo &quot;hello world&quot;
 echo &quot;Today is a good day.&quot;
 </code></pre>
-<h3 id="print-file-to-screen"><a class="header" href="#print-file-to-screen">print file to screen</a></h3>
-<p><code>cat</code> is listed elsewhere in the GNU Coreutils page. The primary use of the <code>cat</code> command is to join, combine, or concatenate files, but if used on a single file, it has this nice side effect of printing the content of the file to the screen:</p>
+<p>We can also <code>echo</code> variables:</p>
+<pre><code>a=4
+echo &quot;$a&quot;
+</code></pre>
+<a class="header" href="./03-filesystem-file-management.html#print-file-to-screen" id="print-file-to-screen"><h3>Print File to Screen</h3></a>
+<p><code>cat</code> is listed elsewhere in the GNU Coreutils page.
+The primary use of the <code>cat</code> command is to join, combine, or concatenate files,
+but if used on a single file,
+it has this nice side effect of printing the content of the file to the screen:</p>
 <pre><code>cat file.html
 </code></pre>
-<p>If the file is very long, we might want to use a <strong>pager</strong>. There are a few options, but the <code>less</code> command is very useful:</p>
+<p>If the file is very long, we might want to use what's called a <strong>pager</strong>.
+There are a few pagers to use, but the <code>less</code> command is a common one:</p>
 <pre><code>less file.html
 </code></pre>
-<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this demo, we learned about the file system or directory structure of Linux, and we also learned some basic command to work with directories and files. You should practice using these commands as much as possible. The more you use them, the easier it'll get. Also, be sure to review the <strong>man pages</strong> for each of the commands, especially to see what options are available for each of them.</p>
+<p>Like with the <strong>man pages</strong>,
+use the up and down arrow keys to scroll through the output,
+and press <strong>q</strong> to quit the pager.</p>
+<a class="header" href="./03-filesystem-file-management.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>In this demo, we learned about the file system or directory structure of Linux,
+and we also learned some basic command to work with directories and files.
+You should practice using these commands as much as possible.
+The more you use them, the easier it'll get.
+Also, be sure to review the <strong>man pages</strong> for each of the commands,
+especially to see what options are available for each of them.</p>
 <p>Basic commands covered in this demo include:</p>
 <ul>
-<li><code>ls</code> : list </li>
+<li><code>ls</code> : list</li>
 <li><code>man</code> : manual pages</li>
 <li><code>cp</code> : copy</li>
 <li><code>mv</code> : move or rename</li>
@@ -293,57 +480,63 @@ echo &quot;Today is a good day.&quot;
 <li><code>rmdir</code> : delete an empty directory</li>
 <li><code>echo</code> : print a line of text</li>
 <li><code>cat</code> : display contents of a file</li>
-<li><code>less</code> : display contents of a file by page </li>
+<li><code>less</code> : display contents of a file by page</li>
 <li><code>tree</code> : list contents of directories in a tree-like format</li>
 </ul>
 
-                    </main>
-
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="02-quick-ssh-connect.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-
-                            <a rel="next" href="04-file-attributes.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-
-                        <div style="clear: both"></div>
-                    </nav>
                 </div>
-            </div>
 
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="02-quick-ssh-connect.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="./02-quick-ssh-connect.html" class="mobile-nav-chapters previous" title="Previous chapter">
                         <i class="fa fa-angle-left"></i>
                     </a>
+                
 
-                    <a rel="next" href="04-file-attributes.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                
+                    <a rel="next" href="./04-file-attributes.html" class="mobile-nav-chapters next" title="Next chapter">
                         <i class="fa fa-angle-right"></i>
                     </a>
-            </nav>
+                
+
+            </div>
+
+            
+                <a href="./02-quick-ssh-connect.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="./04-file-attributes.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
 
         </div>
 
 
-
-
-        <script type="text/javascript">
-            window.playground_copyable = true;
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
         </script>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        
 
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        
 
-        <!-- Custom JS scripts -->
+        
 
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
 
     </body>
 </html>

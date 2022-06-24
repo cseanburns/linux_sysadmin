@@ -1,156 +1,100 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en">
     <head>
-        <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>DNS and Domain Names - Linux Systems Administration</title>
-
-
-        <!-- Custom HTML head -->
-        
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
 
-        <link rel="icon" href="favicon.svg">
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
         <link rel="shortcut icon" href="favicon.png">
-        <link rel="stylesheet" href="css/variables.css">
-        <link rel="stylesheet" href="css/general.css">
-        <link rel="stylesheet" href="css/chrome.css">
-        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
-        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
-        <!-- Custom theme stylesheets -->
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
 
     </head>
-    <body>
-        <!-- Provide site root to javascript -->
-        <script type="text/javascript">
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
-
-        <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
-            try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
-
-                if (theme.startsWith('"') && theme.endsWith('"')) {
-                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
-                }
-
-                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
-                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
-                }
-            } catch (e) { }
-        </script>
-
+    <body class="light">
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
-            var theme;
-            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
-            if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
-            html.classList.remove('no-js')
-            html.classList.remove('light')
-            html.classList.add(theme);
-            html.classList.add('js');
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script type="text/javascript">
-            var html = document.querySelector('html');
-            var sidebar = 'hidden';
-            if (document.body.clientWidth >= 1080) {
-                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
-                sidebar = sidebar || 'visible';
-            }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
         </script>
 
-        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li class="chapter-item expanded "><a href="p1-system-basics.html"><strong aria-hidden="true">2.</strong> System Basics</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">2.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-quick-ssh-connect.html"><strong aria-hidden="true">2.2.</strong> Connect to a Remote Server</a></li><li class="chapter-item expanded "><a href="03-filesystem-file-management.html"><strong aria-hidden="true">2.3.</strong> Linux Filesystems and File Management</a></li><li class="chapter-item expanded "><a href="04-file-attributes.html"><strong aria-hidden="true">2.4.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="05-text-processing-part-1.html"><strong aria-hidden="true">2.5.</strong> Text Processing, Part 1</a></li><li class="chapter-item expanded "><a href="06-text-processing-part-2.html"><strong aria-hidden="true">2.6.</strong> Text Processing, Part 2</a></li><li class="chapter-item expanded "><a href="07-text-editors.html"><strong aria-hidden="true">2.7.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="08-revisiting-paths.html"><strong aria-hidden="true">2.8.</strong> Revisiting Paths</a></li><li class="chapter-item expanded "><a href="09-bash-scripting.html"><strong aria-hidden="true">2.9.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="10-regular-expressions.html"><strong aria-hidden="true">2.10.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p2-managing-services-software.html"><strong aria-hidden="true">3.</strong> Managing Services and Software</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="11-installing-linux.html"><strong aria-hidden="true">3.1.</strong> Installing Linux in VirtualBox</a></li><li class="chapter-item expanded "><a href="12-logical-volumes.html"><strong aria-hidden="true">3.2.</strong> Logical Volume Management</a></li><li class="chapter-item expanded "><a href="13-virtualbox-nat.html"><strong aria-hidden="true">3.3.</strong> Using NAT in VirtualBox</a></li><li class="chapter-item expanded "><a href="14-webconsole-nat.html"><strong aria-hidden="true">3.4.</strong> NAT Table in VirtualBox</a></li><li class="chapter-item expanded "><a href="15-managing-users-groups.html"><strong aria-hidden="true">3.5.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="16-systemd.html"><strong aria-hidden="true">3.6.</strong> systemd</a></li><li class="chapter-item expanded "><a href="17-backup-and-using-dnf.html"><strong aria-hidden="true">3.7.</strong> Backups and DNF</a></li></ol></li><li class="chapter-item expanded "><a href="p3-networking-security.html"><strong aria-hidden="true">4.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="18-tcip-networking.html"><strong aria-hidden="true">4.1.</strong> TCIP Networking</a></li><li class="chapter-item expanded "><a href="19-networking-dns-domains.html" class="active"><strong aria-hidden="true">4.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="20-security-chroot.html"><strong aria-hidden="true">4.3.</strong> Security and chroot</a></li><li class="chapter-item expanded "><a href="21-security-firewall.html"><strong aria-hidden="true">4.4.</strong> Security and Firewalls</a></li></ol></li><li class="chapter-item expanded "><a href="p4-lamp.html"><strong aria-hidden="true">5.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="22-httpd-apache.html"><strong aria-hidden="true">5.1.</strong> Apache2 Web Server</a></li><li class="chapter-item expanded "><a href="23-httpd-php.html"><strong aria-hidden="true">5.2.</strong> Apache2 and PHP</a></li><li class="chapter-item expanded "><a href="24-httpd-virtualhosts.html"><strong aria-hidden="true">5.3.</strong> Apache2 and Virtual Hosts</a></li><li class="chapter-item expanded "><a href="25-httpd-mysql.html"><strong aria-hidden="true">5.4.</strong> Apache2 and MySQL</a></li></ol></li></ol>
-            </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
-        </nav>
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="./linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><a href="./p1-system-basics.html"><strong>2.</strong> System Basics</a></li><li><ul class="section"><li><a href="./01-history-linux-unix.html"><strong>2.1.</strong> History of Unix and Linux</a></li><li><a href="./02-quick-ssh-connect.html"><strong>2.2.</strong> Connect to a Remote Server</a></li><li><a href="./03-filesystem-file-management.html"><strong>2.3.</strong> Linux Filesystems and File Management</a></li><li><a href="./04-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="./05-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="./06-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="./07-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="./08-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="./09-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="./10-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="./p2-managing-services-software.html"><strong>3.</strong> Managing Services and Software</a></li><li><ul class="section"><li><a href="./11-installing-linux.html"><strong>3.1.</strong> Installing Linux in VirtualBox</a></li><li><a href="./12-logical-volumes.html"><strong>3.2.</strong> Logical Volume Management</a></li><li><a href="./13-virtualbox-nat.html"><strong>3.3.</strong> Using NAT in VirtualBox</a></li><li><a href="./14-webconsole-nat.html"><strong>3.4.</strong> NAT Table in VirtualBox</a></li><li><a href="./15-managing-users-groups.html"><strong>3.5.</strong> Managing Users and Groups</a></li><li><a href="./16-systemd.html"><strong>3.6.</strong> systemd</a></li><li><a href="./17-backup-and-using-dnf.html"><strong>3.7.</strong> Backups and DNF</a></li></ul></li><li><a href="./p3-networking-security.html"><strong>4.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="./18-tcip-networking.html"><strong>4.1.</strong> TCIP Networking</a></li><li><a href="./19-networking-dns-domains.html" class="active"><strong>4.2.</strong> DNS and Domain Names</a></li><li><a href="./20-security-chroot.html"><strong>4.3.</strong> Security and chroot</a></li><li><a href="./21-security-firewall.html"><strong>4.4.</strong> Security and Firewalls</a></li></ul></li><li><a href="./p4-lamp.html"><strong>5.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="./22-httpd-apache.html"><strong>5.1.</strong> Apache2 Web Server</a></li><li><a href="./23-httpd-php.html"><strong>5.2.</strong> Apache2 and PHP</a></li><li><a href="./24-httpd-virtualhosts.html"><strong>5.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="./25-httpd-mysql.html"><strong>5.4.</strong> Apache2 and MySQL</a></li></ul></li></ul>
+        </div>
 
         <div id="page-wrapper" class="page-wrapper">
 
-            <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
-                            <i class="fa fa-paint-brush"></i>
-                        </button>
-                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
-                        </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
-                            <i class="fa fa-search"></i>
-                        </button>
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
                     </div>
 
                     <h1 class="menu-title">Linux Systems Administration</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html" title="Print this book" aria-label="Print this book">
-                            <i id="print-button" class="fa fa-print"></i>
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
                         </a>
-
                     </div>
                 </div>
-
-                <div id="search-wrapper" class="hidden">
-                    <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                    </form>
-                    <div id="searchresults-outer" class="searchresults-outer hidden">
-                        <div id="searchresults-header" class="searchresults-header"></div>
-                        <ul id="searchresults">
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
-                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
-                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
-                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
-                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
-                    });
-                </script>
 
                 <div id="content" class="content">
-                    <main>
-                        <h1 id="introduction-to-dns-the-domain-name-system"><a class="header" href="#introduction-to-dns-the-domain-name-system">Introduction to DNS, the Domain Name System</a></h1>
-<h2 id="dns-intro-videos"><a class="header" href="#dns-intro-videos">DNS Intro Videos</a></h2>
+                    <a class="header" href="./19-networking-dns-domains.html#introduction-to-dns-the-domain-name-system" id="introduction-to-dns-the-domain-name-system"><h1>Introduction to DNS, the Domain Name System</h1></a>
+<a class="header" href="./19-networking-dns-domains.html#dns-intro-videos" id="dns-intro-videos"><h2>DNS Intro Videos</h2></a>
 <p>Two helpful YouTube videos. The first one provides an overview of the DNS system:</p>
 <p><a href="https://www.youtube.com/watch?v=mpQZVYPuDGU">How a DNS Server (Domain Name System) works</a></p>
 <p>The second video illustrates how to use a GUI to create and manage DNS records.</p>
 <p><a href="https://www.youtube.com/watch?v=cwT82ibOM2Q">DNS Records</a></p>
 <p>Here is a nice intro to recursive DNS:</p>
 <p><a href="https://www.cloudflare.com/learning/dns/what-is-recursive-dns/">https://www.cloudflare.com/learning/dns/what-is-recursive-dns/</a></p>
-<h2 id="fqdn-the-fully-qualified-domain-name"><a class="header" href="#fqdn-the-fully-qualified-domain-name">FQDN: The Fully Qualified Domain Name</a></h2>
+<a class="header" href="./19-networking-dns-domains.html#fqdn-the-fully-qualified-domain-name" id="fqdn-the-fully-qualified-domain-name"><h2>FQDN: The Fully Qualified Domain Name</h2></a>
 <p>The structure of the domain name system is like the structure of the UNIX/Linux file hierarchy; that is, it is like an inverted tree.</p>
 <p>The fully qualified domain name includes a period at the end of the top-level domain. Your browser is able to supply that dot since we often don't use it when typing website addresses.</p>
 <p>Thus, for Google's main page, the FQDN is:</p>
@@ -162,9 +106,9 @@ google.     second-level domain
 www.        third-level domain
 </code></pre>
 <p>This is important to know so that you understand how the <strong>Domain Name System</strong> works and which DNS servers are responsible for their part of the network.</p>
-<h3 id="root-domain"><a class="header" href="#root-domain">Root domain</a></h3>
+<a class="header" href="./19-networking-dns-domains.html#root-domain" id="root-domain"><h3>Root domain</h3></a>
 <p>The root domain is managed by root name servers. These servers are listed on the <a href="https://www.iana.org/domains/root/servers">IANA</a>, the Internet Assigned Numbers Authority, website, but are managed by multiple operators. The root servers manage the root domain, alternatively referred to as the zone, or the <code>.</code> at the end of the <code>.com.</code>, <code>.edu.</code>, etc.</p>
-<h4 id="alternative-dns-root-systems"><a class="header" href="#alternative-dns-root-systems">Alternative DNS root systems</a></h4>
+<a class="header" href="./19-networking-dns-domains.html#alternative-dns-root-systems" id="alternative-dns-root-systems"><h4>Alternative DNS root systems</h4></a>
 <p>Aside: It's possible to have alternate internets by using outside root name servers. This is not common, but it happens. Read about a few of them here:</p>
 <ul>
 <li>sdf: <a href="https://web.archive.org/web/20081121061730/http://www.smtpnic.org/">https://web.archive.org/web/20081121061730/http://www.smtpnic.org/</a></li>
@@ -172,7 +116,7 @@ www.        third-level domain
 <li>alternic: <a href="https://en.wikipedia.org/wiki/AlterNIC">https://en.wikipedia.org/wiki/AlterNIC</a></li>
 </ul>
 <p>Russia, as an example, has threated to use it's own alternate internet based on a different DNS root system. This would essentially create a large, second internet. You can read about in this <a href="https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet">IEEE Spectrum article</a>.</p>
-<h3 id="top-level-domain-tld"><a class="header" href="#top-level-domain-tld">Top level domain (TLD)</a></h3>
+<a class="header" href="./19-networking-dns-domains.html#top-level-domain-tld" id="top-level-domain-tld"><h3>Top level domain (TLD)</h3></a>
 <p>We are all familiar with top level domains. Specific examples include:</p>
 <ul>
 <li>generic names: .org, .com, .net, .mil, .gov</li>
@@ -183,9 +127,9 @@ www.        third-level domain
 sed '1d' tlds-alpha-by-domain.txt | wc -l
 1495
 </code></pre>
-<h3 id="second-level-domain-names"><a class="header" href="#second-level-domain-names">Second-level domain names</a></h3>
+<a class="header" href="./19-networking-dns-domains.html#second-level-domain-names" id="second-level-domain-names"><h3>Second-level domain names</h3></a>
 <p>In the Google example, the second level domain is <strong>google</strong>. Other examples include: <strong>redhat</strong> in <strong>redhat.com</strong> and <strong>debian</strong> in <strong>debian.org</strong>. <a href="https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364">Soyinka, (2016)</a> refers to this part of the FQDN as that which makes up the &quot;organizational boundary of the namespace&quot; (p. 425).</p>
-<h3 id="third-level-domain-names--hostnames--subdomains"><a class="header" href="#third-level-domain-names--hostnames--subdomains">Third-level domain names / hostnames / subdomains</a></h3>
+<a class="header" href="./19-networking-dns-domains.html#third-level-domain-names--hostnames--subdomains" id="third-level-domain-names--hostnames--subdomains"><h3>Third-level domain names / hostnames / subdomains</h3></a>
 <p>When you've purchased (leased) a top and second level domain like getfedora.org, you can choose whether you employ third level domains. For example: www is a third level domain. If you owned <code>example.org</code>, you could also have <code>www.example.org</code> resolve to a different location, or, <code>www.example.org</code> could resolve to the second-level domain itself. That is:</p>
 <ul>
 <li>www.debian.org can point to debian.org</li>
@@ -203,7 +147,7 @@ sed '1d' tlds-alpha-by-domain.txt | wc -l
 </li>
 </ul>
 <p>This is because those other three provide different, but specific services.</p>
-<h2 id="dns-paths"><a class="header" href="#dns-paths">DNS Paths</a></h2>
+<a class="header" href="./19-networking-dns-domains.html#dns-paths" id="dns-paths"><h2>DNS Paths</h2></a>
 <p>Recursive DNS is the first DNS server to be queried in the DNS system. This is the resolver server in the first video above. This server queries itself (recursive) to check if the domain to IP mapping has been cached in its system.</p>
 <p>If it hasn't been cached, then the DNS query is <em>forwarded</em> to a root server and and so forth down the line.</p>
 <p>We can use the <code>dig</code> command to query the non-cached DNS paths. Let's say we want to follow the DNS path for <strong>google.com</strong>, then we can start by querying any <a href="https://www.iana.org/domains/root/servers">root server</a>. In the output, we wan to pay attention to the QUERY field, the ANSWER field, and the Authority Section:</p>
@@ -216,7 +160,7 @@ sed '1d' tlds-alpha-by-domain.txt | wc -l
 <pre><code>dig @216.239.34.10 google.com
 </code></pre>
 <p>And now we finally get our answer, which is that <strong>google.com</strong> resolves to 142.250.190.78, at least for me and at this instant.</p>
-<h3 id="dns-record-types"><a class="header" href="#dns-record-types">DNS Record types</a></h3>
+<a class="header" href="./19-networking-dns-domains.html#dns-record-types" id="dns-record-types"><h3>DNS Record types</h3></a>
 <ul>
 <li>SOA:    Start of Authority: describes the site's DNS entries
 <ul>
@@ -235,7 +179,7 @@ google.com.     IN      A       142.251.32.78
 <li>MX:     Mail exchanger: the MX record maps your email server.</li>
 <li>CNAME:  Canonical name: used so that a domain name may act as an alias for another domain name. Thus, say someone visits www.example.org, but if no subdomain is set up for www, then the CNAME can point to example.org.</li>
 </ul>
-<h3 id="dns-toolbox"><a class="header" href="#dns-toolbox">DNS Toolbox</a></h3>
+<a class="header" href="./19-networking-dns-domains.html#dns-toolbox" id="dns-toolbox"><h3>DNS Toolbox</h3></a>
 <p>It's important to be able to troubleshoot DNS issues. To do that, we have a few utilities available. Here are examples and you should read the <code>man</code> pages for each one:</p>
 <p><code>host</code>: resolve hostnames to IP Address; or IP addresses to hostnames</p>
 <pre><code>man -f host
@@ -274,53 +218,59 @@ cat /etc/resolv.conf
 resolvectl status
 </code></pre>
 
-                    </main>
-
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="18-tcip-networking.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                                <i class="fa fa-angle-left"></i>
-                            </a>
-
-                            <a rel="next" href="20-security-chroot.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
-
-                        <div style="clear: both"></div>
-                    </nav>
                 </div>
-            </div>
 
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="18-tcip-networking.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="./18-tcip-networking.html" class="mobile-nav-chapters previous" title="Previous chapter">
                         <i class="fa fa-angle-left"></i>
                     </a>
+                
 
-                    <a rel="next" href="20-security-chroot.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                
+                    <a rel="next" href="./20-security-chroot.html" class="mobile-nav-chapters next" title="Next chapter">
                         <i class="fa fa-angle-right"></i>
                     </a>
-            </nav>
+                
+
+            </div>
+
+            
+                <a href="./18-tcip-networking.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="./20-security-chroot.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
 
         </div>
 
 
-
-
-        <script type="text/javascript">
-            window.playground_copyable = true;
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
         </script>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        
 
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
 
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+        
 
-        <!-- Custom JS scripts -->
+        
 
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
 
     </body>
 </html>
