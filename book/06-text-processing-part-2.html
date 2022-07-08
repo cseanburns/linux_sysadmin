@@ -88,20 +88,67 @@
                 <div id="content" class="content">
                     <a class="header" href="./06-text-processing-part-2.html#processing-data-grep-sed-awk-part-2" id="processing-data-grep-sed-awk-part-2"><h1>Processing Data: Grep, Sed, Awk (Part 2)</h1></a>
 <a class="header" href="./06-text-processing-part-2.html#introduction" id="introduction"><h2>Introduction</h2></a>
-<p>Hi Class -- in this demo, I will cover three additional utilities for processing text: <code>grep</code>, <code>sed</code>, and <code>awk</code>. This page contains the entire transcript for the three programs, but I will break the video up into the three respective parts.</p>
-<p>Thus far in class, we have learned about commands like <code>wc</code>, <code>cat</code>, <code>cut</code>, <code>head</code>, <code>tail</code>, <code>sort</code>, and <code>uniq</code>. There are other utilities that help us process data, and these include:</p>
+<p>In the last section, we covered the
+<code>cat</code>, <code>cut</code>, <code>head</code>, <code>sort</code>, <code>tail</code>, <code>uniq</code>, and <code>wc</code> utilities.</p>
+<p>We also learned about the <code>|</code> pipe operator,
+which we use to redirect <strong>standard output</strong>
+from one command
+to a second command so that second command
+can process the output from the first command.
+An example is:</p>
+<pre><code>sort file.txt | uniq
+</code></pre>
+<p>This sorts the lines in a file named <strong>file.txt</strong> and
+then prints to standard output only the unique lines
+(by the way, files must be sorted before piped to <code>uniq</code>).</p>
+<p>We learned about the <code>&gt;</code> and <code>&gt;&gt;</code> redirect operators.
+They work like the pipe operator, but
+instead of directing output to a new command
+for the new command to process,
+they direct output to a file for saving.
+As a reminder,
+the single redirect <code>&gt;</code> overwrites a file or creates a file
+if it does not exist.
+The double redirect <code>&gt;&gt;</code> appends to a file or
+creates a file if it does not exist.
+It's safer to use the double redirect, but
+if you are processing large amounts of data,
+it could also mean creating large files really quickly.
+If that gets out of hand,
+then you might crash your system.
+To build on our prior example,
+we can add <code>&gt;&gt;</code> to send the output to
+a new file called <strong>output.txt</strong>:</p>
+<pre><code>sort file.txt | uniq &gt;&gt; output.txt
+</code></pre>
+<p>We have available more powerful utilities and programs
+to process, manipulate, and analyze text files.
+In this section, we will cover the following three of these:</p>
 <ul>
-<li><code>join</code> for joining lines of two files on a common field</li>
-<li><code>paste</code> for merging lines of files</li>
+<li><code>grep</code> : print lines that match patterns</li>
+<li><code>sed</code>  : stream editor for filtering and transforming text</li>
+<li><code>awk</code>  : pattern scanning and text processing language</li>
 </ul>
-<p>We have learned about the <code>|</code> pipe operator, which we use to redirect <strong>standard output</strong> to a different command so that second (or third) command can process the output. An example is: <code>sort file | uniq</code>, which sorts a file first and then identifies the unique lines (by the way, files must be sorted before piped to <code>uniq</code>).</p>
-<p>We have learned about the <code>&gt;</code> and <code>&gt;&gt;</code> redirect operators. They work like the pipe operator, but instead of directing output to a new command for the new command to process, they direct output to a file. As a reminder, the single redirect <code>&gt;</code> will overwrite a file or create a file if it does not exist. The double redirect <code>&gt;&gt;</code> will append to an existing file or create a file if it does not exist. It's safer thus to use the double redirect, but if you are processing large amounts of data, it could also mean creating really large files really quickly. If that gets out of hand, then you might crash your system.</p>
-<p>The real magic of the Linux command line (and other Unix-like OSes) is this ability to use the pipe and redirect operators to string together multiple commands like the ones that we have covered and to redirect output to files.</p>
-<a class="header" href="./06-text-processing-part-2.html#grep-sed-and-awk" id="grep-sed-and-awk"><h2>Grep, Sed, and Awk</h2></a>
-<p>In addition to the above commands (or utilities) described above, we have additional, and very powerful, programs available to us for processing data. In this demo, I will introduce us to these, and they include <code>grep</code>, <code>sed</code>, and <code>awk</code>. I use these more than I use some of the utilities we have covered so far.</p>
-<a class="header" href="./06-text-processing-part-2.html#grep" id="grep"><h3>Grep</h3></a>
-<p>The <code>grep</code> command is one of my most often used commands. Basically, <code>grep</code> &quot;prints lines that match patterns&quot; (see <code>man grep</code>). In other words, it's search, and it's super powerful.</p>
-<p><code>grep</code> works line by line. So when we use it to search a file for a string of text, it will return the whole line that includes the match. Remember, this <strong>line by line</strong> idea is part of the history of Unix-like operating systems, and it's super important to remember that most utilities and programs that we use on the command line have this as the basis of their approach.</p>
+<a class="header" href="./06-text-processing-part-2.html#grep" id="grep"><h2>Grep</h2></a>
+<p>The <code>grep</code> command is one of my most often used commands.
+Basically, <code>grep</code> &quot;prints lines that match patterns&quot;
+(see <code>man grep</code>).
+In other words, it's search, and
+it's super powerful.</p>
+<p><code>grep</code> works line by line.
+So when we use it to search a file for a <strong>string</strong> of text,
+it will return the whole line that matches the string.
+This <strong>line by line</strong> idea is part of the history of
+Unix-like operating systems,
+and it's super important to remember that most utilities
+and programs that we use on the commandline
+are line oriented.</p>
+<blockquote>
+<p>&quot;A string is any series of characters that are interpreted
+literally by a script. For example, 'hello world' and 'LKJH019283'
+are both examples of strings.&quot; -- <a href="https://www.computerhope.com/jargon/s/string.htm">Computer Hope</a>.
+More generally, it's the literal characters that we type. It's data.</p>
+</blockquote>
 <p>Let's consider the file <strong>operating-systems.csv</strong>, as seen below:</p>
 <pre><code>OS, License, Year
 Chrome OS, Proprietary, 2009
@@ -111,161 +158,617 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
-<p><strong>Quick note:</strong> In the code snippets below, and like in many of my examples, lines starting with a pound sign <strong>#</strong> signal a comment that explains the purpose of the command that follows on the next line.</p>
-<pre><code># to search for a string; here we search for the string &quot;Chrome&quot;
-grep &quot;Chrome&quot; operating-systems.csv
-# repeat the search by be case insensitive; the default is case sensitive
+<p>If we want to search for the string <strong>Chrome</strong>,
+we can use <code>grep</code>.
+Notice that even though the string <strong>Chrome</strong> only appears once,
+and in one part of a line,
+<code>grep</code> returns the entire line.</p>
+<pre><code>grep &quot;Chrome&quot; operating-systems.csv
+Chrome OS, Proprietary, 2009
+</code></pre>
+<p>Be aware that, by default, <code>grep</code> is case-sensitive,
+which means a search for the string <strong>chrome</strong>,
+with a lower case <strong>c</strong>,
+would return no results.
+Fortunately, <code>grep</code> has an <code>-i</code> option,
+which means to ignore the case of the search string.
+In the following examples, <code>grep</code> returns nothing in the first search
+since we do not capitalize the string <strong>chrome</strong>.
+However, adding the <code>-i</code> option results in success:</p>
+<pre><code>grep &quot;chrome&quot; operating-systems.csv
 grep -i &quot;chrome&quot; operating-systems.csv
-# return lines that do not match and that are case insensitive
-grep -vi &quot;chrome&quot; operating-systems.csv
+Chrome OS, Proprietary, 2009
 </code></pre>
-<p>I used the <code>tail</code> command in class to show how we might use that to remove the header (1st line) in a file, but I don't use <code>tail</code> very often because I have <code>grep</code>. Part of the power with <code>grep</code> is that we can use what are called regular expressions (<strong>regex</strong> for short). Regex is a method used to identify patterns in text via abstractions. They can get complicated, but we can use some easy regex methods.</p>
-<pre><code># remove the first line from the output; the carat indicates the start of the line
-# thus, this returns results that do not match lines where the start of the line begins with &quot;os&quot;
-grep -vi &quot;^os&quot; operating-systems.csv
-# remove the first line from the output; the dollar sign indicates the end of the line
-# thus, this returns results that do not match lines where the start of the line ends with &quot;year&quot;
-grep -vi &quot;year$&quot; operating-systems.csv
+<p>We can also search for lines that <strong>do not</strong> match our string
+using the <code>-v</code> option.
+We can combine that with the <code>-i</code> option to ignore the string's case.
+Therefore, in the following example,
+all lines that do not contain the string <strong>chrome</strong> are returned:</p>
+<pre><code>grep -vi &quot;chrome&quot; operating-systems.csv
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
 </code></pre>
-<p>Other <code>grep</code> options:</p>
-<pre><code># returns lines that have the string &quot;proprietary&quot;
-grep -i &quot;proprietary&quot; operating-systems.csv
-# get a count of those lines
-grep -ic &quot;proprietary&quot; operating-systems.csv
-# print only the match and not the whole line
-grep -io &quot;proprietary&quot; operating-systems.csv
-
+<p>I used the <code>tail</code> command in the prior section to show
+how we might use <code>tail</code> to remove the header (1st line) line in a file,
+but it's an odd use of the <code>tail</code> command,
+which normally just returns the last lines of a file.
+Instead, we can use <code>grep</code> to remove the first line.
+To do so, we use what's called a <strong>regular expression</strong>,
+or <strong>regex</strong> for short.
+Regex is a method used to identify patterns in text via abstractions.
+They can get complicated, but we can use some easy regex methods.</p>
+<p>Let's use a version of the above file with the header line:</p>
+<pre><code>cat operating-systems.csv
+OS, License, Year
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
 </code></pre>
-<a class="header" href="./06-text-processing-part-2.html#sed" id="sed"><h3>Sed</h3></a>
-<p>I spoke about the <code>ed</code> command. That and editors like <code>vi</code> or <code>vim</code> all belong to the same family of programs. <code>sed</code> belongs to this family, too. Specifically, <code>sed</code> is a &quot;stream editor ... used to perform basic text transformations on an input stream (a file or input from a pipeline&quot;) (see <code>man sed</code>). By default, <code>sed</code> works on <strong>standard output</strong>, but it can be used to edit and write to files.</p>
-<p>Like <code>ed</code>, <code>vim</code>, and <code>grep</code>, <code>sed</code> works line by line. Unlike <code>grep</code>, <code>sed</code> uses <strong>addresses</strong> to specify lines or ranges of lines, and these addresses are followed by a command.</p>
-<p>All text files are considered to have lines that start with the number 1. So another way to remove the header line of our <strong>operating-systems.csv</strong> file is to simply delete the first line:</p>
-<pre><code># delete (d command) line one from standard output; 
-sed '1d' operating-systems.csv
+<p>To use <code>grep</code> to remove the first line of a file,
+we can invert our search to select all lines not matching
+&quot;OS&quot; at the start of a line.
+Here the carat key <code>^</code> is a <strong>regex</strong> indicating the
+start of a line.
+Again, this <code>grep</code> command returns all lines that
+do not match the string <strong>os</strong> at the start of a line,
+ignoring case:</p>
+<pre><code>grep -vi &quot;^os&quot; operating-systems.csv
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
 </code></pre>
-<p>If I wanted to make that a permanent deletion, then I would use the <code>-i</code> option, which means that I would edit the file in place (see <code>man sed</code>).</p>
-<pre><code># Let's work on a copy and not the original file just for the example
-cp operating-systems.csv os.csv
-# now let's delete the first line from standard output
-sed -i '1d' os.csv
+<p>Alternatively, since we know that the string <strong>Year</strong> comes
+at the end of the first line,
+we can use <code>grep</code> to invert search for that.
+Here the dollar sign key <code>$</code> is a <strong>regex</strong> indicating the
+end of a line.
+Like the above, this <code>grep</code> command returns all lines that
+do not match the string <strong>year</strong> at the end of a line,
+ignoring case:</p>
+<pre><code>grep -vi &quot;year$&quot; operating-systems.csv
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
 </code></pre>
-<p>To refer to line <strong>ranges</strong>, then I add a comma between <strong>addresses</strong>:</p>
-<pre><code># delete the lines one through three; you would add the -i option to edit the file inplace
-sed '1,3d' operating-systems.csv
+<p>The <code>man grep</code> page lists other options,
+but a couple of other good ones include:</p>
+<p>Get a count of the matching lines with the <code>-c</code> option:</p>
+<pre><code>grep -ic &quot;proprietary&quot; operating-systems.csv
+4
 </code></pre>
-<p>I can use <code>sed</code> to <strong>find and replace</strong> strings:</p>
-<pre><code># find string &quot;Linux&quot; and replace with &quot;GNU/Linux&quot;
-# the 's' command means search
-# the string within after the forward slash indicates the search term
-# the string after the second forward slash indicates the replace term
-# the \ is an escape character so that sed interprets the forward slash literally
-# the ending 'g' command means &quot;global&quot;, or all instances.
-# Without it, it would stop after the first instance
-
-sed 's/Linux/GNU\/Linux/g' operating-systems.csv
+<p>Print only the match and not the whole line with the <code>-o</code> option:</p>
+<pre><code>grep -io &quot;proprietary&quot; operating-systems.csv
+Proprietary
+Proprietary
+Proprietary
+Proprietary
 </code></pre>
-<p>I can append <code>a</code> or insert <code>i</code> text:</p>
-<pre><code># append line after line 3 with the 'a' command
-sed '3a iOS, Proprietary, 2007' operating-systems.csv
-# insert line at line 3 with the 'i' command
-sed '3i iOS, Proprietary, 2007' operating-systems.csv
+<p>Print lines matching different strings using the <code>-E</code> option and
+separating the different strings with a vertical bar <code>|</code>.
+This is similar to a Boolean OR search;
+since there's at least one match in the following string,
+there is at least one result:</p>
+<pre><code>grep -Ei &quot;bsd|atari&quot; operating-systems.csv
+FreeBSD, BSD, 1993
 </code></pre>
-<p>For example, say I forgot to add the <strong>shebang</strong> at the top of a script named <strong>test.sh</strong>, I could use <code>sed</code> like so (<strong>Note:</strong> the above command will only work on a non-empty file):</p>
-<pre><code>sed -i '1i #!/usr/bin/bash' test.sh
+<p>Since both &quot;bsd&quot; and &quot;gpl&quot; are in the file,
+both lines are returned:</p>
+<pre><code>grep -Ei &quot;bsd|gpl&quot; operating-systems.csv
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
 </code></pre>
-<a class="header" href="./06-text-processing-part-2.html#awk" id="awk"><h3>Awk</h3></a>
-<p><code>awk</code> or <code>gawk</code> is a complete scripting language for &quot;pattern scanning and processing&quot; text (see <code>man awk</code>). It's a powerful language, and its focus is on columns of structured data.</p>
-<p>In <code>awk</code>, columns of a file are identified by a dollar sign and then the number of the column. So, <code>$1</code> indicates column 1, and <code>$2</code> indicates column 2. If we use <code>$0</code>, then we refer to the entire file.</p>
-<p>The syntax for <code>awk</code> is a little different. Basically, <code>awk</code> uses the following syntax, where <strong>pattern</strong> is optional.</p>
+<p>Print context surrounding matching lines.
+For example, print the matching line plus the two lines
+after the matching line using the <code>-A NUM</code> option:</p>
+<pre><code>grep -i &quot;chrome&quot; -A 2 operating-systems.csv
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+</code></pre>
+<p>Or, print the matching line plus the two lines
+before the matching line using the <code>-B NUM</code> option:</p>
+<pre><code>grep -i &quot;android&quot; -B 2 operating-systems.csv
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p><code>grep</code> is very powerful, and
+there are more options listed in its <code>man</code> page.</p>
+<blockquote>
+<p>Note that I enclose my search strings in double quotes.
+For example, ``grep &quot;search string&quot; filename.txt
+It's not always required to enclose search strings
+in double quotes,
+but it's good practice,
+especially if your string contains more than one word or
+empty spaces.</p>
+</blockquote>
+<a class="header" href="./06-text-processing-part-2.html#sed" id="sed"><h2>Sed</h2></a>
+<p><code>sed</code> is a type of non-interactive text editor
+that filters and transforms text (<code>man sed</code>).
+By default <code>sed</code> works on <strong>standard output</strong>,
+and edits can be redirected (<code>&gt;</code> or <code>&gt;&gt;</code>) to new files
+or made <strong>in-place</strong>.</p>
+<p>Like the other utilities and programs we've covered,
+including <code>grep</code>,
+<code>sed</code> works line by line.
+But unlike <code>grep</code>,
+<code>sed</code> provides a way to <strong>address</strong>
+specific lines or ranges of lines,
+and then run filters or transformations on those lines.
+Once the lines in a text file have been identified or addressed,
+<code>sed</code> offers a number of commands to filter or transform the text
+at those specific lines.</p>
+<p>This concept of the line address is important, but
+not all text files are explicitly numbered by each line.
+Below I use the <code>nl</code> command to number lines in our file,
+even though the contents of the file do not actually display line numbers:</p>
+<pre><code>nl operating-systems.csv
+     1	OS, License, Year
+     2	Chrome OS, Proprietary, 2009
+     3	FreeBSD, BSD, 1993
+     4	Linux, GPL, 1991
+     5	iOS, Proprietary, 2007
+     6	macOS, Proprietary, 2001
+     7	Windows NT, Proprietary, 1993
+     8	Android, Apache, 2008
+</code></pre>
+<p>After we've identified the lines in a file that we want to edit,
+<code>sed</code> offers commands to filter, transform, or edit
+the text at the line addresses.
+Some of these commands include:</p>
+<ul>
+<li><code>a</code> : appending text</li>
+<li><code>c</code> : replace text</li>
+<li><code>d</code> : delete text</li>
+<li><code>i</code> : inserting text</li>
+<li><code>p</code> : print text</li>
+<li><code>r</code> : append text from file</li>
+<li><code>s</code> : substitute text</li>
+<li><code>=</code> : print the current line number</li>
+</ul>
+<p>Let's see how to use <code>sed</code> and that last command, the equal sign <code>=</code>, to identify line
+numbers (although it places the line numbers just above each line):</p>
+<pre><code>sed '=' operating-systems.csv
+1
+OS, License, Year
+2
+Chrome OS, Proprietary, 2009
+3
+FreeBSD, BSD, 1993
+4
+Linux, GPL, 1991
+5
+iOS, Proprietary, 2007
+6
+macOS, Proprietary, 2001
+7
+Windows NT, Proprietary, 1993
+8
+Android, Apache, 2008
+</code></pre>
+<p>Using <code>sed</code>, another another way to remove the header line
+of the <strong>operating-systems.csv</strong> file is to specify the line number (<code>1</code>)
+and then the delete command (<code>d</code>) in order to delete the first line:</p>
+<pre><code>sed '1d' operating-systems.csv
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<blockquote>
+<p>Note that I use single apostrophes for the <code>sed</code> command.
+This is required.</p>
+</blockquote>
+<p>If I wanted to make that a permanent deletion,
+then I would use the <code>-i</code> option,
+which means that I would edit the file <strong>in-place</strong> (see <code>man sed</code>):</p>
+<pre><code>sed -i '1d' operating-system.csv
+</code></pre>
+<p>To refer to line <strong>ranges</strong>, then I add a comma between <strong>addresses</strong>.
+Therefore, to edit lines 1, 2, and 3:</p>
+<pre><code>sed '1,3d' operating-systems.csv
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p>I can use <code>sed</code> to <strong>find and replace</strong> strings.
+The syntax for this is:</p>
+<pre><code>sed 's/regexp/replacement/' filename.txt
+</code></pre>
+<p>The <strong>regexp</strong> part of the above command can take regular expressions, but
+simple strings, like words, work here, too, since they are treated as
+regular expressions themselves.</p>
+<p>In the next example,
+I use <code>sed</code> to search for the string &quot;Linux&quot;,
+and replace it with the string &quot;GNU/Linux&quot;:</p>
+<pre><code>sed 's/Linux/GNU\/Linux/' operating-systems.csv
+OS, License, Year
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+GNU/Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<blockquote>
+<p>Because the string <strong>GNU/Linux</strong> contains a forward slash,
+and because <code>sed</code> uses the forward slash as a separator,
+you will notice that I <strong>escaped</strong> the forward slash with a back slash
+in the above <code>sed</code> command.
+This escape tells <code>sed</code> to interpret the forward slash in <strong>GNU/Linux</strong>
+literally and not as a special <code>sed</code> character.</p>
+</blockquote>
+<p>If we want to add new rows to the file,
+we can append <code>a</code> or insert <code>i</code> text after or at specific lines:</p>
+<p>To append text after line 3, use <code>a</code>:</p>
+<pre><code>sed '3a FreeDOS, GPL, 1998' operating-systems.csv
+OS, License, Year
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+FreeDOS, GPL, 1998
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p>To insert at line 2, use <code>i</code>:</p>
+<pre><code>sed '3i CP\/M, Proprietary, 1974' operating-systems.csv
+OS, License, Year
+Chrome OS, Proprietary, 2009
+CP/M, Proprietary, 1974
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p>Note that the FreeDOS line doesn't appear in the second output.
+This is because I didn't use the <code>-i</code> option nor
+did I redirect output to a new file.
+If we want to edit the file <strong>in-place</strong>,
+that is, save the edits,
+then the commands would look like so:</p>
+<pre><code>sed -i '3a FreeDOS, GPL, 1998' operating-systems.csv
+sed -i '3i CP\/M, Proprietary, 1974' operating-systems.csv
+</code></pre>
+<p>Instead of using line numbers to specify addresses in a text file,
+we can also search by regular expressions,
+which may be simple words.
+In the following example,
+I use the regular expression <code>1991$</code> instead of specifying line 4.
+The regular expression <code>1991$</code>  means
+&quot;lines ending with the string <strong>1991</strong>&quot;.
+Then I use the <code>s</code> command to start a find and replace.
+<code>sed</code> finds the string <strong>Linux</strong> and then replaces
+that with the string <strong>GNU/Linux</strong>.
+I use the back slash to escape the forward slash in GNU/Linux:</p>
+<pre><code>sed '/1991$/s/Linux/GNU\/Linux/' operating-systems.csv
+OS, License, Year
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+GNU/Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p>Here's an example using <code>sed</code> to simply search for a pattern.
+In this example, I'm interested in searching for all operating systems
+that were released on or after 2000:</p>
+<pre><code>sed -n '/20/ p' operating-systems.csv
+Chrome OS, Proprietary, 2009
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Android, Apache, 2008
+</code></pre>
+<p>The above would be equivalent to <code>grep &quot;20&quot; operating-systems.csv</code>.</p>
+<p><code>sed</code> is much more powerful than what I've demonstrated here, and
+if you're interested in learning more,
+there are lots of tutorials on the web.
+Here are a few good ones:</p>
+<ul>
+<li><a href="https://opensource.com/article/20/12/sed">Learn to use the Sed text editor</a></li>
+<li><a href="https://www.gnu.org/software/sed/manual/sed.html">Sed Introduction</a></li>
+<li><a href="https://catonmat.net/sed-one-liners-explained-part-one">Sed One-Liners Explained, Part I: File Spacing, Numbering and Text Conversion and Substitution</a></li>
+<li><a href="https://edoras.sdsu.edu/doc/sed-oneliners.html">sed one-liners</a></li>
+<li><a href="https://www.tutorialspoint.com/sed/index.htm">Sed Tutorial</a></li>
+</ul>
+<a class="header" href="./06-text-processing-part-2.html#awk" id="awk"><h2>Awk</h2></a>
+<p><code>awk</code> is a complete scripting language for
+&quot;pattern scanning and processing&quot; text (see <code>man awk</code>).
+It's a powerful language that focuses on <strong>columns of structured data</strong>.</p>
+<p>Unlike <code>sed</code>, which works on lines and uses line addresses to
+select text to edit,
+<code>awk</code> works on columns, and
+this is regardless if the contents include structured data
+(like a CSV file) or not (like a letter or essay).
+If the data is structured,
+then that means the data will be formatted in some way.
+In the last few sections,
+we have looked at a CSV file.
+This is structured data because the data points
+in this file are separated by commas.</p>
+<p>For <code>awk</code> to work with columns in a file,
+it needs some way to refer to those columns.
+In the examples below, we'll see that columns in a text
+file are referred to by a dollar sign and
+then the number of the column <code>$n</code>.
+So, <code>$1</code> indicates column one,
+<code>$2</code> indicates column two, and so on.
+If we use <code>$0</code>, then we refer to the entire file.
+In our example text file, <code>$1</code> indicates the OS Name column,
+<code>$2</code> indicates the License column,
+<code>$3</code> indicates the release Year column,
+and <code>$0</code> indicates all columns.</p>
+<p>The syntax for <code>awk</code> is a little different than what we've seen so far.
+Basically, <code>awk</code> uses the following syntax,
+where <strong>pattern</strong> is optional.</p>
 <pre><code>awk pattern { action statements }
 </code></pre>
-<p>To print the first column of our file, then:</p>
-<pre><code># print column one
-awk '{ print $1 }' operating-systems.csv
-# print column one that includes the term 'Linux'
-awk '/Linux/ { print $1 }' operating-systems.csv
+<p>Let's see some examples.</p>
+<p>To print the first column of our file,
+we do not need the <strong>pattern</strong> part of the command but
+only need to state an action statement (within curly braces).
+In the command below, the action statement is <code>'{ print $1 }'</code>.</p>
+<pre><code>awk '{ print $1 }' operating-systems.csv
+OS,
+Chrome
+FreeBSD,
+Linux,
+iOS,
+macOS,
+Windows
+Android,
 </code></pre>
-<p><code>awk</code> by default considers the first empty space as the field delimiter. That's why when I printed the first column above, only the term <strong>Windows</strong> appeared in the results even though it should be <strong>Windows NT</strong>. To specify that we want <code>awk</code> to treat the comma as a field delimiter, we use the <code>-F</code> option and we surround the comma with a couple of single quotes:</p>
-<pre><code># use -F to tell awk that the comma is the separator or delimiter
-awk -F',' '{ print $1 }' operating-systems.csv
+<p>By default, <code>awk</code> considers the first empty space as the field delimiter.
+That's why in the command above
+only the term <strong>Windows</strong> and <strong>Chrome</strong> appear in the results
+even though it should be <strong>Windows NT</strong> and <strong>Chrome OS</strong>.
+To fix this, we need to tell <code>awk</code> to use a comma as the field separator,
+instead of defaulting to an empty space.
+To specify that we want <code>awk</code> to treat the comma as a field delimiter,
+we use the <code>-F</code> option, and
+we surround the comma with single quotes:</p>
+<pre><code>awk -F',' '{ print $1 }' operating-systems.csv
+OS
+Chrome OS
+FreeBSD
+Linux
+iOS
+macOS
+Windows NT
+Android
 </code></pre>
-<p>Now we can do a bit more with columns:</p>
-<pre><code># print select columns, like column 1 and 3
-awk -F',' '{ print $1 $3 }' operating-systems.csv
-# make a report by adding some text
-awk -F',' '{ print $1 &quot; was founded in&quot; $3 }' operating-systems.csv
+<p>By specifying the comma as the field separator,
+we now have more accurate results,
+and the commas in the results no longer appear either.</p>
+<p>Like <code>grep</code> and <code>sed</code>, <code>awk</code> can do search.
+In this next example,
+I print the column containing the string <strong>Linux</strong>.
+Here I am using the <strong>pattern</strong> part of the command: <code>'/Linux/'</code>.</p>
+<pre><code>awk -F',' '/Linux/ { print $1 }' operating-systems.csv
+Linux
 </code></pre>
-<p>Since <code>awk</code> is a full-fledged programming language, it understands data structures, which means it can do math or work on strings of text. Let's return lines where the year is greater than some number.</p>
-<pre><code># print all of column 3
-awk -F',' '{ print $3 }' operating-systems.csv
-# print only the parts of column 3 that are greater than 2005
-awk -F',' '$3 &gt; 2005 { print $3 }' operating-systems.csv
-# print only the parts of column 3 that are equal to 2007
-awk -F',' '$3 == 2007 { print $3 }' operating-systems.csv
-# print only the parts of columns 1 and 3 where column 3 equals 2007
-awk -F',' '$3 == 2007 { print $1 $3 }' operating-systems.csv
-# print the entire line where column three equals 2007
-awk -F',' '$3 == 2007 { print $0 }' operating-systems.csv
-# print only those lines where column 3 is greater than 200 and less than 2008
-awk -F',' '$3 &gt; 2000 &amp;&amp; $3 &lt; 2008 { print $0 }' operating-systems.csv
-# even though we wouldn't normally add years up, let's print the sum of column 3
-awk -F',' 'sum += $3 { print sum }' operating-systems.csv
+<p>With <code>awk</code>, we can retrieve more than one column, and
+we can use <code>awk</code> to generate reports,
+which was part of the original motivation to create this language.</p>
+<p>In the next example,
+I select columns one and three:</p>
+<pre><code>awk -F',' '{ print $1 $3 }' operating-systems.csv
+OS Year
+Chrome OS 2009
+FreeBSD 1993
+Linux 1991
+iOS 2007
+macOS 2001
+Windows NT 1993
+Android 2008
 </code></pre>
-<p>Here are a few basic string operations:</p>
+<p>But I can make that a bit more readable by adding some text to print:</p>
+<pre><code>awk -F',' '{ print $1 &quot; was founded in&quot; $3 &quot;.&quot; }' operating-systems.csv
+OS was founded in Year.
+Chrome OS was founded in 2009.
+FreeBSD was founded in 1993.
+Linux was founded in 1991.
+iOS was founded in 2007.
+macOS was founded in 2001.
+Windows NT was founded in 1993.
+Android was founded in 2008.
+</code></pre>
+<p>Since <code>awk</code> is a full-fledged programming language,
+it understands data structures,
+which means it can do math or work on strings of text.
+Let's illustrate this by doing some math or logic on column 3.</p>
+<p>Here I print all of column three:</p>
+<pre><code>awk -F',' '{ print $3 }' operating-systems.csv
+ Year
+ 2009
+ 1993
+ 1991
+ 2007
+ 2001
+ 1993
+ 2008
+</code></pre>
+<p>Next I print only the parts of column three that are greater than 2005, and
+then pipe <code>|</code> the output through the <code>sort</code> command
+to sort the numbers in numeric order:</p>
+<pre><code>awk -F',' '$3 &gt; 2005 { print $3 }' operating-systems.csv | sort
+ 2007
+ 2008
+ 2009
+</code></pre>
+<p>If I want to print only the parts of column one where
+column three equals to 2007,
+then I would run this command:</p>
+<pre><code>awk -F',' '$3 == 2007 { print $1 }' operating-systems.csv
+iOS
+</code></pre>
+<p>If I want to print only the parts of columns one and three
+where column 3 equals 2007:</p>
+<pre><code>awk -F',' '$3 == 2007 { print $1 $3 }' operating-systems.csv
+iOS 2007
+</code></pre>
+<p>Or, print the entire line where column three equals 2007:</p>
+<pre><code>awk -F',' '$3 == 2007 { print $0 }' operating-systems.csv
+iOS, Proprietary, 2007
+</code></pre>
+<p>I can print only those lines where column three is greater than 2000
+and less than 2008:</p>
+<pre><code>awk -F',' '$3 &gt; 2000 &amp;&amp; $3 &lt; 2008 { print $0 }' operating-systems.csv
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+</code></pre>
+<p>Even though we wouldn't normally add years up,
+let's print the sum of column three
+to demonstrate how summing works in <code>awk</code>:</p>
+<pre><code>awk -F',' 'sum += $3 { print sum }' operating-systems.csv
+2009
+4002
+5993
+8000
+10001
+11994
+14002
+</code></pre>
+<p>Here are a few basic string operations.
+First, print column one in upper case:</p>
 <pre><code>awk -F',' '{ print toupper($1) }' operating-systems.csv
-awk -F',' '{ print tolower($1) }' operating-systems.csv
-awk -F',' '{ print length($1) }' operating-systems.csv
+OS
+CHROME OS
+FREEBSD
+LINUX
+IOS
+MACOS
+WINDOWS NT
+ANDROID
 </code></pre>
-<p>We can add additional logic. The double ampersands <code>&amp;&amp;</code> indicate a Boolean/Logical <strong>AND</strong>. The exclamation point <code>!</code> indicates a Boolean/Logical <strong>NOT</strong>.</p>
-<pre><code># print only those lines where column three is greater than 1990
-# and the line has the string &quot;BSD&quot; in it
-awk -F',' '$3 &gt; 1990 &amp;&amp; /BSD/ { print $0 }' operating-systems.csv
-# print only those lines where column three is greater than 1990
-# and the line DOES NOT have the string &quot;BSD&quot; in it; here we use the 
-# exclamation point to signal a Boolean NOT
-awk -F',' '$3 &gt; 1990 &amp;&amp; !/BSD/ { print $0 }' operating-systems.csv
+<p>Or print column on in lower case:</p>
+<pre><code>awk -F',' '{ print tolower($1) }' operating-systems.csv
+os
+chrome os
+freebsd
+linux
+ios
+macos
+windows nt
+android
 </code></pre>
-<p>And now, the double vertical bar <code>||</code> indicates a Boolean/Logical <strong>OR</strong>:</p>
-<pre><code># print only those lines that contain the string &quot;Proprietary&quot; or the string &quot;Apache&quot; (prints both)
-awk -F',' '/Proprietary/ || /Apache/ { print $0 }' operating-systems.csv
-# consider lower case letters. Here use the square brackets to indicate alternate letters
-awk -F',' '/[pP]roprietary/ || /[aA]pache/ { print $0 }' operating-systems.csv
+<p>Or, get the length of each string in column one:</p>
+<pre><code>awk -F',' '{ print length($1) }' operating-systems.csv
+2
+9
+7
+5
+3
+5
+10
+7
 </code></pre>
-<p><code>awk</code> is full-fledged programming language. It provides all sorts of conditionals, control structures, variables, etc. Feel free to explore at:</p>
-<p>Here's an example of how I've used <code>awk</code> recently:</p>
-<pre><code>#!/bin/bash
-
-# Check how much time left to sync email
-# Sean Burns
-
-systemctl status --user mbsync.timer |\
-         awk -F&quot;;&quot;\
-         '/Trigger:/ &amp;&amp; $2 == &quot;&quot; { print &quot;Syncing...&quot;}
-         /Trigger:/ &amp;&amp; $2 != &quot;&quot; { print &quot;Time left to sync: &quot; $2}'
+<p>We can add additional logic.
+The double ampersands <code>&amp;&amp;</code> indicate a Boolean/Logical <strong>AND</strong>.
+The exclamation point <code>!</code> indicates a Boolean/Logical <strong>NOT</strong>.
+In the next example,
+I print only those lines where column three is greater than 1990,
+and the line has the string &quot;BSD&quot; in it:</p>
+<pre><code>awk -F',' '$3 &gt; 1990 &amp;&amp; /BSD/ { print $0 }' operating-systems.csv
+FreeBSD, BSD, 1993
 </code></pre>
+<p>Now I reverse that, and
+print only those lines where column three is greater than 1990
+and the line DOES NOT have the string &quot;BSD&quot; in it:</p>
+<pre><code>awk -F',' '$3 &gt; 1990 &amp;&amp; !/BSD/ { print $0 }' operating-systems.csv
+Chrome OS, Proprietary, 2009
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p>The double vertical bar <code>||</code> indicates a Boolean/Logical <strong>OR</strong>.
+The next command prints only those lines that
+contain the string &quot;Proprietary&quot; or the string &quot;Apache&quot;,
+or it would print both if both strings were in the text:</p>
+<pre><code>awk -F',' '/Proprietary/ || /Apache/ { print $0 }' operating-systems.csv
+Chrome OS, Proprietary, 2009
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p>I can take advantage of regular expressions.
+If the file that I was looking at was large,
+and if I wasn't sure that some fields would be upper or lower case,
+then I could use regular expressions to consider both possibilities.
+That is, by adding <strong>[pP]</strong> and <strong>[aA]</strong>,
+<code>awk</code> will check for both the words <strong>Proprietary</strong> and <strong>proprietary</strong>,
+and <strong>Apache</strong> and <strong>apache</strong>.</p>
+<pre><code>awk -F',' '/[pP]roprietary/ || /[aA]pache/ { print $0 }' operating-systems.csv
+Chrome OS, Proprietary, 2009
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p><code>awk</code> is full-fledged programming language.
+It provides conditionals, control structures, variables, etc.,
+and so I've only scratched the surface.
+If you're interested in learning more,
+then check out some of these tutorials:</p>
+<ul>
+<li><a href="https://www.tecmint.com/category/awk-command/">Awk Command</a></li>
+<li><a href="https://catonmat.net/awk-one-liners-explained-part-one">Awk One-Liners Explained, Part I: File Spacing, Numbering and Calculations</a></li>
+<li><a href="https://www.grymoire.com/Unix/Awk.html">Awk Tutorial</a></li>
+<li><a href="https://blog.robertelder.org/intro-to-awk-command/">How To Become a 10x Engineer using the Awk Command</a></li>
+<li><a href="https://arstechnica.com/gadgets/2021/08/linux-bsd-command-line-101-using-awk-sed-and-grep-in-the-terminal/">Linux/BSD command line wizardry: Learn to think in sed, awk, and grep</a></li>
+<li><a href="https://earthly.dev/blog/awk-examples/">Understanding AWK</a></li>
+</ul>
 <a class="header" href="./06-text-processing-part-2.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
-<p>The Linux (and other Unix-like OSes) command line offers a lot of utilities to examine data. Prior to this lesson, we covered a few of them that help us get parts of a file and then pipe those parts through other commands or redirect output to files. We can use pipes and redirects with <code>grep</code>, <code>sed</code>, and <code>awk</code>, also, if needed, but we may be able to avoid using the basic utilities like <code>cut</code>, <code>wc</code>, etc if want to learn more powerful programs like <code>grep</code>, <code>sed</code>, and <code>awk</code>.</p>
-<p>It's fun to learn and practice these. Despite this, you do not have to become a <code>sed</code> or an <code>awk</code> programmer. Like the utilities that we've discussed in prior lectures, the power of programs like these is that their on hand and easy to use as <strong>one-liners</strong>. If you want to get started, the resources below offer nice lists of pre-made one-liners:</p>
+<p>The Linux (and other Unix-like OSes) command line
+offers a lot of utilities to examine data.
+Prior to this lesson, we covered a few of them that help us get
+parts of a file and then pipe those parts through other commands
+or redirect output to files.
+We can use pipes and redirects with <code>grep</code>, <code>sed</code>, and <code>awk</code>.
+If needed, we may be able to avoid using the basic utilities like
+<code>cut</code>, <code>wc</code>, etc if want to learn more powerful programs
+like <code>grep</code>, <code>sed</code>, and <code>awk</code>.</p>
+<p>It's fun to learn and practice these.
+Despite this, you do not have to become a <code>sed</code> or an <code>awk</code> programmer.
+Like the utilities that we've discussed in prior lectures,
+the power of programs like these is that their on hand and
+easy to use as <strong>one-liners</strong>.
+If you want to get started, the resources listed above can guide you.
+Here's another compilation of a variety of many utilities that
+we have looked at:</p>
 <ul>
-<li><a href="https://edoras.sdsu.edu/doc/sed-oneliners.html">sed one-liners</a></li>
-<li><a href="https://catonmat.net/awk-one-liners-explained-part-one">awk one-liners</a> : this is part 1 with links to additional parts</li>
-<li><a href="https://wikis.utexas.edu/display/bioiteam/Scott%27s+list+of+linux+one-liners">compilation of one-liners</a> : this one is good just in that is shows how you can use the pipe operator with a bunch of the utilities we've discussed</li>
+<li><a href="https://wikis.utexas.edu/display/bioiteam/Scott%27s+list+of+linux+one-liners">compilation of one-liners</a></li>
 </ul>
-<p>The commands we used in this session incuded:</p>
-<ul>
-<li><code>join</code> : join lines of two files on a common field</li>
-<li><code>paste</code> : merge lines of files</li>
-<li><code>grep</code> : print lines that match patterns</li>
-<li><code>sed</code> : stream editor for filtering and transforming text</li>
-<li><code>awk</code> : pattern scanning and text processing language</li>
-</ul>
-<p>We also used two types of operators, the pipe and the redirect:</p>
-<ul>
-<li><code>|</code> : redirect standard output command1 to standard input of command2</li>
-<li><code>&gt;</code> : redirect to standard output to a file, overwriting</li>
-<li><code>&gt;&gt;</code> : redirect to standard output to a file, appending</li>
-</ul>
-<p>Please explore and try these out yourselves!</p>
 
                 </div>
 

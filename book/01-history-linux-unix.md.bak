@@ -15,15 +15,13 @@
 
 ## Location: Berkeley, CA (University of California, Berkeley), early to mid 1970s
 
-- The code for UNIX was not 'free software'
-  but low cost and easily shared.
+- The code for UNIX was not 'free software' but low cost and easily shared.
 - Ken Thompson visited Berkeley and helped install [Version 6 of UNIX][unix6]
 - [Bill Joy][billjoy] and others contributed heavily
     - Joy created the [vi][nvi] text editor,
     a descendant of the popular [Vim][vim] editor,
     many other important programs, and was a co-founder of Sun Microsystems
-- This installation of UNIX would eventually become known
-  as the Berkeley Software Distribution, or BSD.
+- This installation of UNIX would eventually become known as the Berkeley Software Distribution, or BSD.
 
 ## AT&T
 
@@ -55,7 +53,7 @@
   that was Unix-like, called GNU.
 - By the early 1990s, Stallman and others had developed
   all the utilities needed to have a full operating system,
-  except for a kernel, which they called [GNU Hurd][gnuhurd].
+  except for a kernel.
 - This included the Bash shell, written by [Brian Fox][bfox].
 - The GNU philosophy includes several propositions
   that define free software:
@@ -75,7 +73,7 @@
 
 [The Four Freedoms][fourfreedoms]
 
-## The Unix wars and the lawsuit, late 1980s through the early 1990s
+## The Unix wars and the lawsuit
 
 - AT&T, after its breakup, began to commercialize Unix,
   and differences in AT&T Unix and BSD Unix arose.
@@ -88,7 +86,7 @@
 - USL ultimately lost the case,
   but the lawsuit delayed adoption of BSD Unix.
 
-## Linux, Linus Torvalds, University of Helsinki, Finland, early 1990s
+## The Rise of Linux, Linus Torvalds, University of Helsinki, Finland
 
 - On August 25, 1991, [Linus Torvalds][linustorvalds]
   announced that he had started working on a **free**
@@ -111,7 +109,7 @@
 - But Torvalds and others took the GNU utilities
   and created what is now called Linux or GNU/Linux.
 
-## Distributions, early 1990s through today
+## Distributions
 
 - Soon after the Linux development,
   people would create their own Linux and
@@ -123,7 +121,7 @@
   - [Slackware][slackware]
   - [Debian][debian]
 
-## Short History of BSD, 1970s through today
+## Short History of BSD
 
 - Unix version numbers 1-6 eventually led to BSD 1-4.
 - At BSD 4.3, all versions had some AT&T code.
@@ -151,9 +149,9 @@
 > See [Why is macOS often referred to as 'Darwin'?][whydarwin]
 > for a short history.
 
-## Short History of GNU, 1980s through today
+## Short History of GNU
 
-- The GNU Hurd is still under active development,
+- The [GNU Hurd][gnuhurd] is still under active development,
   but it's the pre-production state.
 - The last release was 0.9 on December 2016.
 - A complete OS based on the GNU Hurd can be downloaded and ran.
@@ -164,7 +162,7 @@
 In the free software and open source landscape,
 there are several important free and/or open source
 licenses that are used.
-The two biggest software licenses are
+The two biggest software licences are
 based on the software used by GNU/Linux
 and the software based on the BSDs.
 They each take very different approaches to free
@@ -174,7 +172,7 @@ The biggest difference is this:
 - Software based on software licensed under the GPL
 must also be licensed under the GPL.
 This is referred to as [copyleft][copyleft] software,
-and the idea is to propagate free software.
+and the idea is to propogate free software.
     - [GNU General Public License (GPL)][gnugpl]
 - Software based on software licensed under the BSD
 license may be closed source and

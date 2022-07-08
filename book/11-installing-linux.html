@@ -86,129 +86,127 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="./11-installing-linux.html#installing-and-configuring-fedora-34-linux-server" id="installing-and-configuring-fedora-34-linux-server"><h1>Installing and Configuring Fedora 34 Linux Server</h1></a>
-<a class="header" href="./11-installing-linux.html#download-and-install-virtualbox--download-fedora" id="download-and-install-virtualbox--download-fedora"><h2>Download and Install VirtualBox &amp;&amp; download fedora</h2></a>
-<ol>
-<li>Download fedora Server Edition. We'll install the x86_64 netinstall ISO image because it's a smaller download, and then we can install other items once Fedora is running.
+                    <a class="header" href="./11-installing-linux.html#ubuntu-server-on-google-cloud" id="ubuntu-server-on-google-cloud"><h1>Ubuntu Server on Google Cloud</h1></a>
+<a class="header" href="./11-installing-linux.html#google-cloud-setup" id="google-cloud-setup"><h2>Google Cloud Setup</h2></a>
+<a class="header" href="./11-installing-linux.html#google-account" id="google-account"><h3>Google Account</h3></a>
+<p>I imagine most of you already have a Google account.
+If not, then go ahead and create one at <a href="https://www.google.com">https://www.google.com</a>.</p>
+<a class="header" href="./11-installing-linux.html#google-billing" id="google-billing"><h2>Google Billing</h2></a>
+<p>If you already have a Google account,
+or after you've created one,
+the first thing to do is to set up a billing account for Google Cloud,
+where we will create, administer, and manage our virtual Linux servers.
+That bad news is that we have to spend some money, but
+the good news is that our bills by the end of the semester should
+only amount to a couple of dollars, at most.</p>
+<p><strong><a href="https://cloud.google.com/billing/docs/how-to/manage-billing-account">Create, modify, or close your self-serve Cloud Billing account</a></strong></p>
+<a class="header" href="./11-installing-linux.html#gcloud-installation" id="gcloud-installation"><h2>gcloud Installation</h2></a>
+<p>After you have set up billing,
+then the next step is to install gcloud on your local machines.</p>
+<p><strong><a href="https://cloud.google.com/sdk/docs/install">Install the gcloud CLI</a></strong></p>
+<p>There are installation instructions for macOS and Windows.
+Follow these instructions closely.
+Note that for macOS,
+you have to choose among three different platforms.
+If you have an older macOS machine (before November 2020 or so),
+it's likely that you'll select <strong>macOS 64-bit (x86_64)</strong>.
+If you have a newer macOS machine,
+then it's likely you'll have to select <strong>macOS 64-bit (arm64, Apple M1
+silicon).</strong>
+It's unlikely that any of you are using a 32-bit macOS operating system.
+If you're not sure which macOS system you have,
+then let me know and I can help you determine the appropriate platform.
+Alternatively, follow these instructions to find your processor information:</p>
 <ul>
-<li><a href="https://getfedora.org/">https://getfedora.org/</a></li>
-<li><a href="https://getfedora.org/en/server/download/">https://getfedora.org/en/server/download/</a></li>
+<li>click on the Apple menu</li>
+<li>choose <strong>About This Mac</strong></li>
+<li>locate the <strong>Processor</strong> or <strong>Chip</strong> information</li>
+</ul>
+<a class="header" href="./11-installing-linux.html#gcloud-project" id="gcloud-project"><h2>gcloud Project</h2></a>
+<p>Once you've installed gcloud,
+log into <a href="https://console.cloud.google.com/">Google Cloud Console</a>,
+which should take you to the Dashboard page.</p>
+<p>Our first goal is to create a <strong>virtual machine (VM)</strong> <em>instance</em>.
+A VM is basically a virtualized operating system.
+That means instead of installing an operating system
+(like Linux, macOS, Windows, etc) on a physical machine,
+software is used to mimic the process.</p>
+<p>gcloud offers a number of Linux-based operating systems
+to create VMs with.
+We're going to use the Ubuntu operating system in this class
+and specifically the Ubuntu 20.04 LTS version.</p>
+<blockquote>
+<p>Ubuntu is a Linux distribution.
+A new version of Ubuntu is released every six months.
+The 20.04 signifies that this is the April 2020 version.
+LTS signifies <strong>Long Term Support</strong>.
+LTS versions are released every two years,
+and Canonical LTD,
+the owners of Ubuntu,
+provide standard support for LTS versions for five years.
+Non-LTS versions of Ubuntu only receive nine months of standard support.</p>
+</blockquote>
+<p>To create your VMThen follow these steps:</p>
+<ul>
+<li>Click the <strong>Select from</strong> drop-down list.</li>
+<li>In the window, create a <strong>New Project</strong>.</li>
+<li>In the next window, name the project.
+<ul>
+<li>You can name the project anything.</li>
+<li>E.g., I am using the name <strong>sysadmin-418</strong>.</li>
+<li>Click on the <strong>Create</strong> button.</li>
+<li>Leave the organization field set to <strong>No Organization</strong>.</li>
 </ul>
 </li>
-<li>Download VirtualBox. This will vary depending on whether you run macOS or Windows. If you have issues here, please seek tutorials elsewhere, like YouTube.
+<li>Next, click on <strong>Create a VM</strong>.</li>
+<li>Provide a name for your <strong>instance</strong>.
 <ul>
-<li>Download VirtualBox: <a href="https://www.virtualbox.org/">https://www.virtualbox.org/</a></li>
+<li>E.g., I chose <strong>fall-2022</strong> (no spaces)</li>
 </ul>
 </li>
-<li>Install VirtualBox however you install software for your operating system.
+<li>Under the <strong>Series</strong> dropdown box, make sure <strong>E2</strong> is selected.</li>
+<li>Under the <strong>Machine type</strong> dropdown box, select <strong>e2-micro (2 vCPU, 1 GB memory)</strong>
 <ul>
-<li>Instructions for <a href="https://www.youtube.com/watch?v=1ASMgibukWI">macOS Big Sur</a>. <strong>Note: instructions from this video are only valid until the 4:20 time. Do not use these instructions after that point of the video.</strong></li>
-<li>Instructions for <a href="https://www.youtube.com/watch?v=8mns5yqMfZk">Windows 10</a>. <strong>Note: instructions from this video are only valid until the 2:30 second mark. Do not use these instructions after that point.</strong></li>
+<li>This is the lowest cost virtual machine and perfect for our needs.</li>
 </ul>
 </li>
-<li>Be aware of the <a href="https://www.virtualbox.org/manual/">VirtualBox user manual</a>. I'm not asking you to read it, but if you have any issues, you should search this documentation.</li>
-</ol>
-<a class="header" href="./11-installing-linux.html#host-machine-set-up" id="host-machine-set-up"><h2>Host machine set up</h2></a>
-<ol>
-<li>Create a directory on your own Windows or macOS computer, and call it <strong>iso</strong>. It's fine to create this directory in your home directory, or in your documents directory, or wherever.</li>
-<li>Move the fedora ISO file that you downloaded to your new <strong>iso</strong> directory.</li>
-<li>In your <strong>iso</strong> directory, create a new directory called <strong>virtualbox</strong>.</li>
-</ol>
-<a class="header" href="./11-installing-linux.html#set-up-fedora-in-virtualbox" id="set-up-fedora-in-virtualbox"><h2>Set up fedora in VirtualBox</h2></a>
-<ol>
-<li>Click on the <strong>New</strong> button</li>
-<li>In the <strong>Name:</strong> field, type in <strong>Fedora-Base-34</strong>. As you type this in, VirtualBox should automatically recognize the <strong>Type:</strong> and <strong>Version</strong>. Click <strong>Next &gt;</strong>.</li>
-<li><strong>Memory size</strong>: Depending on your laptop's memory capabilities, you can set this higher, but it's not necessary. The default <strong>1024 MB</strong> should be fine.</li>
-<li><strong>Hard disk</strong>: The default is 8.00 GB. We will change this to 100 GB on an upcoming screen. For now, make sure you select the default <strong>Create a virtual hard disk now</strong>, and then click on <strong>Create</strong>.</li>
-<li><strong>Hard disk file type</strong>: Accept the default, which is <strong>VDI</strong>.</li>
-<li><strong>Storage on physical hard disk</strong>: Accept the default, which is <strong>Dynamically allocated</strong></li>
-<li><strong>File location and size</strong>: Here you adjust to the disk size to 100 GB. Note that you will not use all of this space on your hard drive. It's the maximum amount that you can use. Click on <strong>Create</strong>.</li>
-</ol>
-<p>The settings box should close. Now highlight the virtual machine in the left pane of the VirtualBox menu, and click on Start.</p>
-<a class="header" href="./11-installing-linux.html#install-fedora-in-virtualbox" id="install-fedora-in-virtualbox"><h2>Install fedora in VirtualBox</h2></a>
-<ol>
-<li>
-<p>When you start, a window will pop up and ask you to select a virtual optical disk. This is the fedora 34 ISO that you downloaded and that you saved to your new <strong>iso</strong> folder. We have to select the file icon in the window and then find and select the ISO that we downloaded. Once you do that, click on <strong>Start</strong>.</p>
-</li>
-<li>
-<p>A terminal will open up. Press <strong>Enter</strong> on the Installing Fedora 34 option. Some setup text will scroll by and soon a graphical installer will launch.</p>
-</li>
-<li>
-<p>In the graphical installer, you'll get a message: &quot;WELCOME TO FEDORA 34.&quot; US English should be the default options in both panes. Click on <strong>Continue</strong>.</p>
-</li>
-<li>
-<p>We only have to configure a few things. Click on <strong>Software Selection</strong>. In
-the right pane, under <strong>Additional software for Selected Environment</strong>, select <strong>Headless Management</strong> and then click on <strong>Done</strong>.</p>
-</li>
-<li>
-<p>Now we have to partition our hard drive. We could accept automatic partitioning, but we want to fine tune this. So click on <strong>Installation Destination</strong>.</p>
-</li>
-<li>
-<p>At the bottom of the window it says <strong>Storage Configuration</strong>. Select <strong>Custom</strong> and then <strong>Done</strong>.</p>
-</li>
-<li>
-<p><strong>Manual Partitioning</strong>: In the next screen, the <strong>LVM</strong> option should already be selected. This stands for <strong>Logical Volume Management</strong>. Make sure that stays selected.</p>
-</li>
-<li>
-<p>Now we create some partitions. Partitioning a drive is a way to slice up a drive into parts so that we better manage the use of the drive. As we create these partitions, note the two pieces of information at the bottom of the screen: the <em>Available Space</em> and the <em>Total Space</em>. The Available Space will change as we add partitions.</p>
-</li>
-<li>
-<p>Click on the <strong>+</strong> icon. In the <strong>Mount Point</strong> box, we'll first create the  <strong>root partition</strong>, which is indicated with the forward slash: <strong>/</strong>. For <strong>Desired Capacity</strong>, we should input <strong>20 GB</strong>. In the next screen, change the <strong>File System</strong> to <strong>ext4</strong>.</p>
-</li>
-<li>
-<p>Next we create our other partitions. These include <strong>/boot</strong>, <strong>/home</strong>, <strong>/var</strong>, <strong>/tmp</strong> partitions and the <strong>swap</strong> file (note the missing slash). Click on the plus sign and repeat the process for these partitions. We'll leave about 34 GB of free disk space available for later use. Altogether, our partition map should look like this, but <strong>fedora</strong> will adjust the sizes a bit:</p>
-<table><thead><tr><th> Mount Point/Partition </th><th> Size  </th><th> File System </th></tr></thead><tbody>
-<tr><td> /home                 </td><td> 30 GB </td><td> ext4        </td></tr>
-<tr><td> /                     </td><td> 20 GB </td><td> ext4        </td></tr>
-<tr><td> /tmp                  </td><td> 6 GB  </td><td> ext4        </td></tr>
-<tr><td> /var                  </td><td> 10 GB </td><td> ext4        </td></tr>
-<tr><td> /boot                 </td><td> 1 GB  </td><td> ext4        </td></tr>
-<tr><td> swap                  </td><td> 4 GB  </td><td> swap        </td></tr>
-</tbody></table>
-<p>Note that the <strong>/boot</strong> partition is mapped to <strong>sda1</strong>. This is handy to remember.</p>
-<p>Note also that the Available Space listed at the bottom should be about 33.86 GiB.</p>
-<p>After you've inputted the above info, click on <strong>Done</strong>. Then click on <strong>Accept Changes</strong> in the next window.</p>
-</li>
-<li>
-<p>Set up Root Password. Save this password!</p>
-</li>
-<li>
-<p>Click on <strong>Begin Installation</strong>. This might take up to 15 minutes depending on the strength of your internet connection and what kind of hardware you have.</p>
-</li>
-<li>
-<p>Wait until installation is complete and you are able to Reboot System. HOWEVER, do not reboot yet. Instead, choose <strong>Close</strong> from the <strong>File</strong> menu, and then click <strong>Power off the machine.</strong></p>
-</li>
-<li>
-<p>In VirtualBox settings, click on the settings for this machine.</p>
-</li>
-<li>
-<p>In the window that pops up, click on the <strong>System</strong> tab (this may look different if you're on macOS, especially).</p>
-</li>
-<li>
-<p>Deselect the Floppy and Optical options next to <strong>Boot Order</strong>, and then click <strong>Okay</strong>.</p>
-</li>
-<li>
-<p>Click on <strong>Start</strong> to boot your system back.</p>
-</li>
-</ol>
-<a class="header" href="./11-installing-linux.html#boot-fedora-update-system-and-create-regular-user" id="boot-fedora-update-system-and-create-regular-user"><h2>Boot fedora; update system; and create regular user</h2></a>
-<ol>
-<li>
-<p>Once your system is running, you will get a login prompt. Login as the user <code>root</code>.</p>
-</li>
-<li>
-<p>Update your system right away with the following commands:</p>
-<pre><code>dnf updateinfo
-dnf upgrade
+<li>Under <strong>Boot disk</strong>, click on the <strong>Change</strong> button.</li>
+<li>In the window, select <strong>Ubuntu</strong> from the <strong>Operating system</strong> dropdown box.</li>
+<li>Select <strong>Ubuntu 20.04 LTS</strong></li>
+<li>Leave <strong>Boot disk type</strong> should be set to <strong>Balanced persistant disk</strong></li>
+<li>Disk size should be set to <strong>10 GB</strong>.</li>
+<li>Click on the <strong>Select</strong> button.</li>
+<li>Check the <strong>Allow HTTP Traffic</strong> button</li>
+<li>Finally, click on the <strong>Create</strong> button to create your VM instance.</li>
+</ul>
+<ul>
+<li>Click on the navigation menu: <code>☰</code></li>
+<li>Click on <strong>Compute Engine</strong></li>
+<li>Click on <strong>VM instances</strong></li>
+</ul>
+<pre><code>apt update
+apt upgrade
+apt autoremove
 </code></pre>
-<p>The first command will sync your local repository with the remove repositories that manage software updates. The second command will update the software on your system if updates are available.</p>
-</li>
+<p>The first command will sync your local repository with the remove repositories
+that manage software updates. The second command will update the software on
+your system if updates are available.</p>
+<ol>
 <li>
-<p>We do not normally want to work in the <code>root</code> account. So next we need to a regular user. To create a new user, do the next command. Instead of <strong>sean</strong>, create a username that you like. Make sure it is one word and that it is all lowercase:</p>
+<p>We do not normally want to work in the <code>root</code> account. So next we need to
+a regular user. To create a new user, do the next command. Instead of
+<strong>sean</strong>, create a username that you like. Make sure it is one word and that
+it is all lowercase:</p>
 <pre><code>useradd -m -U -s /usr/bin/bash -G wheel sean
 </code></pre>
-<p>The above command will create a new user named <em>sean</em> and put that user in group of the same name, create a home directory for that user, make <code>bash</code> the default shell for that user, and assign that user to the <strong>wheel</strong> group, which will make that user an administrator of the system. Read <code>man useradd</code> for more details.</p>
 </li>
+</ol>
+<p>The above command will create a new user named <em>sean</em> and put that user in
+group of the same name, create a home directory for that user, make <code>bash</code>
+the default shell for that user, and assign that user to the <strong>wheel</strong> group,
+which will make that user an administrator of the system. Read <code>man useradd</code>
+for more details.</p>
+<ol>
 <li>
 <p>Next create a password for your new user:</p>
 <pre><code>passwd sean

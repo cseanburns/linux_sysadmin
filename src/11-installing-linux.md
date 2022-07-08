@@ -1,91 +1,137 @@
-# Installing and Configuring Fedora 34 Linux Server
+# Ubuntu Server on Google Cloud 
 
-## Download and Install VirtualBox && download fedora
+## Google Cloud Setup
 
-1. Download fedora Server Edition. We'll install the x86_64 netinstall ISO image because it's a smaller download, and then we can install other items once Fedora is running.
-    - [https://getfedora.org/][getfedora]
-    - [https://getfedora.org/en/server/download/][getfedoradownload]
-1. Download VirtualBox. This will vary depending on whether you run macOS or Windows. If you have issues here, please seek tutorials elsewhere, like YouTube.
-    - Download VirtualBox: [https://www.virtualbox.org/][virtualbox]
-1. Install VirtualBox however you install software for your operating system. 
-    - Instructions for [macOS Big Sur][vbbigsur]. **Note: instructions from this video are only valid until the 4:20 time. Do not use these instructions after that point of the video.**
-    - Instructions for [Windows 10][vbwin10]. **Note: instructions from this video are only valid until the 2:30 second mark. Do not use these instructions after that point.**
-1. Be aware of the [VirtualBox user manual][vbmanual]. I'm not asking you to read it, but if you have any issues, you should search this documentation.
+### Google Account
 
-## Host machine set up
+I imagine most of you already have a Google account.
+If not, then go ahead and create one at [https://www.google.com][google].
 
-1. Create a directory on your own Windows or macOS computer, and call it **iso**. It's fine to create this directory in your home directory, or in your documents directory, or wherever.
-1. Move the fedora ISO file that you downloaded to your new **iso** directory.
-1. In your **iso** directory, create a new directory called **virtualbox**.
+## Google Billing
 
-## Set up fedora in VirtualBox
+If you already have a Google account,
+or after you've created one,
+the first thing to do is to set up a billing account for Google Cloud,
+where we will create, administer, and manage our virtual Linux servers.
+That bad news is that we have to spend some money, but
+the good news is that our bills by the end of the semester should
+only amount to a couple of dollars, at most.
 
-1. Click on the **New** button
-1. In the **Name:** field, type in **Fedora-Base-34**. As you type this in, VirtualBox should automatically recognize the **Type:** and **Version**. Click **Next >**.
-1. **Memory size**: Depending on your laptop's memory capabilities, you can set this higher, but it's not necessary. The default **1024 MB** should be fine.
-1. **Hard disk**: The default is 8.00 GB. We will change this to 100 GB on an upcoming screen. For now, make sure you select the default **Create a virtual hard disk now**, and then click on **Create**.
-1. **Hard disk file type**: Accept the default, which is **VDI**.
-1. **Storage on physical hard disk**: Accept the default, which is **Dynamically allocated**
-1. **File location and size**: Here you adjust to the disk size to 100 GB. Note that you will not use all of this space on your hard drive. It's the maximum amount that you can use. Click on **Create**.
+**[Create, modify, or close your self-serve Cloud Billing account][googleBilling]**
 
-The settings box should close. Now highlight the virtual machine in the left pane of the VirtualBox menu, and click on Start.
+## gcloud Installation
 
-## Install fedora in VirtualBox
+After you have set up billing,
+then the next step is to install gcloud on your local machines. 
 
-1. When you start, a window will pop up and ask you to select a virtual optical disk. This is the fedora 34 ISO that you downloaded and that you saved to your new **iso** folder. We have to select the file icon in the window and then find and select the ISO that we downloaded. Once you do that, click on **Start**.
-1. A terminal will open up. Press **Enter** on the Installing Fedora 34 option. Some setup text will scroll by and soon a graphical installer will launch.
-1. In the graphical installer, you'll get a message: "WELCOME TO FEDORA 34." US English should be the default options in both panes. Click on **Continue**.
-1. We only have to configure a few things. Click on **Software Selection**. In
-   the right pane, under **Additional software for Selected Environment**, select **Headless Management** and then click on **Done**.
-1. Now we have to partition our hard drive. We could accept automatic partitioning, but we want to fine tune this. So click on **Installation Destination**.
-1. At the bottom of the window it says **Storage Configuration**. Select **Custom** and then **Done**.
-1. **Manual Partitioning**: In the next screen, the **LVM** option should already be selected. This stands for **Logical Volume Management**. Make sure that stays selected.
-1. Now we create some partitions. Partitioning a drive is a way to slice up a drive into parts so that we better manage the use of the drive. As we create these partitions, note the two pieces of information at the bottom of the screen: the *Available Space* and the *Total Space*. The Available Space will change as we add partitions.
-1. Click on the **+** icon. In the **Mount Point** box, we'll first create the  **root partition**, which is indicated with the forward slash: **/**. For **Desired Capacity**, we should input **20 GB**. In the next screen, change the **File System** to **ext4**.
-1. Next we create our other partitions. These include **/boot**, **/home**, **/var**, **/tmp** partitions and the **swap** file (note the missing slash). Click on the plus sign and repeat the process for these partitions. We'll leave about 34 GB of free disk space available for later use. Altogether, our partition map should look like this, but **fedora** will adjust the sizes a bit:
+**[Install the gcloud CLI][gcloudInstall]**
 
-    | Mount Point/Partition | Size  | File System |
-    |-----------------------|-------|-------------|
-    | /home                 | 30 GB | ext4        |
-    | /                     | 20 GB | ext4        |
-    | /tmp                  | 6 GB  | ext4        |
-    | /var                  | 10 GB | ext4        |
-    | /boot                 | 1 GB  | ext4        |
-    | swap                  | 4 GB  | swap        |
+There are installation instructions for macOS and Windows.
+Follow these instructions closely.
+Note that for macOS,
+you have to choose among three different platforms.
+If you have an older macOS machine (before November 2020 or so),
+it's likely that you'll select **macOS 64-bit (x86_64)**.
+If you have a newer macOS machine,
+then it's likely you'll have to select **macOS 64-bit (arm64, Apple M1
+silicon).**
+It's unlikely that any of you are using a 32-bit macOS operating system.
+If you're not sure which macOS system you have,
+then let me know and I can help you determine the appropriate platform.
+Alternatively, follow these instructions to find your processor information:
 
-    Note that the **/boot** partition is mapped to **sda1**. This is handy to remember.
+- click on the Apple menu
+- choose **About This Mac**
+- locate the **Processor** or **Chip** information
 
-    Note also that the Available Space listed at the bottom should be about 33.86 GiB.
+## gcloud Project
 
-    After you've inputted the above info, click on **Done**. Then click on **Accept Changes** in the next window.
+Once you've installed gcloud,
+log into [Google Cloud Console][gcloudConsole],
+which should take you to the Dashboard page.
 
-1. Set up Root Password. Save this password!
-1. Click on **Begin Installation**. This might take up to 15 minutes depending on the strength of your internet connection and what kind of hardware you have. 
-1. Wait until installation is complete and you are able to Reboot System. HOWEVER, do not reboot yet. Instead, choose **Close** from the **File** menu, and then click **Power off the machine.** 
-1. In VirtualBox settings, click on the settings for this machine.
-1. In the window that pops up, click on the **System** tab (this may look different if you're on macOS, especially).
-1. Deselect the Floppy and Optical options next to **Boot Order**, and then click **Okay**.
-1. Click on **Start** to boot your system back.
+Our first goal is to create a **virtual machine (VM)** *instance*.
+A VM is basically a virtualized operating system.
+That means instead of installing an operating system
+(like Linux, macOS, Windows, etc) on a physical machine,
+software is used to mimic the process. 
 
-## Boot fedora; update system; and create regular user
+gcloud offers a number of Linux-based operating systems
+to create VMs with.
+We're going to use the Ubuntu operating system in this class
+and specifically the Ubuntu 20.04 LTS version.
 
-1. Once your system is running, you will get a login prompt. Login as the user ``root``.
-1. Update your system right away with the following commands:
+> Ubuntu is a Linux distribution.
+> A new version of Ubuntu is released every six months.
+> The 20.04 signifies that this is the April 2020 version.
+> LTS signifies **Long Term Support**.
+> LTS versions are released every two years,
+> and Canonical LTD,
+> the owners of Ubuntu,
+> provide standard support for LTS versions for five years.
+> Non-LTS versions of Ubuntu only receive nine months of standard support.
 
-    ```
-    dnf updateinfo
-    dnf upgrade
-    ```
+To create your VMThen follow these steps:
 
-    The first command will sync your local repository with the remove repositories that manage software updates. The second command will update the software on your system if updates are available.
+- Click the **Select from** drop-down list.
+- In the window, create a **New Project**.
+- In the next window, name the project.
+    - You can name the project anything.
+    - E.g., I am using the name **sysadmin-418**.
+    - Click on the **Create** button.
+    - Leave the organization field set to **No Organization**.
+- Next, click on **Create a VM**.
+- Provide a name for your **instance**.
+    - E.g., I chose **fall-2022** (no spaces) 
+- Under the **Series** dropdown box, make sure **E2** is selected.
+- Under the **Machine type** dropdown box, select **e2-micro (2 vCPU, 1 GB memory)**
+    - This is the lowest cost virtual machine and perfect for our needs.
+- Under **Boot disk**, click on the **Change** button.
+- In the window, select **Ubuntu** from the **Operating system** dropdown box.
+- Select **Ubuntu 20.04 LTS**
+- Leave **Boot disk type** should be set to **Balanced persistant disk**
+- Disk size should be set to **10 GB**.
+- Click on the **Select** button.
+- Check the **Allow HTTP Traffic** button
+- Finally, click on the **Create** button to create your VM instance.
 
-1. We do not normally want to work in the ``root`` account. So next we need to a regular user. To create a new user, do the next command. Instead of **sean**, create a username that you like. Make sure it is one word and that it is all lowercase:
+
+- Click on the navigation menu: ``☰``
+- Click on **Compute Engine**
+- Click on **VM instances**
+
+
+[google]:https://www.google.com
+[gcloudInstall]:https://cloud.google.com/sdk/docs/install
+[googleBilling]:https://cloud.google.com/billing/docs/how-to/manage-billing-account
+[gcloudConsole]:https://console.cloud.google.com/
+
+
+```
+apt update
+apt upgrade
+apt autoremove
+```
+
+
+The first command will sync your local repository with the remove repositories
+that manage software updates. The second command will update the software on
+your system if updates are available.
+
+1. We do not normally want to work in the ``root`` account. So next we need to
+   a regular user. To create a new user, do the next command. Instead of
+   **sean**, create a username that you like. Make sure it is one word and that
+   it is all lowercase:
 
     ```
     useradd -m -U -s /usr/bin/bash -G wheel sean
     ```
 
-    The above command will create a new user named *sean* and put that user in group of the same name, create a home directory for that user, make ``bash`` the default shell for that user, and assign that user to the **wheel** group, which will make that user an administrator of the system. Read ``man useradd`` for more details.
+The above command will create a new user named *sean* and put that user in
+group of the same name, create a home directory for that user, make ``bash``
+the default shell for that user, and assign that user to the **wheel** group,
+which will make that user an administrator of the system. Read ``man useradd``
+for more details.
 
 1. Next create a password for your new user:
 
@@ -104,10 +150,3 @@ The settings box should close. Now highlight the virtual machine in the left pan
 In the VirtualBox Manager, right click on our installation, and then select **Clone**. Accept the default name or rename it as you prefer. Be sure to choose **Full clone**.
 
 That's good for now. Congratulations! You have just completed your first installation of a Linux server.
-
-[getfedora]:https://getfedora.org/
-[getfedoradownload]:https://getfedora.org/en/server/download/
-[virtualbox]:https://www.virtualbox.org/
-[vbmanual]:https://www.virtualbox.org/manual/
-[vbbigsur]:https://www.youtube.com/watch?v=1ASMgibukWI
-[vbwin10]:https://www.youtube.com/watch?v=8mns5yqMfZk

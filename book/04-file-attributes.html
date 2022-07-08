@@ -90,23 +90,37 @@
 <a class="header" href="./04-file-attributes.html#identifying-ownership-and-permissions" id="identifying-ownership-and-permissions"><h2>Identifying Ownership and Permissions</h2></a>
 <p>In the last section, we saw that the output of the <code>ls -l</code> command
 included a lot extra information besides a listing of file names.
-The output also listed the owners and permissions for each file and directory.
-Ownership and permissions are set in order to manage some level
-of access to those files.
-There are two owners for every file (and directory):</p>
+The output also listed the owners and permissions for each file and directory.</p>
+<p>Each user account on a Linux system
+(like many operating systems)
+has a user name and has at least one group membership, and
+that name and that group membership
+determine the user and group ownership
+for all files created under that account.</p>
+<p>In order to allow or restrict access to files and directories
+(for example,
+to allow other users to read, write to, or run your or others' files),
+ownership and permissions are set in order to manage that kind
+of access to those files and directories.
+There are thus two owners for every file (and directory):</p>
 <ul>
 <li>user owner</li>
 <li>group owner</li>
 </ul>
 <p>And there are three permission <em>modes</em> that restrict or expand
-access to each file (or directory):</p>
+access to each file (or directory) based on user or group membership:</p>
 <ul>
 <li>(r)ead</li>
 <li>(w)rite</li>
 <li>e(x)ecute (as in a program)</li>
 </ul>
+<blockquote>
+<p>I am emphasizing the <strong>rwx</strong> in the above list of modes because
+we will need to remember what these letters stand for when
+we work with file and directory permissions.</p>
+</blockquote>
 <p>Consider the output of <code>ls -l</code> in some <strong>public_html</strong> directory
-that contains a single file called <em>index.html</em>:</p>
+that contains a single file called <strong>index.html</strong>:</p>
 <pre><code>-rw-rw-r-- 1 sean sean 11251 Jun 20 14:41 index.html
 </code></pre>
 <p>According to the above output,
@@ -125,36 +139,41 @@ the <strong>Owner name</strong> row,
 and the <strong>Group name</strong> row.</p>
 <p>The Owner and Group names of the <strong>index.html</strong> file are <strong>sean</strong> because
 there is a user account named <strong>sean</strong> on the system and
-a group account named <strong>sean</strong> on the system.</p>
+a group account named <strong>sean</strong> on the system, and
+that file exists in the user <strong>sean</strong>'s home directory.</p>
 <p>The <strong>File permissions</strong> row shows:</p>
 <pre><code>-rw-rw-r--
 </code></pre>
 <p>Let's ignore the first dash for now.
 The remaining permissions can be broken down as:</p>
 <ul>
-<li>rw- (for the Owner)</li>
-<li>rw- (for the Group)</li>
-<li>r-- (for the World)</li>
+<li>rw- (read and write only permissions for the Owner)</li>
+<li>rw- (read and write only permissions for the Group)</li>
+<li>r-- (read-only permissions for the World)</li>
 </ul>
-<p>We read the output as such (dashes signify no permissions):</p>
+<p>We read the output as such
+(dashes, other than the initial one, signify no permissions):</p>
 <ul>
 <li>User <strong>sean</strong> is the Owner and has (r)ead and (w)rite permissions on the file
 but not e(x)ecute permissions (<code>rw-</code>).</li>
 <li>Group <strong>sean</strong> is the Group owner and has (r)ead and (w)rite permissions on
 the file but not e(x)ecute permissions (<code>rw-</code>).</li>
 <li>The <strong>World</strong> can (r)ead the file but cannot (w)rite to the file nor
-e(x)exute the file (<code>r--</code>).</li>
+e(x)ecute the file (<code>r--</code>).</li>
 </ul>
 <blockquote>
-<p>The word <strong>write</strong> is a classical computing term,
+<p>The word <strong>write</strong> is a classical computing term
 that means, essentially, to edit and save edits of a file.
-Today we usually use the term <strong>save</strong>.</p>
+Today we use the term <strong>save</strong> instead of <strong>write</strong>,
+but remember that they are basically equivalent terms.</p>
 </blockquote>
 <p>Since this is an HTML page for a website,
 the <strong>World</strong> ownership allows people to view (read) the file but not write
-(save) to it nor execute (run) it.</p>
+(save) to it nor execute (run) it.
+Any webpage you view on the internet at least has World mode set to read.</p>
 <p>Let's take a look at another file.
-In our <code>/bin</code> directory, we can see a listing for this program:</p>
+In our <code>/bin</code> directory, we can see a listing for this program
+(note that I specify the absolute path of the file named <strong>bin</strong>):</p>
 <pre><code>ls -l /bin/zip
 -rwxr-xr-x 1 root   root    212K Feb  2  2021  zip*
 </code></pre>
@@ -172,7 +191,7 @@ it needs to be e(x)ecutable.
 That is, users on the system need to be able to run it.
 But notice that the owner and group names of the file point to the user <strong>root</strong>.
 We have already learned that there is a <strong>root</strong> level in our filesystem.
-This is the top level directory in our filesytem and is referenced
+This is the top level directory in our filesystem and is referenced
 by the forward slash: <code>/</code>.
 But there is also a <strong>root</strong> user account.
 This is the system's <strong>superuser</strong>.
@@ -189,7 +208,8 @@ program.</li>
 </ul>
 <blockquote>
 <p>The asterisk at the end of the file name (<code>zip*</code>) simply indicates that
-this file is an executable.</p>
+this file is an executable;
+i.e., it is a software program that you can run.</p>
 </blockquote>
 <p>Finally, let's take a look at the permissions for a directory.
 On my system, I run the following command in my home directory,
@@ -211,14 +231,17 @@ which will show the permissions for my <code>/home/sean</code> directory:</p>
 </tbody></table>
 <p>This is a little different from the previous examples, but let's parse it:</p>
 <ul>
-<li>The initial <strong>d</strong> identifies this as a directory. Directories in Linux are
-simply special types of files.</li>
+<li>Instead of an initial dash, this <em>file</em> has an initial <strong>d</strong> that identifies this
+as a directory. Directories in Linux are simply special types of files.</li>
 <li>User <strong>sean</strong> has read, write, and execute (<code>rwx</code>) permissions.</li>
 <li>Group <strong>sean</strong> has execute (<code>--x</code>) permissions only.</li>
 <li>The <strong>World</strong> has no permissions (<code>---</code>).</li>
 <li><strong>./</strong> signifies the current directory, which happens to be my home
 directory, since I ran that command at the <code>/home/sean</code> path.</li>
 </ul>
+<p>The takeaway from this set of permissions and the ownership is that only the
+user <strong>sean</strong> and those in the group <strong>sean</strong>, which is just the user <strong>sean</strong>,
+can access this home directory.</p>
 <p>We might ask why the directory has an e(x)ecutable bit set
 for the owner and the group if
 a directory is not an executable file.
@@ -227,13 +250,15 @@ This is so that the owner and the group can access that directory
 using, for example, the <code>cd</code> (change directory) command.
 If the directory was not executable,
 like it's not for the <strong>World</strong> (<code>---</code>),
-then it would not be accessible.
+then it would not be accessible
+with the <code>cd</code> command,
+or any other command.
 In this case, the <strong>World</strong>
 (users who are not me)
 cannot access my home directory.</p>
 <a class="header" href="./04-file-attributes.html#changing-file-permissions-and-ownership" id="changing-file-permissions-and-ownership"><h2>Changing File Permissions and Ownership</h2></a>
 <a class="header" href="./04-file-attributes.html#changing-file-permissions" id="changing-file-permissions"><h3>Changing File Permissions</h3></a>
-<p>All the files and directories a Linux system
+<p>All the files and directories on a Linux system
 have default ownership and permissions set.
 This includes new files that we might create as
 we use our systems.
@@ -242,12 +267,13 @@ for example, the kinds of defaults described above.
 There are several commands available to do that,
 and here I'll introduce you to the two most common ones.</p>
 <ol>
-<li>The <code>chmod</code> command is used to change file (and directories) permissions
+<li>The <code>chmod</code> command is used to change file (and directory) permissions
 (or file mode bits).</li>
 <li>The <code>chown</code> command is used to change a file's (and directory's) owner and
 group.</li>
 </ol>
-<p>The <code>chmod</code> command changes the <code>-rwxrwxrwx</code> part of a file's attributres.
+<p>The <code>chmod</code> command changes the <code>-rwxrwxrwx</code> part of a file's attributes
+that we see with the <code>ls -l</code> command.
 Each one of those bits (the <code>r</code>, the <code>w</code>, and the <code>x</code>)
 are assigned the following <a href="https://docs.oracle.com/cd/E19504-01/802-5750/6i9g464pv/index.html">octal</a> values:</p>
 <table><thead><tr><th> permission   </th><th> description    </th><th> octal value   </th></tr></thead><tbody>
@@ -256,27 +282,27 @@ are assigned the following <a href="https://docs.oracle.com/cd/E19504-01/802-575
 <tr><td> x            </td><td> execute        </td><td> 1             </td></tr>
 <tr><td> -            </td><td> no permissions </td><td> 0             </td></tr>
 </tbody></table>
-<p>There are three octals for the three set of permissions
-represeted by <code>-rwxrwxrwx</code>.
+<p>There are three octal values for the three set of permissions
+represented by <code>-rwxrwxrwx</code>.
 If I bracket the sets (for demonstration purposes only),
 they look like this:</p>
 <pre><code>-[rwx][rwx][rwx]
 </code></pre>
 <p>The first set describes the permissions for the owner.
 The second set describes the permissions for the group.
-The third set descreibes the permissions for the World.</p>
+The third set describes the permissions for the World.</p>
 <p>We use the <code>chmod</code> command and the octal values to change
 a file or directory's permissions.
 For each set, we add up the octal values.
 For example, to make a file read (4), write (2), and executable (1)
 for the owner only,
 and zero out the permissions for the group and World,
-then we use the <code>chmod</code> command like so:</p>
+we use the <code>chmod</code> command like so:</p>
 <pre><code>chmod 700 paper.txt
 </code></pre>
-<p>Because <code>4+2+1=7</code>, and
-zero in the second two places since we're removing
-permissions for group and World.</p>
+<p>We use 7 because <code>4+2+1=7</code>, and
+we use two zeroes in the second two places
+since we're removing permissions for group and World.</p>
 <p>If we want to make the file read, write, and executable by
 the owner, the group, and the world, then we repeat this for each set:</p>
 <pre><code>chmod 777 paper.txt
@@ -286,21 +312,99 @@ Here we enable <code>rw-</code> for the owner,
 and <code>r--</code> for the group and the World:</p>
 <pre><code>chmod 644 paper.txt
 </code></pre>
-<p>Becuase <code>4+2=6</code> for owner,
+<p>Because <code>4+2=6</code> for owner,
 and <code>4</code> is read only for group and World, respectively.</p>
 <a class="header" href="./04-file-attributes.html#changing-file-ownership" id="changing-file-ownership"><h3>Changing File Ownership</h3></a>
-<p>Let's change the ownership of a file so that it's owned by a group we're in:</p>
-<pre><code>chown sean:sis_fac_staff file.sh
-
-# Let's make it read only for the group:
-chmod g-wx+r file.sh
+<p>In order to change the ownership of a file,
+we use the <code>chown</code> command followed by
+the name of the owner.
+We can optionally change the owner of the group by adding a colon (no spaces)
+and the name of the group.</p>
+<p>We can see what groups we belong to with the <code>groups</code> command.
+On one system that I have an account on, I am a member of two groups:
+a group <strong>sean</strong> (same as my user name on this system),
+and a group <strong>sudo</strong>,
+which signifies that I'm an administrator on this system
+(more on <code>sudo</code> later in the semester).</p>
+<pre><code>groups
+sean sudo 
+</code></pre>
+<p>We can only change the user and group ownership of a file or directory
+if we have administrative privileges (<code>sudo</code> administrative access),
+or if we share group membership.
+This means that,
+unless we have <code>sudo</code> (admin) privileges,
+we often might change the group name for a file or directory
+than the user owner.
+Later in the semester,
+you will have to do this kind of work (change user and group names)
+of files and directories.
+In the meantime, let's see some examples:</p>
+<p>Imagine that my Linux user account belongs to the group <strong>sisFaculty</strong>, and
+that there are other users on the Linux system (my colleagues at work)
+who are also members of this group.
+If I want to make a directory or file accessible to them,
+then I can change the group name of a file I own to <strong>sisFaculty</strong>.
+Let's call that file <strong>testFile.txt</strong>.
+To change only the group name for the file:</p>
+<pre><code>chown :sisFaculty testFile.txt
+</code></pre>
+<p>I can generally only change the user owner of a file if I have admin
+access on a system.
+In such a case,
+I might have to use the <code>sudo</code> command
+(you do not have access to the <code>sudo</code> command
+on our shared server,
+but you will have it later on your virtual machines).
+In this case, I don't need the colon.
+To change the owner only,
+say from the user <strong>sean</strong> to the user <strong>tmk</strong>:</p>
+<pre><code>sudo chown tmk testFile.txt
+</code></pre>
+<p>To change both user owner and group name,
+we simply specify both names
+and separate those names by a colon,
+where the syntax is <code>chown USER:GROUP testFile.txt</code></p>
+<pre><code>sudo chown tmk:sisFaculty testFile.txt
+</code></pre>
+<p>After using the <code>chown</code> command to change
+either the owner or group,
+we should double check the file or directory's permissions
+using the <code>chmod</code> command.
+Here I make it so that the user owner and the group <strong>sisFaculty</strong> has
+(r)ead and (w)rite access to the file.
+I use <code>sudo</code> because,
+as the user <strong>sean</strong>,
+I'm changing the file permissions for a file
+that I do not own:</p>
+<pre><code>sudo chmod 660 testFile.txt
 </code></pre>
 <a class="header" href="./04-file-attributes.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
-<p>In this demo, we looked at two ways to change the attributes of a file. This includes changing the ownership of a file and the read, write, and execute permissions of a file.</p>
+<p>In this section, we learned:</p>
+<ul>
+<li>how to identify file/directory ownership and permissions</li>
+<li>and how to change file/directory ownership and permissions.</li>
+</ul>
+<p>Specifically, we looked at two ways to change the attributes of a file.
+This includes changing the ownership of a file
+with the <code>chown</code> command, and
+setting the read, write, and execute
+permissions of a file with the <code>chmod</code>
+command.</p>
 <p>The commands we used to change these attributes include:</p>
 <ul>
 <li><code>chmod</code> : for changing file permissions (or file mode bits)</li>
-<li><code>chown</code> : for changing file ownwership</li>
+<li><code>chown</code> : for changing file ownership</li>
+</ul>
+<p>We also used the following commands:</p>
+<ul>
+<li><code>ls</code>         : list directory contents
+<ul>
+<li><code>ls -ld</code> : long list directories themselves, not their contents</li>
+</ul>
+</li>
+<li><code>groups</code>     : print the groups a user is in</li>
+<li><code>sudo</code>       : execute a command as another user</li>
 </ul>
 
                 </div>

@@ -1,11 +1,11 @@
-# The Linux/Unix File System and File Types
+# The Linux/Unix Filesystem and File Types
 
 In this demo, we will cover the:
 
-- the Linux file system and how it is organized, and
-- the basic commands to work with directories and files
+- the Linux filesystem and how it is structured and organized, and
+- the basic commands to navigate around and to work with directories and files
 
-> Directories and folders are often used interchangeably, but 
+> The terms **directories** and **folders** are synonymous, but 
 > as users of primarily graphical user interfaces,
 > you are more likely familiar with the term **folders**.
 > I will more often use the term **directories** 
@@ -15,7 +15,7 @@ In this demo, we will cover the:
 Throughout this demonstration,
 I encourage you to ``ssh`` into our remote server
 and follow along with the commands that I use.
-See [Section 2.2](02-quick-ssh-connect.md)
+See [Section 2.2](02-quick-ssh-connect.html)
 for details on connecting to the remote server.
 
 ## Visualizing the Filesystem as a Tree
@@ -25,28 +25,31 @@ quite a lot in this course,
 but the term **filesystem** may refer to different concepts,
 and it's important to clear that up before we start.
 
-In come cases, filesystem refers to how data is [stored and retrieved][filesystem]
+In come cases, a **filesystem** refers to how data (files)
+are [stored and retrieved][filesystem]
 on a device like a hard drive, USB drive, etc.
 For example, macOS uses the [Apple File System (APFS)][apfs] by default,
 and Windows uses the [New Technology File System (NTFS)][ntfs].
-Linux and other unix-like operating systems use a variety of file systems, but
+Linux and other unix-like operating systems use a variety of filesystems, but
 presently, the two major ones are **ext4** and **btrfs**.
-The former is the default file system on distributions
+The former is the default filesystem on distributions
 like [Debian][debian] and [Ubuntu][ubuntu];
 the latter is the default on the 
 [Fedora][fedora] and [openSUSE][opensuse] distributions. 
-[Opensource.com][ext4] has a nice overview of file systems under this concept,
+[Opensource.com][ext4] has a nice overview of filesystems under this concept,
 and we will learn how to use some of them later in the semester
 when we create partitions, manage disk volumes, and learn about backups.
 
-The other way that the term **filesystem** might be used is to refer
-to the directory structure of a system.
-This concept is not always directly related to the prior concept of a file system.
+A **filesystem** might also be used to refer
+to the **directory structure** or [directory tree][directorytree] of a system.
+This concept is related to the prior concept of a filesystem, but
+it's used here to refer to the location of files and directories on a system.
 For example, on Windows, the filesystem is identified by a letter, like the **C:** drive,
-regardless if the disk has a NTFS file system or a FAT file system.
+regardless if the disk has a NTFS filesystem or a FAT filesystem.
 Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.),
 will be assigned their own letters (**A:**, **B:**, **D:**, etc.).
-macOS adheres to a root file system like Linux and other unix-like operating systems.
+[macOS adheres to a tree like filesystem][macosdirtree]
+like Linux and other unix-like operating systems.
 (This is because macOS is UNIX.)
 In these operating systems, we have a top-level **root** directory
 identified by a single forward slash  **/**,
@@ -55,15 +58,21 @@ Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are **
 under that root hierarchy and not separately like on Windows.
 [Linux.com][directories] provides a nice overview of the most common directory structure
 that Linux distributions use along with an explanation for the major bottom level directories.
+In this section, we will learn about this type of filesystem.
 
-On Linux, we can visualize the filesystem with the ``tree`` command. 
+On Linux, we can visualize the filesystem with the ``tree`` command.
+The ``tree`` command, like many Linux commands,
+can be run on its own or with options,
+like in the second example below:
 
 - ``tree`` : list contents of directories in a tree-like format
     - ``tree -dfL 1`` : directories only, full path, one level
+    - ``tree -dfL 1 /`` : list directories only at root **/** level
 
 ### The root Directory and its Base Level Directories
 
-As explained on the Linux.com page, here are the major sub directories under **/** (root)
+As explained on the Linux.com page,
+here are the major sub directories under **/** (root)
 and a short description of their main purpose:
 
 - ``/bin`` : binary files needed to use the system
@@ -73,29 +82,28 @@ and a short description of their main purpose:
 - ``/home`` : user directories
 - ``/lib`` : libraries/programs needed for other programs
 - ``/media`` : external storage is mounted
-- ``/mnt`` : other file systems may be mounted
+- ``/mnt`` : other filesystems may be mounted
 - ``/opt`` : store software code to compile software
 - ``/proc`` : files containing info about your computer
 - ``/root`` : home directory of superuser
 - ``/run`` : used by system processes
 - ``/sbin`` : like ``/bin``, binary files that require superuser privileges
-- ``/usr`` : user binaries, etc that might be installed by users
 - ``/srv`` : contains data for servers
 - ``/sys`` : contains info about devices
 - ``/tmp`` : temp files used by applications
+- ``/usr`` : user binaries, etc that might be installed by users
 - ``/var`` : variable files, used often for system logs
 
-Although there are 18 directories listed here
+Although there are 18 directories listed above
 that **branch** off from the root directory,
-there are some that we'll use much more often than others.
-For example, since the **/etc** directory contains system configuration files,
-we will use the contents of this directory,
+we will use some more often than others.
+For example, the **/etc** directory contains system configuration files,
+and we will use the contents of this directory,
 along with the **/var** directory,
 quite a bit when we set up our web servers, relational database servers,
 and more later in the semester.
 The **/home** directory is where our default home directories are stored,
-and thus if you manage a multi-user system,
-like I do for this class,
+and if you manage a multi-user system,
 then this will be an important directory to manage. 
 
 Source: [Linux Filesystem Explained][directories]
@@ -105,10 +113,10 @@ Source: [Linux Filesystem Explained][directories]
 macOS users have the Finder app to navigate their filesystem,
 to move files to different folders, to copy files, to trash them, etc.
 Window users have File Explorer for these functions.
-Linux users have similar options,
+Linux users have similar graphical software options,
 but all of these functions can be completed on the Linux command line, too,
 and generally more efficiently.
-But to get started, it does take learning two things first:
+To get started, we need to learn two things first:
 
 1. how to specify the locations of files and directories in the filesystem 
 2. the commands needed to work with the filesystem
@@ -119,8 +127,7 @@ there are two key concepts to know:
 - absolute paths
 - relative paths
 
-In the prior section,
-we learned about the **/** root directory and its subdirectories.
+Above we learned about the **/** root directory and its subdirectories.
 All sorts of commands,
 especially those that deal with files and directories 
 (like copying, moving, deleting),
@@ -128,16 +135,16 @@ require us to specify on the command line
 the locations of the files and directories.
 It's common to specify the location in two different ways,
 by specifying their **absolute** path (or location) on the filesystem,
-or the **relative** location.
+or the **relative** path (or location).
 
 To demonstrate, we might want to move around the filesystem.
 When we first log in to our remote system,
 our default location will be our home directory,
 sometimes referred to as **$HOME**.
-The path (location) to that directory will be: 
+The path (location) to that directory will be.
 
 ```
-/home/USER/
+/home/USER
 ```
 
 Where **USER** is your username.
@@ -145,16 +152,23 @@ Therefore, since my username is **sean**,
 my home directory is located at:
 
 ```
-/home/sean/
+/home/sean
+```
+
+which we can see specified with the ``pwd`` (print working directory) command:
+
+```
+pwd
+/home/sean
 ```
 
 > When I write **$HOME**,
 > I am referring to a default, **environmental** variable
-> that points to your home directory.
+> that points to our home directory.
 > It's **variable** because,
 > depending on which account we're logged in as,
 > **$HOME** will point to a different location.
-> For me, then, that will be ``/home/sean/``,
+> For me, then, that will be ``/home/sean``,
 > if I'm logged in as **sean**.
 > For you it'll point to your home directory.
 
@@ -163,33 +177,41 @@ I have a subdirectory called **public_html**.
 The path to that is:
 
 ```
-/home/sean/public_html/
+/home/sean/public_html
 ```
 
 In a program like Finder (macOS) or File Explorer (Windows),
-if I want to change my location to that subdirectory,
+if I want to change my location to that subdirectory (or folder),
 then I'd double click on its folder icon.
 On the command line, however, I have to write out the command
 and the path to the subdirectory.
-Therefore, **from my home directory**,
+Therefore, **starting in my home directory**,
 I use the following command to switch to the public_html subdirectory:
 
 ```
 cd public_html
 ```
 
+> Note that files and directories in Linux are case sensitive.
+> This means that a directory named **public_html** can co-exist
+> alongside a directory named **Public_html**.
+> Or a file named **paper.txt** can co-exist alongside a file
+> named **Paper.txt**.
+> So be sure to use the proper case when spelling out files, directories,
+> and even commands.
+
 The above is an example of using a relative path, and
 that command would only be successful if I were
 first in my **$HOME** directory.
 That's because I specified the location of **public_html**
-relative to my default ($HOME) location.
+relative to my default (**$HOME**) location.
 
 I could have also specified the absolute location,
 but this would be the wordier way.
 Since the **public_html** directory is in my $HOME directory,
-and my $HOME directory is in the **/home** directory,
+and my $HOME directory is a subdirectory in the **/home** directory,
 then to specify the absolute path in the above command,
-I'd do:
+I'd write:
 
 ```
 cd /home/sean/public_html
@@ -197,18 +219,18 @@ cd /home/sean/public_html
 
 Again, the relative path specified above would only work if
 I was in my home directory, because 
-``cd public_html`` is relative to the location of ``/home/sean/``.
-That is, the subdirectory **public_html** is in **/home/sean/**.
+``cd public_html`` is relative to the location of ``/home/sean``.
+That is, the subdirectory **public_html** is in **/home/sean**.
 But specifying the absolute path would work no matter where
 I was located in the filesystem.
 For example, if I was working on a file in the ``/etc/apache2`` directory,
-then using the absolute path (``cd /home/sean/public_html/``) would work.
+then using the absolute path (``cd /home/sean/public_html``) would work.
 But the relative path (``cd public_html``) command would not since
 there is no subdirectory called **public_html**
 in the ``/etc/apache2`` directory.
 
 Understanding relative and absolute paths is
-one of the more difficult concepts for new command line users to learn,
+one of the more difficult concepts for new commandline users to learn,
 but after time, it'll feel natural.
 So just keep practicing, and
 I'll go over this throughout the semester.
@@ -221,7 +243,8 @@ we need to know some basic terminal commands.
 A lot of these commands are part of the base system
 called [GNU Coreutils][coreutils],
 and in this demo,
-we will specifically cover some of the following:
+we will specifically cover some of the following
+GNU Coreutils:
 
 - [Directory Listing][directorylisting]
 - [Basic Operations][basicops]
@@ -230,15 +253,16 @@ we will specifically cover some of the following:
 
 ### Directory Listing
 
-I have already demonstrated one command,
-the ``cd`` (change directory) command.
-This will be one of the most frequently used commands in your toolbox.
+> I have already demonstrated one command:
+> the ``cd`` (change directory) command.
+> This will be one of the most frequently used commands in your toolbox.
 
 In our current directory, or
 once we have changed to a new directory,
 we will want to learn its contents
 (what files and directories it contains).
-We have a few commands to list contents,
+We have a few commands to choose from to list contents
+(e.g.,  you have already seen the ``tree`` command),
 but the most common command is the ``ls`` (list) command.
 We use it by typing the following two letters in the terminal:
 
@@ -246,10 +270,13 @@ We use it by typing the following two letters in the terminal:
 ls
 ```
 
+Again, to confirm that we're in some specific directory,
+use the ``pwd`` command to **print** the **working directory**.
+
 Most commands can be combined with **options**.
 Options provide additional functionality to the base command, and
 in order to see what options are available for the ``ls`` command,
-we use look at its **man(ual) page**:
+we can look at its **man(ual) page**:
 
 ```
 man ls
@@ -268,7 +295,7 @@ ls -l
 ```
 
 We can use the ``-a`` option to list hidden files.
-In Linux, hidden files are hidden from the default ``ls`` command
+In Linux, hidden files are hidden from the base ``ls`` command
 if the files begin with a period.
 We have a some of those files in our **$HOME** directories,
 and we can see them like so:
@@ -291,13 +318,14 @@ ls -al
 
 Some basic file operation commands include:
 
-- ``cp`` for copying files and directories
-- ``mv`` for moving (or renaming) files and directories
-- ``rm`` for removing (or deleting) files and directories
+- ``cp``    : copying files and directories
+- ``mv``    : moving (or renaming) files and directories
+- ``rm``    : removing (or deleting) files and directories
+- ``touch`` : change file timestamps (or, create a new, empty file)
 
 These commands also have various options
 that can be viewed in their respective **man pages**.
-Command options provide additional functionality to the base command,
+Again, command options provide additional functionality to the base command,
 and are mostly (but not always) prepended with a dash and a letter or number.
 To see examples, type the following commands,
 which will launch the manual pages for them.
@@ -308,13 +336,60 @@ and use your up and down arrow keys to scroll through the manuals:
 man cp
 man mv
 man rm
+man touch
 ```
 
-Here are some ways to use these commands and their options:
+The ``touch`` command's primary use is to change a file's timestamp;
+that is, the command updates a file's "access and modification times"
+(see ``man touch``).
+For example, let's say we have a file called **paper.txt**
+in our home directory.
+We can see the output here:
+
+```
+ls -l paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:13 /home/sean/paper.txt
+```
+
+This shows that the last modification time was 12:03AM on June 27.
+
+If I run the touch command on **paper.txt**,
+the timestamp will change:
+
+```
+touch paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:15 /home/sean/paper.txt
+```
+
+This shows an updated modification timestamp of 12:15AM.
+
+The side effect occurs when we name a file with the ``touch`` command,
+but the file does not exist,
+in which case the ``touch`` command will create an empty file
+with the name we use.
+Let's say that I do **not** have a file named **file.txt**
+in my home directory.
+If I run the ``ls -l file.txt`` command, I'll receive an error
+since the file does not exist.
+But if I then use the ``touch file.txt`` command,
+and then run ``ls -l file.txt``.
+we'll see that the file now exists,
+that it has a byte size of zero:
+
+```
+ls -l file.txt
+ls: cannot access 'file.txt': No such file or directory
+touch file.txt
+ls -l file.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:18 file.txt
+```
+
+Here are some ways to use the other three commands and their options:
 
 ### Copying Files and Directories
 
-To copy an existing file to a new file:
+To copy an existing file (**file1.txt**)
+to a new file (**file2.txt**):
 
 ```
 cp file1.txt file2.txt
@@ -345,7 +420,7 @@ the command looks like this:
 mv file.docx newName.docx
 ```
 
-To move the file to our Documents/ subdirectory and rename it,
+To move the file to our Documents/ subdirectory and also rename it,
 then we'd do this:
 
 ```
@@ -353,7 +428,7 @@ mv file.docx Documents/newName.docx
 ```
 
 The ``man`` page for the ``mv`` command also describes an ``-i`` option
-for interactive mode that also helps prevent us from overwriting existing files.
+for interactive mode that helps prevent us from overwriting existing files.
 For example, if we have a file called **paper.docx** in our **$HOME** directory,
 and we have a file named **paper.docx** in our **$HOME/Documents** directory,
 and if these are actually two different papers (or files),
@@ -372,12 +447,17 @@ Finally, to delete a file, we use the ``rm`` command:
 rm file.html
 ```
 
+> Unlike the trash bin in your graphical user environment,
+> it's very hard to recover a deleted file using the ``rm`` command.
+> That is, using ``rm`` does not mean the file or directory is **trashed**;
+> rather, it means it was **deleted**.
+
 ## Special File Types
 
 For now, let's only cover two commands here:
 
 - ``mkdir`` for creating a new directory 
-- ``rmdir`` for deleting a directory
+- ``rmdir`` for deleting an empty directory
 
 Like the above commands,
 these commands also have their own set of options
@@ -391,7 +471,8 @@ man rmdir
 ### Make or Create a New Directory 
 
 We use these commands like we do the ones above.
-If we are in our **$HOME** directory and we want to create a new directory, we do:
+If we are in our **$HOME** directory, and
+we want to create a new directory called **bin**, we do:
 
 ```
 mkdir bin 
@@ -401,19 +482,22 @@ mkdir bin
 > to store our personal applications, or applications (programs) that
 > are only available to us.
 
-And if we run ``ls``, we can see that it was successful.
+And if we run ``ls``, we should see that it was successful.
 
 ### Delete a Directory
 
-The ``rmdir`` command is a bit weird because it only removes **empty** directories.
+The ``rmdir`` command is a bit weird
+because it only removes **empty** directories.
 To remove the directory we just created, we use it like so:
 
 ```
 rmdir bin 
 ```
 
-However, if you want to remove a directory that contains files or other subdirectories,
-then you will have to use the ``rm`` command along with the ``-r`` (recursive) option:
+However, if you want to remove a directory
+that contains files or other subdirectories,
+then you will have to use the ``rm`` command
+along with the ``-r`` (recursive) option:
 
 ```
 rm -r directory-with-content/
@@ -423,18 +507,20 @@ rm -r directory-with-content/
 
 There a number of ways to print text to **standard output**,
 which is our screen by default in the terminal.
-We could also redirect standard output to a file, to a printer, or to a remote shell.
+We could also redirect standard output
+to a file, to a printer, or to a remote shell.
 We'll see examples like that later in the semester.
 Here let's cover two commands:
 
-- ``echo`` to print a line of text to standard output
-- ``cat`` to concatenate and write files
+- ``echo`` : to print a line of text to standard output
+- ``cat``  : to concatenate and write files
+- ``less`` : to view files one page at a time
 
 > **Standard output** is by default the screen.
 > When we **print** to standard output,
 > then by default we print to the screen.
 > However, standard output can be **redirected**
-> to other files, programs, or devices, like actual printers.
+> to files, programs, or devices, like actual printers.
 
 ### Print to Screen
 
@@ -476,7 +562,7 @@ and press **q** to quit the pager.
 
 ## Conclusion
 
-In this demo, we learned about the file system or directory structure of Linux,
+In this demo, we learned about the filesystem or directory structure of Linux,
 and we also learned some basic command to work with directories and files.
 You should practice using these commands as much as possible.
 The more you use them, the easier it'll get.
@@ -485,17 +571,18 @@ especially to see what options are available for each of them.
 
 Basic commands covered in this demo include:
 
-- ``ls`` : list 
-- ``man`` : manual pages
-- ``cp`` : copy
-- ``mv`` : move or rename
-- ``rm`` : remove or delete a file or directory
+- ``cat``   : display contents of a file
+- ``cp``    : copy
+- ``echo``  : print a line of text
+- ``less``  : display contents of a file by page
+- ``ls``    : list
+- ``man``   : manual pages
 - ``mkdir`` : create a directory
+- ``mv``    : move or rename
+- ``pwd``   : print name of current/working directory
 - ``rmdir`` : delete an empty directory
-- ``echo`` : print a line of text
-- ``cat`` : display contents of a file
-- ``less`` : display contents of a file by page 
-- ``tree`` : list contents of directories in a tree-like format
+- ``rm``    : remove or delete a file or directory
+- ``tree``  : list contents of directories in a tree-like format
 
 [filesystem]:https://en.wikipedia.org/wiki/File_system
 [apfs]:https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac
@@ -511,3 +598,5 @@ Basic commands covered in this demo include:
 [basicops]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations
 [filetypes]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Special-file-types
 [printing]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Printing-text
+[directorytree]:https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html
+[macosdirtree]:https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html

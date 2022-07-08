@@ -86,14 +86,14 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="./03-filesystem-file-management.html#the-linuxunix-file-system-and-file-types" id="the-linuxunix-file-system-and-file-types"><h1>The Linux/Unix File System and File Types</h1></a>
+                    <a class="header" href="./03-filesystem-file-management.html#the-linuxunix-filesystem-and-file-types" id="the-linuxunix-filesystem-and-file-types"><h1>The Linux/Unix Filesystem and File Types</h1></a>
 <p>In this demo, we will cover the:</p>
 <ul>
-<li>the Linux file system and how it is organized, and</li>
-<li>the basic commands to work with directories and files</li>
+<li>the Linux filesystem and how it is structured and organized, and</li>
+<li>the basic commands to navigate around and to work with directories and files</li>
 </ul>
 <blockquote>
-<p>Directories and folders are often used interchangeably, but
+<p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous, but
 as users of primarily graphical user interfaces,
 you are more likely familiar with the term <strong>folders</strong>.
 I will more often use the term <strong>directories</strong>
@@ -103,34 +103,37 @@ I will use the term <strong>folders</strong> when referring to a graphical envir
 <p>Throughout this demonstration,
 I encourage you to <code>ssh</code> into our remote server
 and follow along with the commands that I use.
-See <a href="02-quick-ssh-connect.md">Section 2.2</a>
+See <a href="02-quick-ssh-connect.html">Section 2.2</a>
 for details on connecting to the remote server.</p>
 <a class="header" href="./03-filesystem-file-management.html#visualizing-the-filesystem-as-a-tree" id="visualizing-the-filesystem-as-a-tree"><h2>Visualizing the Filesystem as a Tree</h2></a>
 <p>We will need to work within the filesystem
 quite a lot in this course,
 but the term <strong>filesystem</strong> may refer to different concepts,
 and it's important to clear that up before we start.</p>
-<p>In come cases, filesystem refers to how data is <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
+<p>In come cases, a <strong>filesystem</strong> refers to how data (files)
+are <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
 on a device like a hard drive, USB drive, etc.
 For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default,
 and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>.
-Linux and other unix-like operating systems use a variety of file systems, but
+Linux and other unix-like operating systems use a variety of filesystems, but
 presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
-The former is the default file system on distributions
+The former is the default filesystem on distributions
 like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
 the latter is the default on the
 <a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
-<a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of file systems under this concept,
+<a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of filesystems under this concept,
 and we will learn how to use some of them later in the semester
 when we create partitions, manage disk volumes, and learn about backups.</p>
-<p>The other way that the term <strong>filesystem</strong> might be used is to refer
-to the directory structure of a system.
-This concept is not always directly related to the prior concept of a file system.
+<p>A <strong>filesystem</strong> might also be used to refer
+to the <strong>directory structure</strong> or <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html">directory tree</a> of a system.
+This concept is related to the prior concept of a filesystem, but
+it's used here to refer to the location of files and directories on a system.
 For example, on Windows, the filesystem is identified by a letter, like the <strong>C:</strong> drive,
-regardless if the disk has a NTFS file system or a FAT file system.
+regardless if the disk has a NTFS filesystem or a FAT filesystem.
 Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.),
 will be assigned their own letters (<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
-macOS adheres to a root file system like Linux and other unix-like operating systems.
+<a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html">macOS adheres to a tree like filesystem</a>
+like Linux and other unix-like operating systems.
 (This is because macOS is UNIX.)
 In these operating systems, we have a top-level <strong>root</strong> directory
 identified by a single forward slash  <strong>/</strong>,
@@ -138,17 +141,23 @@ and then subdirectories under that root directory.
 Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are <strong>mounted</strong>
 under that root hierarchy and not separately like on Windows.
 <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux.com</a> provides a nice overview of the most common directory structure
-that Linux distributions use along with an explanation for the major bottom level directories.</p>
-<p>On Linux, we can visualize the filesystem with the <code>tree</code> command.</p>
+that Linux distributions use along with an explanation for the major bottom level directories.
+In this section, we will learn about this type of filesystem.</p>
+<p>On Linux, we can visualize the filesystem with the <code>tree</code> command.
+The <code>tree</code> command, like many Linux commands,
+can be run on its own or with options,
+like in the second example below:</p>
 <ul>
 <li><code>tree</code> : list contents of directories in a tree-like format
 <ul>
 <li><code>tree -dfL 1</code> : directories only, full path, one level</li>
+<li><code>tree -dfL 1 /</code> : list directories only at root <strong>/</strong> level</li>
 </ul>
 </li>
 </ul>
 <a class="header" href="./03-filesystem-file-management.html#the-root-directory-and-its-base-level-directories" id="the-root-directory-and-its-base-level-directories"><h3>The root Directory and its Base Level Directories</h3></a>
-<p>As explained on the Linux.com page, here are the major sub directories under <strong>/</strong> (root)
+<p>As explained on the Linux.com page,
+here are the major sub directories under <strong>/</strong> (root)
 and a short description of their main purpose:</p>
 <ul>
 <li><code>/bin</code> : binary files needed to use the system</li>
@@ -158,39 +167,38 @@ and a short description of their main purpose:</p>
 <li><code>/home</code> : user directories</li>
 <li><code>/lib</code> : libraries/programs needed for other programs</li>
 <li><code>/media</code> : external storage is mounted</li>
-<li><code>/mnt</code> : other file systems may be mounted</li>
+<li><code>/mnt</code> : other filesystems may be mounted</li>
 <li><code>/opt</code> : store software code to compile software</li>
 <li><code>/proc</code> : files containing info about your computer</li>
 <li><code>/root</code> : home directory of superuser</li>
 <li><code>/run</code> : used by system processes</li>
 <li><code>/sbin</code> : like <code>/bin</code>, binary files that require superuser privileges</li>
-<li><code>/usr</code> : user binaries, etc that might be installed by users</li>
 <li><code>/srv</code> : contains data for servers</li>
 <li><code>/sys</code> : contains info about devices</li>
 <li><code>/tmp</code> : temp files used by applications</li>
+<li><code>/usr</code> : user binaries, etc that might be installed by users</li>
 <li><code>/var</code> : variable files, used often for system logs</li>
 </ul>
-<p>Although there are 18 directories listed here
+<p>Although there are 18 directories listed above
 that <strong>branch</strong> off from the root directory,
-there are some that we'll use much more often than others.
-For example, since the <strong>/etc</strong> directory contains system configuration files,
-we will use the contents of this directory,
+we will use some more often than others.
+For example, the <strong>/etc</strong> directory contains system configuration files,
+and we will use the contents of this directory,
 along with the <strong>/var</strong> directory,
 quite a bit when we set up our web servers, relational database servers,
 and more later in the semester.
 The <strong>/home</strong> directory is where our default home directories are stored,
-and thus if you manage a multi-user system,
-like I do for this class,
+and if you manage a multi-user system,
 then this will be an important directory to manage.</p>
 <p>Source: <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux Filesystem Explained</a></p>
 <a class="header" href="./03-filesystem-file-management.html#relative-and-absolute-paths" id="relative-and-absolute-paths"><h2>Relative and Absolute Paths</h2></a>
 <p>macOS users have the Finder app to navigate their filesystem,
 to move files to different folders, to copy files, to trash them, etc.
 Window users have File Explorer for these functions.
-Linux users have similar options,
+Linux users have similar graphical software options,
 but all of these functions can be completed on the Linux command line, too,
 and generally more efficiently.
-But to get started, it does take learning two things first:</p>
+To get started, we need to learn two things first:</p>
 <ol>
 <li>how to specify the locations of files and directories in the filesystem</li>
 <li>the commands needed to work with the filesystem</li>
@@ -201,8 +209,7 @@ there are two key concepts to know:</p>
 <li>absolute paths</li>
 <li>relative paths</li>
 </ul>
-<p>In the prior section,
-we learned about the <strong>/</strong> root directory and its subdirectories.
+<p>Above we learned about the <strong>/</strong> root directory and its subdirectories.
 All sorts of commands,
 especially those that deal with files and directories
 (like copying, moving, deleting),
@@ -210,70 +217,83 @@ require us to specify on the command line
 the locations of the files and directories.
 It's common to specify the location in two different ways,
 by specifying their <strong>absolute</strong> path (or location) on the filesystem,
-or the <strong>relative</strong> location.</p>
+or the <strong>relative</strong> path (or location).</p>
 <p>To demonstrate, we might want to move around the filesystem.
 When we first log in to our remote system,
 our default location will be our home directory,
 sometimes referred to as <strong>$HOME</strong>.
-The path (location) to that directory will be:</p>
-<pre><code>/home/USER/
+The path (location) to that directory will be.</p>
+<pre><code>/home/USER
 </code></pre>
 <p>Where <strong>USER</strong> is your username.
 Therefore, since my username is <strong>sean</strong>,
 my home directory is located at:</p>
-<pre><code>/home/sean/
+<pre><code>/home/sean
+</code></pre>
+<p>which we can see specified with the <code>pwd</code> (print working directory) command:</p>
+<pre><code>pwd
+/home/sean
 </code></pre>
 <blockquote>
 <p>When I write <strong>$HOME</strong>,
 I am referring to a default, <strong>environmental</strong> variable
-that points to your home directory.
+that points to our home directory.
 It's <strong>variable</strong> because,
 depending on which account we're logged in as,
 <strong>$HOME</strong> will point to a different location.
-For me, then, that will be <code>/home/sean/</code>,
+For me, then, that will be <code>/home/sean</code>,
 if I'm logged in as <strong>sean</strong>.
 For you it'll point to your home directory.</p>
 </blockquote>
 <p>In my home directory,
 I have a subdirectory called <strong>public_html</strong>.
 The path to that is:</p>
-<pre><code>/home/sean/public_html/
+<pre><code>/home/sean/public_html
 </code></pre>
 <p>In a program like Finder (macOS) or File Explorer (Windows),
-if I want to change my location to that subdirectory,
+if I want to change my location to that subdirectory (or folder),
 then I'd double click on its folder icon.
 On the command line, however, I have to write out the command
 and the path to the subdirectory.
-Therefore, <strong>from my home directory</strong>,
+Therefore, <strong>starting in my home directory</strong>,
 I use the following command to switch to the public_html subdirectory:</p>
 <pre><code>cd public_html
 </code></pre>
+<blockquote>
+<p>Note that files and directories in Linux are case sensitive.
+This means that a directory named <strong>public_html</strong> can co-exist
+alongside a directory named <strong>Public_html</strong>.
+Or a file named <strong>paper.txt</strong> can co-exist alongside a file
+named <strong>Paper.txt</strong>.
+So be sure to use the proper case when spelling out files, directories,
+and even commands.</p>
+</blockquote>
 <p>The above is an example of using a relative path, and
 that command would only be successful if I were
 first in my <strong>$HOME</strong> directory.
 That's because I specified the location of <strong>public_html</strong>
-relative to my default ($HOME) location.</p>
+relative to my default (<strong>$HOME</strong>) location.</p>
 <p>I could have also specified the absolute location,
 but this would be the wordier way.
 Since the <strong>public_html</strong> directory is in my $HOME directory,
-and my $HOME directory is in the <strong>/home</strong> directory,
+and my $HOME directory is a subdirectory in the <strong>/home</strong> directory,
 then to specify the absolute path in the above command,
-I'd do:</p>
+I'd write:</p>
 <pre><code>cd /home/sean/public_html
 </code></pre>
 <p>Again, the relative path specified above would only work if
 I was in my home directory, because
-<code>cd public_html</code> is relative to the location of <code>/home/sean/</code>.
-That is, the subdirectory <strong>public_html</strong> is in <strong>/home/sean/</strong>.
+<code>cd public_html</code> is relative to the location of <code>/home/sean</code>.
+That is, the subdirectory <strong>public_html</strong> is in <strong>/home/sean</strong>.
 But specifying the absolute path would work no matter where
 I was located in the filesystem.
 For example, if I was working on a file in the <code>/etc/apache2</code> directory,
-then using the absolute path (<code>cd /home/sean/public_html/</code>) would work.
+then using the absolute path (<code>cd /home/sean/public_html</code>) would work.
 But the relative path (<code>cd public_html</code>) command would not since
 there is no subdirectory called <strong>public_html</strong>
 in the <code>/etc/apache2</code> directory.</p>
 <p>Understanding relative and absolute paths is
-one of the more difficult concepts for new command line users to learn,
+one of the more difficult concepts for new commandline users to learn,
 but after time, it'll feel natural.
 So just keep practicing, and
 I'll go over this throughout the semester.</p>
@@ -284,7 +304,8 @@ we need to know some basic terminal commands.
 A lot of these commands are part of the base system
 called <a href="https://www.gnu.org/software/coreutils/manual/coreutils.html">GNU Coreutils</a>,
 and in this demo,
-we will specifically cover some of the following:</p>
+we will specifically cover some of the following
+GNU Coreutils:</p>
 <ul>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Directory-listing">Directory Listing</a></li>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations">Basic Operations</a></li>
@@ -292,22 +313,27 @@ we will specifically cover some of the following:</p>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Printing-text">Printing Text</a></li>
 </ul>
 <a class="header" href="./03-filesystem-file-management.html#directory-listing" id="directory-listing"><h3>Directory Listing</h3></a>
-<p>I have already demonstrated one command,
+<blockquote>
+<p>I have already demonstrated one command:
 the <code>cd</code> (change directory) command.
 This will be one of the most frequently used commands in your toolbox.</p>
+</blockquote>
 <p>In our current directory, or
 once we have changed to a new directory,
 we will want to learn its contents
 (what files and directories it contains).
-We have a few commands to list contents,
+We have a few commands to choose from to list contents
+(e.g.,  you have already seen the <code>tree</code> command),
 but the most common command is the <code>ls</code> (list) command.
 We use it by typing the following two letters in the terminal:</p>
 <pre><code>ls
 </code></pre>
+<p>Again, to confirm that we're in some specific directory,
+use the <code>pwd</code> command to <strong>print</strong> the <strong>working directory</strong>.</p>
 <p>Most commands can be combined with <strong>options</strong>.
 Options provide additional functionality to the base command, and
 in order to see what options are available for the <code>ls</code> command,
-we use look at its <strong>man(ual) page</strong>:</p>
+we can look at its <strong>man(ual) page</strong>:</p>
 <pre><code>man ls
 </code></pre>
 <p>From the <code>ls</code> <strong>man page</strong>,
@@ -320,7 +346,7 @@ I will talk more about what the other parts of output of this option mean.</p>
 <pre><code>ls -l
 </code></pre>
 <p>We can use the <code>-a</code> option to list hidden files.
-In Linux, hidden files are hidden from the default <code>ls</code> command
+In Linux, hidden files are hidden from the base <code>ls</code> command
 if the files begin with a period.
 We have a some of those files in our <strong>$HOME</strong> directories,
 and we can see them like so:</p>
@@ -336,13 +362,14 @@ we can use:</p>
 <a class="header" href="./03-filesystem-file-management.html#basic-file-operations" id="basic-file-operations"><h2>Basic File Operations</h2></a>
 <p>Some basic file operation commands include:</p>
 <ul>
-<li><code>cp</code> for copying files and directories</li>
-<li><code>mv</code> for moving (or renaming) files and directories</li>
-<li><code>rm</code> for removing (or deleting) files and directories</li>
+<li><code>cp</code>    : copying files and directories</li>
+<li><code>mv</code>    : moving (or renaming) files and directories</li>
+<li><code>rm</code>    : removing (or deleting) files and directories</li>
+<li><code>touch</code> : change file timestamps (or, create a new, empty file)</li>
 </ul>
 <p>These commands also have various options
 that can be viewed in their respective <strong>man pages</strong>.
-Command options provide additional functionality to the base command,
+Again, command options provide additional functionality to the base command,
 and are mostly (but not always) prepended with a dash and a letter or number.
 To see examples, type the following commands,
 which will launch the manual pages for them.
@@ -351,10 +378,46 @@ and use your up and down arrow keys to scroll through the manuals:</p>
 <pre><code>man cp
 man mv
 man rm
+man touch
 </code></pre>
-<p>Here are some ways to use these commands and their options:</p>
+<p>The <code>touch</code> command's primary use is to change a file's timestamp;
+that is, the command updates a file's &quot;access and modification times&quot;
+(see <code>man touch</code>).
+For example, let's say we have a file called <strong>paper.txt</strong>
+in our home directory.
+We can see the output here:</p>
+<pre><code>ls -l paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:13 /home/sean/paper.txt
+</code></pre>
+<p>This shows that the last modification time was 12:03AM on June 27.</p>
+<p>If I run the touch command on <strong>paper.txt</strong>,
+the timestamp will change:</p>
+<pre><code>touch paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:15 /home/sean/paper.txt
+</code></pre>
+<p>This shows an updated modification timestamp of 12:15AM.</p>
+<p>The side effect occurs when we name a file with the <code>touch</code> command,
+but the file does not exist,
+in which case the <code>touch</code> command will create an empty file
+with the name we use.
+Let's say that I do <strong>not</strong> have a file named <strong>file.txt</strong>
+in my home directory.
+If I run the <code>ls -l file.txt</code> command, I'll receive an error
+since the file does not exist.
+But if I then use the <code>touch file.txt</code> command,
+and then run <code>ls -l file.txt</code>.
+we'll see that the file now exists,
+that it has a byte size of zero:</p>
+<pre><code>ls -l file.txt
+ls: cannot access 'file.txt': No such file or directory
+touch file.txt
+ls -l file.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:18 file.txt
+</code></pre>
+<p>Here are some ways to use the other three commands and their options:</p>
 <a class="header" href="./03-filesystem-file-management.html#copying-files-and-directories" id="copying-files-and-directories"><h3>Copying Files and Directories</h3></a>
-<p>To copy an existing file to a new file:</p>
+<p>To copy an existing file (<strong>file1.txt</strong>)
+to a new file (<strong>file2.txt</strong>):</p>
 <pre><code>cp file1.txt file2.txt
 </code></pre>
 <p>Use the <code>-i</code> option to copy that file in interactive mode;
@@ -373,12 +436,12 @@ to a subdirectory named &quot;Documents&quot;:</p>
 the command looks like this:</p>
 <pre><code>mv file.docx newName.docx
 </code></pre>
-<p>To move the file to our Documents/ subdirectory and rename it,
+<p>To move the file to our Documents/ subdirectory and also rename it,
 then we'd do this:</p>
 <pre><code>mv file.docx Documents/newName.docx
 </code></pre>
 <p>The <code>man</code> page for the <code>mv</code> command also describes an <code>-i</code> option
-for interactive mode that also helps prevent us from overwriting existing files.
+for interactive mode that helps prevent us from overwriting existing files.
 For example, if we have a file called <strong>paper.docx</strong> in our <strong>$HOME</strong> directory,
 and we have a file named <strong>paper.docx</strong> in our <strong>$HOME/Documents</strong> directory,
 and if these are actually two different papers (or files),
@@ -390,11 +453,17 @@ The <code>-i</code> option will prompt us first:</p>
 <p>Finally, to delete a file, we use the <code>rm</code> command:</p>
 <pre><code>rm file.html
 </code></pre>
+<blockquote>
+<p>Unlike the trash bin in your graphical user environment,
+it's very hard to recover a deleted file using the <code>rm</code> command.
+That is, using <code>rm</code> does not mean the file or directory is <strong>trashed</strong>;
+rather, it means it was <strong>deleted</strong>.</p>
+</blockquote>
 <a class="header" href="./03-filesystem-file-management.html#special-file-types" id="special-file-types"><h2>Special File Types</h2></a>
 <p>For now, let's only cover two commands here:</p>
 <ul>
 <li><code>mkdir</code> for creating a new directory</li>
-<li><code>rmdir</code> for deleting a directory</li>
+<li><code>rmdir</code> for deleting an empty directory</li>
 </ul>
 <p>Like the above commands,
 these commands also have their own set of options
@@ -404,7 +473,8 @@ man rmdir
 </code></pre>
 <a class="header" href="./03-filesystem-file-management.html#make-or-create-a-new-directory" id="make-or-create-a-new-directory"><h3>Make or Create a New Directory</h3></a>
 <p>We use these commands like we do the ones above.
-If we are in our <strong>$HOME</strong> directory and we want to create a new directory, we do:</p>
+If we are in our <strong>$HOME</strong> directory, and
+we want to create a new directory called <strong>bin</strong>, we do:</p>
 <pre><code>mkdir bin 
 </code></pre>
 <blockquote>
@@ -412,32 +482,37 @@ If we are in our <strong>$HOME</strong> directory and we want to create a new di
 to store our personal applications, or applications (programs) that
 are only available to us.</p>
 </blockquote>
-<p>And if we run <code>ls</code>, we can see that it was successful.</p>
+<p>And if we run <code>ls</code>, we should see that it was successful.</p>
 <a class="header" href="./03-filesystem-file-management.html#delete-a-directory" id="delete-a-directory"><h3>Delete a Directory</h3></a>
-<p>The <code>rmdir</code> command is a bit weird because it only removes <strong>empty</strong> directories.
+<p>The <code>rmdir</code> command is a bit weird
+because it only removes <strong>empty</strong> directories.
 To remove the directory we just created, we use it like so:</p>
 <pre><code>rmdir bin 
 </code></pre>
-<p>However, if you want to remove a directory that contains files or other subdirectories,
-then you will have to use the <code>rm</code> command along with the <code>-r</code> (recursive) option:</p>
+<p>However, if you want to remove a directory
+that contains files or other subdirectories,
+then you will have to use the <code>rm</code> command
+along with the <code>-r</code> (recursive) option:</p>
 <pre><code>rm -r directory-with-content/
 </code></pre>
 <a class="header" href="./03-filesystem-file-management.html#printing-text" id="printing-text"><h2>Printing Text</h2></a>
 <p>There a number of ways to print text to <strong>standard output</strong>,
 which is our screen by default in the terminal.
-We could also redirect standard output to a file, to a printer, or to a remote shell.
+We could also redirect standard output
+to a file, to a printer, or to a remote shell.
 We'll see examples like that later in the semester.
 Here let's cover two commands:</p>
 <ul>
-<li><code>echo</code> to print a line of text to standard output</li>
-<li><code>cat</code> to concatenate and write files</li>
+<li><code>echo</code> : to print a line of text to standard output</li>
+<li><code>cat</code>  : to concatenate and write files</li>
+<li><code>less</code> : to view files one page at a time</li>
 </ul>
 <blockquote>
 <p><strong>Standard output</strong> is by default the screen.
 When we <strong>print</strong> to standard output,
 then by default we print to the screen.
 However, standard output can be <strong>redirected</strong>
-to other files, programs, or devices, like actual printers.</p>
+to files, programs, or devices, like actual printers.</p>
 </blockquote>
 <a class="header" href="./03-filesystem-file-management.html#print-to-screen" id="print-to-screen"><h3>Print to Screen</h3></a>
 <p>To use <code>echo</code>:</p>
@@ -463,7 +538,7 @@ There are a few pagers to use, but the <code>less</code> command is a common one
 use the up and down arrow keys to scroll through the output,
 and press <strong>q</strong> to quit the pager.</p>
 <a class="header" href="./03-filesystem-file-management.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
-<p>In this demo, we learned about the file system or directory structure of Linux,
+<p>In this demo, we learned about the filesystem or directory structure of Linux,
 and we also learned some basic command to work with directories and files.
 You should practice using these commands as much as possible.
 The more you use them, the easier it'll get.
@@ -471,17 +546,18 @@ Also, be sure to review the <strong>man pages</strong> for each of the commands,
 especially to see what options are available for each of them.</p>
 <p>Basic commands covered in this demo include:</p>
 <ul>
-<li><code>ls</code> : list</li>
-<li><code>man</code> : manual pages</li>
-<li><code>cp</code> : copy</li>
-<li><code>mv</code> : move or rename</li>
-<li><code>rm</code> : remove or delete a file or directory</li>
+<li><code>cat</code>   : display contents of a file</li>
+<li><code>cp</code>    : copy</li>
+<li><code>echo</code>  : print a line of text</li>
+<li><code>less</code>  : display contents of a file by page</li>
+<li><code>ls</code>    : list</li>
+<li><code>man</code>   : manual pages</li>
 <li><code>mkdir</code> : create a directory</li>
+<li><code>mv</code>    : move or rename</li>
+<li><code>pwd</code>   : print name of current/working directory</li>
 <li><code>rmdir</code> : delete an empty directory</li>
-<li><code>echo</code> : print a line of text</li>
-<li><code>cat</code> : display contents of a file</li>
-<li><code>less</code> : display contents of a file by page</li>
-<li><code>tree</code> : list contents of directories in a tree-like format</li>
+<li><code>rm</code>    : remove or delete a file or directory</li>
+<li><code>tree</code>  : list contents of directories in a tree-like format</li>
 </ul>
 
                 </div>
