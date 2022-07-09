@@ -13,7 +13,7 @@
     - [Bash Scripting](./09-bash-scripting.md)
     - [Regular Expressions](./10-regular-expressions.md)
 - [Managing Services and Software](./p2-managing-services-software.md)
-    - [Installing Linux in VirtualBox](./11-installing-linux.md)
+    - [Using gcloud for Virtual Machines](./11-using-gcloud.md)
     - [Logical Volume Management](./12-logical-volumes.md)
     - [Using NAT in VirtualBox](./13-virtualbox-nat.md)
     - [NAT Table in VirtualBox](./14-webconsole-nat.md)
