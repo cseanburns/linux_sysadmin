@@ -97,7 +97,7 @@ echo "${seasons[-1]}"
 
 See [Parameter expansions][parameterexp] for more advanced techniques.
 
-## Conditional Expression
+## Conditional Expressions
 
 Whether working on the commandline, or
 writing scripts in a text editor,

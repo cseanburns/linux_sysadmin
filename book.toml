@@ -1,6 +1,15 @@
 [book]
-authors = ["C. Sean Burns"]
+title = "Linux Systems Administration"
+author = "C. Sean Burns"
+description = "Book on entry level Linux systems administration work."
 language = "en"
 multilingual = false
 src = "src"
-title = "Linux Systems Administration"
+
+[output.html]
+git-repository-url = "https://github.com/cseanburns/linux_sysadmin"
+site-url = "https://cseanburns.net"
+
+[output.html.print]
+enable = true
+page-break = true
