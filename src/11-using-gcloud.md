@@ -277,13 +277,14 @@ To get started:
 2. At the top of the page, click on **Create Snapshot**.
 3. Provide a name for your snapshot: e.g., **ubuntu-1**.
 4. Provide a description of your snapshot: e.g.,
+
     This is a new install of Ubuntu 20.04.
+
 5. Choose your **Source disk**.
 6. Choose a **Location** to store your snapshot.
     - To avoid extra charges, choose **Regional**.
     - From the dropdown box, select the same location (zone-info) your VM has
-7. Click on **Enable application consistent snapshot**
-8. Click on **Create**
+7. Click on **Create**
 
 **<p style="color:red">Please monitor your billing for this to avoid costs
 that you do not want to incur.</p>**
