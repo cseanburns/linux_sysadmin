@@ -1,0 +1,365 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Bash Scripting - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-what-is-linux.html"><strong>1.1.</strong> What is Linux?</a></li><li><a href="02-what-is-sysadmin.html"><strong>1.2.</strong> What is Systems Administration?</a></li><li><a href="03-history-linux-unix.html"><strong>1.3.</strong> History of Unix and Linux</a></li></ul></li><li><a href="p2-the-command-line.html"><strong>2.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="04-quick-ssh-connect.html"><strong>2.1.</strong> Connect to a Remote Server</a></li><li><a href="05-the-linux-filesystem.html"><strong>2.2.</strong> The Linux Filesystem</a></li><li><a href="06-files-and-directories.html"><strong>2.3.</strong> Files and Directories</a></li><li><a href="07-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="08-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="09-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="10-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="11-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="12-bash-scripting.html" class="active"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="13-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="p3-using-gcloud.html"><strong>3.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="14-using-gcloud.html"><strong>3.1.</strong> Using gcloud for Virtual Machines</a></li><li><a href="15-expanding-storage.html"><strong>3.2.</strong> Expanding Storage</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="16-managing-users-groups.html"><strong>4.1.</strong> Managing Users and Groups</a></li><li><a href="17-systemd.html"><strong>4.2.</strong> systemd</a></li><li><a href="18-using-apt.html"><strong>4.3.</strong> Using APT to Manage Software</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-tcip-networking.html"><strong>5.1.</strong> TCIP Networking</a></li><li><a href="20-networking-dns-domains.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-security-chroot.html"><strong>5.3.</strong> Security and chroot</a></li><li><a href="22-security-firewall.html"><strong>5.4.</strong> Security and Firewalls</a></li><li><a href="23-backups.html"><strong>5.5.</strong> Backups</a></li></ul></li><li><a href="p6-lamp.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="24-httpd-apache.html"><strong>6.1.</strong> Apache2 Web Server</a></li><li><a href="25-httpd-php.html"><strong>6.2.</strong> Apache2 and PHP</a></li><li><a href="26-httpd-virtualhosts.html"><strong>6.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="27-httpd-mariadb.html"><strong>6.4.</strong> Apache2 and MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="12-bash-scripting.html#bash-scripting" id="bash-scripting"><h1>Bash Scripting</h1></a>
+<p>It's time to get started on Bash scripting.
+So far, we've been working on the Linux commandline.
+Specifically, we have been working in the <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">Bash</a> shell.
+Wikipedia refers to Bash as a <strong>command language</strong>, and
+by that it means that Bash is used as a commandline language
+but also as a scripting language.
+The main purpose of Bash is to write small applications/scripts
+that analyze text (e.g., log files) and automate jobs, but
+it can be used for a variety of other purposes.</p>
+<a class="header" href="12-bash-scripting.html#variables" id="variables"><h2>Variables</h2></a>
+<p>One of the most important abilities of any programming or scripting language
+is to be able to declare a variable.
+Variables enable us to attach some value to a name.
+That value may be temporary,
+and it's used to pass information to other parts of a program.</p>
+<p>In Bash, we declare a variable with the name of the variable,
+an equal sign,
+and then the value of the variable within double quotes.
+Do not insert spaces.
+In the following code snippet,
+which can be entered on the commandine,
+I create a variable named <code>name</code>
+and assign it the value <code>Sean</code>.
+I create another variable named <code>backup</code>
+and assign it the value <code>/media</code>.
+Then I use the <code>echo</code> and <code>cd</code> commands
+to test the variables:</p>
+<pre><code>name=&quot;Sean&quot;
+backup=&quot;/media&quot;
+echo &quot;My name is ${name}&quot;
+echo &quot;${backup}&quot;
+cd &quot;${backup}&quot;
+pwd
+cd
+</code></pre>
+<p>Variables may include values that may change given some context.
+For example, if we want a variable to refer to today's day of week,
+we can use <a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">command substitution</a>,
+which &quot;allows the output of a command
+to replace the command name&quot; (see <code>man bash</code>).
+Thus, the output at the time this variable is set
+will differ if it is set on a different day.</p>
+<pre><code>today=&quot;$(date +%A)&quot;
+echo &quot;${today}&quot;
+</code></pre>
+<p>The curly braces are not strictly necessary,
+but they offer benefits when we start to use things
+like <a href="https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html">array variables</a>.
+See:</p>
+<ul>
+<li><a href="https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/">How to use curly braces in Bash</a></li>
+<li><a href="https://wiki.bash-hackers.org/syntax/expansion/brace">Brace Expansion</a></li>
+</ul>
+<p>For example, let's look at basic <strong>brace expansion</strong>,
+which can be used to generate arbitrary strings:</p>
+<pre><code>echo {1..5}
+echo {5..1}
+echo {a..l}
+echo {l..a}
+</code></pre>
+<p>Another example: using brace notation,
+we can generate multiple sub-directories at once.
+Start off in your home directory, and:</p>
+<pre><code>mkdir -p homework/{drafts,notes}
+cd homework
+ls
+</code></pre>
+<p>But more than that, they allow us to deal with arrays (or lists).
+Here I create a variable named <code>seasons</code>,
+which holds an <strong>array</strong>, or multiple values: <code>winter spring summer fall</code>.
+Bash lets me access parts of that array:</p>
+<pre><code>seasons=(winter spring summer fall)
+echo &quot;${seasons[@]}&quot;
+echo &quot;${seasons[1]}&quot;
+echo &quot;${seasons[2]}&quot;
+echo &quot;${seasons[-1]}&quot;
+</code></pre>
+<p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
+<a class="header" href="12-bash-scripting.html#conditional-expressions" id="conditional-expressions"><h2>Conditional Expressions</h2></a>
+<p>Whether working on the commandline, or
+writing scripts in a text editor,
+it's sometimes useful to be able to write multiple commands
+on one line.
+There are several ways to do that.
+We can include a list of commands on one line in Bash
+where each command is separated by a semicolon:</p>
+<pre><code>cd ; ls -lt
+</code></pre>
+<p>But we can use <a href="https://ss64.com/bash/syntax-execute.html">conditional expressions</a> and
+apply logic with <code>&amp;&amp;</code> (<strong>Logical AND</strong>) or <code>||</code> (<strong>Logical OR</strong>).</p>
+<p>Here, <code>command2</code> is executed if and only if <code>command1</code> is successful:</p>
+<pre><code>command1 &amp;&amp; command2
+</code></pre>
+<p>Here, <code>command2</code> is executed if and only if <code>command1</code> fails:</p>
+<pre><code>command1 || command2
+</code></pre>
+<p>Example:</p>
+<pre><code>cd documents &amp;&amp; echo &quot;success&quot;
+cd documents || echo &quot;failed&quot;
+# combine them:
+cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
+mkdir test
+cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
+</code></pre>
+<a class="header" href="12-bash-scripting.html#shebang-or-hashbang" id="shebang-or-hashbang"><h2>Shebang or Hashbang</h2></a>
+<p>When we start to write scripts,
+the first thing we add is a [shebang][shebang] at line one.
+We can do so a couple of ways:</p>
+<pre><code>##!/usr/bin/env bash
+</code></pre>
+<p>The first one should be more portable, but alternatively,
+you could put the direct path to Bash:</p>
+<pre><code>#!/usr/bin/bash
+</code></pre>
+<a class="header" href="12-bash-scripting.html#looping" id="looping"><h2>Looping</h2></a>
+<p>There are several looping methods Bash,
+including: <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
+The <code>for</code> loop is often very useful.</p>
+<pre><code>for i in {1..5} ; do
+  echo &quot;${i}&quot;
+done
+</code></pre>
+<p>With that, we can create a rudimentary timer:</p>
+<pre><code>for i in {1..5} ; do
+  echo &quot;${i}&quot; &amp;&amp; sleep 1
+done
+</code></pre>
+<p>We can loop through our <strong>seasons</strong> variable:</p>
+<pre><code>seasons=(winter spring summer fall)
+for i in ${seasons[@]} ; do
+  echo &quot;I hope you have a nice ${i}&quot;
+done
+</code></pre>
+<a class="header" href="12-bash-scripting.html#testing" id="testing"><h2>Testing</h2></a>
+<p>Sometimes we will want to test certain conditions.
+There are two parts to this,
+we can use <code>if; then ; else</code> commands,
+and we can also use the double square brackets: <code>[[</code>.
+There are a few ways to get documentation on these functions.
+See the following:</p>
+<pre><code>man test
+help test
+help [
+help [[
+help if
+</code></pre>
+<p>We can test integers:</p>
+<pre><code>if [[ 5 -ge 3 ]] ; then
+  echo &quot;true&quot;
+else
+  echo &quot;false&quot;
+fi
+</code></pre>
+<p>Reverse it to return the else statement:</p>
+<pre><code>if [[ 3 -ge 5 ]] ; then
+  echo &quot;true&quot;
+else
+  echo &quot;false&quot;
+fi
+</code></pre>
+<p>We can test strings:</p>
+<pre><code>if [[ &quot;$HOME&quot; = &quot;$PWD&quot; ]] ; then
+ echo &quot;You are home.&quot;
+else
+ echo &quot;You are not home, but I will take you there.&quot;
+ cd &quot;$HOME&quot;
+ pwd
+fi
+</code></pre>
+<p>We can test file conditions.
+Let's first create a file called <strong>paper.txt</strong> and
+a file called <strong>paper.bak</strong>.
+We will add some trivial content to <strong>paper.txt</strong>
+but not to the <strong>paper.bak</strong>.
+The following <code>if</code> statement will test if <strong>paper.txt</strong>
+has a more recent modification date, and if so,
+it'll back up the file with the <code>cp</code> and echo back its success:</p>
+<pre><code>if [[ &quot;$HOME/paper.txt&quot; -nt &quot;$HOME/paper.bak&quot; ]] ; then
+  cp &quot;$HOME/paper.txt&quot; &quot;$HOME/paper.bak&quot; &amp;&amp; echo &quot;Paper is backed up.&quot;
+fi
+</code></pre>
+<p>Here's a script that prints info depending on which day of the week it is:</p>
+<pre><code>day1=&quot;Tue&quot;
+day2=&quot;Thu&quot;
+day3=&quot;$(date +%a)&quot;
+
+if [[ &quot;$day3&quot; = &quot;$day1&quot; ]] ; then
+  printf &quot;\nIf %s is %s, then class is at 9:30am.\n&quot; &quot;$day3&quot; &quot;$day1&quot;
+elif [[ &quot;$day3&quot; = &quot;$day2&quot; ]] ; then
+  printf &quot;\nIf %s is %s, then class is at 9:30am.\n&quot; &quot;$day3&quot; &quot;$day2&quot;
+else
+  printf &quot;\nThere is no class today.&quot;
+fi
+</code></pre>
+<a class="header" href="12-bash-scripting.html#resources" id="resources"><h2>Resources</h2></a>
+<p>I encourage you to explore
+some useful guides and cheat sheets on Bash scripting:</p>
+<ul>
+<li><a href="https://tldp.org/LDP/abs/html/index.html">Advanced Bash-Scripting Guide</a></li>
+<li><a href="https://devhints.io/bash">Bash scripting cheatsheet</a></li>
+<li><a href="https://www.shellcheck.net/">Bash shellcheck</a></li>
+<li><a href="https://www.freecodecamp.org/news/shell-scripting-crash-course-how-to-write-bash-scripts-in-linux/">Shell Scripting for Beginners</a></li>
+<li><a href="https://fedoramagazine.org/bash-shell-scripting-for-beginners-part-1/">Bash Shell Scripting for Beginners</a></li>
+<li><a href="https://cs.lmu.edu/%7Eray/notes/bash/">Introduction to Bash</a></li>
+</ul>
+<a class="header" href="12-bash-scripting.html#summary" id="summary"><h2>Summary</h2></a>
+<p>In this demo, we learned about:</p>
+<ul>
+<li>creating and referring to variables</li>
+<li>conditional expressions with <code>&amp;&amp;</code> and <code>||</code></li>
+<li>adding the <strong>shebang</strong> or <strong>hashbang</strong> at the beginning of a script</li>
+<li>looping with the <code>for</code> statement</li>
+<li>testing with the <code>if</code> statement</li>
+</ul>
+<p>These are the basics.
+I'll cover more practical examples in upcoming demos,
+but note that mastering the basics requires understanding
+a lot of the commands and paths that we have covered so far in class.
+So keep practicing.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="11-revisiting-paths.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="13-regular-expressions.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="11-revisiting-paths.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="13-regular-expressions.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

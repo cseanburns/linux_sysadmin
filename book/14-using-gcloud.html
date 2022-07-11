@@ -1,0 +1,419 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Using gcloud for Virtual Machines - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-what-is-linux.html"><strong>1.1.</strong> What is Linux?</a></li><li><a href="02-what-is-sysadmin.html"><strong>1.2.</strong> What is Systems Administration?</a></li><li><a href="03-history-linux-unix.html"><strong>1.3.</strong> History of Unix and Linux</a></li></ul></li><li><a href="p2-the-command-line.html"><strong>2.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="04-quick-ssh-connect.html"><strong>2.1.</strong> Connect to a Remote Server</a></li><li><a href="05-the-linux-filesystem.html"><strong>2.2.</strong> The Linux Filesystem</a></li><li><a href="06-files-and-directories.html"><strong>2.3.</strong> Files and Directories</a></li><li><a href="07-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="08-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="09-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="10-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="11-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="12-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="13-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="p3-using-gcloud.html"><strong>3.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="14-using-gcloud.html" class="active"><strong>3.1.</strong> Using gcloud for Virtual Machines</a></li><li><a href="15-expanding-storage.html"><strong>3.2.</strong> Expanding Storage</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="16-managing-users-groups.html"><strong>4.1.</strong> Managing Users and Groups</a></li><li><a href="17-systemd.html"><strong>4.2.</strong> systemd</a></li><li><a href="18-using-apt.html"><strong>4.3.</strong> Using APT to Manage Software</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-tcip-networking.html"><strong>5.1.</strong> TCIP Networking</a></li><li><a href="20-networking-dns-domains.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-security-chroot.html"><strong>5.3.</strong> Security and chroot</a></li><li><a href="22-security-firewall.html"><strong>5.4.</strong> Security and Firewalls</a></li><li><a href="23-backups.html"><strong>5.5.</strong> Backups</a></li></ul></li><li><a href="p6-lamp.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="24-httpd-apache.html"><strong>6.1.</strong> Apache2 Web Server</a></li><li><a href="25-httpd-php.html"><strong>6.2.</strong> Apache2 and PHP</a></li><li><a href="26-httpd-virtualhosts.html"><strong>6.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="27-httpd-mariadb.html"><strong>6.4.</strong> Apache2 and MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="14-using-gcloud.html#using-gcloud-for-virtual-machines" id="using-gcloud-for-virtual-machines"><h1>Using gcloud for Virtual Machines</h1></a>
+<a class="header" href="14-using-gcloud.html#virtual-machines" id="virtual-machines"><h2>Virtual Machines</h2></a>
+<p>Our goal in this section
+is to create a <strong>virtual machine (VM)</strong> <em>instance</em>.
+A VM is basically a virtualized operating system
+that runs on a host operating system.
+That host operating system may also be Linux,
+but it could be Windows or macOS.
+In short,
+when we use virtual machines,
+it means instead of installing an operating system
+(like Linux, macOS, Windows, etc) on a physical machine,
+we use virtual machine software to mimic the process.
+The virtual machine, thus, runs on top of our main OS.
+It's like an app, where the app is a fully functioning
+operating system.</p>
+<p>In past semesters of this course,
+we used <a href="https://www.virtualbox.org/">VirtualBox</a> to create
+virtual machines with Linux as the virtual operating system.
+This worked despite whether you or I were running
+Windows, macOS, or Linux as our main operating systems.
+VirtualBox is freely available virtualization software,
+and using it let students and myself
+run Linux as a server
+on our own desktops and laptops without changing
+the underlying OS on those machines
+(e.g., Windows, macOS).</p>
+<p>However, even though we virtualize an operating
+system when we run a VM,
+the underlying operating system and CPU architecture
+is still important.
+When Apple, Inc launched their new M1
+(ARM-based) chip in 2020,
+it created problems for running non ARM-based operating
+systems as virtual machines (i.e., x86_64 chips).</p>
+<p>Fortunately, we are able to solve that issue
+using a third-party virtualization platform.
+In this course, that means we're going to use gcloud (via Google),
+but there are other options available that you
+can explore on your own.</p>
+<a class="header" href="14-using-gcloud.html#google-cloud--gcloud" id="google-cloud--gcloud"><h2>Google Cloud / gcloud</h2></a>
+<a class="header" href="14-using-gcloud.html#google-account" id="google-account"><h3>Google Account</h3></a>
+<p>We need to have a Google account to get started with gcloud.
+I imagine most of you already have a Google account,
+but if not, go ahead and create one at <a href="https://www.google.com">https://www.google.com</a>.</p>
+<a class="header" href="14-using-gcloud.html#google-cloud-gcloud-project" id="google-cloud-gcloud-project"><h3>Google Cloud (gcloud) Project</h3></a>
+<p>Next, you need to use gcloud
+to create a Google Cloud project.
+Once you've created that project,
+you can enable billing for that project,
+and then install the gcloud software
+on your local machine.</p>
+<p>Follow <strong>Step 1</strong> at the top of the
+<strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a></strong> page
+to in create a new project.
+Also, review the page on
+<a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#gcloud">creating and managing projects</a>.</p>
+<p>When you create your project, you can name it anything,
+but try to name it something to do with this course.
+E.g., I am using the name <strong>sysadmin-418</strong>.
+<strong>Avoid using spaces when naming your project.</strong></p>
+<p>Then click on the <strong>Create</strong> button,
+and leave the organization field set to <strong>No Organization</strong>.</p>
+<a class="header" href="14-using-gcloud.html#google-billing" id="google-billing"><h3>Google Billing</h3></a>
+<p>The second thing to do is to set up
+a billing account for your gcloud project.
+This does mean there is a cost associated
+with this product, but
+the good news is that our bills by the end of the semester should
+only amount to a couple of dollars, at most.
+<strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Follow Step 2</a></strong> to enable
+billing for your new project.
+See also the page on how to
+<strong><a href="https://cloud.google.com/billing/docs/how-to/manage-billing-account">create, modify, or close your self-serve Cloud Billing account</a></strong></p>
+<a class="header" href="14-using-gcloud.html#install-the-latest-gcloud-cli-version" id="install-the-latest-gcloud-cli-version"><h3>Install the latest gcloud CLI version</h3></a>
+<p>After you have set up billing,
+the next step is to install gcloud on your local machines.
+The <strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a></strong> page
+provides instructions for different operating systems.</p>
+<p>There are installation instructions
+for macOS, Windows, Chromebooks, and various Linux distributions.
+Follow these instructions closely for the operating system
+that you're using.
+Note that for macOS,
+you have to choose among three different CPU/chip
+architectures.
+If you have an older macOS machine (before November 2020 or so),
+it's likely that you'll select <strong>macOS 64-bit (x86_64)</strong>.
+If you have a newer macOS machine,
+then it's likely you'll have to select <strong>macOS 64-bit (arm64, Apple M1
+silicon).</strong>
+It's unlikely that any of you are using a 32-bit macOS operating system.
+If you're not sure which macOS system you have,
+then let me know and I can help you determine the appropriate platform.
+Alternatively, follow these instructions to find your processor information:</p>
+<ul>
+<li>click on the Apple menu</li>
+<li>choose <strong>About This Mac</strong></li>
+<li>locate the <strong>Processor</strong> or <strong>Chip</strong> information</li>
+</ul>
+<p>After you have downloaded the gcloud CLI
+for your particular OS and CPU architecture,
+you will need to open a command prompt/terminal
+on your machines to complete the instructions
+the describe how to install the gcloud CLI.
+macOS uses the Terminal app,
+which can located using Spotlight.
+Windows user can use Command.exe,
+which can be located by search also.</p>
+<p>Windows users will download a regular <strong>.exe</strong> file,
+but macOS users will download a <strong>.tar.gz</strong> file.
+Since macOS is Unix, you can use the <code>mv</code> command to
+move that file to your <code>$HOME</code> directory.
+Then you extract it there using the <code>tar</code> command,
+and once extracted
+you can change to the directory that it
+creates with the <code>cd</code> command.
+For example, if you are downloading the X86_64 version
+of the gcloud CLI, then you would run the following commands:</p>
+<pre><code>mv google-cloud-cli-392.0.0-darwin-x86_64.tar.gz $HOME
+tar -xzf google-cloud-cli-392.0.0-darwin-x86_64.tar.gz
+cd google-cloud-sdk
+</code></pre>
+<p>Modify the above commands, as appropriate,
+if you're using the M1 version
+of the gcloud CLI.</p>
+<a class="header" href="14-using-gcloud.html#initializing-the-gcloud-cli" id="initializing-the-gcloud-cli"><h3>Initializing the gcloud CLI</h3></a>
+<p>Once you have downloaded and installed
+the gcloud CLI program,
+you need to initialize it on your local machine.
+Scroll down on the <a href="https://cloud.google.com/sdk/docs/install-sdk">install page</a>
+to the section titled
+<strong>Initializing the gcloud CLI</strong>.
+In your terminal/command prompt,
+run the initialization command,
+per the instructions at the above page:</p>
+<pre><code>gcloud init
+</code></pre>
+<p>And continue to follow the above instructions.</p>
+<a class="header" href="14-using-gcloud.html#gcloud-vm-instance" id="gcloud-vm-instance"><h2>gcloud VM Instance</h2></a>
+<p>Once you've initialized gcloud,
+log into <a href="https://console.cloud.google.com/">Google Cloud Console</a>,
+which should take you to the Dashboard page.</p>
+<p>Our first goal is to create a <strong>virtual machine (VM)</strong> <em>instance</em>.
+As a reminder,
+a VM is basically a virtualized operating system.
+That means instead of installing an operating system
+(like Linux, macOS, Windows, etc) on a physical machine,
+software is used to mimic the process.</p>
+<p>gcloud offers a number of Linux-based operating systems
+to create VMs.
+We're going to use the Ubuntu operating system
+and specifically the Ubuntu 20.04 LTS version.</p>
+<blockquote>
+<p>Ubuntu is a Linux distribution.
+A new version of Ubuntu is released every six months.
+The 20.04 signifies that this is the April 2020 version.
+LTS signifies <strong>Long Term Support</strong>.
+LTS versions are released every two years,
+and Canonical LTD,
+the owners of Ubuntu,
+provide standard support for LTS versions for five years.</p>
+<p>LTS versions of Ubuntu are also more stable.
+Non-LTS versions of Ubuntu only receive nine months of standard support,
+and generally apply cutting edge technology,
+which is not always desirable for server operating systems.
+Each version of Ubuntu has a code name.
+20.04 has the code name <strong>Focal Fossa</strong>.
+You can see a list of versions, code names, release dates,
+and more on Ubuntu's <a href="https://wiki.ubuntu.com/Releases">Releases</a> page.</p>
+</blockquote>
+<p>We will create our VM using the gcloud console.
+To do so, follow these steps:</p>
+<ul>
+<li>Click the <strong>Select from</strong> drop-down list.</li>
+<li>In the window, select the project that you created earlier.</li>
+<li>Next, click on <strong>Create a VM</strong>.</li>
+<li>Provide a name for your <strong>instance</strong>.
+<ul>
+<li>E.g., I chose <strong>fall-2022</strong> (no spaces)</li>
+</ul>
+</li>
+<li>Under the <strong>Series</strong> dropdown box, make sure <strong>E2</strong> is selected.</li>
+<li>Under the <strong>Machine type</strong> dropdown box, select <strong>e2-micro (2 vCPU, 1 GB memory)</strong>
+<ul>
+<li>This is the lowest cost virtual machine and perfect for our needs.</li>
+</ul>
+</li>
+<li>Under <strong>Boot disk</strong>, click on the <strong>Change</strong> button.</li>
+<li>In the window, select <strong>Ubuntu</strong> from the <strong>Operating system</strong> dropdown box.</li>
+<li>Select <strong>Ubuntu 20.04 LTS</strong></li>
+<li>Leave <strong>Boot disk type</strong> be set to <strong>Balanced persistant disk</strong></li>
+<li>Disk size should be set to <strong>10 GB</strong>.</li>
+<li>Click on the <strong>Select</strong> button.</li>
+<li>Check the <strong>Allow HTTP Traffic</strong> button</li>
+<li>Finally, click on the <strong>Create</strong> button to create your VM instance.</li>
+</ul>
+<a class="header" href="14-using-gcloud.html#connect-to-our-vm" id="connect-to-our-vm"><h2>Connect to our VM</h2></a>
+<p>After the new VM machine has been created,
+we need to connect to it via the command line.
+macOS users will connect to it via their Terminal.app.
+Windows users can connect to it via their command prompt.</p>
+<p>Unlike our past <code>ssh</code> sessions,
+we use a slightly different <code>ssh</code> command
+to connect to our VMs.
+The syntax follows this pattern:</p>
+<pre><code>gcloud compute ssh --zone &quot;zone-info&quot; &quot;name-info&quot; --project &quot;project-info&quot;
+</code></pre>
+<p>The values in the double quotes in the above command
+can be located in your Google Cloud console and
+in your VM instances section.
+Here is my command:</p>
+<pre><code>gcloud compute ssh --zone &quot;us-central1-a&quot; &quot;fall-2022&quot; --project &quot;sysadmin-418&quot;
+</code></pre>
+<a class="header" href="14-using-gcloud.html#update-our-ubuntu-vm" id="update-our-ubuntu-vm"><h2>Update our Ubuntu VM</h2></a>
+<p>The VM will include a recently updated version of Ubuntu 20.04,
+but it may not be completely updated.
+Thus the first thing we need to do is update our machines.
+On Ubuntu, we'll use the following two commands,
+which you should run also:</p>
+<pre><code>apt update
+apt -y upgrade
+</code></pre>
+<a class="header" href="14-using-gcloud.html#snapshots" id="snapshots"><h2>Snapshots</h2></a>
+<p>Lastly, we have installed a pristine version of Ubuntu,
+but it's likely that we will mess something up
+as we work on our systems.
+Or it could be that our systems may become compromised
+at some point.
+Therefore, we want to create a snapshot of our newly
+installed Ubuntu server.
+This will allow us to restore our server if something
+goes wrong later.</p>
+<p>To get started:</p>
+<ol>
+<li>
+<p>In the left hand navigation panel, click on <strong>Snapshots</strong>.</p>
+</li>
+<li>
+<p>At the top of the page, click on <strong>Create Snapshot</strong>.</p>
+</li>
+<li>
+<p>Provide a name for your snapshot: e.g., <strong>ubuntu-1</strong>.</p>
+</li>
+<li>
+<p>Provide a description of your snapshot: e.g.,</p>
+<p>This is a new install of Ubuntu 20.04.</p>
+</li>
+<li>
+<p>Choose your <strong>Source disk</strong>.</p>
+</li>
+<li>
+<p>Choose a <strong>Location</strong> to store your snapshot.</p>
+<ul>
+<li>To avoid extra charges, choose <strong>Regional</strong>.</li>
+<li>From the dropdown box, select the same location (zone-info) your VM has</li>
+</ul>
+</li>
+<li>
+<p>Click on <strong>Create</strong></p>
+</li>
+</ol>
+<p><strong><p style="color:red">Please monitor your billing for this to avoid costs
+that you do not want to incur.</p></strong></p>
+<a class="header" href="14-using-gcloud.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>Congratulations!
+You have just completed your first installation of a Linux server.</p>
+<p>To summarize,
+in this section,
+you learned about and created a VM with gcloud.
+This is a lot!
+After this course is completed,
+you will be able to fire up a virtual machine
+on short notice and deploy websites and more.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="p3-using-gcloud.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="15-expanding-storage.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="p3-using-gcloud.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="15-expanding-storage.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

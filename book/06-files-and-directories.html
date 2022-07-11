@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Files and Directories - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-what-is-linux.html"><strong>1.1.</strong> What is Linux?</a></li><li><a href="02-what-is-sysadmin.html"><strong>1.2.</strong> What is Systems Administration?</a></li><li><a href="03-history-linux-unix.html"><strong>1.3.</strong> History of Unix and Linux</a></li></ul></li><li><a href="p2-the-command-line.html"><strong>2.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="04-quick-ssh-connect.html"><strong>2.1.</strong> Connect to a Remote Server</a></li><li><a href="05-the-linux-filesystem.html"><strong>2.2.</strong> The Linux Filesystem</a></li><li><a href="06-files-and-directories.html" class="active"><strong>2.3.</strong> Files and Directories</a></li><li><a href="07-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="08-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="09-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="10-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="11-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="12-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="13-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="p3-using-gcloud.html"><strong>3.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="14-using-gcloud.html"><strong>3.1.</strong> Using gcloud for Virtual Machines</a></li><li><a href="15-expanding-storage.html"><strong>3.2.</strong> Expanding Storage</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="16-managing-users-groups.html"><strong>4.1.</strong> Managing Users and Groups</a></li><li><a href="17-systemd.html"><strong>4.2.</strong> systemd</a></li><li><a href="18-using-apt.html"><strong>4.3.</strong> Using APT to Manage Software</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-tcip-networking.html"><strong>5.1.</strong> TCIP Networking</a></li><li><a href="20-networking-dns-domains.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-security-chroot.html"><strong>5.3.</strong> Security and chroot</a></li><li><a href="22-security-firewall.html"><strong>5.4.</strong> Security and Firewalls</a></li><li><a href="23-backups.html"><strong>5.5.</strong> Backups</a></li></ul></li><li><a href="p6-lamp.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="24-httpd-apache.html"><strong>6.1.</strong> Apache2 Web Server</a></li><li><a href="25-httpd-php.html"><strong>6.2.</strong> Apache2 and PHP</a></li><li><a href="26-httpd-virtualhosts.html"><strong>6.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="27-httpd-mariadb.html"><strong>6.4.</strong> Apache2 and MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="06-files-and-directories.html#files-and-directories" id="files-and-directories"><h1>Files and Directories</h1></a>
+<a class="header" href="06-files-and-directories.html#basic-directory-and-file-commands" id="basic-directory-and-file-commands"><h2>Basic Directory and File commands</h2></a>
+<p>In order to explore the above directories
+but also to create new ones and work with files,
+we need to know some basic terminal commands.
+A lot of these commands are part of the base system
+called [GNU Coreutils][coreutils],
+and in this demo,
+we will specifically cover some of the following
+GNU Coreutils:</p>
+<ul>
+<li>[Directory Listing][directorylisting]</li>
+<li>[Basic Operations][basicops]</li>
+<li>[Special File Types][filetypes]</li>
+<li>[Printing Text][printing]</li>
+</ul>
+<a class="header" href="06-files-and-directories.html#directory-listing" id="directory-listing"><h3>Directory Listing</h3></a>
+<blockquote>
+<p>I have already demonstrated one command:
+the <code>cd</code> (change directory) command.
+This will be one of the most frequently used commands in your toolbox.</p>
+</blockquote>
+<p>In our current directory, or
+once we have changed to a new directory,
+we will want to learn its contents
+(what files and directories it contains).
+We have a few commands to choose from to list contents
+(e.g.,  you have already seen the <code>tree</code> command),
+but the most common command is the <code>ls</code> (list) command.
+We use it by typing the following two letters in the terminal:</p>
+<pre><code>ls
+</code></pre>
+<p>Again, to confirm that we're in some specific directory,
+use the <code>pwd</code> command to <strong>print</strong> the <strong>working directory</strong>.</p>
+<p>Most commands can be combined with <strong>options</strong>.
+Options provide additional functionality to the base command, and
+in order to see what options are available for the <code>ls</code> command,
+we can look at its <strong>man(ual) page</strong>:</p>
+<pre><code>man ls
+</code></pre>
+<p>From the <code>ls</code> <strong>man page</strong>,
+we learn that we can use the <code>-l</code> option to format
+the output of the <code>ls</code> command as a long-list,
+or a list that provides more information about
+the files and directories in the working directory.
+Later in the semester,
+I will talk more about what the other parts of output of this option mean.</p>
+<pre><code>ls -l
+</code></pre>
+<p>We can use the <code>-a</code> option to list hidden files.
+In Linux, hidden files are hidden from the base <code>ls</code> command
+if the files begin with a period.
+We have a some of those files in our <strong>$HOME</strong> directories,
+and we can see them like so:</p>
+<pre><code>ls -a
+</code></pre>
+<p>We can also combine options.
+For example, to view all files,
+including hidden ones,
+in the long-list format,
+we can use:</p>
+<pre><code>ls -al
+</code></pre>
+<a class="header" href="06-files-and-directories.html#basic-file-operations" id="basic-file-operations"><h2>Basic File Operations</h2></a>
+<p>Some basic file operation commands include:</p>
+<ul>
+<li><code>cp</code>    : copying files and directories</li>
+<li><code>mv</code>    : moving (or renaming) files and directories</li>
+<li><code>rm</code>    : removing (or deleting) files and directories</li>
+<li><code>touch</code> : change file timestamps (or, create a new, empty file)</li>
+</ul>
+<p>These commands also have various options
+that can be viewed in their respective <strong>man pages</strong>.
+Again, command options provide additional functionality to the base command,
+and are mostly (but not always) prepended with a dash and a letter or number.
+To see examples, type the following commands,
+which will launch the manual pages for them.
+Press <code>q</code> to exit the manual pages,
+and use your up and down arrow keys to scroll through the manuals:</p>
+<pre><code>man cp
+man mv
+man rm
+man touch
+</code></pre>
+<p>The <code>touch</code> command's primary use is to change a file's timestamp;
+that is, the command updates a file's &quot;access and modification times&quot;
+(see <code>man touch</code>).
+For example, let's say we have a file called <strong>paper.txt</strong>
+in our home directory.
+We can see the output here:</p>
+<pre><code>ls -l paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:13 /home/sean/paper.txt
+</code></pre>
+<p>This shows that the last modification time was 12:03AM on June 27.</p>
+<p>If I run the touch command on <strong>paper.txt</strong>,
+the timestamp will change:</p>
+<pre><code>touch paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:15 /home/sean/paper.txt
+</code></pre>
+<p>This shows an updated modification timestamp of 12:15AM.</p>
+<p>The side effect occurs when we name a file with the <code>touch</code> command,
+but the file does not exist,
+in which case the <code>touch</code> command will create an empty file
+with the name we use.
+Let's say that I do <strong>not</strong> have a file named <strong>file.txt</strong>
+in my home directory.
+If I run the <code>ls -l file.txt</code> command, I'll receive an error
+since the file does not exist.
+But if I then use the <code>touch file.txt</code> command,
+and then run <code>ls -l file.txt</code>.
+we'll see that the file now exists,
+that it has a byte size of zero:</p>
+<pre><code>ls -l file.txt
+ls: cannot access 'file.txt': No such file or directory
+touch file.txt
+ls -l file.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:18 file.txt
+</code></pre>
+<p>Here are some ways to use the other three commands and their options:</p>
+<a class="header" href="06-files-and-directories.html#copying-files-and-directories" id="copying-files-and-directories"><h3>Copying Files and Directories</h3></a>
+<p>To copy an existing file (<strong>file1.txt</strong>)
+to a new file (<strong>file2.txt</strong>):</p>
+<pre><code>cp file1.txt file2.txt
+</code></pre>
+<p>Use the <code>-i</code> option to copy that file in interactive mode;
+that is, to prompt you before overwriting an existing file.</p>
+<p>We also use the <code>cp</code> command to copy directories.</p>
+<a class="header" href="06-files-and-directories.html#moving-files-and-directories" id="moving-files-and-directories"><h3>Moving Files and Directories</h3></a>
+<p>The <code>mv</code> command will move an existing file to a different directory,
+and/or rename the file.
+For example, from within our home directory
+(therefore, using relative path names),
+to move a file named &quot;file.docx&quot;
+to a subdirectory named &quot;Documents&quot;:</p>
+<pre><code>mv file.docx Documents/
+</code></pre>
+<p>To rename a file only (keeping it in the same directory),
+the command looks like this:</p>
+<pre><code>mv file.docx newName.docx
+</code></pre>
+<p>To move the file to our Documents/ subdirectory and also rename it,
+then we'd do this:</p>
+<pre><code>mv file.docx Documents/newName.docx
+</code></pre>
+<p>The <code>man</code> page for the <code>mv</code> command also describes an <code>-i</code> option
+for interactive mode that helps prevent us from overwriting existing files.
+For example, if we have a file called <strong>paper.docx</strong> in our <strong>$HOME</strong> directory,
+and we have a file named <strong>paper.docx</strong> in our <strong>$HOME/Documents</strong> directory,
+and if these are actually two different papers (or files),
+then moving the file to that directory will overwrite it without asking.
+The <code>-i</code> option will prompt us first:</p>
+<pre><code>mv -i paper.docx Documents/paper.docx
+</code></pre>
+<a class="header" href="06-files-and-directories.html#remove-or-delete" id="remove-or-delete"><h3>Remove or Delete</h3></a>
+<p>Finally, to delete a file, we use the <code>rm</code> command:</p>
+<pre><code>rm file.html
+</code></pre>
+<blockquote>
+<p>Unlike the trash bin in your graphical user environment,
+it's very hard to recover a deleted file using the <code>rm</code> command.
+That is, using <code>rm</code> does not mean the file or directory is <strong>trashed</strong>;
+rather, it means it was <strong>deleted</strong>.</p>
+</blockquote>
+<a class="header" href="06-files-and-directories.html#special-file-types" id="special-file-types"><h2>Special File Types</h2></a>
+<p>For now, let's only cover two commands here:</p>
+<ul>
+<li><code>mkdir</code> for creating a new directory</li>
+<li><code>rmdir</code> for deleting an empty directory</li>
+</ul>
+<p>Like the above commands,
+these commands also have their own set of options
+that can be viewed in their respective <strong>man pages</strong>:</p>
+<pre><code>man mkdir
+man rmdir
+</code></pre>
+<a class="header" href="06-files-and-directories.html#make-or-create-a-new-directory" id="make-or-create-a-new-directory"><h3>Make or Create a New Directory</h3></a>
+<p>We use these commands like we do the ones above.
+If we are in our <strong>$HOME</strong> directory, and
+we want to create a new directory called <strong>bin</strong>, we do:</p>
+<pre><code>mkdir bin 
+</code></pre>
+<blockquote>
+<p>The <strong>bin</strong> directory in our <strong>$HOME</strong> directory is a default location
+to store our personal applications, or applications (programs) that
+are only available to us.</p>
+</blockquote>
+<p>And if we run <code>ls</code>, we should see that it was successful.</p>
+<a class="header" href="06-files-and-directories.html#delete-a-directory" id="delete-a-directory"><h3>Delete a Directory</h3></a>
+<p>The <code>rmdir</code> command is a bit weird
+because it only removes <strong>empty</strong> directories.
+To remove the directory we just created, we use it like so:</p>
+<pre><code>rmdir bin 
+</code></pre>
+<p>However, if you want to remove a directory
+that contains files or other subdirectories,
+then you will have to use the <code>rm</code> command
+along with the <code>-r</code> (recursive) option:</p>
+<pre><code>rm -r directory-with-content/
+</code></pre>
+<a class="header" href="06-files-and-directories.html#printing-text" id="printing-text"><h2>Printing Text</h2></a>
+<p>There a number of ways to print text to <strong>standard output</strong>,
+which is our screen by default in the terminal.
+We could also redirect standard output
+to a file, to a printer, or to a remote shell.
+We'll see examples like that later in the semester.
+Here let's cover two commands:</p>
+<ul>
+<li><code>echo</code> : to print a line of text to standard output</li>
+<li><code>cat</code>  : to concatenate and write files</li>
+<li><code>less</code> : to view files one page at a time</li>
+</ul>
+<blockquote>
+<p><strong>Standard output</strong> is by default the screen.
+When we <strong>print</strong> to standard output,
+then by default we print to the screen.
+However, standard output can be <strong>redirected</strong>
+to files, programs, or devices, like actual printers.</p>
+</blockquote>
+<a class="header" href="06-files-and-directories.html#print-to-screen" id="print-to-screen"><h3>Print to Screen</h3></a>
+<p>To use <code>echo</code>:</p>
+<pre><code>echo &quot;hello world&quot;
+echo &quot;Today is a good day.&quot;
+</code></pre>
+<p>We can also <code>echo</code> variables:</p>
+<pre><code>a=4
+echo &quot;$a&quot;
+</code></pre>
+<a class="header" href="06-files-and-directories.html#print-file-to-screen" id="print-file-to-screen"><h3>Print File to Screen</h3></a>
+<p><code>cat</code> is listed elsewhere in the GNU Coreutils page.
+The primary use of the <code>cat</code> command is to join, combine, or concatenate files,
+but if used on a single file,
+it has this nice side effect of printing the content of the file to the screen:</p>
+<pre><code>cat file.html
+</code></pre>
+<p>If the file is very long, we might want to use what's called a <strong>pager</strong>.
+There are a few pagers to use, but the <code>less</code> command is a common one:</p>
+<pre><code>less file.html
+</code></pre>
+<p>Like with the <strong>man pages</strong>,
+use the up and down arrow keys to scroll through the output,
+and press <strong>q</strong> to quit the pager.</p>
+<a class="header" href="06-files-and-directories.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>In this demo, we learned about the filesystem or directory structure of Linux,
+and we also learned some basic command to work with directories and files.
+You should practice using these commands as much as possible.
+The more you use them, the easier it'll get.
+Also, be sure to review the <strong>man pages</strong> for each of the commands,
+especially to see what options are available for each of them.</p>
+<p>Basic commands covered in this demo include:</p>
+<ul>
+<li><code>cat</code>   : display contents of a file</li>
+<li><code>cp</code>    : copy</li>
+<li><code>echo</code>  : print a line of text</li>
+<li><code>less</code>  : display contents of a file by page</li>
+<li><code>ls</code>    : list</li>
+<li><code>man</code>   : manual pages</li>
+<li><code>mkdir</code> : create a directory</li>
+<li><code>mv</code>    : move or rename</li>
+<li><code>pwd</code>   : print name of current/working directory</li>
+<li><code>rmdir</code> : delete an empty directory</li>
+<li><code>rm</code>    : remove or delete a file or directory</li>
+<li><code>tree</code>  : list contents of directories in a tree-like format</li>
+</ul>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="05-the-linux-filesystem.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="07-file-attributes.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="05-the-linux-filesystem.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="07-file-attributes.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

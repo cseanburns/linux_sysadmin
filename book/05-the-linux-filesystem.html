@@ -1,0 +1,356 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Linux Filesystem - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-what-is-linux.html"><strong>1.1.</strong> What is Linux?</a></li><li><a href="02-what-is-sysadmin.html"><strong>1.2.</strong> What is Systems Administration?</a></li><li><a href="03-history-linux-unix.html"><strong>1.3.</strong> History of Unix and Linux</a></li></ul></li><li><a href="p2-the-command-line.html"><strong>2.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="04-quick-ssh-connect.html"><strong>2.1.</strong> Connect to a Remote Server</a></li><li><a href="05-the-linux-filesystem.html" class="active"><strong>2.2.</strong> The Linux Filesystem</a></li><li><a href="06-files-and-directories.html"><strong>2.3.</strong> Files and Directories</a></li><li><a href="07-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="08-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="09-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="10-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="11-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="12-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="13-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="p3-using-gcloud.html"><strong>3.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="14-using-gcloud.html"><strong>3.1.</strong> Using gcloud for Virtual Machines</a></li><li><a href="15-expanding-storage.html"><strong>3.2.</strong> Expanding Storage</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="16-managing-users-groups.html"><strong>4.1.</strong> Managing Users and Groups</a></li><li><a href="17-systemd.html"><strong>4.2.</strong> systemd</a></li><li><a href="18-using-apt.html"><strong>4.3.</strong> Using APT to Manage Software</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-tcip-networking.html"><strong>5.1.</strong> TCIP Networking</a></li><li><a href="20-networking-dns-domains.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-security-chroot.html"><strong>5.3.</strong> Security and chroot</a></li><li><a href="22-security-firewall.html"><strong>5.4.</strong> Security and Firewalls</a></li><li><a href="23-backups.html"><strong>5.5.</strong> Backups</a></li></ul></li><li><a href="p6-lamp.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="24-httpd-apache.html"><strong>6.1.</strong> Apache2 Web Server</a></li><li><a href="25-httpd-php.html"><strong>6.2.</strong> Apache2 and PHP</a></li><li><a href="26-httpd-virtualhosts.html"><strong>6.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="27-httpd-mariadb.html"><strong>6.4.</strong> Apache2 and MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="05-the-linux-filesystem.html#the-linuxunix-filesystem-and-file-types" id="the-linuxunix-filesystem-and-file-types"><h1>The Linux/Unix Filesystem and File Types</h1></a>
+<p>In this demo, we will cover the:</p>
+<ul>
+<li>the Linux filesystem and how it is structured and organized, and</li>
+<li>the basic commands to navigate around and to work with directories and files</li>
+</ul>
+<blockquote>
+<p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous, but
+as users of primarily graphical user interfaces,
+you are more likely familiar with the term <strong>folders</strong>.
+I will more often use the term <strong>directories</strong>
+since that is the command line (text user interface) convention.
+I will use the term <strong>folders</strong> when referring to a graphical environment.</p>
+</blockquote>
+<p>Throughout this demonstration,
+I encourage you to <code>ssh</code> into our remote server
+and follow along with the commands that I use.
+See <a href="02-quick-ssh-connect.html">Section 2.2</a>
+for details on connecting to the remote server.</p>
+<a class="header" href="05-the-linux-filesystem.html#visualizing-the-filesystem-as-a-tree" id="visualizing-the-filesystem-as-a-tree"><h2>Visualizing the Filesystem as a Tree</h2></a>
+<p>We will need to work within the filesystem
+quite a lot in this course,
+but the term <strong>filesystem</strong> may refer to different concepts,
+and it's important to clear that up before we start.</p>
+<p>In come cases, a <strong>filesystem</strong> refers to how data (files)
+are <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
+on a device like a hard drive, USB drive, etc.
+For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default,
+and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>.
+Linux and other unix-like operating systems use a variety of filesystems, but
+presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
+The former is the default filesystem on distributions
+like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
+the latter is the default on the
+<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
+<a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of filesystems under this concept,
+and we will learn how to use some of them later in the semester
+when we create partitions, manage disk volumes, and learn about backups.</p>
+<p>A <strong>filesystem</strong> might also be used to refer
+to the <strong>directory structure</strong> or <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html">directory tree</a> of a system.
+This concept is related to the prior concept of a filesystem, but
+it's used here to refer to the location of files and directories on a system.
+For example, on Windows, the filesystem is identified by a letter, like the <strong>C:</strong> drive,
+regardless if the disk has a NTFS filesystem or a FAT filesystem.
+Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.),
+will be assigned their own letters (<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
+<a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html">macOS adheres to a tree like filesystem</a>
+like Linux and other unix-like operating systems.
+(This is because macOS is UNIX.)
+In these operating systems, we have a top-level <strong>root</strong> directory
+identified by a single forward slash  <strong>/</strong>,
+and then subdirectories under that root directory.
+Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are <strong>mounted</strong>
+under that root hierarchy and not separately like on Windows.
+<a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux.com</a> provides a nice overview of the most common directory structure
+that Linux distributions use along with an explanation for the major bottom level directories.
+In this section, we will learn about this type of filesystem.</p>
+<p>On Linux, we can visualize the filesystem with the <code>tree</code> command.
+The <code>tree</code> command, like many Linux commands,
+can be run on its own or with options,
+like in the second example below:</p>
+<ul>
+<li><code>tree</code> : list contents of directories in a tree-like format
+<ul>
+<li><code>tree -dfL 1</code> : directories only, full path, one level</li>
+<li><code>tree -dfL 1 /</code> : list directories only at root <strong>/</strong> level</li>
+</ul>
+</li>
+</ul>
+<a class="header" href="05-the-linux-filesystem.html#the-root-directory-and-its-base-level-directories" id="the-root-directory-and-its-base-level-directories"><h3>The root Directory and its Base Level Directories</h3></a>
+<p>As explained on the Linux.com page,
+here are the major sub directories under <strong>/</strong> (root)
+and a short description of their main purpose:</p>
+<ul>
+<li><code>/bin</code> : binary files needed to use the system</li>
+<li><code>/boot</code>  : files needed to boot the system</li>
+<li><code>/dev</code> : device files -- all hardware has a file</li>
+<li><code>/etc</code> : system configuration files</li>
+<li><code>/home</code> : user directories</li>
+<li><code>/lib</code> : libraries/programs needed for other programs</li>
+<li><code>/media</code> : external storage is mounted</li>
+<li><code>/mnt</code> : other filesystems may be mounted</li>
+<li><code>/opt</code> : store software code to compile software</li>
+<li><code>/proc</code> : files containing info about your computer</li>
+<li><code>/root</code> : home directory of superuser</li>
+<li><code>/run</code> : used by system processes</li>
+<li><code>/sbin</code> : like <code>/bin</code>, binary files that require superuser privileges</li>
+<li><code>/srv</code> : contains data for servers</li>
+<li><code>/sys</code> : contains info about devices</li>
+<li><code>/tmp</code> : temp files used by applications</li>
+<li><code>/usr</code> : user binaries, etc that might be installed by users</li>
+<li><code>/var</code> : variable files, used often for system logs</li>
+</ul>
+<p>Although there are 18 directories listed above
+that <strong>branch</strong> off from the root directory,
+we will use some more often than others.
+For example, the <strong>/etc</strong> directory contains system configuration files,
+and we will use the contents of this directory,
+along with the <strong>/var</strong> directory,
+quite a bit when we set up our web servers, relational database servers,
+and more later in the semester.
+The <strong>/home</strong> directory is where our default home directories are stored,
+and if you manage a multi-user system,
+then this will be an important directory to manage.</p>
+<p>Source: <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux Filesystem Explained</a></p>
+<a class="header" href="05-the-linux-filesystem.html#relative-and-absolute-paths" id="relative-and-absolute-paths"><h2>Relative and Absolute Paths</h2></a>
+<p>macOS users have the Finder app to navigate their filesystem,
+to move files to different folders, to copy files, to trash them, etc.
+Window users have File Explorer for these functions.
+Linux users have similar graphical software options,
+but all of these functions can be completed on the Linux command line, too,
+and generally more efficiently.
+To get started, we need to learn two things first:</p>
+<ol>
+<li>how to specify the locations of files and directories in the filesystem</li>
+<li>the commands needed to work with the filesystem</li>
+</ol>
+<p>To help specify the locations of files and directories,
+there are two key concepts to know:</p>
+<ul>
+<li>absolute paths</li>
+<li>relative paths</li>
+</ul>
+<p>Above we learned about the <strong>/</strong> root directory and its subdirectories.
+All sorts of commands,
+especially those that deal with files and directories
+(like copying, moving, deleting),
+require us to specify on the command line
+the locations of the files and directories.
+It's common to specify the location in two different ways,
+by specifying their <strong>absolute</strong> path (or location) on the filesystem,
+or the <strong>relative</strong> path (or location).</p>
+<p>To demonstrate, we might want to move around the filesystem.
+When we first log in to our remote system,
+our default location will be our home directory,
+sometimes referred to as <strong>$HOME</strong>.
+The path (location) to that directory will be.</p>
+<pre><code>/home/USER
+</code></pre>
+<p>Where <strong>USER</strong> is your username.
+Therefore, since my username is <strong>sean</strong>,
+my home directory is located at:</p>
+<pre><code>/home/sean
+</code></pre>
+<p>which we can see specified with the <code>pwd</code> (print working directory) command:</p>
+<pre><code>pwd
+/home/sean
+</code></pre>
+<blockquote>
+<p>When I write <strong>$HOME</strong>,
+I am referring to a default, <strong>environmental</strong> variable
+that points to our home directory.
+It's <strong>variable</strong> because,
+depending on which account we're logged in as,
+<strong>$HOME</strong> will point to a different location.
+For me, then, that will be <code>/home/sean</code>,
+if I'm logged in as <strong>sean</strong>.
+For you it'll point to your home directory.</p>
+</blockquote>
+<p>In my home directory,
+I have a subdirectory called <strong>public_html</strong>.
+The path to that is:</p>
+<pre><code>/home/sean/public_html
+</code></pre>
+<p>In a program like Finder (macOS) or File Explorer (Windows),
+if I want to change my location to that subdirectory (or folder),
+then I'd double click on its folder icon.
+On the command line, however, I have to write out the command
+and the path to the subdirectory.
+Therefore, <strong>starting in my home directory</strong>,
+I use the following command to switch to the public_html subdirectory:</p>
+<pre><code>cd public_html
+</code></pre>
+<blockquote>
+<p>Note that files and directories in Linux are case sensitive.
+This means that a directory named <strong>public_html</strong> can co-exist
+alongside a directory named <strong>Public_html</strong>.
+Or a file named <strong>paper.txt</strong> can co-exist alongside a file
+named <strong>Paper.txt</strong>.
+So be sure to use the proper case when spelling out files, directories,
+and even commands.</p>
+</blockquote>
+<p>The above is an example of using a relative path, and
+that command would only be successful if I were
+first in my <strong>$HOME</strong> directory.
+That's because I specified the location of <strong>public_html</strong>
+relative to my default (<strong>$HOME</strong>) location.</p>
+<p>I could have also specified the absolute location,
+but this would be the wordier way.
+Since the <strong>public_html</strong> directory is in my $HOME directory,
+and my $HOME directory is a subdirectory in the <strong>/home</strong> directory,
+then to specify the absolute path in the above command,
+I'd write:</p>
+<pre><code>cd /home/sean/public_html
+</code></pre>
+<p>Again, the relative path specified above would only work if
+I was in my home directory, because
+<code>cd public_html</code> is relative to the location of <code>/home/sean</code>.
+That is, the subdirectory <strong>public_html</strong> is in <strong>/home/sean</strong>.
+But specifying the absolute path would work no matter where
+I was located in the filesystem.
+For example, if I was working on a file in the <code>/etc/apache2</code> directory,
+then using the absolute path (<code>cd /home/sean/public_html</code>) would work.
+But the relative path (<code>cd public_html</code>) command would not since
+there is no subdirectory called <strong>public_html</strong>
+in the <code>/etc/apache2</code> directory.</p>
+<p>Understanding relative and absolute paths is
+one of the more difficult concepts for new commandline users to learn,
+but after time, it'll feel natural.
+So just keep practicing, and
+I'll go over this throughout the semester.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="04-quick-ssh-connect.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="06-files-and-directories.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="04-quick-ssh-connect.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="06-files-and-directories.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

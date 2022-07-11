@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Apache2 Web Server - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-what-is-linux.html"><strong>1.1.</strong> What is Linux?</a></li><li><a href="02-what-is-sysadmin.html"><strong>1.2.</strong> What is Systems Administration?</a></li><li><a href="03-history-linux-unix.html"><strong>1.3.</strong> History of Unix and Linux</a></li></ul></li><li><a href="p2-the-command-line.html"><strong>2.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="04-quick-ssh-connect.html"><strong>2.1.</strong> Connect to a Remote Server</a></li><li><a href="05-the-linux-filesystem.html"><strong>2.2.</strong> The Linux Filesystem</a></li><li><a href="06-files-and-directories.html"><strong>2.3.</strong> Files and Directories</a></li><li><a href="07-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="08-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="09-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="10-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="11-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="12-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="13-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="p3-using-gcloud.html"><strong>3.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="14-using-gcloud.html"><strong>3.1.</strong> Using gcloud for Virtual Machines</a></li><li><a href="15-expanding-storage.html"><strong>3.2.</strong> Expanding Storage</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="16-managing-users-groups.html"><strong>4.1.</strong> Managing Users and Groups</a></li><li><a href="17-systemd.html"><strong>4.2.</strong> systemd</a></li><li><a href="18-using-apt.html"><strong>4.3.</strong> Using APT to Manage Software</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-tcip-networking.html"><strong>5.1.</strong> TCIP Networking</a></li><li><a href="20-networking-dns-domains.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-security-chroot.html"><strong>5.3.</strong> Security and chroot</a></li><li><a href="22-security-firewall.html"><strong>5.4.</strong> Security and Firewalls</a></li><li><a href="23-backups.html"><strong>5.5.</strong> Backups</a></li></ul></li><li><a href="p6-lamp.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="24-httpd-apache.html" class="active"><strong>6.1.</strong> Apache2 Web Server</a></li><li><a href="25-httpd-php.html"><strong>6.2.</strong> Apache2 and PHP</a></li><li><a href="26-httpd-virtualhosts.html"><strong>6.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="27-httpd-mariadb.html"><strong>6.4.</strong> Apache2 and MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="24-httpd-apache.html#installing-apache2" id="installing-apache2"><h1>Installing Apache2</h1></a>
+<p>Let's install our first web server.</p>
+<p>First, switch to Bridged mode in VirtualBox network settings and refresh
+MAC address in VirtualBox.</p>
+<a class="header" href="24-httpd-apache.html#update-system-first" id="update-system-first"><h2>Update system first</h2></a>
+<p>Make sure your machine is up to date before installing Apache2.</p>
+<p>Login as root, or switch to the <code>root</code> user, and update the machine:</p>
+<pre><code>sudo su
+dnf update
+</code></pre>
+<a class="header" href="24-httpd-apache.html#install-httpd" id="install-httpd"><h2>Install <code>httpd</code></h2></a>
+<p>Now, that the machine is updated, install Apache2. On distributions that
+use a package management system, such as <code>dnf</code> on Fedora and <code>apt</code>
+on Ubuntu, we can use those systems to install the relevant software
+and dependencies. However, different distributions use different names
+for the packages. Fedora refers to the Apache2 package as <code>httpd</code>
+while Ubuntu refers to it as <code>Apache2</code>. We can use <code>dnf</code> to search
+for the appropriate package name:</p>
+<pre><code>dnf search apache | grep &quot;httpd&quot;
+</code></pre>
+<p>Apache2 is not the only web server available. <a href="https://nginx.org/en/">nginx</a> is another
+popular web server, and you should explore or learn about other options
+on your own.  For now, let's get some basic info on the <code>httpd</code> package:</p>
+<pre><code>dnf info httpd
+</code></pre>
+<p>Based on the output, and at the time of this writing, it looks like the
+<code>httpd</code> package refers to the Apache HTTP Server, version 2.4.51. I
+want to highlight this because it's important to know what version of
+things are that we're installing, for a couple of reasons at least:</p>
+<ol>
+<li>
+<p>First, although Apache2 has its own dependencies, other packages
+will also depend on it. For example, say we wanted to install Drupal or
+WordPress, we would first have to install a web server, like Apache2,
+and it might be the case that Drupal or WordPress require a certain
+minimum version of Apache2.</p>
+</li>
+<li>
+<p>Second, some Linux operating systems focus on stability and thus do
+not update to the most recent version of a package instead opting for
+the most stable version of the software. The <a href="https://httpd.apache.org/">latest stable release of
+Apache2</a> is 2.4.51. But it's not always likely that Fedora or
+some other distribution will use that or some newer version until the
+next distribution upgrade, for example, from Fedora 33 to Fedora 34.
+For now, this is fine, and we can proceed with the install:</p>
+</li>
+</ol>
+<pre><code>dnf -y install httpd
+</code></pre>
+<a class="header" href="24-httpd-apache.html#basic-checks" id="basic-checks"><h2>Basic checks</h2></a>
+<p>One of the things that makes Apache2, and some other web servers, powerful
+is the library of modules that extend Apache's functionality. We'll come
+back to modules soon. For now, we're going to make sure the server is
+up and running, configure some basic things, and then create a basic
+web site.</p>
+<p>To start, let's get some info about Apache2 and make sure it is <em>enabled</em>
+and <em>running</em>:</p>
+<pre><code>systemctl list-unit-files httpd.service
+systemctl enable httpd.service
+systemctl list-unit-files httpd.service
+systemctl status httpd.service
+systemctl start httpd.service
+systemctl status httpd.service
+</code></pre>
+<a class="header" href="24-httpd-apache.html#creating-a-web-page" id="creating-a-web-page"><h2>Creating a web page</h2></a>
+<p>Now that we have it up and running, let's look at the default web
+page. We can use our loopback IP address (aka, <em>localhost</em>) and the
+<code>w3m</code> text web browser to view the default page:</p>
+<pre><code>dnf install -y w3m
+w3m http://127.0.0.1
+w3m http://localhost/
+</code></pre>
+<p>The <code>w3m</code> text-mode browser shows the <strong>Fedora Test Page</strong>. That's
+a sign that the default install was successful.</p>
+<p>Let's now create our first web page.  To do so, we need to know what
+directory that <code>httpd</code> is using to serve websites. This directory is
+called the <strong>DocumentRoot</strong> directory. If we read through that <strong>Fedora
+Test Page</strong> document, it'll tell us that the default directory is
+<code>/var/www/html/</code>. Let's go there and create a webpage with our text
+editor of choice:</p>
+<pre><code>cd /var/www/html/
+nano index.html
+</code></pre>
+<p>Create a simple HTML page, something like this. Of course, modify the
+content to suit your own interests:</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;My first web page using Apache2&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;h1&gt;Welcome&lt;/h1&gt;
+
+&lt;p&gt;Welcome to my web site. I have ever created using Apache2 and Fedora
+Linux.&lt;/p&gt;
+
+&lt;p&gt;Thanks!&lt;br/&gt;
+Dr. Burns&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>After you're done, save and close the document. Let's visit our website
+again with <code>w3m</code> to see if it works:</p>
+<pre><code>w3m http://127.0.0.1
+</code></pre>
+<p>Let's open the firewall so that outside systems can access this page:</p>
+<pre><code>firewall-cmd --list-all
+firewall-cmd --get-active-zones
+firewall-cmd --zone=FedoraServer --add-service=http
+firewall-cmd --zone=FedoraServer --add-service=https
+firewall-cmd --runtime-to-permanent
+</code></pre>
+<a class="header" href="24-httpd-apache.html#changing-the-hostname" id="changing-the-hostname"><h2>Changing the <code>hostname</code></h2></a>
+<p>The <code>hostname</code> of a system is the label it uses to identify itself
+to others (humans) on a (sub)network. If the hostname is on the web (or
+the internet), it may also be part of its of the fully qualified domain
+name (FQDN), which we studied during the DNS and networking weeks. For
+example, on a server identified as <strong>enterprise.example.net</strong>, then
+<strong>enterprise</strong>, is the hostname, <strong>example.net</strong> is the domain name,
+and <strong>enterprise.example.net</strong> is the fully qualified domain name. If
+two computers are on the same subnet, then they can be reachable via
+the hostname only, but the domain name is part of the DNS system and is
+required for two computers on the broader internet to reach each other.</p>
+<p>We're going to check and set the system <code>hostname</code> on our Fedora
+(virtual) machines using the <code>hostname</code> and <code>hostnamectl</code> commands:</p>
+<p>Check the default hostname:</p>
+<pre><code># hostname
+localhost.localdomain
+</code></pre>
+<p>To change the default hostname from <strong>localhost</strong>, use the <code>hostnamectl</code>
+command to update the system's hostname per the file. My new hostname
+will be <strong>enterprise</strong>.  You can name your hostname whatever you want,
+but be sure it's a single word with no punctuation.</p>
+<pre><code>hostnamectl set-hostname enterprise
+hostname
+cat /etc/hostname
+</code></pre>
+<p>We can access our site by hostname rather than by IP:</p>
+<pre><code>w3m http://enterprise
+</code></pre>
+<a class="header" href="24-httpd-apache.html#optional" id="optional"><h3>Optional</h3></a>
+<p>After you've completed the above steps, do the following:</p>
+<ol>
+<li>
+<p>On your host machine, find your OS's version of <code>/etc/hosts</code>.</p>
+<ul>
+<li>Windows instructions: <a href="https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992">https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992</a>.</li>
+<li>macOS users can edit their <code>/etc/hosts</code> file.</li>
+</ul>
+</li>
+<li>
+<p>Map your guest IP address (your Fedora IP) to your new hostname:</p>
+<pre><code>192.168.4.31 enterprise
+</code></pre>
+</li>
+</ol>
+<p>Then, in your Firefox, Chrome, or whatever browser, visit your new
+website and replace <strong>enterprise</strong> with the hostname that you chose for
+your guest OS:</p>
+<pre><code>http://enterprise
+</code></pre>
+<a class="header" href="24-httpd-apache.html#apache2-user-directories" id="apache2-user-directories"><h2>Apache2 User Directories</h2></a>
+<p>We can enable Apache2 so that users on our systems can run websites from
+their home directories; that is, sites located at:</p>
+<ul>
+<li><code>$HOME/public_html</code></li>
+</ul>
+<a class="header" href="24-httpd-apache.html#enable-userdir" id="enable-userdir"><h3>Enable userdir</h3></a>
+<p>Edit the <code>userdir.conf</code> file.</p>
+<pre><code>cd /etc/httpd/conf.d/
+nano userdir.conf
+</code></pre>
+<p>Make the following changes:</p>
+<ul>
+<li><code>UserDir disabled</code> to <code>UserDir enabled</code></li>
+<li>Uncomment line <code>UserDir public_html</code></li>
+</ul>
+<p>After saving and exiting, restart <code>httpd.service</code>:</p>
+<pre><code>systemctl restart httpd.service
+</code></pre>
+<a class="header" href="24-httpd-apache.html#tasks" id="tasks"><h2>Tasks</h2></a>
+<ol>
+<li>Exit out of root account</li>
+<li>Go to your regular user's home directory</li>
+<li>Make a directory titled <code>public_html</code> if it doesn't already exist</li>
+<li>Set <code>public_html</code> directory permissions to 755:
+<ul>
+<li><code>chmod 755 public_html</code></li>
+</ul>
+</li>
+<li>Change the user's directory permissions to 701:
+<ul>
+<li><code>chmod 701 /home/your_user</code></li>
+</ul>
+</li>
+</ol>
+<p><strong>SELinux</strong> needs to be configured to allow web access to our home
+directories. Specifically, we need to set some SELinux switches. Using
+<code>sudo</code> or logging in as <code>root</code>. Make sure you replace <strong>sean</strong>
+with your username:</p>
+<pre><code>setsebool -P httpd_enable_homedirs true
+chcon -R -t httpd_sys_content_t /home/sean/public_html
+</code></pre>
+<p>Exit out of root if you need to.</p>
+<a class="header" href="24-httpd-apache.html#test" id="test"><h3>Test</h3></a>
+<p>Now test to see if your <code>public_html</code> site is operational by simply
+visiting the site. For me, I use the following command:</p>
+<pre><code>cd ~/public_html/
+echo &quot;&lt;p&gt;Hello world&lt;/p&gt;&quot; &gt;&gt; index.html
+w3m http://127.0.0.1/~sean
+</code></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="p6-lamp.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="25-httpd-php.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="p6-lamp.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="25-httpd-php.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Managing Users and Groups - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-what-is-linux.html"><strong>1.1.</strong> What is Linux?</a></li><li><a href="02-what-is-sysadmin.html"><strong>1.2.</strong> What is Systems Administration?</a></li><li><a href="03-history-linux-unix.html"><strong>1.3.</strong> History of Unix and Linux</a></li></ul></li><li><a href="p2-the-command-line.html"><strong>2.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="04-quick-ssh-connect.html"><strong>2.1.</strong> Connect to a Remote Server</a></li><li><a href="05-the-linux-filesystem.html"><strong>2.2.</strong> The Linux Filesystem</a></li><li><a href="06-files-and-directories.html"><strong>2.3.</strong> Files and Directories</a></li><li><a href="07-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="08-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="09-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="10-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="11-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="12-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="13-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="p3-using-gcloud.html"><strong>3.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="14-using-gcloud.html"><strong>3.1.</strong> Using gcloud for Virtual Machines</a></li><li><a href="15-expanding-storage.html"><strong>3.2.</strong> Expanding Storage</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="16-managing-users-groups.html" class="active"><strong>4.1.</strong> Managing Users and Groups</a></li><li><a href="17-systemd.html"><strong>4.2.</strong> systemd</a></li><li><a href="18-using-apt.html"><strong>4.3.</strong> Using APT to Manage Software</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-tcip-networking.html"><strong>5.1.</strong> TCIP Networking</a></li><li><a href="20-networking-dns-domains.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-security-chroot.html"><strong>5.3.</strong> Security and chroot</a></li><li><a href="22-security-firewall.html"><strong>5.4.</strong> Security and Firewalls</a></li><li><a href="23-backups.html"><strong>5.5.</strong> Backups</a></li></ul></li><li><a href="p6-lamp.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="24-httpd-apache.html"><strong>6.1.</strong> Apache2 Web Server</a></li><li><a href="25-httpd-php.html"><strong>6.2.</strong> Apache2 and PHP</a></li><li><a href="26-httpd-virtualhosts.html"><strong>6.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="27-httpd-mariadb.html"><strong>6.4.</strong> Apache2 and MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="16-managing-users-groups.html#managing-users" id="managing-users"><h1>Managing Users</h1></a>
+<a class="header" href="16-managing-users-groups.html#the-passwd-file" id="the-passwd-file"><h2>The passwd file</h2></a>
+<p>On my Fedora 34 virtual machine, I can see the following information about my user account in the <strong>passwd</strong> file:</p>
+<pre><code>cat /etc/passwd
+</code></pre>
+<p>Or, I can also <code>grep</code> or <code>awk</code> for specific accounts:</p>
+<pre><code>grep &quot;$(whoami)&quot; /etc/passwd
+sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
+
+grep &quot;sean&quot; /etc/passwd
+sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
+
+awk '/sean/ { print $0 }' /etc/passwd
+sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
+</code></pre>
+<p>Any of those commands can be piped through <code>sed</code> to look at the individual fields, one line at a time:</p>
+<pre><code>grep &quot;sean&quot; /etc/passwd | sed 's/:/\n/g'
+sean
+x
+1000
+1000
+
+/home/sean
+/usr/bin/bash
+</code></pre>
+<p>The fields represent the following information:</p>
+<ul>
+<li>username</li>
+<li>password indicator</li>
+<li>user id</li>
+<li>group id</li>
+<li>user name or comment</li>
+<li>home directory</li>
+<li>default shell</li>
+</ul>
+<p>You can read about these fields via <code>man 5 passwd</code>. [ EXPLAIN THE 5 ]</p>
+<p>Note that the <strong>user name or comment</strong> line is blank. We can add a comment using the <code>chfn</code>, and there are multiple options to use. If I use the <code>-f</code> option, I can set my full name to appear here. See <code>man chfn</code> for more options to set:</p>
+<pre><code>sudo chfn -f &quot;Sean Burns&quot; sean
+</code></pre>
+<p>The <strong>/etc/passwd</strong> file is a pretty standard Linux file, but some things will change depending on the distribution. For example, the user id may start at a different point depending on the system. However, nowadays both Ubuntu and Fedora set the starting UID and group ID for new users at 1000.</p>
+<a class="header" href="16-managing-users-groups.html#the-shadow-file" id="the-shadow-file"><h2>The shadow file</h2></a>
+<p>The <strong>/etc/passwd</strong> file does not contain any passwords but a simple <strong>x</strong> to mark the password field. Passwords on Linux are stored in <strong>/etc/shadow</strong> and are hashed with <strong>sha512</strong>, which is indicated by <strong>$6$</strong>. You need to be root to examine the shadow file or use <code>sudo</code>:</p>
+<pre><code>sudo su
+grep &quot;sean&quot; /etc/shadow
+sean:ENCRYPTED_PASSWORD::0:99999:7:::
+grep &quot;sean&quot; /etc/shadow | sed 's/:/\n/g'
+sean
+ENCRYPTED_PASSWORD
+
+0
+99999
+7
+</code></pre>
+<p>The fields are (see <code>man 5 passwd</code>):</p>
+<ul>
+<li>login name (username)</li>
+<li>encrypted password</li>
+<li>days since 1/1/1970 since password was last changed</li>
+<li>days after which password must be changed</li>
+<li>minimum password age</li>
+<li>maximum password age</li>
+<li>password warning period</li>
+<li>password inactivity period</li>
+<li>account expiration date</li>
+<li>a reserved field</li>
+</ul>
+<a class="header" href="16-managing-users-groups.html#the-group-file" id="the-group-file"><h2>The group file</h2></a>
+<p>The <strong>/etc/group</strong> file holds group information about the entire system (see <code>man group</code>). In the following command, you can see that I'm a member of the <strong>wheel</strong> group (which allows my account to use the <code>sudo</code> command) and that there's a group name that is also the name of my user account. The <strong>sean</strong> at the end of the <strong>wheel</strong> line indicates that I am a member of the <strong>wheel</strong> group. Although user <strong>sean</strong> is a member of group <strong>sean</strong>, users do not have to be listed as members of their own group.</p>
+<pre><code>grep -E 'wheel|^sean' /etc/group
+wheel:x:10:sean
+sean:x:1000:
+</code></pre>
+<p>The fields are:</p>
+<ul>
+<li>group name</li>
+<li>group password</li>
+<li>group ID (GID)</li>
+<li>group members (user list)</li>
+</ul>
+<a class="header" href="16-managing-users-groups.html#management-tools" id="management-tools"><h2>Management Tools</h2></a>
+<p>Other user and group utilities include:</p>
+<ul>
+<li><code>/usr/sbin/useradd</code></li>
+<li><code>/usr/sbin/usermod</code></li>
+<li><code>/usr/sbin/userdel</code></li>
+<li><code>/usr/sbin/groupadd</code></li>
+<li><code>/usr/sbin/groupdel</code></li>
+<li><code>/usr/sbin/groupmod</code></li>
+<li><code>/usr/sbin/gpasswd</code></li>
+</ul>
+<a class="header" href="16-managing-users-groups.html#practice" id="practice"><h2>Practice</h2></a>
+<a class="header" href="16-managing-users-groups.html#modify-default-new-user-setttings" id="modify-default-new-user-setttings"><h3>Modify default new user setttings</h3></a>
+<p>In today's demo, we will modify some default user account settings for new users, and then we'll create a new user account.</p>
+<p>Before we proceed, let's review several important configuration files that establish some default settings:</p>
+<ul>
+<li><strong>/etc/login.defs</strong> : see <code>man login.defs</code></li>
+<li><strong>/etc/skel</strong></li>
+<li><strong>/etc/default/useradd</strong></li>
+</ul>
+<p>Let's change some defaults. We can either user <code>sudo</code> or become <code>su</code>. Here I use <code>sudo</code> to become root:</p>
+<pre><code>sudo su
+</code></pre>
+<p>Let's edit the default <strong>.bashrc</strong> file:</p>
+<pre><code>nano /etc/skel/.bashrc
+</code></pre>
+<p>We want to add these lines at the end of the file:</p>
+<pre><code># Dear New User,
+#
+# I have made the following settings to make your life a bit easier:
+#
+# make &quot;c&quot; a shortcut for &quot;clear&quot;
+alias c='clear'
+#
+# make vi the default command line keybinding
+set -o vi
+</code></pre>
+<p>Now use <code>nano</code> again to create a README file. This file will be added to the home directories of all new users. Add any welcome message you want to add, plus any guidelines for using the system.</p>
+<pre><code>nano /etc/skel/README
+</code></pre>
+<a class="header" href="16-managing-users-groups.html#add-new-user-account" id="add-new-user-account"><h3>Add new user account</h3></a>
+<p>After writing (saving) and exiting <code>nano</code>, we can go ahead and create a new user named <strong>linus</strong>. The <code>-m</code> option creats the user's home directory, the <code>-U</code> option creates a group with the same name as the user, and the <code>-s</code> option sets the default shell to <code>/usr/bin/bash</code>.</p>
+<pre><code>useradd -m -U -s /usr/bin/bash linus
+grep &quot;linus&quot; /etc/passwd
+</code></pre>
+<p>Let's add the user's full name:</p>
+<pre><code>chfn -f &quot;Linus Torvalds&quot; linus
+</code></pre>
+<p>The user does not yet have a password set. Let's create a password for <em>linus</em>:</p>
+<pre><code>grep &quot;linus&quot; /etc/shadow
+passwd linus
+grep &quot;linus&quot; /etc/shadow
+</code></pre>
+<p>Let's modify the minimum days and maximum days of the password's lifetime:</p>
+<pre><code>passwd -n 90 linus
+passwd -x 180 linus
+</code></pre>
+<a class="header" href="16-managing-users-groups.html#create-a-new-group-add-users-to-the-group" id="create-a-new-group-add-users-to-the-group"><h3>Create a new group; add users to the group</h3></a>
+<p>Let's now create a new group, and then I will add my account and my new user's account to the group:</p>
+<pre><code>grep &quot;linus&quot; /etc/group
+groupadd developers
+grep &quot;developers&quot; /etc/group
+gpasswd -a linus developers
+gpasswd -a sean developers
+grep &quot;developers&quot; /etc/group
+</code></pre>
+<p>Exit out of root if logged in as root.</p>
+<p>Now login as user linus and examine the user's group memberships:</p>
+<pre><code>su linus
+groups
+</code></pre>
+<p>Great! Let's exit out and become root again:</p>
+<pre><code>exit
+sudo su
+</code></pre>
+<p>Let's make the <strong>/projects</strong> directory/logical volume a shared directory:</p>
+<pre><code>ls -ld /projects
+# change ownership of the directory to the group developers
+chown :developers /projects
+# allow all group users to add and delete from the folder and read/write to each other's files
+# See this post for various options:
+# https://ubuntuforums.org/showthread.php?t=2138476&amp;p=12616640#post12616640
+chmod 2770 /projects
+exit
+</code></pre>
+<p>Log all the way out and then login again:</p>
+<pre><code>exit # from root
+exit # from regular user
+</code></pre>
+<p>And then relogin so that the group modification will take affect. Check with the <code>groups</code> command:</p>
+<pre><code>groups
+</code></pre>
+<a class="header" href="16-managing-users-groups.html#user-account-and-group-deletion" id="user-account-and-group-deletion"><h3>User account and group deletion</h3></a>
+<p>If we want to delete the new user's account:</p>
+<pre><code>userdel -r linus
+grep &quot;linus&quot; /etc/passwd
+grep &quot;linus&quot; /etc/shadow
+cd /home ; ls -l
+</code></pre>
+<p>And then delete the new group:</p>
+<pre><code>grep &quot;developers&quot; /etc/group
+groupdel developers
+grep &quot;developers&quot; /etc/group
+</code></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="p4-managing-the-system.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="17-systemd.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="p4-managing-the-system.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="17-systemd.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
