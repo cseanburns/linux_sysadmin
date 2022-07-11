@@ -8,5 +8,5 @@ To do:
 1. Add images
 1. Edit text
 1. Standardize format / structure of each section
-1. Write introduction for this section
+1. Write introductory text for this section and the subsections
 
