@@ -1,6 +1,4 @@
-# Processing Data: GNU Coreutils (Part 1)
-
-## Text Processing
+# Text Processing, Part 1
 
 One of the more important sets of tools that Linux (as well Unix-like)
 operating systems provide are tools that

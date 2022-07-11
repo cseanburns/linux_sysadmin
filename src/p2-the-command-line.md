@@ -1,6 +1,4 @@
-# Introduction
-
-This section is an intro to Linux, its history, and its basic usage.
+# Learning the Command Line
 
 This section is in draft status.
 It was last updated on 2022-07-09.
