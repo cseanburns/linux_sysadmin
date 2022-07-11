@@ -1,0 +1,484 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Expanding Storage - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="./linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><a href="./p1-system-basics.html"><strong>2.</strong> System Basics</a></li><li><ul class="section"><li><a href="./01-history-linux-unix.html"><strong>2.1.</strong> History of Unix and Linux</a></li><li><a href="./02-quick-ssh-connect.html"><strong>2.2.</strong> Connect to a Remote Server</a></li><li><a href="./03-filesystem-file-management.html"><strong>2.3.</strong> Linux Filesystems and File Management</a></li><li><a href="./04-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="./05-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="./06-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="./07-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="./08-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="./09-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="./10-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="./p2-managing-services-software.html"><strong>3.</strong> Managing Services and Software</a></li><li><ul class="section"><li><a href="./11-using-gcloud.html"><strong>3.1.</strong> Using gcloud for Virtual Machines</a></li><li><a href="./12-expanding-storage.html" class="active"><strong>3.2.</strong> Expanding Storage</a></li><li><a href="./15-managing-users-groups.html"><strong>3.3.</strong> Managing Users and Groups</a></li><li><a href="./16-systemd.html"><strong>3.4.</strong> systemd</a></li><li><a href="./17-backup-and-using-dnf.html"><strong>3.5.</strong> Backups and DNF</a></li></ul></li><li><a href="./p3-networking-security.html"><strong>4.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="./18-tcip-networking.html"><strong>4.1.</strong> TCIP Networking</a></li><li><a href="./19-networking-dns-domains.html"><strong>4.2.</strong> DNS and Domain Names</a></li><li><a href="./20-security-chroot.html"><strong>4.3.</strong> Security and chroot</a></li><li><a href="./21-security-firewall.html"><strong>4.4.</strong> Security and Firewalls</a></li></ul></li><li><a href="./p4-lamp.html"><strong>5.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="./22-httpd-apache.html"><strong>5.1.</strong> Apache2 Web Server</a></li><li><a href="./23-httpd-php.html"><strong>5.2.</strong> Apache2 and PHP</a></li><li><a href="./24-httpd-virtualhosts.html"><strong>5.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="./25-httpd-mysql.html"><strong>5.4.</strong> Apache2 and MySQL</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="./12-expanding-storage.html#expanding-storage" id="expanding-storage"><h1>Expanding Storage</h1></a>
+<p>I'm sure all or most of you have needed
+extra disk storage at some point
+(USB drives, optical disks, floppies???).
+Such needs are no different for systems administrators,
+who often are responsible for managing, monitoring,
+or storing large amounts of data.</p>
+<p>The disk that we created for our VM is small (10 GB),
+and that's fine for our needs,
+albeit quite small in many real world scenarios.
+To address this,
+we can add a persistent disk
+that is much larger.
+In this section,
+we will add a disk to our VM,
+mount it onto the VM's filesystem, and format it.
+Extra storage does incur extra cost.
+So at the end of this section,
+I will show you how to delete the extra
+disk to avoid that if you want.</p>
+<p>We will essentially follow the Google Cloud tutorial
+to add a non-boot disk to our VM, but
+with some modification.</p>
+<p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
+<blockquote>
+<p>Note: the main disk used by our VM is the <strong>boot disk</strong>,
+although it's not generally called that unless it's
+referring to removable media.
+But for our purposes, we can
+call it the boot disk because it contains the
+software and the formatting required to boot the system.
+All of our computers
+(desktops, laptops, tablets, phones, etc.),
+regardless of which operating system they run,
+have some kind of boot system.</p>
+</blockquote>
+<a class="header" href="./12-expanding-storage.html#creating-a-disk" id="creating-a-disk"><h2>Creating a Disk</h2></a>
+<p>In the Google Cloud console,
+visit the <strong>Disks</strong> page in the <strong>Storage</strong> section,
+which should be here:</p>
+<p><a href="https://console.cloud.google.com/compute/disksAdd">Create a disk</a></p>
+<p>And then follow these steps:</p>
+<ol>
+<li>Under <strong>Name</strong>, add a preferred name or leave the default.</li>
+<li>Under <strong>Description</strong>, add text to describe your disk.</li>
+<li>Under <strong>Location</strong>, leave or choose <strong>Single zone</strong>.
+<ul>
+<li>We are not concerned about data safety.</li>
+<li>If we were, then we would select other options here.</li>
+</ul>
+</li>
+<li>Under <strong>Source</strong>, select <strong>Blank disk</strong>.</li>
+<li>Under <strong>Disk settings</strong>, select <strong>Balanced persistent disk</strong>.</li>
+<li>Under <strong>Size</strong>, change this to 10GB.
+<ul>
+<li>You can actually choose larger sizes, but be aware that <a href="https://cloud.google.com/compute/all-pricing#disk">disk
+pricing</a> is $0.10 per GB.</li>
+<li>At that cost, 100 GB = $10 / month.</li>
+</ul>
+</li>
+<li>Click on <strong>Enable snapshot schedule</strong>.</li>
+<li>Under <strong>Encryption</strong>, make sure <strong>Google-managed encryption key</strong> is
+selected.</li>
+<li>Click <strong>Create</strong> to create your disk.</li>
+</ol>
+<a class="header" href="./12-expanding-storage.html#adding-the-disk-to-our-vm" id="adding-the-disk-to-our-vm"><h2>Adding the Disk to our VM</h2></a>
+<p>Now that we have created our disk,
+we need to <strong>mount</strong> it onto our filesystem
+so that it's available to our VM.
+Conceptually, this process is like inserting
+a new USB drive into our computer.</p>
+<p>To add the new disk to our VM,
+follow these steps:</p>
+<ol>
+<li>Visit the <strong>VM instances</strong> page.</li>
+<li>Click on the check box next to your virtual machine.
+<ul>
+<li>That will convert the <strong>Name</strong> of your VM into a hyperlink.</li>
+</ul>
+</li>
+<li>Click on that <strong>Name</strong>.
+<ul>
+<li>That will take you to the <strong>VM instance details</strong> page.</li>
+</ul>
+</li>
+<li>Click on the <strong>Edit</strong> button at the top of the details page.</li>
+<li>Under the <strong>Additional disks</strong> section, click on <strong>+ ATTACH EXISTING DISK</strong>.</li>
+<li>A panel will open on the right side of your browser.</li>
+<li>Click on the drop down box and select the disk, by name, you created.</li>
+<li>Leave the defaults as-is.</li>
+<li>Click on the <strong>SAVE</strong> button.</li>
+<li>Then click on the <strong>SAVE</strong> button on the details page.</li>
+</ol>
+<p>If you return to the <strong>Disks</strong> page in the <strong>Storage</strong> section,
+you will now see that the new disk is in use by our VM.</p>
+<a class="header" href="./12-expanding-storage.html#formatting-and-mounting-a-non-boot-disk" id="formatting-and-mounting-a-non-boot-disk"><h2>Formatting and Mounting a Non-Boot Disk</h2></a>
+<a class="header" href="./12-expanding-storage.html#formatting-our-disk" id="formatting-our-disk"><h3>Formatting Our Disk</h3></a>
+<p>In order for our VM to make use of the extra storage,
+the new drive must be formatted and mounted.
+Different operating systems use different filesystem formats.
+You may already know that
+macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac">Apple File System (APFS)</a> by default
+and that Windows uses the
+<a href="https://docs.microsoft.com/en-us/windows-server/storage/file-server/ntfs-overview">New Technology File System (NTFS)</a>.
+Linux is no different.
+There are many formatting technologies that we can use in Linux,
+but we'll use the <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">ext4 (fourth extended filesystem)</a> format,
+since this is recommended by Google Cloud and
+is also one of the most stable and common formats for Linux.</p>
+<p>In this section, we will closely follow the steps
+outlined under the
+<a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"><strong>Formatting and mounting a non-boot disk on a Linux VM</strong></a>
+section.
+I replicate those instructions below, but
+I highly encourage you to read through
+the instructions on Google Cloud and here:</p>
+<ol>
+<li>Use the <code>gcloud compute ssh</code> command that you
+have previously used to connect to your VM.
+<ul>
+<li>Alternatively, you can <code>ssh</code> to your VM via your browser:
+<ul>
+<li>Click on the <strong>VM instances</strong> page.</li>
+<li>Under the <strong>Connect</strong> column,
+select <strong>Open in browser window</strong> next to <strong>SSH</strong>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>When you have connected to your VM's command line, run the <code>lsblk</code>
+command.
+<ul>
+<li>Ignore the <strong>loop</strong> devices.</li>
+<li>Instead, you should see <strong>sda</strong> and <strong>sdb</strong> under the <strong>NAME</strong> column
+outputted by the <code>lsblk</code> command.</li>
+<li><strong>sda</strong> represents your main disk.
+<ul>
+<li><strong>sda1, sda14, sda15</strong> (may be slightly different for you)
+represent the partitions of the <strong>sda</strong> disk.</li>
+<li>Notice the <strong>MOUNTPOINT</strong> for <strong>sda1</strong> is <code>/</code>,
+or the root level of our filesystem.</li>
+</ul>
+</li>
+<li><strong>sdb</strong> represents the attached disk we just added.
+<ul>
+<li>After we format this drive, there will be an <strong>sdb1</strong>, and this
+partition will also have a mountpoint.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>To format our disk for the <strong>ext4</strong> filesystem,
+we will use the <code>mkfs.ext4</code>
+(see <code>man mkfs.ext4</code> for details).
+The instructions tell us to run the following command
+(please read the Google Cloud instructions closely;
+<strong>it's important to understand these commands as much
+as possible and not just copy and paste them</strong>):</p>
+<pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/DEVICE_NAME
+</code></pre>
+<p>But replace <strong>DEVICE_NAME</strong> with the name of our device.
+My device's name is <strong>sdb</strong>,
+which we saw with the output of the <code>lsblk</code> command;
+therefore, the specific command I run is:</p>
+<pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
+</code></pre>
+<a class="header" href="./12-expanding-storage.html#mounting-our-disk" id="mounting-our-disk"><h3>Mounting Our Disk</h3></a>
+<p>Now that our disk has been formatted in <strong>ext4</strong>,
+I can mount it.</p>
+<blockquote>
+<p>Note: to <strong>mount</strong> a disk simply means to make the disk's
+filesystem available so that we can use it for accessing,
+storing, etc files on the disk.
+Whenever we insert a USB drive, a DVD drive, etc
+into our computers,
+the OS you use should mount that disk automatically
+so that you can access and use that disk.
+Conversely, when we remove those drives,
+the OS <strong>unmounts</strong> them.
+In Linux, the commands for these are <code>mount</code> and <code>umount</code>.
+Note that the <code>umount</code> command is not <strong>unmount</strong>.</p>
+</blockquote>
+<p>You will recall that we have
+<a href="03-filesystem-file-management.html">discussed filesystems earlier</a>,
+and that the term is a bit confusing since it refers to both
+the directory hierarchy and also the formatting type (e.g., ext4).
+In that prior section, I discussed how in Windows,
+attaching a new drive,
+whether it's a USB drive, a DVD drive,
+an additional disk drive, or an external drive,
+Windows gives the new drive a letter,
+like <strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.
+Unlike Windows, I mentioned that in Linux and Unix (e.g., macOS),
+when we add an additional disk,
+its filesystem gets added onto our existing one.
+That is, it becomes part of the directory hierarchy
+and under the <code>/</code> top level part of the hierarchy.
+In practice, this means that we have to create the <strong>mountpoint</strong>
+for our new disk, and
+we do that with the <code>mkdir</code> command.
+The Google Console documentation instructs us
+to use the following command:</p>
+<pre><code>sudo mkdir -p /mnt/disks/MOUNT_DIR
+</code></pre>
+<p>And to replace <strong>MOUNT_DIR</strong> with the directory we
+want to create.
+Since my added disk is named <strong>disk-1</strong>,
+I'll call it that:</p>
+<pre><code>sudo mkdir -p /mnt/disks/disk-1
+</code></pre>
+<p>Now we can <code>mount</code> the disk to that directory.
+Per the instructions on Google Console,
+and given that my added drive has the device name <strong>sdb</strong>,
+I use the following command:</p>
+<pre><code>sudo mount -o discard,defaults /dev/sdb /mnt/disks/disk-1
+</code></pre>
+<p>We also need to change the modifications, and
+grant access for additional users:</p>
+<pre><code>sudo chmod 777 /mnt/disks/disk-1
+</code></pre>
+<p>We can test that it exists and is accessible with
+the <code>lsblk</code> and the <code>cd</code> commands.
+The <code>lsblk</code> command should show that <strong>sdb</strong> is
+mounted at <code>/mnt/disks/disk-1</code>, and
+we can <code>cd</code> (change directory) to it:</p>
+<pre><code>cd /mnt/disks/disk-1
+</code></pre>
+<a class="header" href="./12-expanding-storage.html#automounting-our-disk" id="automounting-our-disk"><h3>Automounting Our Disk</h3></a>
+<p>Our disk is mounted, but if the computer (VM) gets rebooted,
+we would have to re-<code>mount</code> the additional drive manually.
+In order to avoid this and automount the drive upon reboot,
+we need to edit the file <code>/etc/fstab</code>.</p>
+<blockquote>
+<p>Note that the file is named <strong>fstab</strong> and
+that it's located in the <strong>/etc</strong> directory.
+Therefore the full path is <code>/etc/fstab</code></p>
+</blockquote>
+<p>The <strong>fstab</strong> file is basically a configuration file
+that provides information to the OS about the filesystems
+the system can mount.
+The standard information <strong>fstab</strong> contains includes
+the name (or label) of the device being mounted,
+the mountpoint (e.g., <code>/mnt/disks/disk-1</code>),
+the filesystem type (e.g., <strong>ext4</strong>),
+and various other mount options.
+See <code>man fstab</code> for more details.
+For devices to mount upon boot up automatically,
+they have to be listed in this file.
+That means we need to edit this file on our VM.</p>
+<p>Again, here we're following the Google Cloud instructions:</p>
+<p>Before we edit system configuration files, however,
+always create a backup.
+We'll use the <code>cd</code> command to create a backup of the <strong>fstab</strong> file.</p>
+<pre><code>sudo cp /etc/fstab /etc/fstab.backup
+</code></pre>
+<p>Next we use the <code>blkid</code> command to get
+the UUID (universally unique identifier)
+number for our new device.
+Since my device is <code>/dev/sdb</code>,
+I'll use that:</p>
+<pre><code>sudo blkid /dev/sdb
+</code></pre>
+<p>The output should look something like this:</p>
+<pre><code>/dev/sdb: UUID=&quot;3bc141e2-9e1d-428c-b923-0f9vi99a1123&quot; TYPE=&quot;ext4&quot;
+</code></pre>
+<p>We need to add that value to <code>/etc/fstab</code>
+plus the standard information that file requires.
+The Google Cloud documentation explicitly guides us here.
+We'll use <code>nano</code> to make the edit:</p>
+<pre><code>nano /etc/fstab
+</code></pre>
+<p>And then add this line at the bottom:</p>
+<pre><code>UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0,2
+</code></pre>
+<p>And that's it!
+If you reboot your VM, or
+if your VM rebooted for some reason,
+the extra drive we added should automatically
+mount upon reboot.
+If it doesn't,
+then it may mean that the drive failed,
+or that there was an error (i.e., typo) in the configuration.</p>
+<a class="header" href="./12-expanding-storage.html#delete-the-disk" id="delete-the-disk"><h3>Delete the Disk</h3></a>
+<p>You are welcome to keep the disk attached to the VM,
+but if you do not want to incur any charges for it,
+which would be about $1 / month at 10 GB,
+then we can delete it.</p>
+<p>To delete the disk,
+first delete the line that we added in <code>/etc/fstab</code>,
+unmount it,
+and the delete the disk in the gcloud console.</p>
+<p>To unmount the disk, we use the <code>umount</code> command:</p>
+<pre><code>sudo umount /mnt/disks/disk-1
+</code></pre>
+<p>Then we need to delete the disk in gcloud.</p>
+<ol>
+<li>Go to the <strong>VM instances</strong> page.</li>
+<li>Click on the check box next to the VM.</li>
+<li>Click on the name, which should be a hyperlink.</li>
+<li>This goes to the <strong>VM instances detail</strong> page.</li>
+<li>Click on the <strong>Edit</strong> button at the top of the page.</li>
+<li>Scroll down to the <strong>Additional disks</strong> section.</li>
+<li>Click the edit (looks like a pencil) button.</li>
+<li>In the right-hand pane that opens up, select <strong>Delete disk</strong> under the
+<strong>Deletion rule</strong> section.</li>
+<li>Scroll back to the <strong>Additional disks</strong> section.</li>
+<li>Click on the <code>X</code> to detach the disk.</li>
+<li>Click on <strong>Save</strong>.</li>
+<li>Go the <strong>Disk</strong> section in the left-hand navigation pane.</li>
+<li>Check the disk to delete, and then Delete it.</li>
+<li>Click on the <strong>Snapshots</strong> section int he left-hand navigation pane.</li>
+<li>Check the disk snapshot to delete, and then Delete it.
+<ul>
+<li>Be sure you don't delete your VM here but just your disk.</li>
+</ul>
+</li>
+</ol>
+<a class="header" href="./12-expanding-storage.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>In this section we learned how to expand
+the storage of our VM by creating a new virtual drive,
+adding it to our VM,
+formatting the drive in the <strong>ext4</strong> filesystem format,
+mounting the drive at <code>/mnt/disks/disk-1</code>, and
+then editing <code>/etc/fstab</code> to make automount the drive.</p>
+<p>In addition to using the gcloud console,
+the command we used in this section include:</p>
+<ol>
+<li><code>ssh</code>  : to connect to the remote VM</li>
+<li><code>sudo</code> : to run commands as the administrator</li>
+<li><code>mkfs.ext</code> : to create an <strong>ext4</strong> filesystem on our new drive</li>
+<li><code>mkdir -p</code> : to create multiple directories under <code>/mnt</code></li>
+<li><code>mount</code> : to mount manually the new drive</li>
+<li><code>umount</code> : to unmount manually the new drive</li>
+<li><code>chmod</code> : to change the mountpoint's file permission attributes</li>
+<li><code>cd</code> : to change directories</li>
+<li><code>cp</code> : to copy a file</li>
+<li><code>nano</code> : to use the text editor <code>nano</code> to edit <code>/etc/fstab</code></li>
+</ol>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="./11-using-gcloud.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="./15-managing-users-groups.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="./11-using-gcloud.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="./15-managing-users-groups.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

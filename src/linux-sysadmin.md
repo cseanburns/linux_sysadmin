@@ -10,9 +10,11 @@ This short book is based on a series of lectures
 and demonstrations
 for my course on Linux Systems Administration.
 
-This is a very rough draft
-that used VirtualBox and the Fedora distribution.
-I am in the process of converting content here
+This is a very rough draft.
+Until recently, we used VirtualBox and the Fedora distribution.
+But I am in the process of converting content here
 to demonstrate Google Cloud (gcloud)
-and the Ubuntu distribution
-for the Fall 2022 semester.
+and the Ubuntu distribution.
+
+The work should be fairly complete by
+start of the Fall 2022 semester.
