@@ -1,58 +1,102 @@
 # Managing Users
 
+In some cases we'll want to provide user accounts
+on the servers we administrate, or
+we'll want to set up servers for others to use.
+The process of creating accounts is fairly straightforward, but
+there are a few things to know about how user accounts work.
+
 ## The passwd file
 
-On my Fedora 34 virtual machine, I can see the following information about my user account in the **passwd** file:
+The **/etc/passwd** file contains information
+about the users on your system.
+There is a man page that describes the file, but
+man pages are divided into sections (see ``man man``), and
+the man page for the ``passwd`` file is in section 5.
+Therefore in order to read the man page
+for the **/etc/passwd** file,
+we run the following command:
 
 ```
-cat /etc/passwd
+man 5 passwd
 ```
 
-Or, I can also ``grep`` or ``awk`` for specific accounts:
+Before we proceed,
+let's also take a look at a single line of the file.
+Below I'll show the output for a madeup user account:
 
 ```
-grep "$(whoami)" /etc/passwd
-sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
-
 grep "sean" /etc/passwd
-sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
-
-awk '/sean/ { print $0 }' /etc/passwd
-sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
+peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 ```
 
-Any of those commands can be piped through ``sed`` to look at the individual fields, one line at a time:
+The line starting with **peter** is a colon separate line.
+That means that the line is composed of multiple fields
+each separated by a colon.
+
+``man 5 passwd`` tells us what each field indicates.
+The first field is the login name,
+which in this case is **peter**.
+The second field, marked **x**, marks the password field.
+This file does not contain the password, though.
+The passwords, which are [hashed and salted][hashedSalted],
+for users are located in **/etc/shadow**,
+which can only be read by the root user
+(or using the ``sudo`` command).
+
+> Hashing a file or a string of text is a
+> process of running a hashing algorithm on the file or text.
+> If the file or string is copied exactly, byte for byte,
+> then hashing the copy will return the same value.
+> If anything has changed about the file or string,
+> then the hash value will be different.
+> By implication, this means that if two users on a system
+> use the same password,
+> then the hash of each will be equivalent.
+> Salting a hashed file (or file name)
+> or string of text is a process
+> of adding random data to the file or string.
+> Each password will have a unique and mostly random salt
+> added to it.
+> This means that even if two users on a system use the
+> same password,
+> salting will mean that their passwords are unique.
+
+The third column indicates the user's numerical ID, and
+the fourth column indicates the uers' group ID.
+The fifth column repeats the login name, but
+could also serve as a comment field.
+Comments are added using certain commands (discussed later).
+The fifth field identifies the user's home directory,
+which is **/home/peter**.
+The sixth field identifies the user's default shell,
+which is ``/bin/bash``.
+
+The **user name or comment** field merely repeats the login name here,
+but it can hold specific types of information.
+We can add comments using the ``chfn``.
+Comments include the user's full name,
+their home and work phone numbers,
+their office or room number, and so forth.
+To add a full name to user **peter**'s account,
+we use the **-f** option:
 
 ```
-grep "sean" /etc/passwd | sed 's/:/\n/g'
-sean
-x
-1000
-1000
-
-/home/sean
-/usr/bin/bash
+sudo chfn -f "Peter Parker" peter
 ```
 
-The fields represent the following information:
-
-* username
-* password indicator
-* user id
-* group id
-* user name or comment
-* home directory
-* default shell
-
-You can read about these fields via ``man 5 passwd``. [ EXPLAIN THE 5 ]
-
-Note that the **user name or comment** line is blank. We can add a comment using the ``chfn``, and there are multiple options to use. If I use the ``-f`` option, I can set my full name to appear here. See ``man chfn`` for more options to set:
-
-```
-sudo chfn -f "Sean Burns" sean
-```
-
-The **/etc/passwd** file is a pretty standard Linux file, but some things will change depending on the distribution. For example, the user id may start at a different point depending on the system. However, nowadays both Ubuntu and Fedora set the starting UID and group ID for new users at 1000.
+The **/etc/passwd** file is a standard Linux file, but
+some things will change depending on the distribution.
+For example, the user and group IDs above start at 1000 because
+**peter** is the first human account on the system.
+This is a common starting numerical ID nowadays,
+but it could be different on other Linux distributions.
+But the home directory could be different on other systems;
+for example, it the default could be located at **/usr/home/username**.
+Also, other shells exist besides ``bash``, 
+like [zsh][zsh],
+which is now the default shell on macOS, and
+so other systems may default to different shell environments.
 
 ## The shadow file
 
@@ -260,3 +304,6 @@ grep "developers" /etc/group
 groupdel developers
 grep "developers" /etc/group
 ```
+
+[hashedSalted]:https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/
+[zsh]:https://www.zsh.org/
