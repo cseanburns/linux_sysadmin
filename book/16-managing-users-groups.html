@@ -87,45 +87,90 @@
 
                 <div id="content" class="content">
                     <a class="header" href="16-managing-users-groups.html#managing-users" id="managing-users"><h1>Managing Users</h1></a>
+<p>In some cases we'll want to provide user accounts
+on the servers we administrate, or
+we'll want to set up servers for others to use.
+The process of creating accounts is fairly straightforward, but
+there are a few things to know about how user accounts work.</p>
 <a class="header" href="16-managing-users-groups.html#the-passwd-file" id="the-passwd-file"><h2>The passwd file</h2></a>
-<p>On my Fedora 34 virtual machine, I can see the following information about my user account in the <strong>passwd</strong> file:</p>
-<pre><code>cat /etc/passwd
+<p>The <strong>/etc/passwd</strong> file contains information
+about the users on your system.
+There is a man page that describes the file, but
+man pages are divided into sections (see <code>man man</code>), and
+the man page for the <code>passwd</code> file is in section 5.
+Therefore in order to read the man page
+for the <strong>/etc/passwd</strong> file,
+we run the following command:</p>
+<pre><code>man 5 passwd
 </code></pre>
-<p>Or, I can also <code>grep</code> or <code>awk</code> for specific accounts:</p>
-<pre><code>grep &quot;$(whoami)&quot; /etc/passwd
-sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
-
-grep &quot;sean&quot; /etc/passwd
-sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
-
-awk '/sean/ { print $0 }' /etc/passwd
-sean:x:1000:1000:sean::/home/sean:/usr/bin/bash
+<p>Before we proceed,
+let's also take a look at a single line of the file.
+Below I'll show the output for a madeup user account:</p>
+<pre><code>grep &quot;sean&quot; /etc/passwd
+peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 </code></pre>
-<p>Any of those commands can be piped through <code>sed</code> to look at the individual fields, one line at a time:</p>
-<pre><code>grep &quot;sean&quot; /etc/passwd | sed 's/:/\n/g'
-sean
-x
-1000
-1000
-
-/home/sean
-/usr/bin/bash
+<p>The line starting with <strong>peter</strong> is a colon separate line.
+That means that the line is composed of multiple fields
+each separated by a colon.</p>
+<p><code>man 5 passwd</code> tells us what each field indicates.
+The first field is the login name,
+which in this case is <strong>peter</strong>.
+The second field, marked <strong>x</strong>, marks the password field.
+This file does not contain the password, though.
+The passwords, which are <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">hashed and salted</a>,
+for users are located in <strong>/etc/shadow</strong>,
+which can only be read by the root user
+(or using the <code>sudo</code> command).</p>
+<blockquote>
+<p>Hashing a file or a string of text is a
+process of running a hashing algorithm on the file or text.
+If the file or string is copied exactly, byte for byte,
+then hashing the copy will return the same value.
+If anything has changed about the file or string,
+then the hash value will be different.
+By implication, this means that if two users on a system
+use the same password,
+then the hash of each will be equivalent.
+Salting a hashed file (or file name)
+or string of text is a process
+of adding random data to the file or string.
+Each password will have a unique and mostly random salt
+added to it.
+This means that even if two users on a system use the
+same password,
+salting will mean that their passwords are unique.</p>
+</blockquote>
+<p>The third column indicates the user's numerical ID, and
+the fourth column indicates the uers' group ID.
+The fifth column repeats the login name, but
+could also serve as a comment field.
+Comments are added using certain commands (discussed later).
+The fifth field identifies the user's home directory,
+which is <strong>/home/peter</strong>.
+The sixth field identifies the user's default shell,
+which is <code>/bin/bash</code>.</p>
+<p>The <strong>user name or comment</strong> field merely repeats the login name here,
+but it can hold specific types of information.
+We can add comments using the <code>chfn</code>.
+Comments include the user's full name,
+their home and work phone numbers,
+their office or room number, and so forth.
+To add a full name to user <strong>peter</strong>'s account,
+we use the <strong>-f</strong> option:</p>
+<pre><code>sudo chfn -f &quot;Peter Parker&quot; peter
 </code></pre>
-<p>The fields represent the following information:</p>
-<ul>
-<li>username</li>
-<li>password indicator</li>
-<li>user id</li>
-<li>group id</li>
-<li>user name or comment</li>
-<li>home directory</li>
-<li>default shell</li>
-</ul>
-<p>You can read about these fields via <code>man 5 passwd</code>. [ EXPLAIN THE 5 ]</p>
-<p>Note that the <strong>user name or comment</strong> line is blank. We can add a comment using the <code>chfn</code>, and there are multiple options to use. If I use the <code>-f</code> option, I can set my full name to appear here. See <code>man chfn</code> for more options to set:</p>
-<pre><code>sudo chfn -f &quot;Sean Burns&quot; sean
-</code></pre>
-<p>The <strong>/etc/passwd</strong> file is a pretty standard Linux file, but some things will change depending on the distribution. For example, the user id may start at a different point depending on the system. However, nowadays both Ubuntu and Fedora set the starting UID and group ID for new users at 1000.</p>
+<p>The <strong>/etc/passwd</strong> file is a standard Linux file, but
+some things will change depending on the distribution.
+For example, the user and group IDs above start at 1000 because
+<strong>peter</strong> is the first human account on the system.
+This is a common starting numerical ID nowadays,
+but it could be different on other Linux distributions.
+But the home directory could be different on other systems;
+for example, it the default could be located at <strong>/usr/home/username</strong>.
+Also, other shells exist besides <code>bash</code>,
+like <a href="https://www.zsh.org/">zsh</a>,
+which is now the default shell on macOS, and
+so other systems may default to different shell environments.</p>
 <a class="header" href="16-managing-users-groups.html#the-shadow-file" id="the-shadow-file"><h2>The shadow file</h2></a>
 <p>The <strong>/etc/passwd</strong> file does not contain any passwords but a simple <strong>x</strong> to mark the password field. Passwords on Linux are stored in <strong>/etc/shadow</strong> and are hashed with <strong>sha512</strong>, which is indicated by <strong>$6$</strong>. You need to be root to examine the shadow file or use <code>sudo</code>:</p>
 <pre><code>sudo su

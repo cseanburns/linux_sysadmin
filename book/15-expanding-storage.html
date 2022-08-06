@@ -111,12 +111,9 @@ to add a non-boot disk to our VM, but
 with some modification.</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
 <blockquote>
-<p>Note: the main disk used by our VM is the <strong>boot disk</strong>,
-although it's not generally called that unless it's
-referring to removable media.
-But for our purposes, we can
-call it the boot disk because it contains the
-software and the formatting required to boot the system.
+<p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
+The boot disk contains the
+software required to boot the system.
 All of our computers
 (desktops, laptops, tablets, phones, etc.),
 regardless of which operating system they run,
@@ -190,11 +187,12 @@ You may already know that
 macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac">Apple File System (APFS)</a> by default
 and that Windows uses the
 <a href="https://docs.microsoft.com/en-us/windows-server/storage/file-server/ntfs-overview">New Technology File System (NTFS)</a>.
-Linux is no different.
+Linux is no different, but
+uses different file systems than macOS and Windows, by default.
 There are many formatting technologies that we can use in Linux,
 but we'll use the <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">ext4 (fourth extended filesystem)</a> format,
 since this is recommended by Google Cloud and
-is also one of the most stable and common formats for Linux.</p>
+is also a stable and common one for Linux.</p>
 <p>In this section, we will closely follow the steps
 outlined under the
 <a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"><strong>Formatting and mounting a non-boot disk on a Linux VM</strong></a>

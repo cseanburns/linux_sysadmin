@@ -27,12 +27,9 @@ with some modification.
 
 [Add a persistent disk to your VM][pdisk]
 
-> Note: the main disk used by our VM is the **boot disk**,
-> although it's not generally called that unless it's
-> referring to removable media.
-> But for our purposes, we can 
-> call it the boot disk because it contains the 
-> software and the formatting required to boot the system.
+> Note: the main disk used by our VM is the **boot disk**.
+> The boot disk contains the 
+> software required to boot the system.
 > All of our computers
 > (desktops, laptops, tablets, phones, etc.),
 > regardless of which operating system they run,
@@ -102,11 +99,12 @@ You may already know that
 macOS uses the [Apple File System (APFS)][apfs] by default
 and that Windows uses the
 [New Technology File System (NTFS)][ntfs].
-Linux is no different.
+Linux is no different, but
+uses different file systems than macOS and Windows, by default.
 There are many formatting technologies that we can use in Linux,
 but we'll use the [ext4 (fourth extended filesystem)][ext4] format,
 since this is recommended by Google Cloud and
-is also one of the most stable and common formats for Linux.
+is also a stable and common one for Linux.
 
 In this section, we will closely follow the steps
 outlined under the
