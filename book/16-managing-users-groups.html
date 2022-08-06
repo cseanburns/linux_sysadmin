@@ -104,9 +104,9 @@ we run the following command:</p>
 <pre><code>man 5 passwd
 </code></pre>
 <p>Before we proceed,
-let's also take a look at a single line of the file.
-Below I'll show the output for a madeup user account:</p>
-<pre><code>grep &quot;sean&quot; /etc/passwd
+let's take a look at a single line of the file.
+Below I'll show the output for a made up user account:</p>
+<pre><code>grep &quot;peter&quot; /etc/passwd
 peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 </code></pre>
 <p>The line starting with <strong>peter</strong> is a colon separate line.
@@ -118,7 +118,7 @@ which in this case is <strong>peter</strong>.
 The second field, marked <strong>x</strong>, marks the password field.
 This file does not contain the password, though.
 The passwords, which are <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">hashed and salted</a>,
-for users are located in <strong>/etc/shadow</strong>,
+for users are stored in the <strong>/etc/shadow</strong> file,
 which can only be read by the root user
 (or using the <code>sudo</code> command).</p>
 <blockquote>
@@ -138,10 +138,10 @@ Each password will have a unique and mostly random salt
 added to it.
 This means that even if two users on a system use the
 same password,
-salting will mean that their passwords are unique.</p>
+salting their passwords will result in unique values.</p>
 </blockquote>
 <p>The third column indicates the user's numerical ID, and
-the fourth column indicates the uers' group ID.
+the fourth column indicates the users' group ID.
 The fifth column repeats the login name, but
 could also serve as a comment field.
 Comments are added using certain commands (discussed later).
@@ -151,7 +151,7 @@ The sixth field identifies the user's default shell,
 which is <code>/bin/bash</code>.</p>
 <p>The <strong>user name or comment</strong> field merely repeats the login name here,
 but it can hold specific types of information.
-We can add comments using the <code>chfn</code>.
+We can add comments using the <code>chfn</code> command.
 Comments include the user's full name,
 their home and work phone numbers,
 their office or room number, and so forth.
@@ -160,31 +160,25 @@ we use the <strong>-f</strong> option:</p>
 <pre><code>sudo chfn -f &quot;Peter Parker&quot; peter
 </code></pre>
 <p>The <strong>/etc/passwd</strong> file is a standard Linux file, but
-some things will change depending on the distribution.
+some things will change depending on the Linux distribution.
 For example, the user and group IDs above start at 1000 because
 <strong>peter</strong> is the first human account on the system.
 This is a common starting numerical ID nowadays,
 but it could be different on other Linux distributions.
-But the home directory could be different on other systems;
-for example, it the default could be located at <strong>/usr/home/username</strong>.
+The home directory could be different on other systems, too;
+for example, the default could be located at <strong>/usr/home/peter</strong>.
 Also, other shells exist besides <code>bash</code>,
 like <a href="https://www.zsh.org/">zsh</a>,
-which is now the default shell on macOS, and
+which is now the default shell on macOS;
 so other systems may default to different shell environments.</p>
 <a class="header" href="16-managing-users-groups.html#the-shadow-file" id="the-shadow-file"><h2>The shadow file</h2></a>
-<p>The <strong>/etc/passwd</strong> file does not contain any passwords but a simple <strong>x</strong> to mark the password field. Passwords on Linux are stored in <strong>/etc/shadow</strong> and are hashed with <strong>sha512</strong>, which is indicated by <strong>$6$</strong>. You need to be root to examine the shadow file or use <code>sudo</code>:</p>
-<pre><code>sudo su
-grep &quot;sean&quot; /etc/shadow
-sean:ENCRYPTED_PASSWORD::0:99999:7:::
-grep &quot;sean&quot; /etc/shadow | sed 's/:/\n/g'
-sean
-ENCRYPTED_PASSWORD
-
-0
-99999
-7
-</code></pre>
-<p>The fields are (see <code>man 5 passwd</code>):</p>
+<p>The <strong>/etc/passwd</strong> file does not contain any passwords but
+a simple <strong>x</strong> to mark the password field.
+Passwords on Linux are stored in <strong>/etc/shadow</strong> and
+are hashed with <strong>sha512</strong>,
+which is indicated by <strong>$6$</strong>.
+You need to be root to examine the shadow file or use <code>sudo</code>:</p>
+<p>The fields are (see <code>man 5 shadow</code>):</p>
 <ul>
 <li>login name (username)</li>
 <li>encrypted password</li>
@@ -197,122 +191,193 @@ ENCRYPTED_PASSWORD
 <li>account expiration date</li>
 <li>a reserved field</li>
 </ul>
+<p>The <strong>/etc/shadow</strong> file should not be directly edited.
+To set, for example, a warning that a user's password will expire,
+we would use the <code>passwd</code> command
+(see <code>man passwd</code> for options).
+The following command would make it so the user <strong>peter</strong>
+is warned that their password will expire in 14 days:</p>
+<pre><code>passwd -w 14 peter
+</code></pre>
 <a class="header" href="16-managing-users-groups.html#the-group-file" id="the-group-file"><h2>The group file</h2></a>
-<p>The <strong>/etc/group</strong> file holds group information about the entire system (see <code>man group</code>). In the following command, you can see that I'm a member of the <strong>wheel</strong> group (which allows my account to use the <code>sudo</code> command) and that there's a group name that is also the name of my user account. The <strong>sean</strong> at the end of the <strong>wheel</strong> line indicates that I am a member of the <strong>wheel</strong> group. Although user <strong>sean</strong> is a member of group <strong>sean</strong>, users do not have to be listed as members of their own group.</p>
-<pre><code>grep -E 'wheel|^sean' /etc/group
-wheel:x:10:sean
-sean:x:1000:
-</code></pre>
-<p>The fields are:</p>
-<ul>
-<li>group name</li>
-<li>group password</li>
-<li>group ID (GID)</li>
-<li>group members (user list)</li>
-</ul>
+<p>The <strong>/etc/group</strong> file holds group information
+about the entire system
+(see <code>man 5 group</code>).
+The file can be viewed by anyone on a system, by default,
+but there is also a <code>groups</code> command
+(see <code>man groups</code>)
+that will return the groups for a user.
+Running the <code>groups</code> command by itself
+will return your own memberships.</p>
 <a class="header" href="16-managing-users-groups.html#management-tools" id="management-tools"><h2>Management Tools</h2></a>
-<p>Other user and group utilities include:</p>
+<p>There are different ways to create new users and groups, and
+the following list includes most of the utilities to help
+with this.
+Note that, based on the names of the utilities,
+some of them are repetitive.</p>
 <ul>
-<li><code>/usr/sbin/useradd</code></li>
-<li><code>/usr/sbin/usermod</code></li>
-<li><code>/usr/sbin/userdel</code></li>
-<li><code>/usr/sbin/groupadd</code></li>
-<li><code>/usr/sbin/groupdel</code></li>
-<li><code>/usr/sbin/groupmod</code></li>
-<li><code>/usr/sbin/gpasswd</code></li>
+<li>useradd (8) - create a new user or update default new user information</li>
+<li>usermod (8) - modify a user account</li>
+<li>userdel (8) - delete a user account and related files</li>
+<li>groupadd (8) - create a new group</li>
+<li>groupdel (8) - delete a group</li>
+<li>groupmod (8) - modify a group definition on the system</li>
+<li>gpasswd (1) - administer /etc/group and /etc/gshadow</li>
+<li>adduser.conf (5) - configuration file for adduser(8) and addgroup(8) .</li>
+<li>adduser (8) - add a user or group to the system</li>
+<li>deluser (8) - remove a user or group from the system</li>
+<li>delgroup (8) - remove a user or group from the system</li>
+<li>chgrp (1) - change group ownership</li>
 </ul>
+<p>The numbers within parentheses above indicate the man section.
+Therefore, to view the man page for the <code>userdel</code> command:</p>
+<pre><code>man 8 userdel
+</code></pre>
 <a class="header" href="16-managing-users-groups.html#practice" id="practice"><h2>Practice</h2></a>
-<a class="header" href="16-managing-users-groups.html#modify-default-new-user-setttings" id="modify-default-new-user-setttings"><h3>Modify default new user setttings</h3></a>
-<p>In today's demo, we will modify some default user account settings for new users, and then we'll create a new user account.</p>
-<p>Before we proceed, let's review several important configuration files that establish some default settings:</p>
+<a class="header" href="16-managing-users-groups.html#modify-default-new-user-settings" id="modify-default-new-user-settings"><h3>Modify default new user settings</h3></a>
+<p>Let's modify some default user account settings for new users,
+and then we'll create a new user account.</p>
+<p>Before we proceed,
+let's review several important configuration files
+that establish some default settings:</p>
 <ul>
-<li><strong>/etc/login.defs</strong> : see <code>man login.defs</code></li>
 <li><strong>/etc/skel</strong></li>
-<li><strong>/etc/default/useradd</strong></li>
+<li><strong>/etc/adduser.conf</strong></li>
 </ul>
-<p>Let's change some defaults. We can either user <code>sudo</code> or become <code>su</code>. Here I use <code>sudo</code> to become root:</p>
-<pre><code>sudo su
+<p>The <strong>/etc/skel</strong> directory defines the home directory for new users.
+Whatever files or directories exist in this directory
+at the time a new user account is created
+will result in those files and directories being created
+in the new user's home directory.
+We can view what those are using the following command:</p>
+<pre><code>ls -a /etc/skel/
 </code></pre>
-<p>Let's edit the default <strong>.bashrc</strong> file:</p>
-<pre><code>nano /etc/skel/.bashrc
+<p>The <strong>/etc/adduser.conf</strong> file defines
+the default parameters for new users.
+It's in this file
+where the default starting user and group IDs are set,
+where the default home directory is located
+(e.g., in <strong>/home/</strong>),
+where the default shell is defined
+(e.g., <code>/bin/bash</code>),
+where the default permissions are set for new
+home user directories
+(e.g., <strong>0755</strong>)
+and more.</p>
+<p>Let's change some defaults for <strong>/etc/skel</strong>.
+We need to use <code>sudo [command]</code> or
+use <code>su</code> to become the root user.
+I prefer to use <code>sudo [command]</code>
+since this is a bit safer than becoming root.
+Let's edit the default <strong>.bashrc</strong> file:</p>
+<pre><code>sudo nano /etc/skel/.bashrc
 </code></pre>
-<p>We want to add these lines at the end of the file:</p>
+<p>We want to add these lines at the end of the file.
+This file is a configuration file for <code>/bin/bash</code>,
+and will be interpreted by Bash.
+Therefore, lines starting with a hash mark
+are comments:</p>
 <pre><code># Dear New User,
 #
-# I have made the following settings to make your life a bit easier:
+# I have made the following settings
+# to make your life a bit easier:
 #
 # make &quot;c&quot; a shortcut for &quot;clear&quot;
 alias c='clear'
-#
-# make vi the default command line keybinding
-set -o vi
 </code></pre>
-<p>Now use <code>nano</code> again to create a README file. This file will be added to the home directories of all new users. Add any welcome message you want to add, plus any guidelines for using the system.</p>
-<pre><code>nano /etc/skel/README
+<p>Use <code>nano</code> again to create a README file.
+This file will be added to the
+home directories of all new users.
+Add any welcome message you want to add,
+plus any guidelines for using the system.</p>
+<pre><code>sudo nano /etc/skel/README
 </code></pre>
 <a class="header" href="16-managing-users-groups.html#add-new-user-account" id="add-new-user-account"><h3>Add new user account</h3></a>
-<p>After writing (saving) and exiting <code>nano</code>, we can go ahead and create a new user named <strong>linus</strong>. The <code>-m</code> option creats the user's home directory, the <code>-U</code> option creates a group with the same name as the user, and the <code>-s</code> option sets the default shell to <code>/usr/bin/bash</code>.</p>
-<pre><code>useradd -m -U -s /usr/bin/bash linus
-grep &quot;linus&quot; /etc/passwd
+<p>After writing (saving) and exiting <code>nano</code>,
+we can go ahead and create a new user named <strong>linus</strong>.</p>
+<pre><code>sudo adduser linux
 </code></pre>
-<p>Let's add the user's full name:</p>
-<pre><code>chfn -f &quot;Linus Torvalds&quot; linus
+<p>We'll be prompted to enter a password for the new user,
+plus comments (full name, phone number, etc).
+Any of these can be skipped by pressing enter.
+You can see from the output of the <code>grep</code> command
+below that I added some extra information:</p>
+<pre><code>grep &quot;linus&quot; /etc/passwd
+linus:x:1003:1004:Linus Torvalds,333,555-123-4567,:/home/linus:/bin/bash
 </code></pre>
-<p>The user does not yet have a password set. Let's create a password for <em>linus</em>:</p>
-<pre><code>grep &quot;linus&quot; /etc/shadow
-passwd linus
-grep &quot;linus&quot; /etc/shadow
+<p>Let's modify the minimum days before the password can be changed,
+and the maximum days of the password's lifetime:</p>
+<pre><code>sudo passwd -n 90 linus
+sudo passwd -x 180 linus
 </code></pre>
-<p>Let's modify the minimum days and maximum days of the password's lifetime:</p>
-<pre><code>passwd -n 90 linus
-passwd -x 180 linus
+<p>You can see these values by grepping the shadow file:</p>
+<pre><code>sudo grep &quot;linus&quot; /etc/shadow
 </code></pre>
-<a class="header" href="16-managing-users-groups.html#create-a-new-group-add-users-to-the-group" id="create-a-new-group-add-users-to-the-group"><h3>Create a new group; add users to the group</h3></a>
-<p>Let's now create a new group, and then I will add my account and my new user's account to the group:</p>
-<pre><code>grep &quot;linus&quot; /etc/group
-groupadd developers
+<a class="header" href="16-managing-users-groups.html#add-users-to-a-new-group" id="add-users-to-a-new-group"><h3>Add users to a new group</h3></a>
+<p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>,
+the <strong>linus</strong> user only belongs to a group of the same name.
+Let's create a new group that both
+<strong>linus</strong> and <strong>peter</strong> belong to.
+For that, we'll use the <strong>-a</strong> option for the <code>gpasswd</code> command.
+We'll also make the user <strong>peter</strong> the group administrator
+using the <strong>-A</strong> option
+(see <code>man gpasswd</code> for more details).</p>
+<pre><code>sudo groupadd developers
+sudo gpasswd -a peter developers
+sudo gpasswd -A peter developers
+sudo gpasswd -a linus developers
 grep &quot;developers&quot; /etc/group
-gpasswd -a linus developers
-gpasswd -a sean developers
-grep &quot;developers&quot; /etc/group
 </code></pre>
-<p>Exit out of root if logged in as root.</p>
-<p>Now login as user linus and examine the user's group memberships:</p>
-<pre><code>su linus
-groups
+<blockquote>
+<p>Note: if a user is logged in when you add them
+to a group, they need to logout and log back
+in before the group membership goes into effect.</p>
+</blockquote>
+<a class="header" href="16-managing-users-groups.html#create-a-shared-directory" id="create-a-shared-directory"><h3>Create a shared directory</h3></a>
+<p>One of the benefits of group membership is that members
+can work in a shared directory.</p>
+<p>Let's make the <strong>/srv/developers</strong> a shared directory.
+The <strong>/srv</strong> directory already exists,
+so we only need to create the <strong>developers</strong> subdirectory:</p>
+<pre><code>sudo mkdir /srv/developers
 </code></pre>
-<p>Great! Let's exit out and become root again:</p>
-<pre><code>exit
-sudo su
+<p>We'll have to change the default permissions,
+which are currently set to <strong>0755</strong>:</p>
+<pre><code>ls -ld /srv
+ls -ld /srv/developers
 </code></pre>
-<p>Let's make the <strong>/projects</strong> directory/logical volume a shared directory:</p>
-<pre><code>ls -ld /projects
-# change ownership of the directory to the group developers
-chown :developers /projects
-# allow all group users to add and delete from the folder and read/write to each other's files
-# See this post for various options:
-# https://ubuntuforums.org/showthread.php?t=2138476&amp;p=12616640#post12616640
-chmod 2770 /projects
-exit
+<p>Now we can change ownership of the directory:</p>
+<pre><code>sudo chgrp developers /srv/developers
 </code></pre>
-<p>Log all the way out and then login again:</p>
-<pre><code>exit # from root
-exit # from regular user
+<p>The directory ownership should now reflect that it's owned by
+the <strong>developers</strong> group:</p>
+<pre><code>ls -ld /srv/developers
 </code></pre>
-<p>And then relogin so that the group modification will take affect. Check with the <code>groups</code> command:</p>
-<pre><code>groups
+<p>In order to allow group members to read and write to
+the above directory,
+we need to use the <code>chmod</code> command in a way we haven't yet.
+Specifically, we add a leading <strong>2</strong> sets the group identity.
+The <strong>770</strong> indicates that the user and group owners of
+the directory have read, write, and execute permissions
+for the directory:</p>
+<pre><code>sudo chmod 2770 /srv/developers
 </code></pre>
+<p>Now either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete
+files in the <strong>/srv/developers</strong> directory.</p>
 <a class="header" href="16-managing-users-groups.html#user-account-and-group-deletion" id="user-account-and-group-deletion"><h3>User account and group deletion</h3></a>
-<p>If we want to delete the new user's account:</p>
-<pre><code>userdel -r linus
-grep &quot;linus&quot; /etc/passwd
-grep &quot;linus&quot; /etc/shadow
-cd /home ; ls -l
-</code></pre>
-<p>And then delete the new group:</p>
-<pre><code>grep &quot;developers&quot; /etc/group
-groupdel developers
-grep &quot;developers&quot; /etc/group
+<p>You can keep the additional user and group on your system,
+but know that you can also remove them.
+The <code>deluser</code> and <code>delgroup</code> commands
+offer great options
+and may be preferable to the others utilities
+(see <code>man deluser</code> or <code>man delgroup</code>).</p>
+<p>If we want to delete the new user's account and the new group,
+these are the commands to use.
+The first command will create an archival backup of
+<strong>linus</strong>' home directory and also remove the home
+directory and any files in it.</p>
+<pre><code>deluser --backup --remove-home linus
+delgroup developers
 </code></pre>
 
                 </div>
