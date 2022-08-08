@@ -1,0 +1,330 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Managing Software - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-what-is-linux.html"><strong>1.1.</strong> What is Linux?</a></li><li><a href="02-what-is-sysadmin.html"><strong>1.2.</strong> What is Systems Administration?</a></li><li><a href="03-history-linux-unix.html"><strong>1.3.</strong> History of Unix and Linux</a></li></ul></li><li><a href="p2-the-command-line.html"><strong>2.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="04-quick-ssh-connect.html"><strong>2.1.</strong> Connect to a Remote Server</a></li><li><a href="05-the-linux-filesystem.html"><strong>2.2.</strong> The Linux Filesystem</a></li><li><a href="06-files-and-directories.html"><strong>2.3.</strong> Files and Directories</a></li><li><a href="07-file-attributes.html"><strong>2.4.</strong> File Attributes</a></li><li><a href="08-text-processing-part-1.html"><strong>2.5.</strong> Text Processing, Part 1</a></li><li><a href="09-text-processing-part-2.html"><strong>2.6.</strong> Text Processing, Part 2</a></li><li><a href="10-text-editors.html"><strong>2.7.</strong> Text Editors</a></li><li><a href="11-revisiting-paths.html"><strong>2.8.</strong> Revisiting Paths</a></li><li><a href="12-bash-scripting.html"><strong>2.9.</strong> Bash Scripting</a></li><li><a href="13-regular-expressions.html"><strong>2.10.</strong> Regular Expressions</a></li></ul></li><li><a href="p3-using-gcloud.html"><strong>3.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="14-using-gcloud.html"><strong>3.1.</strong> Using gcloud for Virtual Machines</a></li><li><a href="15-expanding-storage.html"><strong>3.2.</strong> Expanding Storage</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="16-managing-users-groups.html"><strong>4.1.</strong> Managing Users and Groups</a></li><li><a href="17-managing-software.html" class="active"><strong>4.2.</strong> Managing Software</a></li><li><a href="18-systemd.html"><strong>4.3.</strong> systemd</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-tcip-networking.html"><strong>5.1.</strong> TCIP Networking</a></li><li><a href="20-networking-dns-domains.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-security-chroot.html"><strong>5.3.</strong> Security and chroot</a></li><li><a href="22-security-firewall.html"><strong>5.4.</strong> Security and Firewalls</a></li><li><a href="23-backups.html"><strong>5.5.</strong> Backups</a></li></ul></li><li><a href="p6-lamp.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="24-httpd-apache.html"><strong>6.1.</strong> Apache2 Web Server</a></li><li><a href="25-httpd-php.html"><strong>6.2.</strong> Apache2 and PHP</a></li><li><a href="26-httpd-virtualhosts.html"><strong>6.3.</strong> Apache2 and Virtual Hosts</a></li><li><a href="27-httpd-mariadb.html"><strong>6.4.</strong> Apache2 and MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="17-managing-software.html#managing-software" id="managing-software"><h1>Managing Software</h1></a>
+<a class="header" href="17-managing-software.html#introduction" id="introduction"><h2>Introduction</h2></a>
+<p>Many modern Linux distributions offer some kind of
+package manager to
+install, manage, and remove software.
+These package management systems interact with
+curated and audited central repositories of software
+that are collected into <strong>packages</strong>.
+They also provide a set of tools to learn about
+the software that exists in these repositories.</p>
+<blockquote>
+<p>If <strong>package management</strong> seems like an odd concept to you,
+it's just a way to manage software installation, and
+it's very similar to the way that Apple and Google
+distribute software via the App Store and Google Play.</p>
+</blockquote>
+<p>On Debian based systems,
+which includes Ubuntu,
+we use <code>apt</code>, <code>apt-get</code>, and <code>apt-cache</code>
+to manage most software installations.
+For most cases,
+you will simply want to use the <code>apt</code> command,
+as it is meant to combine the functionality commonly
+used with <code>apt-get</code> and <code>apt-cache</code>.</p>
+<p>We can also install software from source code or
+from pre-built binaries.
+On Debian and Ubuntu, for example,
+we might want to install
+(if we trust it)
+pre-build binaries distributed on the
+internet as <strong>.deb</strong> files.
+These are comparable to <strong>.dmg</strong> files for macOS
+and to <strong>.exe</strong> files for Windows.
+When installing <strong>.deb</strong> files, though,
+we need to use the <code>dpkg</code> command.</p>
+<p>Installing software from source code often
+involves compiling the software.
+It's usually not difficult to install software
+this way, but it can become complicated to manage
+software that's installed from source code
+simply because it means managing dependencies
+and keeping a close eye on new versions
+of the software.</p>
+<p>Another way to install software
+(I know, there's a lot)
+is to use the <code>snap</code> command.
+This is a newer way of packaging programs
+that involves packaging all of a program
+and all of its dependencies
+into a single <a href="https://www.ibm.com/cloud/learn/containers">container</a>.
+The main point of <a href="https://ubuntu.com/core/services/guide/snaps-intro">snap</a> seems to be aimed
+at IoT and embedded devices, but
+it's perfectly usable and preferable
+(in some scenarios)
+on the desktop because the general
+aim is end users and not system administrators.
+See the <a href="https://snapcraft.io/">snap store</a> for examples.</p>
+<blockquote>
+<p>You might also want to know that some programming
+languages provide their own mechanisms to install
+packages.
+In many cases, these packages may be installed
+with the <code>apt</code> command, but
+the packages that <code>apt</code> will install tend to
+be older (but more stable)
+than the packages that a programming language will install.
+For example, Python has the <code>pip</code> or <code>pip3</code>
+command to install and remove Python libraries.
+The R programming language has the
+<code>install.packages()</code>, <code>remove.packages()</code>, and the
+<code>update.packages()</code> commands to install R libraries.</p>
+</blockquote>
+<p>Despite all these ways to install, manage, remove, and
+update software,
+we will focus on using the <code>apt</code> command, which
+is pretty straightforward.</p>
+<a class="header" href="17-managing-software.html#apt" id="apt"><h2>APT</h2></a>
+<p>Let's look at the basic <code>apt</code> commands.</p>
+<a class="header" href="17-managing-software.html#apt-update" id="apt-update"><h3>apt update</h3></a>
+<p>Before installing any software,
+we need to update the index of packages that are available
+for the system.</p>
+<pre><code>sudo apt update
+</code></pre>
+<a class="header" href="17-managing-software.html#apt-upgrade" id="apt-upgrade"><h3>apt upgrade</h3></a>
+<p>The above command will also state if there is software
+on the system that is ready for an upgrade.
+If any upgrades are available,
+we run the following command:</p>
+<pre><code>sudo apt upgrade
+</code></pre>
+<a class="header" href="17-managing-software.html#apt-search" id="apt-search"><h3>apt search</h3></a>
+<p>We may know a package's name when we're ready to install it, but
+we also may not.
+To search for a package,
+we use the following syntax:</p>
+<pre><code>apt search [package-name]
+</code></pre>
+<blockquote>
+<p>Package names will never have spaces between words.
+Rather, if a package name has more than one word,
+each word will be separated by a hyphen.</p>
+</blockquote>
+<p>In practice, say I'm curious if there
+are any console based games:</p>
+<pre><code>apt search ncurses game
+</code></pre>
+<blockquote>
+<p>I added <strong>ncurses</strong> to my search query because
+the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library is often used to create console-based
+applications.</p>
+</blockquote>
+<a class="header" href="17-managing-software.html#apt-show" id="apt-show"><h3>apt show</h3></a>
+<p>The above command returned a lit that included
+a game called <strong>ninvaders</strong>, which
+seems to be a console-based Space Invaders like game.
+To get additional information about this package,
+we use the <code>apt show [package-name]</code> command:</p>
+<pre><code>apt show ninvaders
+</code></pre>
+<a class="header" href="17-managing-software.html#apt-install" id="apt-install"><h3>apt install</h3></a>
+<p>It's quite simple to install the package called <strong>ninvaders</strong>:</p>
+<pre><code>sudo apt install ninvaders
+</code></pre>
+<a class="header" href="17-managing-software.html#apt-remove-or-apt-purge" id="apt-remove-or-apt-purge"><h3>apt remove or apt purge</h3></a>
+<p>To remove an installed package,
+we can use either the <code>apt remove</code> or
+the <code>apt purge</code> commands.
+Sometimes when a program is installed,
+configuration files get installed with it
+in the <strong>/etc</strong> directory.
+The <code>apt purge</code> command will remove
+those configuration files but the
+<code>apt remove</code> command will not.
+Both commands are offered because sometimes
+it is useful to keep those configuration files.</p>
+<pre><code>apt remove ninvaders
+</code></pre>
+<p>Or:</p>
+<pre><code>apt purge ninvaders
+</code></pre>
+<a class="header" href="17-managing-software.html#apt-autoremove" id="apt-autoremove"><h3>apt autoremove</h3></a>
+<p>All big software requires other software to run.
+This other software are called <a href="https://queue.acm.org/detail.cfm?id=3344149">dependencies</a>.
+The <code>apt show [package-name]</code> command
+will list a program's dependencies.
+However, when we remove software with the prior
+two commands, the dependencies,
+even if no longer needed,
+are not necessarily removed.
+To remove them,
+(which restores more disk space)
+we do:</p>
+<pre><code>sudo apt autoremove
+</code></pre>
+<a class="header" href="17-managing-software.html#apt-history" id="apt-history"><h3>apt history</h3></a>
+<p>Unfortunately, the <code>apt</code> command does
+not provide a way to get a history of how
+it's been used on a system, but
+a log of its activity is kept.
+We can review that log with the following command:</p>
+<pre><code>less /var/log/apt/history.log
+</code></pre>
+<a class="header" href="17-managing-software.html#daily-usage" id="daily-usage"><h2>Daily Usage</h2></a>
+<p>This all may seem complicated, but
+it's really not.
+For example, to keep my systems updated,
+I run the following two commands on a daily
+or near daily basis:</p>
+<pre><code>apt update
+sudo apt upgrade
+</code></pre>
+<a class="header" href="17-managing-software.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>There are a variety of ways to install
+software on a Linux or Ubuntu system.
+The common way to do it on Ubuntu is to
+use the <code>apt</code> command, which
+was covered in this section.</p>
+<p>We'll come back to this command often because
+we'll soon install and setup a complete LAMP
+(<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
+Until then, I encourage you to read through the
+manual page for <code>apt</code>:</p>
+<pre><code>man apt
+</code></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="16-managing-users-groups.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="18-systemd.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="16-managing-users-groups.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="18-systemd.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
