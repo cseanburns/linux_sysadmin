@@ -5341,46 +5341,118 @@ may also have domain names and IP addresses to resolve.</p>
 <li>DNS record types</li>
 </ul>
 <p>We'll come back to this material when we set up our websites.</p>
-<a class="header" href="print.html#local-security-chroot" id="local-security-chroot"><h1>Local Security: <code>chroot</code></h1></a>
-<p>A <code>chroot jail</code> is a technology used to change the &quot;apparent root <code>/</code> directory for a user or a process&quot; and confine that user to that location on the system. A user or process that is confined to the <code>chroot jail</code> cannot easily see or access the rest of the file system and will have limited access to the binaries (executables/apps/utilities) on the system. From its <code>man</code> page:</p>
+<a class="header" href="print.html#local-security" id="local-security"><h1>Local Security</h1></a>
+<a class="header" href="print.html#introduction-5" id="introduction-5"><h2>Introduction</h2></a>
+<p>Most security issues come from the network, but
+we also need to secure a system from insider attacks, too.
+We can do that by setting appropriate file permissions and
+by making sure users on a system do not have certain kinds
+of access (e.g., <code>sudo</code> access)
+to some utilities.
+For example, the <code>/usr/bin/gcc</code> program is the
+GNU C and C++ compiler.
+If users have unrestricted access to that compiler,
+then it's possible for them to compile programs
+that compromise the system.</p>
+<p>In the next section,
+we'll cover how to set up a firewall, but
+in this section,
+we'll learn how to set up a <strong>chroot jail</strong>.</p>
+<p>As we all know,
+the Linux file system has a root directory <strong>/</strong>,
+and under this directory are other directories like
+<strong>/home</strong>, <strong>/bin</strong>, and so forth.
+A chroot (<strong>change root</strong>) jail
+is a way to create a pseudo root directory
+at some specific location in the directory tree, and
+then build an environment in that pseudo root directory
+that offers some applications.
+One that environment is setup,
+we can then confine a user account(s) to that
+pseudo directory, and
+when they login to the server,
+they will only be able to see
+(e.g., with the <code>cd</code> command)
+what's in that pseudo root directory and
+only be able to use the applications that
+we've made available in that chroot.</p>
+<p>Thus, a <strong>chroot jail</strong> is a technology used
+to change the
+&quot;apparent root <strong>/</strong> directory for a user or a process&quot; and
+confine that user to that location on the system.
+A user or process that is confined to the
+<strong>chroot jail</strong> cannot easily see or access
+the rest of the file system and
+will have limited access to the binaries
+(executables/apps/utilities) on the system.
+From its <code>man</code> page:</p>
 <pre><code>chroot (8) - run command or interactive shell with special root directory
 </code></pre>
-<p>Although it is not security proof, it does have some useful security use cases, from tampering. Some have used <code>chroot</code> to contain DNS servers, for example.</p>
-<p><code>chroot</code> is also the conceptual basis for some kinds of virtualization technologies that are common today, like <a href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a>.</p>
-<a class="header" href="print.html#chroot-a-current-user" id="chroot-a-current-user"><h2>chroot a current user</h2></a>
-<p>In this tutorial, we are going to create a <code>chroot</code> for a human user account.</p>
-<p><strong>Step 1</strong>: Let's create a new user. After we create the new user, we will <code>chroot</code> that user going forward.</p>
-<pre><code>sudo su
-useradd -m -U -s /usr/bin/bash vader
-passwd vader
+<p>Although it is not security proof,
+it does have some useful security use cases.
+Some use <code>chroot</code> to contain DNS servers, for example.</p>
+<p><code>chroot</code> is also the conceptual basis for some kinds of
+virtualization technologies that are common today,
+like <a href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a>.</p>
+<a class="header" href="print.html#chroot-a-current-user" id="chroot-a-current-user"><h2>Chroot a Current User</h2></a>
+<p>In this tutorial,
+we are going to create a <code>chroot</code> for a human user account.</p>
+<ol>
+<li>
+<p>Let's create a new user. After we create the new user, we will <code>chroot</code>
+that user going forward.</p>
+<pre><code>sudo adduser vader
 </code></pre>
-<p><strong>Step 2</strong>: Next, we <code>chroot</code> <em>vader</em> into a new directory. That directory will be located at <code>/var/chroot</code>. Note that the root directory for our regular users is <code>/</code>, but user <em>vader</em>'s root directory will be different <code>/var/chroot</code>, even if they can't tell.</p>
-<pre><code>mkdir /var/chroot
+</li>
+<li>
+<p>Next, we <code>chroot</code> <em>vader</em> into a new directory. That directory will be
+located at <code>/opt/chroot</code>. Note that the root directory for our regular
+users is <code>/</code>, but user <em>vader</em>'s root directory will be different
+<code>/opt/chroot</code>, even if they can't tell. We also want to check the
+permissions of the new directory and make sure it's owned by root. If not,
+use <code>chown root:root /opt/chroot</code> to set it.</p>
+<pre><code>sudo mkdir /opt/chroot
+ls -ld /opt/chroot
 </code></pre>
-<p><strong>Step 3</strong>: Now we set up available binaries for the user. We'll only allow <code>bash</code> for now.  To do that, we'll create a <code>bin/</code> directory, and copy <code>bash</code> to that directory.</p>
+</li>
+<li>
+<p>Now we set up available binaries for the user. We'll only allow <code>bash</code> for
+now.  To do that, we'll create a <code>/usr/bin</code> directory in /opt/chroot, and
+copy <code>bash</code> to that directory.</p>
 <pre><code>which bash
-mkdir -p /var/chroot/usr/bin
-mkdir -p /var/chroot/bin
-cp /usr/bin/bash /var/chroot/usr/bin/
-cp /usr/bin/bash /var/chroot/bin/
+sudo mkdir -p /opt/chroot/usr/bin
+cp /usr/bin/bash /opt/chroot/usr/bin/
 </code></pre>
-<p><strong>Step 4</strong>: Large software applications have dependencies (aka, libraries). Thus, next we copy the libraries that <code>bash</code> needs to run.</p>
-<p>To identify libraries needed by bash:</p>
+</li>
+<li>
+<p>Large software applications have dependencies (aka, libraries). We need to
+copy those libraries to our chroot for the applications, like Bash, to
+function. To identify libraries needed by bash, we use the <code>ldd</code> command:</p>
 <pre><code>ldd /usr/bin/bash
 </code></pre>
-<p>Use the <code>locate</code> command to be sure you identify the exact locations of the libraries:</p>
-<pre><code>locate libtinfo.so.6
+<p>Use the <code>locate</code> command to identify the locations of the libraries. The
+ones we need should be located in the <strong>/usr/lib/x86_64-linux-gnu/</strong>
+directory. The <code>locate</code> command might need to be installed and updated
+first. Here I show how to use it to locate one of the dependencies, but
+there are more than one for you to locate:</p>
+<pre><code>sudo apt install mlocate
+sudo updatedb
+locate libtinfo.so.6
+...
+...
 ...
 </code></pre>
-<p>Create a library directory. We'll name the library directory after lib64 since these are all lib64 libraries.</p>
-<pre><code>mkdir /var/chroot/lib64
-cp /usr/lib64/libtinfo.so.6 /var/chroot/lib64/
-cp /usr/lib64/libdl.so.2 /var/chroot/lib64/
-cp /usr/lib64/libc.so.6 /var/chroot/lib64/
-cp /usr/lib64/ld-linux-x86-64.so.2 /var/chroot/lib64/
+<p>Create a <strong>/opt/chroot/lib/x86_64-linux-gnu/</strong> directory for the libraries.
+We'll name the library directory after the originals to stay consistent
+with the main environment.</p>
+<pre><code>sudo mkdir -p /opt/chroot/lib/x86_64-linux-gnu
+sudo cp /usr/lib/x86_64-linux-gnu/libtinfo.so.6 \
+  /opt/chroot/lib/x86_64-linux-gnu/
 </code></pre>
-<p><strong>Step 5</strong>: Create and test the <code>chroot</code></p>
-<pre><code>chroot /var/chroot/
+</li>
+<li>
+<p>Create and test the <code>chroot</code></p>
+<pre><code>sudo chroot /opt/chroot/
 bash-5.1# ls
 bash: ls: command not found
 bash-5.1# help
@@ -5392,69 +5464,66 @@ bash-5.1# dirs
 bash-5.1# cd ..
 bash-5.1# exit
 </code></pre>
-<p><strong>Step 6</strong>: Create a new group called <em>chrootjail</em>. We can add users to this group that we want to jail. Instructions are based on <a href="https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins">linuxconfig.org</a>.</p>
+</li>
+<li>
+<p>Create a new group called <em>chrootjail</em>. We can add users to this group that
+we want to jail. Instructions are based on <a href="https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins">linuxconfig.org</a>.</p>
 <pre><code>groupadd chrootjail
 usermod -a -G chrootjail vader
 groups vader
 </code></pre>
-<p><strong>Step 7</strong>: Edit <code>/etc/ssh/sshd_config</code> to direct users in the <code>chrootjail</code> group to the <code>chroot</code> directory. Add the following line at the end of the file. Then restart ssh server.</p>
-<pre><code># nano /etc/ssh/sshd_config
+</li>
+<li>
+<p>Edit <code>/etc/ssh/sshd_config</code> to direct users in the <code>chrootjail</code> group to
+the <code>chroot</code> directory. Add the following line at the end of the file.
+Then restart ssh server.</p>
+<pre><code>sudo nano /etc/ssh/sshd_config
 Match group chrootjail
             ChrootDirectory /var/chroot/
 </code></pre>
 <p>Exit <code>nano</code>, and restart <code>ssh</code>:</p>
 <pre><code>systemctl restart sshd
 </code></pre>
-<p>The logout of the server altogether:</p>
-<pre><code>exit
-</code></pre>
-<p><strong>Step 8</strong>: Test <code>ssh</code>.</p>
-<p>Connect to the Fedora server via <code>ssh</code> as the user <em>vader</em>:</p>
-<pre><code>ssh vader@relevant_ip_address
+</li>
+<li>
+<p>Test the <code>ssh</code> connection for the <em>vader</em> user.</p>
+<pre><code>ssh vader@localhost
 -bash-5.1$ ls
 -bash: ls: command not found
 exit
 </code></pre>
-<p>That works as expected. The user <em>vader</em> is now restricted to a special directory and has limited access to the system or to any utilities on that system.</p>
+<p>That works as expected. The user <em>vader</em> is now restricted to a special
+directory and has limited access to the system or to any utilities on that
+system.</p>
+</li>
+</ol>
 <a class="header" href="print.html#exercise" id="exercise"><h2>Exercise</h2></a>
-<p>By using the <code>ldd</code> command, you can add additional binaries for this user. As an exercise, use the <code>ldd</code> command to locate the libraries for the <code>nano</code> editor, and make <code>nano</code> available to the user <em>vader</em> in the chrooted directory.</p>
-<a class="header" href="print.html#nano-in-chroot" id="nano-in-chroot"><h3>Nano in chroot</h3></a>
-<p>After making Bash available in <code>chroot</code>:</p>
-<p>(Side note: Unlike previous instances when I use the <strong>#</strong> sign to indicate a comment, below I'm using the <strong>#</strong> sign below to indicate the root prompt.)</p>
-<pre><code># which nano
-/usr/bin/nano
-# cp /usr/bin/nano /var/chroot/bin/
-# ldd /usr/bin/nano
-linux-vdso.so.1 (0x00007fff5bdd5000)
-  libmagic.so.1 =&gt; /lib64/libmagic.so.1 (0x00007f0ce11a7000)
-  libncursesw.so.6 =&gt; /lib64/libncursesw.so.6 (0x00007f0ce1167000)
-  libtinfo.so.6 =&gt; /lib64/libtinfo.so.6 (0x00007f0ce1138000)
-  libc.so.6 =&gt; /lib64/libc.so.6 (0x00007f0ce0f6e000)
-  libz.so.1 =&gt; /lib64/libz.so.1 (0x00007f0ce0f54000)
-  libdl.so.2 =&gt; /lib64/libdl.so.2 (0x00007f0ce0f4d000)
-  /lib64/ld-linux-x86-64.so.2 (0x00007f0ce1232000)
-# cp /usr/lib64/libmagic.so.1 /var/chroot/lib64/
-# cp /usr/lib64/libncursesw.so.6 /var/chroot/lib64/
-# cp /usr/lib64/libtinfo.so.6 /var/chroot/lib64/
-# cp /usr/lib64/libc.so.6 /var/chroot/lib64/
-# cp /usr/lib64/libz.so.1 /var/chroot/lib64/
-# cp /usr/lib64/libdl.so.2 /var/chroot/lib64/
-# cp /usr/lib64/ld-linux-x86-64.so.2 /var/chroot/lib64/
-# chroot /var/chroot/
-bash-5.1# nano
-Error opening terminal: xterm-256color.
-bash-5.1# exit
-</code></pre>
-<p>To fix this, install <code>ncurses-term</code> and copy over additional files:</p>
-<pre><code># dnf install -y ncurses-term
-# locate xterm-256color
-/usr/share/terminfo/s/screen.xterm-256color
-/usr/share/terminfo/x/xterm-256color
-# mkdir -p /var/chroot/etc/terminfo/x/
-# cp /usr/share/terminfo/x/* /var/chroot/etc/terminfo/x/
-# chroot /var/chroot
-# nano
-</code></pre>
+<p>By using the <code>ldd</code> command,
+you can add additional binaries for this user.
+As an exercise,
+use the <code>ldd</code> command to locate
+the libraries for the <code>nano</code> editor, and
+make <code>nano</code> available to the user <em>vader</em>
+in the chrooted directory.</p>
+<a class="header" href="print.html#conclusion-13" id="conclusion-13"><h2>Conclusion</h2></a>
+<p>Systems need to be secure from the inside and out.
+In order to secure from the inside,
+system users should be given access and permissions
+as needed.</p>
+<p>In this section, we covered how to create a <strong>chroot jail</strong>
+for a new user on our system.
+The jail confines the user to this pseudo location
+and provides the user limited access to that file system and
+to the software on the system.</p>
+<p>We can jail non-human users, too.
+Any user listed in <code>/etc/passwd</code> can be jailed, and
+most users listed in that file are services.</p>
+<p>Jailing a human user may not be necessary.
+On a multi-user system,
+proper education and training about the policies
+and uses of the system may be all that's needed.
+But in case a stricter environment is needed,
+now you know how to create a <strong>chroot jail</strong>.</p>
 <a class="header" href="print.html#security-firewalls-iptables-and-firewall-cmd" id="security-firewalls-iptables-and-firewall-cmd"><h1>Security: Firewalls <code>iptables</code> and <code>firewall-cmd</code></h1></a>
 <p>Netfilter is a part of the kernel that includes a suite of applications
 that help manage how packets flow in and out of a server or internet
@@ -5650,7 +5719,7 @@ linus sean
 <a class="header" href="print.html#delete-option" id="delete-option"><h3>Delete Option</h3></a>
 <p>The <code>--delete</code> option is important. Without it, <code>rsync</code> will add new files to the destination directory when it backs up the source directory. With it, <code>rsync</code> truly syncs. Thus, if a file that was previously backed up to the destination directory and later deleted in the source directory (e.g., because it was no longer needed), then it will be deleted from the destination directory when the <code>--delete</code> option is used. This is how services like Dropbox work.</p>
 <p>See other options and functionality for <code>rsync</code> here: <a href="https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/">https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/</a>. One of the most important options is the ability to backup up to remote machines over a network, and this can be done with the the <code>rsync</code> command.</p>
-<a class="header" href="print.html#introduction-5" id="introduction-5"><h1>Introduction</h1></a>
+<a class="header" href="print.html#introduction-6" id="introduction-6"><h1>Introduction</h1></a>
 <p>This section shows how to create a</p>
 <ul>
 <li>Linux</li>
