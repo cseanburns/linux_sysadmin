@@ -87,87 +87,151 @@
 
                 <div id="content" class="content">
                     <a class="header" href="18-systemd.html#systemd" id="systemd"><h1>systemd</h1></a>
-<ul>
-<li><strong>systemd</strong> is an init system that aims to provide better boot time and a better way to manage services and processes.</li>
-<li><strong>systemd</strong> is a replacement of the <strong>System V like init</strong> system that most Linux distributions used.</li>
-<li><strong>systemd</strong> includes additional utilities to help manage services on a Linux system; essentially, it's much more than an init system</li>
-</ul>
-<p>There are only two basic aspects of <strong>systemd</strong> that I want to cover in this lesson, but know that <strong>systemd</strong> is a big, complicated suite of software that provides a lot of functions. In this lesson, though, we will cover using <strong>systemd</strong> to:</p>
-<ol>
-<li>manage services</li>
-<li>examine logs</li>
-</ol>
+<a class="header" href="18-systemd.html#introduction" id="introduction"><h2>Introduction</h2></a>
+<p>When computers boot up,
+obviously some software manages that process.
+On Linux and other Unix or Unix-like systems,
+this is usually handled via an <strong>init</strong> system.
+For example, macOS uses <a href="https://en.wikipedia.org/wiki/Launchd">launchd</a> and
+many Linux distributions,
+including Ubuntu,
+use <a href="https://en.wikipedia.org/wiki/Systemd">systemd</a>.</p>
+<p><strong>systemd</strong> does more than handle the startup process,
+it also manages various services and connects
+the Linux kernel to various applications.
+In this section,
+we'll cover how to use <strong>systemd</strong> to manage services, and
+to review log files.</p>
 <a class="header" href="18-systemd.html#manage-services" id="manage-services"><h2>Manage Services</h2></a>
-<p>When we install a complicated piece of software like a web server (e.g., Apache2), a SSH server (e.g., openssh-server), or a database server (e.g., MySQL), then it's helpful if we have some commands that will help us manage that service (the web service/server, the SSH service/server, etc).</p>
-<p>For example, after installing a SSH server, we might like to know if it's running, or we might want to stop it if it's running, or start it if it's not. Let's see what that looks like. In the following commands, I will use the <code>dnf</code> utility to install the <code>openssh-server</code>. Then I will check the status of the server using the <code>systemctl status</code> command. I will enable it so that it starts automatically when the operating system is rebooted using the <code>systemctl enable</code> command. Finally, I will make sure the firewall allows outside access to the operating system via <code>ssh</code>. I use the <code>sudo</code> command to run the relevant commands as administrator:</p>
-<pre><code>dnf search openssh
-sudo dnf install openssh-server
-systemctl status sshd.service
-sudo systemctl enable sshd.service
-sudo firewall-cmd --add-service=ssh --permanent
+<p>When we install complicated software,
+like a web server (e.g., Apache2, Nginx),
+a SSH server (e.g., OpenSSH), or
+a database server (e.g., mariaDB or MySQL),
+then it's helpful to have commands that manage that service
+(the web service, the SSH service, the database service, etc).</p>
+<p>For example, the <code>ssh</code> service is installed
+by default on our gcloud servers, and
+we can check its status with the following
+<code>systemctl</code> command:</p>
+<pre><code>systemctl status ssh
 </code></pre>
-<p>There are similar commands to stop a service or to reload a service if a service configuration file has changed. As an example of the latter, let's say that I wanted to present a message to anyone who logs into my system remotely using <code>ssh</code>. In order to do that, I need to edit the main <code>ssh</code> configuration file, which is located in <strong>/etc/ssh/sshd_config</strong>:</p>
-<pre><code>cd /etc/ssh
-sudo nano sshd_config
+<p>The output tells us a few things.
+The line beginning with <strong>Loaded</strong> tells us that
+the SSH service is configured.
+At the end of that line,
+it also tells us that it is <strong>enabled</strong>,
+which means that the service will automatically start
+when the system gets rebooted or starts up.</p>
+<p>The line beginning with <strong>Active</strong> tells us
+that the service is <strong>active (running)</strong> and for how long.
+It has to say this since I'm connecting to the machine
+using <code>ssh</code>.
+If the service was not active (running), then
+I wouldn't be able to login remotely.
+We also can see the process ID (PID) for the service
+as well as how much memory it's using.</p>
+<p>At the bottom of the output,
+we can see the recent log files.
+We can view more of those log files
+using the <code>journalctl</code> command.
+By default, running <code>journalctl</code> by itself
+will return all log files, but
+we can specify that we're interested in
+log files only for the ssh service.
+We can specify using the PID number.
+Replace <em>NNN</em> with the PID number attached
+to your ssh service:</p>
+<pre><code>journalctl _PID=NNN
 </code></pre>
-<p>Then I will remove the beginning pound sign and thus un-comment the following line:</p>
-<pre><code>#Banner none
+<p>Or we can specify by service, or
+more specifically, its <strong>unit</strong> name:</p>
+<pre><code>journalctl -u ssh
 </code></pre>
-<p>And replace it with a path a file that will contain my message:</p>
-<pre><code>Banner /etc/ssh/ssh-banner
+<a class="header" href="18-systemd.html#use-cases" id="use-cases"><h3>Use Cases</h3></a>
+<p>Later we'll install the <a href="https://httpd.apache.org/">Apache web server</a>, and
+we will use <code>systemctl</code> to manage some aspects of this service.</p>
+<p>In particular, we will use the following commands to:</p>
+<ol>
+<li>check the state of the Apache service,</li>
+<li>configure the Apache service to auto start on reboot,</li>
+<li>start the service,</li>
+<li>reload the service after editing its configuration files, and</li>
+<li>stop the service.</li>
+</ol>
+<p>In order, these work out to:</p>
+<pre><code>systemctl status apache2
+sudo systemctl enable apache2
+sudo systemctl start apache2
+sudo systemctl reload apache2
+sudo systemctl stop apache2
 </code></pre>
-<p>After saving and closing <strong>/etc/ssh/sshd_config</strong>, I will create and open the banner file using <code>nano</code>:</p>
-<pre><code>sudo nano /etc/ssh/ssh-banner
-</code></pre>
-<p>And add the following:</p>
-<pre><code>Unauthorized access to this system is not permitted and will be reported to the authorities.
-</code></pre>
-<p>Since we have changed a configuration for the <code>sshd.service</code>, we need to reload the service so that <code>sshd.service</code> becomes aware of the new configuration. To do that, I use <code>systemctl</code> like so:</p>
-<pre><code>sudo systemctl reload sshd.service
-</code></pre>
-<p>Now, when you log into your Fedora system, you will see that new banner displayed.</p>
+<p><code>systemctl</code> is a big piece of software, and
+there are other arguments the command will take.
+See <code>man systemct</code> for details.</p>
 <a class="header" href="18-systemd.html#examine-logs" id="examine-logs"><h2>Examine Logs</h2></a>
-<p>The <code>journalctl</code> command is also part of the <strong>systemd</strong> software suite and is used to monitor logs on the system.</p>
-<p>If we just type <code>journalctl</code> at the command prompt, we will be presented with the logs for the entire system. These logs can be paged through by pressing the space bar, the page up/page down keys, or the up/down arrow keys, and they can also be searched by pressing the forward slash <code>/</code>.</p>
+<p>As mentioned, the <code>journalctl</code> command is
+part of the <strong>systemd</strong> software suite, and
+it is used to monitor system logs.</p>
+<p>It's really important to monitor system logs.
+They help identify any problems in the system or
+with various services.
+For example, by monitoring the log entries for <strong>ssh</strong>,
+I can see all the attempts to break into the server.
+Or if the Apache2 web server malfunctions for some reason,
+which might be because of a configuration error,
+the logs will indicated how to identify the problem.</p>
+<p>If we type <code>journalctl</code> at the command prompt,
+we are be presented with the logs for the entire system.
+These logs can be paged through by pressing the space bar,
+the page up/page down keys, or
+the up/down arrow keys, and
+they can also be searched by pressing the forward slash <strong>/</strong> and
+then entering a search keyword.
+To exit out of the pager,
+press <strong>q</strong> to quit.</p>
 <pre><code>journalctl
 </code></pre>
-<p>However, it's much better to use various options. If you <code>tab tab</code> after typing <code>journalctl</code>, command line completion will provide additional fields (see man page: <code>man 7 systemd.journal-fields</code> and see <code>man man</code> for numbering options) to examine logs for. There are many, but as an example, we see that there is an option called _UID=, which allows us to examine the logs for a user with a specific user id. For example, on our independent Fedora systems, our user ID numbers are 1000. So that means I can see the logs for my account by:</p>
-<pre><code>journalctl _UID=1000
+<p>It's much more useful to specify the field and
+to declare an option when using <code>journalctl</code>.
+See the following man pages for details:</p>
+<pre><code>man systemd.journal-fields
+man journalctl
 </code></pre>
-<p>The above shows journal entries related to user ID of 1000, which is my user id. We can see other user IDs by concatenating (<code>cat</code>) the <strong>passwd</strong> file. Not only do real humans who have accounts on the system have user IDs, but many services do to. Here I look at journal entries for <code>chronyd</code>, with a user ID of 992. This is a service that manages the system's time:</p>
-<pre><code class="language-bash">cat /etc/passwd
-journalctl _UID=984
+<p>There are many fields and options we can use, but
+as an example,
+we see that there is an option to view the more
+recent entries first (which is not the default):</p>
+<pre><code>journalctl -r
 </code></pre>
-<p>I can more specifically look at the logs files for a service by using the <code>-u</code> option with <code>journalctl</code>:</p>
-<pre><code>journalctl -u sshd.service
+<p>Or we view log entries in reverse order,
+for users on the system, and
+since the last boot with the following options:</p>
+<pre><code>journalctl -r --user -b 0
 </code></pre>
-<p>I can examine logs since last boot:</p>
-<pre><code>journalctl -b
+<p>Or for the system:</p>
+<pre><code>journalctl -r --system -b 0
 </code></pre>
-<p>Or I can follow the logs in real-time (press <strong>ctrl-c</strong> to quit the real-time view):</p>
+<p>I can more specifically look at the
+logs files for a service by using the <code>-u</code>
+option with <code>journalctl</code>:</p>
+<pre><code>journalctl -u apache2
+</code></pre>
+<p>I can follow the logs in real-time
+(press <strong>ctrl-c</strong> to quit the real-time view):</p>
 <pre><code>journalctl -f
 </code></pre>
 <a class="header" href="18-systemd.html#useful-systemd-commands" id="useful-systemd-commands"><h2>Useful Systemd Commands</h2></a>
-<p>You can see more of what <code>systemctl</code> or <code>journalctl</code> can do by reading through their documentation:</p>
+<p>You can see more of what <code>systemctl</code> or <code>journalctl</code>
+can do by reading through their documentation:</p>
 <pre><code>man systemctl
 man journalctl
 </code></pre>
-<p>You can get the status, start, stop, reload, restart a servicer; e.g., sshd:</p>
-<pre><code>systemctl status sshd.service
-systemctl start sshd.service
-systemctl stop sshd.service
-systemctl reload sshd.service
-systemctl restart sshd.service
-systemctl reload-or-restart sshd.service
-</code></pre>
-<p>To enable, disable sshd (or some service):</p>
-<pre><code>systemctl enable sshd.service
-systemctl disable sshd.service
-</code></pre>
 <p>You can check if a service if enabled:</p>
-<pre><code>systemctl is-enabled sshd.service
+<pre><code>systemctl is-enabled apache2
 </code></pre>
-<p>You can reboot, poweroff, or suspend a system:</p>
+<p>You can reboot, poweroff, or suspend a system
+(suspending a system mostly makes sense for laptops
+and not servers):</p>
 <pre><code>systemctl reboot
 systemctl poweroff
 systemctl suspend
@@ -193,6 +257,13 @@ systemctl suspend
 </ul>
 <pre><code>systemd-analyze
 </code></pre>
+<a class="header" href="18-systemd.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>This is a basic introduction to <strong>systemd</strong>,
+which is composed of a suite of software to help
+manage booting a system, managing services, and
+monitoring logs.</p>
+<p>We'll put what we've learned into practice
+when we set up our LAMP servers.</p>
 
                 </div>
 

@@ -86,17 +86,39 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="20-networking-dns-domains.html#introduction-to-dns-the-domain-name-system" id="introduction-to-dns-the-domain-name-system"><h1>Introduction to DNS, the Domain Name System</h1></a>
+                    <a class="header" href="20-networking-dns-domains.html#dns-and-domain-names" id="dns-and-domain-names"><h1>DNS and Domain Names</h1></a>
+<p>The DNS (<strong>domain name system</strong>) is referred to
+as the phone book of the internet, and it's
+responsible for mapping IP addresses to
+memorable names.
+Thus, instead of having to remember:</p>
+<p>https://128.163.35.46</p>
+<p>We can instead remember this:</p>
+<p>https://www.uky.edu</p>
+<p>System administrators need to know about DNS
+because they may be responsible for administrating
+a domain name system on their network, and/or
+they may be responsible for setting up and
+administrating web site domains.
+Either case requires a basic understanding of DNS.</p>
 <a class="header" href="20-networking-dns-domains.html#dns-intro-videos" id="dns-intro-videos"><h2>DNS Intro Videos</h2></a>
-<p>Two helpful YouTube videos. The first one provides an overview of the DNS system:</p>
+<p>To help you get started,
+watch these two YouTube videos.
+The first one provides an overview of the DNS system:</p>
 <p><a href="https://www.youtube.com/watch?v=mpQZVYPuDGU">How a DNS Server (Domain Name System) works</a></p>
-<p>The second video illustrates how to use a GUI to create and manage DNS records.</p>
+<p>The second video illustrates how to use a
+graphical user interface to create and manage DNS records.</p>
 <p><a href="https://www.youtube.com/watch?v=cwT82ibOM2Q">DNS Records</a></p>
-<p>Here is a nice intro to recursive DNS:</p>
+<p>And here is a nice intro to recursive DNS:</p>
 <p><a href="https://www.cloudflare.com/learning/dns/what-is-recursive-dns/">https://www.cloudflare.com/learning/dns/what-is-recursive-dns/</a></p>
 <a class="header" href="20-networking-dns-domains.html#fqdn-the-fully-qualified-domain-name" id="fqdn-the-fully-qualified-domain-name"><h2>FQDN: The Fully Qualified Domain Name</h2></a>
-<p>The structure of the domain name system is like the structure of the UNIX/Linux file hierarchy; that is, it is like an inverted tree.</p>
-<p>The fully qualified domain name includes a period at the end of the top-level domain. Your browser is able to supply that dot since we often don't use it when typing website addresses.</p>
+<p>The structure of the domain name system is
+like the structure of the UNIX/Linux file hierarchy;
+that is, it is like an inverted tree.</p>
+<p>The fully qualified domain name includes a
+period at the end of the top-level domain.
+Your browser is able to supply that dot
+since we often don't use it when typing website addresses.</p>
 <p>Thus, for Google's main page, the FQDN is:</p>
 <p>FQDN: www.google.com.</p>
 <p>And the parts include:</p>
@@ -105,36 +127,97 @@ com         top-level domain
 google.     second-level domain
 www.        third-level domain
 </code></pre>
-<p>This is important to know so that you understand how the <strong>Domain Name System</strong> works and which DNS servers are responsible for their part of the network.</p>
-<a class="header" href="20-networking-dns-domains.html#root-domain" id="root-domain"><h3>Root domain</h3></a>
-<p>The root domain is managed by root name servers. These servers are listed on the <a href="https://www.iana.org/domains/root/servers">IANA</a>, the Internet Assigned Numbers Authority, website, but are managed by multiple operators. The root servers manage the root domain, alternatively referred to as the zone, or the <code>.</code> at the end of the <code>.com.</code>, <code>.edu.</code>, etc.</p>
-<a class="header" href="20-networking-dns-domains.html#alternative-dns-root-systems" id="alternative-dns-root-systems"><h4>Alternative DNS root systems</h4></a>
-<p>Aside: It's possible to have alternate internets by using outside root name servers. This is not common, but it happens. Read about a few of them here:</p>
+<p>This is important to know so that you understand
+how the <strong>Domain Name System</strong> works and
+which DNS servers are responsible for their part of the network.</p>
+<a class="header" href="20-networking-dns-domains.html#root-domain" id="root-domain"><h3>Root Domain</h3></a>
+<p>The root domain is managed by root name servers.
+These servers are listed on the <a href="https://www.iana.org/domains/root/servers">IANA</a>,
+the Internet Assigned Numbers Authority, website, but
+are managed by multiple operators.
+The root servers manage the root domain,
+alternatively referred to as the zone, or
+the <strong>.</strong> at the end of the <code>.com.</code>, <code>.edu.</code>, etc.</p>
+<a class="header" href="20-networking-dns-domains.html#alternative-dns-root-systems" id="alternative-dns-root-systems"><h4>Alternative DNS Root Systems</h4></a>
+<p>It's possible to have alternate internets by
+using outside root name servers.
+This is not common, but it happens.
+Read about a few of them here:</p>
 <ul>
 <li>sdf: <a href="https://web.archive.org/web/20081121061730/http://www.smtpnic.org/">https://web.archive.org/web/20081121061730/http://www.smtpnic.org/</a></li>
 <li>opennic: <a href="https://www.opennicproject.org/">https://www.opennicproject.org/</a></li>
 <li>alternic: <a href="https://en.wikipedia.org/wiki/AlterNIC">https://en.wikipedia.org/wiki/AlterNIC</a></li>
 </ul>
-<p>Russia, as an example, has threated to use it's own alternate internet based on a different DNS root system. This would essentially create a large, second internet. You can read about in this <a href="https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet">IEEE Spectrum article</a>.</p>
-<a class="header" href="20-networking-dns-domains.html#top-level-domain-tld" id="top-level-domain-tld"><h3>Top level domain (TLD)</h3></a>
-<p>We are all familiar with top level domains. Specific examples include:</p>
+<p>Russia, as an example, has threated to use
+it's own alternate internet based on a different
+DNS root system.
+This would essentially create a large, second internet.
+You can read about in this <a href="https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet">IEEE Spectrum article</a>.</p>
+<a class="header" href="20-networking-dns-domains.html#top-level-domain-tld" id="top-level-domain-tld"><h3>Top Level Domain (TLD)</h3></a>
+<p>We are all familiar with top level domains.
+Specific examples include:</p>
 <ul>
-<li>generic names: .org, .com, .net, .mil, .gov</li>
-<li>and country code-based: .us, .uk, .ca</li>
+<li>generic TLD names:
+<ul>
+<li>.com</li>
+<li>.gov</li>
+<li>.mil</li>
+<li>.net</li>
+<li>.org</li>
 </ul>
-<p>We can download a list of those top level names from IANA, and get a total count:</p>
+</li>
+<li>and ccTLD, <a href="https://en.wikipedia.org/wiki/Country_code_top-level_domain">country code TLDs</a>
+<ul>
+<li>.ca (Canada)</li>
+<li>.mx (Mexico)</li>
+<li>.jp (Japan)</li>
+<li>.uk (United Kingdom)</li>
+<li>.us (United States)</li>
+</ul>
+</li>
+</ul>
+<p>We can download a list of those top level names from IANA, and
+get a total count of 1,487 (as of August 2022):</p>
 <pre><code>wget https://data.iana.org/TLD/tlds-alpha-by-domain.txt
 sed '1d' tlds-alpha-by-domain.txt | wc -l
-1495
 </code></pre>
-<a class="header" href="20-networking-dns-domains.html#second-level-domain-names" id="second-level-domain-names"><h3>Second-level domain names</h3></a>
-<p>In the Google example, the second level domain is <strong>google</strong>. Other examples include: <strong>redhat</strong> in <strong>redhat.com</strong> and <strong>debian</strong> in <strong>debian.org</strong>. <a href="https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364">Soyinka, (2016)</a> refers to this part of the FQDN as that which makes up the &quot;organizational boundary of the namespace&quot; (p. 425).</p>
-<a class="header" href="20-networking-dns-domains.html#third-level-domain-names--hostnames--subdomains" id="third-level-domain-names--hostnames--subdomains"><h3>Third-level domain names / hostnames / subdomains</h3></a>
-<p>When you've purchased (leased) a top and second level domain like getfedora.org, you can choose whether you employ third level domains. For example: www is a third level domain. If you owned <code>example.org</code>, you could also have <code>www.example.org</code> resolve to a different location, or, <code>www.example.org</code> could resolve to the second-level domain itself. That is:</p>
+<a class="header" href="20-networking-dns-domains.html#second-level-domain-names" id="second-level-domain-names"><h3>Second Level Domain Names</h3></a>
+<p>In the Google example,
+the second level domain is <strong>google</strong>.
+The second level domain along with the TLD
+together, along with any further subdomains,
+for the <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">fully qualified domain name</a>.
+Other examples include:</p>
+<ul>
+<li><strong>redhat</strong> in <strong>redhat.com</strong></li>
+<li><strong>debian</strong> in <strong>debian.org</strong>.</li>
+<li><strong>wikipedia</strong> in <strong>wikipedia.org</strong></li>
+<li><strong>uky</strong> in <strong>uky.edu</strong></li>
+<li><strong>twitter</strong> in <strong>twitter.com</strong></li>
+</ul>
+<a class="header" href="20-networking-dns-domains.html#third-level-domain-names--subdomains" id="third-level-domain-names--subdomains"><h3>Third Level Domain Names / Subdomains</h3></a>
+<p>When you've purchased (leased) a top and second level
+domain like <strong>ubuntu.com</strong>,
+you can choose whether you add third level domains.
+For example: www is a third level domain or subdomain.
+If you owned <code>example.org</code>,
+you could dedicate a machine or a cluster of machines
+to <code>www.example.org</code> that
+resolve to a different location, or
+<code>www.example.org</code> could resolve to the second-level domain itself.
+That is:</p>
 <ul>
 <li>www.debian.org can point to debian.org</li>
 </ul>
-<p>But it could also point to a separate server, such that <strong>debian.org</strong> and <strong>www.debian.org</strong> would be two separate servers with two separate websites or services. Although this is not common with third-level domains that start with <strong>www</strong>, it is common with others.</p>
+<p>It could also point to a separate server,
+such that <strong>debian.org</strong> and <strong>www.debian.org</strong>
+would be two separate servers with two separate websites or services,
+just like <strong>maps.google.com</strong> points to a different
+site than <strong>mail.google.com</strong>.
+Both <strong>maps</strong> and <strong>mail</strong> are subdomains of <strong>google.com</strong>.
+Although this is not common with third-level
+domains that start with <strong>www</strong>,
+it is common with others.</p>
 <p>For example, with hostnames that are not <code>www</code>:</p>
 <ul>
 <li>google.com resolves to www.google.com</li>
@@ -146,21 +229,73 @@ sed '1d' tlds-alpha-by-domain.txt | wc -l
 </ul>
 </li>
 </ul>
-<p>This is because those other three provide different, but specific services.</p>
+<p>This is because those other three provide different,
+but specific services.</p>
 <a class="header" href="20-networking-dns-domains.html#dns-paths" id="dns-paths"><h2>DNS Paths</h2></a>
-<p>Recursive DNS is the first DNS server to be queried in the DNS system. This is the resolver server in the first video above. This server queries itself (recursive) to check if the domain to IP mapping has been cached in its system.</p>
-<p>If it hasn't been cached, then the DNS query is <em>forwarded</em> to a root server and and so forth down the line.</p>
-<p>We can use the <code>dig</code> command to query the non-cached DNS paths. Let's say we want to follow the DNS path for <strong>google.com</strong>, then we can start by querying any <a href="https://www.iana.org/domains/root/servers">root server</a>. In the output, we wan to pay attention to the QUERY field, the ANSWER field, and the Authority Section:</p>
-<pre><code>dig @198.41.0.4 google.com 
+<p>A recursive DNS server is the first DNS server
+to be queried in the DNS system,
+which is usually managed by an ISP.
+This is the resolver server in the first video above.
+This server queries itself (recursive) to check if the
+domain to IP mapping has been cached (remembered/stored) in its system.</p>
+<p>If it hasn't been cached,
+then the DNS query is <em>forwarded</em> to a root server.
+There are thirteen root servers.</p>
+<pre><code>echo {a..m}.root-servers.net.
 </code></pre>
-<p>The root servers only know about top level domains, and in this case, that's the <code>com.</code> domain. Fortunately, it lists some authoritative TLD servers and their IP addresses, and we can query one of those next:</p>
-<pre><code>dig @192.12.94.30 google.com
+<p>Those root servers will identify the next server to query,
+depending on the top level domain (.com, .net, .edu, .gov, etc.).
+If the site ends in <strong>.com</strong> or <strong>.net</strong>, then
+the next server might be something like:
+<strong>a.gtld-servers.net.</strong>
+Or if the top level domain ends in <strong>.edu</strong>, then:
+<strong>a.edu-servers.net.</strong>.
+If the top level domain ends in <strong>.gov</strong>, then:
+<strong>a.gov-servers.net.</strong>.
+And so forth.</p>
+<p>Those top level domains should know where to
+send the query next.
+In many cases, the next path is to send the query
+to a custom domain server.
+For example, Google's custom name servers are:
+<strong>ns1.google.com</strong> to <strong>ns4.google.com</strong>.
+UK's custom name servers are:
+<strong>sndc1.net.uky.edu</strong> and <strong>sndc2.net.uky.edu</strong>.
+Finally, those custom name servers will know
+the IP address that maps to the domain.</p>
+<p>We can use the <code>dig</code> command to query
+the non-cached DNS paths.
+Let's say we want to follow the DNS path for <strong>google.com</strong>,
+then we can start by querying any <a href="https://www.iana.org/domains/root/servers">root server</a>.
+In the output, we want to pay attention to the QUERY field,
+the ANSWER field, and the Authority Section.
+We keep <strong>digging</strong> until the ANSWER field returns
+a number greater than 0.
+The following commands query one of the root servers,
+which points us to one of the authoritative servers for
+<strong>.com</strong> sites,
+which points us to Google's custom nameserver,
+which finally provides an answer,
+in fact six answers,
+or six IP address that all map to <strong>google.com</strong>.</p>
+<pre><code>dig @e.root-servers.net google.com
+dig @a.gtld-servers.net google.com
+dig @ns1.google.com google.com
 </code></pre>
-<p>Now we know something about the TLD. Here we still don't know the full path, but it does tell us that for <strong>google.com</strong>, we need to query one of Google's name servers:</p>
-<pre><code>dig @216.239.34.10 google.com
+<p>Alternatively, we can query UK's:</p>
+<pre><code>dig @j.root-servers.net. uky.edu
+dig @b.edu-servers.net. uky.edu
+dig @sndc1.net.uky.edu. uky.edu
 </code></pre>
-<p>And now we finally get our answer, which is that <strong>google.com</strong> resolves to 142.250.190.78, at least for me and at this instant.</p>
-<a class="header" href="20-networking-dns-domains.html#dns-record-types" id="dns-record-types"><h3>DNS Record types</h3></a>
+<p>We can also get this path information using
+<code>dig</code>'s trace command:</p>
+<pre><code>dig google.com +trace
+</code></pre>
+<p>There are a lot of <a href="https://www.geeksforgeeks.org/dig-command-in-linux-with-examples/">ways to use the dig command</a>, and
+you can test and explore them on your own.</p>
+<a class="header" href="20-networking-dns-domains.html#dns-record-types" id="dns-record-types"><h3>DNS Record Types</h3></a>
+<p>In the <code>dig</code> command output above,
+you will see various fields.</p>
 <ul>
 <li>SOA:    Start of Authority: describes the site's DNS entries
 <ul>
@@ -174,13 +309,18 @@ sed '1d' tlds-alpha-by-domain.txt | wc -l
 <pre><code>dig google.com
 google.com.     IN      A       142.251.32.78
 </code></pre>
+<p>Other record types include:</p>
 <ul>
 <li>PTR:    Pointer Record: provides mapping from IP Address to Hostname</li>
 <li>MX:     Mail exchanger: the MX record maps your email server.</li>
-<li>CNAME:  Canonical name: used so that a domain name may act as an alias for another domain name. Thus, say someone visits www.example.org, but if no subdomain is set up for www, then the CNAME can point to example.org.</li>
+<li>CNAME:  Canonical name: used so that a domain name may act as an alias for
+another domain name. Thus, say someone visits www.example.org, but if no
+subdomain is set up for www, then the CNAME can point to example.org.</li>
 </ul>
 <a class="header" href="20-networking-dns-domains.html#dns-toolbox" id="dns-toolbox"><h3>DNS Toolbox</h3></a>
-<p>It's important to be able to troubleshoot DNS issues. To do that, we have a few utilities available. Here are examples and you should read the <code>man</code> pages for each one:</p>
+<p>It's important to be able to troubleshoot DNS issues.
+To do that, we have a few utilities available.
+Here are examples and you should read the <code>man</code> pages for each one:</p>
 <p><code>host</code>: resolve hostnames to IP Address; or IP addresses to hostnames</p>
 <pre><code>man -f host
 host (1) - DNS lookup utility
@@ -217,6 +357,31 @@ resolv.conf (5) - resolver configuration file
 cat /etc/resolv.conf
 resolvectl status
 </code></pre>
+<a class="header" href="20-networking-dns-domains.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>In the same way that phones have phone numbers,
+servers on the internet have IP addresses.
+Since we're only human,
+we don't remember every phone number that we dial or
+every IP address that we visit.
+In order to make such things human friendly,
+we use names instead.</p>
+<p>Nameservers and DNS records act as the phone book
+and phone book entries of the internet.
+Note that I refer to the <strong>internet</strong> and not the <strong>web</strong> here.
+There is more at the application layer than the HTTP/HTTPS protocols,
+and so other types of servers,
+e.g., mail servers,
+may also have domain names and IP addresses to resolve.</p>
+<p>In this section, we covered the basics of DNS that include:</p>
+<ul>
+<li>FQDN: the Fully Qualified Domain Name</li>
+<li>Root domains</li>
+<li>Top level domains (TLDs) and Country Code TLDS (ccTLDs)</li>
+<li>Second level and third level domains/subdomains</li>
+<li>DNS paths, and</li>
+<li>DNS record types</li>
+</ul>
+<p>We'll come back to this material when we set up our websites.</p>
 
                 </div>
 

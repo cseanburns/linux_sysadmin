@@ -4209,87 +4209,151 @@ manual page for <code>apt</code>:</p>
 <pre><code>man apt
 </code></pre>
 <a class="header" href="print.html#systemd" id="systemd"><h1>systemd</h1></a>
-<ul>
-<li><strong>systemd</strong> is an init system that aims to provide better boot time and a better way to manage services and processes.</li>
-<li><strong>systemd</strong> is a replacement of the <strong>System V like init</strong> system that most Linux distributions used.</li>
-<li><strong>systemd</strong> includes additional utilities to help manage services on a Linux system; essentially, it's much more than an init system</li>
-</ul>
-<p>There are only two basic aspects of <strong>systemd</strong> that I want to cover in this lesson, but know that <strong>systemd</strong> is a big, complicated suite of software that provides a lot of functions. In this lesson, though, we will cover using <strong>systemd</strong> to:</p>
-<ol>
-<li>manage services</li>
-<li>examine logs</li>
-</ol>
+<a class="header" href="print.html#introduction-3" id="introduction-3"><h2>Introduction</h2></a>
+<p>When computers boot up,
+obviously some software manages that process.
+On Linux and other Unix or Unix-like systems,
+this is usually handled via an <strong>init</strong> system.
+For example, macOS uses <a href="https://en.wikipedia.org/wiki/Launchd">launchd</a> and
+many Linux distributions,
+including Ubuntu,
+use <a href="https://en.wikipedia.org/wiki/Systemd">systemd</a>.</p>
+<p><strong>systemd</strong> does more than handle the startup process,
+it also manages various services and connects
+the Linux kernel to various applications.
+In this section,
+we'll cover how to use <strong>systemd</strong> to manage services, and
+to review log files.</p>
 <a class="header" href="print.html#manage-services" id="manage-services"><h2>Manage Services</h2></a>
-<p>When we install a complicated piece of software like a web server (e.g., Apache2), a SSH server (e.g., openssh-server), or a database server (e.g., MySQL), then it's helpful if we have some commands that will help us manage that service (the web service/server, the SSH service/server, etc).</p>
-<p>For example, after installing a SSH server, we might like to know if it's running, or we might want to stop it if it's running, or start it if it's not. Let's see what that looks like. In the following commands, I will use the <code>dnf</code> utility to install the <code>openssh-server</code>. Then I will check the status of the server using the <code>systemctl status</code> command. I will enable it so that it starts automatically when the operating system is rebooted using the <code>systemctl enable</code> command. Finally, I will make sure the firewall allows outside access to the operating system via <code>ssh</code>. I use the <code>sudo</code> command to run the relevant commands as administrator:</p>
-<pre><code>dnf search openssh
-sudo dnf install openssh-server
-systemctl status sshd.service
-sudo systemctl enable sshd.service
-sudo firewall-cmd --add-service=ssh --permanent
+<p>When we install complicated software,
+like a web server (e.g., Apache2, Nginx),
+a SSH server (e.g., OpenSSH), or
+a database server (e.g., mariaDB or MySQL),
+then it's helpful to have commands that manage that service
+(the web service, the SSH service, the database service, etc).</p>
+<p>For example, the <code>ssh</code> service is installed
+by default on our gcloud servers, and
+we can check its status with the following
+<code>systemctl</code> command:</p>
+<pre><code>systemctl status ssh
 </code></pre>
-<p>There are similar commands to stop a service or to reload a service if a service configuration file has changed. As an example of the latter, let's say that I wanted to present a message to anyone who logs into my system remotely using <code>ssh</code>. In order to do that, I need to edit the main <code>ssh</code> configuration file, which is located in <strong>/etc/ssh/sshd_config</strong>:</p>
-<pre><code>cd /etc/ssh
-sudo nano sshd_config
+<p>The output tells us a few things.
+The line beginning with <strong>Loaded</strong> tells us that
+the SSH service is configured.
+At the end of that line,
+it also tells us that it is <strong>enabled</strong>,
+which means that the service will automatically start
+when the system gets rebooted or starts up.</p>
+<p>The line beginning with <strong>Active</strong> tells us
+that the service is <strong>active (running)</strong> and for how long.
+It has to say this since I'm connecting to the machine
+using <code>ssh</code>.
+If the service was not active (running), then
+I wouldn't be able to login remotely.
+We also can see the process ID (PID) for the service
+as well as how much memory it's using.</p>
+<p>At the bottom of the output,
+we can see the recent log files.
+We can view more of those log files
+using the <code>journalctl</code> command.
+By default, running <code>journalctl</code> by itself
+will return all log files, but
+we can specify that we're interested in
+log files only for the ssh service.
+We can specify using the PID number.
+Replace <em>NNN</em> with the PID number attached
+to your ssh service:</p>
+<pre><code>journalctl _PID=NNN
 </code></pre>
-<p>Then I will remove the beginning pound sign and thus un-comment the following line:</p>
-<pre><code>#Banner none
+<p>Or we can specify by service, or
+more specifically, its <strong>unit</strong> name:</p>
+<pre><code>journalctl -u ssh
 </code></pre>
-<p>And replace it with a path a file that will contain my message:</p>
-<pre><code>Banner /etc/ssh/ssh-banner
+<a class="header" href="print.html#use-cases" id="use-cases"><h3>Use Cases</h3></a>
+<p>Later we'll install the <a href="https://httpd.apache.org/">Apache web server</a>, and
+we will use <code>systemctl</code> to manage some aspects of this service.</p>
+<p>In particular, we will use the following commands to:</p>
+<ol>
+<li>check the state of the Apache service,</li>
+<li>configure the Apache service to auto start on reboot,</li>
+<li>start the service,</li>
+<li>reload the service after editing its configuration files, and</li>
+<li>stop the service.</li>
+</ol>
+<p>In order, these work out to:</p>
+<pre><code>systemctl status apache2
+sudo systemctl enable apache2
+sudo systemctl start apache2
+sudo systemctl reload apache2
+sudo systemctl stop apache2
 </code></pre>
-<p>After saving and closing <strong>/etc/ssh/sshd_config</strong>, I will create and open the banner file using <code>nano</code>:</p>
-<pre><code>sudo nano /etc/ssh/ssh-banner
-</code></pre>
-<p>And add the following:</p>
-<pre><code>Unauthorized access to this system is not permitted and will be reported to the authorities.
-</code></pre>
-<p>Since we have changed a configuration for the <code>sshd.service</code>, we need to reload the service so that <code>sshd.service</code> becomes aware of the new configuration. To do that, I use <code>systemctl</code> like so:</p>
-<pre><code>sudo systemctl reload sshd.service
-</code></pre>
-<p>Now, when you log into your Fedora system, you will see that new banner displayed.</p>
+<p><code>systemctl</code> is a big piece of software, and
+there are other arguments the command will take.
+See <code>man systemct</code> for details.</p>
 <a class="header" href="print.html#examine-logs" id="examine-logs"><h2>Examine Logs</h2></a>
-<p>The <code>journalctl</code> command is also part of the <strong>systemd</strong> software suite and is used to monitor logs on the system.</p>
-<p>If we just type <code>journalctl</code> at the command prompt, we will be presented with the logs for the entire system. These logs can be paged through by pressing the space bar, the page up/page down keys, or the up/down arrow keys, and they can also be searched by pressing the forward slash <code>/</code>.</p>
+<p>As mentioned, the <code>journalctl</code> command is
+part of the <strong>systemd</strong> software suite, and
+it is used to monitor system logs.</p>
+<p>It's really important to monitor system logs.
+They help identify any problems in the system or
+with various services.
+For example, by monitoring the log entries for <strong>ssh</strong>,
+I can see all the attempts to break into the server.
+Or if the Apache2 web server malfunctions for some reason,
+which might be because of a configuration error,
+the logs will indicated how to identify the problem.</p>
+<p>If we type <code>journalctl</code> at the command prompt,
+we are be presented with the logs for the entire system.
+These logs can be paged through by pressing the space bar,
+the page up/page down keys, or
+the up/down arrow keys, and
+they can also be searched by pressing the forward slash <strong>/</strong> and
+then entering a search keyword.
+To exit out of the pager,
+press <strong>q</strong> to quit.</p>
 <pre><code>journalctl
 </code></pre>
-<p>However, it's much better to use various options. If you <code>tab tab</code> after typing <code>journalctl</code>, command line completion will provide additional fields (see man page: <code>man 7 systemd.journal-fields</code> and see <code>man man</code> for numbering options) to examine logs for. There are many, but as an example, we see that there is an option called _UID=, which allows us to examine the logs for a user with a specific user id. For example, on our independent Fedora systems, our user ID numbers are 1000. So that means I can see the logs for my account by:</p>
-<pre><code>journalctl _UID=1000
+<p>It's much more useful to specify the field and
+to declare an option when using <code>journalctl</code>.
+See the following man pages for details:</p>
+<pre><code>man systemd.journal-fields
+man journalctl
 </code></pre>
-<p>The above shows journal entries related to user ID of 1000, which is my user id. We can see other user IDs by concatenating (<code>cat</code>) the <strong>passwd</strong> file. Not only do real humans who have accounts on the system have user IDs, but many services do to. Here I look at journal entries for <code>chronyd</code>, with a user ID of 992. This is a service that manages the system's time:</p>
-<pre><code class="language-bash">cat /etc/passwd
-journalctl _UID=984
+<p>There are many fields and options we can use, but
+as an example,
+we see that there is an option to view the more
+recent entries first (which is not the default):</p>
+<pre><code>journalctl -r
 </code></pre>
-<p>I can more specifically look at the logs files for a service by using the <code>-u</code> option with <code>journalctl</code>:</p>
-<pre><code>journalctl -u sshd.service
+<p>Or we view log entries in reverse order,
+for users on the system, and
+since the last boot with the following options:</p>
+<pre><code>journalctl -r --user -b 0
 </code></pre>
-<p>I can examine logs since last boot:</p>
-<pre><code>journalctl -b
+<p>Or for the system:</p>
+<pre><code>journalctl -r --system -b 0
 </code></pre>
-<p>Or I can follow the logs in real-time (press <strong>ctrl-c</strong> to quit the real-time view):</p>
+<p>I can more specifically look at the
+logs files for a service by using the <code>-u</code>
+option with <code>journalctl</code>:</p>
+<pre><code>journalctl -u apache2
+</code></pre>
+<p>I can follow the logs in real-time
+(press <strong>ctrl-c</strong> to quit the real-time view):</p>
 <pre><code>journalctl -f
 </code></pre>
 <a class="header" href="print.html#useful-systemd-commands" id="useful-systemd-commands"><h2>Useful Systemd Commands</h2></a>
-<p>You can see more of what <code>systemctl</code> or <code>journalctl</code> can do by reading through their documentation:</p>
+<p>You can see more of what <code>systemctl</code> or <code>journalctl</code>
+can do by reading through their documentation:</p>
 <pre><code>man systemctl
 man journalctl
 </code></pre>
-<p>You can get the status, start, stop, reload, restart a servicer; e.g., sshd:</p>
-<pre><code>systemctl status sshd.service
-systemctl start sshd.service
-systemctl stop sshd.service
-systemctl reload sshd.service
-systemctl restart sshd.service
-systemctl reload-or-restart sshd.service
-</code></pre>
-<p>To enable, disable sshd (or some service):</p>
-<pre><code>systemctl enable sshd.service
-systemctl disable sshd.service
-</code></pre>
 <p>You can check if a service if enabled:</p>
-<pre><code>systemctl is-enabled sshd.service
+<pre><code>systemctl is-enabled apache2
 </code></pre>
-<p>You can reboot, poweroff, or suspend a system:</p>
+<p>You can reboot, poweroff, or suspend a system
+(suspending a system mostly makes sense for laptops
+and not servers):</p>
 <pre><code>systemctl reboot
 systemctl poweroff
 systemctl suspend
@@ -4315,7 +4379,14 @@ systemctl suspend
 </ul>
 <pre><code>systemd-analyze
 </code></pre>
-<a class="header" href="print.html#introduction-3" id="introduction-3"><h1>Introduction</h1></a>
+<a class="header" href="print.html#conclusion-10" id="conclusion-10"><h2>Conclusion</h2></a>
+<p>This is a basic introduction to <strong>systemd</strong>,
+which is composed of a suite of software to help
+manage booting a system, managing services, and
+monitoring logs.</p>
+<p>We'll put what we've learned into practice
+when we set up our LAMP servers.</p>
+<a class="header" href="print.html#introduction-4" id="introduction-4"><h1>Introduction</h1></a>
 <p>This section covers basic networking:</p>
 <ul>
 <li>DNS</li>
@@ -4333,62 +4404,344 @@ systemctl suspend
 <li>Write introduction for this section page and subsection pages</li>
 </ul>
 <a class="header" href="print.html#networking" id="networking"><h1>Networking</h1></a>
-<p>Wikipedia has a good primer on the <a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite</a>.</p>
-<a class="header" href="print.html#link-layer" id="link-layer"><h2>Link Layer</h2></a>
-<a class="header" href="print.html#arp-address-resolution-protocol" id="arp-address-resolution-protocol"><h3>ARP (Address Resolution Protocol)</h3></a>
-<p><em>ARP</em> or Address Resolution Protocol is a protocol used to map a network address, like the IP address, to the ethernet address (aka, the MAC or Media Access Control address, or the hardware address). Routers use MAC addresses to enable communication inside networks (w/in subnets) so that computers within a local network can talk to each other. Networks are designed so that IP addresses must be associated with MAC addresses before systems can communicate over a network.</p>
-<p>To get ARP info for a system, we can use the <code>ip</code> command, which uses regular options (like <code>-b</code>) but also various <strong>objects</strong> (see <code>man ip</code> for details). Here is the IP info, the ARP output, and the routing table on my Fedora virtual machine (<strong>10.0.2.15</strong>) running on my desktop via a NAT connection:</p>
+<p>An important function of a system administrator
+is to set up, configure, and monitor a network.
+This may involve planning, configuring, and
+connecting the devices on a local area network,
+to planning and implementing a large network
+that interfaces with an outside network,
+and to monitoring networks for various sorts of attacks,
+such as <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">denial of service attacks</a>.</p>
+<p>In order to prepare for this type of work,
+we need at least a basic understanding of how
+the internet works and how local devices
+interact with the internet.
+In this section, we will focus mostly on
+internet addressing, but
+we will also devote some space to TCP and UDP,
+two protocols for transmitting data.</p>
+<p>Connecting two or more devices together
+nowadays involves the TCP/IP or the UDP/IP protocols,
+otherwise part of the
+<a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite</a>.
+This suite is a kind of expression of the more
+generalized <a href="https://en.wikipedia.org/wiki/OSI_model">OSI communication model</a>.</p>
+<p>The internet protocol suite is generally
+framed as a series
+of layers beginning with a lower layer,
+the <strong>link layer</strong>,
+that interfaces with internet capable hardware,
+to the highest layer, the <strong>application layer</strong>.</p>
+<p>The <strong>link layer</strong> describes the local area network.
+Devices connected locally, e.g., via Ethernet cables,
+comprise the link layer.
+The link layer connects to the <strong>internet layer</strong>.
+Data going into or out of a local network must
+be negotiated between these two layers.</p>
+<p>The <strong>internet layer</strong> makes the internet possible by
+basically making the ability to transmit data
+among multiple networks possible.
+(The internet is, in fact, a network of networks).
+The primary characteristic of the internet layer
+is the <strong>IP address</strong>, which currently comes in two versions:
+IPv4 (32 bit) and IPv6 (128 bit).
+IP addresses are used to locate hosts on a network.</p>
+<p>The <strong>transport layer</strong> makes the exchange of data
+on the internet possible.
+There are two dominant protocols attached to this layer:
+<a href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">UDP</a> and <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP</a>.
+Very generally, <a href="https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/">UDP</a> is used when the integrity
+of data is less important than the its ability
+to reach its destination.
+For example, streaming video,
+VOIP, and online gaming
+are often transported
+via UDP because the loss of some pixels or some audio is acceptable.
+<a href="https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/">TCP</a> is used when the integrity of the data is important.
+If the data cannot be transmitted without error,
+then the data won't reach its final destination
+until the error is corrected.</p>
+<p>The <strong>application layer</strong> provides the ability to
+use the internet in particular ways.
+For example, the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> protocol enables
+the <strong>web</strong>,
+which is simply an <strong>application</strong> on the internet.
+The <strong>SMTP</strong>, <strong>IMAP</strong>, and <strong>POP</strong> protocols
+control email exchange.
+<strong>DNS</strong> is a system that maps IP addresses to domain names.
+In this book,
+we use <strong>SSH</strong>, also part of the application layer,
+to connect to remote computers.</p>
+<blockquote>
+<p>By <strong>application</strong>, they simply mean that
+these protocols provide the functionality for applications.
+They are not themselves considered user applications,
+like a web browser.</p>
+</blockquote>
+<a class="header" href="print.html#the-internet-protocol-suite" id="the-internet-protocol-suite"><h2>The Internet Protocol Suite</h2></a>
+<a class="header" href="print.html#link-layer" id="link-layer"><h3>Link Layer</h3></a>
+<a class="header" href="print.html#arp-address-resolution-protocol" id="arp-address-resolution-protocol"><h4>ARP (Address Resolution Protocol)</h4></a>
+<p><strong>ARP</strong> (Address Resolution Protocol) is a protocol
+at the link layer and is
+used to map network addresses,
+like an IP address,
+to the ethernet addresses,
+also called the MAC or Media Access Control address, or
+the hardware address.
+Routers use MAC addresses to enable communication
+inside networks
+(w/in subnets or local area networks)
+so that computers within a local network
+can talk to each other.
+Networks are designed so that IP addresses
+are associated with MAC addresses
+before systems can communicate over a network.
+Everyone of your internet capable devices,
+your smartphone, your laptop, your internet connected toaster,
+have a MAC address.</p>
+<p>To get ARP info for a system,
+we use the <code>ip</code> command,
+which uses regular options (like <code>-b</code>) and
+names specific objects.
+To get the MAC address for a specific computer,
+we can use the following command,
+where <code>ip</code> is the command and
+<code>a</code> or <code>link</code> are considered objects
+(see <code>man ip</code> for details):</p>
 <pre><code>ip a
-ip neigh show
-ip route show
 </code></pre>
-<p>Where:</p>
-<ul>
-<li><strong>10.0.2.15</strong> is the IP address of my fedora server</li>
-<li><strong>10.0.2.2</strong> is the first usable address on subnet, and is likely the virtual router; likewise, <strong>52:54:00:12:35:02</strong> is the MAC/hardware address for that virtual router</li>
-<li><strong>10.0.2.0</strong> is called the <strong>network address (signified by the /24 part)</strong>, which is a unique identifier IP address for the subnet</li>
-</ul>
-<p>The above information is used or created in the following way: A router gets configured to use a specific <strong>network address</strong>, when it's brought online, it searches the network for connected MAC addresses that are assigned to wireless or ethernet cards, it assigns to each of those MAC addresses an available IP address based on the network address,</p>
-<a class="header" href="print.html#internet-layer" id="internet-layer"><h2>Internet Layer</h2></a>
-<a class="header" href="print.html#ip-internet-protocol" id="ip-internet-protocol"><h3>IP (Internet Protocol)</h3></a>
-<p>The Internet Protocol, or <em>IP</em>, address is used to uniquely identify a host on a network and place that host at a specific location (its IP <strong>address</strong>). If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address that will not be directly exposed to the Internet.</p>
-<p>These IP address ranges are reserved, private address ranges, which means no public internet device will have an IP address within these ranges. The private address ranges include:</p>
+<p>On my home system,
+the above command produces three numbered sections of output.
+The first section refers to the <strong>lo</strong> or loopback device.
+This is a special device that allows the computer to
+communicate with itself.
+It always has an IPv4 address of 127.0.0.1.
+The next section on my home machine refers to the ethernet card.
+Currently, I'm connected via wifi, and
+so this section reports the MAC address for that ethernet card
+plus some other other information,
+such as whether the device is down or up.
+Since there's no physical cable connecting my machine
+to the router,
+this section reports DOWN.
+The third section on my home system refers to the wifi card.
+Since this is UP (or active),
+it reports the internal IP address (e.g., 192.168.0.4), plus
+the MAC address, and other details.
+The internal address is different from the machine's
+external address,
+which might be something like 159.3.45.2.</p>
+<p>We can get just the <strong>link</strong> object information
+with the following command:</p>
+<pre><code>ip link
+</code></pre>
+<p>The following two commands help identify
+parts of the local network (or subnet)
+and the routing table.</p>
+<pre><code>ip neigh
+ip route
+</code></pre>
+<p>The <code>ip neigh</code> command produces the ARP cache,
+basically what other systems your system
+is aware of on the local network.
+The <code>ip route</code> command is used to
+define how data is routed on the network but
+can also define the routing table.
+Both of these commands are more commonly used on
+Linux-based routers.</p>
+<p>These details enable the following scenario:
+A router gets configured to use a specific <strong>network address</strong>
+when it's brought online.
+It searches the sub network for connected MAC addresses
+that are assigned to wireless cards or ethernet cards.
+It then assigns each of those MAC addresses an available
+IP address based on the network address.</p>
+<a class="header" href="print.html#internet-layer" id="internet-layer"><h3>Internet Layer</h3></a>
+<a class="header" href="print.html#ip-internet-protocol" id="ip-internet-protocol"><h4>IP (Internet Protocol)</h4></a>
+<p>The Internet Protocol, or <em>IP</em>, address
+is used to uniquely identify a host on a network and
+place that host at a specific location (its IP <strong>address</strong>).
+If that network is subnetted (i.e., routed),
+then a host's IP address will have a subnet or
+private IP address that will not be
+directly exposed to the Internet.
+Remember this, there are public IP addresses that
+are distinct from private IP addresses.
+Public IP addresses are accessible on the internet.
+Private IP addresses are not, but
+they are accessible on subnets or local area networks.</p>
+<p>Private IP address ranges are reserved address ranges,
+which means no public internet device will have an
+IP address within these ranges.
+The private address ranges include:</p>
 <table><thead><tr><th> Start Address </th><th> End Address     </th></tr></thead><tbody>
 <tr><td> 10.0.0.0      </td><td> 10.255.255.255  </td></tr>
 <tr><td> 172.16.0.0    </td><td> 172.31.255.255  </td></tr>
 <tr><td> 192.168.0.0   </td><td> 192.168.255.255 </td></tr>
 </tbody></table>
-<p>If you have a router at home, and look at the IP address for at any of your devices connected to that router, like your phone or computer, you will see that it will have an address within one of the ranges above. For example, it might have an IP address beginning with <strong>192.168.X.X</strong>. This a standard IP address range for a home router. The <strong>10.X.X.X</strong> private range can assign many more IP addresses on its network. This is why you'll see that IP range on bigger networks, like UK's. We'll talk more about subnetwork sizes, shortly.</p>
-<a class="header" href="print.html#example-private-ip-usage" id="example-private-ip-usage"><h3>Example Private IP Usage</h3></a>
-<p>At work, at one time, the IP address on my desktop was <strong>10.163.34.59/24</strong> via a wired connection. I checked with my office neighbor and found that their desktop reported an IP address of <strong>10.163.34.65/24</strong>. These are on the same subnet, and later I will show you how this works.</p>
-<p>At the time, if we both, using our respective wired connected computers, searched Google for <em>[ what's my IP address ]</em>, we will see that we share the same public IP address of <strong>128.163.8.25</strong>.</p>
-<p>Without any additional information, this tells us that we know that all traffic coming from our computers and going out to the internet looks like it's coming from the same IP address (<strong>128.163.8.25</strong>). And in reverse, all traffic coming from outside our network first goes to <strong>128.163.8.25</strong> before it's routed to our respective computers via the router.</p>
-<p>My laptop tells a different story because it is connected to UK wireless (eduroam). At the time of this writing, the laptop had the IP address <strong>10.47.34.150/16</strong>. You can see there's a different pattern with this IP address. The reason it has a different pattern is because this laptop is on an different subnet. This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc). When I searched Google for my IP address from this laptop, it reported <strong>128.163.238.148</strong>, indicating that UK owns a range of public IP address spaces.</p>
+<p>If you have a router at home, and
+look at the IP address for at any of
+your devices connected to that router,
+like your phone or computer,
+you will see that it will have an address
+within one of the ranges above.
+For example, it might have an IP address
+beginning with <strong>192.168.X.X</strong>.
+This is a standard IP address range for a home router.
+The <strong>10.X.X.X</strong> private range can assign
+many more IP addresses on its network,
+which is why you'll see that IP range on bigger networks,
+like a university's network.
+We'll talk more about subnetwork sizes, shortly.</p>
+<a class="header" href="print.html#example-private-ip-usage" id="example-private-ip-usage"><h4>Example Private IP Usage</h4></a>
+<p>Let's say my office computer's IP address
+is <strong>10.163.34.59/24</strong> via a wired connection.
+My office neighbor has an
+IP address of <strong>10.163.34.65/24</strong> via their wired connection.
+Both IP addresses are private because they fall within the
+<strong>10.0.0.0 to 10.255.255.255</strong> range.
+And it's likely they both exist on the same
+subnet since they share the first three <strong>octets</strong>:
+<strong>10.163.34.XX</strong>.</p>
+<p>However, if we both,
+using our respective wired connected computers,
+searched Google for <em>what's my IP address</em>,
+we will see that we share the same public IP address,
+which will be something like <strong>128.163.8.25</strong>.
+That is a public IP address because it does not
+fall within the ranges listed above.</p>
+<p>Without any additional information,
+therefore,
+we know that all traffic coming from our computers and
+going out to the internet looks like it's coming
+from the same IP address (<strong>128.163.8.25</strong>).
+And in reverse,
+all traffic coming from outside our network
+first goes to <strong>128.163.8.25</strong> before it's routed
+to our respective computers via the router.</p>
+<p>Let's say I also have a laptop in my office, and
+that it has a wireless connection.
+When I check with <code>ip a</code>,
+I find that the laptop had the IP address
+<strong>10.47.34.150/16</strong>.
+You can see there's a different pattern with this IP address.
+The reason it has a different pattern is
+because this laptop is on an different subnet even
+though it's physically sitting next to the wired computer.
+This wireless subnet was configured to allow
+more hosts to connect to it since it must allow for more devices
+(i.e., laptops, phones, etc).
+When I searched Google for my IP address from this laptop,
+it reports <strong>128.163.238.148</strong>,
+indicating that UK owns a range of public IP address spaces.</p>
 <p>Here's kind of visual diagram of what this network looks like:</p>
-<p>| <img src="18-network.png" alt="network diagram" /> |
-|:--:|
-| <b>Fig. 1. This figure contains a network switch, which is used to route traffic within a subnet. It relies solely on MAC addresses and not IP addresses to determine the location of devices on its subnet. The router is capable of transferring data across networks.</b>|</p>
-<a class="header" href="print.html#using-the-ip-command" id="using-the-ip-command"><h3>Using the <code>ip</code> Command</h3></a>
-<p>The <code>ip</code> command can do more than provide us information about our network. We can also use it to turn a connection to the network on or off (and more). Here is how to disable and then enable a connection on a machine. Note that <strong>enp0s3</strong> is the name of my network card/device. Yours might have a different name.</p>
+<figure>
+<img src="images/18-network.png"
+alt="Network diagram"
+title="Network diagram">
+<figcaption>
+Fig. 1. This figure contains a network switch,
+which is used to route traffic within a subnet.
+The switch relies solely on MAC addresses and not
+IP addresses to determine the location of
+devices on its subnet.
+The router acts as the interface between
+the private network and the public network and
+is managing two subnets: a wired and a wireless one.
+</figcaption>
+</figure>
+<a class="header" href="print.html#using-the-ip-command" id="using-the-ip-command"><h4>Using the <code>ip</code> Command</h4></a>
+<p>The <code>ip</code> command can do more than
+provide us information about our network.
+We can also use it to turn a connection
+to the network on or off (and more).
+Here we disable and then enable a connection on a machine.
+Note that <strong>enp0s3</strong> is the name of my network card/device.
+Yours might have a different name.</p>
 <pre><code>sudo ip link set enp0s3 down
 sudo ip link set enp0s3 up
 </code></pre>
-<a class="header" href="print.html#transport-layer" id="transport-layer"><h2>Transport Layer</h2></a>
-<a class="header" href="print.html#udp-user-datagram-protocol" id="udp-user-datagram-protocol"><h3>UDP, User Datagram Protocol</h3></a>
-<p><em>UDP</em> or User Datagram Protocol performs a similar function as TCP, but it does not error check and data may get lost. UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube, which uses a type of UDP transmission called QUIC that has builtin encryption.</p>
-<a class="header" href="print.html#tcp-transmission-control-protocol" id="tcp-transmission-control-protocol"><h3>TCP, Transmission Control Protocol</h3></a>
-<p><em>TCP</em> or Transmission Control Protocol is responsible for the transmission of data and for making sure the data arrives at its destination w/o errors. If there are errors, the data is re-transmitted or halted in case of some failure. Much of the data sent over the internet is sent using TCP.</p>
-<a class="header" href="print.html#tcp-and-udp-headers" id="tcp-and-udp-headers"><h3>TCP and UDP Headers</h3></a>
-<p>The above protocols send data in data packets (TCP) or datagrams (UDP), but <a href="https://www.cloudflare.com/learning/network-layer/what-is-a-packet/">these terms may be used interchangeably</a>. Packets for both protocols include header information to help route the data across the internet. TCP includes <a href="https://www.imperva.com/learn/ddos/tcp-transmission-control-protocol/">ten fields</a> of header data, and UDP includes <a href="https://www.imperva.com/learn/ddos/udp-user-datagram-protocol/">four fields</a>.</p>
-<p>We can see this header data using the <code>tcpdump</code> command, which requires <code>sudo</code> or being <strong>root</strong> to use. The first part of the IP header contains the source address, then comes the destination address, and so forth. Aside from a few other parts, this is the primary information in an IP header.</p>
-<p>To use <code>tcpdump</code>, we first identify the IP number of a host, which we can do with the <code>ping</code> command, and then run <code>tcpdump</code>:</p>
+<a class="header" href="print.html#transport-layer" id="transport-layer"><h3>Transport Layer</h3></a>
+<p>The internet layer does not transmit content,
+like web pages or video streams.
+This is the work of the transport layer.
+As discussed previously,
+the two most common transport layer
+protocols are <strong>TCP</strong> and <strong>UDP</strong>.</p>
+<a class="header" href="print.html#tcp-transmission-control-protocol" id="tcp-transmission-control-protocol"><h4>TCP, Transmission Control Protocol</h4></a>
+<p><em>TCP</em> or Transmission Control Protocol
+is responsible for the transmission of data and
+for making sure the data arrives at its
+destination w/o errors.
+If there are errors,
+the data is re-transmitted or halted
+in case of some failure.
+Much of the data sent over the internet is sent using TCP.</p>
+<a class="header" href="print.html#udp-user-datagram-protocol" id="udp-user-datagram-protocol"><h4>UDP, User Datagram Protocol</h4></a>
+<p>The <strong>UDP</strong> or User Datagram Protocol
+performs a similar function as TCP, but
+it does not error check and data may get lost.
+UDP is useful for conducting voice over internet
+calls or for streaming video,
+such as through YouTube,
+which uses a type of UDP transmission
+called <strong>QUIC</strong> that has builtin encryption.</p>
+<a class="header" href="print.html#tcp-and-udp-headers" id="tcp-and-udp-headers"><h4>TCP and UDP Headers</h4></a>
+<p>The above protocols send data in
+data TCP <strong>packets</strong> or UDP <strong>datagrams</strong>, but
+<a href="https://www.cloudflare.com/learning/network-layer/what-is-a-packet/">these terms may be used interchangeably</a>.
+Packets for both protocols include header
+information to help route the data across the internet.
+TCP includes <a href="https://www.imperva.com/learn/ddos/tcp-transmission-control-protocol/">ten fields</a> of header data, and
+UDP includes <a href="https://www.imperva.com/learn/ddos/udp-user-datagram-protocol/">four fields</a>.</p>
+<p>We can see this header data using
+the <code>tcpdump</code> command,
+which requires <code>sudo</code> or being <strong>root</strong> to use.
+The first part of the IP header contains the source address,
+then comes the destination address, and so forth.
+Aside from a few other parts,
+this is the primary information in an IP header.</p>
+<p><strong>You should use <code>tcpdump</code> on your local computer and not
+on your gcloud instance</strong>.
+First we identify the IP number of a host,
+which we can do with the <code>ping</code> command, and
+then run <code>tcpdump</code>:</p>
 <pre><code>ping -c1 www.uky.edu
 sudo tcpdump host 128.163.35.46
 </code></pre>
-<p>While that's running, we can type that IP address in our web browser, or enter <strong>www.uky.edu</strong>, and watch the output of <code>tcpdump</code>.</p>
-<p>TCP headers include port information and other mandatory fields for both source and destination servers. The SYN, or synchronize, message is sent when a source or client requests a connection. The ACK, or acknowledgment, message is sent in response, along with a SYN message, to acknowledge the request for a connection. Then the client responds with an additional ACK message. This is referred to as the <a href="https://www.geeksforgeeks.org/tcp-3-way-handshake-process/">TCP three-way handshake</a>. In addition to the header info, TCP and UDP packets include the data that's being sent (e.g., a webpage) and error checking if it's TCP.</p>
-<a class="header" href="print.html#ports" id="ports"><h3>Ports</h3></a>
-<p>TCP and UDP connections use ports to bind internet traffic to specific IP addresses. Specifically, a <em>port</em> associates a process with an application, such as a web service or outgoing email. That is, ports provide a way to distinguish and filter internet traffic through an IP address. E.g., all traffic going to IP address 10.0.5.33:80 means that this is <strong>http</strong> traffic for the http web service, since http is commonly associated with port 80. Note that the port info is attached to the end of the IP address via a colon.</p>
+<p>While that's running,
+we can type that IP address in our web browser,
+or enter <strong>www.uky.edu</strong>, and
+watch the output of <code>tcpdump</code>.</p>
+<p>TCP headers include port information and other
+mandatory fields for both source and destination servers.
+The SYN, or synchronize, message is sent
+when a source or client requests a connection.
+The ACK, or acknowledgment, message is sent in response,
+along with a SYN message,
+to acknowledge the request for a connection.
+Then the client responds with an additional ACK message.
+This is referred to as the
+<a href="https://www.geeksforgeeks.org/tcp-3-way-handshake-process/">TCP three-way handshake</a>.
+In addition to the header info,
+TCP and UDP packets include the data that's being sent
+(e.g., a webpage) and
+error checking if it's TCP.</p>
+<a class="header" href="print.html#ports" id="ports"><h4>Ports</h4></a>
+<p>TCP and UDP connections use ports to bind
+internet traffic to specific IP addresses.
+Specifically, a <strong>port</strong> associates a process
+with an application
+(and is part of the <strong>application layer</strong> of the internet suite),
+such as a web service or outgoing email.
+That is, ports provide a way to distinguish and
+filter internet traffic (web, email, etc)
+through an IP address.
+For example, all traffic going to IP address 10.0.5.33:80
+means that this is <strong>http</strong> traffic for the http web service,
+since HTTP is commonly associated with port 80.
+Note that the port info is attached to the end of the
+IP address via a colon.</p>
 <p>Common ports include:</p>
 <ul>
 <li>21: FTP</li>
@@ -4400,66 +4753,109 @@ sudo tcpdump host 128.163.35.46
 <li>587: SMTP Secure</li>
 <li>993: IMAP Secure</li>
 </ul>
-<p>There's a complete list of the 317 default ports on your Linux systems. It's located in the following file:</p>
+<p>There's a complete list of the 318
+default ports/protocols on your Linux systems.
+It's located in the following file:</p>
 <pre><code>less /etc/services
 </code></pre>
-<p>And to get a count of the ports, we can invert grep for lines starting with a pound sign or are empty</p>
+<p>And to get a count of the ports,
+we can invert grep for lines starting with a pound sign or are empty</p>
 <pre><code>grep -Ev &quot;^#|^$&quot; /etc/services | wc -l
 </code></pre>
-<p>See also the Wikipedia page: <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></p>
+<p>See also the Wikipedia page:
+<a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></p>
 <a class="header" href="print.html#ip-subnetting" id="ip-subnetting"><h2>IP Subnetting</h2></a>
+<p>Let's now return to the internet layer and
+discuss one of the major duties of a systems administrator:
+subnetting.</p>
+<p>Subnets are used to carve out smaller and more manageable
+subnetworks out of a larger network.
+They are created using routers that have this capability
+(e.g., commercial use routers) and certain types
+of network switches.</p>
 <a class="header" href="print.html#private-ip-ranges" id="private-ip-ranges"><h3>Private IP Ranges</h3></a>
-<p>When subnetting, we generally work with private IP ranges:</p>
+<p>When subnetting local area networks,
+we work with the private IP ranges:</p>
 <table><thead><tr><th> Start Address </th><th> End Address     </th></tr></thead><tbody>
 <tr><td> 10.0.0.0      </td><td> 10.255.255.255  </td></tr>
 <tr><td> 172.16.0.0    </td><td> 172.31.255.255  </td></tr>
 <tr><td> 192.168.0.0   </td><td> 192.168.255.255 </td></tr>
 </tbody></table>
+<p>It's important to be able to work with IP addresses
+like those listed above in order to subnet; and
+therefore, we will need to learn a bit of IP math
+along the way.</p>
 <a class="header" href="print.html#ip-meaning" id="ip-meaning"><h4>IP Meaning</h4></a>
-<p>An IP address is 32 bits (8 x 4), or four bytes, in size. In human readable context, it's usually expressed in the following, decimal-based, notation style:</p>
+<p>An IPv4 address is 32 bits (8 x 4),
+or four bytes, in size.
+In human readable context,
+it's usually expressed in the following,
+decimal-based, notation style:</p>
 <ul>
 <li><strong>192.168.1.6</strong></li>
 <li><strong>172.16.3.44</strong></li>
 </ul>
-<p>Each set of numbers separated by a dot is referred to as an <strong>octet</strong>. An <strong>octet</strong> is a group of 8 <strong>bits</strong>. Eight <strong>bits</strong> equal a single <strong>byte</strong>. By implication, 8 gigabits equals 1 gigabyte, and 8 megabits equals 1 megabyte. We use these symbols to note the terms:</p>
+<p>Each set of numbers separated by a dot is
+referred to as an <strong>octet</strong>.
+An <strong>octet</strong> is a group of 8 <strong>bits</strong>.
+Eight <strong>bits</strong> equal a single <strong>byte</strong>.
+By implication, 8 gigabits equals 1 gigabyte, and
+8 megabits equals 1 megabyte.
+We use these symbols to note the terms:</p>
 <table><thead><tr><th> Term  </th><th> Symbol </th></tr></thead><tbody>
 <tr><td> bit   </td><td> <em>b</em>    </td></tr>
 <tr><td> byte  </td><td> B      </td></tr>
 <tr><td> octet </td><td> <em>o</em>    </td></tr>
 </tbody></table>
-<p>Each bit is represented by either a 1 or a 0. For example, the first address above in binary is:</p>
+<p>Each bit is represented by either a 1 or a 0.
+For example, the first address above in binary is:</p>
 <ul>
-<li>11000000.10101000.00000001.00000110</li>
-<li>192.168.1.6</li>
+<li><strong>11000000.10101000.00000001.00000110</strong> is <strong>192.168.1.6</strong></li>
 </ul>
 <p>Or:</p>
-<ul>
-<li>11000000 = 192</li>
-<li>10101000 = 168</li>
-<li>00000001 = 1</li>
-<li>00000110 = 6</li>
-</ul>
+<table><thead><tr><th> Byte     </th><th> Decimal Value </th></tr></thead><tbody>
+<tr><td> 11000000 </td><td> 192           </td></tr>
+<tr><td> 10101000 </td><td> 168           </td></tr>
+<tr><td> 00000001 </td><td> 1             </td></tr>
+<tr><td> 00000110 </td><td> 6             </td></tr>
+</tbody></table>
 <a class="header" href="print.html#ip-math" id="ip-math"><h3>IP Math</h3></a>
-<p>When doing IP math, one easy way to do it is to simply remember that each bit in each of the above bytes is a placeholder for the following values:</p>
+<p>When doing IP math,
+one easy way to do it is to simply remember
+that each bit in each of the above bytes is a
+placeholder for the following values:</p>
 <pre><code>128 64 32 16 8 4 2 1
 </code></pre>
 <p>Alternatively, from low to high:</p>
-<table><thead><tr><th> base-2 </th><th> Output </th></tr></thead><tbody>
-<tr><td> 2^0    </td><td> 1      </td></tr>
-<tr><td> 2^1    </td><td> 2      </td></tr>
-<tr><td> 2^2    </td><td> 4      </td></tr>
-<tr><td> 2^3    </td><td> 8      </td></tr>
-<tr><td> 2^4    </td><td> 16     </td></tr>
-<tr><td> 2^5    </td><td> 32     </td></tr>
-<tr><td> 2^6    </td><td> 64     </td></tr>
-<tr><td> 2^7    </td><td> 128    </td></tr>
+<table><thead><tr><th> base-2        </th><th> Output </th></tr></thead><tbody>
+<tr><td> 2<sup>0</sup> </td><td> 1      </td></tr>
+<tr><td> 2<sup>1</sup> </td><td> 2      </td></tr>
+<tr><td> 2<sup>2</sup> </td><td> 4      </td></tr>
+<tr><td> 2<sup>3</sup> </td><td> 8      </td></tr>
+<tr><td> 2<sup>4</sup> </td><td> 16     </td></tr>
+<tr><td> 2<sup>5</sup> </td><td> 32     </td></tr>
+<tr><td> 2<sup>6</sup> </td><td> 64     </td></tr>
+<tr><td> 2<sup>7</sup> </td><td> 128    </td></tr>
 </tbody></table>
-<p>In binary, 192 is equal to 11000000. It's helpful to work backward. For IP addresses, all octets are 255 or less (256 total, from 0 to 255) and therefore do not exceed 8 bits or places. To convert the integer 192 to binary:</p>
+<p>In binary, 192 is equal to 11000000.
+It's helpful to work backward.
+For IP addresses,
+all octets are 255 or less
+(256 total, from 0 to 255) and
+therefore do not exceed 8 bits or places.
+To convert the integer 192 to binary:</p>
 <pre><code>1 * 2^7 = 128
 1 * 2^6 =  64 (128 + 64 = 192)
 </code></pre>
-<p>STOP: There are no values left, and so the rest are zeroes. So: 11000000</p>
-<p>Our everyday counting system is base-10, but binary is base-2, and thus another way to convert binary to decimal is to multiple each bit (1 or 0) by the power of base two of its placeholder:</p>
+<p>Then STOP.
+There are no values left, and
+so the rest are zeroes.
+Thus: 11000000</p>
+<p>Our everyday counting system is base-10, but
+binary is base-2, and
+thus another way to convert binary to decimal
+is to multiple each bit (1 or 0)
+by the power of base two of its placeholder:</p>
 <pre><code>(0 * 2^0) = 0 +
 (0 * 2^1) = 0 +
 (0 * 2^2) = 0 +
@@ -4469,28 +4865,73 @@ sudo tcpdump host 128.163.35.46
 (1 * 2^6) = 64 +
 (1 * 2^7) = 128 = 192
 </code></pre>
-<p>Another way to convert to binary: simply subtract the numbers from each value. As long as there is something remaining or the placeholder equals the remainder of the previous subtraction, then the bit equals 1. So:</p>
+<p>Another way to convert to binary:
+simply subtract the numbers from each value.
+As long as there is something remaining or
+the placeholder equals the remainder of the
+previous subtraction,
+then the bit equals 1.
+So:</p>
 <ul>
 <li>192 - 128 = 64 -- therefore the first bit is equal to 1.</li>
 <li>Now take the leftover and subtract it:</li>
 <li>64 - 64 = 0 -- therefore the second bit is equal to 1.</li>
 </ul>
-<p>Since there is nothing remaining, the rest of the bits equal 0.</p>
+<p>Since there is nothing remaining,
+the rest of the bits equal 0.</p>
 <a class="header" href="print.html#subnetting-examples" id="subnetting-examples"><h3>Subnetting Examples</h3></a>
-<p>Subnetting involves dividing a network into two or more subnets. When we subnet, we first identify the number of hosts we will require on the subnet. For starters, let's assume that we need a subnet that can assign at most 254 IP addresses to the devices attached to it via the router.</p>
-<p>We need two additional IP addresses: the <strong>subnet mask</strong> and the <strong>network address/ID</strong>. The <strong>network address</strong> identifies the network and the <strong>subnet mask</strong> marks the boundary between the network and the hosts. Knowing or determining the <strong>subnet mask</strong> will allow us to determine how many hosts can exist on a network. Both the <strong>network address</strong> and the <strong>subnet mask</strong> can be written as IP addresses, but they cannot be assigned to computers on a network.</p>
-<p>When we have determined these IPs, we will know the <strong>broadcast address</strong>. This is the last IP address in a subnet range, and it cannot be assigned to a connected device. The <strong>broadcast address</strong> is used by a router or other devices to communicate to all connected devices on the subnet.</p>
-<p>For our sake, let's work backwards. We want to identify and describe a network that we are connected to. Let's work with two example private IP addresses that exist on two separate subnets.</p>
-<a class="header" href="print.html#example-1-19216816" id="example-1-19216816"><h4>Example 1: 192.168.1.6</h4></a>
-<p>Let's derive the network mask and the network address (or ID) from this IP address.</p>
+<p>Subnetting involves dividing a network
+into two or more subnets.
+When we subnet,
+we first identify the number of hosts,
+aka, the size,
+we will require on the subnet.
+For starters,
+let's assume that we need a subnet that can
+assign at most 254 IP addresses to the
+devices attached to it via the router.</p>
+<p>In order to do this,
+we need two additional IP addresses:
+the <strong>subnet mask</strong> and the <strong>network address/ID</strong>.
+The <strong>network address identifies the network</strong> and
+the <strong>subnet mask marks the boundary between the network and the hosts</strong>.
+Knowing or determining the <strong>subnet mask</strong>
+allows us to determine how many hosts
+can exist on a network.
+Both the <strong>network address</strong> and the <strong>subnet mask</strong>
+can be written as IP addresses, but
+these IP addresses cannot be
+assigned to computers on a network.</p>
+<p>When we have determined these IPs,
+we will know the <strong>broadcast address</strong>.
+This is the last IP address in a subnet range, and
+it also cannot be assigned to a connected device/host.
+The <strong>broadcast address</strong> is used by a router
+to communicate to all connected devices on the subnet.</p>
+<p>For our sake, let's work through this process backwards; that is,
+we want to identify and describe a network
+that we are connected to.
+Let's work with two example private IP addresses
+that exist on two separate subnets.</p>
+<a class="header" href="print.html#example-ip-address-1-19216816" id="example-ip-address-1-19216816"><h4>Example IP Address 1: 192.168.1.6</h4></a>
+<p>Using the private IP address 192.168.1.6,
+let's derive the network mask and the network address
+(or ID) from this IP address.
+First, convert the decimal notation to binary.
+State the mask, which is <strong>/24</strong>, or <strong>255.255.255.0</strong>.
+And then derive the network addressing
+using an <strong>bitwise logical AND</strong> operation:</p>
 <pre><code>11000000.10101000.00000001.00000110 IP              192.168.1.6
 11111111.11111111.11111111.00000000 Mask            255.255.255.0
 -----------------------------------
 11000000.10101000.00000001.00000000 Network Address 192.168.1.0
 </code></pre>
-<p>Note the mask has 24 ones followed by 8 zeroes. That 24 is used as CIDR notation:</p>
-<p>192.168.1.6/24</p>
-<p>For Example 1, we have the following subnet information:</p>
+<p>Note the mask has 24 ones followed by 8 zeroes.
+That 24 is used as <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">CIDR</a> notation:</p>
+<ul>
+<li>192.168.1.6/24</li>
+</ul>
+<p>For Example 1, we thus have the following subnet information:</p>
 <table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
 <tr><td> Netmask/Mask </td><td> 255.255.255.0 </td></tr>
 <tr><td> Network ID   </td><td> 192.168.1.0   </td></tr>
@@ -4498,8 +4939,9 @@ sudo tcpdump host 128.163.35.46
 <tr><td> End Range    </td><td> 192.168.1.254 </td></tr>
 <tr><td> Broadcast    </td><td> 192.168.1.255 </td></tr>
 </tbody></table>
-<a class="header" href="print.html#example-2-101603875" id="example-2-101603875"><h4>Example 2: 10.160.38.75</h4></a>
-<p>For example 2:</p>
+<a class="header" href="print.html#example-ip-address-2-101603875" id="example-ip-address-2-101603875"><h4>Example IP Address 2: 10.160.38.75</h4></a>
+<p>For example 2, let's start off with a private
+IP address of 10.160.38.75 and a mask of /24:</p>
 <pre><code>00001010.10100000.00100110.01001011 IP               10.160.38.75
 11111111.11111111.11111111.00000000 Mask            255.255.255.0
 -----------------------------------
@@ -4512,8 +4954,9 @@ sudo tcpdump host 128.163.35.46
 <tr><td> End Range    </td><td> 10.160.38.254 </td></tr>
 <tr><td> Broadcast    </td><td> 10.160.38.255 </td></tr>
 </tbody></table>
-<a class="header" href="print.html#example-3-1721616224" id="example-3-1721616224"><h4>Example 3: 172.16.1.62/24</h4></a>
-<p>For example 3:</p>
+<a class="header" href="print.html#example-ip-address-3-1721616224" id="example-ip-address-3-1721616224"><h4>Example IP Address 3: 172.16.1.62/24</h4></a>
+<p>For example 3, let's start off with a private
+IP address of 172.16.1.62 and a mask of /24:</p>
 <pre><code>10101100 00010000 00000001 00100111 IP                172.16.1.62
 11111111 11111111 11111111 00000000 Mask            255.255.255.0
 -----------------------------------
@@ -4526,10 +4969,22 @@ sudo tcpdump host 128.163.35.46
 <tr><td> End Range    </td><td> 172.16.1.254  </td></tr>
 <tr><td> Broadcast    </td><td> 172.16.1.255  </td></tr>
 </tbody></table>
-<p>To determine the number of hosts on a CIDR /24 subnet, we look at the start and end ranges. In all three of the above examples, the start range begins with X.X.X.1 and ends with X.X.X.254. Therefore, there are 254 maximum hosts allowed on these subnets.</p>
-<a class="header" href="print.html#example-4-10052316" id="example-4-10052316"><h4>Example 4: 10.0.5.23/16</h4></a>
-<p>The first three examples show instances where the CIDR is set to /24. This only allows 254 maximum hosts on a subnet. If the CIDR is set to /16, then we can theoretically allow 65,534 hosts on a subnet.</p>
-<p>For example 4, then: 10.0.5.23/16</p>
+<a class="header" href="print.html#determine-the-number-of-hosts" id="determine-the-number-of-hosts"><h4>Determine the Number of Hosts</h4></a>
+<p>To determine the number of hosts on a CIDR /24 subnet,
+we look at the start and end ranges.
+In all three of the above examples,
+the start range begins with X.X.X.1 and
+ends with X.X.X.254.
+Therefore, there are 254 maximum hosts allowed on these subnets because
+1 to 254, inclusive of 1 and 254, is 254.</p>
+<a class="header" href="print.html#example-ip-address-4-10052316" id="example-ip-address-4-10052316"><h4>Example IP Address 4: 10.0.5.23/16</h4></a>
+<p>The first three examples show instances
+where the CIDR is set to /24.
+This only allows 254 maximum hosts on a subnet.
+If the CIDR is set to /16,
+then we can theoretically allow 65,534 hosts on a subnet.</p>
+<p>For example 4, let's start off then with a private
+IP address of 10.0.5.23 and a mask of /16:</p>
 <pre><code>00001010.00000000.00000101.00010111 IP Address: 10.0.5.23
 11111111.11111111.00000000.00000000 Mask:       255.255.0.0
 -----------------------------------------------------------
@@ -4543,7 +4998,9 @@ sudo tcpdump host 128.163.35.46
 <tr><td> End Range    </td><td> 10.0.255.254  </td></tr>
 <tr><td> Broadcast    </td><td> 10.0.255.255  </td></tr>
 </tbody></table>
-<p>Hosts:</p>
+<p>Since the last two octets/bytes now vary, we count up
+by each octet.
+Therefore, the number of hosts is:</p>
 <table><thead><tr><th> IPs          </th><th>         </th></tr></thead><tbody>
 <tr><td> 10.0.0.1     </td><td>         </td></tr>
 <tr><td> 10.0.0.255   </td><td> = 256   </td></tr>
@@ -4556,18 +5013,71 @@ sudo tcpdump host 128.163.35.46
 <li>Number of Usable Hosts = 256 x 256 - 2 = 65534</li>
 </ul>
 <a class="header" href="print.html#ipv6-subnetting" id="ipv6-subnetting"><h3>IPv6 subnetting</h3></a>
-<p>We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
-<a class="header" href="print.html#introduction-to-dns-the-domain-name-system" id="introduction-to-dns-the-domain-name-system"><h1>Introduction to DNS, the Domain Name System</h1></a>
+<p>We're not going to cover IPv6 subnetting, but
+if you're interested,
+this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
+<a class="header" href="print.html#conclusion-11" id="conclusion-11"><h2>Conclusion</h2></a>
+<p>As a systems administrator,
+it's important to have a basic understanding of
+how networking works, and
+the basic models used to describe the internet
+and its applications.
+System administrators have to know how to
+create subnets and defend against various
+network-based attacks.</p>
+<p>In order to acquire a basic understanding,
+this section covered topics that included:</p>
+<ul>
+<li>the internet protocol suite
+<ul>
+<li>link layer</li>
+<li>internet layer</li>
+<li>transport layer</li>
+</ul>
+</li>
+<li>IP subnetting
+<ul>
+<li>private IP ranges</li>
+<li>IP math</li>
+</ul>
+</li>
+</ul>
+<p>In the next section,
+we extend upon this and discuss the
+domain name system (DNS) and domain names.</p>
+<a class="header" href="print.html#dns-and-domain-names" id="dns-and-domain-names"><h1>DNS and Domain Names</h1></a>
+<p>The DNS (<strong>domain name system</strong>) is referred to
+as the phone book of the internet, and it's
+responsible for mapping IP addresses to
+memorable names.
+Thus, instead of having to remember:</p>
+<p>https://128.163.35.46</p>
+<p>We can instead remember this:</p>
+<p>https://www.uky.edu</p>
+<p>System administrators need to know about DNS
+because they may be responsible for administrating
+a domain name system on their network, and/or
+they may be responsible for setting up and
+administrating web site domains.
+Either case requires a basic understanding of DNS.</p>
 <a class="header" href="print.html#dns-intro-videos" id="dns-intro-videos"><h2>DNS Intro Videos</h2></a>
-<p>Two helpful YouTube videos. The first one provides an overview of the DNS system:</p>
+<p>To help you get started,
+watch these two YouTube videos.
+The first one provides an overview of the DNS system:</p>
 <p><a href="https://www.youtube.com/watch?v=mpQZVYPuDGU">How a DNS Server (Domain Name System) works</a></p>
-<p>The second video illustrates how to use a GUI to create and manage DNS records.</p>
+<p>The second video illustrates how to use a
+graphical user interface to create and manage DNS records.</p>
 <p><a href="https://www.youtube.com/watch?v=cwT82ibOM2Q">DNS Records</a></p>
-<p>Here is a nice intro to recursive DNS:</p>
+<p>And here is a nice intro to recursive DNS:</p>
 <p><a href="https://www.cloudflare.com/learning/dns/what-is-recursive-dns/">https://www.cloudflare.com/learning/dns/what-is-recursive-dns/</a></p>
 <a class="header" href="print.html#fqdn-the-fully-qualified-domain-name" id="fqdn-the-fully-qualified-domain-name"><h2>FQDN: The Fully Qualified Domain Name</h2></a>
-<p>The structure of the domain name system is like the structure of the UNIX/Linux file hierarchy; that is, it is like an inverted tree.</p>
-<p>The fully qualified domain name includes a period at the end of the top-level domain. Your browser is able to supply that dot since we often don't use it when typing website addresses.</p>
+<p>The structure of the domain name system is
+like the structure of the UNIX/Linux file hierarchy;
+that is, it is like an inverted tree.</p>
+<p>The fully qualified domain name includes a
+period at the end of the top-level domain.
+Your browser is able to supply that dot
+since we often don't use it when typing website addresses.</p>
 <p>Thus, for Google's main page, the FQDN is:</p>
 <p>FQDN: www.google.com.</p>
 <p>And the parts include:</p>
@@ -4576,36 +5086,97 @@ com         top-level domain
 google.     second-level domain
 www.        third-level domain
 </code></pre>
-<p>This is important to know so that you understand how the <strong>Domain Name System</strong> works and which DNS servers are responsible for their part of the network.</p>
-<a class="header" href="print.html#root-domain" id="root-domain"><h3>Root domain</h3></a>
-<p>The root domain is managed by root name servers. These servers are listed on the <a href="https://www.iana.org/domains/root/servers">IANA</a>, the Internet Assigned Numbers Authority, website, but are managed by multiple operators. The root servers manage the root domain, alternatively referred to as the zone, or the <code>.</code> at the end of the <code>.com.</code>, <code>.edu.</code>, etc.</p>
-<a class="header" href="print.html#alternative-dns-root-systems" id="alternative-dns-root-systems"><h4>Alternative DNS root systems</h4></a>
-<p>Aside: It's possible to have alternate internets by using outside root name servers. This is not common, but it happens. Read about a few of them here:</p>
+<p>This is important to know so that you understand
+how the <strong>Domain Name System</strong> works and
+which DNS servers are responsible for their part of the network.</p>
+<a class="header" href="print.html#root-domain" id="root-domain"><h3>Root Domain</h3></a>
+<p>The root domain is managed by root name servers.
+These servers are listed on the <a href="https://www.iana.org/domains/root/servers">IANA</a>,
+the Internet Assigned Numbers Authority, website, but
+are managed by multiple operators.
+The root servers manage the root domain,
+alternatively referred to as the zone, or
+the <strong>.</strong> at the end of the <code>.com.</code>, <code>.edu.</code>, etc.</p>
+<a class="header" href="print.html#alternative-dns-root-systems" id="alternative-dns-root-systems"><h4>Alternative DNS Root Systems</h4></a>
+<p>It's possible to have alternate internets by
+using outside root name servers.
+This is not common, but it happens.
+Read about a few of them here:</p>
 <ul>
 <li>sdf: <a href="https://web.archive.org/web/20081121061730/http://www.smtpnic.org/">https://web.archive.org/web/20081121061730/http://www.smtpnic.org/</a></li>
 <li>opennic: <a href="https://www.opennicproject.org/">https://www.opennicproject.org/</a></li>
 <li>alternic: <a href="https://en.wikipedia.org/wiki/AlterNIC">https://en.wikipedia.org/wiki/AlterNIC</a></li>
 </ul>
-<p>Russia, as an example, has threated to use it's own alternate internet based on a different DNS root system. This would essentially create a large, second internet. You can read about in this <a href="https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet">IEEE Spectrum article</a>.</p>
-<a class="header" href="print.html#top-level-domain-tld" id="top-level-domain-tld"><h3>Top level domain (TLD)</h3></a>
-<p>We are all familiar with top level domains. Specific examples include:</p>
+<p>Russia, as an example, has threated to use
+it's own alternate internet based on a different
+DNS root system.
+This would essentially create a large, second internet.
+You can read about in this <a href="https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet">IEEE Spectrum article</a>.</p>
+<a class="header" href="print.html#top-level-domain-tld" id="top-level-domain-tld"><h3>Top Level Domain (TLD)</h3></a>
+<p>We are all familiar with top level domains.
+Specific examples include:</p>
 <ul>
-<li>generic names: .org, .com, .net, .mil, .gov</li>
-<li>and country code-based: .us, .uk, .ca</li>
+<li>generic TLD names:
+<ul>
+<li>.com</li>
+<li>.gov</li>
+<li>.mil</li>
+<li>.net</li>
+<li>.org</li>
 </ul>
-<p>We can download a list of those top level names from IANA, and get a total count:</p>
+</li>
+<li>and ccTLD, <a href="https://en.wikipedia.org/wiki/Country_code_top-level_domain">country code TLDs</a>
+<ul>
+<li>.ca (Canada)</li>
+<li>.mx (Mexico)</li>
+<li>.jp (Japan)</li>
+<li>.uk (United Kingdom)</li>
+<li>.us (United States)</li>
+</ul>
+</li>
+</ul>
+<p>We can download a list of those top level names from IANA, and
+get a total count of 1,487 (as of August 2022):</p>
 <pre><code>wget https://data.iana.org/TLD/tlds-alpha-by-domain.txt
 sed '1d' tlds-alpha-by-domain.txt | wc -l
-1495
 </code></pre>
-<a class="header" href="print.html#second-level-domain-names" id="second-level-domain-names"><h3>Second-level domain names</h3></a>
-<p>In the Google example, the second level domain is <strong>google</strong>. Other examples include: <strong>redhat</strong> in <strong>redhat.com</strong> and <strong>debian</strong> in <strong>debian.org</strong>. <a href="https://www.amazon.com/Linux-Administration-Beginners-Guide-Seventh/dp/0071845364">Soyinka, (2016)</a> refers to this part of the FQDN as that which makes up the &quot;organizational boundary of the namespace&quot; (p. 425).</p>
-<a class="header" href="print.html#third-level-domain-names--hostnames--subdomains" id="third-level-domain-names--hostnames--subdomains"><h3>Third-level domain names / hostnames / subdomains</h3></a>
-<p>When you've purchased (leased) a top and second level domain like getfedora.org, you can choose whether you employ third level domains. For example: www is a third level domain. If you owned <code>example.org</code>, you could also have <code>www.example.org</code> resolve to a different location, or, <code>www.example.org</code> could resolve to the second-level domain itself. That is:</p>
+<a class="header" href="print.html#second-level-domain-names" id="second-level-domain-names"><h3>Second Level Domain Names</h3></a>
+<p>In the Google example,
+the second level domain is <strong>google</strong>.
+The second level domain along with the TLD
+together, along with any further subdomains,
+for the <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">fully qualified domain name</a>.
+Other examples include:</p>
+<ul>
+<li><strong>redhat</strong> in <strong>redhat.com</strong></li>
+<li><strong>debian</strong> in <strong>debian.org</strong>.</li>
+<li><strong>wikipedia</strong> in <strong>wikipedia.org</strong></li>
+<li><strong>uky</strong> in <strong>uky.edu</strong></li>
+<li><strong>twitter</strong> in <strong>twitter.com</strong></li>
+</ul>
+<a class="header" href="print.html#third-level-domain-names--subdomains" id="third-level-domain-names--subdomains"><h3>Third Level Domain Names / Subdomains</h3></a>
+<p>When you've purchased (leased) a top and second level
+domain like <strong>ubuntu.com</strong>,
+you can choose whether you add third level domains.
+For example: www is a third level domain or subdomain.
+If you owned <code>example.org</code>,
+you could dedicate a machine or a cluster of machines
+to <code>www.example.org</code> that
+resolve to a different location, or
+<code>www.example.org</code> could resolve to the second-level domain itself.
+That is:</p>
 <ul>
 <li>www.debian.org can point to debian.org</li>
 </ul>
-<p>But it could also point to a separate server, such that <strong>debian.org</strong> and <strong>www.debian.org</strong> would be two separate servers with two separate websites or services. Although this is not common with third-level domains that start with <strong>www</strong>, it is common with others.</p>
+<p>It could also point to a separate server,
+such that <strong>debian.org</strong> and <strong>www.debian.org</strong>
+would be two separate servers with two separate websites or services,
+just like <strong>maps.google.com</strong> points to a different
+site than <strong>mail.google.com</strong>.
+Both <strong>maps</strong> and <strong>mail</strong> are subdomains of <strong>google.com</strong>.
+Although this is not common with third-level
+domains that start with <strong>www</strong>,
+it is common with others.</p>
 <p>For example, with hostnames that are not <code>www</code>:</p>
 <ul>
 <li>google.com resolves to www.google.com</li>
@@ -4617,21 +5188,73 @@ sed '1d' tlds-alpha-by-domain.txt | wc -l
 </ul>
 </li>
 </ul>
-<p>This is because those other three provide different, but specific services.</p>
+<p>This is because those other three provide different,
+but specific services.</p>
 <a class="header" href="print.html#dns-paths" id="dns-paths"><h2>DNS Paths</h2></a>
-<p>Recursive DNS is the first DNS server to be queried in the DNS system. This is the resolver server in the first video above. This server queries itself (recursive) to check if the domain to IP mapping has been cached in its system.</p>
-<p>If it hasn't been cached, then the DNS query is <em>forwarded</em> to a root server and and so forth down the line.</p>
-<p>We can use the <code>dig</code> command to query the non-cached DNS paths. Let's say we want to follow the DNS path for <strong>google.com</strong>, then we can start by querying any <a href="https://www.iana.org/domains/root/servers">root server</a>. In the output, we wan to pay attention to the QUERY field, the ANSWER field, and the Authority Section:</p>
-<pre><code>dig @198.41.0.4 google.com 
+<p>A recursive DNS server is the first DNS server
+to be queried in the DNS system,
+which is usually managed by an ISP.
+This is the resolver server in the first video above.
+This server queries itself (recursive) to check if the
+domain to IP mapping has been cached (remembered/stored) in its system.</p>
+<p>If it hasn't been cached,
+then the DNS query is <em>forwarded</em> to a root server.
+There are thirteen root servers.</p>
+<pre><code>echo {a..m}.root-servers.net.
 </code></pre>
-<p>The root servers only know about top level domains, and in this case, that's the <code>com.</code> domain. Fortunately, it lists some authoritative TLD servers and their IP addresses, and we can query one of those next:</p>
-<pre><code>dig @192.12.94.30 google.com
+<p>Those root servers will identify the next server to query,
+depending on the top level domain (.com, .net, .edu, .gov, etc.).
+If the site ends in <strong>.com</strong> or <strong>.net</strong>, then
+the next server might be something like:
+<strong>a.gtld-servers.net.</strong>
+Or if the top level domain ends in <strong>.edu</strong>, then:
+<strong>a.edu-servers.net.</strong>.
+If the top level domain ends in <strong>.gov</strong>, then:
+<strong>a.gov-servers.net.</strong>.
+And so forth.</p>
+<p>Those top level domains should know where to
+send the query next.
+In many cases, the next path is to send the query
+to a custom domain server.
+For example, Google's custom name servers are:
+<strong>ns1.google.com</strong> to <strong>ns4.google.com</strong>.
+UK's custom name servers are:
+<strong>sndc1.net.uky.edu</strong> and <strong>sndc2.net.uky.edu</strong>.
+Finally, those custom name servers will know
+the IP address that maps to the domain.</p>
+<p>We can use the <code>dig</code> command to query
+the non-cached DNS paths.
+Let's say we want to follow the DNS path for <strong>google.com</strong>,
+then we can start by querying any <a href="https://www.iana.org/domains/root/servers">root server</a>.
+In the output, we want to pay attention to the QUERY field,
+the ANSWER field, and the Authority Section.
+We keep <strong>digging</strong> until the ANSWER field returns
+a number greater than 0.
+The following commands query one of the root servers,
+which points us to one of the authoritative servers for
+<strong>.com</strong> sites,
+which points us to Google's custom nameserver,
+which finally provides an answer,
+in fact six answers,
+or six IP address that all map to <strong>google.com</strong>.</p>
+<pre><code>dig @e.root-servers.net google.com
+dig @a.gtld-servers.net google.com
+dig @ns1.google.com google.com
 </code></pre>
-<p>Now we know something about the TLD. Here we still don't know the full path, but it does tell us that for <strong>google.com</strong>, we need to query one of Google's name servers:</p>
-<pre><code>dig @216.239.34.10 google.com
+<p>Alternatively, we can query UK's:</p>
+<pre><code>dig @j.root-servers.net. uky.edu
+dig @b.edu-servers.net. uky.edu
+dig @sndc1.net.uky.edu. uky.edu
 </code></pre>
-<p>And now we finally get our answer, which is that <strong>google.com</strong> resolves to 142.250.190.78, at least for me and at this instant.</p>
-<a class="header" href="print.html#dns-record-types" id="dns-record-types"><h3>DNS Record types</h3></a>
+<p>We can also get this path information using
+<code>dig</code>'s trace command:</p>
+<pre><code>dig google.com +trace
+</code></pre>
+<p>There are a lot of <a href="https://www.geeksforgeeks.org/dig-command-in-linux-with-examples/">ways to use the dig command</a>, and
+you can test and explore them on your own.</p>
+<a class="header" href="print.html#dns-record-types" id="dns-record-types"><h3>DNS Record Types</h3></a>
+<p>In the <code>dig</code> command output above,
+you will see various fields.</p>
 <ul>
 <li>SOA:    Start of Authority: describes the site's DNS entries
 <ul>
@@ -4645,13 +5268,18 @@ sed '1d' tlds-alpha-by-domain.txt | wc -l
 <pre><code>dig google.com
 google.com.     IN      A       142.251.32.78
 </code></pre>
+<p>Other record types include:</p>
 <ul>
 <li>PTR:    Pointer Record: provides mapping from IP Address to Hostname</li>
 <li>MX:     Mail exchanger: the MX record maps your email server.</li>
-<li>CNAME:  Canonical name: used so that a domain name may act as an alias for another domain name. Thus, say someone visits www.example.org, but if no subdomain is set up for www, then the CNAME can point to example.org.</li>
+<li>CNAME:  Canonical name: used so that a domain name may act as an alias for
+another domain name. Thus, say someone visits www.example.org, but if no
+subdomain is set up for www, then the CNAME can point to example.org.</li>
 </ul>
 <a class="header" href="print.html#dns-toolbox" id="dns-toolbox"><h3>DNS Toolbox</h3></a>
-<p>It's important to be able to troubleshoot DNS issues. To do that, we have a few utilities available. Here are examples and you should read the <code>man</code> pages for each one:</p>
+<p>It's important to be able to troubleshoot DNS issues.
+To do that, we have a few utilities available.
+Here are examples and you should read the <code>man</code> pages for each one:</p>
 <p><code>host</code>: resolve hostnames to IP Address; or IP addresses to hostnames</p>
 <pre><code>man -f host
 host (1) - DNS lookup utility
@@ -4688,6 +5316,31 @@ resolv.conf (5) - resolver configuration file
 cat /etc/resolv.conf
 resolvectl status
 </code></pre>
+<a class="header" href="print.html#conclusion-12" id="conclusion-12"><h2>Conclusion</h2></a>
+<p>In the same way that phones have phone numbers,
+servers on the internet have IP addresses.
+Since we're only human,
+we don't remember every phone number that we dial or
+every IP address that we visit.
+In order to make such things human friendly,
+we use names instead.</p>
+<p>Nameservers and DNS records act as the phone book
+and phone book entries of the internet.
+Note that I refer to the <strong>internet</strong> and not the <strong>web</strong> here.
+There is more at the application layer than the HTTP/HTTPS protocols,
+and so other types of servers,
+e.g., mail servers,
+may also have domain names and IP addresses to resolve.</p>
+<p>In this section, we covered the basics of DNS that include:</p>
+<ul>
+<li>FQDN: the Fully Qualified Domain Name</li>
+<li>Root domains</li>
+<li>Top level domains (TLDs) and Country Code TLDS (ccTLDs)</li>
+<li>Second level and third level domains/subdomains</li>
+<li>DNS paths, and</li>
+<li>DNS record types</li>
+</ul>
+<p>We'll come back to this material when we set up our websites.</p>
 <a class="header" href="print.html#local-security-chroot" id="local-security-chroot"><h1>Local Security: <code>chroot</code></h1></a>
 <p>A <code>chroot jail</code> is a technology used to change the &quot;apparent root <code>/</code> directory for a user or a process&quot; and confine that user to that location on the system. A user or process that is confined to the <code>chroot jail</code> cannot easily see or access the rest of the file system and will have limited access to the binaries (executables/apps/utilities) on the system. From its <code>man</code> page:</p>
 <pre><code>chroot (8) - run command or interactive shell with special root directory
@@ -4997,7 +5650,7 @@ linus sean
 <a class="header" href="print.html#delete-option" id="delete-option"><h3>Delete Option</h3></a>
 <p>The <code>--delete</code> option is important. Without it, <code>rsync</code> will add new files to the destination directory when it backs up the source directory. With it, <code>rsync</code> truly syncs. Thus, if a file that was previously backed up to the destination directory and later deleted in the source directory (e.g., because it was no longer needed), then it will be deleted from the destination directory when the <code>--delete</code> option is used. This is how services like Dropbox work.</p>
 <p>See other options and functionality for <code>rsync</code> here: <a href="https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/">https://www.linux.com/tutorials/how-backup-files-linux-rsync-command-line/</a>. One of the most important options is the ability to backup up to remote machines over a network, and this can be done with the the <code>rsync</code> command.</p>
-<a class="header" href="print.html#introduction-4" id="introduction-4"><h1>Introduction</h1></a>
+<a class="header" href="print.html#introduction-5" id="introduction-5"><h1>Introduction</h1></a>
 <p>This section shows how to create a</p>
 <ul>
 <li>Linux</li>
