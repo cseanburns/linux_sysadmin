@@ -240,11 +240,6 @@ gcloud compute ssh --zone "zone-info" "name-info" --project "project-info"
 The values in the double quotes in the above command
 can be located in your Google Cloud console and
 in your VM instances section.
-Here is my command:
-
-```
-gcloud compute ssh --zone "us-central1-a" "fall-2022" --project "sysadmin-418"
-```
 
 ## Update our Ubuntu VM
 
