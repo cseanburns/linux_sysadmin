@@ -1,0 +1,381 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Text Processing, Part 1 - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-history-linux-unix.html"><strong>1.1.</strong> History of Unix and Linux</a></li><li><a href="02-what-is-linux.html"><strong>1.2.</strong> What is Linux?</a></li><li><a href="03-what-is-sysadmin.html"><strong>1.3.</strong> What is Systems Administration?</a></li></ul></li><li><a href="p2-using-gcloud.html"><strong>2.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="04-connect-with-ssh.html"><strong>2.1.</strong> Connect with Secure Shell</a></li><li><a href="05-using-gcloud-virtual-machines.html"><strong>2.2.</strong> Using gcloud for Virtual Machines</a></li></ul></li><li><a href="p3-the-command-line.html"><strong>3.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="06-the-linux-filesystem.html"><strong>3.1.</strong> The Linux Filesystem</a></li><li><a href="07-files-and-directories.html"><strong>3.2.</strong> Files and Directories</a></li><li><a href="08-file-attributes.html"><strong>3.3.</strong> File Attributes</a></li><li><a href="09-text-processing-part-1.html" class="active"><strong>3.4.</strong> Text Processing, Part 1</a></li><li><a href="10-text-processing-part-2.html"><strong>3.5.</strong> Text Processing, Part 2</a></li><li><a href="11-text-editors.html"><strong>3.6.</strong> Text Editors</a></li><li><a href="12-revisiting-directory-paths.html"><strong>3.7.</strong> Revisiting Directory Paths</a></li><li><a href="13-bash-scripting.html"><strong>3.8.</strong> Bash Scripting</a></li><li><a href="14-regular-expressions.html"><strong>3.9.</strong> Regular Expressions</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="15-expanding-storage.html"><strong>4.1.</strong> Expanding Storage</a></li><li><a href="16-managing-users-groups.html"><strong>4.2.</strong> Managing Users and Groups</a></li><li><a href="17-managing-software.html"><strong>4.3.</strong> Managing Software</a></li><li><a href="18-using-systemd.html"><strong>4.4.</strong> Using systemd</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-networking-tcpip.html"><strong>5.1.</strong> Networking and TCP/IP</a></li><li><a href="20-dns-domain-names.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-local-security.html"><strong>5.3.</strong> Local Security</a></li><li><a href="22-firewall-backups.html"><strong>5.4.</strong> Firewalls and Backups</a></li></ul></li><li><a href="p6-creating-a-lamp-server.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="23-installing-the-apache-web-server.html"><strong>6.1.</strong> Installing the Apache Web Server</a></li><li><a href="24-installing-configuring-php.html"><strong>6.2.</strong> Installing and Configuring PHP</a></li><li><a href="25-installing-configuring-mariadb.html"><strong>6.3.</strong> Installing and Configuring MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="09-text-processing-part-1.html#text-processing-part-1" id="text-processing-part-1"><h1>Text Processing: Part 1</h1></a>
+<p>One of the more important sets of tools that Linux (as well Unix-like)
+operating systems provide are tools that
+<a href="https://tldp.org/LDP/abs/html/textproc.html">aid processing and manipulating text</a>.
+The ability to process and manipulate text, programmatically,
+is a basic and essential part of many programming languages,
+(e.g., Python, JavaScript, etc),
+and learning how to process and manipulate text is
+an important skill for a variety of jobs including
+statistics, data analytics, data science, programming, web programming,
+systems administration, and so forth.
+In other words,
+this functionality of Linux (and Unix-like) operating systems
+essentially means that to learn Linux and the tools that it provides
+is akin to learning how to program.</p>
+<blockquote>
+<p>Plain text files are the basic building blocks of programs and data.
+Programs are written in plain text editors, and
+data is often stored as plain text.
+Linux offers many tools to examine, manipulate, process, analyze,
+and visualize data in plain text files.</p>
+</blockquote>
+<p>In this section, we will learn some of the basic
+tools to examine plain text (i.e., data).
+We will do some programming later in this class, but for us,
+the main objective with learning to program
+aligns with our work as systems administrators.
+That means our text processing and programming goals will serve our interests
+in managing users, security, networking, system configuration, and so forth
+as Linux system administrators.</p>
+<p>In the meantime, the goal of this section is to acquaint ourselves with
+some of the tools that can be used to process text.
+In this section, we will only cover a handful of text processing
+programs or utilities,
+but here is a fairly comprehensive list,
+and we'll examine some additional ones from this list
+later in the semester:</p>
+<ul>
+<li><code>cat</code>      : concatenate files and print on the standard output</li>
+<li><code>cut</code>      : remove sections from each line of files</li>
+<li><code>diff</code>     : compare files line by line</li>
+<li><code>echo</code>     : display a line of text</li>
+<li><code>expand</code>   : convert tabs to spaces</li>
+<li><code>find</code>     : search for files in a directory hierarchy</li>
+<li><code>fmt</code>      : simple optimal text formatter</li>
+<li><code>fold</code>     : wrap each input line to fit in specified width</li>
+<li><code>grep</code>     : print lines that match patterns</li>
+<li><code>head</code>     : output the first part of files</li>
+<li><code>join</code>     : join lines of two files on a common field</li>
+<li><code>look</code>     : display lines beginning with a given string</li>
+<li><code>nl</code>       : number lines of files</li>
+<li><code>paste</code>    : merge lines of files</li>
+<li><code>printf</code>   : format and print data</li>
+<li><code>shuf</code>     : generate random permutations</li>
+<li><code>sort</code>     : sort lines of text files</li>
+<li><code>tail</code>     : output the last part of files</li>
+<li><code>tr</code>       : translate or delete characters</li>
+<li><code>unexpand</code> : convert spaces to tabs</li>
+<li><code>uniq</code>     : report or omit repeat lines</li>
+<li><code>wc</code>       : print newline, word, and byte counts for each file</li>
+</ul>
+<p>We will also discuss two types of operators, the pipe and the redirect.
+The latter has a version that will write over the contents of a file,
+and a version that will append contents to the end of a file:</p>
+<ul>
+<li><code>|</code> : redirect standard output from command1 to standard input for command2</li>
+<li><code>&gt;</code> : redirect to standard output to a file, overwriting</li>
+<li><code>&gt;&gt;</code> : redirect to standard output to a file, appending</li>
+</ul>
+<p>Today I want to cover a few of the above commands for processing data in a file;
+specifically:</p>
+<ul>
+<li><code>cat</code>  : concatenate files and print on the standard output</li>
+<li><code>cut</code>  : remove sections from each line of files</li>
+<li><code>head</code> : output the first part of files</li>
+<li><code>sort</code> : sort lines of text files</li>
+<li><code>tail</code> : output the last part of files</li>
+<li><code>uniq</code> : report or omit repeat lines</li>
+<li><code>wc</code>   : print newline, word, and byte counts for each file</li>
+</ul>
+<p>Let's look at a toy, sample file that contains
+structured data as a CSV (comma separated value) file.
+The file contains a list of operating systems (column one),
+their software license (column two),
+and the year they were released (column three).
+We can use the <code>cat</code> command to view the entire
+contents of this small file:</p>
+<pre><code>cat operating-systems.csv
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p>It's a small file, but
+we might want the line and word count of the file.
+To acquire that, we can use the <code>wc</code> (word count) command.
+By itself, the <code>wc</code> command will print
+the number of lines, words, and bytes of a file.
+The following output states that the file contains
+seven lines, 23 words, and 165 bytes:</p>
+<pre><code>wc operating-systems.csv
+  7  23 165 operating-systems.csv
+</code></pre>
+<p>We can use the <code>head</code> command to output,
+by default,
+the first ten lines of a file.
+Since our file is only seven lines long,
+we can use the <code>-n</code> option
+to change the default number of lines:</p>
+<pre><code>head -n3 operating-systems.csv
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+</code></pre>
+<p>Using the <code>cut</code> command, we can select data from file.
+In the first example, I want to select column two (or field two),
+which contains the license information.
+Since this is a CSV file,
+the fields (aka, columns) are separated by commas.
+The <code>-d</code> option tells the <code>cut</code> command to use commas
+as the separator character.
+(A CSV file may use other characters as the separator character,
+like the Tab character or a colon.)</p>
+<pre><code># get the second field, where the fields are separated by a comma &quot;,&quot;
+cut -d&quot;,&quot; -f2 operating-system.csv
+ Proprietary
+ BSD
+ GPL
+ Proprietary
+ Proprietary
+ Proprietary
+ Apache
+</code></pre>
+<p>From there it's trivial to select a different column.
+In the next example,
+I select field (or column) three to get the release year:</p>
+<pre><code># get the third field
+cut -d&quot;,&quot; -f3 operating-system.csv
+ 2009
+ 1993
+ 1991
+ 2007
+ 2001
+ 1993
+ 2008
+</code></pre>
+<p>One of the magical aspects of the Linux (and Unix) commandline
+is the ability to <strong>pipe</strong> and <strong>redirect</strong> output from one program
+to another program, and then to a file.
+By stringing together multiple programs with these operators,
+we can create small programs that do much more than the
+simple programs that compose them.
+In this next example,
+I use the pipe operators to send the output of the <code>cut</code>
+command to the <code>sort</code> command,
+which sorts the data in alphabetical or numerical order,
+depending on the character type (lexical or numerical),
+pipe that output to the <code>uniq</code> command,
+which removes duplicate rows,
+and then redirect that final output to a new
+file titled <strong>os-years.csv</strong>.
+Since the year <strong>1993</strong> appears twice in the original file,
+it only appears once in the output
+because the <code>uniq</code> command removed the duplicate:</p>
+<pre><code># select field, sort it, unique it, and save it in a separate file
+cut -d&quot;,&quot; -f3 operating-system.csv | sort | uniq &gt; os-years.csv
+cat os-years.csv
+ 1991
+ 1993
+ 2001
+ 2007
+ 2008
+ 2009
+</code></pre>
+<p>Let's add a header row to the top of the file.
+The header row names each column.
+Since the CSV file now has a header line,
+we may want to remove it from the output.
+First, let's look at the file:</p>
+<pre><code>cat operating-systems.csv
+OS, License, Year
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+</code></pre>
+<p>Say we want the license field data,
+but we need to remove that first line.
+In this case, we need the tail command:</p>
+<pre><code>tail -n +2 operating-system-csv | cut -d&quot;,&quot; -f2 | sort | uniq &gt; license-data.csv
+cat license-data.csv
+ Apache
+ BSD
+ GPL
+ Proprietary
+ Proprietary
+</code></pre>
+<blockquote>
+<p>The <code>tail</code> command generally outputs the last lines of a file,
+but the <code>-n +2</code> option is special.
+It makes the <code>tail</code> command ouput a file starting
+at the second line.
+We could specify a different number in order
+to start output at a different line.
+See <code>man tail</code> for more information.</p>
+</blockquote>
+<a class="header" href="09-text-processing-part-1.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>In this lesson, we learned how to process and
+make sense of data held in a text file.
+We used some commands that let us select,
+sort, de-duplicate, redirect, and view data in different ways.
+Our data file was a small one,
+but these are powerful and useful command and operators
+that would easily make sense of large amounts of data
+in a file.</p>
+<p>The commands we used in this lesson include:</p>
+<ul>
+<li><code>cat</code>  : concatenate files and print on the standard output</li>
+<li><code>cut</code>  : remove sections from each line of files</li>
+<li><code>head</code> : output the first part of files</li>
+<li><code>sort</code> : sort lines of text files</li>
+<li><code>tail</code> : output the last part of files</li>
+<li><code>uniq</code> : report or omit repeat lines</li>
+<li><code>wc</code>   : print newline, word, and byte counts for each file</li>
+</ul>
+<p>We also used two types of operators, the pipe and the redirect:</p>
+<ul>
+<li><code>|</code> : redirect standard output command1 to standard input of command2</li>
+<li><code>&gt;</code> : redirect to standard output to a file, overwriting</li>
+</ul>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="08-file-attributes.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="10-text-processing-part-2.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="08-file-attributes.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="10-text-processing-part-2.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

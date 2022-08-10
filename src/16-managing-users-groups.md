@@ -1,4 +1,4 @@
-# Managing Users
+# Managing Users and Groups
 
 In some cases we'll want to provide user accounts
 on the servers we administrate, or

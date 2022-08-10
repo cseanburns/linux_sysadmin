@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Local Security - Linux Systems Administration</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="Book on entry level Linux systems administration work.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
+        <script src="store.js"></script>
+
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = store.get('mdbook-theme');
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = store.get('mdbook-sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-history-linux-unix.html"><strong>1.1.</strong> History of Unix and Linux</a></li><li><a href="02-what-is-linux.html"><strong>1.2.</strong> What is Linux?</a></li><li><a href="03-what-is-sysadmin.html"><strong>1.3.</strong> What is Systems Administration?</a></li></ul></li><li><a href="p2-using-gcloud.html"><strong>2.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="04-connect-with-ssh.html"><strong>2.1.</strong> Connect with Secure Shell</a></li><li><a href="05-using-gcloud-virtual-machines.html"><strong>2.2.</strong> Using gcloud for Virtual Machines</a></li></ul></li><li><a href="p3-the-command-line.html"><strong>3.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="06-the-linux-filesystem.html"><strong>3.1.</strong> The Linux Filesystem</a></li><li><a href="07-files-and-directories.html"><strong>3.2.</strong> Files and Directories</a></li><li><a href="08-file-attributes.html"><strong>3.3.</strong> File Attributes</a></li><li><a href="09-text-processing-part-1.html"><strong>3.4.</strong> Text Processing, Part 1</a></li><li><a href="10-text-processing-part-2.html"><strong>3.5.</strong> Text Processing, Part 2</a></li><li><a href="11-text-editors.html"><strong>3.6.</strong> Text Editors</a></li><li><a href="12-revisiting-directory-paths.html"><strong>3.7.</strong> Revisiting Directory Paths</a></li><li><a href="13-bash-scripting.html"><strong>3.8.</strong> Bash Scripting</a></li><li><a href="14-regular-expressions.html"><strong>3.9.</strong> Regular Expressions</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="15-expanding-storage.html"><strong>4.1.</strong> Expanding Storage</a></li><li><a href="16-managing-users-groups.html"><strong>4.2.</strong> Managing Users and Groups</a></li><li><a href="17-managing-software.html"><strong>4.3.</strong> Managing Software</a></li><li><a href="18-using-systemd.html"><strong>4.4.</strong> Using systemd</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-networking-tcpip.html"><strong>5.1.</strong> Networking and TCP/IP</a></li><li><a href="20-dns-domain-names.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-local-security.html" class="active"><strong>5.3.</strong> Local Security</a></li><li><a href="22-firewall-backups.html"><strong>5.4.</strong> Firewalls and Backups</a></li></ul></li><li><a href="p6-creating-a-lamp-server.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="23-installing-the-apache-web-server.html"><strong>6.1.</strong> Installing the Apache Web Server</a></li><li><a href="24-installing-configuring-php.html"><strong>6.2.</strong> Installing and Configuring PHP</a></li><li><a href="25-installing-configuring-mariadb.html"><strong>6.3.</strong> Installing and Configuring MariaDB</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page" tabindex="-1">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="21-local-security.html#local-security" id="local-security"><h1>Local Security</h1></a>
+<a class="header" href="21-local-security.html#introduction" id="introduction"><h2>Introduction</h2></a>
+<p>Most security issues come from the network, but
+we also need to secure a system from insider attacks, too.
+We can do that by setting appropriate file permissions and
+by making sure users on a system do not have certain kinds
+of access (e.g., <code>sudo</code> access)
+to some utilities.
+For example, the <code>/usr/bin/gcc</code> program is the
+GNU C and C++ compiler.
+If users have unrestricted access to that compiler,
+then it's possible for them to compile programs
+that compromise the system.</p>
+<p>In the next section,
+we'll cover how to set up a firewall, but
+in this section,
+we'll learn how to set up a <strong>chroot jail</strong>.</p>
+<p>As we all know,
+the Linux file system has a root directory <strong>/</strong>,
+and under this directory are other directories like
+<strong>/home</strong>, <strong>/bin</strong>, and so forth.
+A chroot (<strong>change root</strong>) jail
+is a way to create a pseudo root directory
+at some specific location in the directory tree, and
+then build an environment in that pseudo root directory
+that offers some applications.
+One that environment is setup,
+we can then confine a user account(s) to that
+pseudo directory, and
+when they login to the server,
+they will only be able to see
+(e.g., with the <code>cd</code> command)
+what's in that pseudo root directory and
+only be able to use the applications that
+we've made available in that chroot.</p>
+<p>Thus, a <strong>chroot jail</strong> is a technology used
+to change the
+&quot;apparent root <strong>/</strong> directory for a user or a process&quot; and
+confine that user to that location on the system.
+A user or process that is confined to the
+<strong>chroot jail</strong> cannot easily see or access
+the rest of the file system and
+will have limited access to the binaries
+(executables/apps/utilities) on the system.
+From its <code>man</code> page:</p>
+<pre><code>chroot (8) - run command or interactive shell with special root directory
+</code></pre>
+<p>Although it is not security proof,
+it does have some useful security use cases.
+Some use <code>chroot</code> to contain DNS servers, for example.</p>
+<p><code>chroot</code> is also the conceptual basis for some kinds of
+virtualization technologies that are common today,
+like <a href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a>.</p>
+<a class="header" href="21-local-security.html#chroot-a-current-user" id="chroot-a-current-user"><h2>Chroot a Current User</h2></a>
+<p>In this tutorial,
+we are going to create a <code>chroot</code> for a human user account.</p>
+<ol>
+<li>
+<p>Let's create a new user. After we create the new user, we will <code>chroot</code>
+that user going forward.</p>
+<pre><code>sudo adduser vader
+</code></pre>
+</li>
+<li>
+<p>Next, we <code>chroot</code> <em>vader</em> into a new directory. That directory will be
+located at <code>/opt/chroot</code>. Note that the root directory for our regular
+users is <code>/</code>, but user <em>vader</em>'s root directory will be different
+<code>/opt/chroot</code>, even if they can't tell. We also want to check the
+permissions of the new directory and make sure it's owned by root. If not,
+use <code>chown root:root /opt/chroot</code> to set it.</p>
+<pre><code>sudo mkdir /opt/chroot
+ls -ld /opt/chroot
+</code></pre>
+</li>
+<li>
+<p>Now we set up available binaries for the user. We'll only allow <code>bash</code> for
+now.  To do that, we'll create a <code>/usr/bin</code> directory in /opt/chroot, and
+copy <code>bash</code> to that directory.</p>
+<pre><code>which bash
+sudo mkdir -p /opt/chroot/usr/bin
+cp /usr/bin/bash /opt/chroot/usr/bin/
+</code></pre>
+</li>
+<li>
+<p>Large software applications have dependencies (aka, libraries). We need to
+copy those libraries to our chroot for the applications, like Bash, to
+function. To identify libraries needed by bash, we use the <code>ldd</code> command:</p>
+<pre><code>ldd /usr/bin/bash
+</code></pre>
+<p>Use the <code>locate</code> command to identify the locations of the libraries. The
+ones we need should be located in the <strong>/usr/lib/x86_64-linux-gnu/</strong>
+directory. The <code>locate</code> command might need to be installed and updated
+first. Here I show how to use it to locate one of the dependencies, but
+there are more than one for you to locate:</p>
+<pre><code>sudo apt install mlocate
+sudo updatedb
+locate libtinfo.so.6
+...
+...
+...
+</code></pre>
+<p>Create a <strong>/opt/chroot/lib/x86_64-linux-gnu/</strong> directory for the libraries.
+We'll name the library directory after the originals to stay consistent
+with the main environment.</p>
+<pre><code>sudo mkdir -p /opt/chroot/lib/x86_64-linux-gnu
+sudo cp /usr/lib/x86_64-linux-gnu/libtinfo.so.6 \
+  /opt/chroot/lib/x86_64-linux-gnu/
+</code></pre>
+</li>
+<li>
+<p>Create and test the <code>chroot</code></p>
+<pre><code>sudo chroot /opt/chroot/
+bash-5.1# ls
+bash: ls: command not found
+bash-5.1# help
+bash-5.1# dirs
+bash-5.1# cd bin/
+bash-5.1# dirs
+bash-5.1# cd ../lib64/
+bash-5.1# dirs
+bash-5.1# cd ..
+bash-5.1# exit
+</code></pre>
+</li>
+<li>
+<p>Create a new group called <em>chrootjail</em>. We can add users to this group that
+we want to jail. Instructions are based on <a href="https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins">linuxconfig.org</a>.</p>
+<pre><code>groupadd chrootjail
+usermod -a -G chrootjail vader
+groups vader
+</code></pre>
+</li>
+<li>
+<p>Edit <code>/etc/ssh/sshd_config</code> to direct users in the <code>chrootjail</code> group to
+the <code>chroot</code> directory. Add the following line at the end of the file.
+Then restart ssh server.</p>
+<pre><code>sudo nano /etc/ssh/sshd_config
+Match group chrootjail
+            ChrootDirectory /var/chroot/
+</code></pre>
+<p>Exit <code>nano</code>, and restart <code>ssh</code>:</p>
+<pre><code>systemctl restart sshd
+</code></pre>
+</li>
+<li>
+<p>Test the <code>ssh</code> connection for the <em>vader</em> user.</p>
+<pre><code>ssh vader@localhost
+-bash-5.1$ ls
+-bash: ls: command not found
+exit
+</code></pre>
+<p>That works as expected. The user <em>vader</em> is now restricted to a special
+directory and has limited access to the system or to any utilities on that
+system.</p>
+</li>
+</ol>
+<a class="header" href="21-local-security.html#exercise" id="exercise"><h2>Exercise</h2></a>
+<p>By using the <code>ldd</code> command,
+you can add additional binaries for this user.
+As an exercise,
+use the <code>ldd</code> command to locate
+the libraries for the <code>nano</code> editor, and
+make <code>nano</code> available to the user <em>vader</em>
+in the chrooted directory.</p>
+<a class="header" href="21-local-security.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>Systems need to be secure from the inside and out.
+In order to secure from the inside,
+system users should be given access and permissions
+as needed.</p>
+<p>In this section, we covered how to create a <strong>chroot jail</strong>
+for a new user on our system.
+The jail confines the user to this pseudo location
+and provides the user limited access to that file system and
+to the software on the system.</p>
+<p>We can jail non-human users, too.
+Any user listed in <code>/etc/passwd</code> can be jailed, and
+most users listed in that file are services.</p>
+<p>Jailing a human user may not be necessary.
+On a multi-user system,
+proper education and training about the policies
+and uses of the system may be all that's needed.
+But in case a stricter environment is needed,
+now you know how to create a <strong>chroot jail</strong>.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a rel="prev" href="20-dns-domain-names.html" class="mobile-nav-chapters previous" title="Previous chapter">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="22-firewall-backups.html" class="mobile-nav-chapters next" title="Next chapter">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="20-dns-domain-names.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="22-firewall-backups.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        
+
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

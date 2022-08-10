@@ -1,4 +1,6 @@
-# Introduction
+# Managing the System
+
+## Introduction
 
 This section covers:
 
