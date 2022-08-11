@@ -18,17 +18,17 @@ In these cases, we must enclose them in quotes.
 
 ```
 cat cities.csv
-City | 2020 Census | Founded
-New York City, NY | 8804190 | 1624
-Los Angeles, CA | 3898747 | 1781
-Chicago, IL | 2746388 | 1780
-Houston, TX | 2304580 | 1837
-Phoenix, AZ | 1624569 | 1881
-Philadelphia, PA | 1576251 | 1701
-San Antonio, TX | 1451853 | 1718
-San Diego, CA | 1381611 | 1769
-Dallas, TX | 1288457 | 1856
-San Jose, CA | 983489 | 1777
+City              | 2020 Census | Founded
+New York City, NY | 8804190     | 1624
+Los Angeles, CA   | 3898747     | 1781
+Chicago, IL       | 2746388     | 1780
+Houston, TX       | 2304580     | 1837
+Phoenix, AZ       | 1624569     | 1881
+Philadelphia, PA  | 1576251     | 1701
+San Antonio, TX   | 1451853     | 1718
+San Diego, CA     | 1381611     | 1769
+Dallas, TX        | 1288457     | 1856
+San Jose, CA      | 983489      | 1777
 
 grep "San Antonio" cities.csv
 San Antonio, TX | 1451853 | 1718
@@ -121,22 +121,22 @@ within the range of **N,M,O,P**:
 ```
 grep ^[N..P] cities.csv
 New York City, NY | 8804190 | 1624
-Phoenix, AZ | 1624569 | 1881
-Philadelphia, PA | 1576251 | 1701
+Phoenix, AZ       | 1624569 | 1881
+Philadelphia, PA  | 1576251 | 1701
 ```
 
 And we can reverse that with the following command:
 
 ```
 grep ^[^N..P] cities.csv
-City | 2020 Census | Founded
-Los Angeles, CA | 3898747 | 1781
-Chicago, IL | 2746388 | 1780
-Houston, TX | 2304580 | 1837
-San Antonio, TX | 1451853 | 1718
-San Diego, CA | 1381611 | 1769
-Dallas, TX | 1288457 | 1856
-San Jose, CA | 983489 | 1777
+City            | 2020 Census | Founded
+Los Angeles, CA | 3898747     | 1781
+Chicago, IL     | 2746388     | 1780
+Houston, TX     | 2304580     | 1837
+San Antonio, TX | 1451853     | 1718
+San Diego, CA   | 1381611     | 1769
+Dallas, TX      | 1288457     | 1856
+San Jose, CA    | 983489      | 1777
 ```
 
 ### Character classes
@@ -193,8 +193,8 @@ For example, search all lines that start with capital **D through L**
 ```
 grep "^[D-L]" cities.csv
 Los Angeles, CA | 3898747 | 1781
-Houston, TX | 2304580 | 1837
-Dallas, TX | 1288457 | 1856
+Houston, TX     | 2304580 | 1837
+Dallas, TX      | 1288457 | 1856
 ```
 
 And all lines that end with the numbers **4, 5, or 6**:
@@ -202,7 +202,7 @@ And all lines that end with the numbers **4, 5, or 6**:
 ```
 grep "[4-6]$" cities.csv
 New York City, NY | 8804190 | 1624
-Dallas, TX | 1288457 | 1856
+Dallas, TX        | 1288457 | 1856
 ```
 
 ```
@@ -225,8 +225,8 @@ Here, the preceding item **S** is matched one or more times:
 ```
 grep -E "S+" cities.csv
 San Antonio, TX | 1451853 | 1718
-San Diego, CA | 1381611 | 1769
-San Jose, CA | 983489 | 1777
+San Diego, CA   | 1381611 | 1769
+San Jose, CA    | 983489  | 1777
 ```
 
 In this search, the preceding item **l** is
@@ -259,7 +259,7 @@ both appear in the file:
 ```
 grep -E "San Antonio|Dallas" cities.csv
 San Antonio, TX | 1451853 | 1718
-Dallas, TX | 1288457 | 1856
+Dallas, TX      | 1288457 | 1856
 ```
 
 The following will return the San Antonio line even though
