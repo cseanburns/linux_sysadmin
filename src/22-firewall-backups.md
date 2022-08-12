@@ -6,12 +6,13 @@ A firewall program allows or denies connections for
 incoming (**ingress**) or outgoing (**egress**) traffic.
 Traffic can be controlled by link layer
 (e.g., a network interface such as an ethernet or wireless card),
-by IP layer
-(e.g., IPv4 or IPv6 address or address ranges),
-by transport layer
-(e.g., TCP, UDP, etc.),
-or by application layer via port numbers
-(e.g., HTTP(S), SSH, SMTP, etc.).
+by IP layer,
+e.g., IPv4 or IPv6 address or address ranges;
+by transport layer,
+e.g., TCP, UDP, etc.;
+or by application layer via port numbers,
+e.g., HTTP (port 80), HTTPS (port 443),
+SSH (port 22), SMTPs (port 465), etc.
 Firewalls have other abilities.
 For example, they can also place limits
 on the number of attempts to connect.
@@ -38,8 +39,8 @@ then further restrict SSH connections to a
 specific IP range.
 And/or, another rule may block all incoming,
 unencrypted HTTP connections through port 80, but
-allow all incoming connections, encrypted HTTPS
-connections through port 443.
+allow all incoming, encrypted HTTPS connections 
+through port 443.
 
 Let's briefly cover two ways to define
 firewall rules.
@@ -50,12 +51,14 @@ allow outside connections to our server.
 
 > LAMP originally referred to Linux, Apache, MySQL, and PHP;
 > these four technologies create a web server.
-> Technically, only Apache is needed.
+> Technically, only Linux (or some other OS) and
+> Apache (or some other web server software)
+> are needed to serve a website.
 > PHP and MySQL provide additional functionality,
 > like the ability for a website to interact with a
 > relational database.
 > The **M** in LAMP may also refer to MariaDB,
-> which is fully open source clone of MySQL.
+> which is a fully open source clone of MySQL.
 > We'll use MariaDB later in this course.
 
 First, our Google Cloud instance is
@@ -87,7 +90,9 @@ then the network firewall second.
 It's also important to know that Ubuntu's ``ufw`` firewall
 is disabled by default.
 In fact, it may be overkill to use both
-Google Cloud's firewall and Ubuntu's ``ufw``.
+Google Cloud's firewall and Ubuntu's ``ufw``, or
+it may not.
+It simply depends on our needs and our circumstances.
 
 We'll return to firewalls and put some rules
 into practice when we work on our LAMP setup.
@@ -128,10 +133,12 @@ I'd use:
 rsync -av /home/me/ /mnt/backup/
 ```
 
+where **/home/me/** is the **source directory**, and
+**/mnt/backup/** is the **destination directory**.
+
 Syntax matters here.
-Specifically, if I include the trailing slash on
+If I include the trailing slash on
 the source directory,
-which is **/home/me/** in the above example,
 then ``rsync`` will copy everything in **/home/me/**
 to **/mnt/backup/**.
 However, if I leave the trailing slash off,
@@ -141,7 +148,7 @@ like so:
 rsync -av /home/me /mnt/backup/
 ```
 
-Then the result will be that the directory **me/**
+then the result will be that the directory **me/**
 will be copied to **/mnt/backup/me/**.
 
 Let's see this in action.
@@ -178,10 +185,16 @@ file1 file2
 to a directory on a remote server, and
 the directory and files being copied will
 be encrypted on the way.
-To do this, then we use ``ssh`` style syntax:
+To do this, we use ``ssh`` style syntax:
 
 ```
 rsync -av tmp1/ USER@REMOTE:~/tmp2/
+```
+
+For example:
+
+```
+rsync -av tmp1 linus@222.22.33.333:~/tmp2/
 ```
 
 In fact, not only do I use ``rsync`` to backup
@@ -195,11 +208,12 @@ local web projects to remote servers.
 ``--delete`` option.
 Adding this option means that ``rsync`` will
 synchronize the source directory with the destination directory.
-Thus if I had already created a backup
+This means that if I had already created a backup
 of **tmp1** to **tmp2**, and 
 then delete **file1** in **tmp1** later,
-then run ``rsync`` with the delete option with the command below,
-then ``rsync`` will also delete **file1** from **tmp2/**:
+then run ``rsync`` with the delete option,
+then ``rsync`` will also delete **file1** from **tmp2/**.
+This is how that looks:
 
 ```
 ls tmp1/
@@ -236,19 +250,21 @@ the result is basically a file of a complete operating system.
 Since it's a file,
 it can itself be used in other projects or used
 to restore a machine to the time the snapshot was taken.
-Snapshots may also be used to document work.
+
+Snapshots may also be used to document or reproduce other's work.
 For example, if I worked with programmers,
 as a systems administrator,
-I might help the programmer share snapshots of a virtual
+I might help a programmer share snapshots of a virtual
 machine with other programmers.
 Those other programmers could then restore
-the snapshot in their own instances
-and see the original work.
+the snapshot in their own instances,
+and see and run the original work
+in the environment it was created in.
 
 Taking snapshots in Google Cloud is very straightforward, but
 since it does take up extra storage,
 it will accrue extra costs.
-Since we can avoid that in practice,
+Since we want avoid that for now,
 please see the following documentation for how to take
 a snapshot in Google Cloud:
 
@@ -260,13 +276,14 @@ In this section,
 we covered firewalls and backups.
 Since we're running an Ubuntu server on Google Cloud,
 we have Google Cloud options
-for creating firewall rules and for backing up disks, and
-we have Ubuntu options for creating firewall rules and
-for backing up disks.
+for creating firewall rules at the network level and
+for backing up disks as snapshots, and
+we have Ubuntu options for creating firewall rules at the OS level and
+for backing up disks using commands like ``rsync``.
 
 How we go about either depends entirely on our needs
 or on our organization's needs.
-But knowing these options exit and
+But knowing these options exist and
 the different reasons why we have these options,
 provides quite a bit of utility.
 
