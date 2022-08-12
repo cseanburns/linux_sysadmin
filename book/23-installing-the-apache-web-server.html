@@ -87,90 +87,165 @@
 
                 <div id="content" class="content">
                     <a class="header" href="23-installing-the-apache-web-server.html#installing-the-apache-web-server" id="installing-the-apache-web-server"><h1>Installing the Apache Web Server</h1></a>
-<p>Let's install our first web server.</p>
-<p>First, switch to Bridged mode in VirtualBox network settings and refresh
-MAC address in VirtualBox.</p>
-<a class="header" href="23-installing-the-apache-web-server.html#update-system-first" id="update-system-first"><h2>Update system first</h2></a>
-<p>Make sure your machine is up to date before installing Apache2.</p>
-<p>Login as root, or switch to the <code>root</code> user, and update the machine:</p>
-<pre><code>sudo su
-dnf update
+<a class="header" href="23-installing-the-apache-web-server.html#introduction" id="introduction"><h2>Introduction</h2></a>
+<p><a href="https://httpd.apache.org/">Apache</a> is an HTTP server,
+otherwise called web server software.
+Other HTTP server software exists.
+Another big one is <a href="https://nginx.org/en/">nginx</a>.
+An HTTP server essentially makes files on a computer available
+to others who are able to establish a
+connection to the computer and view the files
+with a web browser.</p>
+<p>It's important to understand the basics of an HTTP server, and
+therefore I ask you to read Apache's
+<a href="https://httpd.apache.org/docs/2.4/getting-started.html">Getting Started</a> page before
+proceeding with the rest of this section.
+Each of the main sections on that page describe
+the important elements that make up and serve a website,
+including</p>
+<ul>
+<li>clients, servers, and URLs</li>
+<li>hostnames and DNS</li>
+<li>configuration files and directives</li>
+<li>web site content</li>
+<li>log files and troubleshooting</li>
+</ul>
+<a class="header" href="23-installing-the-apache-web-server.html#installation" id="installation"><h2>Installation</h2></a>
+<p>Before we install Apache,
+we need to update our systems first.</p>
+<pre><code>sudo apt update
+sudo apt -y upgrade
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#install-httpd" id="install-httpd"><h2>Install <code>httpd</code></h2></a>
-<p>Now, that the machine is updated, install Apache2. On distributions that
-use a package management system, such as <code>dnf</code> on Fedora and <code>apt</code>
-on Ubuntu, we can use those systems to install the relevant software
-and dependencies. However, different distributions use different names
-for the packages. Fedora refers to the Apache2 package as <code>httpd</code>
-while Ubuntu refers to it as <code>Apache2</code>. We can use <code>dnf</code> to search
-for the appropriate package name:</p>
-<pre><code>dnf search apache | grep &quot;httpd&quot;
+<p>Once the machine is updated,
+we can install Apache2 using <code>apt</code>.
+First we'll use <code>apt search</code> to identify
+the specific package name.
+I already know that a lot of results
+will be returned,
+so let's <strong>pipe</strong> the <code>apt search</code> command
+through <code>head</code> to look at the initial results:</p>
+<pre><code>sudo apt search apache2 | head
 </code></pre>
-<p>Apache2 is not the only web server available. <a href="https://nginx.org/en/">nginx</a> is another
-popular web server, and you should explore or learn about other options
-on your own.  For now, let's get some basic info on the <code>httpd</code> package:</p>
-<pre><code>dnf info httpd
+<p>The package that we're interested in
+happens to be named <strong>apache2</strong> on Ubuntu.
+This is not a given.
+On other distributions,
+like Fedora,
+the Apache package is called <strong>httpd</strong>.
+To learn more about the <strong>apache2</strong> package,
+let's examine it with the <code>apt show</code> command:</p>
+<pre><code>apt show apache2
 </code></pre>
-<p>Based on the output, and at the time of this writing, it looks like the
-<code>httpd</code> package refers to the Apache HTTP Server, version 2.4.51. I
-want to highlight this because it's important to know what version of
-things are that we're installing, for a couple of reasons at least:</p>
-<ol>
-<li>
-<p>First, although Apache2 has its own dependencies, other packages
-will also depend on it. For example, say we wanted to install Drupal or
-WordPress, we would first have to install a web server, like Apache2,
-and it might be the case that Drupal or WordPress require a certain
-minimum version of Apache2.</p>
-</li>
-<li>
-<p>Second, some Linux operating systems focus on stability and thus do
-not update to the most recent version of a package instead opting for
-the most stable version of the software. The <a href="https://httpd.apache.org/">latest stable release of
-Apache2</a> is 2.4.51. But it's not always likely that Fedora or
-some other distribution will use that or some newer version until the
-next distribution upgrade, for example, from Fedora 33 to Fedora 34.
-For now, this is fine, and we can proceed with the install:</p>
-</li>
-</ol>
-<pre><code>dnf -y install httpd
+<p>Once we've confirmed that <strong>apache2</strong> is the package
+that we want,
+we install it with the <code>apt install</code> command.
+Press <strong>Y</strong> to agree to continue after running
+the command below:</p>
+<pre><code>sudo apt install apache2
 </code></pre>
 <a class="header" href="23-installing-the-apache-web-server.html#basic-checks" id="basic-checks"><h2>Basic checks</h2></a>
-<p>One of the things that makes Apache2, and some other web servers, powerful
-is the library of modules that extend Apache's functionality. We'll come
-back to modules soon. For now, we're going to make sure the server is
-up and running, configure some basic things, and then create a basic
-web site.</p>
-<p>To start, let's get some info about Apache2 and make sure it is <em>enabled</em>
-and <em>running</em>:</p>
-<pre><code>systemctl list-unit-files httpd.service
-systemctl enable httpd.service
-systemctl list-unit-files httpd.service
-systemctl status httpd.service
-systemctl start httpd.service
-systemctl status httpd.service
+<p>One of the things that makes Apache2, and
+some other web servers,
+powerful is the library of modules that
+extend Apache's functionality.
+We'll come back to modules soon.
+For now,
+we're going to make sure the server is up and running,
+configure some basic things, and
+then create a basic web site.</p>
+<p>To start,
+let's use <code>systemctl</code> to acquire some info about <strong>apache2</strong> and
+make sure it is <em>enabled</em> and <em>running</em>:</p>
+<pre><code>systemctl list-unit-files apache2.service
+systemctl status apache2
 </code></pre>
+<p>The output shows that <strong>apache2</strong> is enabled,
+which means that it will start running automatically
+if the computer gets rebooted.</p>
+<p>The output of the second command also shows
+that <strong>apache2</strong> is enabled and
+that it is also active (running).</p>
 <a class="header" href="23-installing-the-apache-web-server.html#creating-a-web-page" id="creating-a-web-page"><h2>Creating a web page</h2></a>
-<p>Now that we have it up and running, let's look at the default web
-page. We can use our loopback IP address (aka, <em>localhost</em>) and the
-<code>w3m</code> text web browser to view the default page:</p>
-<pre><code>dnf install -y w3m
-w3m http://127.0.0.1
-w3m http://localhost/
+<p>Since <strong>apache2</strong> is up and running,
+let's look at the default web page.</p>
+<p>There are two ways we can look at the default web page.
+We can use a command line web browser.
+There are a number available, but
+I like <code>w3m</code>.</p>
+<p>We can also use our regular web browsers and view
+the site by entering the IP address of the server
+in our browser URL bar.</p>
+<p>To check with <code>w3m</code>,
+we have to install it first:</p>
+<pre><code>sudo apt install w3m
 </code></pre>
-<p>The <code>w3m</code> text-mode browser shows the <strong>Fedora Test Page</strong>. That's
-a sign that the default install was successful.</p>
-<p>Let's now create our first web page.  To do so, we need to know what
-directory that <code>httpd</code> is using to serve websites. This directory is
-called the <strong>DocumentRoot</strong> directory. If we read through that <strong>Fedora
-Test Page</strong> document, it'll tell us that the default directory is
-<code>/var/www/html/</code>. Let's go there and create a webpage with our text
-editor of choice:</p>
+<p>Once it's installed,
+we can visit our default site using the loopback IP address
+(aka, <em>localhost</em>).
+From the command line on our server,
+we can run either of these two commands:</p>
+<pre><code>w3m 127.0.0.1
+w3m localhost
+</code></pre>
+<p>We can also get the subnet/private IP address
+using the <code>ip a</code> command, and
+then use that with <code>w3m</code>.
+For example, if <code>ip a</code> showed that my NIC
+has an IP address of <strong>10.0.1.1</strong>, then
+I could use <code>w3m</code> with that IP address:</p>
+<pre><code>w3m 10.0.1.1
+</code></pre>
+<p>If the <strong>apache2</strong> installed and started correctly,
+then you should see the following text at the top
+of the screen:</p>
+<p><strong>Apache2 Ubuntu Default Page</strong><br />
+<strong>It works!</strong></p>
+<p>To exit <code>w3m</code>,
+press <strong>q</strong> and then <strong>y</strong> to confirm exit.</p>
+<p>To view the default web page using
+a regular web browser,
+like Firefox, Chrome, Safari, Edge, or etc.,
+you need to get our server's public IP address.
+To do that,
+log into the
+<a href="https://console.cloud.google.com/">Google Cloud Console</a>,
+in the left hand navigation panel,
+hover your cursor over the <strong>Compute Engine</strong> link, and
+then click on <strong>VM instances</strong>.
+You should see your <strong>External IP</strong> address
+in the table on that page.
+You can copy that external IP address or
+simply click on it to open it in a new browser tab.
+Then you should see the graphical version of the
+<strong>Apache2 Ubuntu Default Page</strong>.</p>
+<p>Please take a moment to read through
+the text on the default page.
+It provides important information about
+where Ubuntu stores configuration files and
+what those files do, and
+document roots,
+which is where website files go.</p>
+<a class="header" href="23-installing-the-apache-web-server.html#create-a-web-page" id="create-a-web-page"><h2>Create a Web Page</h2></a>
+<p>Let's create our first web page.
+The default page described above provides
+the location of the document root at
+<strong>/var/www/html</strong>.
+When we navigate to that location,
+we'll see that there is already an <strong>index.html</strong>
+file located in that directory.
+This is the <strong>Apache2 Ubuntu Default Page</strong>
+that we described above.
+Let's rename that <strong>index.html</strong> file,
+and create a new one:</p>
 <pre><code>cd /var/www/html/
-nano index.html
+sudo mv index.html index.html.original
+sudo nano index.html
 </code></pre>
-<p>Create a simple HTML page, something like this. Of course, modify the
-content to suit your own interests:</p>
+<p>If you know HTML, then
+feel free to write some basic HTML code to get started.
+Otherwise, you can re-type the content below
+in <code>nano</code>, and
+then save and exit out.</p>
 <pre><code>&lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;My first web page using Apache2&lt;/title&gt;
@@ -179,125 +254,146 @@ content to suit your own interests:</p>
 
 &lt;h1&gt;Welcome&lt;/h1&gt;
 
-&lt;p&gt;Welcome to my web site. I have ever created using Apache2 and Fedora
-Linux.&lt;/p&gt;
-
-&lt;p&gt;Thanks!&lt;br/&gt;
-Dr. Burns&lt;/p&gt;
+&lt;p&gt;Welcome to my web site. I created this site using the Apache2 HTTP server.&lt;/p&gt;
 
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-<p>After you're done, save and close the document. Let's visit our website
-again with <code>w3m</code> to see if it works:</p>
-<pre><code>w3m http://127.0.0.1
+<p>If you have our site open in your web browser,
+reload the page, and you should see
+the new text.</p>
+<p>You can still view the original default page by
+specifying its name in the URL.
+For example, if your <strong>external IP address</strong> is
+<strong>55.222.55.222</strong>, then you'd specify it like so:</p>
+<pre><code>http://55.222.55.222/index.html.original
 </code></pre>
-<p>Let's open the firewall so that outside systems can access this page:</p>
-<pre><code>firewall-cmd --list-all
-firewall-cmd --get-active-zones
-firewall-cmd --zone=FedoraServer --add-service=http
-firewall-cmd --zone=FedoraServer --add-service=https
-firewall-cmd --runtime-to-permanent
+<a class="header" href="23-installing-the-apache-web-server.html#user-directories" id="user-directories"><h2>User Directories</h2></a>
+<p>You may have visited sites in the past
+that have a tilde in the URL and look like this:</p>
+<pre><code>http://example.com/~user/
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#changing-the-hostname" id="changing-the-hostname"><h2>Changing the <code>hostname</code></h2></a>
-<p>The <code>hostname</code> of a system is the label it uses to identify itself
-to others (humans) on a (sub)network. If the hostname is on the web (or
-the internet), it may also be part of its of the fully qualified domain
-name (FQDN), which we studied during the DNS and networking weeks. For
-example, on a server identified as <strong>enterprise.example.net</strong>, then
-<strong>enterprise</strong>, is the hostname, <strong>example.net</strong> is the domain name,
-and <strong>enterprise.example.net</strong> is the fully qualified domain name. If
-two computers are on the same subnet, then they can be reachable via
-the hostname only, but the domain name is part of the DNS system and is
-required for two computers on the broader internet to reach each other.</p>
-<p>We're going to check and set the system <code>hostname</code> on our Fedora
-(virtual) machines using the <code>hostname</code> and <code>hostnamectl</code> commands:</p>
-<p>Check the default hostname:</p>
-<pre><code># hostname
-localhost.localdomain
+<p>These are called user directories, and
+the provide additional path to the <strong>document root</strong>
+that's located in users' home directories
+in a directory called <strong>public_html</strong>.
+This is the default document root for user directories,
+but the default can be changed to different locations.
+Please read the documentation on what's called the
+<a href="https://httpd.apache.org/docs/2.4/mod/mod_userdir.html">Apache Module mod_userdir</a> before proceeding.</p>
+<p>By default, users with accounts on the server
+need to have a <strong>public_html</strong> directory
+in their home directories, and
+Apache2 needs to be configured
+to serve sites from those directories.
+For example, for the user <strong>linus</strong>,
+they should have the following file path available:</p>
+<pre><code>/home/linus/public_html/
 </code></pre>
-<p>To change the default hostname from <strong>localhost</strong>, use the <code>hostnamectl</code>
-command to update the system's hostname per the file. My new hostname
-will be <strong>enterprise</strong>.  You can name your hostname whatever you want,
-but be sure it's a single word with no punctuation.</p>
-<pre><code>hostnamectl set-hostname enterprise
-hostname
-cat /etc/hostname
+<a class="header" href="23-installing-the-apache-web-server.html#enable-mod_userdir" id="enable-mod_userdir"><h3>Enable mod_userdir</h3></a>
+<p>The configuration file for <strong>mod_userdir</strong> is
+located in <strong>/etc/apache2/mods-available/</strong>
+and is named <strong>userdir.conf</strong>.
+Files in this directory are modules that
+are available to Apache2 but that are not
+enabled (i.e., they're turned off) by default.
+We can view that the <strong>userdir.conf</strong> file
+with the <code>less</code> command:</p>
+<pre><code>less /etc/apache2/mods-available/userdir.conf
 </code></pre>
-<p>We can access our site by hostname rather than by IP:</p>
-<pre><code>w3m http://enterprise
+<p>The default configuration does not need to be modified.
+Therefore, all we need to do is enable this module.
+To do that, we use the <code>a2enmod</code> Apache2 command
+(see <code>man a2enmod</code> for details.)</p>
+<pre><code>sudo a2enmod userdir
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#optional" id="optional"><h3>Optional</h3></a>
-<p>After you've completed the above steps, do the following:</p>
-<ol>
-<li>
-<p>On your host machine, find your OS's version of <code>/etc/hosts</code>.</p>
-<ul>
-<li>Windows instructions: <a href="https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992">https://gist.github.com/zenorocha/18b10a14b2deb214dc4ce43a2d2e2992</a>.</li>
-<li>macOS users can edit their <code>/etc/hosts</code> file.</li>
-</ul>
-</li>
-<li>
-<p>Map your guest IP address (your Fedora IP) to your new hostname:</p>
-<pre><code>192.168.4.31 enterprise
+<p>After enabling,
+we need to reload the HTTP service, and
+we can also check its status:</p>
+<pre><code>sudo systemctl restart apache2
+systemctl status apache2
 </code></pre>
-</li>
-</ol>
-<p>Then, in your Firefox, Chrome, or whatever browser, visit your new
-website and replace <strong>enterprise</strong> with the hostname that you chose for
-your guest OS:</p>
-<pre><code>http://enterprise
+<a class="header" href="23-installing-the-apache-web-server.html#create-a-user-directory-website" id="create-a-user-directory-website"><h3>Create a User Directory Website</h3></a>
+<p>Let's say I am logged in as the user <strong>linus</strong> on the system and
+will use that to test if the user directory is working.
+First, let's go home.
+For me, as the user <strong>linus</strong>,
+that would <strong>/home/linus/</strong>, and
+I just have to type in the <code>cd</code> command and press Enter:</p>
+<pre><code>cd
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#apache2-user-directories" id="apache2-user-directories"><h2>Apache2 User Directories</h2></a>
-<p>We can enable Apache2 so that users on our systems can run websites from
-their home directories; that is, sites located at:</p>
-<ul>
-<li><code>$HOME/public_html</code></li>
-</ul>
-<a class="header" href="23-installing-the-apache-web-server.html#enable-userdir" id="enable-userdir"><h3>Enable userdir</h3></a>
-<p>Edit the <code>userdir.conf</code> file.</p>
-<pre><code>cd /etc/httpd/conf.d/
-nano userdir.conf
+<p>Now I need to create a <strong>public_html</strong> directory
+in my home directory
+(<strong>make sure you're in your home directory!</strong>), and
+change into that directory:</p>
+<pre><code>mkdir public_html
+cd public_html
 </code></pre>
-<p>Make the following changes:</p>
-<ul>
-<li><code>UserDir disabled</code> to <code>UserDir enabled</code></li>
-<li>Uncomment line <code>UserDir public_html</code></li>
-</ul>
-<p>After saving and exiting, restart <code>httpd.service</code>:</p>
-<pre><code>systemctl restart httpd.service
+<p>By default, Apache2 looks for a file
+named <strong>index.html</strong> in the document root.
+I'll create that and add some basic HTML to it:</p>
+<pre><code>nano index.html
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#tasks" id="tasks"><h2>Tasks</h2></a>
-<ol>
-<li>Exit out of root account</li>
-<li>Go to your regular user's home directory</li>
-<li>Make a directory titled <code>public_html</code> if it doesn't already exist</li>
-<li>Set <code>public_html</code> directory permissions to 755:
-<ul>
-<li><code>chmod 755 public_html</code></li>
-</ul>
-</li>
-<li>Change the user's directory permissions to 701:
-<ul>
-<li><code>chmod 701 /home/your_user</code></li>
-</ul>
-</li>
-</ol>
-<p><strong>SELinux</strong> needs to be configured to allow web access to our home
-directories. Specifically, we need to set some SELinux switches. Using
-<code>sudo</code> or logging in as <code>root</code>. Make sure you replace <strong>sean</strong>
-with your username:</p>
-<pre><code>setsebool -P httpd_enable_homedirs true
-chcon -R -t httpd_sys_content_t /home/sean/public_html
+<p>And in that file:</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;My home site&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;p&gt;This is my home site.&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-<p>Exit out of root if you need to.</p>
-<a class="header" href="23-installing-the-apache-web-server.html#test" id="test"><h3>Test</h3></a>
-<p>Now test to see if your <code>public_html</code> site is operational by simply
-visiting the site. For me, I use the following command:</p>
-<pre><code>cd ~/public_html/
-echo &quot;&lt;p&gt;Hello world&lt;/p&gt;&quot; &gt;&gt; index.html
-w3m http://127.0.0.1/~sean
+<p>Now simply add <strong>/~linus/</strong> to your external IP
+address in your browser's URL bar.
+Like so
+(of course, replace the external IP address with
+your external IP address and the username with
+the username that you're using):</p>
+<pre><code>http://55.222.55.222/~linus/
 </code></pre>
+<p>Note that this process is pretty easy but
+that it will be different on other distributions.
+For example, the <strong>Fedora</strong> distribution has different
+<strong>Apache2</strong> defaults.
+Also, on some distributions,
+we might need to change the directory permissions
+before this will work.
+By default, Ubuntu sets directory permissions to
+on our home directories to:</p>
+<pre><code>drwxr-xr-x
+</code></pre>
+<p>That means that any user can view the contents
+of our home directories.
+And Ubuntu sets directories created with <code>mkdir</code>
+in the home directory with these permissions by default:</p>
+<pre><code>drwxrwxr-x
+</code></pre>
+<p>These default settings make those directories
+world readable, but
+other distributions do not default to those permissions.
+If the last <code>r-x</code> was set to <code>---</code>, then
+we would need to use the <code>chmod</code> command
+to make these directories executable and readable
+before files in our <strong>public_html</strong> directory
+could be accessed in a browser.</p>
+<a class="header" href="23-installing-the-apache-web-server.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>In this section,
+we learned about the Apache2 HTTP server.
+We learned how to install it on Ubuntu,
+how to use systemd (<code>systemctl</code>) commands
+to check its default status,
+how to create a basic web page in <strong>/var/www/html</strong>,
+how to view that web page using the <code>w3m</code>
+command line browser and with our regular graphical browser,
+how to enable the user directory module, and
+repeat the steps above to create a website
+in our home directories.</p>
+<p>In the next section,
+we will learn how to make our sites applications
+by installing PHP and enabling the relevant PHP modules.</p>
 
                 </div>
 
