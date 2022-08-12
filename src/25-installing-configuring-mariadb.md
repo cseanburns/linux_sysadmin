@@ -1,6 +1,6 @@
 # Installing and Configuring MariaDB
 
-work in progress...
+**TO BE UPDATED**
 
 ## Install and Set Up MySQL
 

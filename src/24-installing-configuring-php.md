@@ -1,5 +1,7 @@
 # Installing and Configuring PHP
 
+**TO BE UPDATED**
+
 PHP is a server-side programming language. Client-side programming
 languages, like JavaScript, are handled by the browser, but the PHP
 software must be installed on the server and made to work with the Apache

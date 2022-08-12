@@ -88,22 +88,123 @@
                 <div id="content" class="content">
                     <a class="header" href="p1-linux-sysadmin.html#linux-systems-administration" id="linux-systems-administration"><h1>Linux Systems Administration</h1></a>
 <p>Author: C. Sean Burns<br />
-Date: 2022-07-10<br />
+Date: 2022-08-12<br />
 Email: <a href="sean.burns@uky.edu">sean.burns@uky.edu</a><br />
+Website: <a href="https://cseanburns.net">cseanburns.net</a><br />
 Twitter: <a href="https://twitter.com/cseanburns">@cseanburns</a><br />
-Website: <a href="https://cseanburns.net">cseanburns.net</a></p>
-<p>This short book is based on a series of lectures
-and demonstrations
-for my course on Linux Systems Administration.</p>
-<p><strong>This is a very rough draft.</strong>
-Until recently, we used VirtualBox and the Fedora distribution
-in the course.
-However, I am in the process of converting content here
-in order to demonstrate Google Cloud (gcloud)
-and Ubuntu.</p>
-<p>The work should be fairly complete by
-start of the Fall 2022 semester, but again,
-it's quite a work in progress at the moment.</p>
+GitHub: <a href="https://github.com/cseanburns">@cseanburns</a></p>
+<a class="header" href="p1-linux-sysadmin.html#introduction" id="introduction"><h2>Introduction</h2></a>
+<p>This short book was written for my
+Linux Systems Administration course.
+The book and course's goals are to
+provide the very basics about systems
+administration using Linux, and
+to teach students:</p>
+<ol>
+<li>how to use the command line in order to become more efficient computer users
+and more comfortable with using computers in general;</li>
+<li>how to use command line utilities and programs and to learn what they can
+accomplish using those programs;</li>
+<li>the basics of cloud computing;</li>
+<li>how to administer users on a Linux server; and</li>
+<li>how to secure a Linux server.</li>
+</ol>
+<p>And finally, this book/course ends on walking students
+through the process of building a <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP stack</a>.</p>
+<a class="header" href="p1-linux-sysadmin.html#about-this-book" id="about-this-book"><h2>About This Book</h2></a>
+<p>Since I use this book for my Linux Systems Administration course,
+which I teach each fall semester,
+this book will be a live document.
+I will update the content as I teach it in order
+to address changes in the technology and to
+edit for clarity when I discover some aspect
+of the book causes confusion or
+does not provide enough information.</p>
+<p>This book is not a comprehensive introduction to Linux nor
+to systems administration.
+It's designed for an entry level course on these topics and
+is focused on a select and small range of those topics that
+have specific pedagogical aims (see above).</p>
+<p>The book started off as a series of transcripts and
+demonstrations.
+It still has that focus, but
+I've had a long-term goal to make these transcripts
+more cohesive.
+Achieving this became easier when I learned about
+<a href="https://github.com/rust-lang/mdBook">mdBook</a>.</p>
+<p>This book is open access and
+licensed under the <a href="https://github.com/cseanburns/linux_sysadmin/blob/master/LICENSE">GNU GPL v3.0</a>.
+Feel free to fork it on <a href="https://github.com/cseanburns/linux_sysadmin">GitHub</a> and
+modify it for your own needs.</p>
+<a class="header" href="p1-linux-sysadmin.html#history-of-this-course" id="history-of-this-course"><h2>History of This Course</h2></a>
+<p>I created and started teaching this course in the Fall 2016 semester.
+I originally used Soyinka's (2016) excellent
+introduction to Linux administration, and
+we used VirtualBox and the Fedora Server distribution
+to practice and learn the material.</p>
+<p>However, around 2018 or '19,
+I moved away from Soyinka's comprehensive book to
+focus the material on a more limited range of topics.
+I did this for two reasons.
+First, most of my students do not
+become systems administrators,
+although some have (to my delight).
+Second, my students have grown up using only
+graphical user interfaces on one of the two common,
+commercial operating systems, and
+consequently have very constrained and limited understandings
+of how computers work and what can be done with them.
+In redesigning this course,
+I wanted to strike a balance between these two problems.
+I wanted students to acquire enough skills and
+gain enough confidence to feel comfortable applying for
+(at least) entry level systems administrator jobs, and
+more basically,
+I wanted students to be exposed to a different
+type of computing environment than what they were used to
+and that fostered a hacking mentality,
+<a href="http://www.catb.org/jargon/html/H/hacker.html">in the more benign and playful sense of the word</a>.</p>
+<p>I moved us away from using
+Fedora Server for the Fall 2022 course.
+Fedora Server is a great and fun operating system, and
+there's a lot to learn about Linux using it, but
+it was too bleeding edge for me, and
+that meant something would break in my demonstrations each year
+I taught this course.
+Thus, identifying what had changed in Fedora
+each year made using it somewhat of a chore to keep up.
+We have therefore switched to a less bleeding edge
+distribution of Linux: the most recent
+<a href="https://ubuntu.com/blog/what-is-an-ubuntu-lts-release">Ubuntu Server LTS release</a>.
+Based on my personal experience managing several servers
+that run on some release of Ubuntu LTS,
+I believe this should provide more stability.
+It helps that Ubuntu Server has a big share of the
+Linux server market.</p>
+<p>The primary reason I moved us away from VirtualBox is because
+a good number of my students each year use Apple computers, and
+this created a
+major obstacle because of
+<a href="https://apple.stackexchange.com/questions/422565/does-virtualbox-run-on-apple-silicon">Apple's switch to the M1 chip</a>.
+I originally considered asking those students
+with Apple computers to use
+different virtualization software, but
+it was nice to have all students,
+regardless of operating system, and myself using the
+same software.
+I also considered using something like <a href="https://www.docker.com/">Docker</a>
+as a replacement, but
+decided instead to use Google Cloud.
+I figured that learning how to use a
+service like Google Cloud might be more broadly useful
+to students, and
+that if we used Docker,
+we'd have to spend a lot of time installing and
+configuring that on their laptops.
+We'll see how this goes this semester (Fall 2022).</p>
+<a class="header" href="p1-linux-sysadmin.html#references" id="references"><h2>References</h2></a>
+<p>Soyinka, W. (2016). <em>Linux administration: A beginner's guide</em> (7th ed.). New
+York: MacGraw Hill Education. ISBN: 978-0-07-184536-6</p>
 
                 </div>
 
