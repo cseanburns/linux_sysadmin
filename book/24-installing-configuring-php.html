@@ -87,6 +87,110 @@
 
                 <div id="content" class="content">
                     <a class="header" href="24-installing-configuring-php.html#installing-and-configuring-php" id="installing-and-configuring-php"><h1>Installing and Configuring PHP</h1></a>
+<p>PHP is a server-side programming language. Client-side programming
+languages, like JavaScript, are handled by the browser, but the PHP
+software must be installed on the server and made to work with the Apache
+<code>httpd</code> server.</p>
+<p>In order for Apache and PHP to work together, we therefore need to
+install PHP. Then we'll make some modifications to Apache so that it
+defaults to PHP files rather than to HTML files.</p>
+<p>To get started, let's work with last week's HTTP machine that we used to
+set up Apache and user directories <code>userdir</code>. You can use that machine
+or you can clone it to be sure that you have a good backup in case you
+need to start over.</p>
+<p>Let's find the relevant packages to install. Again, make sure your system
+is up to date first.</p>
+<pre><code>sudo su
+dnf -y upgrade
+dnf search php | less
+dnf info php
+dnf info php-common
+dnf install php php-common
+</code></pre>
+<p>Since we are altering how the Apache <code>httpd</code> service functions, we
+need to restart the service. To check and restart services:</p>
+<pre><code>systemctl status httpd.service
+systemctl restart httpd.service
+systemctl status httpd.service
+</code></pre>
+<p>If all is well, our next task is to see if the Apache <code>httpd</code> service
+recognizes PHP. We will proceed to the base HTTP directory, and use
+<code>nano</code> to create and open a file called <code>info.php</code>.</p>
+<pre><code>cd /var/www/html/
+nano info.php
+</code></pre>
+<p>To make sure that the Apache web server can recognize that PHP is
+installed and usable, we can add test code to the <code>info.php</code> file. The
+test code will give us information about the version of PHP that we
+just installed:</p>
+<pre><code>&lt;?php
+phpinfo();
+?&gt;
+</code></pre>
+<p>Next, update file ownership for all files in this directory. They should
+be owned be the Apache user:</p>
+<pre><code>ls -l
+chown apache:apache *
+ls -l
+w3m http://localhost/info.php
+</code></pre>
+<p>By default, if both an <strong>index.html</strong> file and an <strong>index.php</strong>
+file exist in the same directory, the Apache web server will
+display the <strong>index.html</strong> file if a user visits the directory (e.g.,
+<code>http://example.com/</code> or <code>http://localhost/</code>). So we need to configure
+Apache to display <em>index.php</em> files before displaying <em>index.html</em>
+files in case both files exist in the same directory:</p>
+<pre><code>cd /etc/httpd/conf/
+nano httpd.conf
+</code></pre>
+<p>Change this line:</p>
+<pre><code>DirectoryIndex index.html
+</code></pre>
+<p>To (that is, add <strong>index.php</strong> file to the line and make sure that it comes
+before <strong>index.html</strong>. It should look like:</p>
+<pre><code>DirectoryIndex index.php index.html
+</code></pre>
+<p>Since we have modified an Apache configuration file, we should check
+that we haven't made a syntax mistake:</p>
+<pre><code>apachectl configtest
+</code></pre>
+<p>If we get an <strong>Syntax Ok</strong> message (you can ignore the FQDN error
+message), you can tell Apache to reload its config files:</p>
+<pre><code>systemctl reload httpd.service
+systemctl restart httpd.service
+</code></pre>
+<p>Now create a basic PHP page. <code>cd</code> back to the base HTTP directory and
+use <code>nano</code> to create and open and <code>index.php</code> file:</p>
+<pre><code>cd /var/www/html/
+nano index.php
+</code></pre>
+<p>Add some HTML and PHP that will detect our browser to the <strong>index.php</strong>
+(<a href="https://stackoverflow.com/questions/8754080/how-to-get-exact-browser-name-and-version">Source code link</a>):</p>
+<pre><code>&lt;p&gt;You are using the following browser to view this site:&lt;/p&gt;
+
+&lt;?php
+echo $_SERVER['HTTP_USER_AGENT'] . &quot;\n\n&quot;;
+
+$browser = get_browser(null, true);
+print_r($browser);
+?&gt;
+</code></pre>
+<p>Next, save and exit <code>nano</code>, change ownership of the file to Apache,
+and view with <code>w3m</code>:</p>
+<pre><code>chown apache:apache index.php
+w3m http://localhost/
+</code></pre>
+<p>Of course, since we set up our hostname last week, we can use our hostname
+in our URL:</p>
+<pre><code>w3m http://enterprise/
+</code></pre>
+<p><strong>Your goal:</strong></p>
+<ul>
+<li>Create an <strong>index.php</strong> file in your <strong>userdir</strong></li>
+<li>Add some PHP and submit screenshots, like last week, showing both
+the code and the output.</li>
+</ul>
+<p>Test some sample PHP code from here: <a href="https://www.w3schools.com/php/php_syntax.asp">https://www.w3schools.com/php/php_syntax.asp</a></p>
 
                 </div>
 
