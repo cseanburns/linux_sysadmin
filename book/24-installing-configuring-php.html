@@ -87,87 +87,139 @@
 
                 <div id="content" class="content">
                     <a class="header" href="24-installing-configuring-php.html#installing-and-configuring-php" id="installing-and-configuring-php"><h1>Installing and Configuring PHP</h1></a>
-<p><strong>TO BE UPDATED</strong></p>
-<p>PHP is a server-side programming language. Client-side programming
-languages, like JavaScript, are handled by the browser, but the PHP
-software must be installed on the server and made to work with the Apache
-<code>httpd</code> server.</p>
-<p>In order for Apache and PHP to work together, we therefore need to
-install PHP. Then we'll make some modifications to Apache so that it
-defaults to PHP files rather than to HTML files.</p>
-<p>To get started, let's work with last week's HTTP machine that we used to
-set up Apache and user directories <code>userdir</code>. You can use that machine
-or you can clone it to be sure that you have a good backup in case you
-need to start over.</p>
-<p>Let's find the relevant packages to install. Again, make sure your system
-is up to date first.</p>
-<pre><code>sudo su
-dnf -y upgrade
-dnf search php | less
-dnf info php
-dnf info php-common
-dnf install php php-common
+<a class="header" href="24-installing-configuring-php.html#introduction" id="introduction"><h2>Introduction</h2></a>
+<p>Client-side programming languages, like JavaScript,
+are handled by the browser.
+Major browsers like Firefox, Chrome, Safari, Edge, etc.
+all include <a href="https://en.wikipedia.org/wiki/JavaScript_engine">JavaScript engines</a> that use
+just-in-time compilers to execute the JavaScript code
+(Mozilla has a <a href="https://blog.mozilla.org/javascript/">nice description</a> of the process.)
+From an end user's perspective,
+you basically install JavaScript when you install a web browser.</p>
+<p><a href="https://www.php.net/">PHP</a>, on the other hand,
+is a server-side programming language,
+which means it must be installed on the server
+in order to be used.
+From a system or web administrator's perspective,
+this means that not only does PHP have be installed
+on a server, but
+it must also be configured to work with the HTTP server,
+which in our case is Apache2.</p>
+<p>The main use of PHP is to interact with databases,
+like MySQL, MariaDB, postgreSQL, etc.,
+in order to create dynamic page content.
+This is our goal in the last part of this class.
+To accomplish this, we have to:</p>
+<ol>
+<li>Install PHP and relevant Apache2 modules</li>
+<li>Configure PHP and relevant modules to work with Apache2</li>
+<li>Configure PHP and relevant modules to work with MariaDB</li>
+</ol>
+<a class="header" href="24-installing-configuring-php.html#install-php" id="install-php"><h2>Install PHP</h2></a>
+<p>As normal, we will use <code>apt install</code>
+to install PHP and relevant modules and
+then restart Apache2 using the <code>systemctl</code> command:</p>
+<pre><code>sudo apt install php libapache2-mod-php
+sudo systemctl restart apache2
 </code></pre>
-<p>Since we are altering how the Apache <code>httpd</code> service functions, we
-need to restart the service. To check and restart services:</p>
-<pre><code>systemctl status httpd.service
-systemctl restart httpd.service
-systemctl status httpd.service
+<p>We can check its status and
+see if there are any errors:</p>
+<pre><code>systemctl status apache2
 </code></pre>
-<p>If all is well, our next task is to see if the Apache <code>httpd</code> service
-recognizes PHP. We will proceed to the base HTTP directory, and use
-<code>nano</code> to create and open a file called <code>info.php</code>.</p>
+<a class="header" href="24-installing-configuring-php.html#check-install" id="check-install"><h2>Check Install</h2></a>
+<p>To check that it's been installed and that
+it's working with Apache2,
+we can create a small PHP file in our
+web document root.
+To do that,
+we change to the <strong>/var/www/html/</strong> directory, and
+create a file called <strong>info.php</strong>:</p>
 <pre><code>cd /var/www/html/
-nano info.php
+sudo nano info.php
 </code></pre>
-<p>To make sure that the Apache web server can recognize that PHP is
-installed and usable, we can add test code to the <code>info.php</code> file. The
-test code will give us information about the version of PHP that we
-just installed:</p>
+<p>In that file,
+add the following text,
+then save and close the file:</p>
 <pre><code>&lt;?php
 phpinfo();
 ?&gt;
 </code></pre>
-<p>Next, update file ownership for all files in this directory. They should
-be owned be the Apache user:</p>
-<pre><code>ls -l
-chown apache:apache *
-ls -l
-w3m http://localhost/info.php
+<p>No visit that file using the external IP address
+for your server.
+For example, in Firefox, Chrome, etc, go to
+(<strong>be sure to replace the IP below with your IP address</strong>):</p>
+<pre><code>http://55.333.55.333/info.php
 </code></pre>
-<p>By default, if both an <strong>index.html</strong> file and an <strong>index.php</strong>
-file exist in the same directory, the Apache web server will
-display the <strong>index.html</strong> file if a user visits the directory (e.g.,
-<code>http://example.com/</code> or <code>http://localhost/</code>). So we need to configure
-Apache to display <em>index.php</em> files before displaying <em>index.html</em>
-files in case both files exist in the same directory:</p>
-<pre><code>cd /etc/httpd/conf/
-nano httpd.conf
+<p>You should see a page that provides system information
+about PHP, Apache2, and the server.
+The top of the page should look like Figure 1 below:</p>
+<figure>
+<img src="images/24-phpinstall.png"
+alt="PHP install page"
+title="PHP install page">
+<figcaption>
+Fig. 1. A screenshot of the title of the PHP install page.
+</figcaption>
+</figure>
+<a class="header" href="24-installing-configuring-php.html#basic-configurations" id="basic-configurations"><h2>Basic Configurations</h2></a>
+<p>By default, when Apache2 serves a web page,
+it looks for and servers a
+<a href="https://httpd.apache.org/docs/current/mod/mod_dir.html">file titled <strong>index.html</strong></a>,
+even if it does not display that file in the URL bar.
+Thus, <code>http://example.com/</code> actually
+resolves to <code>http://example.com/index.html</code>
+in such cases.</p>
+<p>However, if our plan is to provide for PHP,
+we want Apache2 to default to a file titled <strong>index.php</strong> instead and
+to the <strong>index.html</strong> file as backup.
+To configure that,
+we need to edit the <strong>dir.conf</strong> file
+in the <strong>/etc/apache2/mods-enabled/</strong> directory.
+In that file there is a line that starts with
+<strong>DirectoryIndex</strong>.
+The first file in that line is <strong>index.html</strong>, and then
+there are a series of other files that Apache2 will
+look for in the order listed.
+If any of those files exist in the document root,
+then Apache2 will serve those before proceeding to the next.
+We simply want to put <strong>index.php</strong> first and let
+<strong>index.html</strong> be second on that line.</p>
+<pre><code>cd /etc/apache2/mods-enabled/
+sudo nano dir.conf
 </code></pre>
-<p>Change this line:</p>
-<pre><code>DirectoryIndex index.html
+<p>And change the line to this:</p>
+<pre><code>DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm
 </code></pre>
-<p>To (that is, add <strong>index.php</strong> file to the line and make sure that it comes
-before <strong>index.html</strong>. It should look like:</p>
-<pre><code>DirectoryIndex index.php index.html
-</code></pre>
-<p>Since we have modified an Apache configuration file, we should check
-that we haven't made a syntax mistake:</p>
+<p>Whenever we make a configuration change,
+we can use the <code>apachectl</code> command to
+check our configuration:</p>
 <pre><code>apachectl configtest
 </code></pre>
-<p>If we get an <strong>Syntax Ok</strong> message (you can ignore the FQDN error
-message), you can tell Apache to reload its config files:</p>
-<pre><code>systemctl reload httpd.service
-systemctl restart httpd.service
+<p>If we get an <strong>Syntax Ok</strong> message,
+you can reload the Apache2 configuration and
+restart the service:</p>
+<pre><code>sudo systemctl reload apache2
+sudo systemctl restart apache2
 </code></pre>
-<p>Now create a basic PHP page. <code>cd</code> back to the base HTTP directory and
+<p>Now create a basic PHP page.
+<code>cd</code> back to the document root directory and
 use <code>nano</code> to create and open and <code>index.php</code> file:</p>
 <pre><code>cd /var/www/html/
 nano index.php
 </code></pre>
-<p>Add some HTML and PHP that will detect our browser to the <strong>index.php</strong>
-(<a href="https://stackoverflow.com/questions/8754080/how-to-get-exact-browser-name-and-version">Source code link</a>):</p>
-<pre><code>&lt;p&gt;You are using the following browser to view this site:&lt;/p&gt;
+<a class="header" href="24-installing-configuring-php.html#creating-an-indexphp-file" id="creating-an-indexphp-file"><h2>Creating an index.php File</h2></a>
+<p>Let's now create an <strong>index.php</strong> page, and
+add some HTML and PHP to it.
+The PHP can be a simple <a href="https://stackoverflow.com/questions/8754080/how-to-get-exact-browser-name-and-version">browser detector</a>.
+Change to the <strong>/var/www/html/</strong> directory,
+and use <code>sudo nano</code> to create and edit <strong>index.php</strong>.
+Then add the following code:</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Broswer Detector&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;You are using the following browser to view this site:&lt;/p&gt;
 
 &lt;?php
 echo $_SERVER['HTTP_USER_AGENT'] . &quot;\n\n&quot;;
@@ -175,23 +227,33 @@ echo $_SERVER['HTTP_USER_AGENT'] . &quot;\n\n&quot;;
 $browser = get_browser(null, true);
 print_r($browser);
 ?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-<p>Next, save and exit <code>nano</code>, change ownership of the file to Apache,
-and view with <code>w3m</code>:</p>
-<pre><code>chown apache:apache index.php
-w3m http://localhost/
+<p>Next, save the file and exit <code>nano</code>.
+In your browser,
+visit your external IP address site:</p>
+<pre><code>http://55.333.55.333/
 </code></pre>
-<p>Of course, since we set up our hostname last week, we can use our hostname
-in our URL:</p>
-<pre><code>w3m http://enterprise/
-</code></pre>
-<p><strong>Your goal:</strong></p>
-<ul>
-<li>Create an <strong>index.php</strong> file in your <strong>userdir</strong></li>
-<li>Add some PHP and submit screenshots, like last week, showing both
-the code and the output.</li>
-</ul>
-<p>Test some sample PHP code from here: <a href="https://www.w3schools.com/php/php_syntax.asp">https://www.w3schools.com/php/php_syntax.asp</a></p>
+<p>Although your <strong>index.html</strong> file still exists
+in your document root,
+Apache2 now returns the <strong>index.php</strong> file
+instead.
+However, if for some reason the <strong>index.php</strong>
+was deleted,
+then Apache2 would revert to the <strong>index.html</strong> file
+since that's what's next in the <strong>dir.conf</strong>
+<strong>DirectoryIndex</strong> line.</p>
+<a class="header" href="24-installing-configuring-php.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<p>In this section,
+we installed PHP and configured it work with Apache2.
+We also created a simple PHP test page
+that reported our browser user agent information
+on our website.</p>
+<p>In the next section,
+we'll learn how to complete the LAMP stack
+by adding the MariaDB relational database
+to our setup.</p>
 
                 </div>
 

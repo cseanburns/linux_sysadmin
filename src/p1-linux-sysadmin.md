@@ -20,9 +20,9 @@ to teach students:
    and more comfortable with using computers in general;
 2. how to use command line utilities and programs and to learn what they can
    accomplish using those programs;
+3. how to administer users and manage software on a Linux server;
+4. how to secure a Linux server; and
 3. the basics of cloud computing;
-4. how to administer users on a Linux server; and
-5. how to secure a Linux server.
 
 And finally, this book/course ends on walking students
 through the process of building a [LAMP stack][lampWikipedia].
@@ -38,7 +38,8 @@ edit for clarity when I discover some aspect
 of the book causes confusion or
 does not provide enough information.
 
-This book is not a comprehensive introduction to Linux nor
+This book is not a
+comprehensive introduction to Linux nor
 to systems administration.
 It's designed for an entry level course on these topics and
 is focused on a select and small range of those topics that
@@ -52,7 +53,7 @@ more cohesive.
 Achieving this became easier when I learned about
 [mdBook][mdbook].
 
-This book is open access and
+The conent in this book is open access and
 licensed under the [GNU GPL v3.0][gplrepo].
 Feel free to fork it on [GitHub][linuxSysAdmin] and
 modify it for your own needs.
