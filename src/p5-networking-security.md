@@ -1,19 +1,10 @@
 # Networking and Security
 
-## Introduction
-
-This section covers basic networking:
-
-- DNS
-- chroot
-- firewalls
-- and backups.
-
-To do:
-
-- Be sure to reflect changes from VirtualBox to gcloud
-- Be sure to reflect chagnes from Fedora to Ubuntu
-- Add images
-- Edit text
-- Standardize format / structure of each subsectin
-- Write introduction for this section page and subsection pages
+Even if we do not work as network administrators,
+system administrators need to know network basics.
+In this section, we cover TCP/IP and other protocols
+related to the internet protocol suite,
+and how to protect our systems locally,
+from external threats,
+and how to create backups of our systems in case
+of disaster.

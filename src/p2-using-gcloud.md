@@ -1,14 +1,15 @@
 # Using Google Cloud (gcloud)
 
-This section is in draft status.
-It was last updated on 2022-07-10.
+This section introduces us to [Google Cloud][gcloud] (gcloud).
+We will use this platform to create virtual
+instances of the Ubuntu Server Linux operating system.
 
-The subsections have been revised and updated,
-but they still are rough around the edges:
+In the first part of this section,,
+we will learn how to connect to remote
+systems using **SSH** (Secure Shell).
 
-To do:
+In the second part of this section,
+we will create, launch, and connect to our Ubuntu server
+on gcloud.
 
-1. Add images
-1. Edit text
-1. Standardize format / structure of each section
-1. Write introduction for this page
+[gcloud]:https://cloud.google.com
