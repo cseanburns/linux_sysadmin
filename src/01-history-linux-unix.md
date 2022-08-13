@@ -1,5 +1,7 @@
 # History of Unix and Linux
 
+An outline of the history of Unix and Linux.
+
 ## Location: Bell Labs, part of AT&T (New Jersey), late 1960s through early 1970s
 
 - Starts with an operating system called Multics.
@@ -98,7 +100,7 @@
 - Linux technically refers only to the kernel.
     - An operating system kernel handles startup,
     devices, memory, resources, etc.
-    - A kernel does not provide userland utilities---the
+    - A kernel does not provide user land utilities---the
     kinds of software they people use when using computers.
 - Torvalds' motivation was to learn about OS development
   but also to have access to a Unix-like system.
