@@ -162,7 +162,7 @@ and others.
 
 I provided links to various certifications you might
 pursue as a systems administrator, and
-links to associations that might benefit you and career.
+links to associations that might benefit you and your career.
 
 Technology manages so much of our daily lives, and
 computer systems store lots of data about us.

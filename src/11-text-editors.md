@@ -163,14 +163,14 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ,n
-1   OS, License, Year
-2   Chrome OS, Proprietary, 2009
-3	  FreeBSD, BSD, 1993
-4	  Linux, GPL, 1991
-5	  iOS, Proprietary, 2007
-6	  macOS, Proprietary, 2001
-7	  Windows NT, Proprietary, 1993
-8	  Android, Apache, 2008
+1 OS, License, Year
+2 Chrome OS, Proprietary, 2009
+3	FreeBSD, BSD, 1993
+4	Linux, GPL, 1991
+5	iOS, Proprietary, 2007
+6	macOS, Proprietary, 2001
+7	Windows NT, Proprietary, 1993
+8	Android, Apache, 2008
 ```
 
 Using ``ed``, another way to remove the header line of the

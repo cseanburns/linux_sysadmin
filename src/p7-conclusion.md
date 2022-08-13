@@ -32,5 +32,5 @@ I hope it's helpful to you, too.
 This is, in fact, why I've made it available on my website and
 not simply dropped it in my course shell.
 
-Sean Burns, PhD  
+C. Sean Burns, PhD  
 August 13, 2022

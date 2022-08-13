@@ -16,6 +16,7 @@ GNU Coreutils:
 - [Special File Types][filetypes]
 - [Printing Text][printing]
 
+
 ### Directory Listing
 
 > I have already demonstrated one command:
@@ -349,3 +350,7 @@ Basic commands covered in this demo include:
 - ``rm``    : remove or delete a file or directory
 - ``tree``  : list contents of directories in a tree-like format
 
+[directorylisting]:https://www.gnu.org/software/coreutils/manual/coreutils.html#toc-Directory-listing-1
+[basicops]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations
+[filetypes]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations
+[printing]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Printing-text

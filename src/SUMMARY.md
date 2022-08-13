@@ -5,7 +5,6 @@
     - [What is Linux?](02-what-is-linux.md)
     - [What is Systems Administration?](03-what-is-sysadmin.md)
 - [Using Google Cloud (gcloud)](p2-using-gcloud.md)
-    - [Connect with Secure Shell](04-connect-with-ssh.md)
     - [Using gcloud for Virtual Machines](05-using-gcloud-virtual-machines.md)
 - [Learning the Command Line](p3-the-command-line.md)
     - [The Linux Filesystem](06-the-linux-filesystem.md)

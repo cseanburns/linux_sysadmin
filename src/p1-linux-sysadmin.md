@@ -18,11 +18,11 @@ to teach students:
 
 1. how to use the command line in order to become more efficient computer users
    and more comfortable with using computers in general;
-2. how to use command line utilities and programs and to learn what they can
-   accomplish using those programs;
+2. how to use command line utilities and programs and to learn what can be
+   accomplished using those programs;
 3. how to administer users and manage software on a Linux server;
 4. how to secure a Linux server; and
-3. the basics of cloud computing;
+6. the basics of cloud computing;
 
 And finally, this book/course ends on walking students
 through the process of building a [LAMP stack][lampWikipedia].
@@ -41,7 +41,7 @@ does not provide enough information.
 This book is not a
 comprehensive introduction to Linux nor
 to systems administration.
-It's designed for an entry level course on these topics and
+It is designed for an entry level course on these topics and
 is focused on a select and small range of those topics that
 have specific pedagogical aims (see above).
 
@@ -53,7 +53,7 @@ more cohesive.
 Achieving this became easier when I learned about
 [mdBook][mdbook].
 
-The conent in this book is open access and
+The content in this book is open access and
 licensed under the [GNU GPL v3.0][gplrepo].
 Feel free to fork it on [GitHub][linuxSysAdmin] and
 modify it for your own needs.
@@ -96,23 +96,22 @@ there's a lot to learn about Linux using it.
 However, since it is rather bleeding edge, it 
 meant something would break in my demonstrations each semester, and
 identifying what had changed in Fedora
-each year made using it somewhat of a chore to keep up.
+each year made it somewhat of a chore to keep up.
 I have therefore switched to a less bleeding edge
-distribution of Linux: the most recent
+distribution of Linux: a still supported
 [Ubuntu Server LTS release][ubuntuLTS].
-Based on my personal experience managing several servers
-that run on some release of Ubuntu LTS,
+Based on my personal experience managing servers
+that run on some version of Ubuntu LTS,
 I believe this should provide more stability.
-It helps that Ubuntu Server has a big share of the
+It helps that Ubuntu Server has a good share of the
 Linux server market.
 
 The primary reason I moved us away from VirtualBox is because 
 a good number of my students each year use Apple computers, which
-a major obstacle when
+became a major obstacle when
 [Apple switched to the M1 chip][m1StackOverflow].
 I originally considered asking those students
-with Apple computers to use
-different virtualization software, but
+to use different virtualization software, but
 it was nice to have all students,
 regardless of operating system, and myself using the
 same software.
@@ -125,7 +124,8 @@ to students, and
 that if we used Docker,
 we'd have to spend a lot of time installing and
 configuring that on their laptops.
-We'll see how this goes this semester (Fall 2022).
+Time is already a constraint in this course, but
+we'll see how it goes this semester (Fall 2022).
 
 ## References
 
