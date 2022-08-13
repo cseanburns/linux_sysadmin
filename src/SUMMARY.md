@@ -31,5 +31,5 @@
     - [Installing the Apache Web Server](23-installing-the-apache-web-server.md)
     - [Installing and Configuring PHP](24-installing-configuring-php.md)
     - [Installing and Configuring MariaDB](25-installing-configuring-mariadb.md)
-
-
+- [Conclusion](p7-conclusion.md)
+  
