@@ -674,17 +674,15 @@ another ten to twenty years.
 If we don't keep up,
 we won't be of much use to the people we serve.</p>
 <a class="header" href="print.html#using-google-cloud-gcloud" id="using-google-cloud-gcloud"><h1>Using Google Cloud (gcloud)</h1></a>
-<p>This section is in draft status.
-It was last updated on 2022-07-10.</p>
-<p>The subsections have been revised and updated,
-but they still are rough around the edges:</p>
-<p>To do:</p>
-<ol>
-<li>Add images</li>
-<li>Edit text</li>
-<li>Standardize format / structure of each section</li>
-<li>Write introduction for this page</li>
-</ol>
+<p>This section introduces us to <a href="https://cloud.google.com">Google Cloud</a> (gcloud).
+We will use this platform to create virtual
+instances of the Ubuntu Server Linux operating system.</p>
+<p>In the first part of this section,,
+we will learn how to connect to remote
+systems using <strong>SSH</strong> (Secure Shell).</p>
+<p>In the second part of this section,
+we will create, launch, and connect to our Ubuntu server
+on gcloud.</p>
 <a class="header" href="print.html#connect-with-secure-shell-ssh" id="connect-with-secure-shell-ssh"><h1>Connect with Secure Shell (SSH)</h1></a>
 <p>Later in the semester, each of you will install virtual machine software so
 that you can install a Linux operating system and manage it on your own
@@ -1015,15 +1013,29 @@ After this course is completed,
 you will be able to fire up a virtual machine
 on short notice and deploy websites and more.</p>
 <a class="header" href="print.html#the-command-line" id="the-command-line"><h1>The Command Line</h1></a>
-<p>This section is in draft status.
-It was last updated on 2022-07-09.</p>
-<p>To do:</p>
-<ol>
-<li>Add images</li>
-<li>Edit text</li>
-<li>Standardize format / structure of each section</li>
-<li>Write introductory text for this section and the subsections</li>
-</ol>
+<p>It's obviously more common for people today
+to learn how to use a computer via a
+graphical user interface, but
+graphical user interfaces entail extra software, and
+the more software we have on a server,
+the more resources that software consumes, and
+the more we expose our systems to security risks.</p>
+<p>Graphical user interfaces also do not provide
+a good platform for automation,
+at least not remotely as well
+as command line interfaces do.
+Working on the command line,
+in what is know as a <a href="https://en.wikipedia.org/wiki/Unix_shell">shell</a>,
+is in fact programming the computer.</p>
+<p>Fortunately, Linux, and
+many other Unix-like operating systems,
+have the ability to operate without graphical user interfaces.
+This is partly the reason why these operating systems
+have done so well in the server market.</p>
+<p>In this section,
+our focus is learning the command line environment,
+how to use it, and
+what it offers.</p>
 <a class="header" href="print.html#the-linux-filesystem" id="the-linux-filesystem"><h1>The Linux Filesystem</h1></a>
 <p>In this demo, we will cover the:</p>
 <ul>
@@ -3719,22 +3731,15 @@ Lexington does not appear in the file:</p>
 <p>Even though we focused on <code>grep</code>,
 many these regular expressions work across many programming languages.</p>
 <a class="header" href="print.html#managing-the-system" id="managing-the-system"><h1>Managing the System</h1></a>
-<a class="header" href="print.html#introduction-3" id="introduction-3"><h2>Introduction</h2></a>
-<p>This section covers:</p>
-<ul>
-<li>managing users and groups</li>
-<li>systemd</li>
-<li>installing and managing software with apt.</li>
-</ul>
-<p>To do:</p>
-<ul>
-<li>Be sure to reflect changes from VirtualBox to gcloud</li>
-<li>Be sure to reflect chagnes from Fedora to Ubuntu</li>
-<li>Add images</li>
-<li>Edit text</li>
-<li>Standardize format / structure of each subsectin</li>
-<li>Write introduction for this section page and subsection pages</li>
-</ul>
+<p>Now that we have the basics of
+the command line interface down,
+it's time to learn some systems administration.
+In this section,
+we learn how to expand storage space,
+create new user and group accounts and
+manage those accounts,
+install and remove software,
+and manage that software and other processes.</p>
 <a class="header" href="print.html#expanding-storage" id="expanding-storage"><h1>Expanding Storage</h1></a>
 <p>I'm sure all or most of you have needed
 extra disk storage at some point
@@ -4366,7 +4371,7 @@ directory and any files in it.</p>
 delgroup developers
 </code></pre>
 <a class="header" href="print.html#managing-software" id="managing-software"><h1>Managing Software</h1></a>
-<a class="header" href="print.html#introduction-4" id="introduction-4"><h2>Introduction</h2></a>
+<a class="header" href="print.html#introduction-3" id="introduction-3"><h2>Introduction</h2></a>
 <p>Many modern Linux distributions offer some kind of
 package manager to
 install, manage, and remove software.
@@ -4551,7 +4556,7 @@ manual page for <code>apt</code>:</p>
 <pre><code>man apt
 </code></pre>
 <a class="header" href="print.html#using-systemd" id="using-systemd"><h1>Using systemd</h1></a>
-<a class="header" href="print.html#introduction-5" id="introduction-5"><h2>Introduction</h2></a>
+<a class="header" href="print.html#introduction-4" id="introduction-4"><h2>Introduction</h2></a>
 <p>When computers boot up,
 obviously some software manages that process.
 On Linux and other Unix or Unix-like systems,
@@ -4729,23 +4734,14 @@ monitoring logs.</p>
 <p>We'll put what we've learned into practice
 when we set up our LAMP servers.</p>
 <a class="header" href="print.html#networking-and-security" id="networking-and-security"><h1>Networking and Security</h1></a>
-<a class="header" href="print.html#introduction-6" id="introduction-6"><h2>Introduction</h2></a>
-<p>This section covers basic networking:</p>
-<ul>
-<li>DNS</li>
-<li>chroot</li>
-<li>firewalls</li>
-<li>and backups.</li>
-</ul>
-<p>To do:</p>
-<ul>
-<li>Be sure to reflect changes from VirtualBox to gcloud</li>
-<li>Be sure to reflect chagnes from Fedora to Ubuntu</li>
-<li>Add images</li>
-<li>Edit text</li>
-<li>Standardize format / structure of each subsectin</li>
-<li>Write introduction for this section page and subsection pages</li>
-</ul>
+<p>Even if we do not work as network administrators,
+system administrators need to know network basics.
+In this section, we cover TCP/IP and other protocols
+related to the internet protocol suite,
+and how to protect our systems locally,
+from external threats,
+and how to create backups of our systems in case
+of disaster.</p>
 <a class="header" href="print.html#networking-and-tcpip" id="networking-and-tcpip"><h1>Networking and TCP/IP</h1></a>
 <p>An important function of a system administrator
 is to set up, configure, and monitor a network.
@@ -5685,7 +5681,7 @@ may also have domain names and IP addresses to resolve.</p>
 </ul>
 <p>We'll come back to this material when we set up our websites.</p>
 <a class="header" href="print.html#local-security" id="local-security"><h1>Local Security</h1></a>
-<a class="header" href="print.html#introduction-7" id="introduction-7"><h2>Introduction</h2></a>
+<a class="header" href="print.html#introduction-5" id="introduction-5"><h2>Introduction</h2></a>
 <p>Most security issues come from the network, but
 we also need to secure a system from insider attacks, too.
 We can do that by setting appropriate file permissions and
@@ -6108,16 +6104,16 @@ But knowing these options exist and
 the different reasons why we have these options,
 provides quite a bit of utility.</p>
 <a class="header" href="print.html#creating-a-lamp-server" id="creating-a-lamp-server"><h1>Creating a LAMP Server</h1></a>
-<a class="header" href="print.html#introduction-8" id="introduction-8"><h2>Introduction</h2></a>
-<p>This section shows how to create a</p>
-<ul>
-<li>Linux</li>
-<li>Apache2</li>
-<li>MariaDB</li>
-<li>PHP server.</li>
-</ul>
+<p>In this section,
+we learn how to set up a LAMP
+(Linux, Apache, MariaDB, PHP) stack.
+This stack enables us to create a web server
+that provides extra funtionality via PHP and MariaDB.
+Even if we do not become web server administrators,
+knowing how to set up a LAMP stack is not only fun, but
+it's also a valuable skill to have.</p>
 <a class="header" href="print.html#installing-the-apache-web-server" id="installing-the-apache-web-server"><h1>Installing the Apache Web Server</h1></a>
-<a class="header" href="print.html#introduction-9" id="introduction-9"><h2>Introduction</h2></a>
+<a class="header" href="print.html#introduction-6" id="introduction-6"><h2>Introduction</h2></a>
 <p><a href="https://httpd.apache.org/">Apache</a> is an HTTP server,
 otherwise called web server software.
 Other HTTP server software exists.
@@ -6425,7 +6421,7 @@ in our home directories.</p>
 we will learn how to make our sites applications
 by installing PHP and enabling the relevant PHP modules.</p>
 <a class="header" href="print.html#installing-and-configuring-php" id="installing-and-configuring-php"><h1>Installing and Configuring PHP</h1></a>
-<a class="header" href="print.html#introduction-10" id="introduction-10"><h2>Introduction</h2></a>
+<a class="header" href="print.html#introduction-7" id="introduction-7"><h2>Introduction</h2></a>
 <p>Client-side programming languages, like JavaScript,
 are handled by the browser.
 Major browsers like Firefox, Chrome, Safari, Edge, etc.
@@ -6593,7 +6589,7 @@ we'll learn how to complete the LAMP stack
 by adding the MariaDB relational database
 to our setup.</p>
 <a class="header" href="print.html#installing-and-configuring-mariadb" id="installing-and-configuring-mariadb"><h1>Installing and Configuring MariaDB</h1></a>
-<a class="header" href="print.html#introduction-11" id="introduction-11"><h2>Introduction</h2></a>
+<a class="header" href="print.html#introduction-8" id="introduction-8"><h2>Introduction</h2></a>
 <p>We started our LAMP stack when we installed
 Apache2 on Linux, and
 then we added extra functionality when
