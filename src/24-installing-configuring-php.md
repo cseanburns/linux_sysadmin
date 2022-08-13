@@ -22,7 +22,7 @@ it must also be configured to work with the HTTP server,
 which in our case is Apache2.
 
 The main use of PHP is to interact with databases,
-like MySQL, MariaDB, postgreSQL, etc.,
+like MySQL, MariaDB, PostgreSQL, etc.,
 in order to create dynamic page content.
 This is our goal in the last part of this class.
 To accomplish this, we have to:
