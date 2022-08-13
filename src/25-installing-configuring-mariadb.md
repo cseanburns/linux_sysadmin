@@ -1,135 +1,222 @@
 # Installing and Configuring MariaDB
 
-**TO BE UPDATED**
+## Introduction
 
-## Install and Set Up MySQL
+We started our LAMP stack when we installed
+Apache2 on Linux, and
+then we added extra functionality when
+we installed and configured PHP to work with Apache2.
+In this section, our objective is to complete
+the LAMP stack and install and configure [MariaDB][wikipediaMariaDB],
+a (so-far) compatible fork of the MySQL relational database.
 
-This week we'll learn how to install, setup, secure, and configure
-the MySQL relational database so that it works with the Apache2 web
-server. First, a point on terms. This week we will be working as
+If you need a refresher on relational databases, the
+MariaDB website can help. See:
+[Introduction to Relational Databases][introRelDatabases].
 
-- the Linux **root** user and as
-- the MySQL **root** user.
+It's also good to review the documentation for any
+technology that you use.
+MariaDB has [good documentation][mariadbDocs] and
+getting started pages.
 
-These are two different users and accounts. To revisit, in Linux,
-there is the **root** user, which has a home directory at **/root**,
-and there is also the **root** directory at **/**.
+## Install and Set Up MariaDB
 
-In MySQL and other relational database software, there is also a **root**
-user and this user is not the same as the Linux **root** user. It's
-important to keep these concepts separate in our heads, and for most
-of this transcript, I will refer to the MySQL root user or to the Linux
-root user when I'm referring to either one.
+In this section, we'll learn how to install,
+setup, secure, and configure the MariaDB
+relational database so that it works
+with the Apache2 web server and
+the PHP programming language.
 
-First, let's install MySQL Community Server, and then log into the MySQL
-shell under the **MySQL root** account.
+First, let's install MariaDB Community Server, and
+then log into the MariaDB shell
+under the **MariaDB root** account.
+
+```
+sudo apt install mariadb-server mariadb-client
+```
+
+This should also start and enable the database server, but
+we can check if it's running and enabled
+using the ``systemctl`` command:
+
+```
+systemctl status mariadb
+```
+
+Next we need to run a post installation script
+called ``mysql_secure_installation``
+(that's not a typo)
+that sets up the MariaDB root password and 
+performs some security checks.
+To do that, run the following command, and
+**be sure to save the MariaDB root password you create**:
+
+```
+sudo mysql_secure_installation
+```
+
+Again, here is where you create a root password
+for the MariaDB database server.
+Be sure to save that and not forget it!
+When you run the above script,
+you'll get a series of prompts to respond to like below.
+Press **enter** for the first prompt,
+press **Y** for the prompts marked **Y**,
+and input your own password.
+Since this server is exposed to the internet,
+be sure to use a complex password.
+
+```
+Enter the current password for root (enter for none):
+Set root password: Y
+New Password: XXXXXXXXX
+Re-enter new password: XXXXXXXXX
+Remove anonymous users: Y
+Disallow root login remotely: Y
+Remove test database and access to it: Y
+Reload privilege tables now: Y
+```
+
+We can login to the database to test it.
+In order to do so,
+we have to become the **root Linux user**,
+which we can do with the following command:
 
 ```
 sudo su
-dnf upgrade
-dnf search mysql server
-dnf info community-mysql-server
-dnf info community-mysql-server
-dnf install community-mysql-server
-systemctl list-unit-files mysqld.service
-systemctl status mysqld.service
-systemctl start mysqld.service
-systemctl enable mysqld.service
-systemctl status mysqld.service
-systemctl list-unit-files mysqld.service
-mysql -u root
 ```
 
-After we have logged in, we need to create a secure password for the
-**MySQL root** account. Again, do not confuse the **Linux root** with
-the **MySQL root** account. That is, these are two different accounts:
-*Linux root* and *MySQL root*. Once we have created the password, we
-will exit MySQL.
+> Note: we need to generally be careful when we
+> enter commands on the command line, because
+> it's a largely unforgiving computing environment.
+> But we need to be especially careful when we
+> are logged in as the Linux root user.
+> This user can delete anything, including
+> files that the system needs in order to boot
+> and operate.
 
-In MySQL, we will create the following root password: "aNewPassword4!"
-(withouth the quotes), and then log out. In a production environment,
-I would not use a basic password like this, but for our purposes, we
-can keep things simple.
-
-```
-mysql> alter user 'root'@'localhost' identified by 'aNewPassword4!';
-mysql> \q
-```
-
-## Secure MySQL Server
-
-Now we use a MySQL program called ``mysql_secure_installation`` to help
-secure the MySQL installation. From the Bash shell and while logged in
-as **Linux root**, run the following command, and respond to the command
-line prompts as follows:
+After we are root,
+we can login to MariaDB,
+run the ``show databases;`` command, and
+then exit with the ``\q`` command:
 
 ```
-mysql_secure_installation
-Enter password for user root: aNewPassword4!
-Validate Password: Y
-Password Strength: 0
-Change the password for root: N
-Remove anonymous users: y
-Disallow root login remotely: y
-Remove test database: y
-Reload privilege tables now: y
+root@hostname:~# mariadb -u root
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 47
+Server version: 10.3.34-MariaDB-0ubuntu0.20.04.1 Ubuntu 20.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+3 rows in set (0.002 sec)
 ```
+
+> Note: If we are logging into the root database account
+> as the root Linux user, we don't need to enter our password.
 
 ## Create and Set Up a Regular User Account
 
-Now, log back into the MySQL shell as the **MySQL root** user. Here the
-command is a bit different from the first one that we used to login to
-MySQL because we now have to enter our password:
+We need to reserve the **root MariaDB user** for
+special use cases and
+instead create a **regular MariaDB user**, or
+more than one MariaDB user, as needed.
+
+To create a regular MariaDB user,
+we use the ``create`` command.
+In the command below,
+I'll create a new user called **webapp**
+with a complex password within the single quotes
+at the end (marked with a series of Xs here for demo purposes):
 
 ```
-mysql -u root -p
+MariaDB [(none)]> create user 'webapp'@'localhost' identified by 'XXXXXXXXX';
 ```
 
-In MySQL, we need to create and set up a new account that is not **root**
-and therefore does not have **root** privileges:
-
-```
-mysql> create user 'sean'@'localhost' identified by 'an0ldP4ssPhrase!';
-```
+If the prompt returns a **Query OK** message,
+then the new user should have been created without any issues.
 
 ## Create a Practice Database
 
-Now let's create a linux-topic database for user 'sean'. This user will
-be granted all privileges on this database, including all its tables.
-Other than granting all privileges, we could only grant specific
-privileges, including: CREATE, DROP, DELETE, INSERT, SELECT, UPDATE, and
-GRANT OPTION. Such privileges may be called operations or functions. They
-allow MySQL users to use and modify the database:
+As the root database user,
+let's create a new database for a regular, new user.
 
-Don't use this exact command, but the syntax of the ``grant`` command
-below is this:
-
-```
-grant PRIVILEGE_OPTION on DATABASE.TABLE to 'USER'@'LOCALHOST';
-```
-
-In practice, we do this:
-
-```
-mysql> create database linuxdb;
-mysql> grant all privileges on linuxdb.* to 'sean'@'localhost';
-mysql> show databases;
-mysql> \q
-```
-
-### Logging in as Regular User and Creating Tables
-
-Now, we can start doing MySQL work. We've created a new MySQL user named
-**sean** and a new database for **sean** that is called **linuxdb**. Let's
-logout out of the **Linux root** account and re-login under our regular
-Linux account, for me that's **sean**, and create tables and data for
-our database:
+The regular user will be granted **all privileges**
+on the new database,
+including all its tables.
+Other than granting **all privileges**,
+we could limit the user to specific privileges, including:
+**CREATE, DROP, DELETE, INSERT, SELECT, UPDATE, and GRANT OPTION**.
+Such privileges may be called operations or functions, and
+they allow MariaDB users to use and modify the databases,
+where appropriate.
+For example, we may want to limit the **webapp** user to
+only be able to use **SELECT** commands.
+It totally depends on the purpose of the database and
+our security risks.
 
 ```
-$ mysql -u sean -p
-mysql> show databases;
-mysql> use linuxdb;
-mysql> create table distributions
+MariaDB [(none)]> create database linuxdb;
+MariaDB [(none)]> grant all privileges on linuxdb.* to 'webapp'@'localhost';
+MariaDB [(none)]> show databases;
+```
+
+Exit out of the MariaDB database as the **root MariaDB user**, and
+then exit out of the **root Linux user account**, and
+you should be back to your normal Linux user account:
+
+```
+MariaDB [(none)]> \q
+root@hostname:~# exit
+```
+
+> Note: relational database keywords are often written
+> in all capital letters.
+> As far as I know,
+> this is simply a convention to make the code more readable.
+> However, in most cases I'll write the keywords in lower case
+> letters.
+> This is simply because, by convention, I'm super lazy.
+
+## Logging in as Regular User and Creating Tables
+
+We can start doing MariaDB work.
+As a reminder,
+we've created a new MariaDB user named **webapp** and
+a new database for **webapp** that is called **linuxdb**.
+When we run the ``show databases`` command as
+the **webapp** user,
+we should see the **linuxdb** database
+(and only the **linuxdb** database).
+Note below that I use the ``-p`` option.
+This instructs MariaDB to request the password
+for the **webapp** user, which
+is required to log in.
+
+```
+mariadb -u webapp -p
+MariaDB [(none)]> show databases;
+MariaDB [(none)]> use linuxdb;
+```
+
+A database is not worth much without data.
+In the following code,
+I create and define a new table for our **linuxdb** database.
+The table will be called **distributions**, and
+it will contain data about various Linux distributions
+(name of distribution, distribution developer, and founding date).
+
+```
+MariaDB [(linuxdb)]> create table distributions
     -> (
     -> id int unsigned not null auto_increment,
     -> name varchar(150) not null,
@@ -139,28 +226,35 @@ mysql> create table distributions
     -> );
 Query OK, 0 rows affected (0.07 sec)
 
-mysql> show tables;
-mysql> describe distributions;
+MariaDB [(linuxdb)]> show tables;
+MariaDB [(linuxdb)]> describe distributions;
 ```
 
 Congratulations! Now create some records for that table.
 
 ### Adding records into the table
 
-We'll use the INSERT command to add records:
+We can populate our **linuxdb** database
+with some data.
+We'll use the ``insert`` command to add our records
+into our **distribution** table:
 
 ```
-mysql> insert into distributions (name, developer, founded) values
+MariaDB [(linuxdb)]> insert into distributions (name, developer, founded) values
     -> ('Debian', 'The Debian Project', '1993-09-15'),
     -> ('Ubuntu', 'Canonical Ltd.', '2004-10-20'),
     -> ('Fedora', 'Fedora Project', '2003-11-06');
-Query OK, 3 rows affected (0.06 sec)
+Query OK, 3 rows affected (0.004 sec)
 Records: 3  Duplicates: 0  Warnings: 0
-mysql> select * from distributions;
+MariaDB [(linuxdb)]> select * from distributions;
 ```
 
-Success! Now let's test our table. We will complete the following tasks
-to refresh our MySQL knowledge:
+Success! Now let's test our table.
+
+### Testing Commands
+
+We will complete the following tasks
+to refresh our MySQL/MariaDB knowledge:
 
 - retrieve some records or parts of records, 
 - delete a record,
@@ -168,84 +262,114 @@ to refresh our MySQL knowledge:
 - add a record:
 
 ```
-mysql> select name from distributions;
-mysql> select founded from distributions;
-mysql> select name, developer from distributions;
-mysql> select name from distributions where name='Debian';
-mysql> select developer from distributions where name='Ubuntu';
-mysql> # delete from distributions where name='Debian';
-mysql> select /* from distributions;
-mysql> alter table distributions add packagemanager char(3) after name;
-mysql> describe distributions;
-mysql> select * from distributions;
-mysql> update distributions set packagemanager="APT" where id="1";
-mysql> update distributions set packagemanager="APT" where id="2";
-mysql> update distributions set packagemanager="DNF" where id="3";
-mysql> select * from distributions;
-mysql> insert into distributions (name, packagemanager, developer, founded) values
+MariaDB [(linuxdb)]> select name from distributions;
+MariaDB [(linuxdb)]> select founded from distributions;
+MariaDB [(linuxdb)]> select name, developer from distributions;
+MariaDB [(linuxdb)]> select name from distributions where name='Debian';
+MariaDB [(linuxdb)]> select developer from distributions where name='Ubuntu';
+MariaDB [(linuxdb)]> select * from distributions;
+MariaDB [(linuxdb)]> alter table distributions
+    -> add packagemanager char(3) after name;
+MariaDB [(linuxdb)]> describe distributions;
+MariaDB [(linuxdb)]> update distributions set packagemanager='APT' where id='1';
+MariaDB [(linuxdb)]> update distributions set packagemanager='APT' where id='2';
+MariaDB [(linuxdb)]> update distributions set packagemanager='DNF' where id='3';
+MariaDB [(linuxdb)]> select * from distributions;
+MariaDB [(linuxdb)]> delete from distributions where name='Debian';
+MariaDB [(linuxdb)]> insert into distributions
+    -> (name, packagemanager, developer, founded) values
+    -> ('Debian', 'The Debian Project', '1993-09-15'),
     -> ('CentOS', 'YUM', 'The CentOS Project', '2004-05-14');
-mysql> select * from distributions;
-mysql> select name, packagemanager from distributions where founded < '2004-01-01';
-mysql> select name from distributions order by founded;
-mysql> \q
+MariaDB [(linuxdb)]> select * from distributions;
+MariaDB [(linuxdb)]> select name, packagemanager
+    -> from distributions
+    -> where founded < '2004-01-01';
+MariaDB [(linuxdb)]> select name from distributions order by founded;
+MariaDB [(linuxdb)]> \q
 ```
-
-## References and Read More
-
-1. [MySQL: Getting Started with MySQL][mysqlgetstarted]
-1. [How to Create a New User and Grant Permissions in MySQL][mysqlnewuser]
-1. [MySQL: MySQL 5.7 Reference Manual: 13 SQL Statement Syntax][mysqlsyntax]
 
 ## Install PHP and MySQL Support
 
-The next goal is to complete the connection between PHP and MySQL so
-that we can use both for our websites.
+The next goal is to complete the connection
+between PHP and MariaDB so that
+we can use both for our websites.
 
-First install MySQL support for PHP. We're installing some modules alongside
-the basic support. These may or may not be needed, but I'm installing them to
-demonstrate some basics. Use ``dnf info <packagename>`` to get information
-about each package before installing.
+First install PHP support for MariaDB.
+We're installing some modules alongside the basic support.
+These may or may not be needed,
+but I'm installing them to demonstrate some basics.
 
 ```
-sudo su
-dnf install php-mysqlnd php-cli php-mbstring php-fpm
-systemctl restart mysqld.service
-systemctl restart httpd.service
+sudo apt install php-mysql
+```
+
+And then restart Apache2 and MariaDB:
+
+```
+sudo systemctl restart apache2
+sudo systemctl restart mariadab
 ```
 
 ### Create PHP Scripts
 
-Let's move to the base web directory and create our login file, which
-will contain the credentials for our *MySQL regular user* account. In
-the previous week, I demonstrated VirtualHosts. We'll use one of our
-virtual domains to connect to our MySQL server with PHP.
+In order for PHP to connect to MariaDB,
+it needs to authenticate itself.
+To do that,
+we will create a **login.php** file
+in **/var/www/html**.
+We also need to change the group ownership
+of the file and its permissions so that
+the file can be read by the Apache2 web server
+but not by the world,
+since this file will store password information.
 
 ```
-cd /var/www/html/linuxonenterprise/
-touch login.php
-chmod 640 login.php
+cd /var/www/html/
+sudo touch login.php
+sudo chmod 640 login.php
+sudo chown :www-data login.php
 ls -l login.php
 nano login.php
 ```
 
-In the file, add the following credentials, substituting your credentials
-where necessary:
+In the file,
+add the following credentials.
+If you used a different database name than **linuxdb**
+and a different username than **webapp**,
+then you need to substitute your names below. 
+You need to use your own password where
+I have the Xs:
 
 ```
 <?php // login.php
 $db_hostname = "localhost";
 $db_database = "linuxdb";
-$db_username = "sean";
-$db_password = "an0ldP4ssPhrase!";
+$db_username = "webapp";
+$db_password = "XXXXXXXXX";
 ?>
 ```
 
-Now, in a separate file, which will be **index.php**, add the following
-PHP to test our database connection and return some results:
+Next we create a new PHP file for our website.
+This file will display HTML but
+will primarily be PHP interacting with our
+MariaDB **distributions** database.
+
+Create a file titled **distros.php**.
+
+```
+sudo nano distros.php
+```
+
+Then copy over the following text
+(I suggest you transcribe it, especially
+if you're interested in learning a bit of PHP, but
+you can simply copy and paste it into the ``nano`` buffer):
 
 ```
 <html>
-<head><title>MySQL Server Example</title></head>
+<head>
+<title>MySQL Server Example</title>
+</head>
 <body>
 
 <?php
@@ -321,55 +445,39 @@ mysqli_close($conn);
 </html>
 ```
 
-After you save the file and exit the text editor, we need to test the
-PHP syntax. If there are any errors in our PHP, these commands will show
-the line numbers that are causing errors or leading up to errors. If all
-is well with the first command, nothing will output. If all is well with
-the second command, HTML should be outputted:
+Save the file and exit out of ``nano``.
+
+### Test Syntax
+
+After you save the file and exit the text editor,
+we need to test the PHP syntax.
+If there are any errors in our PHP,
+these commands will show the line numbers
+that are causing errors or leading up to errors.
+Nothing will output if all is well with the first command.
+If all is well with the second command, HTML should be outputted:
 
 ```
-php -f login.php
-php -f index.php
-chown :apache *php
+sudo php -f login.php
+sudo php -f index.php
 ```
 
-### Check IP and Hostname
+## Conclusion
 
-We want to make sure that ``/etc/hosts`` has the correct IP address
-for **linuxonenterprise**:
+Congratulations! If you've reached this far,
+you have successfully created a LAMP stack.
+In the process,
+you have learned how to install and set up MariaDB,
+how to create MariaDB root and regular user accounts,
+how to create a test database
+with play data for practicing, and
+how to connect this with PHP for display on a webpage.
 
-```
-ip a
-nano /etc/hosts # update IP address if changed
-```
+In regular applications of these technologies,
+there's a lot more involved, but
+completing the above process is a great start to
+learning more.
 
-## Tasks
-
-Copy the *login.php* and *index.php* to your ``public_html`` directory
-(you should still have *userdir* enabled). Figure out what you need to
-change in order to get your script to work there.
-
-## References
-
-- [How to Test PHP MySQL Database Connection Using Script][phpmysql]
-- [Install Apache/PHP 7.2.12 on Fedora 29/28, CentOS/RHEL 7.5/6.10][apachephp]
-- [MySQL Improved Extension][mysqlimproved]
-- [PHP 5 MySQLi Functions][phpmysqli]
-
-Note: this doesn't seem to be a problem now, but in previous times,
-there was an an error with authentication due to an upgrade in MySQL
-that hadn't caught up with PHP yet. If so, you might need to login as
-**root** to MySQL and run the following command, replacing the relevant
-information with your non-root user info:
-
-```
-ALTER USER 'mysqlUsername'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mysqlUsernamePassword';
-```
-
-[mysqlgetstarted]:https://dev.mysql.com/doc/mysql-getting-started/en/
-[mysqlnewuser]:https://www.digitalocean.com/community/tutorials/how-to-create-a-new-user-and-grant-permissions-in-mysql
-[mysqlsyntax]:https://dev.mysql.com/doc/refman/5.7/en/sql-syntax.html
-[phpmysql]:https://www.tecmint.com/test-php-mysql-database-connection-using-script/
-[apachephp]:https://www.if-not-true-then-false.com/2010/install-apache-php-on-fedora-centos-red-hat-rhel/
-[mysqlimproved]:https://secure.php.net/manual/en/book.mysqli.php
-[phpmysqli]:https://www.w3schools.com/PHP/php_ref_mysqli.asp
+[wikipediaMariaDB]:https://en.wikipedia.org/wiki/MariaDB
+[introRelDatabases]:https://mariadb.com/kb/en/introduction-to-relational-databases/
+[mariadbDocs]:https://mariadb.org/documentation/
