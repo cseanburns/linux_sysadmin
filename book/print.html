@@ -168,13 +168,12 @@ and that fostered a hacking mentality,
 <p>I moved us away from using
 Fedora Server for the Fall 2022 course.
 Fedora Server is a great and fun operating system, and
-there's a lot to learn about Linux using it, but
-it was too bleeding edge for me, and
-that meant something would break in my demonstrations each year
-I taught this course.
-Thus, identifying what had changed in Fedora
+there's a lot to learn about Linux using it.
+However, since it is rather bleeding edge, it
+meant something would break in my demonstrations each semester, and
+identifying what had changed in Fedora
 each year made using it somewhat of a chore to keep up.
-We have therefore switched to a less bleeding edge
+I have therefore switched to a less bleeding edge
 distribution of Linux: the most recent
 <a href="https://ubuntu.com/blog/what-is-an-ubuntu-lts-release">Ubuntu Server LTS release</a>.
 Based on my personal experience managing several servers
@@ -183,10 +182,9 @@ I believe this should provide more stability.
 It helps that Ubuntu Server has a big share of the
 Linux server market.</p>
 <p>The primary reason I moved us away from VirtualBox is because
-a good number of my students each year use Apple computers, and
-this created a
-major obstacle because of
-<a href="https://apple.stackexchange.com/questions/422565/does-virtualbox-run-on-apple-silicon">Apple's switch to the M1 chip</a>.
+a good number of my students each year use Apple computers, which
+a major obstacle when
+<a href="https://apple.stackexchange.com/questions/422565/does-virtualbox-run-on-apple-silicon">Apple switched to the M1 chip</a>.
 I originally considered asking those students
 with Apple computers to use
 different virtualization software, but
@@ -430,6 +428,77 @@ primarily must only attribute the original source code and author.
 </li>
 </ul>
 <a class="header" href="print.html#what-is-linux" id="what-is-linux"><h1>What is Linux?</h1></a>
+<a class="header" href="print.html#the-linux-kernel" id="the-linux-kernel"><h2>The Linux Kernel</h2></a>
+<p>Technically, <a href="https://kernel.org/">Linux is a kernel</a>, and
+a kernel is a part of an operating system that
+oversees CPU activity like multitasking, as well as networking,
+memory management, device management, file systems, and more.
+The kernel alone does not make an operating system.
+It needs user land applications and programs,
+the kind we use on a daily basis, to form a whole,
+as well as ways for these user land utilities to
+interact with the kernel.</p>
+<a class="header" href="print.html#linux-and-gnu" id="linux-and-gnu"><h2>Linux and GNU</h2></a>
+<p>The earliest versions of the Linux kernel were combined
+with tools, utilities, and programs from the <a href="https://www.gnu.org/software/software.html">GNU project</a>
+to form a complete operating system,
+without necessarily a graphical user interface.
+This association continues to this day.
+Additional non-GNU, but
+free and open source programs under different licenses,
+have been added to form a more functional and user friendly system.
+However, since the Linux kernel needs user land applications
+to form an operating system, and
+since user land applications from GNU cannot work without a kernel,
+some argue that the operating system
+should be called <a href="https://en.wikipedia.org/wiki/GNU/Linux_naming_controversy">GNU/Linux</a>
+and not just Linux.
+This has not gained wide acceptance, though.
+Regardless, credit is due to both camps for their contribution,
+as well as many others who have made substantial contributions
+to the operating system.</p>
+<a class="header" href="print.html#linux-uses" id="linux-uses"><h2>Linux Uses</h2></a>
+<p>We are using Linux as a server in this course, which
+means we will use Linux to provide various services.
+Our first focus is to learn to use Linux itself, but
+by the end of the course,
+we will also learn how to provide web and database services.
+Linux can be used to provide <a href="https://en.wikipedia.org/wiki/Server_(computing)">other services</a> that
+we won't cover in this course, such as:</p>
+<ul>
+<li>file servers</li>
+<li>mail servers</li>
+<li>print servers</li>
+<li>game servers</li>
+<li>computing servers</li>
+</ul>
+<p>Although it's a small overall percentage,
+many people use Linux as their main
+desktop/laptop operating system.
+I belong in this camp.
+Linux has been my main OS since the early 2000s.
+While our work on the Linux server means that we will
+almost entirely work on the command line,
+this does not mean that my Linux
+desktop environment is all command line.
+In fact, there are many graphical user environments,
+often called <a href="https://en.wikipedia.org/wiki/Desktop_environment">desktop environments</a>,
+available to Linux users.
+Since I'm currently using the Ubuntu Desktop distribution,
+my default desktop environment is called <a href="https://www.gnome.org/">Gnome</a>.
+<a href="https://kde.org/">KDE</a> is another popular desktop environment, but
+there are many other attractive and useful ones.
+And it's easy to install and switch between
+multiple ones on the same OS.</p>
+<p>Linux has become quite a pervasive operating system.
+Linux powers the hundreds of the
+fastest supercomputers in the world.
+It, or other Unix-like operating systems,
+are the foundation of most web servers.
+The Linux kernel also forms the basis of the Android
+operating system and of Chrome OS.
+The only place where Linux does not dominate is
+in the desktop/laptop space.</p>
 <a class="header" href="print.html#what-is-systems-administration" id="what-is-systems-administration"><h1>What is Systems Administration?</h1></a>
 <a class="header" href="print.html#using-google-cloud-gcloud" id="using-google-cloud-gcloud"><h1>Using Google Cloud (gcloud)</h1></a>
 <p>This section is in draft status.
