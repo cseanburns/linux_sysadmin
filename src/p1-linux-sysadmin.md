@@ -92,13 +92,12 @@ and that fostered a hacking mentality,
 I moved us away from using
 Fedora Server for the Fall 2022 course.
 Fedora Server is a great and fun operating system, and
-there's a lot to learn about Linux using it, but
-it was too bleeding edge for me, and
-that meant something would break in my demonstrations each year
-I taught this course.
-Thus, identifying what had changed in Fedora
+there's a lot to learn about Linux using it.
+However, since it is rather bleeding edge, it 
+meant something would break in my demonstrations each semester, and
+identifying what had changed in Fedora
 each year made using it somewhat of a chore to keep up.
-We have therefore switched to a less bleeding edge
+I have therefore switched to a less bleeding edge
 distribution of Linux: the most recent
 [Ubuntu Server LTS release][ubuntuLTS].
 Based on my personal experience managing several servers
@@ -108,10 +107,9 @@ It helps that Ubuntu Server has a big share of the
 Linux server market.
 
 The primary reason I moved us away from VirtualBox is because 
-a good number of my students each year use Apple computers, and
-this created a
-major obstacle because of
-[Apple's switch to the M1 chip][m1StackOverflow].
+a good number of my students each year use Apple computers, which
+a major obstacle when
+[Apple switched to the M1 chip][m1StackOverflow].
 I originally considered asking those students
 with Apple computers to use
 different virtualization software, but
