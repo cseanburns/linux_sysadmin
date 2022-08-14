@@ -1,99 +1,151 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" class="sidebar-visible no-js light">
     <head>
+        <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Linux Systems Administration</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
-
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
-
+        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
-        <!-- Custom theme -->
-        
-
-        
-
-        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
-        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
-        <script>
-            if (typeof Clipboard == 'undefined') {
-                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
-            }
-        </script>
-
-        <!-- Fetch JQuery from CDN but have a local fallback -->
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script>
-            if (typeof jQuery == 'undefined') {
-                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
-            }
-        </script>
-
-        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
-        <script src="store.js"></script>
-
+        <!-- Custom theme stylesheets -->
     </head>
-    <body class="light">
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
-            var theme = store.get('mdbook-theme');
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            $('body').removeClass().addClass(theme);
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script type="text/javascript">
-            var sidebar = store.get('mdbook-sidebar');
-            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
-            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
         </script>
 
-        <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-history-linux-unix.html"><strong>1.1.</strong> History of Unix and Linux</a></li><li><a href="02-what-is-linux.html"><strong>1.2.</strong> What is Linux?</a></li><li><a href="03-what-is-sysadmin.html"><strong>1.3.</strong> What is Systems Administration?</a></li></ul></li><li><a href="p2-using-gcloud.html"><strong>2.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="05-using-gcloud-virtual-machines.html"><strong>2.1.</strong> Using gcloud for Virtual Machines</a></li></ul></li><li><a href="p3-the-command-line.html"><strong>3.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="06-the-linux-filesystem.html"><strong>3.1.</strong> The Linux Filesystem</a></li><li><a href="07-files-and-directories.html"><strong>3.2.</strong> Files and Directories</a></li><li><a href="08-file-attributes.html"><strong>3.3.</strong> File Attributes</a></li><li><a href="09-text-processing-part-1.html"><strong>3.4.</strong> Text Processing: Part 1</a></li><li><a href="10-text-processing-part-2.html"><strong>3.5.</strong> Text Processing: Part 2</a></li><li><a href="11-text-editors.html"><strong>3.6.</strong> Text Editors</a></li><li><a href="12-revisiting-directory-paths.html"><strong>3.7.</strong> Revisiting Directory Paths</a></li><li><a href="13-bash-scripting.html"><strong>3.8.</strong> Bash Scripting</a></li><li><a href="14-regular-expressions.html"><strong>3.9.</strong> Regular Expressions</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="15-expanding-storage.html"><strong>4.1.</strong> Expanding Storage</a></li><li><a href="16-managing-users-groups.html"><strong>4.2.</strong> Managing Users and Groups</a></li><li><a href="17-managing-software.html"><strong>4.3.</strong> Managing Software</a></li><li><a href="18-using-systemd.html"><strong>4.4.</strong> Using systemd</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-networking-tcpip.html"><strong>5.1.</strong> Networking and TCP/IP</a></li><li><a href="20-dns-domain-names.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-local-security.html"><strong>5.3.</strong> Local Security</a></li><li><a href="22-firewall-backups.html"><strong>5.4.</strong> Firewalls and Backups</a></li></ul></li><li><a href="p6-creating-a-lamp-server.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="23-installing-the-apache-web-server.html"><strong>6.1.</strong> Installing the Apache Web Server</a></li><li><a href="24-installing-configuring-php.html"><strong>6.2.</strong> Installing and Configuring PHP</a></li><li><a href="25-installing-configuring-mariadb.html"><strong>6.3.</strong> Installing and Configuring MariaDB</a></li></ul></li><li><a href="p7-conclusion.html"><strong>7.</strong> Conclusion</a></li></ul>
-        </div>
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="03-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-using-gcloud.html"><strong aria-hidden="true">2.</strong> Using Google Cloud (gcloud)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="05-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="06-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="07-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="08-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="09-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="10-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="11-text-editors.html"><strong aria-hidden="true">3.6.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="12-revisiting-directory-paths.html"><strong aria-hidden="true">3.7.</strong> Revisiting Directory Paths</a></li><li class="chapter-item expanded "><a href="13-bash-scripting.html"><strong aria-hidden="true">3.8.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="14-regular-expressions.html"><strong aria-hidden="true">3.9.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p4-managing-the-system.html"><strong aria-hidden="true">4.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="15-expanding-storage.html"><strong aria-hidden="true">4.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="16-managing-users-groups.html"><strong aria-hidden="true">4.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="17-managing-software.html"><strong aria-hidden="true">4.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="18-using-systemd.html"><strong aria-hidden="true">4.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p5-networking-security.html"><strong aria-hidden="true">5.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="19-networking-tcpip.html"><strong aria-hidden="true">5.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="20-dns-domain-names.html"><strong aria-hidden="true">5.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="21-local-security.html"><strong aria-hidden="true">5.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="22-firewall-backups.html"><strong aria-hidden="true">5.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p6-creating-a-lamp-server.html"><strong aria-hidden="true">6.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="23-installing-the-apache-web-server.html"><strong aria-hidden="true">6.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="24-installing-configuring-php.html"><strong aria-hidden="true">6.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="25-installing-configuring-mariadb.html"><strong aria-hidden="true">6.3.</strong> Installing and Configuring MariaDB</a></li></ol></li><li class="chapter-item expanded "><a href="p7-conclusion.html"><strong aria-hidden="true">7.</strong> Conclusion</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
 
         <div id="page-wrapper" class="page-wrapper">
 
-            <div class="page" tabindex="-1">
-                
-                <div id="menu-bar" class="menu-bar">
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
-                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
-                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
 
                     <h1 class="menu-title">Linux Systems Administration</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html">
-                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cseanburns/linux_sysadmin" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
                     </div>
                 </div>
 
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
                 <div id="content" class="content">
-                    <a class="header" href="print.html#linux-systems-administration" id="linux-systems-administration"><h1>Linux Systems Administration</h1></a>
+                    <main>
+                        <h1 id="linux-systems-administration"><a class="header" href="#linux-systems-administration">Linux Systems Administration</a></h1>
 <p>Author: C. Sean Burns<br />
 Date: 2022-08-12<br />
 Email: <a href="sean.burns@uky.edu">sean.burns@uky.edu</a><br />
 Website: <a href="https://cseanburns.net">cseanburns.net</a><br />
 Twitter: <a href="https://twitter.com/cseanburns">@cseanburns</a><br />
 GitHub: <a href="https://github.com/cseanburns">@cseanburns</a></p>
-<a class="header" href="print.html#introduction" id="introduction"><h2>Introduction</h2></a>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p>This short book was written for my
 Linux Systems Administration course.
 The book and course's goals are to
@@ -111,7 +163,7 @@ accomplished using those programs;</li>
 </ol>
 <p>And finally, this book/course ends on walking students
 through the process of building a <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP stack</a>.</p>
-<a class="header" href="print.html#about-this-book" id="about-this-book"><h2>About This Book</h2></a>
+<h2 id="about-this-book"><a class="header" href="#about-this-book">About This Book</a></h2>
 <p>Since I use this book for my Linux Systems Administration course,
 which I teach each fall semester,
 this book will be a live document.
@@ -137,7 +189,7 @@ Achieving this became easier when I learned about
 licensed under the <a href="https://github.com/cseanburns/linux_sysadmin/blob/master/LICENSE">GNU GPL v3.0</a>.
 Feel free to fork it on <a href="https://github.com/cseanburns/linux_sysadmin">GitHub</a> and
 modify it for your own needs.</p>
-<a class="header" href="print.html#history-of-this-course" id="history-of-this-course"><h2>History of This Course</h2></a>
+<h2 id="history-of-this-course"><a class="header" href="#history-of-this-course">History of This Course</a></h2>
 <p>I created and started teaching this course in the Fall 2016 semester.
 I originally used Soyinka's (2016) excellent
 introduction to Linux administration, and
@@ -158,7 +210,7 @@ of how computers work and what can be done with them.
 In redesigning this course,
 I wanted to strike a balance between these two problems.
 I wanted students to acquire enough skills and
-gain enough confidence to feel comfortable applying for
+gain enough confidence to feel comfortable applying for 
 (at least) entry level systems administrator jobs, and
 more basically,
 I wanted students to be exposed to a different
@@ -169,7 +221,7 @@ and that fostered a hacking mentality,
 Fedora Server for the Fall 2022 course.
 Fedora Server is a great and fun operating system, and
 there's a lot to learn about Linux using it.
-However, since it is rather bleeding edge, it
+However, since it is rather bleeding edge, it 
 meant something would break in my demonstrations each semester, and
 identifying what had changed in Fedora
 each year made it somewhat of a chore to keep up.
@@ -181,7 +233,7 @@ that run on some version of Ubuntu LTS,
 I believe this should provide more stability.
 It helps that Ubuntu Server has a good share of the
 Linux server market.</p>
-<p>The primary reason I moved us away from VirtualBox is because
+<p>The primary reason I moved us away from VirtualBox is because 
 a good number of my students each year use Apple computers, which
 became a major obstacle when
 <a href="https://apple.stackexchange.com/questions/422565/does-virtualbox-run-on-apple-silicon">Apple switched to the M1 chip</a>.
@@ -201,12 +253,12 @@ we'd have to spend a lot of time installing and
 configuring that on their laptops.
 Time is already a constraint in this course, but
 we'll see how it goes this semester (Fall 2022).</p>
-<a class="header" href="print.html#references" id="references"><h2>References</h2></a>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
 <p>Soyinka, W. (2016). <em>Linux administration: A beginner's guide</em> (7th ed.). New
 York: MacGraw Hill Education. ISBN: 978-0-07-184536-6</p>
-<a class="header" href="print.html#history-of-unix-and-linux" id="history-of-unix-and-linux"><h1>History of Unix and Linux</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="history-of-unix-and-linux"><a class="header" href="#history-of-unix-and-linux">History of Unix and Linux</a></h1>
 <p>An outline of the history of Unix and Linux.</p>
-<a class="header" href="print.html#location-bell-labs-part-of-att-new-jersey-late-1960s-through-early-1970s" id="location-bell-labs-part-of-att-new-jersey-late-1960s-through-early-1970s"><h2>Location: Bell Labs, part of AT&amp;T (New Jersey), late 1960s through early 1970s</h2></a>
+<h2 id="location-bell-labs-part-of-att-new-jersey-late-1960s-through-early-1970s"><a class="header" href="#location-bell-labs-part-of-att-new-jersey-late-1960s-through-early-1970s">Location: Bell Labs, part of AT&amp;T (New Jersey), late 1960s through early 1970s</a></h2>
 <ul>
 <li>Starts with an operating system called Multics.</li>
 <li>Multics was a time sharing system
@@ -225,7 +277,7 @@ York: MacGraw Hill Education. ISBN: 978-0-07-184536-6</p>
 <li><a href="https://www.bell-labs.com/usr/dmr/www/">Dennis Ritchie</a>, the creator of the C programming language,
 joined Thompson's efforts.</li>
 </ul>
-<a class="header" href="print.html#location-berkeley-ca-university-of-california-berkeley-early-to-mid-1970s" id="location-berkeley-ca-university-of-california-berkeley-early-to-mid-1970s"><h2>Location: Berkeley, CA (University of California, Berkeley), early to mid 1970s</h2></a>
+<h2 id="location-berkeley-ca-university-of-california-berkeley-early-to-mid-1970s"><a class="header" href="#location-berkeley-ca-university-of-california-berkeley-early-to-mid-1970s">Location: Berkeley, CA (University of California, Berkeley), early to mid 1970s</a></h2>
 <ul>
 <li>The code for UNIX was not 'free software'
 but low cost and easily shared.</li>
@@ -240,7 +292,7 @@ many other important programs, and was a co-founder of Sun Microsystems</li>
 <li>This installation of UNIX would eventually become known
 as the Berkeley Software Distribution, or BSD.</li>
 </ul>
-<a class="header" href="print.html#att" id="att"><h2>AT&amp;T</h2></a>
+<h2 id="att"><a class="header" href="#att">AT&amp;T</a></h2>
 <ul>
 <li>Until its breakup in 1984,
 AT&amp;T was not allowed to profit off patents
@@ -251,7 +303,7 @@ and as a result, they could not commercialize UNIX.</li>
 <li>This changed after the breakup.
 System V UNIX became the standard bearer of commercial UNIX.</li>
 </ul>
-<a class="header" href="print.html#location-boston-ma-mit-early-1980s-through-early-1990s" id="location-boston-ma-mit-early-1980s-through-early-1990s"><h2>Location: Boston, MA (MIT), early 1980s through early 1990s</h2></a>
+<h2 id="location-boston-ma-mit-early-1980s-through-early-1990s"><a class="header" href="#location-boston-ma-mit-early-1980s-through-early-1990s">Location: Boston, MA (MIT), early 1980s through early 1990s</a></h2>
 <ul>
 <li>In the late 1970s, <a href="https://en.wikipedia.org/wiki/Richard_Stallman">Richard Stallman</a> noticed
 that software began to become commercialized.
@@ -279,10 +331,10 @@ except for a kernel, which they called <a href="https://www.gnu.org/software/hur
 that define free software:</li>
 </ul>
 <blockquote>
-<p>The four freedoms, per GNU Project:</p>
-<ol start="0">
-<li>The freedom to run the program as you wish,
-for any purpose (freedom 0).</li>
+<p>The four freedoms, per GNU Project:
+0. The freedom to run the program as you wish,
+for any purpose (freedom 0).</p>
+<ol>
 <li>The freedom to study how the program works,
 and change it so it does your computing as you wish (freedom 1).
 Access to the source code is a precondition for this.</li>
@@ -295,7 +347,7 @@ Access to the source code is a precondition for this.</li>
 </ol>
 </blockquote>
 <p><a href="https://www.gnu.org/philosophy/free-sw.html">The Four Freedoms</a></p>
-<a class="header" href="print.html#the-unix-wars-and-the-lawsuit-late-1980s-through-the-early-1990s" id="the-unix-wars-and-the-lawsuit-late-1980s-through-the-early-1990s"><h2>The Unix wars and the lawsuit, late 1980s through the early 1990s</h2></a>
+<h2 id="the-unix-wars-and-the-lawsuit-late-1980s-through-the-early-1990s"><a class="header" href="#the-unix-wars-and-the-lawsuit-late-1980s-through-the-early-1990s">The Unix wars and the lawsuit, late 1980s through the early 1990s</a></h2>
 <ul>
 <li>AT&amp;T, after its breakup, began to commercialize Unix,
 and differences in AT&amp;T Unix and BSD Unix arose.</li>
@@ -308,7 +360,7 @@ for copyright and trademark violations.</li>
 <li>USL ultimately lost the case,
 but the lawsuit delayed adoption of BSD Unix.</li>
 </ul>
-<a class="header" href="print.html#linux-linus-torvalds-university-of-helsinki-finland-early-1990s" id="linux-linus-torvalds-university-of-helsinki-finland-early-1990s"><h2>Linux, Linus Torvalds, University of Helsinki, Finland, early 1990s</h2></a>
+<h2 id="linux-linus-torvalds-university-of-helsinki-finland-early-1990s"><a class="header" href="#linux-linus-torvalds-university-of-helsinki-finland-early-1990s">Linux, Linus Torvalds, University of Helsinki, Finland, early 1990s</a></h2>
 <ul>
 <li>On August 25, 1991, <a href="https://www.cs.helsinki.fi/u/torvalds/">Linus Torvalds</a>
 announced that he had started working on a <strong>free</strong>
@@ -337,14 +389,14 @@ then he may not have created the Linux kernel.</li>
 <li>But Torvalds and others took the GNU utilities
 and created what is now called Linux or GNU/Linux.</li>
 </ul>
-<a class="header" href="print.html#distributions-early-1990s-through-today" id="distributions-early-1990s-through-today"><h2>Distributions, early 1990s through today</h2></a>
+<h2 id="distributions-early-1990s-through-today"><a class="header" href="#distributions-early-1990s-through-today">Distributions, early 1990s through today</a></h2>
 <ul>
 <li>Soon after the Linux development,
 people would create their own Linux and
 GNU based operating systems and would distribute them.</li>
-<li>As such, these Linux operating systems became
+<li>As such, these Linux operating systems became 
 referred to as <em>distributions</em>.</li>
-<li>The two oldest distributions that are still in
+<li>The two oldest distributions that are still in 
 active development include:
 <ul>
 <li><a href="http://www.slackware.com/">Slackware</a></li>
@@ -352,7 +404,7 @@ active development include:
 </ul>
 </li>
 </ul>
-<a class="header" href="print.html#short-history-of-bsd-1970s-through-today" id="short-history-of-bsd-1970s-through-today"><h2>Short History of BSD, 1970s through today</h2></a>
+<h2 id="short-history-of-bsd-1970s-through-today"><a class="header" href="#short-history-of-bsd-1970s-through-today">Short History of BSD, 1970s through today</a></h2>
 <ul>
 <li>Unix version numbers 1-6 eventually led to BSD 1-4.</li>
 <li>At BSD 4.3, all versions had some AT&amp;T code.
@@ -378,9 +430,9 @@ a year after the Linux kernel was released.</li>
 <li>From a bird's eye point of view, they each have different focuses:
 <ul>
 <li>NetBSD focuses on portability (MacOS, NASA)</li>
-<li>FreeBSD focuses on wide applicability
+<li>FreeBSD focuses on wide applicability 
 (WhatsApp, Netflix, PlayStation 4, MacOS)</li>
-<li>OpenBSD focuses on security
+<li>OpenBSD focuses on security 
 (has contributed a number of very important applications)</li>
 </ul>
 </li>
@@ -393,7 +445,7 @@ coming from the other BSDs.
 See <a href="https://apple.stackexchange.com/questions/401832/why-is-macos-often-referred-to-as-darwin">Why is macOS often referred to as 'Darwin'?</a>
 for a short history.</p>
 </blockquote>
-<a class="header" href="print.html#short-history-of-gnu-1980s-through-today" id="short-history-of-gnu-1980s-through-today"><h2>Short History of GNU, 1980s through today</h2></a>
+<h2 id="short-history-of-gnu-1980s-through-today"><a class="header" href="#short-history-of-gnu-1980s-through-today">Short History of GNU, 1980s through today</a></h2>
 <ul>
 <li>The GNU Hurd is still under active development,
 but it's the pre-production state.</li>
@@ -401,7 +453,7 @@ but it's the pre-production state.</li>
 <li>A complete OS based on the GNU Hurd can be downloaded and ran.
 For example: <a href="https://www.debian.org/ports/hurd/">Debian GNU/Hurd</a></li>
 </ul>
-<a class="header" href="print.html#free-and-open-source-licenses" id="free-and-open-source-licenses"><h2>Free and Open Source Licenses</h2></a>
+<h2 id="free-and-open-source-licenses"><a class="header" href="#free-and-open-source-licenses">Free and Open Source Licenses</a></h2>
 <p>In the free software and open source landscape,
 there are several important free and/or open source
 licenses that are used.
@@ -428,8 +480,8 @@ primarily must only attribute the original source code and author.
 </ul>
 </li>
 </ul>
-<a class="header" href="print.html#what-is-linux" id="what-is-linux"><h1>What is Linux?</h1></a>
-<a class="header" href="print.html#the-linux-kernel" id="the-linux-kernel"><h2>The Linux Kernel</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-linux"><a class="header" href="#what-is-linux">What is Linux?</a></h1>
+<h2 id="the-linux-kernel"><a class="header" href="#the-linux-kernel">The Linux Kernel</a></h2>
 <p>Technically, <a href="https://kernel.org/">Linux is a kernel</a>, and
 a kernel is a part of an operating system that
 oversees CPU activity like multitasking, as well as networking,
@@ -439,7 +491,7 @@ It needs user land applications and programs,
 the kind we use on a daily basis, to form a whole,
 as well as ways for these user land utilities to
 interact with the kernel.</p>
-<a class="header" href="print.html#linux-and-gnu" id="linux-and-gnu"><h2>Linux and GNU</h2></a>
+<h2 id="linux-and-gnu"><a class="header" href="#linux-and-gnu">Linux and GNU</a></h2>
 <p>The earliest versions of the Linux kernel were combined
 with tools, utilities, and programs from the <a href="https://www.gnu.org/software/software.html">GNU project</a>
 to form a complete operating system,
@@ -458,7 +510,7 @@ This has not gained wide acceptance, though.
 Regardless, credit is due to both camps for their contribution,
 as well as many others who have made substantial contributions
 to the operating system.</p>
-<a class="header" href="print.html#linux-uses" id="linux-uses"><h2>Linux Uses</h2></a>
+<h2 id="linux-uses"><a class="header" href="#linux-uses">Linux Uses</a></h2>
 <p>We are using Linux as a server in this course, which
 means we will use Linux to provide various services.
 Our first focus is to learn to use Linux itself, but
@@ -500,8 +552,8 @@ The Linux kernel also forms the basis of the Android
 operating system and of Chrome OS.
 The only place where Linux does not dominate is
 in the desktop/laptop space.</p>
-<a class="header" href="print.html#what-is-systems-administration" id="what-is-systems-administration"><h1>What is Systems Administration?</h1></a>
-<a class="header" href="print.html#introduction-1" id="introduction-1"><h2>Introduction</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-systems-administration"><a class="header" href="#what-is-systems-administration">What is Systems Administration?</a></h1>
+<h2 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h2>
 <p>What is systems administration or
 who is a systems administrator (or <strong>sysadmin</strong>)?
 Let's start off with some definitions provided by
@@ -520,7 +572,7 @@ computer system or network. This position normally carries special privileges
 including access to the protection state and software of a system.</p>
 </blockquote>
 <p>See: <a href="https://csrc.nist.gov/glossary/term/system_administrator">Systems Administrator @NIST</a></p>
-<a class="header" href="print.html#specialized-positions" id="specialized-positions"><h2>Specialized Positions</h2></a>
+<h2 id="specialized-positions"><a class="header" href="#specialized-positions">Specialized Positions</a></h2>
 <p>In addition to the above definitions,
 which broadly define the role,
 there are a number of related or specialized positions.
@@ -539,7 +591,7 @@ responsibility of the Webmaster (<a href="https://csrc.nist.gov/glossary/term/we
 <ul>
 <li>like web admins, and to paraphrase above, database administrators are system
 architects responsible for the overall design, implementation, and
-maintenance of database management systems.</li>
+maintenance of database management systems. </li>
 </ul>
 </li>
 <li>Network administrator:
@@ -573,7 +625,7 @@ People are still needed to work with these
 third-party email providers, but
 the nature of the work is different than operating
 independent mail servers.</p>
-<a class="header" href="print.html#certifications" id="certifications"><h2>Certifications</h2></a>
+<h2 id="certifications"><a class="header" href="#certifications">Certifications</a></h2>
 <p>It's not always necessary to get certified
 as a systems administrator to get work as one, but
 there might be cases where it is necessary; for example,
@@ -591,7 +643,7 @@ the support of your organization.</p>
 <p>Plus, Google offers, via <a href="https://www.coursera.org/">Coursera</a>, a
 beginners <a href="https://www.coursera.org/professional-certificates/google-it-support">Google IT Support Professional Certificate</a>
 that may be helpful.</p>
-<a class="header" href="print.html#associations" id="associations"><h2>Associations</h2></a>
+<h2 id="associations"><a class="header" href="#associations">Associations</a></h2>
 <p>Getting involved in associations and related
 organizations is a great way to learn and
 to connect with others in the field.
@@ -603,11 +655,11 @@ the field and membership is free for students.</p>
 <p><a href="https://www.acm.org/">ACM</a>, or the Association for Computing Machinery,
 has a number of relevant
 <a href="https://www.acm.org/special-interest-groups/alphabetical-listing">special interest groups (SIGs)</a>
-that might be beneficial to systems administrators.</p>
+that might be beneficial to systems administrators. </p>
 <p><a href="http://www.npa.org/">NPA</a>, or the Network Professional Association,
-is an organization that &quot;supports IT/Network
+is an organization that &quot;supports IT/Network 
 professionals.&quot;</p>
-<a class="header" href="print.html#codes-of-ethics" id="codes-of-ethics"><h2>Codes of Ethics</h2></a>
+<h2 id="codes-of-ethics"><a class="header" href="#codes-of-ethics">Codes of Ethics</a></h2>
 <p>Systems administrators manage computer systems
 that contain a lot of data about us and
 this raises privacy and competency issues,
@@ -618,7 +670,7 @@ that are well worth reviewing and discussing.</p>
 <li>LOPSA: <a href="https://lopsa.org/CodeOfEthics">Code of Ethics</a></li>
 <li>NPA: <a href="https://www.npa.org/public/about_codeofethics.cfm">Code of Ethics</a></li>
 </ul>
-<a class="header" href="print.html#keeping-up" id="keeping-up"><h2>Keeping Up</h2></a>
+<h2 id="keeping-up"><a class="header" href="#keeping-up">Keeping Up</a></h2>
 <p>Technology changes fast.
 In fact, even though I teach this course
 about every year,
@@ -631,7 +683,7 @@ as sysadmins,
 to keep up, too.</p>
 <p>I therefore suggest that you continue your
 education by reading and practicing.
-For example, there are lots of books on
+For example, there are lots of books on 
 systems administration.
 <a href="https://www.npa.org/public/about_codeofethics.cfm">O'Reilly</a> continually
 publishes on the topic.
@@ -650,7 +702,7 @@ informative podcast on technology and
 sysadmin related topics.
 <a href="https://www.linuxjournal.com/">Linux Journal</a> publishes great articles
 on Linux related topics.</p>
-<a class="header" href="print.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In this section I provided definitions of systems administrators
 and also the related or more specialized positions,
 such as database administrator, network administrator,
@@ -673,13 +725,13 @@ that surely indicates that it could be much different in
 another ten to twenty years.
 If we don't keep up,
 we won't be of much use to the people we serve.</p>
-<a class="header" href="print.html#using-google-cloud-gcloud" id="using-google-cloud-gcloud"><h1>Using Google Cloud (gcloud)</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="using-google-cloud-gcloud"><a class="header" href="#using-google-cloud-gcloud">Using Google Cloud (gcloud)</a></h1>
 <p>This section introduces us to <a href="https://cloud.google.com">Google Cloud</a> (gcloud).
 We will use this platform to create virtual
 instances of the Ubuntu Server Linux operating system.</p>
-<a class="header" href="print.html#using-gcloud-for-virtual-machines" id="using-gcloud-for-virtual-machines"><h1>Using gcloud for Virtual Machines</h1></a>
-<a class="header" href="print.html#virtual-machines" id="virtual-machines"><h2>Virtual Machines</h2></a>
-<p>Our goal in this section
+<div style="break-before: page; page-break-before: always;"></div><h1 id="using-gcloud-for-virtual-machines"><a class="header" href="#using-gcloud-for-virtual-machines">Using gcloud for Virtual Machines</a></h1>
+<h2 id="virtual-machines"><a class="header" href="#virtual-machines">Virtual Machines</a></h2>
+<p>Our goal in this section 
 is to create a <strong>virtual machine (VM)</strong> <em>instance</em>.
 A VM is basically a virtualized operating system
 that runs on a host operating system.
@@ -708,28 +760,28 @@ the underlying OS on those machines
 system when we run a VM,
 the underlying operating system and CPU architecture
 is still important.
-When Apple, Inc launched their new M1
+When Apple, Inc launched their new M1 
 (ARM-based) chip in 2020,
 it created problems for running non ARM-based operating
 systems as virtual machines (i.e., x86_64 chips).</p>
 <p>Fortunately, we are able to solve that issue
 using a third-party virtualization platform.
 In this course, that means we're going to use gcloud (via Google),
-but there are other options available that you
+but there are other options available that you 
 can explore on your own.</p>
-<a class="header" href="print.html#google-cloud--gcloud" id="google-cloud--gcloud"><h2>Google Cloud / gcloud</h2></a>
-<a class="header" href="print.html#google-account" id="google-account"><h3>Google Account</h3></a>
+<h2 id="google-cloud--gcloud"><a class="header" href="#google-cloud--gcloud">Google Cloud / gcloud</a></h2>
+<h3 id="google-account"><a class="header" href="#google-account">Google Account</a></h3>
 <p>We need to have a Google account to get started with gcloud.
 I imagine most of you already have a Google account,
 but if not, go ahead and create one at <a href="https://www.google.com">https://www.google.com</a>.</p>
-<a class="header" href="print.html#google-cloud-gcloud-project" id="google-cloud-gcloud-project"><h3>Google Cloud (gcloud) Project</h3></a>
+<h3 id="google-cloud-gcloud-project"><a class="header" href="#google-cloud-gcloud-project">Google Cloud (gcloud) Project</a></h3>
 <p>Next, you need to use gcloud
 to create a Google Cloud project.
 Once you've created that project,
 you can enable billing for that project,
-and then install the gcloud software
+and then install the gcloud software 
 on your local machine.</p>
-<p>Follow <strong>Step 1</strong> at the top of the
+<p>Follow <strong>Step 1</strong> at the top of the 
 <strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a></strong> page
 to in create a new project.
 Also, review the page on
@@ -740,7 +792,7 @@ E.g., I am using the name <strong>sysadmin-418</strong>.
 <strong>Avoid using spaces when naming your project.</strong></p>
 <p>Then click on the <strong>Create</strong> button,
 and leave the organization field set to <strong>No Organization</strong>.</p>
-<a class="header" href="print.html#google-billing" id="google-billing"><h3>Google Billing</h3></a>
+<h3 id="google-billing"><a class="header" href="#google-billing">Google Billing</a></h3>
 <p>The second thing to do is to set up
 a billing account for your gcloud project.
 This does mean there is a cost associated
@@ -751,9 +803,9 @@ only amount to a couple of dollars, at most.
 billing for your new project.
 See also the page on how to
 <strong><a href="https://cloud.google.com/billing/docs/how-to/manage-billing-account">create, modify, or close your self-serve Cloud Billing account</a></strong></p>
-<a class="header" href="print.html#install-the-latest-gcloud-cli-version" id="install-the-latest-gcloud-cli-version"><h3>Install the latest gcloud CLI version</h3></a>
+<h3 id="install-the-latest-gcloud-cli-version"><a class="header" href="#install-the-latest-gcloud-cli-version">Install the latest gcloud CLI version</a></h3>
 <p>After you have set up billing,
-the next step is to install gcloud on your local machines.
+the next step is to install gcloud on your local machines. 
 The <strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a></strong> page
 provides instructions for different operating systems.</p>
 <p>There are installation instructions
@@ -788,7 +840,7 @@ Windows user can use Command.exe,
 which can be located by search also.</p>
 <p>Windows users will download a regular <strong>.exe</strong> file,
 but macOS users will download a <strong>.tar.gz</strong> file.
-Since macOS is Unix, you can use the <code>mv</code> command to
+Since macOS is Unix, you can use the <code>mv</code> command to 
 move that file to your <code>$HOME</code> directory.
 Then you extract it there using the <code>tar</code> command,
 and once extracted
@@ -803,7 +855,7 @@ cd google-cloud-sdk
 <p>Modify the above commands, as appropriate,
 if you're using the M1 version
 of the gcloud CLI.</p>
-<a class="header" href="print.html#initializing-the-gcloud-cli" id="initializing-the-gcloud-cli"><h3>Initializing the gcloud CLI</h3></a>
+<h3 id="initializing-the-gcloud-cli"><a class="header" href="#initializing-the-gcloud-cli">Initializing the gcloud CLI</a></h3>
 <p>Once you have downloaded and installed
 the gcloud CLI program,
 you need to initialize it on your local machine.
@@ -816,7 +868,7 @@ per the instructions at the above page:</p>
 <pre><code>gcloud init
 </code></pre>
 <p>And continue to follow the above instructions.</p>
-<a class="header" href="print.html#gcloud-vm-instance" id="gcloud-vm-instance"><h2>gcloud VM Instance</h2></a>
+<h2 id="gcloud-vm-instance"><a class="header" href="#gcloud-vm-instance">gcloud VM Instance</a></h2>
 <p>Once you've initialized gcloud,
 log into <a href="https://console.cloud.google.com/">Google Cloud Console</a>,
 which should take you to the Dashboard page.</p>
@@ -825,7 +877,7 @@ As a reminder,
 a VM is basically a virtualized operating system.
 That means instead of installing an operating system
 (like Linux, macOS, Windows, etc) on a physical machine,
-software is used to mimic the process.</p>
+software is used to mimic the process. </p>
 <p>gcloud offers a number of Linux-based operating systems
 to create VMs.
 We're going to use the Ubuntu operating system
@@ -856,7 +908,7 @@ To do so, follow these steps:</p>
 <li>Next, click on <strong>Create a VM</strong>.</li>
 <li>Provide a name for your <strong>instance</strong>.
 <ul>
-<li>E.g., I chose <strong>fall-2022</strong> (no spaces)</li>
+<li>E.g., I chose <strong>fall-2022</strong> (no spaces) </li>
 </ul>
 </li>
 <li>Under the <strong>Series</strong> dropdown box, make sure <strong>E2</strong> is selected.</li>
@@ -874,7 +926,7 @@ To do so, follow these steps:</p>
 <li>Check the <strong>Allow HTTP Traffic</strong> button</li>
 <li>Finally, click on the <strong>Create</strong> button to create your VM instance.</li>
 </ul>
-<a class="header" href="print.html#connect-to-our-vm" id="connect-to-our-vm"><h2>Connect to our VM</h2></a>
+<h2 id="connect-to-our-vm"><a class="header" href="#connect-to-our-vm">Connect to our VM</a></h2>
 <p>After the new VM machine has been created,
 we need to connect to it via the command line.
 macOS users will connect to it via their Terminal.app.
@@ -888,7 +940,7 @@ The syntax follows this pattern:</p>
 <p>The values in the double quotes in the above command
 can be located in your Google Cloud console and
 in your VM instances section.</p>
-<a class="header" href="print.html#update-our-ubuntu-vm" id="update-our-ubuntu-vm"><h2>Update our Ubuntu VM</h2></a>
+<h2 id="update-our-ubuntu-vm"><a class="header" href="#update-our-ubuntu-vm">Update our Ubuntu VM</a></h2>
 <p>The VM will include a recently updated version of Ubuntu 20.04,
 but it may not be completely updated.
 Thus the first thing we need to do is update our machines.
@@ -897,9 +949,9 @@ which you should run also:</p>
 <pre><code>apt update
 apt -y upgrade
 </code></pre>
-<a class="header" href="print.html#snapshots" id="snapshots"><h2>Snapshots</h2></a>
+<h2 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h2>
 <p>Lastly, we have installed a pristine version of Ubuntu,
-but it's likely that we will mess something up
+but it's likely that we will mess something up 
 as we work on our systems.
 Or it could be that our systems may become compromised
 at some point.
@@ -938,19 +990,19 @@ goes wrong later.</p>
 </ol>
 <p><strong><p style="color:red">Please monitor your billing for this to avoid costs
 that you do not want to incur.</p></strong></p>
-<a class="header" href="print.html#conclusion-1" id="conclusion-1"><h2>Conclusion</h2></a>
+<h2 id="conclusion-1"><a class="header" href="#conclusion-1">Conclusion</a></h2>
 <p>Congratulations!
 You have just completed your first installation of a Linux server.</p>
 <p>To summarize,
 in this section,
 you learned about and created a VM with gcloud.
-This is a lot!
+This is a lot! 
 After this course is completed,
 you will be able to fire up a virtual machine
 on short notice and deploy websites and more.</p>
-<a class="header" href="print.html#the-command-line" id="the-command-line"><h1>The Command Line</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-command-line"><a class="header" href="#the-command-line">The Command Line</a></h1>
 <p>It's obviously more common for people today
-to learn how to use a computer via a
+to learn how to use a computer via a 
 graphical user interface, but
 graphical user interfaces entail extra software, and
 the more software we have on a server,
@@ -958,7 +1010,7 @@ the more resources that software consumes, and
 the more we expose our systems to security risks.</p>
 <p>Graphical user interfaces also do not provide
 a good platform for automation,
-at least not remotely as well
+at least not remotely as well 
 as command line interfaces do.
 Working on the command line,
 in what is know as a <a href="https://en.wikipedia.org/wiki/Unix_shell">shell</a>,
@@ -972,17 +1024,17 @@ have done so well in the server market.</p>
 our focus is learning the command line environment,
 how to use it, and
 what it offers.</p>
-<a class="header" href="print.html#the-linux-filesystem" id="the-linux-filesystem"><h1>The Linux Filesystem</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-linux-filesystem"><a class="header" href="#the-linux-filesystem">The Linux Filesystem</a></h1>
 <p>In this demo, we will cover the:</p>
 <ul>
 <li>the Linux filesystem and how it is structured and organized, and</li>
 <li>the basic commands to navigate around and to work with directories and files</li>
 </ul>
 <blockquote>
-<p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous, but
+<p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous, but 
 as users of primarily graphical user interfaces,
 you are more likely familiar with the term <strong>folders</strong>.
-I will more often use the term <strong>directories</strong>
+I will more often use the term <strong>directories</strong> 
 since that is the command line (text user interface) convention.
 I will use the term <strong>folders</strong> when referring to a graphical environment.</p>
 </blockquote>
@@ -991,7 +1043,7 @@ I encourage you to <code>ssh</code> into our remote server
 and follow along with the commands that I use.
 See <a href="02-quick-ssh-connect.html">Section 2.2</a>
 for details on connecting to the remote server.</p>
-<a class="header" href="print.html#visualizing-the-filesystem-as-a-tree" id="visualizing-the-filesystem-as-a-tree"><h2>Visualizing the Filesystem as a Tree</h2></a>
+<h2 id="visualizing-the-filesystem-as-a-tree"><a class="header" href="#visualizing-the-filesystem-as-a-tree">Visualizing the Filesystem as a Tree</a></h2>
 <p>We will need to work within the filesystem
 quite a lot in this course,
 but the term <strong>filesystem</strong> may refer to different concepts,
@@ -1005,8 +1057,8 @@ Linux and other unix-like operating systems use a variety of filesystems, but
 presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
 The former is the default filesystem on distributions
 like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
-the latter is the default on the
-<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
+the latter is the default on the 
+<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions. 
 <a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of filesystems under this concept,
 and we will learn how to use some of them later in the semester
 when we create partitions, manage disk volumes, and learn about backups.</p>
@@ -1041,7 +1093,7 @@ like in the second example below:</p>
 </ul>
 </li>
 </ul>
-<a class="header" href="print.html#the-root-directory-and-its-base-level-directories" id="the-root-directory-and-its-base-level-directories"><h3>The root Directory and its Base Level Directories</h3></a>
+<h3 id="the-root-directory-and-its-base-level-directories"><a class="header" href="#the-root-directory-and-its-base-level-directories">The root Directory and its Base Level Directories</a></h3>
 <p>As explained on the Linux.com page,
 here are the major sub directories under <strong>/</strong> (root)
 and a short description of their main purpose:</p>
@@ -1075,9 +1127,9 @@ quite a bit when we set up our web servers, relational database servers,
 and more later in the semester.
 The <strong>/home</strong> directory is where our default home directories are stored,
 and if you manage a multi-user system,
-then this will be an important directory to manage.</p>
+then this will be an important directory to manage. </p>
 <p>Source: <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux Filesystem Explained</a></p>
-<a class="header" href="print.html#relative-and-absolute-paths" id="relative-and-absolute-paths"><h2>Relative and Absolute Paths</h2></a>
+<h2 id="relative-and-absolute-paths"><a class="header" href="#relative-and-absolute-paths">Relative and Absolute Paths</a></h2>
 <p>macOS users have the Finder app to navigate their filesystem,
 to move files to different folders, to copy files, to trash them, etc.
 Window users have File Explorer for these functions.
@@ -1086,7 +1138,7 @@ but all of these functions can be completed on the Linux command line, too,
 and generally more efficiently.
 To get started, we need to learn two things first:</p>
 <ol>
-<li>how to specify the locations of files and directories in the filesystem</li>
+<li>how to specify the locations of files and directories in the filesystem </li>
 <li>the commands needed to work with the filesystem</li>
 </ol>
 <p>To help specify the locations of files and directories,
@@ -1097,7 +1149,7 @@ there are two key concepts to know:</p>
 </ul>
 <p>Above we learned about the <strong>/</strong> root directory and its subdirectories.
 All sorts of commands,
-especially those that deal with files and directories
+especially those that deal with files and directories 
 (like copying, moving, deleting),
 require us to specify on the command line
 the locations of the files and directories.
@@ -1168,7 +1220,7 @@ I'd write:</p>
 <pre><code>cd /home/sean/public_html
 </code></pre>
 <p>Again, the relative path specified above would only work if
-I was in my home directory, because
+I was in my home directory, because 
 <code>cd public_html</code> is relative to the location of <code>/home/sean</code>.
 That is, the subdirectory <strong>public_html</strong> is in <strong>/home/sean</strong>.
 But specifying the absolute path would work no matter where
@@ -1183,8 +1235,8 @@ one of the more difficult concepts for new commandline users to learn,
 but after time, it'll feel natural.
 So just keep practicing, and
 I'll go over this throughout the semester.</p>
-<a class="header" href="print.html#files-and-directories" id="files-and-directories"><h1>Files and Directories</h1></a>
-<a class="header" href="print.html#basic-directory-and-file-commands" id="basic-directory-and-file-commands"><h2>Basic Directory and File commands</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="files-and-directories"><a class="header" href="#files-and-directories">Files and Directories</a></h1>
+<h2 id="basic-directory-and-file-commands"><a class="header" href="#basic-directory-and-file-commands">Basic Directory and File commands</a></h2>
 <p>In order to explore the above directories
 but also to create new ones and work with files,
 we need to know some basic terminal commands.
@@ -1199,7 +1251,7 @@ GNU Coreutils:</p>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations">Special File Types</a></li>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Printing-text">Printing Text</a></li>
 </ul>
-<a class="header" href="print.html#directory-listing" id="directory-listing"><h3>Directory Listing</h3></a>
+<h3 id="directory-listing"><a class="header" href="#directory-listing">Directory Listing</a></h3>
 <blockquote>
 <p>I have already demonstrated one command:
 the <code>cd</code> (change directory) command.
@@ -1246,7 +1298,7 @@ in the long-list format,
 we can use:</p>
 <pre><code>ls -al
 </code></pre>
-<a class="header" href="print.html#basic-file-operations" id="basic-file-operations"><h2>Basic File Operations</h2></a>
+<h2 id="basic-file-operations"><a class="header" href="#basic-file-operations">Basic File Operations</a></h2>
 <p>Some basic file operation commands include:</p>
 <ul>
 <li><code>cp</code>    : copying files and directories</li>
@@ -1302,7 +1354,7 @@ ls -l file.txt
 -rw-rw-r-- 1 sean sean 0 Jun 27 00:18 file.txt
 </code></pre>
 <p>Here are some ways to use the other three commands and their options:</p>
-<a class="header" href="print.html#copying-files-and-directories" id="copying-files-and-directories"><h3>Copying Files and Directories</h3></a>
+<h3 id="copying-files-and-directories"><a class="header" href="#copying-files-and-directories">Copying Files and Directories</a></h3>
 <p>To copy an existing file (<strong>file1.txt</strong>)
 to a new file (<strong>file2.txt</strong>):</p>
 <pre><code>cp file1.txt file2.txt
@@ -1310,12 +1362,12 @@ to a new file (<strong>file2.txt</strong>):</p>
 <p>Use the <code>-i</code> option to copy that file in interactive mode;
 that is, to prompt you before overwriting an existing file.</p>
 <p>We also use the <code>cp</code> command to copy directories.</p>
-<a class="header" href="print.html#moving-files-and-directories" id="moving-files-and-directories"><h3>Moving Files and Directories</h3></a>
+<h3 id="moving-files-and-directories"><a class="header" href="#moving-files-and-directories">Moving Files and Directories</a></h3>
 <p>The <code>mv</code> command will move an existing file to a different directory,
 and/or rename the file.
 For example, from within our home directory
 (therefore, using relative path names),
-to move a file named &quot;file.docx&quot;
+to move a file named &quot;file.docx&quot; 
 to a subdirectory named &quot;Documents&quot;:</p>
 <pre><code>mv file.docx Documents/
 </code></pre>
@@ -1336,7 +1388,7 @@ then moving the file to that directory will overwrite it without asking.
 The <code>-i</code> option will prompt us first:</p>
 <pre><code>mv -i paper.docx Documents/paper.docx
 </code></pre>
-<a class="header" href="print.html#remove-or-delete" id="remove-or-delete"><h3>Remove or Delete</h3></a>
+<h3 id="remove-or-delete"><a class="header" href="#remove-or-delete">Remove or Delete</a></h3>
 <p>Finally, to delete a file, we use the <code>rm</code> command:</p>
 <pre><code>rm file.html
 </code></pre>
@@ -1346,10 +1398,10 @@ it's very hard to recover a deleted file using the <code>rm</code> command.
 That is, using <code>rm</code> does not mean the file or directory is <strong>trashed</strong>;
 rather, it means it was <strong>deleted</strong>.</p>
 </blockquote>
-<a class="header" href="print.html#special-file-types" id="special-file-types"><h2>Special File Types</h2></a>
+<h2 id="special-file-types"><a class="header" href="#special-file-types">Special File Types</a></h2>
 <p>For now, let's only cover two commands here:</p>
 <ul>
-<li><code>mkdir</code> for creating a new directory</li>
+<li><code>mkdir</code> for creating a new directory </li>
 <li><code>rmdir</code> for deleting an empty directory</li>
 </ul>
 <p>Like the above commands,
@@ -1358,7 +1410,7 @@ that can be viewed in their respective <strong>man pages</strong>:</p>
 <pre><code>man mkdir
 man rmdir
 </code></pre>
-<a class="header" href="print.html#make-or-create-a-new-directory" id="make-or-create-a-new-directory"><h3>Make or Create a New Directory</h3></a>
+<h3 id="make-or-create-a-new-directory"><a class="header" href="#make-or-create-a-new-directory">Make or Create a New Directory</a></h3>
 <p>We use these commands like we do the ones above.
 If we are in our <strong>$HOME</strong> directory, and
 we want to create a new directory called <strong>bin</strong>, we do:</p>
@@ -1370,7 +1422,7 @@ to store our personal applications, or applications (programs) that
 are only available to us.</p>
 </blockquote>
 <p>And if we run <code>ls</code>, we should see that it was successful.</p>
-<a class="header" href="print.html#delete-a-directory" id="delete-a-directory"><h3>Delete a Directory</h3></a>
+<h3 id="delete-a-directory"><a class="header" href="#delete-a-directory">Delete a Directory</a></h3>
 <p>The <code>rmdir</code> command is a bit weird
 because it only removes <strong>empty</strong> directories.
 To remove the directory we just created, we use it like so:</p>
@@ -1382,7 +1434,7 @@ then you will have to use the <code>rm</code> command
 along with the <code>-r</code> (recursive) option:</p>
 <pre><code>rm -r directory-with-content/
 </code></pre>
-<a class="header" href="print.html#printing-text" id="printing-text"><h2>Printing Text</h2></a>
+<h2 id="printing-text"><a class="header" href="#printing-text">Printing Text</a></h2>
 <p>There a number of ways to print text to <strong>standard output</strong>,
 which is our screen by default in the terminal.
 We could also redirect standard output
@@ -1401,7 +1453,7 @@ then by default we print to the screen.
 However, standard output can be <strong>redirected</strong>
 to files, programs, or devices, like actual printers.</p>
 </blockquote>
-<a class="header" href="print.html#print-to-screen" id="print-to-screen"><h3>Print to Screen</h3></a>
+<h3 id="print-to-screen"><a class="header" href="#print-to-screen">Print to Screen</a></h3>
 <p>To use <code>echo</code>:</p>
 <pre><code>echo &quot;hello world&quot;
 echo &quot;Today is a good day.&quot;
@@ -1410,7 +1462,7 @@ echo &quot;Today is a good day.&quot;
 <pre><code>a=4
 echo &quot;$a&quot;
 </code></pre>
-<a class="header" href="print.html#print-file-to-screen" id="print-file-to-screen"><h3>Print File to Screen</h3></a>
+<h3 id="print-file-to-screen"><a class="header" href="#print-file-to-screen">Print File to Screen</a></h3>
 <p><code>cat</code> is listed elsewhere in the GNU Coreutils page.
 The primary use of the <code>cat</code> command is to join, combine, or concatenate files,
 but if used on a single file,
@@ -1424,7 +1476,7 @@ There are a few pagers to use, but the <code>less</code> command is a common one
 <p>Like with the <strong>man pages</strong>,
 use the up and down arrow keys to scroll through the output,
 and press <strong>q</strong> to quit the pager.</p>
-<a class="header" href="print.html#conclusion-2" id="conclusion-2"><h2>Conclusion</h2></a>
+<h2 id="conclusion-2"><a class="header" href="#conclusion-2">Conclusion</a></h2>
 <p>In this demo, we learned about the filesystem or directory structure of Linux,
 and we also learned some basic command to work with directories and files.
 You should practice using these commands as much as possible.
@@ -1446,8 +1498,8 @@ especially to see what options are available for each of them.</p>
 <li><code>rm</code>    : remove or delete a file or directory</li>
 <li><code>tree</code>  : list contents of directories in a tree-like format</li>
 </ul>
-<a class="header" href="print.html#file-attributes" id="file-attributes"><h1>File Attributes</h1></a>
-<a class="header" href="print.html#identifying-ownership-and-permissions" id="identifying-ownership-and-permissions"><h2>Identifying Ownership and Permissions</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="file-attributes"><a class="header" href="#file-attributes">File Attributes</a></h1>
+<h2 id="identifying-ownership-and-permissions"><a class="header" href="#identifying-ownership-and-permissions">Identifying Ownership and Permissions</a></h2>
 <p>In the last section, we saw that the output of the <code>ls -l</code> command
 included a lot extra information besides a listing of file names.
 The output also listed the owners and permissions for each file and directory.</p>
@@ -1460,7 +1512,7 @@ for all files created under that account.</p>
 <p>In order to allow or restrict access to files and directories
 (for example,
 to allow other users to read, write to, or run your or others' files),
-ownership and permissions are set in order to manage that kind
+ownership and permissions are set in order to manage that kind 
 of access to those files and directories.
 There are thus two owners for every file (and directory):</p>
 <ul>
@@ -1485,15 +1537,16 @@ that contains a single file called <strong>index.html</strong>:</p>
 </code></pre>
 <p>According to the above output,
 we can parse the following information about the file:</p>
-<table><thead><tr><th> Attributes             </th><th> <code>ls -l</code> output   </th></tr></thead><tbody>
-<tr><td> File permissions       </td><td> <code>-rw-rw-r--</code>     </td></tr>
-<tr><td> Number of links        </td><td> 1                  </td></tr>
-<tr><td> Owner name             </td><td> sean               </td></tr>
-<tr><td> Group name             </td><td> sean               </td></tr>
-<tr><td> Byte size              </td><td> 11251              </td></tr>
-<tr><td> Last modification date </td><td> Jun 20 14:41       </td></tr>
-<tr><td> File name              </td><td> index.html         </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Attributes</th><th><code>ls -l</code> output</th></tr></thead><tbody>
+<tr><td>File permissions</td><td><code>-rw-rw-r--</code></td></tr>
+<tr><td>Number of links</td><td>1</td></tr>
+<tr><td>Owner name</td><td>sean</td></tr>
+<tr><td>Group name</td><td>sean</td></tr>
+<tr><td>Byte size</td><td>11251</td></tr>
+<tr><td>Last modification date</td><td>Jun 20 14:41</td></tr>
+<tr><td>File name</td><td>index.html</td></tr>
 </tbody></table>
+</div>
 <p>What's important for us right now are the <strong>File permissions</strong> row,
 the <strong>Owner name</strong> row,
 and the <strong>Group name</strong> row.</p>
@@ -1537,15 +1590,16 @@ In our <code>/bin</code> directory, we can see a listing for this program
 <pre><code>ls -l /bin/zip
 -rwxr-xr-x 1 root   root    212K Feb  2  2021  zip*
 </code></pre>
-<table><thead><tr><th> Attributes             </th><th> <code>ls -l</code> output   </th></tr></thead><tbody>
-<tr><td> File permissions       </td><td> <code>-rwxr-xr-x</code>     </td></tr>
-<tr><td> Number of links        </td><td> 1                  </td></tr>
-<tr><td> Owner name             </td><td> root               </td></tr>
-<tr><td> Group name             </td><td> root               </td></tr>
-<tr><td> Byte size              </td><td> 212K               </td></tr>
-<tr><td> Last modification date </td><td> Feb  2 2021        </td></tr>
-<tr><td> File name              </td><td> zip*               </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Attributes</th><th><code>ls -l</code> output</th></tr></thead><tbody>
+<tr><td>File permissions</td><td><code>-rwxr-xr-x</code></td></tr>
+<tr><td>Number of links</td><td>1</td></tr>
+<tr><td>Owner name</td><td>root</td></tr>
+<tr><td>Group name</td><td>root</td></tr>
+<tr><td>Byte size</td><td>212K</td></tr>
+<tr><td>Last modification date</td><td>Feb  2 2021</td></tr>
+<tr><td>File name</td><td>zip*</td></tr>
 </tbody></table>
+</div>
 <p>Since <code>zip</code> is a computer program used to package and compress files,
 it needs to be e(x)ecutable.
 That is, users on the system need to be able to run it.
@@ -1580,15 +1634,16 @@ which will show the permissions for my <code>/home/sean</code> directory:</p>
 <pre><code>drwx--x--- 51 sean sean 4.0K Jun 23 18:35 ./
 </code></pre>
 <p>This shows that:</p>
-<table><thead><tr><th> Attributes             </th><th> <code>ls -ld</code> output  </th></tr></thead><tbody>
-<tr><td> File permissions       </td><td> <code>drwx--x---</code>     </td></tr>
-<tr><td> Number of links        </td><td> 1                  </td></tr>
-<tr><td> Owner name             </td><td> sean               </td></tr>
-<tr><td> Group name             </td><td> sean               </td></tr>
-<tr><td> Byte size              </td><td> 4.0K               </td></tr>
-<tr><td> Last modification date </td><td> Jun 23             </td></tr>
-<tr><td> File name              </td><td> ./                 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Attributes</th><th><code>ls -ld</code> output</th></tr></thead><tbody>
+<tr><td>File permissions</td><td><code>drwx--x---</code></td></tr>
+<tr><td>Number of links</td><td>1</td></tr>
+<tr><td>Owner name</td><td>sean</td></tr>
+<tr><td>Group name</td><td>sean</td></tr>
+<tr><td>Byte size</td><td>4.0K</td></tr>
+<tr><td>Last modification date</td><td>Jun 23</td></tr>
+<tr><td>File name</td><td>./</td></tr>
 </tbody></table>
+</div>
 <p>This is a little different from the previous examples, but let's parse it:</p>
 <ul>
 <li>Instead of an initial dash, this <em>file</em> has an initial <strong>d</strong> that identifies this
@@ -1616,8 +1671,8 @@ or any other command.
 In this case, the <strong>World</strong>
 (users who are not me)
 cannot access my home directory.</p>
-<a class="header" href="print.html#changing-file-permissions-and-ownership" id="changing-file-permissions-and-ownership"><h2>Changing File Permissions and Ownership</h2></a>
-<a class="header" href="print.html#changing-file-permissions" id="changing-file-permissions"><h3>Changing File Permissions</h3></a>
+<h2 id="changing-file-permissions-and-ownership"><a class="header" href="#changing-file-permissions-and-ownership">Changing File Permissions and Ownership</a></h2>
+<h3 id="changing-file-permissions"><a class="header" href="#changing-file-permissions">Changing File Permissions</a></h3>
 <p>All the files and directories on a Linux system
 have default ownership and permissions set.
 This includes new files that we might create as
@@ -1636,12 +1691,13 @@ group.</li>
 that we see with the <code>ls -l</code> command.
 Each one of those bits (the <code>r</code>, the <code>w</code>, and the <code>x</code>)
 are assigned the following <a href="https://docs.oracle.com/cd/E19504-01/802-5750/6i9g464pv/index.html">octal</a> values:</p>
-<table><thead><tr><th> permission   </th><th> description    </th><th> octal value   </th></tr></thead><tbody>
-<tr><td> r            </td><td> read           </td><td> 4             </td></tr>
-<tr><td> w            </td><td> write          </td><td> 2             </td></tr>
-<tr><td> x            </td><td> execute        </td><td> 1             </td></tr>
-<tr><td> -            </td><td> no permissions </td><td> 0             </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>permission</th><th>description</th><th>octal value</th></tr></thead><tbody>
+<tr><td>r</td><td>read</td><td>4</td></tr>
+<tr><td>w</td><td>write</td><td>2</td></tr>
+<tr><td>x</td><td>execute</td><td>1</td></tr>
+<tr><td>-</td><td>no permissions</td><td>0</td></tr>
 </tbody></table>
+</div>
 <p>There are three octal values for the three set of permissions
 represented by <code>-rwxrwxrwx</code>.
 If I bracket the sets (for demonstration purposes only),
@@ -1650,7 +1706,7 @@ they look like this:</p>
 </code></pre>
 <p>The first set describes the permissions for the owner.
 The second set describes the permissions for the group.
-The third set describes the permissions for the World.</p>
+The third set describes the permissions for the World. </p>
 <p>We use the <code>chmod</code> command and the octal values to change
 a file or directory's permissions.
 For each set, we add up the octal values.
@@ -1674,7 +1730,7 @@ and <code>r--</code> for the group and the World:</p>
 </code></pre>
 <p>Because <code>4+2=6</code> for owner,
 and <code>4</code> is read only for group and World, respectively.</p>
-<a class="header" href="print.html#changing-file-ownership" id="changing-file-ownership"><h3>Changing File Ownership</h3></a>
+<h3 id="changing-file-ownership"><a class="header" href="#changing-file-ownership">Changing File Ownership</a></h3>
 <p>In order to change the ownership of a file,
 we use the <code>chown</code> command followed by
 the name of the owner.
@@ -1714,7 +1770,7 @@ access on a system.
 In such a case,
 I might have to use the <code>sudo</code> command
 (you do not have access to the <code>sudo</code> command
-on our shared server,
+on our shared server, 
 but you will have it later on your virtual machines).
 In this case, I don't need the colon.
 To change the owner only,
@@ -1727,7 +1783,7 @@ and separate those names by a colon,
 where the syntax is <code>chown USER:GROUP testFile.txt</code></p>
 <pre><code>sudo chown tmk:sisFaculty testFile.txt
 </code></pre>
-<p>After using the <code>chown</code> command to change
+<p>After using the <code>chown</code> command to change 
 either the owner or group,
 we should double check the file or directory's permissions
 using the <code>chmod</code> command.
@@ -1739,7 +1795,7 @@ I'm changing the file permissions for a file
 that I do not own:</p>
 <pre><code>sudo chmod 660 testFile.txt
 </code></pre>
-<a class="header" href="print.html#conclusion-3" id="conclusion-3"><h2>Conclusion</h2></a>
+<h2 id="conclusion-3"><a class="header" href="#conclusion-3">Conclusion</a></h2>
 <p>In this section, we learned:</p>
 <ul>
 <li>how to identify file/directory ownership and permissions</li>
@@ -1766,7 +1822,7 @@ command.</p>
 <li><code>groups</code>     : print the groups a user is in</li>
 <li><code>sudo</code>       : execute a command as another user</li>
 </ul>
-<a class="header" href="print.html#text-processing-part-1" id="text-processing-part-1"><h1>Text Processing: Part 1</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="text-processing-part-1"><a class="header" href="#text-processing-part-1">Text Processing: Part 1</a></h1>
 <p>One of the more important sets of tools that Linux (as well Unix-like)
 operating systems provide are tools that
 <a href="https://tldp.org/LDP/abs/html/textproc.html">aid processing and manipulating text</a>.
@@ -1865,7 +1921,7 @@ Android, Apache, 2008
 <p>It's a small file, but
 we might want the line and word count of the file.
 To acquire that, we can use the <code>wc</code> (word count) command.
-By itself, the <code>wc</code> command will print
+By itself, the <code>wc</code> command will print 
 the number of lines, words, and bytes of a file.
 The following output states that the file contains
 seven lines, 23 words, and 165 bytes:</p>
@@ -1876,7 +1932,7 @@ seven lines, 23 words, and 165 bytes:</p>
 by default,
 the first ten lines of a file.
 Since our file is only seven lines long,
-we can use the <code>-n</code> option
+we can use the <code>-n</code> option 
 to change the default number of lines:</p>
 <pre><code>head -n3 operating-systems.csv
 Chrome OS, Proprietary, 2009
@@ -1978,7 +2034,7 @@ We could specify a different number in order
 to start output at a different line.
 See <code>man tail</code> for more information.</p>
 </blockquote>
-<a class="header" href="print.html#conclusion-4" id="conclusion-4"><h2>Conclusion</h2></a>
+<h2 id="conclusion-4"><a class="header" href="#conclusion-4">Conclusion</a></h2>
 <p>In this lesson, we learned how to process and
 make sense of data held in a text file.
 We used some commands that let us select,
@@ -2002,8 +2058,8 @@ in a file.</p>
 <li><code>|</code> : redirect standard output command1 to standard input of command2</li>
 <li><code>&gt;</code> : redirect to standard output to a file, overwriting</li>
 </ul>
-<a class="header" href="print.html#text-processing-part-2" id="text-processing-part-2"><h1>Text Processing: Part 2</h1></a>
-<a class="header" href="print.html#introduction-2" id="introduction-2"><h2>Introduction</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="text-processing-part-2"><a class="header" href="#text-processing-part-2">Text Processing: Part 2</a></h1>
+<h2 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h2>
 <p>In the last section, we covered the
 <code>cat</code>, <code>cut</code>, <code>head</code>, <code>sort</code>, <code>tail</code>, <code>uniq</code>, and <code>wc</code> utilities.</p>
 <p>We also learned about the <code>|</code> pipe operator,
@@ -2045,7 +2101,7 @@ In this section, we will cover the following three of these:</p>
 <li><code>sed</code>  : stream editor for filtering and transforming text</li>
 <li><code>awk</code>  : pattern scanning and text processing language</li>
 </ul>
-<a class="header" href="print.html#grep" id="grep"><h2>Grep</h2></a>
+<h2 id="grep"><a class="header" href="#grep">Grep</a></h2>
 <p>The <code>grep</code> command is one of my most often used commands.
 Basically, <code>grep</code> &quot;prints lines that match patterns&quot;
 (see <code>man grep</code>).
@@ -2095,7 +2151,7 @@ However, adding the <code>-i</code> option results in success:</p>
 grep -i &quot;chrome&quot; operating-systems.csv
 Chrome OS, Proprietary, 2009
 </code></pre>
-<p>We can also search for lines that <strong>do not</strong> match our string
+<p>We can also search for lines that <strong>do not</strong> match our string 
 using the <code>-v</code> option.
 We can combine that with the <code>-i</code> option to ignore the string's case.
 Therefore, in the following example,
@@ -2215,7 +2271,7 @@ but it's good practice,
 especially if your string contains more than one word or
 empty spaces.</p>
 </blockquote>
-<a class="header" href="print.html#sed" id="sed"><h2>Sed</h2></a>
+<h2 id="sed"><a class="header" href="#sed">Sed</a></h2>
 <p><code>sed</code> is a type of non-interactive text editor
 that filters and transforms text (<code>man sed</code>).
 By default <code>sed</code> works on <strong>standard output</strong>,
@@ -2364,7 +2420,7 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
 <p>Note that the FreeDOS line doesn't appear in the second output.
-This is because I didn't use the <code>-i</code> option nor
+This is because I didn't use the <code>-i</code> option nor 
 did I redirect output to a new file.
 If we want to edit the file <strong>in-place</strong>,
 that is, save the edits,
@@ -2382,7 +2438,7 @@ The regular expression <code>1991$</code>  means
 Then I use the <code>s</code> command to start a find and replace.
 <code>sed</code> finds the string <strong>Linux</strong> and then replaces
 that with the string <strong>GNU/Linux</strong>.
-I use the back slash to escape the forward slash in GNU/Linux:</p>
+I use the back slash to escape the forward slash in GNU/Linux: </p>
 <pre><code>sed '/1991$/s/Linux/GNU\/Linux/' operating-systems.csv
 OS, License, Year
 Chrome OS, Proprietary, 2009
@@ -2409,32 +2465,32 @@ there are lots of tutorials on the web.
 Here are a few good ones:</p>
 <ul>
 <li><a href="https://opensource.com/article/20/12/sed">Learn to use the Sed text editor</a></li>
-<li><a href="https://www.gnu.org/software/sed/manual/sed.html">Sed Introduction</a></li>
+<li><a href="https://www.gnu.org/software/sed/manual/sed.html">Sed Introduction</a> </li>
 <li><a href="https://catonmat.net/sed-one-liners-explained-part-one">Sed One-Liners Explained, Part I: File Spacing, Numbering and Text Conversion and Substitution</a></li>
 <li><a href="https://edoras.sdsu.edu/doc/sed-oneliners.html">sed one-liners</a></li>
 <li><a href="https://www.tutorialspoint.com/sed/index.htm">Sed Tutorial</a></li>
 </ul>
-<a class="header" href="print.html#awk" id="awk"><h2>Awk</h2></a>
+<h2 id="awk"><a class="header" href="#awk">Awk</a></h2>
 <p><code>awk</code> is a complete scripting language for
 &quot;pattern scanning and processing&quot; text (see <code>man awk</code>).
 It's a powerful language that focuses on <strong>columns of structured data</strong>.</p>
 <p>Unlike <code>sed</code>, which works on lines and uses line addresses to
 select text to edit,
 <code>awk</code> works on columns, and
-this is regardless if the contents include structured data
+this is regardless if the contents include structured data 
 (like a CSV file) or not (like a letter or essay).
 If the data is structured,
 then that means the data will be formatted in some way.
 In the last few sections,
 we have looked at a CSV file.
-This is structured data because the data points
+This is structured data because the data points 
 in this file are separated by commas.</p>
 <p>For <code>awk</code> to work with columns in a file,
 it needs some way to refer to those columns.
-In the examples below, we'll see that columns in a text
+In the examples below, we'll see that columns in a text 
 file are referred to by a dollar sign and
 then the number of the column <code>$n</code>.
-So, <code>$1</code> indicates column one,
+So, <code>$1</code> indicates column one, 
 <code>$2</code> indicates column two, and so on.
 If we use <code>$0</code>, then we refer to the entire file.
 In our example text file, <code>$1</code> indicates the OS Name column,
@@ -2561,7 +2617,7 @@ iOS, Proprietary, 2007
 macOS, Proprietary, 2001
 </code></pre>
 <p>Even though we wouldn't normally add years up,
-let's print the sum of column three
+let's print the sum of column three 
 to demonstrate how summing works in <code>awk</code>:</p>
 <pre><code>awk -F',' 'sum += $3 { print sum }' operating-systems.csv
 2009
@@ -2664,7 +2720,7 @@ then check out some of these tutorials:</p>
 <li><a href="https://arstechnica.com/gadgets/2021/08/linux-bsd-command-line-101-using-awk-sed-and-grep-in-the-terminal/">Linux/BSD command line wizardry: Learn to think in sed, awk, and grep</a></li>
 <li><a href="https://earthly.dev/blog/awk-examples/">Understanding AWK</a></li>
 </ul>
-<a class="header" href="print.html#conclusion-5" id="conclusion-5"><h2>Conclusion</h2></a>
+<h2 id="conclusion-5"><a class="header" href="#conclusion-5">Conclusion</a></h2>
 <p>The Linux (and other Unix-like OSes) command line
 offers a lot of utilities to examine data.
 Prior to this lesson, we covered a few of them that help us get
@@ -2685,10 +2741,10 @@ we have looked at:</p>
 <ul>
 <li><a href="https://wikis.utexas.edu/display/bioiteam/Scott%27s+list+of+linux+one-liners">compilation of one-liners</a></li>
 </ul>
-<a class="header" href="print.html#text-editors" id="text-editors"><h1>Text editors</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="text-editors"><a class="header" href="#text-editors">Text editors</a></h1>
 <p>Working on the command line means, well, writing a lot of commands.
 But there will be times when we will want to save some of the commands
-that we write in order to re-use them later, or we might want to
+that we write in order to re-use them later, or we might want to 
 develop the commands into a script (i.e., program) because we might
 want to automate a process. The shell is great for writing one off commands,
 but it's not a great place to write multi-line commands.
@@ -2710,18 +2766,18 @@ and we will need to edit Apache's configuration files in the process.
 We could do this using some of the tools that we've already covered,
 like <code>sed</code> and <code>awk</code>,
 but it'll make our lives much easier to use a text editor.</p>
-<p>In any case, in order to save our commands or edit text files,
+<p>In any case, in order to save our commands or edit text files, 
 a text editor is very helpful.
 Programmers use text editors to write programs,
 but because programmers may often be working in graphical user environments,
-they may often use more specific graphical text editors or <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s.
+they may often use more specific graphical text editors or <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s. 
 As systems administrators, we might not always have a
 graphical user interface installed on a server.
 The servers that we manage might contain limited software
 that does not serve its main purpose as as server because
 any non-relevant software on the system takes up disk space,
 consumes resources, and/or poses a security threat.
-In such cases, we might have to use a text editor built for the
+In such cases, we might have to use a text editor built for the 
 text user interface.</p>
 <p>Fortunately, there are lots of options.
 In this lesson, I will demonstrate how to use three different
@@ -2740,11 +2796,11 @@ I think it's more important that you are aware of them.
 If you wish to learn more,
 there are lots of additional tutorials on the web on how to use these
 fine, esteemed text editors.</p>
-<a class="header" href="print.html#ed" id="ed"><h2><code>ed</code></h2></a>
+<h2 id="ed"><a class="header" href="#ed"><code>ed</code></a></h2>
 <p><code>ed</code> is a line editor, and
 it's one of the most likely text editors
 to be installed on a Linux distribution,
-but <code>nano</code> might eventually take its place.
+but <code>nano</code> might eventually take its place. 
 <code>ed</code>, or an early version of it,
 is also the first text editor for the Unix operating system and
 was developed by Ken Thompson, one of the Unix creators, in the late 1960s.
@@ -2774,7 +2830,7 @@ and it should not surprise you that <a href="https://www.oreilly.com/library/vie
 <p>To operationalize this,
 this means that each line has an <strong>address</strong>,
 that the address for line 7 is, for example, <strong>7</strong>, and so forth.
-Line editors like <code>ed</code> are command driven.
+Line editors like <code>ed</code> are command driven. 
 There is no menu to select from at the top of the <em>window</em>,
 and in fact, when we used <code>ed</code> to open an existing file,
 the text in the file isn't even printed on the screen.
@@ -2789,32 +2845,34 @@ including all the lines in the file,
 just like <code>sed</code> does.</p>
 <p>In fact, many of the commands that <code>ed</code> uses are also used by <code>sed</code>.
 To compare:</p>
-<table><thead><tr><th> Command         </th><th> <code>sed</code>   </th><th> <code>ed</code>   </th></tr></thead><tbody>
-<tr><td> append text     </td><td> <code>a</code>     </td><td> <code>a</code>    </td></tr>
-<tr><td> replace text    </td><td> <code>c</code>     </td><td> <code>c</code>    </td></tr>
-<tr><td> delete text     </td><td> <code>d</code>     </td><td> <code>d</code>    </td></tr>
-<tr><td> insert text     </td><td> <code>i</code>     </td><td> <code>i</code>    </td></tr>
-<tr><td> print text      </td><td> <code>p</code>     </td><td> <code>p</code>    </td></tr>
-<tr><td> substitute text </td><td> <code>s</code>     </td><td> <code>s</code>    </td></tr>
-<tr><td> print w/ line # </td><td> <code>=</code>     </td><td> <code>n</code>    </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th><code>sed</code></th><th><code>ed</code></th></tr></thead><tbody>
+<tr><td>append text</td><td><code>a</code></td><td><code>a</code></td></tr>
+<tr><td>replace text</td><td><code>c</code></td><td><code>c</code></td></tr>
+<tr><td>delete text</td><td><code>d</code></td><td><code>d</code></td></tr>
+<tr><td>insert text</td><td><code>i</code></td><td><code>i</code></td></tr>
+<tr><td>print text</td><td><code>p</code></td><td><code>p</code></td></tr>
+<tr><td>substitute text</td><td><code>s</code></td><td><code>s</code></td></tr>
+<tr><td>print w/ line #</td><td><code>=</code></td><td><code>n</code></td></tr>
 </tbody></table>
+</div>
 <p>However, there are big differences that mainly relate
 to the fact that <code>ed</code> is a text editor
 and <code>sed</code> is not.
 For example, here are some commands available in <code>ed</code> only.
 <code>sed</code> can usually accomplish these tasks,
 but in a non-trivial way.</p>
-<table><thead><tr><th> Command                 </th><th> <code>ed</code> only   </th></tr></thead><tbody>
-<tr><td> edit file               </td><td> <code>e</code>         </td></tr>
-<tr><td> name file               </td><td> <code>f</code>         </td></tr>
-<tr><td> join lines              </td><td> <code>j</code>         </td></tr>
-<tr><td> copies lines            </td><td> <code>t</code>         </td></tr>
-<tr><td> moves lines             </td><td> <code>m</code>         </td></tr>
-<tr><td> undo                    </td><td> <code>u</code>         </td></tr>
-<tr><td> saves file              </td><td> <code>w</code>         </td></tr>
-<tr><td> quits <code>ed</code>            </td><td> <code>q</code>         </td></tr>
-<tr><td> Quits <code>ed</code> w/o saving </td><td> <code>Q</code>         </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th><code>ed</code> only</th></tr></thead><tbody>
+<tr><td>edit file</td><td><code>e</code></td></tr>
+<tr><td>name file</td><td><code>f</code></td></tr>
+<tr><td>join lines</td><td><code>j</code></td></tr>
+<tr><td>copies lines</td><td><code>t</code></td></tr>
+<tr><td>moves lines</td><td><code>m</code></td></tr>
+<tr><td>undo</td><td><code>u</code></td></tr>
+<tr><td>saves file</td><td><code>w</code></td></tr>
+<tr><td>quits <code>ed</code></td><td><code>q</code></td></tr>
+<tr><td>Quits <code>ed</code> w/o saving</td><td><code>Q</code></td></tr>
 </tbody></table>
+</div>
 <p>There are other differences,
 but these are sufficient for our purposes.</p>
 <p>Let's see how to use <code>ed</code> to open a file,
@@ -2881,7 +2939,7 @@ I'll start with a fresh version of the file:</p>
 ,s/Linux/GNU\/Linux/
 </code></pre>
 <p>If we want to add new rows to the file,
-we can append <code>a</code> or insert <code>i</code> text
+we can append <code>a</code> or insert <code>i</code> text 
 after  or at specific lines.
 To append text after line 3, use <code>a</code>:</p>
 <pre><code>3a
@@ -2889,7 +2947,7 @@ FreeDOS, GPL, 1998
 .
 </code></pre>
 <p>Because enter input mode when using the <code>a</code>, <code>i</code>, or <code>c</code> commands,
-we have to enter a period <code>.</code> on a line by itself to revert
+we have to enter a period <code>.</code> on a line by itself to revert 
 to command mode.</p>
 <p>To insert at line 2, use <code>i</code>:</p>
 <pre><code>2i
@@ -2932,7 +2990,7 @@ but also because the line editing technology developed for it
 is still in use today,
 and is a basic part of the <code>vim</code> text editor,
 which is a very widely used application.</p>
-<a class="header" href="print.html#vim" id="vim"><h2><code>vim</code></h2></a>
+<h2 id="vim"><a class="header" href="#vim"><code>vim</code></a></h2>
 <p>The <code>vim</code> text editor is a take on the <code>vi</code> text editor
 and is in fact called <strong>Vi IMproved</strong>.
 (The <code>vi</code> text editor is usually available via the <code>nvi</code>
@@ -3048,7 +3106,7 @@ as websites, videos, etc that explore them, and
 especially <code>vim</code> in more detail.
 But now that you have some familiarity with them,
 you might find this funny: <a href="https://www.gnu.org/fun/jokes/ed-msg.en.html">Ed, man! !man ed</a>.</p>
-<a class="header" href="print.html#nano" id="nano"><h2><code>nano</code></h2></a>
+<h2 id="nano"><a class="header" href="#nano"><code>nano</code></a></h2>
 <p>The <code>nano</code> text editor is the user-friendliest of these text editors but
 still requires some adjustment as a new command line user.
 The friendliest thing about <code>nano</code> is that it is modeless,
@@ -3091,7 +3149,7 @@ Some quick tips:</p>
 <li>Quit and save by pressing <code>Ctrl-x</code>.</li>
 <li>Be sure to follow the prompts at the bottom of the screen.</li>
 </ol>
-<a class="header" href="print.html#conclusion-6" id="conclusion-6"><h2>Conclusion</h2></a>
+<h2 id="conclusion-6"><a class="header" href="#conclusion-6">Conclusion</a></h2>
 <p>In prior lessons, we learned how to use the Bash interactive shell and
 how to view, manipulate, and edit files from that shell.
 In this lesson, we learned how to use several command line text editors.
@@ -3103,7 +3161,7 @@ and in the future, edit configuration files.</p>
 <li><code>vim</code> : Vi IMproved, a programmer's text editor</li>
 <li><code>nano</code> : Nano's ANOther editor, inspired by Pico</li>
 </ul>
-<a class="header" href="print.html#revisiting-directory-paths" id="revisiting-directory-paths"><h1>Revisiting Directory Paths</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="revisiting-directory-paths"><a class="header" href="#revisiting-directory-paths">Revisiting Directory Paths</a></h1>
 <p>I introduced the concept of absolute and relative paths
 in <a href="03-filesystem-file-management.html">section 2.3</a>.
 In this session, the goal is to revisit paths
@@ -3111,7 +3169,7 @@ In this session, the goal is to revisit paths
 and provide some examples.
 This will be important as we proceed to Bash scripting
 and other tasks going forward.</p>
-<a class="header" href="print.html#change-directories" id="change-directories"><h2>Change Directories</h2></a>
+<h2 id="change-directories"><a class="header" href="#change-directories">Change Directories</a></h2>
 <p>The <code>cd</code> command is used to change directories.
 When we login to our systems,
 we will find ourselves in our <strong>$HOME</strong> directory,
@@ -3148,7 +3206,7 @@ pwd
 pwd
 cd /home/sean
 </code></pre>
-<a class="header" href="print.html#make-directories" id="make-directories"><h2>Make Directories</h2></a>
+<h2 id="make-directories"><a class="header" href="#make-directories">Make Directories</a></h2>
 <p>Sometimes we'll want to create new directories.
 To do so, we use the <code>mkdir</code> command.</p>
 <p>To make a new directory in our <strong>$HOME</strong> directory:</p>
@@ -3167,7 +3225,7 @@ where the second or additional directories are nested,
 use the <code>-p</code> option:</p>
 <pre><code>mkdir -p photos/2022
 </code></pre>
-<a class="header" href="print.html#remove-or-delete-files-and-directories" id="remove-or-delete-files-and-directories"><h2>Remove or Delete Files and Directories</h2></a>
+<h2 id="remove-or-delete-files-and-directories"><a class="header" href="#remove-or-delete-files-and-directories">Remove or Delete Files and Directories</a></h2>
 <p>To remove a file, we use the <code>rm</code> command.
 If the file is in a subdirectory,
 specify the relative path:</p>
@@ -3194,7 +3252,7 @@ just specify the path (absolute or relative).</p>
 <p>Remember that the <code>rm</code> command deletes files and directories.
 Use it with caution,
 or with the <code>-i</code> option.</p>
-<a class="header" href="print.html#copy-files-or-directories" id="copy-files-or-directories"><h2>Copy Files or Directories</h2></a>
+<h2 id="copy-files-or-directories"><a class="header" href="#copy-files-or-directories">Copy Files or Directories</a></h2>
 <p>Let's say I want to copy a file in my <strong>$HOME</strong> directory
 to a nested directory:</p>
 <pre><code>cp file.txt documents/ICT418/homework/
@@ -3205,7 +3263,7 @@ to my <code>~/documents</code>directory.
 The <code>~</code> (tilde) is shorthand for my <strong>$HOME</strong> directory.</p>
 <pre><code>cp ~/bin/file.txt ~/documents/``
 </code></pre>
-<a class="header" href="print.html#move-or-rename-files-or-directories" id="move-or-rename-files-or-directories"><h2>Move or Rename Files or Directories</h2></a>
+<h2 id="move-or-rename-files-or-directories"><a class="header" href="#move-or-rename-files-or-directories">Move or Rename Files or Directories</a></h2>
 <p>Let's say I downloaded a file to my <code>~/Downloads</code> directory,
 and I want to move it to my <code>~/documents</code> directory:</p>
 <pre><code>mv ~/Downloads/article.pdf ~/documents/
@@ -3219,7 +3277,7 @@ let's say I rename the <strong>documents</strong> directory
 to <strong>Documents</strong>:</p>
 <pre><code>mv ~/documents ~/Documents
 </code></pre>
-<a class="header" href="print.html#conclusion-7" id="conclusion-7"><h2>Conclusion</h2></a>
+<h2 id="conclusion-7"><a class="header" href="#conclusion-7">Conclusion</a></h2>
 <p>We revisited working with paths in this section,
 and we used the following commands to do so:</p>
 <ul>
@@ -3229,7 +3287,7 @@ and we used the following commands to do so:</p>
 <li><code>cp</code> : copy files or directories</li>
 <li><code>mv</code> : move or rename files or directories</li>
 </ul>
-<a class="header" href="print.html#bash-scripting" id="bash-scripting"><h1>Bash Scripting</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bash-scripting"><a class="header" href="#bash-scripting">Bash Scripting</a></h1>
 <p>It's time to get started on Bash scripting.
 So far, we've been working on the Linux commandline.
 Specifically, we have been working in the <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">Bash</a> shell.
@@ -3239,7 +3297,7 @@ but also as a scripting language.
 The main purpose of Bash is to write small applications/scripts
 that analyze text (e.g., log files) and automate jobs, but
 it can be used for a variety of other purposes.</p>
-<a class="header" href="print.html#variables" id="variables"><h2>Variables</h2></a>
+<h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
 <p>One of the most important abilities of any programming or scripting language
 is to be able to declare a variable.
 Variables enable us to attach some value to a name.
@@ -3253,7 +3311,7 @@ In the following code snippet,
 which can be entered on the commandine,
 I create a variable named <code>name</code>
 and assign it the value <code>Sean</code>.
-I create another variable named <code>backup</code>
+I create another variable named <code>backup</code> 
 and assign it the value <code>/media</code>.
 Then I use the <code>echo</code> and <code>cd</code> commands
 to test the variables:</p>
@@ -3308,7 +3366,7 @@ echo &quot;${seasons[2]}&quot;
 echo &quot;${seasons[-1]}&quot;
 </code></pre>
 <p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
-<a class="header" href="print.html#conditional-expressions" id="conditional-expressions"><h2>Conditional Expressions</h2></a>
+<h2 id="conditional-expressions"><a class="header" href="#conditional-expressions">Conditional Expressions</a></h2>
 <p>Whether working on the commandline, or
 writing scripts in a text editor,
 it's sometimes useful to be able to write multiple commands
@@ -3334,7 +3392,7 @@ cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
 mkdir test
 cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
 </code></pre>
-<a class="header" href="print.html#shebang-or-hashbang" id="shebang-or-hashbang"><h2>Shebang or Hashbang</h2></a>
+<h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
 <p>When we start to write scripts,
 the first thing we add is a [shebang][shebang] at line one.
 We can do so a couple of ways:</p>
@@ -3344,10 +3402,10 @@ We can do so a couple of ways:</p>
 you could put the direct path to Bash:</p>
 <pre><code>#!/usr/bin/bash
 </code></pre>
-<a class="header" href="print.html#looping" id="looping"><h2>Looping</h2></a>
+<h2 id="looping"><a class="header" href="#looping">Looping</a></h2>
 <p>There are several looping methods Bash,
 including: <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
-The <code>for</code> loop is often very useful.</p>
+The <code>for</code> loop is often very useful. </p>
 <pre><code>for i in {1..5} ; do
   echo &quot;${i}&quot;
 done
@@ -3363,7 +3421,7 @@ for i in ${seasons[@]} ; do
   echo &quot;I hope you have a nice ${i}&quot;
 done
 </code></pre>
-<a class="header" href="print.html#testing" id="testing"><h2>Testing</h2></a>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
 <p>Sometimes we will want to test certain conditions.
 There are two parts to this,
 we can use <code>if; then ; else</code> commands,
@@ -3404,7 +3462,7 @@ Let's first create a file called <strong>paper.txt</strong> and
 a file called <strong>paper.bak</strong>.
 We will add some trivial content to <strong>paper.txt</strong>
 but not to the <strong>paper.bak</strong>.
-The following <code>if</code> statement will test if <strong>paper.txt</strong>
+The following <code>if</code> statement will test if <strong>paper.txt</strong> 
 has a more recent modification date, and if so,
 it'll back up the file with the <code>cp</code> and echo back its success:</p>
 <pre><code>if [[ &quot;$HOME/paper.txt&quot; -nt &quot;$HOME/paper.bak&quot; ]] ; then
@@ -3424,7 +3482,7 @@ else
   printf &quot;\nThere is no class today.&quot;
 fi
 </code></pre>
-<a class="header" href="print.html#resources" id="resources"><h2>Resources</h2></a>
+<h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
 <p>I encourage you to explore
 some useful guides and cheat sheets on Bash scripting:</p>
 <ul>
@@ -3435,7 +3493,7 @@ some useful guides and cheat sheets on Bash scripting:</p>
 <li><a href="https://fedoramagazine.org/bash-shell-scripting-for-beginners-part-1/">Bash Shell Scripting for Beginners</a></li>
 <li><a href="https://cs.lmu.edu/%7Eray/notes/bash/">Introduction to Bash</a></li>
 </ul>
-<a class="header" href="print.html#summary" id="summary"><h2>Summary</h2></a>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
 <p>In this demo, we learned about:</p>
 <ul>
 <li>creating and referring to variables</li>
@@ -3449,7 +3507,7 @@ I'll cover more practical examples in upcoming demos,
 but note that mastering the basics requires understanding
 a lot of the commands and paths that we have covered so far in class.
 So keep practicing.</p>
-<a class="header" href="print.html#regular-expressions" id="regular-expressions"><h1>Regular Expressions</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="regular-expressions"><a class="header" href="#regular-expressions">Regular Expressions</a></h1>
 <p>Oftentimes, as systems administrators,
 we will need to search the contents of a file, like a log file.
 One of the commands that we use to do that is the <code>grep</code> command.
@@ -3458,7 +3516,7 @@ which is not unlike doing any kind of search,
 such as in Google.
 The command simply involves running <code>grep</code>
 along with the search string and against a file.</p>
-<a class="header" href="print.html#multiword-strings" id="multiword-strings"><h2>Multiword strings</h2></a>
+<h2 id="multiword-strings"><a class="header" href="#multiword-strings">Multiword strings</a></h2>
 <p>It's good habit to include search strings within quotes,
 but this is especially important if
 we would search for multiword strings.
@@ -3479,7 +3537,7 @@ San Jose, CA      | 983489      | 1777
 grep &quot;San Antonio&quot; cities.csv
 San Antonio, TX | 1451853 | 1718
 </code></pre>
-<a class="header" href="print.html#whole-words-case-sensitive-by-default" id="whole-words-case-sensitive-by-default"><h2>Whole words, case sensitive by default</h2></a>
+<h2 id="whole-words-case-sensitive-by-default"><a class="header" href="#whole-words-case-sensitive-by-default">Whole words, case sensitive by default</a></h2>
 <p>However, <code>grep</code> can employ stricter and
 more powerful syntax than a Google search.
 Since the contents of <strong>cities.csv</strong> are all in lowercase,
@@ -3494,14 +3552,14 @@ to read through the documentation and
 see what the various options exit for this command.</p>
 <pre><code>grep -i &quot;san antonio&quot; cities.csv
 </code></pre>
-<a class="header" href="print.html#bracket-expressions-and-character-classes" id="bracket-expressions-and-character-classes"><h2>Bracket Expressions and Character Classes</h2></a>
+<h2 id="bracket-expressions-and-character-classes"><a class="header" href="#bracket-expressions-and-character-classes">Bracket Expressions and Character Classes</a></h2>
 <p>In conjunction with the <code>grep</code> command,
 we can also use regular expressions to search the content of text files.
 For example, we can use what are called <strong>bracket expressions</strong> and
 <strong>character classes</strong> to search for patterns in the text.
 Here again using <code>man grep</code> is very important because
 it includes instructions on how to use these regular expressions.</p>
-<a class="header" href="print.html#bracket-expressions" id="bracket-expressions"><h3>Bracket expressions</h3></a>
+<h3 id="bracket-expressions"><a class="header" href="#bracket-expressions">Bracket expressions</a></h3>
 <p>From <code>man grep</code> on <strong>bracket expressions</strong>:</p>
 <blockquote>
 <p>A  bracket  expression  is  a  list  of  characters  enclosed  by  [ and ].
@@ -3557,8 +3615,8 @@ San Diego, CA   | 1381611     | 1769
 Dallas, TX      | 1288457     | 1856
 San Jose, CA    | 983489      | 1777
 </code></pre>
-<a class="header" href="print.html#character-classes" id="character-classes"><h3>Character classes</h3></a>
-<p>Character classes are special types of predefined
+<h3 id="character-classes"><a class="header" href="#character-classes">Character classes</a></h3>
+<p>Character classes are special types of predefined 
 bracket expressions.
 They make it easy to search for general data.
 From <code>man grep</code> on <strong>character classes</strong>:</p>
@@ -3570,7 +3628,7 @@ Their names are self explanatory, and they are
 [:digit:], [:graph:], [:lower:], [:print:],
 [:punct:], [:space:], [:upper:], and [:xdigit:].
 For example, [[:alnum:]] means the character class
-of numbers and letters ...</p>
+of numbers and letters ... </p>
 </blockquote>
 <p>Here I search for anything that matches the Year column.
 Specifically, I search for a blank (empty space) <code>[[:blank:]]</code>,
@@ -3594,7 +3652,7 @@ and an end of line <code>$</code>:</p>
 <p>In the above command, the <code>[[:blank:]]</code> can be excluded and
 we'd still retrieve the desired results, but
 I include it here for demonstration purposes.</p>
-<a class="header" href="print.html#anchoring" id="anchoring"><h2>Anchoring</h2></a>
+<h2 id="anchoring"><a class="header" href="#anchoring">Anchoring</a></h2>
 <p>As seen above, outside of bracket expansions and character classes,
 we use the caret <code>^</code> to mark the beginning of a line.
 We can also use the <code>$</code> to match the end of a line.
@@ -3613,7 +3671,7 @@ Dallas, TX        | 1288457 | 1856
 </code></pre>
 <pre><code>grep &quot;^[D-L].*[4-6]$&quot; cities.csv
 </code></pre>
-<a class="header" href="print.html#repetition" id="repetition"><h2>Repetition</h2></a>
+<h2 id="repetition"><a class="header" href="#repetition">Repetition</a></h2>
 <p>If we want to use regular expressions to identify repetitive patterns,
 then we can use repetition operators.
 As we saw above,
@@ -3632,12 +3690,12 @@ matched exactly 2 times:</p>
 <pre><code>grep -E &quot;l{2}&quot; cities.csv
 Dallas, TX | 1288457 | 1856
 </code></pre>
-<p>Finally, in this example, the preceding item <strong>7</strong> is matched
+<p>Finally, in this example, the preceding item <strong>7</strong> is matched 
 at least two times or at most three times:</p>
 <pre><code>grep -E &quot;7{2,3}&quot; cities.csv
 San Jose, CA | 983489 | 1777
 </code></pre>
-<a class="header" href="print.html#or-searches" id="or-searches"><h2>OR searches</h2></a>
+<h2 id="or-searches"><a class="header" href="#or-searches">OR searches</a></h2>
 <p>We can use the vertical bar <code>|</code> to do a Boolean OR search.
 In a Boolean OR statement, the statement is True if either
 one part is true, the other part is true, or both are true.
@@ -3653,7 +3711,7 @@ Dallas, TX      | 1288457 | 1856
 Lexington does not appear in the file:</p>
 <pre><code>grep -E &quot;San Antonio|Lexington&quot; cities.csv
 </code></pre>
-<a class="header" href="print.html#conclusion-8" id="conclusion-8"><h2>Conclusion</h2></a>
+<h2 id="conclusion-8"><a class="header" href="#conclusion-8">Conclusion</a></h2>
 <p>We covered a lot in this section on <code>grep</code> and regular expressions.</p>
 <p>We specifically covered:</p>
 <ul>
@@ -3666,7 +3724,7 @@ Lexington does not appear in the file:</p>
 </ul>
 <p>Even though we focused on <code>grep</code>,
 many these regular expressions work across many programming languages.</p>
-<a class="header" href="print.html#managing-the-system" id="managing-the-system"><h1>Managing the System</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="managing-the-system"><a class="header" href="#managing-the-system">Managing the System</a></h1>
 <p>Now that we have the basics of
 the command line interface down,
 it's time to learn some systems administration.
@@ -3676,7 +3734,7 @@ create new user and group accounts and
 manage those accounts,
 install and remove software,
 and manage that software and other processes.</p>
-<a class="header" href="print.html#expanding-storage" id="expanding-storage"><h1>Expanding Storage</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="expanding-storage"><a class="header" href="#expanding-storage">Expanding Storage</a></h1>
 <p>I'm sure all or most of you have needed
 extra disk storage at some point
 (USB drives, optical disks, floppies???).
@@ -3690,11 +3748,11 @@ To address this,
 we can add a persistent disk
 that is much larger.
 In this section,
-we will add a disk to our VM,
+we will add a disk to our VM, 
 mount it onto the VM's filesystem, and format it.
 Extra storage does incur extra cost.
 So at the end of this section,
-I will show you how to delete the extra
+I will show you how to delete the extra 
 disk to avoid that if you want.</p>
 <p>We will essentially follow the Google Cloud tutorial
 to add a non-boot disk to our VM, but
@@ -3702,14 +3760,14 @@ with some modification.</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
 <blockquote>
 <p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
-The boot disk contains the
+The boot disk contains the 
 software required to boot the system.
 All of our computers
 (desktops, laptops, tablets, phones, etc.),
 regardless of which operating system they run,
 have some kind of boot system.</p>
 </blockquote>
-<a class="header" href="print.html#creating-a-disk" id="creating-a-disk"><h2>Creating a Disk</h2></a>
+<h2 id="creating-a-disk"><a class="header" href="#creating-a-disk">Creating a Disk</a></h2>
 <p>In the Google Cloud console,
 visit the <strong>Disks</strong> page in the <strong>Storage</strong> section,
 which should be here:</p>
@@ -3738,7 +3796,7 @@ pricing</a> is $0.10 per GB.</li>
 selected.</li>
 <li>Click <strong>Create</strong> to create your disk.</li>
 </ol>
-<a class="header" href="print.html#adding-the-disk-to-our-vm" id="adding-the-disk-to-our-vm"><h2>Adding the Disk to our VM</h2></a>
+<h2 id="adding-the-disk-to-our-vm"><a class="header" href="#adding-the-disk-to-our-vm">Adding the Disk to our VM</a></h2>
 <p>Now that we have created our disk,
 we need to <strong>mount</strong> it onto our filesystem
 so that it's available to our VM.
@@ -3759,7 +3817,7 @@ follow these steps:</p>
 </ul>
 </li>
 <li>Click on the <strong>Edit</strong> button at the top of the details page.</li>
-<li>Under the <strong>Additional disks</strong> section, click on <strong>+ ATTACH EXISTING DISK</strong>.</li>
+<li>Under the <strong>Additional disks</strong> section, click on <strong>+ ATTACH EXISTING DISK</strong>. </li>
 <li>A panel will open on the right side of your browser.</li>
 <li>Click on the drop down box and select the disk, by name, you created.</li>
 <li>Leave the defaults as-is.</li>
@@ -3768,8 +3826,8 @@ follow these steps:</p>
 </ol>
 <p>If you return to the <strong>Disks</strong> page in the <strong>Storage</strong> section,
 you will now see that the new disk is in use by our VM.</p>
-<a class="header" href="print.html#formatting-and-mounting-a-non-boot-disk" id="formatting-and-mounting-a-non-boot-disk"><h2>Formatting and Mounting a Non-Boot Disk</h2></a>
-<a class="header" href="print.html#formatting-our-disk" id="formatting-our-disk"><h3>Formatting Our Disk</h3></a>
+<h2 id="formatting-and-mounting-a-non-boot-disk"><a class="header" href="#formatting-and-mounting-a-non-boot-disk">Formatting and Mounting a Non-Boot Disk</a></h2>
+<h3 id="formatting-our-disk"><a class="header" href="#formatting-our-disk">Formatting Our Disk</a></h3>
 <p>In order for our VM to make use of the extra storage,
 the new drive must be formatted and mounted.
 Different operating systems use different filesystem formats.
@@ -3841,7 +3899,7 @@ which we saw with the output of the <code>lsblk</code> command;
 therefore, the specific command I run is:</p>
 <pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
 </code></pre>
-<a class="header" href="print.html#mounting-our-disk" id="mounting-our-disk"><h3>Mounting Our Disk</h3></a>
+<h3 id="mounting-our-disk"><a class="header" href="#mounting-our-disk">Mounting Our Disk</a></h3>
 <p>Now that our disk has been formatted in <strong>ext4</strong>,
 I can mount it.</p>
 <blockquote>
@@ -3879,7 +3937,7 @@ The Google Console documentation instructs us
 to use the following command:</p>
 <pre><code>sudo mkdir -p /mnt/disks/MOUNT_DIR
 </code></pre>
-<p>And to replace <strong>MOUNT_DIR</strong> with the directory we
+<p>And to replace <strong>MOUNT_DIR</strong> with the directory we 
 want to create.
 Since my added disk is named <strong>disk-1</strong>,
 I'll call it that:</p>
@@ -3898,22 +3956,22 @@ grant access for additional users:</p>
 <p>We can test that it exists and is accessible with
 the <code>lsblk</code> and the <code>cd</code> commands.
 The <code>lsblk</code> command should show that <strong>sdb</strong> is
-mounted at <code>/mnt/disks/disk-1</code>, and
+mounted at <code>/mnt/disks/disk-1</code>, and 
 we can <code>cd</code> (change directory) to it:</p>
 <pre><code>cd /mnt/disks/disk-1
 </code></pre>
-<a class="header" href="print.html#automounting-our-disk" id="automounting-our-disk"><h3>Automounting Our Disk</h3></a>
+<h3 id="automounting-our-disk"><a class="header" href="#automounting-our-disk">Automounting Our Disk</a></h3>
 <p>Our disk is mounted, but if the computer (VM) gets rebooted,
 we would have to re-<code>mount</code> the additional drive manually.
 In order to avoid this and automount the drive upon reboot,
 we need to edit the file <code>/etc/fstab</code>.</p>
 <blockquote>
-<p>Note that the file is named <strong>fstab</strong> and
+<p>Note that the file is named <strong>fstab</strong> and 
 that it's located in the <strong>/etc</strong> directory.
 Therefore the full path is <code>/etc/fstab</code></p>
 </blockquote>
-<p>The <strong>fstab</strong> file is basically a configuration file
-that provides information to the OS about the filesystems
+<p>The <strong>fstab</strong> file is basically a configuration file 
+that provides information to the OS about the filesystems 
 the system can mount.
 The standard information <strong>fstab</strong> contains includes
 the name (or label) of the device being mounted,
@@ -3952,12 +4010,12 @@ We'll use <code>nano</code> to make the edit:</p>
 <p>And that's it!
 If you reboot your VM, or
 if your VM rebooted for some reason,
-the extra drive we added should automatically
+the extra drive we added should automatically 
 mount upon reboot.
 If it doesn't,
 then it may mean that the drive failed,
 or that there was an error (i.e., typo) in the configuration.</p>
-<a class="header" href="print.html#delete-the-disk" id="delete-the-disk"><h3>Delete the Disk</h3></a>
+<h3 id="delete-the-disk"><a class="header" href="#delete-the-disk">Delete the Disk</a></h3>
 <p>You are welcome to keep the disk attached to the VM,
 but if you do not want to incur any charges for it,
 which would be about $1 / month at 10 GB,
@@ -3992,8 +4050,8 @@ and the delete the disk in the gcloud console.</p>
 </ul>
 </li>
 </ol>
-<a class="header" href="print.html#conclusion-9" id="conclusion-9"><h2>Conclusion</h2></a>
-<p>In this section we learned how to expand
+<h2 id="conclusion-9"><a class="header" href="#conclusion-9">Conclusion</a></h2>
+<p>In this section we learned how to expand 
 the storage of our VM by creating a new virtual drive,
 adding it to our VM,
 formatting the drive in the <strong>ext4</strong> filesystem format,
@@ -4013,13 +4071,13 @@ the command we used in this section include:</p>
 <li><code>cp</code> : to copy a file</li>
 <li><code>nano</code> : to use the text editor <code>nano</code> to edit <code>/etc/fstab</code></li>
 </ol>
-<a class="header" href="print.html#managing-users-and-groups" id="managing-users-and-groups"><h1>Managing Users and Groups</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="managing-users-and-groups"><a class="header" href="#managing-users-and-groups">Managing Users and Groups</a></h1>
 <p>In some cases we'll want to provide user accounts
 on the servers we administrate, or
 we'll want to set up servers for others to use.
 The process of creating accounts is fairly straightforward, but
 there are a few things to know about how user accounts work.</p>
-<a class="header" href="print.html#the-passwd-file" id="the-passwd-file"><h2>The passwd file</h2></a>
+<h2 id="the-passwd-file"><a class="header" href="#the-passwd-file">The passwd file</a></h2>
 <p>The <strong>/etc/passwd</strong> file contains information
 about the users on your system.
 There is a man page that describes the file, but
@@ -4094,11 +4152,11 @@ This is a common starting numerical ID nowadays,
 but it could be different on other Linux distributions.
 The home directory could be different on other systems, too;
 for example, the default could be located at <strong>/usr/home/peter</strong>.
-Also, other shells exist besides <code>bash</code>,
+Also, other shells exist besides <code>bash</code>, 
 like <a href="https://www.zsh.org/">zsh</a>,
 which is now the default shell on macOS;
 so other systems may default to different shell environments.</p>
-<a class="header" href="print.html#the-shadow-file" id="the-shadow-file"><h2>The shadow file</h2></a>
+<h2 id="the-shadow-file"><a class="header" href="#the-shadow-file">The shadow file</a></h2>
 <p>The <strong>/etc/passwd</strong> file does not contain any passwords but
 a simple <strong>x</strong> to mark the password field.
 Passwords on Linux are stored in <strong>/etc/shadow</strong> and
@@ -4123,10 +4181,10 @@ To set, for example, a warning that a user's password will expire,
 we would use the <code>passwd</code> command
 (see <code>man passwd</code> for options).
 The following command would make it so the user <strong>peter</strong>
-is warned that their password will expire in 14 days:</p>
+is warned that their password will expire in 14 days: </p>
 <pre><code>passwd -w 14 peter
 </code></pre>
-<a class="header" href="print.html#the-group-file" id="the-group-file"><h2>The group file</h2></a>
+<h2 id="the-group-file"><a class="header" href="#the-group-file">The group file</a></h2>
 <p>The <strong>/etc/group</strong> file holds group information
 about the entire system
 (see <code>man 5 group</code>).
@@ -4136,7 +4194,7 @@ but there is also a <code>groups</code> command
 that will return the groups for a user.
 Running the <code>groups</code> command by itself
 will return your own memberships.</p>
-<a class="header" href="print.html#management-tools" id="management-tools"><h2>Management Tools</h2></a>
+<h2 id="management-tools"><a class="header" href="#management-tools">Management Tools</a></h2>
 <p>There are different ways to create new users and groups, and
 the following list includes most of the utilities to help
 with this.
@@ -4160,8 +4218,8 @@ some of them are repetitive.</p>
 Therefore, to view the man page for the <code>userdel</code> command:</p>
 <pre><code>man 8 userdel
 </code></pre>
-<a class="header" href="print.html#practice" id="practice"><h2>Practice</h2></a>
-<a class="header" href="print.html#modify-default-new-user-settings" id="modify-default-new-user-settings"><h3>Modify default new user settings</h3></a>
+<h2 id="practice"><a class="header" href="#practice">Practice</a></h2>
+<h3 id="modify-default-new-user-settings"><a class="header" href="#modify-default-new-user-settings">Modify default new user settings</a></h3>
 <p>Let's modify some default user account settings for new users,
 and then we'll create a new user account.</p>
 <p>Before we proceed,
@@ -4187,7 +4245,7 @@ where the default home directory is located
 (e.g., in <strong>/home/</strong>),
 where the default shell is defined
 (e.g., <code>/bin/bash</code>),
-where the default permissions are set for new
+where the default permissions are set for new 
 home user directories
 (e.g., <strong>0755</strong>)
 and more.</p>
@@ -4219,7 +4277,7 @@ Add any welcome message you want to add,
 plus any guidelines for using the system.</p>
 <pre><code>sudo nano /etc/skel/README
 </code></pre>
-<a class="header" href="print.html#add-new-user-account" id="add-new-user-account"><h3>Add new user account</h3></a>
+<h3 id="add-new-user-account"><a class="header" href="#add-new-user-account">Add new user account</a></h3>
 <p>After writing (saving) and exiting <code>nano</code>,
 we can go ahead and create a new user named <strong>linus</strong>.</p>
 <pre><code>sudo adduser linux
@@ -4240,7 +4298,7 @@ sudo passwd -x 180 linus
 <p>You can see these values by grepping the shadow file:</p>
 <pre><code>sudo grep &quot;linus&quot; /etc/shadow
 </code></pre>
-<a class="header" href="print.html#add-users-to-a-new-group" id="add-users-to-a-new-group"><h3>Add users to a new group</h3></a>
+<h3 id="add-users-to-a-new-group"><a class="header" href="#add-users-to-a-new-group">Add users to a new group</a></h3>
 <p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>,
 the <strong>linus</strong> user only belongs to a group of the same name.
 Let's create a new group that both
@@ -4256,11 +4314,11 @@ sudo gpasswd -a linus developers
 grep &quot;developers&quot; /etc/group
 </code></pre>
 <blockquote>
-<p>Note: if a user is logged in when you add them
+<p>Note: if a user is logged in when you add them 
 to a group, they need to logout and log back
 in before the group membership goes into effect.</p>
 </blockquote>
-<a class="header" href="print.html#create-a-shared-directory" id="create-a-shared-directory"><h3>Create a shared directory</h3></a>
+<h3 id="create-a-shared-directory"><a class="header" href="#create-a-shared-directory">Create a shared directory</a></h3>
 <p>One of the benefits of group membership is that members
 can work in a shared directory.</p>
 <p>Let's make the <strong>/srv/developers</strong> a shared directory.
@@ -4276,11 +4334,11 @@ ls -ld /srv/developers
 <p>Now we can change ownership of the directory:</p>
 <pre><code>sudo chgrp developers /srv/developers
 </code></pre>
-<p>The directory ownership should now reflect that it's owned by
+<p>The directory ownership should now reflect that it's owned by 
 the <strong>developers</strong> group:</p>
 <pre><code>ls -ld /srv/developers
 </code></pre>
-<p>In order to allow group members to read and write to
+<p>In order to allow group members to read and write to 
 the above directory,
 we need to use the <code>chmod</code> command in a way we haven't yet.
 Specifically, we add a leading <strong>2</strong> sets the group identity.
@@ -4291,7 +4349,7 @@ for the directory:</p>
 </code></pre>
 <p>Now either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete
 files in the <strong>/srv/developers</strong> directory.</p>
-<a class="header" href="print.html#user-account-and-group-deletion" id="user-account-and-group-deletion"><h3>User account and group deletion</h3></a>
+<h3 id="user-account-and-group-deletion"><a class="header" href="#user-account-and-group-deletion">User account and group deletion</a></h3>
 <p>You can keep the additional user and group on your system,
 but know that you can also remove them.
 The <code>deluser</code> and <code>delgroup</code> commands
@@ -4301,20 +4359,20 @@ and may be preferable to the others utilities
 <p>If we want to delete the new user's account and the new group,
 these are the commands to use.
 The first command will create an archival backup of
-<strong>linus</strong>' home directory and also remove the home
+<strong>linus</strong>' home directory and also remove the home 
 directory and any files in it.</p>
 <pre><code>deluser --backup --remove-home linus
 delgroup developers
 </code></pre>
-<a class="header" href="print.html#managing-software" id="managing-software"><h1>Managing Software</h1></a>
-<a class="header" href="print.html#introduction-3" id="introduction-3"><h2>Introduction</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="managing-software"><a class="header" href="#managing-software">Managing Software</a></h1>
+<h2 id="introduction-3"><a class="header" href="#introduction-3">Introduction</a></h2>
 <p>Many modern Linux distributions offer some kind of
 package manager to
 install, manage, and remove software.
 These package management systems interact with
 curated and audited central repositories of software
 that are collected into <strong>packages</strong>.
-They also provide a set of tools to learn about
+They also provide a set of tools to learn about 
 the software that exists in these repositories.</p>
 <blockquote>
 <p>If <strong>package management</strong> seems like an odd concept to you,
@@ -4382,22 +4440,22 @@ The R programming language has the
 update software,
 we will focus on using the <code>apt</code> command, which
 is pretty straightforward.</p>
-<a class="header" href="print.html#apt" id="apt"><h2>APT</h2></a>
+<h2 id="apt"><a class="header" href="#apt">APT</a></h2>
 <p>Let's look at the basic <code>apt</code> commands.</p>
-<a class="header" href="print.html#apt-update" id="apt-update"><h3>apt update</h3></a>
+<h3 id="apt-update"><a class="header" href="#apt-update">apt update</a></h3>
 <p>Before installing any software,
 we need to update the index of packages that are available
 for the system.</p>
 <pre><code>sudo apt update
 </code></pre>
-<a class="header" href="print.html#apt-upgrade" id="apt-upgrade"><h3>apt upgrade</h3></a>
+<h3 id="apt-upgrade"><a class="header" href="#apt-upgrade">apt upgrade</a></h3>
 <p>The above command will also state if there is software
 on the system that is ready for an upgrade.
 If any upgrades are available,
 we run the following command:</p>
 <pre><code>sudo apt upgrade
 </code></pre>
-<a class="header" href="print.html#apt-search" id="apt-search"><h3>apt search</h3></a>
+<h3 id="apt-search"><a class="header" href="#apt-search">apt search</a></h3>
 <p>We may know a package's name when we're ready to install it, but
 we also may not.
 To search for a package,
@@ -4418,7 +4476,7 @@ are any console based games:</p>
 the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library is often used to create console-based
 applications.</p>
 </blockquote>
-<a class="header" href="print.html#apt-show" id="apt-show"><h3>apt show</h3></a>
+<h3 id="apt-show"><a class="header" href="#apt-show">apt show</a></h3>
 <p>The above command returned a lit that included
 a game called <strong>ninvaders</strong>, which
 seems to be a console-based Space Invaders like game.
@@ -4426,11 +4484,11 @@ To get additional information about this package,
 we use the <code>apt show [package-name]</code> command:</p>
 <pre><code>apt show ninvaders
 </code></pre>
-<a class="header" href="print.html#apt-install" id="apt-install"><h3>apt install</h3></a>
+<h3 id="apt-install"><a class="header" href="#apt-install">apt install</a></h3>
 <p>It's quite simple to install the package called <strong>ninvaders</strong>:</p>
 <pre><code>sudo apt install ninvaders
 </code></pre>
-<a class="header" href="print.html#apt-remove-or-apt-purge" id="apt-remove-or-apt-purge"><h3>apt remove or apt purge</h3></a>
+<h3 id="apt-remove-or-apt-purge"><a class="header" href="#apt-remove-or-apt-purge">apt remove or apt purge</a></h3>
 <p>To remove an installed package,
 we can use either the <code>apt remove</code> or
 the <code>apt purge</code> commands.
@@ -4438,7 +4496,7 @@ Sometimes when a program is installed,
 configuration files get installed with it
 in the <strong>/etc</strong> directory.
 The <code>apt purge</code> command will remove
-those configuration files but the
+those configuration files but the 
 <code>apt remove</code> command will not.
 Both commands are offered because sometimes
 it is useful to keep those configuration files.</p>
@@ -4447,7 +4505,7 @@ it is useful to keep those configuration files.</p>
 <p>Or:</p>
 <pre><code>apt purge ninvaders
 </code></pre>
-<a class="header" href="print.html#apt-autoremove" id="apt-autoremove"><h3>apt autoremove</h3></a>
+<h3 id="apt-autoremove"><a class="header" href="#apt-autoremove">apt autoremove</a></h3>
 <p>All big software requires other software to run.
 This other software are called <a href="https://queue.acm.org/detail.cfm?id=3344149">dependencies</a>.
 The <code>apt show [package-name]</code> command
@@ -4461,7 +4519,7 @@ To remove them,
 we do:</p>
 <pre><code>sudo apt autoremove
 </code></pre>
-<a class="header" href="print.html#apt-history" id="apt-history"><h3>apt history</h3></a>
+<h3 id="apt-history"><a class="header" href="#apt-history">apt history</a></h3>
 <p>Unfortunately, the <code>apt</code> command does
 not provide a way to get a history of how
 it's been used on a system, but
@@ -4469,7 +4527,7 @@ a log of its activity is kept.
 We can review that log with the following command:</p>
 <pre><code>less /var/log/apt/history.log
 </code></pre>
-<a class="header" href="print.html#daily-usage" id="daily-usage"><h2>Daily Usage</h2></a>
+<h2 id="daily-usage"><a class="header" href="#daily-usage">Daily Usage</a></h2>
 <p>This all may seem complicated, but
 it's really not.
 For example, to keep my systems updated,
@@ -4478,21 +4536,21 @@ or near daily basis:</p>
 <pre><code>apt update
 sudo apt upgrade
 </code></pre>
-<a class="header" href="print.html#conclusion-10" id="conclusion-10"><h2>Conclusion</h2></a>
+<h2 id="conclusion-10"><a class="header" href="#conclusion-10">Conclusion</a></h2>
 <p>There are a variety of ways to install
 software on a Linux or Ubuntu system.
 The common way to do it on Ubuntu is to
 use the <code>apt</code> command, which
 was covered in this section.</p>
 <p>We'll come back to this command often because
-we'll soon install and setup a complete LAMP
+we'll soon install and setup a complete LAMP 
 (<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
 Until then, I encourage you to read through the
 manual page for <code>apt</code>:</p>
 <pre><code>man apt
 </code></pre>
-<a class="header" href="print.html#using-systemd" id="using-systemd"><h1>Using systemd</h1></a>
-<a class="header" href="print.html#introduction-4" id="introduction-4"><h2>Introduction</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="using-systemd"><a class="header" href="#using-systemd">Using systemd</a></h1>
+<h2 id="introduction-4"><a class="header" href="#introduction-4">Introduction</a></h2>
 <p>When computers boot up,
 obviously some software manages that process.
 On Linux and other Unix or Unix-like systems,
@@ -4507,7 +4565,7 @@ the Linux kernel to various applications.
 In this section,
 we'll cover how to use <strong>systemd</strong> to manage services, and
 to review log files.</p>
-<a class="header" href="print.html#manage-services" id="manage-services"><h2>Manage Services</h2></a>
+<h2 id="manage-services"><a class="header" href="#manage-services">Manage Services</a></h2>
 <p>When we install complicated software,
 like a web server (e.g., Apache2, Nginx),
 a SSH server (e.g., OpenSSH), or
@@ -4516,7 +4574,7 @@ then it's helpful to have commands that manage that service
 (the web service, the SSH service, the database service, etc).</p>
 <p>For example, the <code>ssh</code> service is installed
 by default on our gcloud servers, and
-we can check its status with the following
+we can check its status with the following 
 <code>systemctl</code> command:</p>
 <pre><code>systemctl status ssh
 </code></pre>
@@ -4552,10 +4610,10 @@ to your ssh service:</p>
 more specifically, its <strong>unit</strong> name:</p>
 <pre><code>journalctl -u ssh
 </code></pre>
-<a class="header" href="print.html#use-cases" id="use-cases"><h3>Use Cases</h3></a>
+<h3 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h3>
 <p>Later we'll install the <a href="https://httpd.apache.org/">Apache web server</a>, and
 we will use <code>systemctl</code> to manage some aspects of this service.</p>
-<p>In particular, we will use the following commands to:</p>
+<p>In particular, we will use the following commands to: </p>
 <ol>
 <li>check the state of the Apache service,</li>
 <li>configure the Apache service to auto start on reboot,</li>
@@ -4573,7 +4631,7 @@ sudo systemctl stop apache2
 <p><code>systemctl</code> is a big piece of software, and
 there are other arguments the command will take.
 See <code>man systemct</code> for details.</p>
-<a class="header" href="print.html#examine-logs" id="examine-logs"><h2>Examine Logs</h2></a>
+<h2 id="examine-logs"><a class="header" href="#examine-logs">Examine Logs</a></h2>
 <p>As mentioned, the <code>journalctl</code> command is
 part of the <strong>systemd</strong> software suite, and
 it is used to monitor system logs.</p>
@@ -4604,7 +4662,7 @@ man journalctl
 </code></pre>
 <p>There are many fields and options we can use, but
 as an example,
-we see that there is an option to view the more
+we see that there is an option to view the more 
 recent entries first (which is not the default):</p>
 <pre><code>journalctl -r
 </code></pre>
@@ -4625,7 +4683,7 @@ option with <code>journalctl</code>:</p>
 (press <strong>ctrl-c</strong> to quit the real-time view):</p>
 <pre><code>journalctl -f
 </code></pre>
-<a class="header" href="print.html#useful-systemd-commands" id="useful-systemd-commands"><h2>Useful Systemd Commands</h2></a>
+<h2 id="useful-systemd-commands"><a class="header" href="#useful-systemd-commands">Useful Systemd Commands</a></h2>
 <p>You can see more of what <code>systemctl</code> or <code>journalctl</code>
 can do by reading through their documentation:</p>
 <pre><code>man systemctl
@@ -4662,14 +4720,14 @@ systemctl suspend
 </ul>
 <pre><code>systemd-analyze
 </code></pre>
-<a class="header" href="print.html#conclusion-11" id="conclusion-11"><h2>Conclusion</h2></a>
+<h2 id="conclusion-11"><a class="header" href="#conclusion-11">Conclusion</a></h2>
 <p>This is a basic introduction to <strong>systemd</strong>,
 which is composed of a suite of software to help
 manage booting a system, managing services, and
 monitoring logs.</p>
 <p>We'll put what we've learned into practice
 when we set up our LAMP servers.</p>
-<a class="header" href="print.html#networking-and-security" id="networking-and-security"><h1>Networking and Security</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="networking-and-security"><a class="header" href="#networking-and-security">Networking and Security</a></h1>
 <p>Even if we do not work as network administrators,
 system administrators need to know network basics.
 In this section, we cover TCP/IP and other protocols
@@ -4678,7 +4736,7 @@ and how to protect our systems locally,
 from external threats,
 and how to create backups of our systems in case
 of disaster.</p>
-<a class="header" href="print.html#networking-and-tcpip" id="networking-and-tcpip"><h1>Networking and TCP/IP</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="networking-and-tcpip"><a class="header" href="#networking-and-tcpip">Networking and TCP/IP</a></h1>
 <p>An important function of a system administrator
 is to set up, configure, and monitor a network.
 This may involve planning, configuring, and
@@ -4695,7 +4753,7 @@ In this section, we will focus mostly on
 internet addressing, but
 we will also devote some space to TCP and UDP,
 two protocols for transmitting data.</p>
-<p>Connecting two or more devices together
+<p>Connecting two or more devices together 
 nowadays involves the TCP/IP or the UDP/IP protocols,
 otherwise part of the
 <a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite</a>.
@@ -4753,9 +4811,9 @@ these protocols provide the functionality for applications.
 They are not themselves considered user applications,
 like a web browser.</p>
 </blockquote>
-<a class="header" href="print.html#the-internet-protocol-suite" id="the-internet-protocol-suite"><h2>The Internet Protocol Suite</h2></a>
-<a class="header" href="print.html#link-layer" id="link-layer"><h3>Link Layer</h3></a>
-<a class="header" href="print.html#arp-address-resolution-protocol" id="arp-address-resolution-protocol"><h4>ARP (Address Resolution Protocol)</h4></a>
+<h2 id="the-internet-protocol-suite"><a class="header" href="#the-internet-protocol-suite">The Internet Protocol Suite</a></h2>
+<h3 id="link-layer"><a class="header" href="#link-layer">Link Layer</a></h3>
+<h4 id="arp-address-resolution-protocol"><a class="header" href="#arp-address-resolution-protocol">ARP (Address Resolution Protocol)</a></h4>
 <p><strong>ARP</strong> (Address Resolution Protocol) is a protocol
 at the link layer and is
 used to map network addresses,
@@ -4831,8 +4889,8 @@ It searches the sub network for connected MAC addresses
 that are assigned to wireless cards or ethernet cards.
 It then assigns each of those MAC addresses an available
 IP address based on the network address.</p>
-<a class="header" href="print.html#internet-layer" id="internet-layer"><h3>Internet Layer</h3></a>
-<a class="header" href="print.html#ip-internet-protocol" id="ip-internet-protocol"><h4>IP (Internet Protocol)</h4></a>
+<h3 id="internet-layer"><a class="header" href="#internet-layer">Internet Layer</a></h3>
+<h4 id="ip-internet-protocol"><a class="header" href="#ip-internet-protocol">IP (Internet Protocol)</a></h4>
 <p>The Internet Protocol, or <em>IP</em>, address
 is used to uniquely identify a host on a network and
 place that host at a specific location (its IP <strong>address</strong>).
@@ -4849,11 +4907,12 @@ they are accessible on subnets or local area networks.</p>
 which means no public internet device will have an
 IP address within these ranges.
 The private address ranges include:</p>
-<table><thead><tr><th> Start Address </th><th> End Address     </th></tr></thead><tbody>
-<tr><td> 10.0.0.0      </td><td> 10.255.255.255  </td></tr>
-<tr><td> 172.16.0.0    </td><td> 172.31.255.255  </td></tr>
-<tr><td> 192.168.0.0   </td><td> 192.168.255.255 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Start Address</th><th>End Address</th></tr></thead><tbody>
+<tr><td>10.0.0.0</td><td>10.255.255.255</td></tr>
+<tr><td>172.16.0.0</td><td>172.31.255.255</td></tr>
+<tr><td>192.168.0.0</td><td>192.168.255.255</td></tr>
 </tbody></table>
+</div>
 <p>If you have a router at home, and
 look at the IP address for at any of
 your devices connected to that router,
@@ -4868,7 +4927,7 @@ many more IP addresses on its network,
 which is why you'll see that IP range on bigger networks,
 like a university's network.
 We'll talk more about subnetwork sizes, shortly.</p>
-<a class="header" href="print.html#example-private-ip-usage" id="example-private-ip-usage"><h4>Example Private IP Usage</h4></a>
+<h4 id="example-private-ip-usage"><a class="header" href="#example-private-ip-usage">Example Private IP Usage</a></h4>
 <p>Let's say my office computer's IP address
 is <strong>10.163.34.59/24</strong> via a wired connection.
 My office neighbor has an
@@ -4925,7 +4984,7 @@ the private network and the public network and
 is managing two subnets: a wired and a wireless one.
 </figcaption>
 </figure>
-<a class="header" href="print.html#using-the-ip-command" id="using-the-ip-command"><h4>Using the <code>ip</code> Command</h4></a>
+<h4 id="using-the-ip-command"><a class="header" href="#using-the-ip-command">Using the <code>ip</code> Command</a></h4>
 <p>The <code>ip</code> command can do more than
 provide us information about our network.
 We can also use it to turn a connection
@@ -4936,14 +4995,14 @@ Yours might have a different name.</p>
 <pre><code>sudo ip link set enp0s3 down
 sudo ip link set enp0s3 up
 </code></pre>
-<a class="header" href="print.html#transport-layer" id="transport-layer"><h3>Transport Layer</h3></a>
+<h3 id="transport-layer"><a class="header" href="#transport-layer">Transport Layer</a></h3>
 <p>The internet layer does not transmit content,
 like web pages or video streams.
 This is the work of the transport layer.
 As discussed previously,
 the two most common transport layer
 protocols are <strong>TCP</strong> and <strong>UDP</strong>.</p>
-<a class="header" href="print.html#tcp-transmission-control-protocol" id="tcp-transmission-control-protocol"><h4>TCP, Transmission Control Protocol</h4></a>
+<h4 id="tcp-transmission-control-protocol"><a class="header" href="#tcp-transmission-control-protocol">TCP, Transmission Control Protocol</a></h4>
 <p><em>TCP</em> or Transmission Control Protocol
 is responsible for the transmission of data and
 for making sure the data arrives at its
@@ -4952,7 +5011,7 @@ If there are errors,
 the data is re-transmitted or halted
 in case of some failure.
 Much of the data sent over the internet is sent using TCP.</p>
-<a class="header" href="print.html#udp-user-datagram-protocol" id="udp-user-datagram-protocol"><h4>UDP, User Datagram Protocol</h4></a>
+<h4 id="udp-user-datagram-protocol"><a class="header" href="#udp-user-datagram-protocol">UDP, User Datagram Protocol</a></h4>
 <p>The <strong>UDP</strong> or User Datagram Protocol
 performs a similar function as TCP, but
 it does not error check and data may get lost.
@@ -4960,8 +5019,8 @@ UDP is useful for conducting voice over internet
 calls or for streaming video,
 such as through YouTube,
 which uses a type of UDP transmission
-called <strong>QUIC</strong> that has builtin encryption.</p>
-<a class="header" href="print.html#tcp-and-udp-headers" id="tcp-and-udp-headers"><h4>TCP and UDP Headers</h4></a>
+called <strong>QUIC</strong> that has builtin encryption. </p>
+<h4 id="tcp-and-udp-headers"><a class="header" href="#tcp-and-udp-headers">TCP and UDP Headers</a></h4>
 <p>The above protocols send data in
 data TCP <strong>packets</strong> or UDP <strong>datagrams</strong>, but
 <a href="https://www.cloudflare.com/learning/network-layer/what-is-a-packet/">these terms may be used interchangeably</a>.
@@ -5002,11 +5061,11 @@ In addition to the header info,
 TCP and UDP packets include the data that's being sent
 (e.g., a webpage) and
 error checking if it's TCP.</p>
-<a class="header" href="print.html#ports" id="ports"><h4>Ports</h4></a>
+<h4 id="ports"><a class="header" href="#ports">Ports</a></h4>
 <p>TCP and UDP connections use ports to bind
 internet traffic to specific IP addresses.
 Specifically, a <strong>port</strong> associates a process
-with an application
+with an application 
 (and is part of the <strong>application layer</strong> of the internet suite),
 such as a web service or outgoing email.
 That is, ports provide a way to distinguish and
@@ -5016,7 +5075,7 @@ For example, all traffic going to IP address 10.0.5.33:80
 means that this is <strong>http</strong> traffic for the http web service,
 since HTTP is commonly associated with port 80.
 Note that the port info is attached to the end of the
-IP address via a colon.</p>
+IP address via a colon. </p>
 <p>Common ports include:</p>
 <ul>
 <li>21: FTP</li>
@@ -5039,7 +5098,7 @@ we can invert grep for lines starting with a pound sign or are empty</p>
 </code></pre>
 <p>See also the Wikipedia page:
 <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></p>
-<a class="header" href="print.html#ip-subnetting" id="ip-subnetting"><h2>IP Subnetting</h2></a>
+<h2 id="ip-subnetting"><a class="header" href="#ip-subnetting">IP Subnetting</a></h2>
 <p>Let's now return to the internet layer and
 discuss one of the major duties of a systems administrator:
 subnetting.</p>
@@ -5048,19 +5107,20 @@ subnetworks out of a larger network.
 They are created using routers that have this capability
 (e.g., commercial use routers) and certain types
 of network switches.</p>
-<a class="header" href="print.html#private-ip-ranges" id="private-ip-ranges"><h3>Private IP Ranges</h3></a>
+<h3 id="private-ip-ranges"><a class="header" href="#private-ip-ranges">Private IP Ranges</a></h3>
 <p>When subnetting local area networks,
 we work with the private IP ranges:</p>
-<table><thead><tr><th> Start Address </th><th> End Address     </th></tr></thead><tbody>
-<tr><td> 10.0.0.0      </td><td> 10.255.255.255  </td></tr>
-<tr><td> 172.16.0.0    </td><td> 172.31.255.255  </td></tr>
-<tr><td> 192.168.0.0   </td><td> 192.168.255.255 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Start Address</th><th>End Address</th></tr></thead><tbody>
+<tr><td>10.0.0.0</td><td>10.255.255.255</td></tr>
+<tr><td>172.16.0.0</td><td>172.31.255.255</td></tr>
+<tr><td>192.168.0.0</td><td>192.168.255.255</td></tr>
 </tbody></table>
+</div>
 <p>It's important to be able to work with IP addresses
 like those listed above in order to subnet; and
 therefore, we will need to learn a bit of IP math
 along the way.</p>
-<a class="header" href="print.html#ip-meaning" id="ip-meaning"><h4>IP Meaning</h4></a>
+<h4 id="ip-meaning"><a class="header" href="#ip-meaning">IP Meaning</a></h4>
 <p>An IPv4 address is 32 bits (8 x 4),
 or four bytes, in size.
 In human readable context,
@@ -5077,24 +5137,26 @@ Eight <strong>bits</strong> equal a single <strong>byte</strong>.
 By implication, 8 gigabits equals 1 gigabyte, and
 8 megabits equals 1 megabyte.
 We use these symbols to note the terms:</p>
-<table><thead><tr><th> Term  </th><th> Symbol </th></tr></thead><tbody>
-<tr><td> bit   </td><td> <em>b</em>    </td></tr>
-<tr><td> byte  </td><td> B      </td></tr>
-<tr><td> octet </td><td> <em>o</em>    </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Term</th><th>Symbol</th></tr></thead><tbody>
+<tr><td>bit</td><td><em>b</em></td></tr>
+<tr><td>byte</td><td>B</td></tr>
+<tr><td>octet</td><td><em>o</em></td></tr>
 </tbody></table>
+</div>
 <p>Each bit is represented by either a 1 or a 0.
 For example, the first address above in binary is:</p>
 <ul>
 <li><strong>11000000.10101000.00000001.00000110</strong> is <strong>192.168.1.6</strong></li>
 </ul>
 <p>Or:</p>
-<table><thead><tr><th> Byte     </th><th> Decimal Value </th></tr></thead><tbody>
-<tr><td> 11000000 </td><td> 192           </td></tr>
-<tr><td> 10101000 </td><td> 168           </td></tr>
-<tr><td> 00000001 </td><td> 1             </td></tr>
-<tr><td> 00000110 </td><td> 6             </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Byte</th><th>Decimal Value</th></tr></thead><tbody>
+<tr><td>11000000</td><td>192</td></tr>
+<tr><td>10101000</td><td>168</td></tr>
+<tr><td>00000001</td><td>1</td></tr>
+<tr><td>00000110</td><td>6</td></tr>
 </tbody></table>
-<a class="header" href="print.html#ip-math" id="ip-math"><h3>IP Math</h3></a>
+</div>
+<h3 id="ip-math"><a class="header" href="#ip-math">IP Math</a></h3>
 <p>When doing IP math,
 one easy way to do it is to simply remember
 that each bit in each of the above bytes is a
@@ -5102,16 +5164,17 @@ placeholder for the following values:</p>
 <pre><code>128 64 32 16 8 4 2 1
 </code></pre>
 <p>Alternatively, from low to high:</p>
-<table><thead><tr><th> base-2        </th><th> Output </th></tr></thead><tbody>
-<tr><td> 2<sup>0</sup> </td><td> 1      </td></tr>
-<tr><td> 2<sup>1</sup> </td><td> 2      </td></tr>
-<tr><td> 2<sup>2</sup> </td><td> 4      </td></tr>
-<tr><td> 2<sup>3</sup> </td><td> 8      </td></tr>
-<tr><td> 2<sup>4</sup> </td><td> 16     </td></tr>
-<tr><td> 2<sup>5</sup> </td><td> 32     </td></tr>
-<tr><td> 2<sup>6</sup> </td><td> 64     </td></tr>
-<tr><td> 2<sup>7</sup> </td><td> 128    </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>base-2</th><th>Output</th></tr></thead><tbody>
+<tr><td>2<sup>0</sup></td><td>1</td></tr>
+<tr><td>2<sup>1</sup></td><td>2</td></tr>
+<tr><td>2<sup>2</sup></td><td>4</td></tr>
+<tr><td>2<sup>3</sup></td><td>8</td></tr>
+<tr><td>2<sup>4</sup></td><td>16</td></tr>
+<tr><td>2<sup>5</sup></td><td>32</td></tr>
+<tr><td>2<sup>6</sup></td><td>64</td></tr>
+<tr><td>2<sup>7</sup></td><td>128</td></tr>
 </tbody></table>
+</div>
 <p>In binary, 192 is equal to 11000000.
 It's helpful to work backward.
 For IP addresses,
@@ -5154,7 +5217,7 @@ So:</p>
 </ul>
 <p>Since there is nothing remaining,
 the rest of the bits equal 0.</p>
-<a class="header" href="print.html#subnetting-examples" id="subnetting-examples"><h3>Subnetting Examples</h3></a>
+<h3 id="subnetting-examples"><a class="header" href="#subnetting-examples">Subnetting Examples</a></h3>
 <p>Subnetting involves dividing a network
 into two or more subnets.
 When we subnet,
@@ -5188,7 +5251,7 @@ we want to identify and describe a network
 that we are connected to.
 Let's work with two example private IP addresses
 that exist on two separate subnets.</p>
-<a class="header" href="print.html#example-ip-address-1-19216816" id="example-ip-address-1-19216816"><h4>Example IP Address 1: 192.168.1.6</h4></a>
+<h4 id="example-ip-address-1-19216816"><a class="header" href="#example-ip-address-1-19216816">Example IP Address 1: 192.168.1.6</a></h4>
 <p>Using the private IP address 192.168.1.6,
 let's derive the network mask and the network address
 (or ID) from this IP address.
@@ -5207,14 +5270,15 @@ That 24 is used as <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain
 <li>192.168.1.6/24</li>
 </ul>
 <p>For Example 1, we thus have the following subnet information:</p>
-<table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
-<tr><td> Netmask/Mask </td><td> 255.255.255.0 </td></tr>
-<tr><td> Network ID   </td><td> 192.168.1.0   </td></tr>
-<tr><td> Start Range  </td><td> 192.168.1.1   </td></tr>
-<tr><td> End Range    </td><td> 192.168.1.254 </td></tr>
-<tr><td> Broadcast    </td><td> 192.168.1.255 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>192.168.1.0</td></tr>
+<tr><td>Start Range</td><td>192.168.1.1</td></tr>
+<tr><td>End Range</td><td>192.168.1.254</td></tr>
+<tr><td>Broadcast</td><td>192.168.1.255</td></tr>
 </tbody></table>
-<a class="header" href="print.html#example-ip-address-2-101603875" id="example-ip-address-2-101603875"><h4>Example IP Address 2: 10.160.38.75</h4></a>
+</div>
+<h4 id="example-ip-address-2-101603875"><a class="header" href="#example-ip-address-2-101603875">Example IP Address 2: 10.160.38.75</a></h4>
 <p>For example 2, let's start off with a private
 IP address of 10.160.38.75 and a mask of /24:</p>
 <pre><code>00001010.10100000.00100110.01001011 IP               10.160.38.75
@@ -5222,14 +5286,15 @@ IP address of 10.160.38.75 and a mask of /24:</p>
 -----------------------------------
 00001010.10100000.00100110.00000000 Network Address   10.160.38.0
 </code></pre>
-<table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
-<tr><td> Netmask/Mask </td><td> 255.255.255.0 </td></tr>
-<tr><td> Network ID   </td><td> 10.160.38.0   </td></tr>
-<tr><td> Start Range  </td><td> 10.160.38.1   </td></tr>
-<tr><td> End Range    </td><td> 10.160.38.254 </td></tr>
-<tr><td> Broadcast    </td><td> 10.160.38.255 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>10.160.38.0</td></tr>
+<tr><td>Start Range</td><td>10.160.38.1</td></tr>
+<tr><td>End Range</td><td>10.160.38.254</td></tr>
+<tr><td>Broadcast</td><td>10.160.38.255</td></tr>
 </tbody></table>
-<a class="header" href="print.html#example-ip-address-3-1721616224" id="example-ip-address-3-1721616224"><h4>Example IP Address 3: 172.16.1.62/24</h4></a>
+</div>
+<h4 id="example-ip-address-3-1721616224"><a class="header" href="#example-ip-address-3-1721616224">Example IP Address 3: 172.16.1.62/24</a></h4>
 <p>For example 3, let's start off with a private
 IP address of 172.16.1.62 and a mask of /24:</p>
 <pre><code>10101100 00010000 00000001 00100111 IP                172.16.1.62
@@ -5237,14 +5302,15 @@ IP address of 172.16.1.62 and a mask of /24:</p>
 -----------------------------------
 10101100 00010000 00000001 00000000 Network Address    172.16.1.0
 </code></pre>
-<table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
-<tr><td> Netmask/Mask </td><td> 255.255.255.0 </td></tr>
-<tr><td> Network ID   </td><td> 172.16.1.0    </td></tr>
-<tr><td> Start Range  </td><td> 172.16.1.1    </td></tr>
-<tr><td> End Range    </td><td> 172.16.1.254  </td></tr>
-<tr><td> Broadcast    </td><td> 172.16.1.255  </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>172.16.1.0</td></tr>
+<tr><td>Start Range</td><td>172.16.1.1</td></tr>
+<tr><td>End Range</td><td>172.16.1.254</td></tr>
+<tr><td>Broadcast</td><td>172.16.1.255</td></tr>
 </tbody></table>
-<a class="header" href="print.html#determine-the-number-of-hosts" id="determine-the-number-of-hosts"><h4>Determine the Number of Hosts</h4></a>
+</div>
+<h4 id="determine-the-number-of-hosts"><a class="header" href="#determine-the-number-of-hosts">Determine the Number of Hosts</a></h4>
 <p>To determine the number of hosts on a CIDR /24 subnet,
 we look at the start and end ranges.
 In all three of the above examples,
@@ -5252,12 +5318,12 @@ the start range begins with X.X.X.1 and
 ends with X.X.X.254.
 Therefore, there are 254 maximum hosts allowed on these subnets because
 1 to 254, inclusive of 1 and 254, is 254.</p>
-<a class="header" href="print.html#example-ip-address-4-10052316" id="example-ip-address-4-10052316"><h4>Example IP Address 4: 10.0.5.23/16</h4></a>
+<h4 id="example-ip-address-4-10052316"><a class="header" href="#example-ip-address-4-10052316">Example IP Address 4: 10.0.5.23/16</a></h4>
 <p>The first three examples show instances
 where the CIDR is set to /24.
 This only allows 254 maximum hosts on a subnet.
 If the CIDR is set to /16,
-then we can theoretically allow 65,534 hosts on a subnet.</p>
+then we can theoretically allow 65,534 hosts on a subnet. </p>
 <p>For example 4, let's start off then with a private
 IP address of 10.0.5.23 and a mask of /16:</p>
 <pre><code>00001010.00000000.00000101.00010111 IP Address: 10.0.5.23
@@ -5265,33 +5331,35 @@ IP address of 10.0.5.23 and a mask of /16:</p>
 -----------------------------------------------------------
 00001010.00000000.00000000.00000000 Network ID: 10.0.0.0
 </code></pre>
-<table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
-<tr><td> IP Address   </td><td> 10.0.5.23     </td></tr>
-<tr><td> Netmask/Mask </td><td> 255.255.0.0   </td></tr>
-<tr><td> Network ID   </td><td> 10.0.0.0      </td></tr>
-<tr><td> Start Range  </td><td> 10.0.0.1      </td></tr>
-<tr><td> End Range    </td><td> 10.0.255.254  </td></tr>
-<tr><td> Broadcast    </td><td> 10.0.255.255  </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>IP Address</td><td>10.0.5.23</td></tr>
+<tr><td>Netmask/Mask</td><td>255.255.0.0</td></tr>
+<tr><td>Network ID</td><td>10.0.0.0</td></tr>
+<tr><td>Start Range</td><td>10.0.0.1</td></tr>
+<tr><td>End Range</td><td>10.0.255.254</td></tr>
+<tr><td>Broadcast</td><td>10.0.255.255</td></tr>
 </tbody></table>
+</div>
 <p>Since the last two octets/bytes now vary, we count up
 by each octet.
 Therefore, the number of hosts is:</p>
-<table><thead><tr><th> IPs          </th><th>         </th></tr></thead><tbody>
-<tr><td> 10.0.0.1     </td><td>         </td></tr>
-<tr><td> 10.0.0.255   </td><td> = 256   </td></tr>
-<tr><td> 10.0.1.1     </td><td>         </td></tr>
-<tr><td> 10.0.255.255 </td><td> = 256   </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>IPs</th><th></th></tr></thead><tbody>
+<tr><td>10.0.0.1</td><td></td></tr>
+<tr><td>10.0.0.255</td><td>= 256</td></tr>
+<tr><td>10.0.1.1</td><td></td></tr>
+<tr><td>10.0.255.255</td><td>= 256</td></tr>
 </tbody></table>
+</div>
 <ul>
 <li>Number of Hosts = 256 x 256 = 65536</li>
 <li>Subtract Network ID (1) and Broadcast (1) = 2 IP addresses</li>
 <li>Number of Usable Hosts = 256 x 256 - 2 = 65534</li>
 </ul>
-<a class="header" href="print.html#ipv6-subnetting" id="ipv6-subnetting"><h3>IPv6 subnetting</h3></a>
+<h3 id="ipv6-subnetting"><a class="header" href="#ipv6-subnetting">IPv6 subnetting</a></h3>
 <p>We're not going to cover IPv6 subnetting, but
 if you're interested,
 this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
-<a class="header" href="print.html#conclusion-12" id="conclusion-12"><h2>Conclusion</h2></a>
+<h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
 <p>As a systems administrator,
 it's important to have a basic understanding of
 how networking works, and
@@ -5320,7 +5388,7 @@ this section covered topics that included:</p>
 <p>In the next section,
 we extend upon this and discuss the
 domain name system (DNS) and domain names.</p>
-<a class="header" href="print.html#dns-and-domain-names" id="dns-and-domain-names"><h1>DNS and Domain Names</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="dns-and-domain-names"><a class="header" href="#dns-and-domain-names">DNS and Domain Names</a></h1>
 <p>The DNS (<strong>domain name system</strong>) is referred to
 as the phone book of the internet, and it's
 responsible for mapping IP addresses to
@@ -5335,7 +5403,7 @@ a domain name system on their network, and/or
 they may be responsible for setting up and
 administrating web site domains.
 Either case requires a basic understanding of DNS.</p>
-<a class="header" href="print.html#dns-intro-videos" id="dns-intro-videos"><h2>DNS Intro Videos</h2></a>
+<h2 id="dns-intro-videos"><a class="header" href="#dns-intro-videos">DNS Intro Videos</a></h2>
 <p>To help you get started,
 watch these two YouTube videos.
 The first one provides an overview of the DNS system:</p>
@@ -5345,7 +5413,7 @@ graphical user interface to create and manage DNS records.</p>
 <p><a href="https://www.youtube.com/watch?v=cwT82ibOM2Q">DNS Records</a></p>
 <p>And here is a nice intro to recursive DNS:</p>
 <p><a href="https://www.cloudflare.com/learning/dns/what-is-recursive-dns/">https://www.cloudflare.com/learning/dns/what-is-recursive-dns/</a></p>
-<a class="header" href="print.html#fqdn-the-fully-qualified-domain-name" id="fqdn-the-fully-qualified-domain-name"><h2>FQDN: The Fully Qualified Domain Name</h2></a>
+<h2 id="fqdn-the-fully-qualified-domain-name"><a class="header" href="#fqdn-the-fully-qualified-domain-name">FQDN: The Fully Qualified Domain Name</a></h2>
 <p>The structure of the domain name system is
 like the structure of the UNIX/Linux file hierarchy;
 that is, it is like an inverted tree.</p>
@@ -5364,7 +5432,7 @@ www.        third-level domain
 <p>This is important to know so that you understand
 how the <strong>Domain Name System</strong> works and
 which DNS servers are responsible for their part of the network.</p>
-<a class="header" href="print.html#root-domain" id="root-domain"><h3>Root Domain</h3></a>
+<h3 id="root-domain"><a class="header" href="#root-domain">Root Domain</a></h3>
 <p>The root domain is managed by root name servers.
 These servers are listed on the <a href="https://www.iana.org/domains/root/servers">IANA</a>,
 the Internet Assigned Numbers Authority, website, but
@@ -5372,7 +5440,7 @@ are managed by multiple operators.
 The root servers manage the root domain,
 alternatively referred to as the zone, or
 the <strong>.</strong> at the end of the <code>.com.</code>, <code>.edu.</code>, etc.</p>
-<a class="header" href="print.html#alternative-dns-root-systems" id="alternative-dns-root-systems"><h4>Alternative DNS Root Systems</h4></a>
+<h4 id="alternative-dns-root-systems"><a class="header" href="#alternative-dns-root-systems">Alternative DNS Root Systems</a></h4>
 <p>It's possible to have alternate internets by
 using outside root name servers.
 This is not common, but it happens.
@@ -5387,7 +5455,7 @@ it's own alternate internet based on a different
 DNS root system.
 This would essentially create a large, second internet.
 You can read about in this <a href="https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet">IEEE Spectrum article</a>.</p>
-<a class="header" href="print.html#top-level-domain-tld" id="top-level-domain-tld"><h3>Top Level Domain (TLD)</h3></a>
+<h3 id="top-level-domain-tld"><a class="header" href="#top-level-domain-tld">Top Level Domain (TLD)</a></h3>
 <p>We are all familiar with top level domains.
 Specific examples include:</p>
 <ul>
@@ -5415,7 +5483,7 @@ get a total count of 1,487 (as of August 2022):</p>
 <pre><code>wget https://data.iana.org/TLD/tlds-alpha-by-domain.txt
 sed '1d' tlds-alpha-by-domain.txt | wc -l
 </code></pre>
-<a class="header" href="print.html#second-level-domain-names" id="second-level-domain-names"><h3>Second Level Domain Names</h3></a>
+<h3 id="second-level-domain-names"><a class="header" href="#second-level-domain-names">Second Level Domain Names</a></h3>
 <p>In the Google example,
 the second level domain is <strong>google</strong>.
 The second level domain along with the TLD
@@ -5429,7 +5497,7 @@ Other examples include:</p>
 <li><strong>uky</strong> in <strong>uky.edu</strong></li>
 <li><strong>twitter</strong> in <strong>twitter.com</strong></li>
 </ul>
-<a class="header" href="print.html#third-level-domain-names--subdomains" id="third-level-domain-names--subdomains"><h3>Third Level Domain Names / Subdomains</h3></a>
+<h3 id="third-level-domain-names--subdomains"><a class="header" href="#third-level-domain-names--subdomains">Third Level Domain Names / Subdomains</a></h3>
 <p>When you've purchased (leased) a top and second level
 domain like <strong>ubuntu.com</strong>,
 you can choose whether you add third level domains.
@@ -5465,7 +5533,7 @@ it is common with others.</p>
 </ul>
 <p>This is because those other three provide different,
 but specific services.</p>
-<a class="header" href="print.html#dns-paths" id="dns-paths"><h2>DNS Paths</h2></a>
+<h2 id="dns-paths"><a class="header" href="#dns-paths">DNS Paths</a></h2>
 <p>A recursive DNS server is the first DNS server
 to be queried in the DNS system,
 which is usually managed by an ISP.
@@ -5527,7 +5595,7 @@ dig @sndc1.net.uky.edu. uky.edu
 </code></pre>
 <p>There are a lot of <a href="https://www.geeksforgeeks.org/dig-command-in-linux-with-examples/">ways to use the dig command</a>, and
 you can test and explore them on your own.</p>
-<a class="header" href="print.html#dns-record-types" id="dns-record-types"><h3>DNS Record Types</h3></a>
+<h3 id="dns-record-types"><a class="header" href="#dns-record-types">DNS Record Types</a></h3>
 <p>In the <code>dig</code> command output above,
 you will see various fields.</p>
 <ul>
@@ -5551,7 +5619,7 @@ google.com.     IN      A       142.251.32.78
 another domain name. Thus, say someone visits www.example.org, but if no
 subdomain is set up for www, then the CNAME can point to example.org.</li>
 </ul>
-<a class="header" href="print.html#dns-toolbox" id="dns-toolbox"><h3>DNS Toolbox</h3></a>
+<h3 id="dns-toolbox"><a class="header" href="#dns-toolbox">DNS Toolbox</a></h3>
 <p>It's important to be able to troubleshoot DNS issues.
 To do that, we have a few utilities available.
 Here are examples and you should read the <code>man</code> pages for each one:</p>
@@ -5591,7 +5659,7 @@ resolv.conf (5) - resolver configuration file
 cat /etc/resolv.conf
 resolvectl status
 </code></pre>
-<a class="header" href="print.html#conclusion-13" id="conclusion-13"><h2>Conclusion</h2></a>
+<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
 <p>In the same way that phones have phone numbers,
 servers on the internet have IP addresses.
 Since we're only human,
@@ -5616,8 +5684,8 @@ may also have domain names and IP addresses to resolve.</p>
 <li>DNS record types</li>
 </ul>
 <p>We'll come back to this material when we set up our websites.</p>
-<a class="header" href="print.html#local-security" id="local-security"><h1>Local Security</h1></a>
-<a class="header" href="print.html#introduction-5" id="introduction-5"><h2>Introduction</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="local-security"><a class="header" href="#local-security">Local Security</a></h1>
+<h2 id="introduction-5"><a class="header" href="#introduction-5">Introduction</a></h2>
 <p>Most security issues come from the network, but
 we also need to secure a system from insider attacks, too.
 We can do that by setting appropriate file permissions and
@@ -5657,7 +5725,7 @@ to change the
 confine that user to that location on the system.
 A user or process that is confined to the
 <strong>chroot jail</strong> cannot easily see or access
-the rest of the file system and
+the rest of the file system and 
 will have limited access to the binaries
 (executables/apps/utilities) on the system.
 From its <code>man</code> page:</p>
@@ -5669,7 +5737,7 @@ Some use <code>chroot</code> to contain DNS servers, for example.</p>
 <p><code>chroot</code> is also the conceptual basis for some kinds of
 virtualization technologies that are common today,
 like <a href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a>.</p>
-<a class="header" href="print.html#chroot-a-current-user" id="chroot-a-current-user"><h2>Chroot a Current User</h2></a>
+<h2 id="chroot-a-current-user"><a class="header" href="#chroot-a-current-user">Chroot a Current User</a></h2>
 <p>In this tutorial,
 we are going to create a <code>chroot</code> for a human user account.</p>
 <ol>
@@ -5772,7 +5840,7 @@ directory and has limited access to the system or to any utilities on that
 system.</p>
 </li>
 </ol>
-<a class="header" href="print.html#exercise" id="exercise"><h2>Exercise</h2></a>
+<h2 id="exercise"><a class="header" href="#exercise">Exercise</a></h2>
 <p>By using the <code>ldd</code> command,
 you can add additional binaries for this user.
 As an exercise,
@@ -5780,7 +5848,7 @@ use the <code>ldd</code> command to locate
 the libraries for the <code>nano</code> editor, and
 make <code>nano</code> available to the user <em>vader</em>
 in the chrooted directory.</p>
-<a class="header" href="print.html#conclusion-14" id="conclusion-14"><h2>Conclusion</h2></a>
+<h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
 <p>Systems need to be secure from the inside and out.
 In order to secure from the inside,
 system users should be given access and permissions
@@ -5799,8 +5867,8 @@ proper education and training about the policies
 and uses of the system may be all that's needed.
 But in case a stricter environment is needed,
 now you know how to create a <strong>chroot jail</strong>.</p>
-<a class="header" href="print.html#firewalls-and-backups" id="firewalls-and-backups"><h1>Firewalls and Backups</h1></a>
-<a class="header" href="print.html#google-cloud-firewall-and-ubuntus-ufw" id="google-cloud-firewall-and-ubuntus-ufw"><h2>Google Cloud Firewall and Ubuntu's UFW</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="firewalls-and-backups"><a class="header" href="#firewalls-and-backups">Firewalls and Backups</a></h1>
+<h2 id="google-cloud-firewall-and-ubuntus-ufw"><a class="header" href="#google-cloud-firewall-and-ubuntus-ufw">Google Cloud Firewall and Ubuntu's UFW</a></h2>
 <p>A firewall program allows or denies connections for
 incoming (<strong>ingress</strong>) or outgoing (<strong>egress</strong>) traffic.
 Traffic can be controlled by link layer
@@ -5838,7 +5906,7 @@ then further restrict SSH connections to a
 specific IP range.
 And/or, another rule may block all incoming,
 unencrypted HTTP connections through port 80, but
-allow all incoming, encrypted HTTPS connections
+allow all incoming, encrypted HTTPS connections 
 through port 443.</p>
 <p>Let's briefly cover two ways to define
 firewall rules.
@@ -5891,7 +5959,7 @@ it may not.
 It simply depends on our needs and our circumstances.</p>
 <p>We'll return to firewalls and put some rules
 into practice when we work on our LAMP setup.</p>
-<a class="header" href="print.html#backups" id="backups"><h2>Backups</h2></a>
+<h2 id="backups"><a class="header" href="#backups">Backups</a></h2>
 <p>Catastrophes (natural, physical, criminal, or out of negligence) happen, and
 as a systems administrator,
 you may be required to have backup strategies
@@ -5905,7 +5973,7 @@ like our Google Cloud instance,
 then that requires a different tool.
 Therefore, in this section,
 I will briefly cover both scenarios.</p>
-<a class="header" href="print.html#rsync" id="rsync"><h3>rsync</h3></a>
+<h3 id="rsync"><a class="header" href="#rsync">rsync</a></h3>
 <p>If we were managing bare metal machines, then
 we might use a program like <code>rsync</code> to backup
 physical disk drives.
@@ -5969,13 +6037,13 @@ To do this, we use <code>ssh</code> style syntax:</p>
 my desktop computer to external hard drives,
 I also use a command like the above to copy
 local web projects to remote servers.</p>
-<a class="header" href="print.html#delete-option" id="delete-option"><h3>Delete Option</h3></a>
+<h3 id="delete-option"><a class="header" href="#delete-option">Delete Option</a></h3>
 <p><code>rsync</code> has a
 <code>--delete</code> option.
 Adding this option means that <code>rsync</code> will
 synchronize the source directory with the destination directory.
 This means that if I had already created a backup
-of <strong>tmp1</strong> to <strong>tmp2</strong>, and
+of <strong>tmp1</strong> to <strong>tmp2</strong>, and 
 then delete <strong>file1</strong> in <strong>tmp1</strong> later,
 then run <code>rsync</code> with the delete option,
 then <code>rsync</code> will also delete <strong>file1</strong> from <strong>tmp2/</strong>.
@@ -5998,11 +6066,11 @@ To restore with <code>rsync</code>, we just reverse the
 destination directory with the source directory:</p>
 <pre><code>rsync -av tmp2/ tmp1/
 </code></pre>
-<a class="header" href="print.html#google-cloud" id="google-cloud"><h3>Google Cloud</h3></a>
+<h3 id="google-cloud"><a class="header" href="#google-cloud">Google Cloud</a></h3>
 <p>Since our instance on Google Cloud is a virtual machine,
-we can use the Google Cloud console to create
+we can use the Google Cloud console to create 
 <strong>snapshots</strong> of our instance.
-A <strong>snapshot</strong> is a copy of a virtual machine at
+A <strong>snapshot</strong> is a copy of a virtual machine at 
 the time the snapshot was taken.
 What's great about taking a snapshot is that
 the result is basically a file of a complete operating system.
@@ -6025,7 +6093,7 @@ Since we want avoid that for now,
 please see the following documentation for how to take
 a snapshot in Google Cloud:</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/create-snapshots">Create and manage disk snapshots</a></p>
-<a class="header" href="print.html#conclusion-15" id="conclusion-15"><h2>Conclusion</h2></a>
+<h2 id="conclusion-15"><a class="header" href="#conclusion-15">Conclusion</a></h2>
 <p>In this section,
 we covered firewalls and backups.
 Since we're running an Ubuntu server on Google Cloud,
@@ -6039,7 +6107,7 @@ or on our organization's needs.
 But knowing these options exist and
 the different reasons why we have these options,
 provides quite a bit of utility.</p>
-<a class="header" href="print.html#creating-a-lamp-server" id="creating-a-lamp-server"><h1>Creating a LAMP Server</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="creating-a-lamp-server"><a class="header" href="#creating-a-lamp-server">Creating a LAMP Server</a></h1>
 <p>In this section,
 we learn how to set up a LAMP
 (Linux, Apache, MariaDB, PHP) stack.
@@ -6048,8 +6116,8 @@ that provides extra funtionality via PHP and MariaDB.
 Even if we do not become web server administrators,
 knowing how to set up a LAMP stack is not only fun, but
 it's also a valuable skill to have.</p>
-<a class="header" href="print.html#installing-the-apache-web-server" id="installing-the-apache-web-server"><h1>Installing the Apache Web Server</h1></a>
-<a class="header" href="print.html#introduction-6" id="introduction-6"><h2>Introduction</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installing-the-apache-web-server"><a class="header" href="#installing-the-apache-web-server">Installing the Apache Web Server</a></h1>
+<h2 id="introduction-6"><a class="header" href="#introduction-6">Introduction</a></h2>
 <p><a href="https://httpd.apache.org/">Apache</a> is an HTTP server,
 otherwise called web server software.
 Other HTTP server software exists.
@@ -6072,7 +6140,7 @@ including</p>
 <li>web site content</li>
 <li>log files and troubleshooting</li>
 </ul>
-<a class="header" href="print.html#installation" id="installation"><h2>Installation</h2></a>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
 <p>Before we install Apache,
 we need to update our systems first.</p>
 <pre><code>sudo apt update
@@ -6105,7 +6173,7 @@ Press <strong>Y</strong> to agree to continue after running
 the command below:</p>
 <pre><code>sudo apt install apache2
 </code></pre>
-<a class="header" href="print.html#basic-checks" id="basic-checks"><h2>Basic checks</h2></a>
+<h2 id="basic-checks"><a class="header" href="#basic-checks">Basic checks</a></h2>
 <p>One of the things that makes Apache2, and
 some other web servers,
 powerful is the library of modules that
@@ -6127,7 +6195,7 @@ if the computer gets rebooted.</p>
 <p>The output of the second command also shows
 that <strong>apache2</strong> is enabled and
 that it is also active (running).</p>
-<a class="header" href="print.html#creating-a-web-page" id="creating-a-web-page"><h2>Creating a web page</h2></a>
+<h2 id="creating-a-web-page"><a class="header" href="#creating-a-web-page">Creating a web page</a></h2>
 <p>Since <strong>apache2</strong> is up and running,
 let's look at the default web page.</p>
 <p>There are two ways we can look at the default web page.
@@ -6187,7 +6255,7 @@ where Ubuntu stores configuration files and
 what those files do, and
 document roots,
 which is where website files go.</p>
-<a class="header" href="print.html#create-a-web-page" id="create-a-web-page"><h2>Create a Web Page</h2></a>
+<h2 id="create-a-web-page"><a class="header" href="#create-a-web-page">Create a Web Page</a></h2>
 <p>Let's create our first web page.
 The default page described above provides
 the location of the document root at
@@ -6230,7 +6298,7 @@ For example, if your <strong>external IP address</strong> is
 <strong>55.222.55.222</strong>, then you'd specify it like so:</p>
 <pre><code>http://55.222.55.222/index.html.original
 </code></pre>
-<a class="header" href="print.html#user-directories" id="user-directories"><h2>User Directories</h2></a>
+<h2 id="user-directories"><a class="header" href="#user-directories">User Directories</a></h2>
 <p>You may have visited sites in the past
 that have a tilde in the URL and look like this:</p>
 <pre><code>http://example.com/~user/
@@ -6252,7 +6320,7 @@ For example, for the user <strong>linus</strong>,
 they should have the following file path available:</p>
 <pre><code>/home/linus/public_html/
 </code></pre>
-<a class="header" href="print.html#enable-mod_userdir" id="enable-mod_userdir"><h3>Enable mod_userdir</h3></a>
+<h3 id="enable-mod_userdir"><a class="header" href="#enable-mod_userdir">Enable mod_userdir</a></h3>
 <p>The configuration file for <strong>mod_userdir</strong> is
 located in <strong>/etc/apache2/mods-available/</strong>
 and is named <strong>userdir.conf</strong>.
@@ -6275,7 +6343,7 @@ we can also check its status:</p>
 <pre><code>sudo systemctl restart apache2
 systemctl status apache2
 </code></pre>
-<a class="header" href="print.html#create-a-user-directory-website" id="create-a-user-directory-website"><h3>Create a User Directory Website</h3></a>
+<h3 id="create-a-user-directory-website"><a class="header" href="#create-a-user-directory-website">Create a User Directory Website</a></h3>
 <p>Let's say I am logged in as the user <strong>linus</strong> on the system and
 will use that to test if the user directory is working.
 First, let's go home.
@@ -6341,7 +6409,7 @@ we would need to use the <code>chmod</code> command
 to make these directories executable and readable
 before files in our <strong>public_html</strong> directory
 could be accessed in a browser.</p>
-<a class="header" href="print.html#conclusion-16" id="conclusion-16"><h2>Conclusion</h2></a>
+<h2 id="conclusion-16"><a class="header" href="#conclusion-16">Conclusion</a></h2>
 <p>In this section,
 we learned about the Apache2 HTTP server.
 We learned how to install it on Ubuntu,
@@ -6356,8 +6424,8 @@ in our home directories.</p>
 <p>In the next section,
 we will learn how to make our sites applications
 by installing PHP and enabling the relevant PHP modules.</p>
-<a class="header" href="print.html#installing-and-configuring-php" id="installing-and-configuring-php"><h1>Installing and Configuring PHP</h1></a>
-<a class="header" href="print.html#introduction-7" id="introduction-7"><h2>Introduction</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installing-and-configuring-php"><a class="header" href="#installing-and-configuring-php">Installing and Configuring PHP</a></h1>
+<h2 id="introduction-7"><a class="header" href="#introduction-7">Introduction</a></h2>
 <p>Client-side programming languages, like JavaScript,
 are handled by the browser.
 Major browsers like Firefox, Chrome, Safari, Edge, etc.
@@ -6385,7 +6453,7 @@ To accomplish this, we have to:</p>
 <li>Configure PHP and relevant modules to work with Apache2</li>
 <li>Configure PHP and relevant modules to work with MariaDB</li>
 </ol>
-<a class="header" href="print.html#install-php" id="install-php"><h2>Install PHP</h2></a>
+<h2 id="install-php"><a class="header" href="#install-php">Install PHP</a></h2>
 <p>As normal, we will use <code>apt install</code>
 to install PHP and relevant modules and
 then restart Apache2 using the <code>systemctl</code> command:</p>
@@ -6396,7 +6464,7 @@ sudo systemctl restart apache2
 see if there are any errors:</p>
 <pre><code>systemctl status apache2
 </code></pre>
-<a class="header" href="print.html#check-install" id="check-install"><h2>Check Install</h2></a>
+<h2 id="check-install"><a class="header" href="#check-install">Check Install</a></h2>
 <p>To check that it's been installed and that
 it's working with Apache2,
 we can create a small PHP file in our
@@ -6431,7 +6499,7 @@ title="PHP install page">
 Fig. 1. A screenshot of the title of the PHP install page.
 </figcaption>
 </figure>
-<a class="header" href="print.html#basic-configurations" id="basic-configurations"><h2>Basic Configurations</h2></a>
+<h2 id="basic-configurations"><a class="header" href="#basic-configurations">Basic Configurations</a></h2>
 <p>By default, when Apache2 serves a web page,
 it looks for and servers a
 <a href="https://httpd.apache.org/docs/current/mod/mod_dir.html">file titled <strong>index.html</strong></a>,
@@ -6477,7 +6545,7 @@ use <code>nano</code> to create and open and <code>index.php</code> file:</p>
 <pre><code>cd /var/www/html/
 nano index.php
 </code></pre>
-<a class="header" href="print.html#creating-an-indexphp-file" id="creating-an-indexphp-file"><h2>Creating an index.php File</h2></a>
+<h2 id="creating-an-indexphp-file"><a class="header" href="#creating-an-indexphp-file">Creating an index.php File</a></h2>
 <p>Let's now create an <strong>index.php</strong> page, and
 add some HTML and PHP to it.
 The PHP can be a simple <a href="https://stackoverflow.com/questions/8754080/how-to-get-exact-browser-name-and-version">browser detector</a>.
@@ -6514,7 +6582,7 @@ was deleted,
 then Apache2 would revert to the <strong>index.html</strong> file
 since that's what's next in the <strong>dir.conf</strong>
 <strong>DirectoryIndex</strong> line.</p>
-<a class="header" href="print.html#conclusion-17" id="conclusion-17"><h2>Conclusion</h2></a>
+<h2 id="conclusion-17"><a class="header" href="#conclusion-17">Conclusion</a></h2>
 <p>In this section,
 we installed PHP and configured it work with Apache2.
 We also created a simple PHP test page
@@ -6524,8 +6592,8 @@ on our website.</p>
 we'll learn how to complete the LAMP stack
 by adding the MariaDB relational database
 to our setup.</p>
-<a class="header" href="print.html#installing-and-configuring-mariadb" id="installing-and-configuring-mariadb"><h1>Installing and Configuring MariaDB</h1></a>
-<a class="header" href="print.html#introduction-8" id="introduction-8"><h2>Introduction</h2></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="installing-and-configuring-mariadb"><a class="header" href="#installing-and-configuring-mariadb">Installing and Configuring MariaDB</a></h1>
+<h2 id="introduction-8"><a class="header" href="#introduction-8">Introduction</a></h2>
 <p>We started our LAMP stack when we installed
 Apache2 on Linux, and
 then we added extra functionality when
@@ -6540,7 +6608,7 @@ MariaDB website can help. See:
 technology that you use.
 MariaDB has <a href="https://mariadb.org/documentation/">good documentation</a> and
 getting started pages.</p>
-<a class="header" href="print.html#install-and-set-up-mariadb" id="install-and-set-up-mariadb"><h2>Install and Set Up MariaDB</h2></a>
+<h2 id="install-and-set-up-mariadb"><a class="header" href="#install-and-set-up-mariadb">Install and Set Up MariaDB</a></h2>
 <p>In this section, we'll learn how to install,
 setup, secure, and configure the MariaDB
 relational database so that it works
@@ -6559,7 +6627,7 @@ using the <code>systemctl</code> command:</p>
 <p>Next we need to run a post installation script
 called <code>mysql_secure_installation</code>
 (that's not a typo)
-that sets up the MariaDB root password and
+that sets up the MariaDB root password and 
 performs some security checks.
 To do that, run the following command, and
 <strong>be sure to save the MariaDB root password you create</strong>:</p>
@@ -6627,7 +6695,7 @@ MariaDB [(none)]&gt; show databases;
 <p>Note: If we are logging into the root database account
 as the root Linux user, we don't need to enter our password.</p>
 </blockquote>
-<a class="header" href="print.html#create-and-set-up-a-regular-user-account" id="create-and-set-up-a-regular-user-account"><h2>Create and Set Up a Regular User Account</h2></a>
+<h2 id="create-and-set-up-a-regular-user-account"><a class="header" href="#create-and-set-up-a-regular-user-account">Create and Set Up a Regular User Account</a></h2>
 <p>We need to reserve the <strong>root MariaDB user</strong> for
 special use cases and
 instead create a <strong>regular MariaDB user</strong>, or
@@ -6642,7 +6710,7 @@ at the end (marked with a series of Xs here for demo purposes):</p>
 </code></pre>
 <p>If the prompt returns a <strong>Query OK</strong> message,
 then the new user should have been created without any issues.</p>
-<a class="header" href="print.html#create-a-practice-database" id="create-a-practice-database"><h2>Create a Practice Database</h2></a>
+<h2 id="create-a-practice-database"><a class="header" href="#create-a-practice-database">Create a Practice Database</a></h2>
 <p>As the root database user,
 let's create a new database for a regular, new user.</p>
 <p>The regular user will be granted <strong>all privileges</strong>
@@ -6677,7 +6745,7 @@ However, in most cases I'll write the keywords in lower case
 letters.
 This is simply because, by convention, I'm super lazy.</p>
 </blockquote>
-<a class="header" href="print.html#logging-in-as-regular-user-and-creating-tables" id="logging-in-as-regular-user-and-creating-tables"><h2>Logging in as Regular User and Creating Tables</h2></a>
+<h2 id="logging-in-as-regular-user-and-creating-tables"><a class="header" href="#logging-in-as-regular-user-and-creating-tables">Logging in as Regular User and Creating Tables</a></h2>
 <p>We can start doing MariaDB work.
 As a reminder,
 we've created a new MariaDB user named <strong>webapp</strong> and
@@ -6714,7 +6782,7 @@ MariaDB [(linuxdb)]&gt; show tables;
 MariaDB [(linuxdb)]&gt; describe distributions;
 </code></pre>
 <p>Congratulations! Now create some records for that table.</p>
-<a class="header" href="print.html#adding-records-into-the-table" id="adding-records-into-the-table"><h3>Adding records into the table</h3></a>
+<h3 id="adding-records-into-the-table"><a class="header" href="#adding-records-into-the-table">Adding records into the table</a></h3>
 <p>We can populate our <strong>linuxdb</strong> database
 with some data.
 We'll use the <code>insert</code> command to add our records
@@ -6728,11 +6796,11 @@ Records: 3  Duplicates: 0  Warnings: 0
 MariaDB [(linuxdb)]&gt; select * from distributions;
 </code></pre>
 <p>Success! Now let's test our table.</p>
-<a class="header" href="print.html#testing-commands" id="testing-commands"><h3>Testing Commands</h3></a>
+<h3 id="testing-commands"><a class="header" href="#testing-commands">Testing Commands</a></h3>
 <p>We will complete the following tasks
 to refresh our MySQL/MariaDB knowledge:</p>
 <ul>
-<li>retrieve some records or parts of records,</li>
+<li>retrieve some records or parts of records, </li>
 <li>delete a record,</li>
 <li>alter the table structure so that it will hold more data, and</li>
 <li>add a record:</li>
@@ -6762,7 +6830,7 @@ MariaDB [(linuxdb)]&gt; select name, packagemanager
 MariaDB [(linuxdb)]&gt; select name from distributions order by founded;
 MariaDB [(linuxdb)]&gt; \q
 </code></pre>
-<a class="header" href="print.html#install-php-and-mysql-support" id="install-php-and-mysql-support"><h2>Install PHP and MySQL Support</h2></a>
+<h2 id="install-php-and-mysql-support"><a class="header" href="#install-php-and-mysql-support">Install PHP and MySQL Support</a></h2>
 <p>The next goal is to complete the connection
 between PHP and MariaDB so that
 we can use both for our websites.</p>
@@ -6776,7 +6844,7 @@ but I'm installing them to demonstrate some basics.</p>
 <pre><code>sudo systemctl restart apache2
 sudo systemctl restart mariadab
 </code></pre>
-<a class="header" href="print.html#create-php-scripts" id="create-php-scripts"><h3>Create PHP Scripts</h3></a>
+<h3 id="create-php-scripts"><a class="header" href="#create-php-scripts">Create PHP Scripts</a></h3>
 <p>In order for PHP to connect to MariaDB,
 it needs to authenticate itself.
 To do that,
@@ -6798,7 +6866,7 @@ nano login.php
 add the following credentials.
 If you used a different database name than <strong>linuxdb</strong>
 and a different username than <strong>webapp</strong>,
-then you need to substitute your names below.
+then you need to substitute your names below. 
 You need to use your own password where
 I have the Xs:</p>
 <pre><code>&lt;?php // login.php
@@ -6898,7 +6966,7 @@ mysqli_close($conn);
 &lt;/html&gt;
 </code></pre>
 <p>Save the file and exit out of <code>nano</code>.</p>
-<a class="header" href="print.html#test-syntax" id="test-syntax"><h3>Test Syntax</h3></a>
+<h3 id="test-syntax"><a class="header" href="#test-syntax">Test Syntax</a></h3>
 <p>After you save the file and exit the text editor,
 we need to test the PHP syntax.
 If there are any errors in our PHP,
@@ -6909,7 +6977,7 @@ If all is well with the second command, HTML should be outputted:</p>
 <pre><code>sudo php -f login.php
 sudo php -f index.php
 </code></pre>
-<a class="header" href="print.html#conclusion-18" id="conclusion-18"><h2>Conclusion</h2></a>
+<h2 id="conclusion-18"><a class="header" href="#conclusion-18">Conclusion</a></h2>
 <p>Congratulations! If you've reached this far,
 you have successfully created a LAMP stack.
 In the process,
@@ -6922,13 +6990,13 @@ how to connect this with PHP for display on a webpage.</p>
 there's a lot more involved, but
 completing the above process is a great start to
 learning more.</p>
-<a class="header" href="print.html#conclusion-19" id="conclusion-19"><h1>Conclusion</h1></a>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="conclusion-19"><a class="header" href="#conclusion-19">Conclusion</a></h1>
 <p>I consider this book to be a live document.
 Perhaps, then, this is version 0.8, or
 something like that.
 In any case,
 it will be continually updated throughout the year but
-probably more often before and during the fall semesters
+probably more often before and during the fall semesters 
 when I teach my Linux Systems Administration course.</p>
 <p>This book in no way is meant to provide a comprehensive
 overview of systems administration nor of Linux.
@@ -6955,49 +7023,35 @@ not simply dropped it in my course shell.</p>
 <p>C. Sean Burns, PhD<br />
 August 13, 2022</p>
 
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
                 </div>
-
-                <!-- Mobile navigation buttons -->
-                
-
-                
-
             </div>
 
-            
-
-            
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
 
         </div>
 
-
-        <!-- Local fallback for Font Awesome -->
-        <script>
-            if ($(".fa").css("font-family") !== "FontAwesome") {
-                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
-            }
+        <script type="text/javascript">
+            window.playground_copyable = true;
         </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        
-
-        
-
-        
-
-        
-        <script>
-            $(document).ready(function() {
-                window.print();
-            })
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
         </script>
-        
-
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
-
-        <!-- Custom JS script -->
-        
-
     </body>
 </html>

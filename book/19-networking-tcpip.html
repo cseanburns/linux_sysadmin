@@ -1,92 +1,143 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" class="sidebar-visible no-js light">
     <head>
+        <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Networking and TCP/IP - Linux Systems Administration</title>
+        <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
-
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
-
+        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
-        <!-- Custom theme -->
-        
-
-        
-
-        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
-        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
-        <script>
-            if (typeof Clipboard == 'undefined') {
-                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
-            }
-        </script>
-
-        <!-- Fetch JQuery from CDN but have a local fallback -->
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script>
-            if (typeof jQuery == 'undefined') {
-                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
-            }
-        </script>
-
-        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
-        <script src="store.js"></script>
-
+        <!-- Custom theme stylesheets -->
     </head>
-    <body class="light">
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
-            var theme = store.get('mdbook-theme');
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            $('body').removeClass().addClass(theme);
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script type="text/javascript">
-            var sidebar = store.get('mdbook-sidebar');
-            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
-            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
         </script>
 
-        <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-history-linux-unix.html"><strong>1.1.</strong> History of Unix and Linux</a></li><li><a href="02-what-is-linux.html"><strong>1.2.</strong> What is Linux?</a></li><li><a href="03-what-is-sysadmin.html"><strong>1.3.</strong> What is Systems Administration?</a></li></ul></li><li><a href="p2-using-gcloud.html"><strong>2.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="05-using-gcloud-virtual-machines.html"><strong>2.1.</strong> Using gcloud for Virtual Machines</a></li></ul></li><li><a href="p3-the-command-line.html"><strong>3.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="06-the-linux-filesystem.html"><strong>3.1.</strong> The Linux Filesystem</a></li><li><a href="07-files-and-directories.html"><strong>3.2.</strong> Files and Directories</a></li><li><a href="08-file-attributes.html"><strong>3.3.</strong> File Attributes</a></li><li><a href="09-text-processing-part-1.html"><strong>3.4.</strong> Text Processing: Part 1</a></li><li><a href="10-text-processing-part-2.html"><strong>3.5.</strong> Text Processing: Part 2</a></li><li><a href="11-text-editors.html"><strong>3.6.</strong> Text Editors</a></li><li><a href="12-revisiting-directory-paths.html"><strong>3.7.</strong> Revisiting Directory Paths</a></li><li><a href="13-bash-scripting.html"><strong>3.8.</strong> Bash Scripting</a></li><li><a href="14-regular-expressions.html"><strong>3.9.</strong> Regular Expressions</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="15-expanding-storage.html"><strong>4.1.</strong> Expanding Storage</a></li><li><a href="16-managing-users-groups.html"><strong>4.2.</strong> Managing Users and Groups</a></li><li><a href="17-managing-software.html"><strong>4.3.</strong> Managing Software</a></li><li><a href="18-using-systemd.html"><strong>4.4.</strong> Using systemd</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-networking-tcpip.html" class="active"><strong>5.1.</strong> Networking and TCP/IP</a></li><li><a href="20-dns-domain-names.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-local-security.html"><strong>5.3.</strong> Local Security</a></li><li><a href="22-firewall-backups.html"><strong>5.4.</strong> Firewalls and Backups</a></li></ul></li><li><a href="p6-creating-a-lamp-server.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="23-installing-the-apache-web-server.html"><strong>6.1.</strong> Installing the Apache Web Server</a></li><li><a href="24-installing-configuring-php.html"><strong>6.2.</strong> Installing and Configuring PHP</a></li><li><a href="25-installing-configuring-mariadb.html"><strong>6.3.</strong> Installing and Configuring MariaDB</a></li></ul></li><li><a href="p7-conclusion.html"><strong>7.</strong> Conclusion</a></li></ul>
-        </div>
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="03-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-using-gcloud.html"><strong aria-hidden="true">2.</strong> Using Google Cloud (gcloud)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="05-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="06-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="07-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="08-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="09-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="10-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="11-text-editors.html"><strong aria-hidden="true">3.6.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="12-revisiting-directory-paths.html"><strong aria-hidden="true">3.7.</strong> Revisiting Directory Paths</a></li><li class="chapter-item expanded "><a href="13-bash-scripting.html"><strong aria-hidden="true">3.8.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="14-regular-expressions.html"><strong aria-hidden="true">3.9.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p4-managing-the-system.html"><strong aria-hidden="true">4.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="15-expanding-storage.html"><strong aria-hidden="true">4.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="16-managing-users-groups.html"><strong aria-hidden="true">4.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="17-managing-software.html"><strong aria-hidden="true">4.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="18-using-systemd.html"><strong aria-hidden="true">4.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p5-networking-security.html"><strong aria-hidden="true">5.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="19-networking-tcpip.html" class="active"><strong aria-hidden="true">5.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="20-dns-domain-names.html"><strong aria-hidden="true">5.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="21-local-security.html"><strong aria-hidden="true">5.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="22-firewall-backups.html"><strong aria-hidden="true">5.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p6-creating-a-lamp-server.html"><strong aria-hidden="true">6.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="23-installing-the-apache-web-server.html"><strong aria-hidden="true">6.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="24-installing-configuring-php.html"><strong aria-hidden="true">6.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="25-installing-configuring-mariadb.html"><strong aria-hidden="true">6.3.</strong> Installing and Configuring MariaDB</a></li></ol></li><li class="chapter-item expanded "><a href="p7-conclusion.html"><strong aria-hidden="true">7.</strong> Conclusion</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
 
         <div id="page-wrapper" class="page-wrapper">
 
-            <div class="page" tabindex="-1">
-                
-                <div id="menu-bar" class="menu-bar">
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
-                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
-                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
 
                     <h1 class="menu-title">Linux Systems Administration</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html">
-                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cseanburns/linux_sysadmin" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
                     </div>
                 </div>
 
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
                 <div id="content" class="content">
-                    <a class="header" href="19-networking-tcpip.html#networking-and-tcpip" id="networking-and-tcpip"><h1>Networking and TCP/IP</h1></a>
+                    <main>
+                        <h1 id="networking-and-tcpip"><a class="header" href="#networking-and-tcpip">Networking and TCP/IP</a></h1>
 <p>An important function of a system administrator
 is to set up, configure, and monitor a network.
 This may involve planning, configuring, and
@@ -103,7 +154,7 @@ In this section, we will focus mostly on
 internet addressing, but
 we will also devote some space to TCP and UDP,
 two protocols for transmitting data.</p>
-<p>Connecting two or more devices together
+<p>Connecting two or more devices together 
 nowadays involves the TCP/IP or the UDP/IP protocols,
 otherwise part of the
 <a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite</a>.
@@ -161,9 +212,9 @@ these protocols provide the functionality for applications.
 They are not themselves considered user applications,
 like a web browser.</p>
 </blockquote>
-<a class="header" href="19-networking-tcpip.html#the-internet-protocol-suite" id="the-internet-protocol-suite"><h2>The Internet Protocol Suite</h2></a>
-<a class="header" href="19-networking-tcpip.html#link-layer" id="link-layer"><h3>Link Layer</h3></a>
-<a class="header" href="19-networking-tcpip.html#arp-address-resolution-protocol" id="arp-address-resolution-protocol"><h4>ARP (Address Resolution Protocol)</h4></a>
+<h2 id="the-internet-protocol-suite"><a class="header" href="#the-internet-protocol-suite">The Internet Protocol Suite</a></h2>
+<h3 id="link-layer"><a class="header" href="#link-layer">Link Layer</a></h3>
+<h4 id="arp-address-resolution-protocol"><a class="header" href="#arp-address-resolution-protocol">ARP (Address Resolution Protocol)</a></h4>
 <p><strong>ARP</strong> (Address Resolution Protocol) is a protocol
 at the link layer and is
 used to map network addresses,
@@ -239,8 +290,8 @@ It searches the sub network for connected MAC addresses
 that are assigned to wireless cards or ethernet cards.
 It then assigns each of those MAC addresses an available
 IP address based on the network address.</p>
-<a class="header" href="19-networking-tcpip.html#internet-layer" id="internet-layer"><h3>Internet Layer</h3></a>
-<a class="header" href="19-networking-tcpip.html#ip-internet-protocol" id="ip-internet-protocol"><h4>IP (Internet Protocol)</h4></a>
+<h3 id="internet-layer"><a class="header" href="#internet-layer">Internet Layer</a></h3>
+<h4 id="ip-internet-protocol"><a class="header" href="#ip-internet-protocol">IP (Internet Protocol)</a></h4>
 <p>The Internet Protocol, or <em>IP</em>, address
 is used to uniquely identify a host on a network and
 place that host at a specific location (its IP <strong>address</strong>).
@@ -257,11 +308,12 @@ they are accessible on subnets or local area networks.</p>
 which means no public internet device will have an
 IP address within these ranges.
 The private address ranges include:</p>
-<table><thead><tr><th> Start Address </th><th> End Address     </th></tr></thead><tbody>
-<tr><td> 10.0.0.0      </td><td> 10.255.255.255  </td></tr>
-<tr><td> 172.16.0.0    </td><td> 172.31.255.255  </td></tr>
-<tr><td> 192.168.0.0   </td><td> 192.168.255.255 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Start Address</th><th>End Address</th></tr></thead><tbody>
+<tr><td>10.0.0.0</td><td>10.255.255.255</td></tr>
+<tr><td>172.16.0.0</td><td>172.31.255.255</td></tr>
+<tr><td>192.168.0.0</td><td>192.168.255.255</td></tr>
 </tbody></table>
+</div>
 <p>If you have a router at home, and
 look at the IP address for at any of
 your devices connected to that router,
@@ -276,7 +328,7 @@ many more IP addresses on its network,
 which is why you'll see that IP range on bigger networks,
 like a university's network.
 We'll talk more about subnetwork sizes, shortly.</p>
-<a class="header" href="19-networking-tcpip.html#example-private-ip-usage" id="example-private-ip-usage"><h4>Example Private IP Usage</h4></a>
+<h4 id="example-private-ip-usage"><a class="header" href="#example-private-ip-usage">Example Private IP Usage</a></h4>
 <p>Let's say my office computer's IP address
 is <strong>10.163.34.59/24</strong> via a wired connection.
 My office neighbor has an
@@ -333,7 +385,7 @@ the private network and the public network and
 is managing two subnets: a wired and a wireless one.
 </figcaption>
 </figure>
-<a class="header" href="19-networking-tcpip.html#using-the-ip-command" id="using-the-ip-command"><h4>Using the <code>ip</code> Command</h4></a>
+<h4 id="using-the-ip-command"><a class="header" href="#using-the-ip-command">Using the <code>ip</code> Command</a></h4>
 <p>The <code>ip</code> command can do more than
 provide us information about our network.
 We can also use it to turn a connection
@@ -344,14 +396,14 @@ Yours might have a different name.</p>
 <pre><code>sudo ip link set enp0s3 down
 sudo ip link set enp0s3 up
 </code></pre>
-<a class="header" href="19-networking-tcpip.html#transport-layer" id="transport-layer"><h3>Transport Layer</h3></a>
+<h3 id="transport-layer"><a class="header" href="#transport-layer">Transport Layer</a></h3>
 <p>The internet layer does not transmit content,
 like web pages or video streams.
 This is the work of the transport layer.
 As discussed previously,
 the two most common transport layer
 protocols are <strong>TCP</strong> and <strong>UDP</strong>.</p>
-<a class="header" href="19-networking-tcpip.html#tcp-transmission-control-protocol" id="tcp-transmission-control-protocol"><h4>TCP, Transmission Control Protocol</h4></a>
+<h4 id="tcp-transmission-control-protocol"><a class="header" href="#tcp-transmission-control-protocol">TCP, Transmission Control Protocol</a></h4>
 <p><em>TCP</em> or Transmission Control Protocol
 is responsible for the transmission of data and
 for making sure the data arrives at its
@@ -360,7 +412,7 @@ If there are errors,
 the data is re-transmitted or halted
 in case of some failure.
 Much of the data sent over the internet is sent using TCP.</p>
-<a class="header" href="19-networking-tcpip.html#udp-user-datagram-protocol" id="udp-user-datagram-protocol"><h4>UDP, User Datagram Protocol</h4></a>
+<h4 id="udp-user-datagram-protocol"><a class="header" href="#udp-user-datagram-protocol">UDP, User Datagram Protocol</a></h4>
 <p>The <strong>UDP</strong> or User Datagram Protocol
 performs a similar function as TCP, but
 it does not error check and data may get lost.
@@ -368,8 +420,8 @@ UDP is useful for conducting voice over internet
 calls or for streaming video,
 such as through YouTube,
 which uses a type of UDP transmission
-called <strong>QUIC</strong> that has builtin encryption.</p>
-<a class="header" href="19-networking-tcpip.html#tcp-and-udp-headers" id="tcp-and-udp-headers"><h4>TCP and UDP Headers</h4></a>
+called <strong>QUIC</strong> that has builtin encryption. </p>
+<h4 id="tcp-and-udp-headers"><a class="header" href="#tcp-and-udp-headers">TCP and UDP Headers</a></h4>
 <p>The above protocols send data in
 data TCP <strong>packets</strong> or UDP <strong>datagrams</strong>, but
 <a href="https://www.cloudflare.com/learning/network-layer/what-is-a-packet/">these terms may be used interchangeably</a>.
@@ -410,11 +462,11 @@ In addition to the header info,
 TCP and UDP packets include the data that's being sent
 (e.g., a webpage) and
 error checking if it's TCP.</p>
-<a class="header" href="19-networking-tcpip.html#ports" id="ports"><h4>Ports</h4></a>
+<h4 id="ports"><a class="header" href="#ports">Ports</a></h4>
 <p>TCP and UDP connections use ports to bind
 internet traffic to specific IP addresses.
 Specifically, a <strong>port</strong> associates a process
-with an application
+with an application 
 (and is part of the <strong>application layer</strong> of the internet suite),
 such as a web service or outgoing email.
 That is, ports provide a way to distinguish and
@@ -424,7 +476,7 @@ For example, all traffic going to IP address 10.0.5.33:80
 means that this is <strong>http</strong> traffic for the http web service,
 since HTTP is commonly associated with port 80.
 Note that the port info is attached to the end of the
-IP address via a colon.</p>
+IP address via a colon. </p>
 <p>Common ports include:</p>
 <ul>
 <li>21: FTP</li>
@@ -447,7 +499,7 @@ we can invert grep for lines starting with a pound sign or are empty</p>
 </code></pre>
 <p>See also the Wikipedia page:
 <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></p>
-<a class="header" href="19-networking-tcpip.html#ip-subnetting" id="ip-subnetting"><h2>IP Subnetting</h2></a>
+<h2 id="ip-subnetting"><a class="header" href="#ip-subnetting">IP Subnetting</a></h2>
 <p>Let's now return to the internet layer and
 discuss one of the major duties of a systems administrator:
 subnetting.</p>
@@ -456,19 +508,20 @@ subnetworks out of a larger network.
 They are created using routers that have this capability
 (e.g., commercial use routers) and certain types
 of network switches.</p>
-<a class="header" href="19-networking-tcpip.html#private-ip-ranges" id="private-ip-ranges"><h3>Private IP Ranges</h3></a>
+<h3 id="private-ip-ranges"><a class="header" href="#private-ip-ranges">Private IP Ranges</a></h3>
 <p>When subnetting local area networks,
 we work with the private IP ranges:</p>
-<table><thead><tr><th> Start Address </th><th> End Address     </th></tr></thead><tbody>
-<tr><td> 10.0.0.0      </td><td> 10.255.255.255  </td></tr>
-<tr><td> 172.16.0.0    </td><td> 172.31.255.255  </td></tr>
-<tr><td> 192.168.0.0   </td><td> 192.168.255.255 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Start Address</th><th>End Address</th></tr></thead><tbody>
+<tr><td>10.0.0.0</td><td>10.255.255.255</td></tr>
+<tr><td>172.16.0.0</td><td>172.31.255.255</td></tr>
+<tr><td>192.168.0.0</td><td>192.168.255.255</td></tr>
 </tbody></table>
+</div>
 <p>It's important to be able to work with IP addresses
 like those listed above in order to subnet; and
 therefore, we will need to learn a bit of IP math
 along the way.</p>
-<a class="header" href="19-networking-tcpip.html#ip-meaning" id="ip-meaning"><h4>IP Meaning</h4></a>
+<h4 id="ip-meaning"><a class="header" href="#ip-meaning">IP Meaning</a></h4>
 <p>An IPv4 address is 32 bits (8 x 4),
 or four bytes, in size.
 In human readable context,
@@ -485,24 +538,26 @@ Eight <strong>bits</strong> equal a single <strong>byte</strong>.
 By implication, 8 gigabits equals 1 gigabyte, and
 8 megabits equals 1 megabyte.
 We use these symbols to note the terms:</p>
-<table><thead><tr><th> Term  </th><th> Symbol </th></tr></thead><tbody>
-<tr><td> bit   </td><td> <em>b</em>    </td></tr>
-<tr><td> byte  </td><td> B      </td></tr>
-<tr><td> octet </td><td> <em>o</em>    </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Term</th><th>Symbol</th></tr></thead><tbody>
+<tr><td>bit</td><td><em>b</em></td></tr>
+<tr><td>byte</td><td>B</td></tr>
+<tr><td>octet</td><td><em>o</em></td></tr>
 </tbody></table>
+</div>
 <p>Each bit is represented by either a 1 or a 0.
 For example, the first address above in binary is:</p>
 <ul>
 <li><strong>11000000.10101000.00000001.00000110</strong> is <strong>192.168.1.6</strong></li>
 </ul>
 <p>Or:</p>
-<table><thead><tr><th> Byte     </th><th> Decimal Value </th></tr></thead><tbody>
-<tr><td> 11000000 </td><td> 192           </td></tr>
-<tr><td> 10101000 </td><td> 168           </td></tr>
-<tr><td> 00000001 </td><td> 1             </td></tr>
-<tr><td> 00000110 </td><td> 6             </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Byte</th><th>Decimal Value</th></tr></thead><tbody>
+<tr><td>11000000</td><td>192</td></tr>
+<tr><td>10101000</td><td>168</td></tr>
+<tr><td>00000001</td><td>1</td></tr>
+<tr><td>00000110</td><td>6</td></tr>
 </tbody></table>
-<a class="header" href="19-networking-tcpip.html#ip-math" id="ip-math"><h3>IP Math</h3></a>
+</div>
+<h3 id="ip-math"><a class="header" href="#ip-math">IP Math</a></h3>
 <p>When doing IP math,
 one easy way to do it is to simply remember
 that each bit in each of the above bytes is a
@@ -510,16 +565,17 @@ placeholder for the following values:</p>
 <pre><code>128 64 32 16 8 4 2 1
 </code></pre>
 <p>Alternatively, from low to high:</p>
-<table><thead><tr><th> base-2        </th><th> Output </th></tr></thead><tbody>
-<tr><td> 2<sup>0</sup> </td><td> 1      </td></tr>
-<tr><td> 2<sup>1</sup> </td><td> 2      </td></tr>
-<tr><td> 2<sup>2</sup> </td><td> 4      </td></tr>
-<tr><td> 2<sup>3</sup> </td><td> 8      </td></tr>
-<tr><td> 2<sup>4</sup> </td><td> 16     </td></tr>
-<tr><td> 2<sup>5</sup> </td><td> 32     </td></tr>
-<tr><td> 2<sup>6</sup> </td><td> 64     </td></tr>
-<tr><td> 2<sup>7</sup> </td><td> 128    </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>base-2</th><th>Output</th></tr></thead><tbody>
+<tr><td>2<sup>0</sup></td><td>1</td></tr>
+<tr><td>2<sup>1</sup></td><td>2</td></tr>
+<tr><td>2<sup>2</sup></td><td>4</td></tr>
+<tr><td>2<sup>3</sup></td><td>8</td></tr>
+<tr><td>2<sup>4</sup></td><td>16</td></tr>
+<tr><td>2<sup>5</sup></td><td>32</td></tr>
+<tr><td>2<sup>6</sup></td><td>64</td></tr>
+<tr><td>2<sup>7</sup></td><td>128</td></tr>
 </tbody></table>
+</div>
 <p>In binary, 192 is equal to 11000000.
 It's helpful to work backward.
 For IP addresses,
@@ -562,7 +618,7 @@ So:</p>
 </ul>
 <p>Since there is nothing remaining,
 the rest of the bits equal 0.</p>
-<a class="header" href="19-networking-tcpip.html#subnetting-examples" id="subnetting-examples"><h3>Subnetting Examples</h3></a>
+<h3 id="subnetting-examples"><a class="header" href="#subnetting-examples">Subnetting Examples</a></h3>
 <p>Subnetting involves dividing a network
 into two or more subnets.
 When we subnet,
@@ -596,7 +652,7 @@ we want to identify and describe a network
 that we are connected to.
 Let's work with two example private IP addresses
 that exist on two separate subnets.</p>
-<a class="header" href="19-networking-tcpip.html#example-ip-address-1-19216816" id="example-ip-address-1-19216816"><h4>Example IP Address 1: 192.168.1.6</h4></a>
+<h4 id="example-ip-address-1-19216816"><a class="header" href="#example-ip-address-1-19216816">Example IP Address 1: 192.168.1.6</a></h4>
 <p>Using the private IP address 192.168.1.6,
 let's derive the network mask and the network address
 (or ID) from this IP address.
@@ -615,14 +671,15 @@ That 24 is used as <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain
 <li>192.168.1.6/24</li>
 </ul>
 <p>For Example 1, we thus have the following subnet information:</p>
-<table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
-<tr><td> Netmask/Mask </td><td> 255.255.255.0 </td></tr>
-<tr><td> Network ID   </td><td> 192.168.1.0   </td></tr>
-<tr><td> Start Range  </td><td> 192.168.1.1   </td></tr>
-<tr><td> End Range    </td><td> 192.168.1.254 </td></tr>
-<tr><td> Broadcast    </td><td> 192.168.1.255 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>192.168.1.0</td></tr>
+<tr><td>Start Range</td><td>192.168.1.1</td></tr>
+<tr><td>End Range</td><td>192.168.1.254</td></tr>
+<tr><td>Broadcast</td><td>192.168.1.255</td></tr>
 </tbody></table>
-<a class="header" href="19-networking-tcpip.html#example-ip-address-2-101603875" id="example-ip-address-2-101603875"><h4>Example IP Address 2: 10.160.38.75</h4></a>
+</div>
+<h4 id="example-ip-address-2-101603875"><a class="header" href="#example-ip-address-2-101603875">Example IP Address 2: 10.160.38.75</a></h4>
 <p>For example 2, let's start off with a private
 IP address of 10.160.38.75 and a mask of /24:</p>
 <pre><code>00001010.10100000.00100110.01001011 IP               10.160.38.75
@@ -630,14 +687,15 @@ IP address of 10.160.38.75 and a mask of /24:</p>
 -----------------------------------
 00001010.10100000.00100110.00000000 Network Address   10.160.38.0
 </code></pre>
-<table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
-<tr><td> Netmask/Mask </td><td> 255.255.255.0 </td></tr>
-<tr><td> Network ID   </td><td> 10.160.38.0   </td></tr>
-<tr><td> Start Range  </td><td> 10.160.38.1   </td></tr>
-<tr><td> End Range    </td><td> 10.160.38.254 </td></tr>
-<tr><td> Broadcast    </td><td> 10.160.38.255 </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>10.160.38.0</td></tr>
+<tr><td>Start Range</td><td>10.160.38.1</td></tr>
+<tr><td>End Range</td><td>10.160.38.254</td></tr>
+<tr><td>Broadcast</td><td>10.160.38.255</td></tr>
 </tbody></table>
-<a class="header" href="19-networking-tcpip.html#example-ip-address-3-1721616224" id="example-ip-address-3-1721616224"><h4>Example IP Address 3: 172.16.1.62/24</h4></a>
+</div>
+<h4 id="example-ip-address-3-1721616224"><a class="header" href="#example-ip-address-3-1721616224">Example IP Address 3: 172.16.1.62/24</a></h4>
 <p>For example 3, let's start off with a private
 IP address of 172.16.1.62 and a mask of /24:</p>
 <pre><code>10101100 00010000 00000001 00100111 IP                172.16.1.62
@@ -645,14 +703,15 @@ IP address of 172.16.1.62 and a mask of /24:</p>
 -----------------------------------
 10101100 00010000 00000001 00000000 Network Address    172.16.1.0
 </code></pre>
-<table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
-<tr><td> Netmask/Mask </td><td> 255.255.255.0 </td></tr>
-<tr><td> Network ID   </td><td> 172.16.1.0    </td></tr>
-<tr><td> Start Range  </td><td> 172.16.1.1    </td></tr>
-<tr><td> End Range    </td><td> 172.16.1.254  </td></tr>
-<tr><td> Broadcast    </td><td> 172.16.1.255  </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>Netmask/Mask</td><td>255.255.255.0</td></tr>
+<tr><td>Network ID</td><td>172.16.1.0</td></tr>
+<tr><td>Start Range</td><td>172.16.1.1</td></tr>
+<tr><td>End Range</td><td>172.16.1.254</td></tr>
+<tr><td>Broadcast</td><td>172.16.1.255</td></tr>
 </tbody></table>
-<a class="header" href="19-networking-tcpip.html#determine-the-number-of-hosts" id="determine-the-number-of-hosts"><h4>Determine the Number of Hosts</h4></a>
+</div>
+<h4 id="determine-the-number-of-hosts"><a class="header" href="#determine-the-number-of-hosts">Determine the Number of Hosts</a></h4>
 <p>To determine the number of hosts on a CIDR /24 subnet,
 we look at the start and end ranges.
 In all three of the above examples,
@@ -660,12 +719,12 @@ the start range begins with X.X.X.1 and
 ends with X.X.X.254.
 Therefore, there are 254 maximum hosts allowed on these subnets because
 1 to 254, inclusive of 1 and 254, is 254.</p>
-<a class="header" href="19-networking-tcpip.html#example-ip-address-4-10052316" id="example-ip-address-4-10052316"><h4>Example IP Address 4: 10.0.5.23/16</h4></a>
+<h4 id="example-ip-address-4-10052316"><a class="header" href="#example-ip-address-4-10052316">Example IP Address 4: 10.0.5.23/16</a></h4>
 <p>The first three examples show instances
 where the CIDR is set to /24.
 This only allows 254 maximum hosts on a subnet.
 If the CIDR is set to /16,
-then we can theoretically allow 65,534 hosts on a subnet.</p>
+then we can theoretically allow 65,534 hosts on a subnet. </p>
 <p>For example 4, let's start off then with a private
 IP address of 10.0.5.23 and a mask of /16:</p>
 <pre><code>00001010.00000000.00000101.00010111 IP Address: 10.0.5.23
@@ -673,33 +732,35 @@ IP address of 10.0.5.23 and a mask of /16:</p>
 -----------------------------------------------------------
 00001010.00000000.00000000.00000000 Network ID: 10.0.0.0
 </code></pre>
-<table><thead><tr><th> Type         </th><th> IP            </th></tr></thead><tbody>
-<tr><td> IP Address   </td><td> 10.0.5.23     </td></tr>
-<tr><td> Netmask/Mask </td><td> 255.255.0.0   </td></tr>
-<tr><td> Network ID   </td><td> 10.0.0.0      </td></tr>
-<tr><td> Start Range  </td><td> 10.0.0.1      </td></tr>
-<tr><td> End Range    </td><td> 10.0.255.254  </td></tr>
-<tr><td> Broadcast    </td><td> 10.0.255.255  </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>IP</th></tr></thead><tbody>
+<tr><td>IP Address</td><td>10.0.5.23</td></tr>
+<tr><td>Netmask/Mask</td><td>255.255.0.0</td></tr>
+<tr><td>Network ID</td><td>10.0.0.0</td></tr>
+<tr><td>Start Range</td><td>10.0.0.1</td></tr>
+<tr><td>End Range</td><td>10.0.255.254</td></tr>
+<tr><td>Broadcast</td><td>10.0.255.255</td></tr>
 </tbody></table>
+</div>
 <p>Since the last two octets/bytes now vary, we count up
 by each octet.
 Therefore, the number of hosts is:</p>
-<table><thead><tr><th> IPs          </th><th>         </th></tr></thead><tbody>
-<tr><td> 10.0.0.1     </td><td>         </td></tr>
-<tr><td> 10.0.0.255   </td><td> = 256   </td></tr>
-<tr><td> 10.0.1.1     </td><td>         </td></tr>
-<tr><td> 10.0.255.255 </td><td> = 256   </td></tr>
+<div class="table-wrapper"><table><thead><tr><th>IPs</th><th></th></tr></thead><tbody>
+<tr><td>10.0.0.1</td><td></td></tr>
+<tr><td>10.0.0.255</td><td>= 256</td></tr>
+<tr><td>10.0.1.1</td><td></td></tr>
+<tr><td>10.0.255.255</td><td>= 256</td></tr>
 </tbody></table>
+</div>
 <ul>
 <li>Number of Hosts = 256 x 256 = 65536</li>
 <li>Subtract Network ID (1) and Broadcast (1) = 2 IP addresses</li>
 <li>Number of Usable Hosts = 256 x 256 - 2 = 65534</li>
 </ul>
-<a class="header" href="19-networking-tcpip.html#ipv6-subnetting" id="ipv6-subnetting"><h3>IPv6 subnetting</h3></a>
+<h3 id="ipv6-subnetting"><a class="header" href="#ipv6-subnetting">IPv6 subnetting</a></h3>
 <p>We're not going to cover IPv6 subnetting, but
 if you're interested,
 this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
-<a class="header" href="19-networking-tcpip.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>As a systems administrator,
 it's important to have a basic understanding of
 how networking works, and
@@ -729,59 +790,42 @@ this section covered topics that included:</p>
 we extend upon this and discuss the
 domain name system (DNS) and domain names.</p>
 
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="p5-networking-security.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="20-dns-domain-names.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
                 </div>
-
-                <!-- Mobile navigation buttons -->
-                
-                    <a rel="prev" href="p5-networking-security.html" class="mobile-nav-chapters previous" title="Previous chapter">
-                        <i class="fa fa-angle-left"></i>
-                    </a>
-                
-
-                
-                    <a rel="next" href="20-dns-domain-names.html" class="mobile-nav-chapters next" title="Next chapter">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-                
-
             </div>
 
-            
-                <a href="p5-networking-security.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-            
-
-            
-                <a href="20-dns-domain-names.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-            
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="p5-networking-security.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="20-dns-domain-names.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
 
         </div>
 
-
-        <!-- Local fallback for Font Awesome -->
-        <script>
-            if ($(".fa").css("font-family") !== "FontAwesome") {
-                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
-            }
+        <script type="text/javascript">
+            window.playground_copyable = true;
         </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        
-
-        
-
-        
-
-        
-
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
-
-        <!-- Custom JS script -->
-        
-
+        <!-- Custom JS scripts -->
     </body>
 </html>

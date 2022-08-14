@@ -1,93 +1,144 @@
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" class="sidebar-visible no-js light">
     <head>
+        <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Installing the Apache Web Server - Linux Systems Administration</title>
+        <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
-
-        <link rel="stylesheet" href="book.css">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
-        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
-
+        <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
-        <!-- Custom theme -->
-        
-
-        
-
-        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
-        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
-        <script>
-            if (typeof Clipboard == 'undefined') {
-                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
-            }
-        </script>
-
-        <!-- Fetch JQuery from CDN but have a local fallback -->
-        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script>
-            if (typeof jQuery == 'undefined') {
-                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
-            }
-        </script>
-
-        <!-- Fetch store.js from local - TODO add CDN when 2.x.x is available on cdnjs -->
-        <script src="store.js"></script>
-
+        <!-- Custom theme stylesheets -->
     </head>
-    <body class="light">
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
-            var theme = store.get('mdbook-theme');
-            if (theme === null || theme === undefined) { theme = 'light'; }
-            $('body').removeClass().addClass(theme);
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script type="text/javascript">
-            var sidebar = store.get('mdbook-sidebar');
-            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
-            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
         </script>
 
-        <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="p1-linux-sysadmin.html"><strong>1.</strong> Linux Systems Administration</a></li><li><ul class="section"><li><a href="01-history-linux-unix.html"><strong>1.1.</strong> History of Unix and Linux</a></li><li><a href="02-what-is-linux.html"><strong>1.2.</strong> What is Linux?</a></li><li><a href="03-what-is-sysadmin.html"><strong>1.3.</strong> What is Systems Administration?</a></li></ul></li><li><a href="p2-using-gcloud.html"><strong>2.</strong> Using Google Cloud (gcloud)</a></li><li><ul class="section"><li><a href="05-using-gcloud-virtual-machines.html"><strong>2.1.</strong> Using gcloud for Virtual Machines</a></li></ul></li><li><a href="p3-the-command-line.html"><strong>3.</strong> Learning the Command Line</a></li><li><ul class="section"><li><a href="06-the-linux-filesystem.html"><strong>3.1.</strong> The Linux Filesystem</a></li><li><a href="07-files-and-directories.html"><strong>3.2.</strong> Files and Directories</a></li><li><a href="08-file-attributes.html"><strong>3.3.</strong> File Attributes</a></li><li><a href="09-text-processing-part-1.html"><strong>3.4.</strong> Text Processing: Part 1</a></li><li><a href="10-text-processing-part-2.html"><strong>3.5.</strong> Text Processing: Part 2</a></li><li><a href="11-text-editors.html"><strong>3.6.</strong> Text Editors</a></li><li><a href="12-revisiting-directory-paths.html"><strong>3.7.</strong> Revisiting Directory Paths</a></li><li><a href="13-bash-scripting.html"><strong>3.8.</strong> Bash Scripting</a></li><li><a href="14-regular-expressions.html"><strong>3.9.</strong> Regular Expressions</a></li></ul></li><li><a href="p4-managing-the-system.html"><strong>4.</strong> Managing the System</a></li><li><ul class="section"><li><a href="15-expanding-storage.html"><strong>4.1.</strong> Expanding Storage</a></li><li><a href="16-managing-users-groups.html"><strong>4.2.</strong> Managing Users and Groups</a></li><li><a href="17-managing-software.html"><strong>4.3.</strong> Managing Software</a></li><li><a href="18-using-systemd.html"><strong>4.4.</strong> Using systemd</a></li></ul></li><li><a href="p5-networking-security.html"><strong>5.</strong> Networking and Security</a></li><li><ul class="section"><li><a href="19-networking-tcpip.html"><strong>5.1.</strong> Networking and TCP/IP</a></li><li><a href="20-dns-domain-names.html"><strong>5.2.</strong> DNS and Domain Names</a></li><li><a href="21-local-security.html"><strong>5.3.</strong> Local Security</a></li><li><a href="22-firewall-backups.html"><strong>5.4.</strong> Firewalls and Backups</a></li></ul></li><li><a href="p6-creating-a-lamp-server.html"><strong>6.</strong> Creating a LAMP Server</a></li><li><ul class="section"><li><a href="23-installing-the-apache-web-server.html" class="active"><strong>6.1.</strong> Installing the Apache Web Server</a></li><li><a href="24-installing-configuring-php.html"><strong>6.2.</strong> Installing and Configuring PHP</a></li><li><a href="25-installing-configuring-mariadb.html"><strong>6.3.</strong> Installing and Configuring MariaDB</a></li></ul></li><li><a href="p7-conclusion.html"><strong>7.</strong> Conclusion</a></li></ul>
-        </div>
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="03-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-using-gcloud.html"><strong aria-hidden="true">2.</strong> Using Google Cloud (gcloud)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="05-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="06-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="07-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="08-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="09-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="10-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="11-text-editors.html"><strong aria-hidden="true">3.6.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="12-revisiting-directory-paths.html"><strong aria-hidden="true">3.7.</strong> Revisiting Directory Paths</a></li><li class="chapter-item expanded "><a href="13-bash-scripting.html"><strong aria-hidden="true">3.8.</strong> Bash Scripting</a></li><li class="chapter-item expanded "><a href="14-regular-expressions.html"><strong aria-hidden="true">3.9.</strong> Regular Expressions</a></li></ol></li><li class="chapter-item expanded "><a href="p4-managing-the-system.html"><strong aria-hidden="true">4.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="15-expanding-storage.html"><strong aria-hidden="true">4.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="16-managing-users-groups.html"><strong aria-hidden="true">4.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="17-managing-software.html"><strong aria-hidden="true">4.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="18-using-systemd.html"><strong aria-hidden="true">4.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p5-networking-security.html"><strong aria-hidden="true">5.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="19-networking-tcpip.html"><strong aria-hidden="true">5.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="20-dns-domain-names.html"><strong aria-hidden="true">5.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="21-local-security.html"><strong aria-hidden="true">5.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="22-firewall-backups.html"><strong aria-hidden="true">5.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p6-creating-a-lamp-server.html"><strong aria-hidden="true">6.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="23-installing-the-apache-web-server.html" class="active"><strong aria-hidden="true">6.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="24-installing-configuring-php.html"><strong aria-hidden="true">6.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="25-installing-configuring-mariadb.html"><strong aria-hidden="true">6.3.</strong> Installing and Configuring MariaDB</a></li></ol></li><li class="chapter-item expanded "><a href="p7-conclusion.html"><strong aria-hidden="true">7.</strong> Conclusion</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
 
         <div id="page-wrapper" class="page-wrapper">
 
-            <div class="page" tabindex="-1">
-                
-                <div id="menu-bar" class="menu-bar">
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
-                        <i id="sidebar-toggle" class="fa fa-bars" title="Toggle sidebar"></i>
-                        <i id="theme-toggle" class="fa fa-paint-brush" title="Change theme"></i>
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
                     </div>
 
                     <h1 class="menu-title">Linux Systems Administration</h1>
 
                     <div class="right-buttons">
-                        <a href="print.html">
-                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cseanburns/linux_sysadmin" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
                     </div>
                 </div>
 
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
                 <div id="content" class="content">
-                    <a class="header" href="23-installing-the-apache-web-server.html#installing-the-apache-web-server" id="installing-the-apache-web-server"><h1>Installing the Apache Web Server</h1></a>
-<a class="header" href="23-installing-the-apache-web-server.html#introduction" id="introduction"><h2>Introduction</h2></a>
+                    <main>
+                        <h1 id="installing-the-apache-web-server"><a class="header" href="#installing-the-apache-web-server">Installing the Apache Web Server</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p><a href="https://httpd.apache.org/">Apache</a> is an HTTP server,
 otherwise called web server software.
 Other HTTP server software exists.
@@ -110,7 +161,7 @@ including</p>
 <li>web site content</li>
 <li>log files and troubleshooting</li>
 </ul>
-<a class="header" href="23-installing-the-apache-web-server.html#installation" id="installation"><h2>Installation</h2></a>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
 <p>Before we install Apache,
 we need to update our systems first.</p>
 <pre><code>sudo apt update
@@ -143,7 +194,7 @@ Press <strong>Y</strong> to agree to continue after running
 the command below:</p>
 <pre><code>sudo apt install apache2
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#basic-checks" id="basic-checks"><h2>Basic checks</h2></a>
+<h2 id="basic-checks"><a class="header" href="#basic-checks">Basic checks</a></h2>
 <p>One of the things that makes Apache2, and
 some other web servers,
 powerful is the library of modules that
@@ -165,7 +216,7 @@ if the computer gets rebooted.</p>
 <p>The output of the second command also shows
 that <strong>apache2</strong> is enabled and
 that it is also active (running).</p>
-<a class="header" href="23-installing-the-apache-web-server.html#creating-a-web-page" id="creating-a-web-page"><h2>Creating a web page</h2></a>
+<h2 id="creating-a-web-page"><a class="header" href="#creating-a-web-page">Creating a web page</a></h2>
 <p>Since <strong>apache2</strong> is up and running,
 let's look at the default web page.</p>
 <p>There are two ways we can look at the default web page.
@@ -225,7 +276,7 @@ where Ubuntu stores configuration files and
 what those files do, and
 document roots,
 which is where website files go.</p>
-<a class="header" href="23-installing-the-apache-web-server.html#create-a-web-page" id="create-a-web-page"><h2>Create a Web Page</h2></a>
+<h2 id="create-a-web-page"><a class="header" href="#create-a-web-page">Create a Web Page</a></h2>
 <p>Let's create our first web page.
 The default page described above provides
 the location of the document root at
@@ -268,7 +319,7 @@ For example, if your <strong>external IP address</strong> is
 <strong>55.222.55.222</strong>, then you'd specify it like so:</p>
 <pre><code>http://55.222.55.222/index.html.original
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#user-directories" id="user-directories"><h2>User Directories</h2></a>
+<h2 id="user-directories"><a class="header" href="#user-directories">User Directories</a></h2>
 <p>You may have visited sites in the past
 that have a tilde in the URL and look like this:</p>
 <pre><code>http://example.com/~user/
@@ -290,7 +341,7 @@ For example, for the user <strong>linus</strong>,
 they should have the following file path available:</p>
 <pre><code>/home/linus/public_html/
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#enable-mod_userdir" id="enable-mod_userdir"><h3>Enable mod_userdir</h3></a>
+<h3 id="enable-mod_userdir"><a class="header" href="#enable-mod_userdir">Enable mod_userdir</a></h3>
 <p>The configuration file for <strong>mod_userdir</strong> is
 located in <strong>/etc/apache2/mods-available/</strong>
 and is named <strong>userdir.conf</strong>.
@@ -313,7 +364,7 @@ we can also check its status:</p>
 <pre><code>sudo systemctl restart apache2
 systemctl status apache2
 </code></pre>
-<a class="header" href="23-installing-the-apache-web-server.html#create-a-user-directory-website" id="create-a-user-directory-website"><h3>Create a User Directory Website</h3></a>
+<h3 id="create-a-user-directory-website"><a class="header" href="#create-a-user-directory-website">Create a User Directory Website</a></h3>
 <p>Let's say I am logged in as the user <strong>linus</strong> on the system and
 will use that to test if the user directory is working.
 First, let's go home.
@@ -379,7 +430,7 @@ we would need to use the <code>chmod</code> command
 to make these directories executable and readable
 before files in our <strong>public_html</strong> directory
 could be accessed in a browser.</p>
-<a class="header" href="23-installing-the-apache-web-server.html#conclusion" id="conclusion"><h2>Conclusion</h2></a>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In this section,
 we learned about the Apache2 HTTP server.
 We learned how to install it on Ubuntu,
@@ -395,59 +446,42 @@ in our home directories.</p>
 we will learn how to make our sites applications
 by installing PHP and enabling the relevant PHP modules.</p>
 
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="p6-creating-a-lamp-server.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="24-installing-configuring-php.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
                 </div>
-
-                <!-- Mobile navigation buttons -->
-                
-                    <a rel="prev" href="p6-creating-a-lamp-server.html" class="mobile-nav-chapters previous" title="Previous chapter">
-                        <i class="fa fa-angle-left"></i>
-                    </a>
-                
-
-                
-                    <a rel="next" href="24-installing-configuring-php.html" class="mobile-nav-chapters next" title="Next chapter">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-                
-
             </div>
 
-            
-                <a href="p6-creating-a-lamp-server.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-            
-
-            
-                <a href="24-installing-configuring-php.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-            
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="p6-creating-a-lamp-server.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="24-installing-configuring-php.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
 
         </div>
 
-
-        <!-- Local fallback for Font Awesome -->
-        <script>
-            if ($(".fa").css("font-family") !== "FontAwesome") {
-                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
-            }
+        <script type="text/javascript">
+            window.playground_copyable = true;
         </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
-        <!-- Livereload script (if served using the cli tool) -->
-        
-
-        
-
-        
-
-        
-
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
-
-        <!-- Custom JS script -->
-        
-
+        <!-- Custom JS scripts -->
     </body>
 </html>
