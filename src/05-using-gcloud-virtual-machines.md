@@ -254,6 +254,12 @@ sudo apt update
 sudo apt -y upgrade
 ```
 
+Then type ``exit`` to logout and quit the connection to the remote server.
+
+```
+exit
+```
+
 ## Snapshots
 
 Lastly, we have installed a pristine version of Ubuntu,
