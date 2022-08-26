@@ -214,7 +214,7 @@ To do so, follow these steps:
     - This is the lowest cost virtual machine and perfect for our needs.
 - Under **Boot disk**, click on the **Change** button.
 - In the window, select **Ubuntu** from the **Operating system** dropdown box.
-- Select **Ubuntu 20.04 LTS**
+- Select **Ubuntu 20.04 LTS x86/64**
 - Leave **Boot disk type** be set to **Balanced persistant disk**
 - Disk size should be set to **10 GB**.
 - Click on the **Select** button.
