@@ -234,7 +234,7 @@ to connect to our VMs.
 The syntax follows this pattern:
 
 ```
-gcloud compute ssh --zone "zone-info" "name-info" --project "project-info"
+gcloud compute ssh --zone "zone-info" "name-info" --project "project-id"
 ```
 
 The values in the double quotes in the above command
@@ -250,8 +250,8 @@ On Ubuntu, we'll use the following two commands,
 which you should run also:
 
 ```
-apt update
-apt -y upgrade
+sudo apt update
+sudo apt -y upgrade
 ```
 
 ## Snapshots

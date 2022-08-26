@@ -935,7 +935,7 @@ Windows users can connect to it via their command prompt.</p>
 we use a slightly different <code>ssh</code> command
 to connect to our VMs.
 The syntax follows this pattern:</p>
-<pre><code>gcloud compute ssh --zone &quot;zone-info&quot; &quot;name-info&quot; --project &quot;project-info&quot;
+<pre><code>gcloud compute ssh --zone &quot;zone-info&quot; &quot;name-info&quot; --project &quot;project-id&quot;
 </code></pre>
 <p>The values in the double quotes in the above command
 can be located in your Google Cloud console and
@@ -946,8 +946,8 @@ but it may not be completely updated.
 Thus the first thing we need to do is update our machines.
 On Ubuntu, we'll use the following two commands,
 which you should run also:</p>
-<pre><code>apt update
-apt -y upgrade
+<pre><code>sudo apt update
+sudo apt -y upgrade
 </code></pre>
 <h2 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h2>
 <p>Lastly, we have installed a pristine version of Ubuntu,
