@@ -299,7 +299,7 @@ So keep practicing.
 [commandsub]:https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html
 [curlies]:https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/
 [braceexp]:https://wiki.bash-hackers.org/syntax/expansion/brace
-[shebank]:https://en.wikipedia.org/wiki/Shebang_(Unix)
+[shebang]:https://en.wikipedia.org/wiki/Shebang_(Unix)
 [condexpr]:https://ss64.com/bash/syntax-execute.html
 [parameterexp]:https://devhints.io/bash#parameter-expansion
 [arrays]:https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html
