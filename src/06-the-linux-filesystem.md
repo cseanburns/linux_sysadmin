@@ -5,17 +5,20 @@ In this demo, we will cover the:
 - the Linux filesystem and how it is structured and organized, and
 - the basic commands to navigate around and to work with directories and files
 
-> The terms **directories** and **folders** are synonymous, but 
-> as users of primarily graphical user interfaces,
-> you are more likely familiar with the term **folders**.
-> I will more often use the term **directories** 
-> since that is the command line (text user interface) convention.
-> I will use the term **folders** when referring to a graphical environment.
+> The terms **directories** and **folders** are synonymous,
+> but as users of primarily graphical user interfaces, you
+> are more likely familiar with the term **folders**. I will
+> more often use the term **directories** since that is the
+> command line (text user interface) convention. I will use
+> the term **folders** when referring to a graphical
+> environment.
 
 Throughout this demonstration,
-I encourage you to ``ssh`` into our remote server
-and follow along with the commands that I use.
-See [Section 2.2](02-quick-ssh-connect.html)
+I encourage you to ``gcloud compute ssh`` into
+our remote server and
+follow along with the commands that I use.
+See
+[Section 2.1](05-using-gcloud-virtual-machines.md#connect-to-our-vm)
 for details on connecting to the remote server.
 
 ## Visualizing the Filesystem as a Tree
@@ -36,31 +39,45 @@ The former is the default filesystem on distributions
 like [Debian][debian] and [Ubuntu][ubuntu];
 the latter is the default on the 
 [Fedora][fedora] and [openSUSE][opensuse] distributions. 
-[Opensource.com][ext4] has a nice overview of filesystems under this concept,
-and we will learn how to use some of them later in the semester
-when we create partitions, manage disk volumes, and learn about backups.
+[Opensource.com][ext4] has a nice overview of
+filesystems under this concept.
 
 A **filesystem** might also be used to refer
-to the **directory structure** or [directory tree][directorytree] of a system.
-This concept is related to the prior concept of a filesystem, but
-it's used here to refer to the location of files and directories on a system.
-For example, on Windows, the filesystem is identified by a letter, like the **C:** drive,
-regardless if the disk has a NTFS filesystem or a FAT filesystem.
-Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.),
-will be assigned their own letters (**A:**, **B:**, **D:**, etc.).
+to the **directory structure** or
+[directory tree][directorytree] of a system.
+This concept is related to the prior concept
+of a filesystem, but
+it's used here to refer to the location of
+files and directories on a system.
+For example, on Windows,
+the filesystem is identified by a letter,
+like the **C:** drive,
+regardless if the disk has a
+NTFS filesystem or a FAT filesystem.
+Additional drives
+(e.g., extra hard drives, USB drives, DVD drives, etc.),
+will be assigned their own letters
+(**A:**, **B:**, **D:**, etc.).
 [macOS adheres to a tree like filesystem][macosdirtree]
 like Linux and other unix-like operating systems.
 (This is because macOS is UNIX.)
-In these operating systems, we have a top-level **root** directory
+In these operating systems, we have a
+top-level **root** directory
 identified by a single forward slash  **/**,
 and then subdirectories under that root directory.
-Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are **mounted**
-under that root hierarchy and not separately like on Windows.
-[Linux.com][directories] provides a nice overview of the most common directory structure
-that Linux distributions use along with an explanation for the major bottom level directories.
-In this section, we will learn about this type of filesystem.
+Additional drives
+(e.g., extra hard drives, USB drives, DVD drives, etc.)
+are **mounted** under that root hierarchy and
+not separately like on Windows.
+[Linux.com][directories] provides a nice overview
+of the most common directory structure
+that Linux distributions use along with an
+explanation for the major bottom level directories.
+In this section, we will learn
+about this type of filesystem.
 
-On Linux, we can visualize the filesystem with the ``tree`` command.
+On Linux, we can visualize the
+filesystem with the ``tree`` command.
 The ``tree`` command, like many Linux commands,
 can be run on its own or with options,
 like in the second example below:
@@ -97,12 +114,15 @@ and a short description of their main purpose:
 Although there are 18 directories listed above
 that **branch** off from the root directory,
 we will use some more often than others.
-For example, the **/etc** directory contains system configuration files,
+For example, the **/etc** directory
+contains system configuration files,
 and we will use the contents of this directory,
 along with the **/var** directory,
-quite a bit when we set up our web servers, relational database servers,
+quite a bit when we set up our web servers,
+relational database servers,
 and more later in the semester.
-The **/home** directory is where our default home directories are stored,
+The **/home** directory is where our default
+home directories are stored,
 and if you manage a multi-user system,
 then this will be an important directory to manage. 
 
@@ -110,15 +130,19 @@ Source: [Linux Filesystem Explained][directories]
 
 ## Relative and Absolute Paths
 
-macOS users have the Finder app to navigate their filesystem,
-to move files to different folders, to copy files, to trash them, etc.
+macOS users have the Finder app
+to navigate their filesystem,
+to move files to different folders,
+to copy files, to trash them, etc.
 Window users have File Explorer for these functions.
 Linux users have similar graphical software options,
-but all of these functions can be completed on the Linux command line, too,
+but all of these functions can be
+completed on the Linux command line,
 and generally more efficiently.
 To get started, we need to learn two things first:
 
-1. how to specify the locations of files and directories in the filesystem 
+1. how to specify the locations of files and directories in
+   the filesystem 
 2. the commands needed to work with the filesystem
 
 To help specify the locations of files and directories,
@@ -127,14 +151,16 @@ there are two key concepts to know:
 - absolute paths
 - relative paths
 
-Above we learned about the **/** root directory and its subdirectories.
+Above we learned about the **/** root directory
+and its subdirectories.
 All sorts of commands,
 especially those that deal with files and directories 
 (like copying, moving, deleting),
 require us to specify on the command line
 the locations of the files and directories.
 It's common to specify the location in two different ways,
-by specifying their **absolute** path (or location) on the filesystem,
+by specifying their **absolute** path (or location)
+on the filesystem,
 or the **relative** path (or location).
 
 To demonstrate, we might want to move around the filesystem.
@@ -155,7 +181,8 @@ my home directory is located at:
 /home/sean
 ```
 
-which we can see specified with the ``pwd`` (print working directory) command:
+which we can see specified with the ``pwd``
+(print working directory) command:
 
 ```
 pwd
@@ -180,25 +207,29 @@ The path to that is:
 /home/sean/public_html
 ```
 
-In a program like Finder (macOS) or File Explorer (Windows),
-if I want to change my location to that subdirectory (or folder),
+In a program like Finder (macOS) or
+File Explorer (Windows),
+if I want to change my location to that
+  subdirectory (or folder),
 then I'd double click on its folder icon.
-On the command line, however, I have to write out the command
+On the command line, however, I have to
+write out the command
 and the path to the subdirectory.
 Therefore, **starting in my home directory**,
-I use the following command to switch to the public_html subdirectory:
+I use the following command to switch to the
+public_html subdirectory:
 
 ```
 cd public_html
 ```
 
-> Note that files and directories in Linux are case sensitive.
-> This means that a directory named **public_html** can co-exist
-> alongside a directory named **Public_html**.
-> Or a file named **paper.txt** can co-exist alongside a file
-> named **Paper.txt**.
-> So be sure to use the proper case when spelling out files, directories,
-> and even commands.
+> Note that files and directories in Linux are case
+> sensitive. This means that a directory named
+> **public_html** can co-exist alongside a directory named
+> **Public_html**. Or a file named **paper.txt** can
+> co-exist alongside a file named **Paper.txt**. So be sure
+> to use the proper case when spelling out files,
+> directories, and even commands.
 
 The above is an example of using a relative path, and
 that command would only be successful if I were
@@ -208,8 +239,10 @@ relative to my default (**$HOME**) location.
 
 I could have also specified the absolute location,
 but this would be the wordier way.
-Since the **public_html** directory is in my $HOME directory,
-and my $HOME directory is a subdirectory in the **/home** directory,
+Since the **public_html** directory
+is in my $HOME directory,
+and my $HOME directory is a subdirectory
+in the **/home** directory,
 then to specify the absolute path in the above command,
 I'd write:
 
@@ -217,23 +250,67 @@ I'd write:
 cd /home/sean/public_html
 ```
 
-Again, the relative path specified above would only work if
+Again, the relative path specified above
+would only work if
 I was in my home directory, because 
-``cd public_html`` is relative to the location of ``/home/sean``.
-That is, the subdirectory **public_html** is in **/home/sean**.
+``cd public_html`` is relative to the
+location of ``/home/sean``.
+That is, the subdirectory **public_html**
+is in **/home/sean**.
 But specifying the absolute path would work no matter where
 I was located in the filesystem.
-For example, if I was working on a file in the ``/etc/apache2`` directory,
-then using the absolute path (``cd /home/sean/public_html``) would work.
-But the relative path (``cd public_html``) command would not since
+For example, if I was working on a file
+in the ``/etc/apache2`` directory,
+then using the absolute path
+(``cd /home/sean/public_html``) would work.
+But the relative path (``cd public_html``)
+command would not since
 there is no subdirectory called **public_html**
 in the ``/etc/apache2`` directory.
 
+Finally, you can use the ``ls`` command to
+list the contents of a directory, i.e.,
+the files and subdirectories in a directory:
+
+```
+ls
+```
+
+We will cover this more next. 
+
+## Conclusion
+
 Understanding relative and absolute paths is
-one of the more difficult concepts for new commandline users to learn,
+one of the more difficult concepts for
+new commandline users to learn,
 but after time, it'll feel natural.
 So just keep practicing, and
 I'll go over this throughout the semester.
+
+In this section, you learned the following commands:
+
+- ``tree`` to list directory contents in a tree-like format
+- ``cd`` to **change directory**
+- ``pwd`` to **print working directory**
+
+You learned different ways to refer to the home
+directory:
+
+- **/home/USER**
+- **$HOME**
+- **~**
+
+You learned about relative and absolute paths.
+An absolute path starts with the root directory **/**.
+Here's an absolute path to a file named
+**paper.txt** in my home directory:
+
+- absolute path: **/home/sean/paper.txt**
+
+If I were already in my home directory,
+then the relative path would simply be:
+
+- relative path: **paper.txt**
 
 [filesystem]:https://en.wikipedia.org/wiki/File_system
 [apfs]:https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac
