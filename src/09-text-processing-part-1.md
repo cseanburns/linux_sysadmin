@@ -195,11 +195,30 @@ cat os-years.csv
  2009
 ```
 
-Let's add a header row to the top of the file.
-The header row names each column.
-Since the CSV file now has a header line,
-we may want to remove it from the output.
-First, let's look at the file:
+Data files like this often have a
+header line at the top row that
+names the data columns.
+It's useful to know how
+to work with such files, so
+let's add a header row to the top of the file.
+In this example,
+I'll use the ``sed`` command,
+which we will learn more about in the
+next lesson.
+For now,
+we use ``sed`` with the option ``-i``
+to edit the file,
+then ``1i`` instructs ``sed`` to **insert**
+text at **line 1**.
+``\OS, License, Year`` is the text
+that we want inserted at line 1.
+We wrap the argument within single quotes:
+
+```
+sed -i '1i \OS, License, Year' operating-systems.csv
+```
+
+Now, let's look at the file:
 
 ```
 cat operating-systems.csv
@@ -213,6 +232,8 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
 
+Since the CSV file now has a header line,
+we want to remove it from the output.
 Say we want the license field data,
 but we need to remove that first line.
 In this case, we need the tail command:
@@ -223,7 +244,6 @@ cat license-data.csv
  Apache
  BSD
  GPL
- Proprietary
  Proprietary
 ```
 
