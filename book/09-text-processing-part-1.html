@@ -224,8 +224,11 @@ their software license (column two),
 and the year they were released (column three).
 We can use the <code>cat</code> command to view the entire
 contents of this small file:</p>
+<p><strong>Command:</strong></p>
 <pre><code>cat operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
 iOS, Proprietary, 2007
@@ -240,8 +243,11 @@ By itself, the <code>wc</code> command will print
 the number of lines, words, and bytes of a file.
 The following output states that the file contains
 seven lines, 23 words, and 165 bytes:</p>
+<p><strong>Command:</strong></p>
 <pre><code>wc operating-systems.csv
-  7  23 165 operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>  7  23 165 operating-systems.csv
 </code></pre>
 <p>We can use the <code>head</code> command to output,
 by default,
@@ -249,8 +255,11 @@ the first ten lines of a file.
 Since our file is only seven lines long,
 we can use the <code>-n</code> option 
 to change the default number of lines:</p>
+<p><strong>Command:</strong></p>
 <pre><code>head -n3 operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
 </code></pre>
@@ -261,11 +270,15 @@ Since this is a CSV file,
 the fields (aka, columns) are separated by commas.
 The <code>-d</code> option tells the <code>cut</code> command to use commas
 as the separator character.
+The <code>-f</code> option tells the <code>cut</code> command to select
+field two.
 (A CSV file may use other characters as the separator character,
 like the Tab character or a colon.)</p>
-<pre><code># get the second field, where the fields are separated by a comma &quot;,&quot;
-cut -d&quot;,&quot; -f2 operating-system.csv
- Proprietary
+<p><strong>Command:</strong></p>
+<pre><code>cut -d&quot;,&quot; -f2 operating-system.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code> Proprietary
  BSD
  GPL
  Proprietary
@@ -276,9 +289,11 @@ cut -d&quot;,&quot; -f2 operating-system.csv
 <p>From there it's trivial to select a different column.
 In the next example,
 I select field (or column) three to get the release year:</p>
-<pre><code># get the third field
-cut -d&quot;,&quot; -f3 operating-system.csv
- 2009
+<p><strong>Command:</strong></p>
+<pre><code>cut -d&quot;,&quot; -f3 operating-system.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code> 2009
  1993
  1991
  2007
@@ -304,9 +319,11 @@ file titled <strong>os-years.csv</strong>.
 Since the year <strong>1993</strong> appears twice in the original file,
 it only appears once in the output
 because the <code>uniq</code> command removed the duplicate:</p>
-<pre><code># select field, sort it, unique it, and save it in a separate file
-cut -d&quot;,&quot; -f3 operating-system.csv | sort | uniq &gt; os-years.csv
-cat os-years.csv
+<p><strong>Command:</strong></p>
+<pre><code>cut -d&quot;,&quot; -f3 operating-system.csv | sort | uniq &gt; os-years.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>cat os-years.csv
  1991
  1993
  2001
@@ -332,11 +349,12 @@ text at <strong>line 1</strong>.
 <code>\OS, License, Year</code> is the text
 that we want inserted at line 1.
 We wrap the argument within single quotes:</p>
+<p><strong>Command:</strong></p>
 <pre><code>sed -i '1i \OS, License, Year' operating-systems.csv
+cat operating-systems.csv
 </code></pre>
-<p>Now, let's look at the file:</p>
-<pre><code>cat operating-systems.csv
-OS, License, Year
+<p><strong>Output:</strong></p>
+<pre><code>OS, License, Year
 Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
@@ -350,9 +368,12 @@ we want to remove it from the output.
 Say we want the license field data,
 but we need to remove that first line.
 In this case, we need the tail command:</p>
+<p><strong>Command:</strong></p>
 <pre><code>tail -n +2 operating-system-csv | cut -d&quot;,&quot; -f2 | sort | uniq &gt; license-data.csv
 cat license-data.csv
- Apache
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code> Apache
  BSD
  GPL
  Proprietary
