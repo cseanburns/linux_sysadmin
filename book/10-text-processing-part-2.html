@@ -214,8 +214,11 @@ we can use <code>grep</code>.
 Notice that even though the string <strong>Chrome</strong> only appears once,
 and in one part of a line,
 <code>grep</code> returns the entire line.</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep &quot;Chrome&quot; operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 </code></pre>
 <p>Be aware that, by default, <code>grep</code> is case-sensitive,
 which means a search for the string <strong>chrome</strong>,
@@ -226,17 +229,27 @@ which means to ignore the case of the search string.
 In the following examples, <code>grep</code> returns nothing in the first search
 since we do not capitalize the string <strong>chrome</strong>.
 However, adding the <code>-i</code> option results in success:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep &quot;chrome&quot; operating-systems.csv
-grep -i &quot;chrome&quot; operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<p>None.</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i &quot;chrome&quot; operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 </code></pre>
 <p>We can also search for lines that <strong>do not</strong> match our string 
 using the <code>-v</code> option.
 We can combine that with the <code>-i</code> option to ignore the string's case.
 Therefore, in the following example,
 all lines that do not contain the string <strong>chrome</strong> are returned:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -vi &quot;chrome&quot; operating-systems.csv
-FreeBSD, BSD, 1993
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>FreeBSD, BSD, 1993
 Linux, GPL, 1991
 iOS, Proprietary, 2007
 macOS, Proprietary, 2001
@@ -253,8 +266,11 @@ or <strong>regex</strong> for short.
 Regex is a method used to identify patterns in text via abstractions.
 They can get complicated, but we can use some easy regex methods.</p>
 <p>Let's use a version of the above file with the header line:</p>
+<p><strong>Command:</strong></p>
 <pre><code>cat operating-systems.csv
-OS, License, Year
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS, License, Year
 Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
@@ -271,8 +287,11 @@ start of a line.
 Again, this <code>grep</code> command returns all lines that
 do not match the string <strong>os</strong> at the start of a line,
 ignoring case:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -vi &quot;^os&quot; operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code>Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
 iOS, Proprietary, 2007
@@ -288,8 +307,11 @@ end of a line.
 Like the above, this <code>grep</code> command returns all lines that
 do not match the string <strong>year</strong> at the end of a line,
 ignoring case:</p>
+<p><strong>Command</strong>:</p>
 <pre><code>grep -vi &quot;year$&quot; operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code>Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
 iOS, Proprietary, 2007
@@ -300,62 +322,122 @@ Android, Apache, 2008
 <p>The <code>man grep</code> page lists other options,
 but a couple of other good ones include:</p>
 <p>Get a count of the matching lines with the <code>-c</code> option:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -ic &quot;proprietary&quot; operating-systems.csv
-4
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code>4
 </code></pre>
 <p>Print only the match and not the whole line with the <code>-o</code> option:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -io &quot;proprietary&quot; operating-systems.csv
-Proprietary
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Proprietary
 Proprietary
 Proprietary
 Proprietary
 </code></pre>
-<p>Print lines matching different strings using the <code>-E</code> option and
-separating the different strings with a vertical bar <code>|</code>.
-This is similar to a Boolean OR search;
+<p>We can simulate a Boolean OR search, and
+print lines matching one or both strings
+using the <code>-E</code> option.
+We separate the strings with a vertical bar <code>|</code>.
+This is similar to a Boolean OR search
 since there's at least one match in the following string,
-there is at least one result:</p>
+there is at least one result.</p>
+<p>Here is an example where only one string
+returns a true value:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -Ei &quot;bsd|atari&quot; operating-systems.csv
-FreeBSD, BSD, 1993
 </code></pre>
-<p>Since both &quot;bsd&quot; and &quot;gpl&quot; are in the file,
-both lines are returned:</p>
+<p><strong>Output:</strong></p>
+<pre><code>FreeBSD, BSD, 1993
+</code></pre>
+<p>Here's an example where both strings evaluate to true:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -Ei &quot;bsd|gpl&quot; operating-systems.csv
-FreeBSD, BSD, 1993
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>FreeBSD, BSD, 1993
 Linux, GPL, 1991
 </code></pre>
-<p>Print context surrounding matching lines.
+<p>By default, <code>grep</code> will return results where the
+string appears within a larger word,
+like <strong>OS</strong> in <strong>macOS</strong>.</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i &quot;os&quot; operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS, License, Year
+Chrome OS, Proprietary, 2009
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+</code></pre>
+<p>However, we might want to limit results so that
+we only return results where <strong>OS</strong> is a complete word.
+To do that, we can surround the string with
+special characters:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i &quot;\&lt;os\&gt;&quot; operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS, License, Year
+Chrome OS, Proprietary, 2009
+</code></pre>
+<p>Sometimes we want to the context for a result;
+that is,
+we might want to print lines that surround our matches.
 For example, print the matching line plus the two lines
 after the matching line using the <code>-A NUM</code> option:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -i &quot;chrome&quot; -A 2 operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
 </code></pre>
 <p>Or, print the matching line plus the two lines
 before the matching line using the <code>-B NUM</code> option:</p>
+<p><strong>Command</strong></p>
 <pre><code>grep -i &quot;android&quot; -B 2 operating-systems.csv
-macOS, Proprietary, 2001
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
+</code></pre>
+<p>We can combine many of the variations.
+Here I search for the whole word <strong>BSD</strong>,
+case insensitive, and
+print the line before and the line after
+the match:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i -A 1 -B 1 &quot;\&lt;bsd\&gt;&quot; operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+Linux, GPL, 1991
 </code></pre>
 <p><code>grep</code> is very powerful, and
 there are more options listed in its <code>man</code> page.</p>
 <blockquote>
 <p>Note that I enclose my search strings in double quotes.
-For example, ``grep &quot;search string&quot; filename.txt
-It's not always required to enclose search strings
+For example: <code>grep &quot;search string&quot; filename.txt</code>
+It's not always required to enclose a search string
 in double quotes,
-but it's good practice,
-especially if your string contains more than one word or
-empty spaces.</p>
+but it's good practice because
+if your string contains more than one word or
+empty spaces, the search will fail.</p>
 </blockquote>
 <h2 id="sed"><a class="header" href="#sed">Sed</a></h2>
 <p><code>sed</code> is a type of non-interactive text editor
 that filters and transforms text (<code>man sed</code>).
 By default <code>sed</code> works on <strong>standard output</strong>,
 and edits can be redirected (<code>&gt;</code> or <code>&gt;&gt;</code>) to new files
-or made <strong>in-place</strong>.</p>
+or, more appropriately,
+made <strong>in-place</strong> using the <code>-i</code> option.</p>
 <p>Like the other utilities and programs we've covered,
 including <code>grep</code>,
 <code>sed</code> works line by line.
@@ -370,8 +452,11 @@ at those specific lines.</p>
 not all text files are explicitly numbered by each line.
 Below I use the <code>nl</code> command to number lines in our file,
 even though the contents of the file do not actually display line numbers:</p>
+<p><strong>Command:</strong></p>
 <pre><code>nl operating-systems.csv
-     1	OS, License, Year
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>     1	OS, License, Year
      2	Chrome OS, Proprietary, 2009
      3	FreeBSD, BSD, 1993
      4	Linux, GPL, 1991
@@ -394,10 +479,17 @@ Some of these commands include:</p>
 <li><code>s</code> : substitute text</li>
 <li><code>=</code> : print the current line number</li>
 </ul>
-<p>Let's see how to use <code>sed</code> and that last command, the equal sign <code>=</code>, to identify line
-numbers (although it places the line numbers just above each line):</p>
+<p>Let's see how to use <code>sed</code> to print line numbers
+instead of using the <code>nl</code> command.
+To do so, we use the equal sign <code>=</code> to
+identify line numbers
+(although note that it places the line numbers
+just above each line):</p>
+<p><strong>Command:</strong></p>
 <pre><code>sed '=' operating-systems.csv
-1
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>1
 OS, License, Year
 2
 Chrome OS, Proprietary, 2009
@@ -414,11 +506,20 @@ Windows NT, Proprietary, 1993
 8
 Android, Apache, 2008
 </code></pre>
-<p>Using <code>sed</code>, another another way to remove the header line
-of the <strong>operating-systems.csv</strong> file is to specify the line number (<code>1</code>)
-and then the delete command (<code>d</code>) in order to delete the first line:</p>
+<p>In the last section,
+we used the <code>tail</code> command to
+remove the header line of our file, and above,
+we used <code>grep</code> to accomplish this task.
+It's much easier to use <code>sed</code>
+to remove the header line of the <strong>operating-systems.csv</strong>.
+We simply specify the line number (<code>1</code>) and
+then use the delete command (<code>d</code>).
+Thus, we delete line 1:</p>
+<p><strong>Command:</strong></p>
 <pre><code>sed '1d' operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
 iOS, Proprietary, 2007
@@ -432,13 +533,19 @@ This is required.</p>
 </blockquote>
 <p>If I wanted to make that a permanent deletion,
 then I would use the <code>-i</code> option,
-which means that I would edit the file <strong>in-place</strong> (see <code>man sed</code>):</p>
+which means that I would edit the file <strong>in-place</strong>
+(see <code>man sed</code>):</p>
+<p><strong>Command:</strong></p>
 <pre><code>sed -i '1d' operating-system.csv
 </code></pre>
-<p>To refer to line <strong>ranges</strong>, then I add a comma between <strong>addresses</strong>.
+<p>To refer to line <strong>ranges</strong>,
+I add a comma between <strong>addresses</strong>.
 Therefore, to edit lines 1, 2, and 3:</p>
+<p><strong>Command:</strong></p>
 <pre><code>sed '1,3d' operating-systems.csv
-Linux, GPL, 1991
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Linux, GPL, 1991
 iOS, Proprietary, 2007
 macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
@@ -448,14 +555,19 @@ Android, Apache, 2008
 The syntax for this is:</p>
 <pre><code>sed 's/regexp/replacement/' filename.txt
 </code></pre>
-<p>The <strong>regexp</strong> part of the above command can take regular expressions, but
-simple strings, like words, work here, too, since they are treated as
+<p>The <strong>regexp</strong> part of the above command can take
+regular expressions, but
+simple strings like words work here, too,
+since they are treated as
 regular expressions themselves.</p>
 <p>In the next example,
 I use <code>sed</code> to search for the string &quot;Linux&quot;,
 and replace it with the string &quot;GNU/Linux&quot;:</p>
+<p><strong>Command:</strong></p>
 <pre><code>sed 's/Linux/GNU\/Linux/' operating-systems.csv
-OS, License, Year
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS, License, Year
 Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 GNU/Linux, GPL, 1991
@@ -465,18 +577,21 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
 <blockquote>
-<p>Because the string <strong>GNU/Linux</strong> contains a forward slash,
-and because <code>sed</code> uses the forward slash as a separator,
-you will notice that I <strong>escaped</strong> the forward slash with a back slash
-in the above <code>sed</code> command.
-This escape tells <code>sed</code> to interpret the forward slash in <strong>GNU/Linux</strong>
-literally and not as a special <code>sed</code> character.</p>
+<p>Because the string <strong>GNU/Linux</strong> contains a forward slash, and because
+<code>sed</code> uses the forward slash as a separator, note that I <strong>escaped</strong> the
+forward slash with a back slash. This escape tells <code>sed</code> to interpret the
+forward slash in <strong>GNU/Linux</strong> literally and not as a special <code>sed</code>
+character.</p>
 </blockquote>
 <p>If we want to add new rows to the file,
-we can append <code>a</code> or insert <code>i</code> text after or at specific lines:</p>
-<p>To append text after line 3, use <code>a</code>:</p>
+we can append <code>a</code> or insert <code>i</code>
+text after or at specific lines:</p>
+<p>To append text <strong>after line 3</strong>, use <code>a</code>:</p>
+<p><strong>Command:</strong></p>
 <pre><code>sed '3a FreeDOS, GPL, 1998' operating-systems.csv
-OS, License, Year
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS, License, Year
 Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 FreeDOS, GPL, 1998
@@ -486,9 +601,12 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
-<p>To insert at line 2, use <code>i</code>:</p>
+<p>To insert <strong>at line 3</strong>, use <code>i</code>:</p>
+<p><strong>Command:</strong></p>
 <pre><code>sed '3i CP\/M, Proprietary, 1974' operating-systems.csv
-OS, License, Year
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS, License, Year
 Chrome OS, Proprietary, 2009
 CP/M, Proprietary, 1974
 FreeBSD, BSD, 1993
@@ -498,7 +616,8 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
-<p>Note that the FreeDOS line doesn't appear in the second output.
+<p>Note that the FreeDOS line doesn't appear
+in the last output.
 This is because I didn't use the <code>-i</code> option nor 
 did I redirect output to a new file.
 If we want to edit the file <strong>in-place</strong>,
@@ -507,19 +626,25 @@ then the commands would look like so:</p>
 <pre><code>sed -i '3a FreeDOS, GPL, 1998' operating-systems.csv
 sed -i '3i CP\/M, Proprietary, 1974' operating-systems.csv
 </code></pre>
-<p>Instead of using line numbers to specify addresses in a text file,
-we can also search by regular expressions,
+<p>Instead of using line numbers to specify
+addresses in a text file,
+we can use regular expressions as addresses,
 which may be simple words.
 In the following example,
-I use the regular expression <code>1991$</code> instead of specifying line 4.
+I use the regular expression <code>1991$</code>
+instead of specifying line 4.
 The regular expression <code>1991$</code>  means
 &quot;lines ending with the string <strong>1991</strong>&quot;.
 Then I use the <code>s</code> command to start a find and replace.
 <code>sed</code> finds the string <strong>Linux</strong> and then replaces
 that with the string <strong>GNU/Linux</strong>.
-I use the back slash to escape the forward slash in GNU/Linux: </p>
+I use the back slash to escape the
+forward slash in GNU/Linux: </p>
+<p><strong>Command:</strong></p>
 <pre><code>sed '/1991$/s/Linux/GNU\/Linux/' operating-systems.csv
-OS, License, Year
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS, License, Year
 Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 GNU/Linux, GPL, 1991
@@ -528,17 +653,24 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
-<p>Here's an example using <code>sed</code> to simply search for a pattern.
-In this example, I'm interested in searching for all operating systems
+<p>Here's an example using <code>sed</code> to
+simply search for a pattern.
+In this example,
+I'm interested in searching for all operating systems
 that were released on or after 2000:</p>
-<pre><code>sed -n '/20/ p' operating-systems.csv
-Chrome OS, Proprietary, 2009
+<p><strong>Command:</strong></p>
+<pre><code>sed -n '/20/p' operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 iOS, Proprietary, 2007
 macOS, Proprietary, 2001
 Android, Apache, 2008
 </code></pre>
-<p>The above would be equivalent to <code>grep &quot;20&quot; operating-systems.csv</code>.</p>
-<p><code>sed</code> is much more powerful than what I've demonstrated here, and
+<p>The above would be equivalent to
+<code>grep &quot;20&quot; operating-systems.csv</code>.</p>
+<p><code>sed</code> is much more powerful than
+what I've demonstrated here, and
 if you're interested in learning more,
 there are lots of tutorials on the web.
 Here are a few good ones:</p>
@@ -552,8 +684,10 @@ Here are a few good ones:</p>
 <h2 id="awk"><a class="header" href="#awk">Awk</a></h2>
 <p><code>awk</code> is a complete scripting language for
 &quot;pattern scanning and processing&quot; text (see <code>man awk</code>).
-It's a powerful language that focuses on <strong>columns of structured data</strong>.</p>
-<p>Unlike <code>sed</code>, which works on lines and uses line addresses to
+It's a powerful language that focuses
+on <strong>columns of structured data</strong>.</p>
+<p>Unlike <code>sed</code>,
+which works on lines and uses line addresses to
 select text to edit,
 <code>awk</code> works on columns, and
 this is regardless if the contents include structured data 
@@ -572,11 +706,13 @@ then the number of the column <code>$n</code>.
 So, <code>$1</code> indicates column one, 
 <code>$2</code> indicates column two, and so on.
 If we use <code>$0</code>, then we refer to the entire file.
-In our example text file, <code>$1</code> indicates the OS Name column,
+In our example text file,
+<code>$1</code> indicates the OS Name column,
 <code>$2</code> indicates the License column,
 <code>$3</code> indicates the release Year column,
 and <code>$0</code> indicates all columns.</p>
-<p>The syntax for <code>awk</code> is a little different than what we've seen so far.
+<p>The syntax for <code>awk</code> is a little different
+than what we've seen so far.
 Basically, <code>awk</code> uses the following syntax,
 where <strong>pattern</strong> is optional.</p>
 <pre><code>awk pattern { action statements }
@@ -584,10 +720,15 @@ where <strong>pattern</strong> is optional.</p>
 <p>Let's see some examples.</p>
 <p>To print the first column of our file,
 we do not need the <strong>pattern</strong> part of the command but
-only need to state an action statement (within curly braces).
-In the command below, the action statement is <code>'{ print $1 }'</code>.</p>
+only need to state an action statement
+(within curly braces).
+In the command below,
+the action statement is <code>'{ print $1 }'</code>.</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk '{ print $1 }' operating-systems.csv
-OS,
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS,
 Chrome
 FreeBSD,
 Linux,
@@ -596,17 +737,25 @@ macOS,
 Windows
 Android,
 </code></pre>
-<p>By default, <code>awk</code> considers the first empty space as the field delimiter.
+<p>By default,
+<code>awk</code> considers the first empty space
+as the field delimiter.
 That's why in the command above
 only the term <strong>Windows</strong> and <strong>Chrome</strong> appear in the results
 even though it should be <strong>Windows NT</strong> and <strong>Chrome OS</strong>.
-To fix this, we need to tell <code>awk</code> to use a comma as the field separator,
-instead of defaulting to an empty space.
-To specify that we want <code>awk</code> to treat the comma as a field delimiter,
+It's also why we see commas in the output.
+To fix this,
+we tell <code>awk</code> to use a comma as the field separator,
+instead of the default empty space.
+To specify that we want <code>awk</code>
+to treat the comma as a field delimiter,
 we use the <code>-F</code> option, and
 we surround the comma with single quotes:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '{ print $1 }' operating-systems.csv
-OS
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS
 Chrome OS
 FreeBSD
 Linux
@@ -616,48 +765,75 @@ Windows NT
 Android
 </code></pre>
 <p>By specifying the comma as the field separator,
-we now have more accurate results,
-and the commas in the results no longer appear either.</p>
-<p>Like <code>grep</code> and <code>sed</code>, <code>awk</code> can do search.
+our results are more accurate,
+and the commas no longer appear either.</p>
+<p>Like <code>grep</code> and <code>sed</code>,
+<code>awk</code> can do search.
 In this next example,
 I print the column containing the string <strong>Linux</strong>.
-Here I am using the <strong>pattern</strong> part of the command: <code>'/Linux/'</code>.</p>
+Here I am using the <strong>pattern</strong> part
+of the command: <code>'/Linux/'</code>.</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '/Linux/ { print $1 }' operating-systems.csv
-Linux
 </code></pre>
-<p>With <code>awk</code>, we can retrieve more than one column, and
+<p><strong>Output:</strong></p>
+<pre><code>Linux
+</code></pre>
+<p>Note how <code>awk</code> does not return the whole
+line but only the match.
+This is because, unlike <code>grep</code> and <code>sed</code>,
+<code>awk</code> is <strong>not</strong> line-oriented.</p>
+<p>With <code>awk</code>,
+we can retrieve more than one column, and
 we can use <code>awk</code> to generate reports,
-which was part of the original motivation to create this language.</p>
+which was part of the original motivation
+to create this language.</p>
 <p>In the next example,
-I select columns one and three:</p>
-<pre><code>awk -F',' '{ print $1 $3 }' operating-systems.csv
-OS Year
-Chrome OS 2009
-FreeBSD 1993
-Linux 1991
-iOS 2007
-macOS 2001
-Windows NT 1993
-Android 2008
+I select columns two and one in that order,
+which is something the <code>cut</code> command cannot do.
+I also add a space between the columns
+using the double quotes to surround an empty space,
+and I modified the field delimiter to include both
+a comma and a space to get the output that I want:</p>
+<p><strong>Command:</strong></p>
+<pre><code>awk -F', ' '{ print $2 &quot; &quot; $1 }' operating-systems.csv
 </code></pre>
-<p>But I can make that a bit more readable by adding some text to print:</p>
-<pre><code>awk -F',' '{ print $1 &quot; was founded in&quot; $3 &quot;.&quot; }' operating-systems.csv
-OS was founded in Year.
-Chrome OS was founded in 2009.
-FreeBSD was founded in 1993.
-Linux was founded in 1991.
-iOS was founded in 2007.
-macOS was founded in 2001.
-Windows NT was founded in 1993.
-Android was founded in 2008.
+<p><strong>Output:</strong></p>
+<pre><code>License OS
+Proprietary Chrome OS
+BSD FreeBSD
+GPL Linux
+Proprietary iOS
+Proprietary macOS
+Proprietary Windows NT
+Apache Android
+</code></pre>
+<p>I can make output more readable by adding
+text to print:</p>
+<p><strong>Command:</strong></p>
+<pre><code>awk -F',' '{ print $1 &quot; was released in&quot; $3 &quot;.&quot; }' operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS was released in Year.
+Chrome OS was released in 2009.
+FreeBSD was released in 1993.
+Linux was released in 1991.
+iOS was released in 2007.
+macOS was released in 2001.
+Windows NT was released in 1993.
+Android was released in 2008.
 </code></pre>
 <p>Since <code>awk</code> is a full-fledged programming language,
 it understands data structures,
 which means it can do math or work on strings of text.
-Let's illustrate this by doing some math or logic on column 3.</p>
+Let's illustrate this by doing some math
+or logic on column 3.</p>
 <p>Here I print all of column three:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '{ print $3 }' operating-systems.csv
- Year
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code> Year
  2009
  1993
  1991
@@ -666,40 +842,59 @@ Let's illustrate this by doing some math or logic on column 3.</p>
  1993
  2008
 </code></pre>
-<p>Next I print only the parts of column three that are greater than 2005, and
+<p>Next I print only the parts of column three that
+are greater than 2005, and
 then pipe <code>|</code> the output through the <code>sort</code> command
 to sort the numbers in numeric order:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 &gt; 2005 { print $3 }' operating-systems.csv | sort
- 2007
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code> 2007
  2008
  2009
 </code></pre>
 <p>If I want to print only the parts of column one where
 column three equals to 2007,
 then I would run this command:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 == 2007 { print $1 }' operating-systems.csv
-iOS
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>iOS
 </code></pre>
 <p>If I want to print only the parts of columns one and three
 where column 3 equals 2007:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 == 2007 { print $1 $3 }' operating-systems.csv
-iOS 2007
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>iOS 2007
 </code></pre>
 <p>Or, print the entire line where column three equals 2007:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 == 2007 { print $0 }' operating-systems.csv
-iOS, Proprietary, 2007
 </code></pre>
-<p>I can print only those lines where column three is greater than 2000
-and less than 2008:</p>
+<p><strong>Output:</strong></p>
+<pre><code>iOS, Proprietary, 2007
+</code></pre>
+<p>I can print only those lines where column three
+is greater than 2000 and less than 2008:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 &gt; 2000 &amp;&amp; $3 &lt; 2008 { print $0 }' operating-systems.csv
-iOS, Proprietary, 2007
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>iOS, Proprietary, 2007
 macOS, Proprietary, 2001
 </code></pre>
-<p>Even though we wouldn't normally add years up,
+<p>Even though we wouldn't normally sum years,
 let's print the sum of column three 
 to demonstrate how summing works in <code>awk</code>:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' 'sum += $3 { print sum }' operating-systems.csv
-2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>2009
 4002
 5993
 8000
@@ -709,8 +904,11 @@ to demonstrate how summing works in <code>awk</code>:</p>
 </code></pre>
 <p>Here are a few basic string operations.
 First, print column one in upper case:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '{ print toupper($1) }' operating-systems.csv
-OS
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>OS
 CHROME OS
 FREEBSD
 LINUX
@@ -720,8 +918,11 @@ WINDOWS NT
 ANDROID
 </code></pre>
 <p>Or print column on in lower case:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '{ print tolower($1) }' operating-systems.csv
-os
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>os
 chrome os
 freebsd
 linux
@@ -731,8 +932,11 @@ windows nt
 android
 </code></pre>
 <p>Or, get the length of each string in column one:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '{ print length($1) }' operating-systems.csv
-2
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>2
 9
 7
 5
@@ -742,31 +946,46 @@ android
 7
 </code></pre>
 <p>We can add additional logic.
-The double ampersands <code>&amp;&amp;</code> indicate a Boolean/Logical <strong>AND</strong>.
-The exclamation point <code>!</code> indicates a Boolean/Logical <strong>NOT</strong>.
+The double ampersands <code>&amp;&amp;</code> indicate a
+Boolean/Logical <strong>AND</strong>.
+The exclamation point <code>!</code> indicates a
+Boolean/Logical <strong>NOT</strong>.
 In the next example,
-I print only those lines where column three is greater than 1990,
+I print only those lines where
+column three is greater than 1990,
 and the line has the string &quot;BSD&quot; in it:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 &gt; 1990 &amp;&amp; /BSD/ { print $0 }' operating-systems.csv
-FreeBSD, BSD, 1993
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>FreeBSD, BSD, 1993
 </code></pre>
 <p>Now I reverse that, and
-print only those lines where column three is greater than 1990
+print only those lines where column three
+is greater than 1990
 and the line DOES NOT have the string &quot;BSD&quot; in it:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 &gt; 1990 &amp;&amp; !/BSD/ { print $0 }' operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 Linux, GPL, 1991
 iOS, Proprietary, 2007
 macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
-<p>The double vertical bar <code>||</code> indicates a Boolean/Logical <strong>OR</strong>.
+<p>The double vertical bar <code>||</code> indicates
+a Boolean/Logical <strong>OR</strong>.
 The next command prints only those lines that
-contain the string &quot;Proprietary&quot; or the string &quot;Apache&quot;,
+contain the string &quot;Proprietary&quot;
+or the string &quot;Apache&quot;,
 or it would print both if both strings were in the text:</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '/Proprietary/ || /Apache/ { print $0 }' operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 iOS, Proprietary, 2007
 macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
@@ -774,13 +993,19 @@ Android, Apache, 2008
 </code></pre>
 <p>I can take advantage of regular expressions.
 If the file that I was looking at was large,
-and if I wasn't sure that some fields would be upper or lower case,
-then I could use regular expressions to consider both possibilities.
+and if I wasn't sure that some fields
+would be upper or lower case,
+then I could use regular expressions
+to consider both possibilities.
 That is, by adding <strong>[pP]</strong> and <strong>[aA]</strong>,
-<code>awk</code> will check for both the words <strong>Proprietary</strong> and <strong>proprietary</strong>,
+<code>awk</code> will check for both the words <strong>Proprietary</strong>
+and <strong>proprietary</strong>,
 and <strong>Apache</strong> and <strong>apache</strong>.</p>
+<p><strong>Command:</strong></p>
 <pre><code>awk -F',' '/[pP]roprietary/ || /[aA]pache/ { print $0 }' operating-systems.csv
-Chrome OS, Proprietary, 2009
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chrome OS, Proprietary, 2009
 iOS, Proprietary, 2007
 macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
@@ -802,24 +1027,25 @@ then check out some of these tutorials:</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>The Linux (and other Unix-like OSes) command line
 offers a lot of utilities to examine data.
-Prior to this lesson, we covered a few of them that help us get
-parts of a file and then pipe those parts through other commands
+Prior to this lesson, we covered a few of
+them that help us get
+parts of a file and then pipe those parts
+through other commands
 or redirect output to files.
-We can use pipes and redirects with <code>grep</code>, <code>sed</code>, and <code>awk</code>.
-If needed, we may be able to avoid using the basic utilities like
+We can use pipes and redirects with
+<code>grep</code>, <code>sed</code>, and <code>awk</code>.
+If needed, we may be able to avoid using
+the basic utilities like
 <code>cut</code>, <code>wc</code>, etc if want to learn more powerful programs
 like <code>grep</code>, <code>sed</code>, and <code>awk</code>.</p>
 <p>It's fun to learn and practice these.
-Despite this, you do not have to become a <code>sed</code> or an <code>awk</code> programmer.
+Despite this, you do not have to become
+a <code>sed</code> or an <code>awk</code> programmer.
 Like the utilities that we've discussed in prior lectures,
 the power of programs like these is that their on hand and
 easy to use as <strong>one-liners</strong>.
-If you want to get started, the resources listed above can guide you.
-Here's another compilation of a variety of many utilities that
-we have looked at:</p>
-<ul>
-<li><a href="https://wikis.utexas.edu/display/bioiteam/Scott%27s+list+of+linux+one-liners">compilation of one-liners</a></li>
-</ul>
+If you want to get started,
+the resources listed above can guide you.</p>
 
                     </main>
 
