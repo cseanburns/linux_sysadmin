@@ -88,8 +88,15 @@ and the year they were released (column three).
 We can use the ``cat`` command to view the entire
 contents of this small file:
 
+**Command:**
+
 ```
 cat operating-systems.csv
+```
+
+**Output:**
+
+```
 Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
@@ -107,8 +114,15 @@ the number of lines, words, and bytes of a file.
 The following output states that the file contains
 seven lines, 23 words, and 165 bytes:
 
+**Command:**
+
 ```
 wc operating-systems.csv
+```
+
+**Output:**
+
+```
   7  23 165 operating-systems.csv
 ```
 
@@ -119,8 +133,14 @@ Since our file is only seven lines long,
 we can use the ``-n`` option 
 to change the default number of lines:
 
+**Command:**
+
 ```
 head -n3 operating-systems.csv
+```
+**Output:**
+
+```
 Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
@@ -133,12 +153,20 @@ Since this is a CSV file,
 the fields (aka, columns) are separated by commas.
 The ``-d`` option tells the ``cut`` command to use commas
 as the separator character.
+The ``-f`` option tells the ``cut`` command to select
+field two.
 (A CSV file may use other characters as the separator character,
 like the Tab character or a colon.)
 
+**Command:**
+
 ```
-# get the second field, where the fields are separated by a comma ","
 cut -d"," -f2 operating-system.csv
+```
+
+**Output:**
+
+```
  Proprietary
  BSD
  GPL
@@ -152,9 +180,15 @@ From there it's trivial to select a different column.
 In the next example,
 I select field (or column) three to get the release year:
 
+**Command:**
+
 ```
-# get the third field
 cut -d"," -f3 operating-system.csv
+```
+
+**Output:**
+
+```
  2009
  1993
  1991
@@ -183,9 +217,15 @@ Since the year **1993** appears twice in the original file,
 it only appears once in the output
 because the ``uniq`` command removed the duplicate:
 
+**Command:**
+
 ```
-# select field, sort it, unique it, and save it in a separate file
 cut -d"," -f3 operating-system.csv | sort | uniq > os-years.csv
+```
+
+**Output:**
+
+```
 cat os-years.csv
  1991
  1993
@@ -214,14 +254,15 @@ text at **line 1**.
 that we want inserted at line 1.
 We wrap the argument within single quotes:
 
+**Command:**
 ```
 sed -i '1i \OS, License, Year' operating-systems.csv
-```
-
-Now, let's look at the file:
-
-```
 cat operating-systems.csv
+```
+
+**Output:**
+
+```
 OS, License, Year
 Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
@@ -238,9 +279,16 @@ Say we want the license field data,
 but we need to remove that first line.
 In this case, we need the tail command:
 
+**Command:**
+
 ```
 tail -n +2 operating-system-csv | cut -d"," -f2 | sort | uniq > license-data.csv
 cat license-data.csv
+```
+
+**Output:**
+
+```
  Apache
  BSD
  GPL
