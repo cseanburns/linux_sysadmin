@@ -751,14 +751,13 @@ Here are a few good ones:
 
 ``awk`` is a complete scripting language for
 "pattern scanning and processing" text (see ``man awk``).
-It's a powerful language that focuses
-on **columns of structured data**.
+Like ``grep`` and ``sed``,
+``awk`` performs some **action** when
+it detects some **pattern**.
+It is particularly suited for **columns of structured data**.
 
-Unlike ``sed``,
-which works on lines and uses line addresses to
-select text to edit,
-``awk`` works on columns, and
-this is regardless if the contents include structured data 
+However, ``awk`` works on columns 
+regardless if the contents include structured data 
 (like a CSV file) or not (like a letter or essay).
 If the data is structured,
 then that means the data will be formatted in some way.
@@ -877,8 +876,6 @@ Linux
 
 Note how ``awk`` does not return the whole
 line but only the match.
-This is because, unlike ``grep`` and ``sed``,
-``awk`` is **not** line-oriented.
 
 With ``awk``,
 we can retrieve more than one column, and

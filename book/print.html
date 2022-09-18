@@ -2718,13 +2718,12 @@ Here are a few good ones:</p>
 <h2 id="awk"><a class="header" href="#awk">Awk</a></h2>
 <p><code>awk</code> is a complete scripting language for
 &quot;pattern scanning and processing&quot; text (see <code>man awk</code>).
-It's a powerful language that focuses
-on <strong>columns of structured data</strong>.</p>
-<p>Unlike <code>sed</code>,
-which works on lines and uses line addresses to
-select text to edit,
-<code>awk</code> works on columns, and
-this is regardless if the contents include structured data 
+Like <code>grep</code> and <code>sed</code>,
+<code>awk</code> performs some <strong>action</strong> when
+it detects some <strong>pattern</strong>.
+It is particularly suited for <strong>columns of structured data</strong>.</p>
+<p>However, <code>awk</code> works on columns 
+regardless if the contents include structured data 
 (like a CSV file) or not (like a letter or essay).
 If the data is structured,
 then that means the data will be formatted in some way.
@@ -2814,9 +2813,7 @@ of the command: <code>'/Linux/'</code>.</p>
 <pre><code>Linux
 </code></pre>
 <p>Note how <code>awk</code> does not return the whole
-line but only the match.
-This is because, unlike <code>grep</code> and <code>sed</code>,
-<code>awk</code> is <strong>not</strong> line-oriented.</p>
+line but only the match.</p>
 <p>With <code>awk</code>,
 we can retrieve more than one column, and
 we can use <code>awk</code> to generate reports,
