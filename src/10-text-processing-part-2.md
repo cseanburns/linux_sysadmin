@@ -749,14 +749,14 @@ Here are a few good ones:
 
 ## Awk
 
-``awk`` is a complete scripting language for
-"pattern scanning and processing" text (see ``man awk``).
-Like ``grep`` and ``sed``,
-``awk`` performs some **action** when
-it detects some **pattern**.
-It is particularly suited for **columns of structured data**.
+``awk`` is a complete scripting language designed for
+"pattern scanning and processing" text.
+It generally performs some **action** when
+it detects some **pattern** and
+is particularly suited for **columns of structured data**
+(see ``man awk``).
 
-However, ``awk`` works on columns 
+``awk`` works on columns 
 regardless if the contents include structured data 
 (like a CSV file) or not (like a letter or essay).
 If the data is structured,
