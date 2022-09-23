@@ -1,4 +1,4 @@
-# The Command Line
+# Learning the Command Line
 
 It's obviously more common for people today
 to learn how to use a computer via a 
