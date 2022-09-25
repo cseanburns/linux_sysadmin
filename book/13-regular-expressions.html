@@ -151,8 +151,11 @@ along with the search string and against a file.</p>
 but this is especially important if
 we would search for multiword strings.
 In these cases, we must enclose them in quotes.</p>
+<p><strong>Command:</strong></p>
 <pre><code>cat cities.csv
-City              | 2020 Census | Founded
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>City              | 2020 Census | Founded
 New York City, NY | 8804190     | 1624
 Los Angeles, CA   | 3898747     | 1781
 Chicago, IL       | 2746388     | 1780
@@ -163,32 +166,96 @@ San Antonio, TX   | 1451853     | 1718
 San Diego, CA     | 1381611     | 1769
 Dallas, TX        | 1288457     | 1856
 San Jose, CA      | 983489      | 1777
-
-grep &quot;San Antonio&quot; cities.csv
-San Antonio, TX | 1451853 | 1718
+</code></pre>
+<p><strong>Command:</strong></p>
+<pre><code>grep &quot;San Antonio&quot; cities.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>San Antonio, TX | 1451853 | 1718
 </code></pre>
 <h2 id="whole-words-case-sensitive-by-default"><a class="header" href="#whole-words-case-sensitive-by-default">Whole words, case sensitive by default</a></h2>
-<p>However, <code>grep</code> can employ stricter and
-more powerful syntax than a Google search.
-Since the contents of <strong>cities.csv</strong> are all in lowercase,
-if I run the above command without the city named capitalized,
+<p>As a reminder,
+<code>grep</code> commands are case-sensitive
+by default, and
+since the contents of <strong>cities.csv</strong>
+are all in lowercase,
+if I run the above command without
+the city named capitalized,
 then <code>grep</code> will return nothing:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep &quot;san antonio&quot; cities.csv
 </code></pre>
 <p>In order to tell grep to ignore case,
 I need to use the <code>-i</code> option.
-This is a reminder for you to run <code>man grep</code> and
+We also want to make sure that
+we enclose our entire search string
+withing double quotes.</p>
+<p>This is a reminder for you to run <code>man grep</code> and
 to read through the documentation and
 see what the various options exit for this command.</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -i &quot;san antonio&quot; cities.csv
 </code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>San Antonio, TX   | 1451853     | 1718
+</code></pre>
+<h3 id="whole-words-by-the-edges"><a class="header" href="#whole-words-by-the-edges">Whole words by the edges</a></h3>
+<p>To search whole words,
+we can use special characters
+to match strings at the start
+and/or the end of words.
+For example, note the output
+if I search for cities
+in California in my file by
+searching for the string <strong>ca</strong>.
+Since this string appears
+in Chi<strong>ca</strong>go,
+then that city matches my
+grep search:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i &quot;ca&quot; cities.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Los Angeles, CA   | 3898747     | 1781
+Chicago, IL       | 2746388     | 1780
+San Diego, CA     | 1381611     | 1769
+San Jose, CA      | 983489      | 1777
+</code></pre>
+<p>To limit results to only <strong>CA</strong>,
+we can enclose our search in
+certain special characters:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i &quot;\bca\b&quot; cities.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Los Angeles, CA   | 3898747     | 1781
+San Diego, CA     | 1381611     | 1769
+San Jose, CA      | 983489      | 1777
+</code></pre>
+<p>We can reverse that output
+and look for strings within
+other words.
+Here is an example of searching
+for the string <strong>ca</strong> within words:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i &quot;\Bca\B&quot; cities.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Chicago, IL       | 2746388     | 1780
+</code></pre>
 <h2 id="bracket-expressions-and-character-classes"><a class="header" href="#bracket-expressions-and-character-classes">Bracket Expressions and Character Classes</a></h2>
-<p>In conjunction with the <code>grep</code> command,
-we can also use regular expressions to search the content of text files.
-For example, we can use what are called <strong>bracket expressions</strong> and
-<strong>character classes</strong> to search for patterns in the text.
-Here again using <code>man grep</code> is very important because
-it includes instructions on how to use these regular expressions.</p>
+<p>In conjunction with
+the <code>grep</code> command,
+we can also use regular expressions
+to search for more general patterns
+in text files.
+For example, we can use <strong>bracket expressions</strong> and
+<strong>character classes</strong> to search
+for patterns in the text.
+Here again using <code>man grep</code>
+is very important because
+it includes instructions on
+how to use these regular expressions.</p>
 <h3 id="bracket-expressions"><a class="header" href="#bracket-expressions">Bracket expressions</a></h3>
 <p>From <code>man grep</code> on <strong>bracket expressions</strong>:</p>
 <blockquote>
@@ -202,41 +269,139 @@ example, the regular expression [0123456789] matches any single digit.</p>
 separated by a hyphen. It matches any single character that sorts between the
 two characters</p>
 </blockquote>
-<p>To see how this works, let's search the <strong>cities.csv</strong> file
-for letters matching <strong>x, y, z</strong>.
-Specifically, the following command,
-because we are using a hyphen,
-matches any characters <strong>in</strong> the range x,y,z:</p>
-<pre><code>grep -i [x-z] cities.csv 
+<p>To see how this works,
+let's search the <strong>cities.csv</strong> file
+for letters matching <strong>A, B, or C</strong>.
+Specifically in the following command
+I use a hyphen to match
+any characters <strong>in</strong> the range A, B, C.
+The output does not include
+the cities <strong>Houston</strong> or <strong>Dallas</strong>
+since neither of those lines contain
+capital <strong>A, B, or C</strong> characters:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep &quot;[A-C]&quot; cities.csv 
 </code></pre>
-<p>Since the carat key acts as a Boolean NOT
-when placed <strong>within the brackets</strong>,
-the following command matches any
-characters <strong>not in</strong> the range x,y,z:</p>
-<pre><code>grep -i [^x-z] cities.csv
+<p><strong>Output:</strong></p>
+<pre><code>City              | 2020 Census | Founded
+New York City, NY | 8804190     | 1624
+Los Angeles, CA   | 3898747     | 1781
+Chicago, IL       | 2746388     | 1780
+Phoenix, AZ       | 1624569     | 1881
+Philadelphia, PA  | 1576251     | 1701
+San Antonio, TX   | 1451853     | 1718
+San Diego, CA     | 1381611     | 1769
+San Jose, CA      | 983489      | 1777
+</code></pre>
+<h3 id="bracket-expressions-inverse-searches"><a class="header" href="#bracket-expressions-inverse-searches">Bracket expressions, inverse searches</a></h3>
+<p>When placed after the first bracket,
+the carat key acts as a Boolean NOT.
+The following command matches any
+characters <strong>not in</strong> the range A,B,C:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep &quot;[^A-C]&quot; cities.csv
+</code></pre>
+<p>However, the output matches
+all lines since there are no
+instances of <strong>A, B, and C</strong>
+in all lines:</p>
+<p><strong>Output:</strong></p>
+<pre><code>City              | 2020 Census | Founded
+New York City, NY | 8804190     | 1624
+Los Angeles, CA   | 3898747     | 1781
+Chicago, IL       | 2746388     | 1780
+Houston, TX       | 2304580     | 1837
+Phoenix, AZ       | 1624569     | 1881
+Philadelphia, PA  | 1576251     | 1701
+San Antonio, TX   | 1451853     | 1718
+San Diego, CA     | 1381611     | 1769
+Dallas, TX        | 1288457     | 1856
+San Jose, CA      | 983489      | 1777
+</code></pre>
+<h4 id="process-substitution"><a class="header" href="#process-substitution">Process substitution</a></h4>
+<p>We can confirm that output
+from the first command
+does not include Houston or Dallas
+in the second command by comparing
+the outputs of the two commands 
+using <strong>process substitution</strong>.
+This is a technique that pipes
+the standard output of multiple
+commands to be processed by
+another command.
+Here I use the <code>diff</code> command
+to compare the output of both
+<code>grep</code> commands:</p>
+<p><strong>Command:</strong></p>
+<pre><code>diff &lt;(grep &quot;[A-C]&quot; cities.csv) &lt;(grep &quot;[^A-C]&quot; cities.csv)
+</code></pre>
+<p>The <code>diff</code> output shows
+that the second <code>grep</code>
+command includes the
+two lines below that
+are not in the output
+of the first <code>grep</code> command: </p>
+<p><strong>Output:</strong></p>
+<pre><code>4a5
+&gt; Houston, TX       | 2304580     | 1837
+8a10
+&gt; Dallas, TX        | 1288457     | 1856
+</code></pre>
+<blockquote>
+<p>The output of the <code>diff</code> command is nicely explained in this <a href="https://unix.stackexchange.com/a/216131">Stack
+Overflow</a> answer.</p>
+</blockquote>
+<p>Try this command for an alternate output:</p>
+<pre><code>diff -y &lt;(grep &quot;[A-C]&quot; cities.csv) &lt;(grep &quot;[^A-C]&quot; cities.csv)
 </code></pre>
 <p>Our ranges may be alphabetical or numerical.
 The following command matches any numbers <strong>in</strong> the range 1,2,3:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep [1-3] cities.csv
 </code></pre>
-<p>Likewise, the following matches any numbers <strong>not in</strong> the range 1,2,3:</p>
-<pre><code>grep [^1-3] cities.csv
+<p>Since all single digits appear
+in the file, the above command
+returns all lines.
+To invert the search,
+we can use the following
+grep command.
+This will match all non-integers:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep [^0-9] cities.csv
 </code></pre>
-<p>We saw previously that the carat <code>^</code> key indicates
-the start of line.
-This is true here,
-if the carat key precedes the opening bracket.
+<h3 id="bracket-expressions-carat-preceding-the-bracket"><a class="header" href="#bracket-expressions-carat-preceding-the-bracket">Bracket expressions, carat preceding the bracket</a></h3>
+<p>We saw in a previous
+section that the carat <code>^</code>
+key indicates
+the start of line;
+however, we learned above
+that it is used to
+return the inverse of a string.
+To use the carat to signify
+the start of a line,
+the carat key must precede
+the opening bracket.
 For example, the following command matches
 any lines that start with the upper case letters
-within the range of <strong>N,M,O,P</strong>:</p>
-<pre><code>grep ^[N..P] cities.csv
-New York City, NY | 8804190 | 1624
+within the range of <strong>N,O,P</strong>:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep ^[N-P] cities.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>New York City, NY | 8804190 | 1624
 Phoenix, AZ       | 1624569 | 1881
 Philadelphia, PA  | 1576251 | 1701
 </code></pre>
-<p>And we can reverse that with the following command:</p>
-<pre><code>grep ^[^N..P] cities.csv
-City            | 2020 Census | Founded
+<p>And we can reverse that
+with the following command,
+which returns all lines
+that <strong>do not</strong> start with
+<strong>N,O, or P</strong>:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep ^[^N-P] cities.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>City            | 2020 Census | Founded
 Los Angeles, CA | 3898747     | 1781
 Chicago, IL     | 2746388     | 1780
 Houston, TX     | 2304580     | 1837
@@ -246,9 +411,11 @@ Dallas, TX      | 1288457     | 1856
 San Jose, CA    | 983489      | 1777
 </code></pre>
 <h3 id="character-classes"><a class="header" href="#character-classes">Character classes</a></h3>
-<p>Character classes are special types of predefined 
+<p>Character classes are special
+types of predefined 
 bracket expressions.
-They make it easy to search for general data.
+They make it easy to
+search for general patterns.
 From <code>man grep</code> on <strong>character classes</strong>:</p>
 <blockquote>
 <p>Finally, certain named classes of characters are predefined
@@ -260,15 +427,22 @@ Their names are self explanatory, and they are
 For example, [[:alnum:]] means the character class
 of numbers and letters ... </p>
 </blockquote>
-<p>Here I search for anything that matches the Year column.
-Specifically, I search for a blank (empty space) <code>[[:blank:]]</code>,
-a four digit string <code>[[:digit:]]{4}</code>,
-(the <code>{4}</code> means &quot;The preceding item is
-matched exactly 4 times&quot; <code>man grep</code>,
-and the number 4 can be replaced with any relevant number).
+<p>Here I search for anything
+that matches the Year column.
+Specifically, I search for
+a empty space <code>[[:blank:]]</code>,
+a four digit string <code>[[:digit:]]{4}</code>.
+The <code>{4}</code> means
+&quot;The preceding item is matched
+exactly 4 times&quot; (<code>man grep</code>),
+and the number 4 can be replaced
+with any relevant number.
 and an end of line <code>$</code>:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -Eo &quot;[[:blank:]][[:digit:]]{4}$&quot; cities.csv 
- 1624
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code> 1624
  1781
  1780
  1837
@@ -279,27 +453,60 @@ and an end of line <code>$</code>:</p>
  1856
  1777
 </code></pre>
-<p>In the above command, the <code>[[:blank:]]</code> can be excluded and
-we'd still retrieve the desired results, but
-I include it here for demonstration purposes.</p>
+<p>In the above command, the <code>[[:blank:]]</code>
+can be excluded and
+we'd still retrieve the desired results because
+we've included the dollar sign to
+mark the end of the line, but
+I include it here for demonstration purposes.
+Note that I also added the <code>-E</code> option.
+This is required for character classes.</p>
 <h2 id="anchoring"><a class="header" href="#anchoring">Anchoring</a></h2>
-<p>As seen above, outside of bracket expansions and character classes,
-we use the caret <code>^</code> to mark the beginning of a line.
-We can also use the <code>$</code> to match the end of a line.
-This is called <strong>anchoring</strong>.
+<p>As seen above,
+outside of
+bracket expressions and character classes,
+we use the caret <code>^</code>
+to mark the beginning of a line.
+We can also use the <code>$</code>
+to match the end of a line.
+Using either (or both)
+is called <strong>anchoring</strong>.
 Anchoring works in many places.
-For example, search all lines that start with capital <strong>D through L</strong></p>
+For example, to search all lines
+that start with capital <strong>D through L</strong></p>
+<p><strong>Command:</strong></p>
 <pre><code>grep &quot;^[D-L]&quot; cities.csv
-Los Angeles, CA | 3898747 | 1781
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Los Angeles, CA | 3898747 | 1781
 Houston, TX     | 2304580 | 1837
 Dallas, TX      | 1288457 | 1856
 </code></pre>
 <p>And all lines that end with the numbers <strong>4, 5, or 6</strong>:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep &quot;[4-6]$&quot; cities.csv
-New York City, NY | 8804190 | 1624
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>New York City, NY | 8804190 | 1624
 Dallas, TX        | 1288457 | 1856
 </code></pre>
+<p>We can use both anchors in
+our <code>grep</code> commands.
+The following searches
+for any lines starting
+with capital letters ranging
+from D through L and any lines
+ending with the numbers
+starting from 4 through 6.
+The single dot stands for any character,
+and the asterisk stands for
+&quot;the preceding character will
+zero or more times&quot; (<code>man grep</code>).</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep &quot;^[D-L].*[4-6]$&quot; cities.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Dallas, TX        | 1288457     | 1856
 </code></pre>
 <h2 id="repetition"><a class="header" href="#repetition">Repetition</a></h2>
 <p>If we want to use regular expressions to identify repetitive patterns,
@@ -310,36 +517,63 @@ But there are other options:</p>
 <p>In come cases, we need to add the -E option
 to extend <code>grep</code>'s regular expression functionality:</p>
 <p>Here, the preceding item <strong>S</strong> is matched one or more times:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -E &quot;S+&quot; cities.csv
-San Antonio, TX | 1451853 | 1718
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>San Antonio, TX | 1451853 | 1718
 San Diego, CA   | 1381611 | 1769
 San Jose, CA    | 983489  | 1777
 </code></pre>
-<p>In this search, the preceding item <strong>l</strong> is
+<p>In the next search,
+the preceding item <strong>l</strong> is
 matched exactly 2 times:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -E &quot;l{2}&quot; cities.csv
-Dallas, TX | 1288457 | 1856
 </code></pre>
-<p>Finally, in this example, the preceding item <strong>7</strong> is matched 
-at least two times or at most three times:</p>
+<p><strong>Output:</strong></p>
+<pre><code>Dallas, TX | 1288457 | 1856
+</code></pre>
+<p>Finally, in this example,
+the preceding item <strong>7</strong> is matched 
+at least two times or
+at most three times:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -E &quot;7{2,3}&quot; cities.csv
-San Jose, CA | 983489 | 1777
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>San Jose, CA | 983489 | 1777
 </code></pre>
 <h2 id="or-searches"><a class="header" href="#or-searches">OR searches</a></h2>
-<p>We can use the vertical bar <code>|</code> to do a Boolean OR search.
-In a Boolean OR statement, the statement is True if either
-one part is true, the other part is true, or both are true.
-In a search statement, this means that at least one part
+<p>We can use the vertical bar <code>|</code>
+to do a Boolean OR search.
+In a Boolean OR statement,
+the statement is True if either
+one part is true,
+the other part is true,
+or both are true.
+In a search statement,
+this means that at least one part
 of the search is true.</p>
-<p>The following will return lines for each city because they
+<p>The following will return lines
+for each city because they
 both appear in the file:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -E &quot;San Antonio|Dallas&quot; cities.csv
-San Antonio, TX | 1451853 | 1718
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>San Antonio, TX | 1451853 | 1718
 Dallas, TX      | 1288457 | 1856
 </code></pre>
-<p>The following will return the San Antonio line even though
-Lexington does not appear in the file:</p>
+<p>The following will match
+San Antonio even though
+Lexington does not appear
+in the file:</p>
+<p><strong>Command:</strong></p>
 <pre><code>grep -E &quot;San Antonio|Lexington&quot; cities.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>San Antonio, TX   | 1451853     | 1718
 </code></pre>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>We covered a lot in this section on <code>grep</code> and regular expressions.</p>
@@ -353,7 +587,10 @@ Lexington does not appear in the file:</p>
 <li>Boolean OR searches</li>
 </ul>
 <p>Even though we focused on <code>grep</code>,
-many these regular expressions work across many programming languages.</p>
+many these regular expressions work
+across many programming languages.</p>
+<p>See <a href="https://www.regular-expressions.info/">Regular-Expression.info</a> for
+more in-depth lessons on regular expressions.</p>
 
                     </main>
 
