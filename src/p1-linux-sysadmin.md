@@ -4,7 +4,6 @@ Author: C. Sean Burns
 Date: 2022-08-12  
 Email: [sean.burns@uky.edu](sean.burns@uky.edu)  
 Website: [cseanburns.net](https://cseanburns.net)  
-Twitter: [@cseanburns](https://twitter.com/cseanburns)  
 GitHub: [@cseanburns](https://github.com/cseanburns)  
 
 ## Introduction
