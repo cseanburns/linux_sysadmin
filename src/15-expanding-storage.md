@@ -276,7 +276,9 @@ I'll use that:
 sudo blkid /dev/sdb
 ```
 
-The output should look something like this:
+The output should look something like this
+**BUT NOTE that your UUID value will
+be DIFFERENT**:
 
 ```
 /dev/sdb: UUID="3bc141e2-9e1d-428c-b923-0f9vi99a1123" TYPE="ext4"
@@ -288,13 +290,13 @@ The Google Cloud documentation explicitly guides us here.
 We'll use ``nano`` to make the edit:
 
 ```
-nano /etc/fstab
+sudo nano /etc/fstab
 ```
 
 And then add this line at the bottom:
 
 ```
-UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0,2
+UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0 2
 ```
 
 And that's it!
@@ -317,7 +319,7 @@ then we can delete it.
 To delete the disk,
 first delete the line that we added in ``/etc/fstab``,
 unmount it,
-and the delete the disk in the gcloud console.
+and then delete the disk in the gcloud console.
 
 To unmount the disk, we use the ``umount`` command:
 
@@ -341,7 +343,7 @@ Then we need to delete the disk in gcloud.
 1. Click on **Save**.
 1. Go the **Disk** section in the left-hand navigation pane.
 1. Check the disk to delete, and then Delete it.
-1. Click on the **Snapshots** section int he left-hand navigation pane.
+1. Click on the **Snapshots** section in the left-hand navigation pane.
 1. Check the disk snapshot to delete, and then Delete it.
     - Be sure you don't delete your VM here but just your disk.
 
@@ -355,7 +357,7 @@ mounting the drive at ``/mnt/disks/disk-1``, and
 then editing ``/etc/fstab`` to make automount the drive.
 
 In addition to using the gcloud console,
-the command we used in this section include:
+the commands we used in this section include:
 
 1. ``ssh``  : to connect to the remote VM
 1. ``sudo`` : to run commands as the administrator

@@ -4885,17 +4885,19 @@ Since my device is <code>/dev/sdb</code>,
 I'll use that:</p>
 <pre><code>sudo blkid /dev/sdb
 </code></pre>
-<p>The output should look something like this:</p>
+<p>The output should look something like this
+<strong>BUT NOTE that your UUID value will
+be DIFFERENT</strong>:</p>
 <pre><code>/dev/sdb: UUID=&quot;3bc141e2-9e1d-428c-b923-0f9vi99a1123&quot; TYPE=&quot;ext4&quot;
 </code></pre>
 <p>We need to add that value to <code>/etc/fstab</code>
 plus the standard information that file requires.
 The Google Cloud documentation explicitly guides us here.
 We'll use <code>nano</code> to make the edit:</p>
-<pre><code>nano /etc/fstab
+<pre><code>sudo nano /etc/fstab
 </code></pre>
 <p>And then add this line at the bottom:</p>
-<pre><code>UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0,2
+<pre><code>UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0 2
 </code></pre>
 <p>And that's it!
 If you reboot your VM, or
@@ -4913,7 +4915,7 @@ then we can delete it.</p>
 <p>To delete the disk,
 first delete the line that we added in <code>/etc/fstab</code>,
 unmount it,
-and the delete the disk in the gcloud console.</p>
+and then delete the disk in the gcloud console.</p>
 <p>To unmount the disk, we use the <code>umount</code> command:</p>
 <pre><code>sudo umount /mnt/disks/disk-1
 </code></pre>
@@ -4933,7 +4935,7 @@ and the delete the disk in the gcloud console.</p>
 <li>Click on <strong>Save</strong>.</li>
 <li>Go the <strong>Disk</strong> section in the left-hand navigation pane.</li>
 <li>Check the disk to delete, and then Delete it.</li>
-<li>Click on the <strong>Snapshots</strong> section int he left-hand navigation pane.</li>
+<li>Click on the <strong>Snapshots</strong> section in the left-hand navigation pane.</li>
 <li>Check the disk snapshot to delete, and then Delete it.
 <ul>
 <li>Be sure you don't delete your VM here but just your disk.</li>
@@ -4948,7 +4950,7 @@ formatting the drive in the <strong>ext4</strong> filesystem format,
 mounting the drive at <code>/mnt/disks/disk-1</code>, and
 then editing <code>/etc/fstab</code> to make automount the drive.</p>
 <p>In addition to using the gcloud console,
-the command we used in this section include:</p>
+the commands we used in this section include:</p>
 <ol>
 <li><code>ssh</code>  : to connect to the remote VM</li>
 <li><code>sudo</code> : to run commands as the administrator</li>
