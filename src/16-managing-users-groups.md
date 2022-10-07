@@ -252,7 +252,7 @@ After writing (saving) and exiting ``nano``,
 we can go ahead and create a new user named **linus**.
 
 ```
-sudo adduser linux
+sudo adduser linus
 ```
 
 We'll be prompted to enter a password for the new user,
