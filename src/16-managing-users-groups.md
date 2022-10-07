@@ -30,7 +30,7 @@ grep "peter" /etc/passwd
 peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 ```
 
-The line starting with **peter** is a colon separate line.
+The line starting with **peter** is a colon separated line.
 That means that the line is composed of multiple fields
 each separated by a colon.
 
@@ -90,7 +90,7 @@ some things will change depending on the Linux distribution.
 For example, the user and group IDs above start at 1000 because
 **peter** is the first human account on the system.
 This is a common starting numerical ID nowadays,
-but it could be different on other Linux distributions.
+but it could be different on other Linux or Unix-like distributions.
 The home directory could be different on other systems, too;
 for example, the default could be located at **/usr/home/peter**.
 Also, other shells exist besides ``bash``, 
@@ -164,7 +164,7 @@ some of them are repetitive.
 * delgroup (8) - remove a user or group from the system
 * chgrp (1) - change group ownership
 
-The numbers within parentheses above indicate the man section.
+The numbers within parentheses above indicate the ``man`` section.
 Therefore, to view the man page for the ``userdel`` command:
 
 ```

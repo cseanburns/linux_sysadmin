@@ -160,7 +160,7 @@ Below I'll show the output for a made up user account:</p>
 <pre><code>grep &quot;peter&quot; /etc/passwd
 peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 </code></pre>
-<p>The line starting with <strong>peter</strong> is a colon separate line.
+<p>The line starting with <strong>peter</strong> is a colon separated line.
 That means that the line is composed of multiple fields
 each separated by a colon.</p>
 <p><code>man 5 passwd</code> tells us what each field indicates.
@@ -215,7 +215,7 @@ some things will change depending on the Linux distribution.
 For example, the user and group IDs above start at 1000 because
 <strong>peter</strong> is the first human account on the system.
 This is a common starting numerical ID nowadays,
-but it could be different on other Linux distributions.
+but it could be different on other Linux or Unix-like distributions.
 The home directory could be different on other systems, too;
 for example, the default could be located at <strong>/usr/home/peter</strong>.
 Also, other shells exist besides <code>bash</code>, 
@@ -280,7 +280,7 @@ some of them are repetitive.</p>
 <li>delgroup (8) - remove a user or group from the system</li>
 <li>chgrp (1) - change group ownership</li>
 </ul>
-<p>The numbers within parentheses above indicate the man section.
+<p>The numbers within parentheses above indicate the <code>man</code> section.
 Therefore, to view the man page for the <code>userdel</code> command:</p>
 <pre><code>man 8 userdel
 </code></pre>
