@@ -280,6 +280,20 @@ You can see these values by grepping the shadow file:
 sudo grep "linus" /etc/shadow
 ```
 
+To log in as the new user,
+use the ``su`` command:
+
+```
+su linus
+```
+
+To exit the new user's account,
+use the ``exit`` command:
+
+```
+exit
+```
+
 ### Add users to a new group
 
 Because of the default configuration defined in **/etc/adduser.conf**,

@@ -5190,6 +5190,14 @@ sudo passwd -x 180 linus
 <p>You can see these values by grepping the shadow file:</p>
 <pre><code>sudo grep &quot;linus&quot; /etc/shadow
 </code></pre>
+<p>To log in as the new user,
+use the <code>su</code> command:</p>
+<pre><code>su linus
+</code></pre>
+<p>To exit the new user's account,
+use the <code>exit</code> command:</p>
+<pre><code>exit
+</code></pre>
 <h3 id="add-users-to-a-new-group"><a class="header" href="#add-users-to-a-new-group">Add users to a new group</a></h3>
 <p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>,
 the <strong>linus</strong> user only belongs to a group of the same name.
