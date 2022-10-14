@@ -133,7 +133,7 @@ apt search ncurses game
 
 ### apt show
 
-The above command returned a lit that included
+The above command returned a list that includes
 a game called **ninvaders**, which
 seems to be a console-based Space Invaders like game.
 To get additional information about this package,
@@ -166,13 +166,13 @@ Both commands are offered because sometimes
 it is useful to keep those configuration files.
 
 ```
-apt remove ninvaders
+sudo apt remove ninvaders
 ```
 
 Or:
 
 ```
-apt purge ninvaders
+sudo apt purge ninvaders
 ```
 
 ### apt autoremove
