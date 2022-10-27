@@ -4,7 +4,10 @@
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Local Security - Linux Systems Administration</title>
+
+
         <!-- Custom HTML head -->
+        
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,25 +19,28 @@
         <link rel="stylesheet" href="css/general.css">
         <link rel="stylesheet" href="css/chrome.css">
         <link rel="stylesheet" href="css/print.css" media="print">
+
         <!-- Fonts -->
         <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link rel="stylesheet" href="fonts/fonts.css">
+
         <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
+
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script type="text/javascript">
+        <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script type="text/javascript">
+        <script>
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -50,7 +56,7 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script type="text/javascript">
+        <script>
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
@@ -62,7 +68,7 @@
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script type="text/javascript">
+        <script>
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -83,7 +89,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -113,6 +119,7 @@
                         <a href="https://github.com/cseanburns/linux_sysadmin" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
+
                     </div>
                 </div>
 
@@ -126,8 +133,9 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script type="text/javascript">
+                <script>
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -202,53 +210,74 @@ that user going forward.</p>
 </li>
 <li>
 <p>Next, we <code>chroot</code> <em>vader</em> into a new directory. That directory will be
-located at <code>/opt/chroot</code>. Note that the root directory for our regular
-users is <code>/</code>, but user <em>vader</em>'s root directory will be different
-<code>/opt/chroot</code>, even if they can't tell. We also want to check the
-permissions of the new directory and make sure it's owned by root. If not,
-use <code>chown root:root /opt/chroot</code> to set it.</p>
-<pre><code>sudo mkdir /opt/chroot
-ls -ld /opt/chroot
+located at <code>/mustafar</code>. Note that the root directory for our regular users
+is <code>/</code>, but user <em>vader</em>'s root directory will be <code>/mustafar</code>, even
+though they won't be able to tell. We also want to check the permissions of
+the new directory and make sure it's owned by root. If not, use <code>chown root:root /mustafar</code> to set it.</p>
+<pre><code>sudo mkdir /mustafar
+ls -ld /mustafar
 </code></pre>
 </li>
 <li>
 <p>Now we set up available binaries for the user. We'll only allow <code>bash</code> for
-now.  To do that, we'll create a <code>/usr/bin</code> directory in /opt/chroot, and
+now.  To do that, we'll create a <code>/bin</code> directory in <code>/mustafar</code>, and
 copy <code>bash</code> to that directory.</p>
 <pre><code>which bash
-sudo mkdir -p /opt/chroot/usr/bin
-cp /usr/bin/bash /opt/chroot/usr/bin/
+sudo mkdir -p /mustafar/bin
+sudo cp /usr/bin/bash /mustafar/bin/
 </code></pre>
 </li>
 <li>
 <p>Large software applications have dependencies (aka, libraries). We need to
-copy those libraries to our chroot for the applications, like Bash, to
-function. To identify libraries needed by bash, we use the <code>ldd</code> command:</p>
+copy those libraries to our <code>/jail</code> so the applications, like Bash, can run.
+To identify libraries needed by bash, we use the <code>ldd</code> command:</p>
 <pre><code>ldd /usr/bin/bash
 </code></pre>
 <p>Use the <code>locate</code> command to identify the locations of the libraries. The
-ones we need should be located in the <strong>/usr/lib/x86_64-linux-gnu/</strong>
-directory. The <code>locate</code> command might need to be installed and updated
-first. Here I show how to use it to locate one of the dependencies, but
-there are more than one for you to locate:</p>
+ones we need should be located in the <strong>/usr/lib/x86_64-linux-gnu/</strong> and
+<strong>/lib64</strong> directories. The <code>locate</code> command might need to be installed
+and updated first. Here I show how to use it to locate one of the
+dependencies, but there are more than one for you to locate:</p>
 <pre><code>sudo apt install mlocate
 sudo updatedb
-locate libtinfo.so.6
-...
-...
-...
 </code></pre>
-<p>Create a <strong>/opt/chroot/lib/x86_64-linux-gnu/</strong> directory for the libraries.
-We'll name the library directory after the originals to stay consistent
-with the main environment.</p>
-<pre><code>sudo mkdir -p /opt/chroot/lib/x86_64-linux-gnu
-sudo cp /usr/lib/x86_64-linux-gnu/libtinfo.so.6 \
-  /opt/chroot/lib/x86_64-linux-gnu/
+<p>Then we use the <code>locate</code> command to identify the paths to the needed
+libraries. Here's an example of using <code>locate</code> to identify the path to
+the first library we need:</p>
+<pre><code>locate libtinfo.so.6
+/snap/core20/1611/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+/snap/core20/1611/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+/snap/core20/1623/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+/snap/core20/1623/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+/snap/core22/275/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+/snap/core22/275/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+/snap/core22/310/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+/snap/core22/310/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+/usr/lib/i386-linux-gnu/libtinfo.so.6
+/usr/lib/i386-linux-gnu/libtinfo.so.6.3
+/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+</code></pre>
+<p>We have to decide, amongst all this output, which of these libraries is the
+needed one. We want to avoid the <strong>snap</strong> libraries. After eliminating
+those, the fourth one from the bottom becomes the obvious choice since it's an
+exact match.</p>
+<p>Next we create directories for these libraries in <code>/mustafar</code>. Create a
+<strong>/mustafar/lib/x86_64-linux-gnu/</strong> directory and a <strong>/mustafar/lib64</strong> for
+the libraries. We'll name the library directories after the originals to
+stay consistent with the main environment.</p>
+<pre><code>sudo mkdir -p /mustafar/lib/x86_64-linux-gnu
+sudo mkdir -p /mustafar/lib64
+</code></pre>
+<p>Then we proceed to copy the libraries to their respective directories in
+the <strong>/mustafar</strong> directory. Here's an example of the first command:</p>
+<pre><code>sudo cp /usr/lib/x86_64-linux-gnu/libtinfo.so.6 \
+  /mustafar/lib/x86_64-linux-gnu/
 </code></pre>
 </li>
 <li>
 <p>Create and test the <code>chroot</code></p>
-<pre><code>sudo chroot /opt/chroot/
+<pre><code>sudo chroot /mustafar
 bash-5.1# ls
 bash: ls: command not found
 bash-5.1# help
@@ -262,10 +291,10 @@ bash-5.1# exit
 </code></pre>
 </li>
 <li>
-<p>Create a new group called <em>chrootjail</em>. We can add users to this group that
-we want to jail. Instructions are based on <a href="https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins">linuxconfig.org</a>.</p>
-<pre><code>groupadd chrootjail
-usermod -a -G chrootjail vader
+<p>Create a new group called <em>mustafar</em>. We can add users to this group that
+we want to jail.</p>
+<pre><code>groupadd mustafar
+usermod -a -G mustafar vader
 groups vader
 </code></pre>
 </li>
@@ -274,8 +303,8 @@ groups vader
 the <code>chroot</code> directory. Add the following line at the end of the file.
 Then restart ssh server.</p>
 <pre><code>sudo nano /etc/ssh/sshd_config
-Match group chrootjail
-            ChrootDirectory /var/chroot/
+Match group mustafar
+            ChrootDirectory /mustafar
 </code></pre>
 <p>Exit <code>nano</code>, and restart <code>ssh</code>:</p>
 <pre><code>systemctl restart sshd
@@ -297,10 +326,18 @@ system.</p>
 <p>By using the <code>ldd</code> command,
 you can add additional binaries for this user.
 As an exercise,
-use the <code>ldd</code> command to locate
-the libraries for the <code>nano</code> editor, and
-make <code>nano</code> available to the user <em>vader</em>
-in the chrooted directory.</p>
+use the above process to make
+the following utilities/binaries
+available to <em>vader</em> in the
+<code>/mustafar</code> chroot directory:</p>
+<ul>
+<li><code>ls</code></li>
+<li><code>mkdir</code></li>
+<li><code>rmdir</code></li>
+<li><code>cp</code></li>
+<li><code>mv</code></li>
+<li><code>rm</code></li>
+</ul>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>Systems need to be secure from the inside and out.
 In order to secure from the inside,
@@ -308,7 +345,7 @@ system users should be given access and permissions
 as needed.</p>
 <p>In this section, we covered how to create a <strong>chroot jail</strong>
 for a new user on our system.
-The jail confines the user to this pseudo location
+The jail confines the user to this pseudo root location
 and provides the user limited access to that file system and
 to the software on the system.</p>
 <p>We can jail non-human users, too.
@@ -319,7 +356,13 @@ On a multi-user system,
 proper education and training about the policies
 and uses of the system may be all that's needed.
 But in case a stricter environment is needed,
-now you know how to create a <strong>chroot jail</strong>.</p>
+now you know how to create a basic <strong>chroot jail</strong>.</p>
+<p><strong>Additional Sources:</strong></p>
+<ul>
+<li><a href="https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins">How to automatically chroot jail selected ssh user logins</a>.</li>
+<li><a href="https://help.ubuntu.com/community/BasicChroot">BasicChroot</a></li>
+<li><a href="https://www.linode.com/docs/guides/use-chroot-for-testing-on-ubuntu/">How to Use chroot for Testing on Ubuntu</a></li>
+</ul>
 
                     </main>
 
@@ -328,9 +371,11 @@ now you know how to create a <strong>chroot jail</strong>.</p>
                             <a rel="prev" href="20-dns-domain-names.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
+
                             <a rel="next" href="22-firewall-backups.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
+
                         <div style="clear: both"></div>
                     </nav>
                 </div>
@@ -340,6 +385,7 @@ now you know how to create a <strong>chroot jail</strong>.</p>
                     <a rel="prev" href="20-dns-domain-names.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
+
                     <a rel="next" href="22-firewall-backups.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
@@ -347,16 +393,24 @@ now you know how to create a <strong>chroot jail</strong>.</p>
 
         </div>
 
-        <script type="text/javascript">
+
+
+
+        <script>
             window.playground_copyable = true;
         </script>
-        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
-        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
-        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
-        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+
+        <script src="elasticlunr.min.js" charset="utf-8"></script>
+        <script src="mark.min.js" charset="utf-8"></script>
+        <script src="searcher.js" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" charset="utf-8"></script>
+        <script src="highlight.js" charset="utf-8"></script>
+        <script src="book.js" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+
+
     </body>
 </html>
