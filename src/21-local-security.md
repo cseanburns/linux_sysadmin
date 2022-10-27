@@ -136,12 +136,13 @@ we are going to create a ``chroot`` for a human user account.
 
     We have to decide, amongst all this output, which of these libraries is the
     needed one. We want to avoid the **snap** libraries. After eliminating
-    those, the fourth one from the top becomes the obvious choice since it's an
+    those, the fourth one from the bottom becomes the obvious choice since it's an
     exact match.
 
-    Create a **/mustafar/lib/x86_64-linux-gnu/** directory and a
-    **/mustafar/lib64** for the libraries. We'll name the library directories
-    after the originals to stay consistent with the main environment.
+    Next we create directories for these libraries in ``/mustafar``. Create a
+    **/mustafar/lib/x86_64-linux-gnu/** directory and a **/mustafar/lib64** for
+    the libraries. We'll name the library directories after the originals to
+    stay consistent with the main environment.
 
     ```
     sudo mkdir -p /mustafar/lib/x86_64-linux-gnu
@@ -151,6 +152,7 @@ we are going to create a ``chroot`` for a human user account.
     Then we proceed to copy the libraries to their respective directories in
     the **/mustafar** directory. Here's an example of the first command:
 
+    ```
     sudo cp /usr/lib/x86_64-linux-gnu/libtinfo.so.6 \
       /mustafar/lib/x86_64-linux-gnu/
     ```
@@ -172,7 +174,7 @@ we are going to create a ``chroot`` for a human user account.
     ```
 
 6. Create a new group called *mustafar*. We can add users to this group that
-   we want to jail. Instructions are based on [linuxconfig.org][chrootjail].
+   we want to jail.
 
     ```
     groupadd mustafar
@@ -250,5 +252,13 @@ and uses of the system may be all that's needed.
 But in case a stricter environment is needed,
 now you know how to create a **chroot jail**.
 
+**Additional Sources:**
+
+- [How to automatically chroot jail selected ssh user logins][chrootjail].
+- [BasicChroot][basicchroot]
+- [How to Use chroot for Testing on Ubuntu][linode]
+
 [chrootjail]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins
 [docker]:https://en.wikipedia.org/wiki/Docker_(software)
+[basicchroot]:https://help.ubuntu.com/community/BasicChroot
+[linode]:https://www.linode.com/docs/guides/use-chroot-for-testing-on-ubuntu/
