@@ -74,64 +74,91 @@ we are going to create a ``chroot`` for a human user account.
     ```
 
 2. Next, we ``chroot`` *vader* into a new directory. That directory will be
-   located at ``/opt/chroot``. Note that the root directory for our regular
-   users is ``/``, but user *vader*'s root directory will be different
-   ``/opt/chroot``, even if they can't tell. We also want to check the
-   permissions of the new directory and make sure it's owned by root. If not,
-   use ``chown root:root /opt/chroot`` to set it.
+   located at ``/mustafar``. Note that the root directory for our regular users
+   is ``/``, but user *vader*'s root directory will be ``/mustafar``, even
+   though they won't be able to tell. We also want to check the permissions of
+   the new directory and make sure it's owned by root. If not, use ``chown
+   root:root /mustafar`` to set it.
 
     ```
-    sudo mkdir /opt/chroot
-    ls -ld /opt/chroot
+    sudo mkdir /mustafar
+    ls -ld /mustafar
     ```
 
 3. Now we set up available binaries for the user. We'll only allow ``bash`` for
-   now.  To do that, we'll create a ``/usr/bin`` directory in /opt/chroot, and
+   now.  To do that, we'll create a ``/bin`` directory in ``/mustafar``, and
    copy ``bash`` to that directory.
 
     ```
     which bash
-    sudo mkdir -p /opt/chroot/usr/bin
-    cp /usr/bin/bash /opt/chroot/usr/bin/
+    sudo mkdir -p /mustafar/bin
+    sudo cp /usr/bin/bash /mustafar/bin/
     ```
 
 4. Large software applications have dependencies (aka, libraries). We need to
-   copy those libraries to our chroot for the applications, like Bash, to
-   function. To identify libraries needed by bash, we use the ``ldd`` command:
+   copy those libraries to our ``/jail`` so the applications, like Bash, can run.
+   To identify libraries needed by bash, we use the ``ldd`` command:
 
     ```
     ldd /usr/bin/bash
     ```
 
     Use the ``locate`` command to identify the locations of the libraries. The
-    ones we need should be located in the **/usr/lib/x86_64-linux-gnu/**
-    directory. The ``locate`` command might need to be installed and updated
-    first. Here I show how to use it to locate one of the dependencies, but
-    there are more than one for you to locate:
+    ones we need should be located in the **/usr/lib/x86_64-linux-gnu/** and
+    **/lib64** directories. The ``locate`` command might need to be installed
+    and updated first. Here I show how to use it to locate one of the
+    dependencies, but there are more than one for you to locate:
 
     ```
     sudo apt install mlocate
     sudo updatedb
+    ```
+
+    Then we use the ``locate`` command to identify the paths to the needed
+    libraries. Here's an example of using ``locate`` to identify the path to
+    the first library we need:
+
+    ```
     locate libtinfo.so.6
-    ...
-    ...
-    ...
+    /snap/core20/1611/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+    /snap/core20/1611/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+    /snap/core20/1623/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+    /snap/core20/1623/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
+    /snap/core22/275/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+    /snap/core22/275/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+    /snap/core22/310/usr/lib/x86_64-linux-gnu/libtinfo.so.6
+    /snap/core22/310/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+    /usr/lib/i386-linux-gnu/libtinfo.so.6
+    /usr/lib/i386-linux-gnu/libtinfo.so.6.3
+    /usr/lib/x86_64-linux-gnu/libtinfo.so.6
+    /usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
     ```
 
-    Create a **/opt/chroot/lib/x86_64-linux-gnu/** directory for the libraries.
-    We'll name the library directory after the originals to stay consistent
-    with the main environment.
+    We have to decide, amongst all this output, which of these libraries is the
+    needed one. We want to avoid the **snap** libraries. After eliminating
+    those, the fourth one from the top becomes the obvious choice since it's an
+    exact match.
+
+    Create a **/mustafar/lib/x86_64-linux-gnu/** directory and a
+    **/mustafar/lib64** for the libraries. We'll name the library directories
+    after the originals to stay consistent with the main environment.
 
     ```
-    sudo mkdir -p /opt/chroot/lib/x86_64-linux-gnu
+    sudo mkdir -p /mustafar/lib/x86_64-linux-gnu
+    sudo mkdir -p /mustafar/lib64
+    ```
+
+    Then we proceed to copy the libraries to their respective directories in
+    the **/mustafar** directory. Here's an example of the first command:
+
     sudo cp /usr/lib/x86_64-linux-gnu/libtinfo.so.6 \
-      /opt/chroot/lib/x86_64-linux-gnu/
+      /mustafar/lib/x86_64-linux-gnu/
     ```
 
 5. Create and test the ``chroot``
 
     ```
-    sudo chroot /opt/chroot/
+    sudo chroot /mustafar
     bash-5.1# ls
     bash: ls: command not found
     bash-5.1# help
@@ -144,12 +171,12 @@ we are going to create a ``chroot`` for a human user account.
     bash-5.1# exit
     ```
 
-6. Create a new group called *chrootjail*. We can add users to this group that
+6. Create a new group called *mustafar*. We can add users to this group that
    we want to jail. Instructions are based on [linuxconfig.org][chrootjail].
 
     ```
-    groupadd chrootjail
-    usermod -a -G chrootjail vader
+    groupadd mustafar
+    usermod -a -G mustafar vader
     groups vader
     ```
 
@@ -159,8 +186,8 @@ we are going to create a ``chroot`` for a human user account.
 
     ```
     sudo nano /etc/ssh/sshd_config
-    Match group chrootjail
-                ChrootDirectory /var/chroot/
+    Match group mustafar
+                ChrootDirectory /mustafar
     ```
 
     Exit ``nano``, and restart ``ssh``:
@@ -187,10 +214,17 @@ we are going to create a ``chroot`` for a human user account.
 By using the ``ldd`` command,
 you can add additional binaries for this user.
 As an exercise,
-use the ``ldd`` command to locate
-the libraries for the ``nano`` editor, and
-make ``nano`` available to the user *vader*
-in the chrooted directory.
+use the above process to make
+the following utilities.
+available to *vader* in the
+``/mustafar``:
+
+- ``ls``
+- ``mkdir``
+- ``rmdir``
+- ``cp``
+- ``mv``
+- ``rm``
 
 ## Conclusion
 
@@ -201,7 +235,7 @@ as needed.
 
 In this section, we covered how to create a **chroot jail**
 for a new user on our system.
-The jail confines the user to this pseudo location
+The jail confines the user to this pseudo root location
 and provides the user limited access to that file system and
 to the software on the system.
 
