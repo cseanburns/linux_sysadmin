@@ -217,9 +217,9 @@ By using the ``ldd`` command,
 you can add additional binaries for this user.
 As an exercise,
 use the above process to make
-the following utilities.
+the following utilities/binaries
 available to *vader* in the
-``/mustafar``:
+``/mustafar`` chroot directory:
 
 - ``ls``
 - ``mkdir``
@@ -250,7 +250,7 @@ On a multi-user system,
 proper education and training about the policies
 and uses of the system may be all that's needed.
 But in case a stricter environment is needed,
-now you know how to create a **chroot jail**.
+now you know how to create a basic **chroot jail**.
 
 **Additional Sources:**
 
