@@ -257,8 +257,10 @@ now you know how to create a basic **chroot jail**.
 - [How to automatically chroot jail selected ssh user logins][chrootjail].
 - [BasicChroot][basicchroot]
 - [How to Use chroot for Testing on Ubuntu][linode]
+- [How To Setup Linux Chroot Jails][linuxhint]
 
 [chrootjail]:https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins
 [docker]:https://en.wikipedia.org/wiki/Docker_(software)
 [basicchroot]:https://help.ubuntu.com/community/BasicChroot
 [linode]:https://www.linode.com/docs/guides/use-chroot-for-testing-on-ubuntu/
+[linuxhint]:https://linuxhint.com/setup-linux-chroot-jails/
