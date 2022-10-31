@@ -25,6 +25,7 @@
 - [Networking and Security](p6-networking-security.md)
     - [Networking and TCP/IP](19-networking-tcpip.md)
     - [DNS and Domain Names](20-dns-domain-names.md)
+    - [Local Security](21-local-security.md)
     - [Firewalls and Backups](22-firewall-backups.md)
 - [Creating a LAMP Server](p7-creating-a-lamp-server.md)
     - [Installing the Apache Web Server](23-installing-the-apache-web-server.md)
