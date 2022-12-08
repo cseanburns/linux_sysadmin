@@ -307,7 +307,7 @@ And then restart Apache2 and MariaDB:
 
 ```
 sudo systemctl restart apache2
-sudo systemctl restart mariadab
+sudo systemctl restart mariadb
 ```
 
 ### Create PHP Scripts

@@ -352,7 +352,7 @@ OS, License, Year
 Chrome OS, Proprietary, 2009
 ```
 
-Sometimes we want to the context for a result;
+Sometimes we want the context for a result;
 that is,
 we might want to print lines that surround our matches.
 For example, print the matching line plus the two lines
