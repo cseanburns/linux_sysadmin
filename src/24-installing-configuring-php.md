@@ -156,7 +156,7 @@ use ``nano`` to create and open and ``index.php`` file:
 
 ```
 cd /var/www/html/
-nano index.php
+sudo nano index.php
 ```
 
 ## Creating an index.php File

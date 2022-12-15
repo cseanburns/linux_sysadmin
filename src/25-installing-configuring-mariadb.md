@@ -329,7 +329,7 @@ sudo touch login.php
 sudo chmod 640 login.php
 sudo chown :www-data login.php
 ls -l login.php
-nano login.php
+sudo nano login.php
 ```
 
 In the file,
