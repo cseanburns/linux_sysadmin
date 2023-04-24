@@ -6,7 +6,9 @@ The content is written in markdown (see **src/** directory),
 and is built using [mdBook][mdbook].
 
 The book is complete (as of August 13, 2022)
-and is hosted on my [website][linuxBook].
+and is hosted using GitHub Pages:
+https://cseanburns.net/WWW/linux-systems-admin/index.html
+
 I consider this book a live document that will
 be updated throughout the year
 (probably more frequently before and
