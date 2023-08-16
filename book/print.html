@@ -9,7 +9,6 @@
 
         <!-- Custom HTML head -->
         
-        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -34,6 +33,7 @@
 
     </head>
     <body>
+    <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
@@ -71,10 +71,12 @@
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
             var html = document.querySelector('html');
-            var sidebar = 'hidden';
+            var sidebar = null;
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
             }
             html.classList.remove('sidebar-visible');
             html.classList.add("sidebar-" + sidebar);
@@ -100,7 +102,7 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
@@ -266,77 +268,108 @@ York: MacGraw Hill Education. ISBN: 978-0-07-184536-6</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="history-of-unix-and-linux"><a class="header" href="#history-of-unix-and-linux">History of Unix and Linux</a></h1>
 <p>An outline of the history of Unix and Linux.</p>
 <h2 id="location-bell-labs-part-of-att-new-jersey-late-1960s-through-early-1970s"><a class="header" href="#location-bell-labs-part-of-att-new-jersey-late-1960s-through-early-1970s">Location: Bell Labs, part of AT&amp;T (New Jersey), late 1960s through early 1970s</a></h2>
-<ul>
-<li>Starts with an operating system called Multics.</li>
-<li>Multics was a time sharing system
-<ul>
-<li>That is, more than one person could use it at once.</li>
-</ul>
-</li>
-<li>But Multics had issues and was slowly abandoned</li>
-<li><a href="http://cs.bell-labs.co/who/ken/">Ken Thompson</a> found an old PDP-7. Started to write UNIX.
-<ul>
-<li>The <a href="https://en.wikipedia.org/wiki/Ed_(text_editor)">ed</a> line editor was written.</li>
-<li>Pronounced e.d. but generally sounded out.</li>
-</ul>
-</li>
-<li>This version of UNIX would later be referred to as <em>Research Unix</em></li>
-<li><a href="https://www.bell-labs.com/usr/dmr/www/">Dennis Ritchie</a>, the creator of the C programming language,
-joined Thompson's efforts.</li>
-</ul>
+<p>In the late 1960s through the early 1970s at Bell Labs,
+part of AT&amp;T in New Jersey,
+the journey began with an operating system called Multics. 
+Multics was a pioneering time-sharing system,
+allowing more than one person to use it at once.
+Despite its innovative approach,
+Multics was fraught with issues and was slowly abandoned. 
+In the midst of this abandonment,
+<a href="http://cs.bell-labs.co/who/ken/">Ken Thompson</a>
+stumbled upon an old PDP-7 and started 
+writing what would become UNIX.
+During this time,
+he created the <a href="https://en.wikipedia.org/wiki/Ed_(text_editor)">ed</a> line editor,
+pronounced e.d.,
+but generally sounded out.
+This specific version of UNIX would
+later be known as Research Unix.
+The project caught the attention of
+<a href="https://www.bell-labs.com/usr/dmr/www/">Dennis Ritchie</a>,
+the creator of the C programming language,
+who joined Thompson's efforts, and
+together they laid the groundwork for
+a revolution in computing.</p>
 <h2 id="location-berkeley-ca-university-of-california-berkeley-early-to-mid-1970s"><a class="header" href="#location-berkeley-ca-university-of-california-berkeley-early-to-mid-1970s">Location: Berkeley, CA (University of California, Berkeley), early to mid 1970s</a></h2>
-<ul>
-<li>The code for UNIX was not 'free software'
-but low cost and easily shared.</li>
-<li>Ken Thompson visited Berkeley and helped install <a href="https://en.wikipedia.org/wiki/Berkeley_Software_Distribution">Version 6 of UNIX</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Bill_Joy">Bill Joy</a> and others contributed heavily
-<ul>
-<li>Joy created the <a href="https://sites.google.com/a/bostic.com/keithbostic/vi/">vi</a> text editor,
+<p>In the early to mid-1970s at the
+University of California, Berkeley,
+the evolution of UNIX continued.
+While not classified as 'free software,'
+UNIX's code was low-cost and easily shared among
+tech enthusiasts.
+Ken Thompson visited Berkeley,
+where he helped install Version 6 of <a href="https://en.wikipedia.org/wiki/Berkeley_Software_Distribution">UNIX</a>,
+marking a significant moment in the system's history.
+At Berkeley, several contributors,
+including <a href="https://en.wikipedia.org/wiki/Bill_Joy">Bill Joy</a>,
+played vital roles in its development.
+Joy was particularly influential,
+creating the <a href="https://sites.google.com/a/bostic.com/keithbostic/vi/">vi</a> text editor,
 a descendant of the popular <a href="https://www.vim.org/">Vim</a> editor,
-many other important programs, and was a co-founder of Sun Microsystems</li>
-</ul>
-</li>
-<li>This installation of UNIX would eventually become known
-as the Berkeley Software Distribution, or BSD.</li>
-</ul>
+and many other essential programs.
+He also co-founded Sun Microsystems.
+This installation and collaborative effort at
+Berkeley eventually led to the creation of the
+Berkeley Software Distribution, or <a href="https://en.wikipedia.org/wiki/Berkeley_Software_Distribution">BSD</a>,
+a landmark in the history of UNIX
+and computing as a whole.</p>
 <h2 id="att"><a class="header" href="#att">AT&amp;T</a></h2>
-<ul>
-<li>Until its breakup in 1984,
-AT&amp;T was not allowed to profit off patents
-that were not directly related to its telecommunications businesses.</li>
-<li>This agreement with the US government helped
-protect the company from monopolistic charges,
-and as a result, they could not commercialize UNIX.</li>
-<li>This changed after the breakup.
-System V UNIX became the standard bearer of commercial UNIX.</li>
-</ul>
+<p>Until its breakup in 1984,
+AT&amp;T operated under a unique agreement with the
+U.S. government that restricted the company from
+profiting off patents not directly related
+to its telecommunications businesses.
+This arrangement helped shield AT&amp;T from
+monopolistic charges,
+but it also came with a significant limitation:
+they could not commercialize UNIX.
+The landscape changed dramatically after the
+breakup of AT&amp;T.
+The constraints lifted,
+allowing System V UNIX to emerge as
+the standard bearer of commercial UNIX.
+This transition marked a turning point
+in the history of computing,
+positioning UNIX as a central player
+in the commercial technology market.</p>
 <h2 id="location-boston-ma-mit-early-1980s-through-early-1990s"><a class="header" href="#location-boston-ma-mit-early-1980s-through-early-1990s">Location: Boston, MA (MIT), early 1980s through early 1990s</a></h2>
-<ul>
-<li>In the late 1970s, <a href="https://en.wikipedia.org/wiki/Richard_Stallman">Richard Stallman</a> noticed
-that software began to become commercialized.
-<ul>
-<li>As a result, hardware vendors stopped sharing
-the code they developed to make their hardware work.</li>
-</ul>
-</li>
-<li>Software code became eligible for copyright protection with
-the Copyright Act of 1976</li>
-<li>Stallman, who thrived in a <em>hacker culture</em>,
-began to battle against this turn of events.</li>
-<li>Stallman created the <a href="https://www.gnu.org/gnu/gnu.html">GNU project</a>,
-the free software philosophy, GNU Emacs,
-a popular and important text editor,
-and he wrote many other programs.</li>
-<li>The GNU project is an attempt to create a completely
-<strong>free software</strong> operating system,
-that was Unix-like, called GNU.</li>
-<li>By the early 1990s, Stallman and others had developed
-all the utilities needed to have a full operating system,
-except for a kernel, which they called <a href="https://www.gnu.org/software/hurd/">GNU Hurd</a>.</li>
-<li>This included the Bash shell, written by <a href="https://opuslogica.com/">Brian Fox</a>.</li>
-<li>The GNU philosophy includes several propositions
-that define free software:</li>
-</ul>
+<p>In Boston, MA, at MIT during the early 1980s
+through the early 1990s,
+a significant shift in the software industry
+was taking place.
+In the late 1970s,
+<a href="https://en.wikipedia.org/wiki/Richard_Stallman">Richard Stallman</a> observed the growing
+trend of software becoming commercialized.
+This commercialization led to hardware vendors
+ceasing to share the code they developed
+to make their hardware work.
+This paradigm change was further solidified by the 
+Copyright Act of 1976,
+making software code eligible for copyright protection. 
+Stallman, who thrived in a hacker culture,
+began to battle against this new direction.
+He responded by creating the <a href="https://www.gnu.org/gnu/gnu.html">GNU project</a>,
+embracing the free software philosophy,
+and developing influential tools such as GNU Emacs,
+a popular text editor,
+and many other programs.
+The GNU project was an ambitious attempt
+to create a completely free software operating
+system that was Unix-like,
+called GNU.
+By the early 1990s,
+Stallman and others had developed all
+the utilities needed for a full operating system,
+except for a kernel,
+which they named <a href="https://www.gnu.org/software/hurd/">GNU Hurd</a>.
+This encompassing project included
+the creation of the Bash shell,
+written by <a href="https://opuslogica.com/">Brian Fox</a>,
+reflecting a profound commitment
+to free and open software.</p>
+<p>The GNU philosophy includes several
+propositions that define free software:</p>
 <blockquote>
 <p>The four freedoms, per GNU Project:
 0. The freedom to run the program as you wish,
@@ -355,95 +388,130 @@ Access to the source code is a precondition for this.</li>
 </blockquote>
 <p><a href="https://www.gnu.org/philosophy/free-sw.html">The Four Freedoms</a></p>
 <h2 id="the-unix-wars-and-the-lawsuit-late-1980s-through-the-early-1990s"><a class="header" href="#the-unix-wars-and-the-lawsuit-late-1980s-through-the-early-1990s">The Unix wars and the lawsuit, late 1980s through the early 1990s</a></h2>
-<ul>
-<li>AT&amp;T, after its breakup, began to commercialize Unix,
-and differences in AT&amp;T Unix and BSD Unix arose.</li>
-<li>The former was aimed at commercialization,
-and the latter aimed at researchers and academics.</li>
-<li>UNIX Systems Laboratories, Inc. (USL, part of AT&amp;T)
-sued Berkeley Software Design, Inc.
+<p>During the late 1980s through the early 1990s,
+the so-called &quot;Unix wars&quot; and an
+ensuing lawsuit marked a contentious period
+in the history of computing.
+Following its breakup,
+AT&amp;T began to commercialize Unix,
+leading to distinct differences between
+AT&amp;T Unix and BSD Unix.
+The former was aimed at commercial markets,
+while the latter was targeted at
+researchers and academics.
+These contrasting objectives led to legal friction, 
+culminating in UNIX Systems Laboratories, Inc.
+(USL, part of AT&amp;T) suing
+Berkeley Software Design, Inc.
 (BSDi, part of the University of California, Berkeley)
-for copyright and trademark violations.</li>
-<li>USL ultimately lost the case,
-but the lawsuit delayed adoption of BSD Unix.</li>
-</ul>
+for copyright and trademark violations.
+Ultimately, USL lost the case,
+but not before the lawsuit had created significant 
+obstacles for BSD Unix.
+The legal battle delayed the adoption of BSD Unix,
+leaving a lasting impact on the
+development and dissemination of Unix systems.</p>
 <h2 id="linux-linus-torvalds-university-of-helsinki-finland-early-1990s"><a class="header" href="#linux-linus-torvalds-university-of-helsinki-finland-early-1990s">Linux, Linus Torvalds, University of Helsinki, Finland, early 1990s</a></h2>
-<ul>
-<li>On August 25, 1991, <a href="https://www.cs.helsinki.fi/u/torvalds/">Linus Torvalds</a>
-announced that he had started working on a <strong>free</strong>
-operating system kernel for the 386 CPU architecture
-and for his specific hardware.</li>
-<li>This <a href="https://www.kernel.org/">kernel</a> would later be named <strong>Linux</strong>.</li>
-<li>Linux technically refers only to the kernel.
-<ul>
-<li>An operating system kernel handles startup,
-devices, memory, resources, etc.</li>
-<li>A kernel does not provide user land utilities---the
-kinds of software they people use when using computers.</li>
-</ul>
-</li>
-<li>Torvalds' motivation was to learn about OS development
-but also to have access to a Unix-like system.
-<ul>
-<li>He already had access to an Unix-like system
-called <a href="https://www.minix3.org/">MINIX</a>,
-but MINIX had technical and copyright restrictions.</li>
-</ul>
-</li>
-<li>Torvalds has stated that if a BSD or
-if GNU Hurd operating system were available,
-then he may not have created the Linux kernel.</li>
-<li>But Torvalds and others took the GNU utilities
-and created what is now called Linux or GNU/Linux.</li>
-</ul>
+<p>In the early 1990s at the University of Helsinki
+in Finland,
+a significant development in the
+world of computing unfolded.
+On August 25, 1991,
+<a href="https://www.cs.helsinki.fi/u/torvalds/">Linus Torvalds</a> announced that he had
+started working on a free operating system kernel 
+specifically for the 386 CPU architecture and
+his hardware.
+This <a href="https://www.kernel.org/">kernel</a> would later be famously named Linux.
+It's essential to understand that Linux
+technically refers only to the kernel,
+which handles startup, devices,
+memory, resources, and more,
+but does not provide user land
+utilities—the kind of software
+that people use on their computers.</p>
+<p>Torvalds' motivation for this project was
+both to learn about OS development and
+to have access to a Unix-like system.
+He already had access to an Unix-like
+system called <a href="https://www.minix3.org/">MINIX</a>,
+but MINIX was limited by technical and
+copyright restrictions.
+Interestingly, Torvalds has stated that if a
+BSD or GNU Hurd operating system were
+available at that time,
+he might not have created the Linux kernel at all. 
+However, he and others took the
+GNU utilities and created what is
+now widely referred to as Linux or GNU/Linux.
+This amalgamation of Torvalds' kernel and
+GNU utilities marked a critical point
+in the evolution of free and open-source software, 
+fostering a global community of developers and users.</p>
 <h2 id="distributions-early-1990s-through-today"><a class="header" href="#distributions-early-1990s-through-today">Distributions, early 1990s through today</a></h2>
-<ul>
-<li>Soon after the Linux development,
-people would create their own Linux and
-GNU based operating systems and would distribute them.</li>
-<li>As such, these Linux operating systems became 
-referred to as <em>distributions</em>.</li>
-<li>The two oldest distributions that are still in 
-active development include:
+<p>Soon after the development of Linux in the early 1990s,
+a trend began to emerge that continues to this day. 
+Enthusiasts and developers started creating
+their own Linux and GNU-based operating systems, 
+customizing them to suit various needs and preferences. 
+They would then distribute these customized
+versions to others,
+sharing their innovations and insights with a
+wider community.
+As a result of this practice,
+these Linux operating systems became
+known as &quot;distributions.&quot;
+This phenomenon has led to a rich ecosystem of
+Linux distributions,
+catering to different user bases,
+industries, and interests, and
+has played a central role in the
+continued growth and
+diversification of open-source computing.</p>
+<p>The two oldest distributions that are still in
+active development include:</p>
 <ul>
 <li><a href="http://www.slackware.com/">Slackware</a></li>
 <li><a href="https://www.debian.org/">Debian</a></li>
 </ul>
-</li>
-</ul>
 <h2 id="short-history-of-bsd-1970s-through-today"><a class="header" href="#short-history-of-bsd-1970s-through-today">Short History of BSD, 1970s through today</a></h2>
+<p>The history of Berkeley Software Distribution (BSD)
+spans from the 1970s to today and is closely
+intertwined with the evolution of Unix.
+Early Unix version numbers 1-6
+eventually led to the development of BSD versions 1-4.
+By the time of BSD 4.3,
+all versions still contained some AT&amp;T code.
+A desire to remove this proprietary code led to the 
+creation of BSD Net/1.</p>
+<p>The effort continued until all AT&amp;T
+code was successfully removed by BSD Net/2.
+This version was then ported to the Intel 386
+processor, resulting in 386BSD,
+made available in 1992,
+a year after the Linux kernel was released.</p>
+<p>386BSD eventually split into two distinct projects:
+<a href="https://www.netbsd.org/">NetBSD</a> and <a href="https://www.freebsd.org/">FreeBSD</a>.
+Later, NetBSD itself split into another project,
+giving rise to <a href="https://www.openbsd.org/">OpenBSD</a>.
+All three of these BSDs are still in
+active development today,
+and each has a unique focus:</p>
 <ul>
-<li>Unix version numbers 1-6 eventually led to BSD 1-4.</li>
-<li>At BSD 4.3, all versions had some AT&amp;T code.
-<ul>
-<li>Desire to remove this code led to BSD Net/1.</li>
+<li><strong>NetBSD</strong> is known for its focus on portability, finding
+applications in various environments such as MacOS and even
+NASA projects.</li>
+<li><strong>FreeBSD</strong> is recognized for its wide applicability and has
+been utilized by notable companies and products like WhatsApp,
+Netflix, PlayStation 4, and MacOS.</li>
+<li><strong>OpenBSD</strong> emphasizes security and has contributed several
+essential applications in this domain.</li>
 </ul>
-</li>
-<li>All AT&amp;T code was removed by BSD Net/2.</li>
-<li>BSD Net/2 was ported to the Intel 386 processor.
-<ul>
-<li>This became 386BSD and was made available in 1992,
-a year after the Linux kernel was released.</li>
-</ul>
-</li>
-<li>386BSD split into two projects:
-<ul>
-<li><a href="https://www.netbsd.org/">NetBSD</a></li>
-<li><a href="https://www.freebsd.org/">FreeBSD</a></li>
-</ul>
-</li>
-<li>NetBSD split into another project: <a href="https://www.openbsd.org/">OpenBSD</a>.</li>
-<li>All three of these BSDs are still in active development.</li>
-<li>From a bird's eye point of view, they each have different focuses:
-<ul>
-<li>NetBSD focuses on portability (MacOS, NASA)</li>
-<li>FreeBSD focuses on wide applicability 
-(WhatsApp, Netflix, PlayStation 4, MacOS)</li>
-<li>OpenBSD focuses on security 
-(has contributed a number of very important applications)</li>
-</ul>
-</li>
-</ul>
+<p>This intricate journey of BSD,
+marked by splits, adaptations, and varied focuses,
+has cemented its place in the history of
+operating systems,
+allowing it to cater to a wide range of
+applications and audiences.</p>
 <blockquote>
 <p>MacOS is based on <a href="http://www.puredarwin.org/">Darwin</a>,
 is <a href="https://www.opengroup.org/membership/forums/platform/unix">technically UNIX</a>, and is
@@ -453,13 +521,24 @@ See <a href="https://apple.stackexchange.com/questions/401832/why-is-macos-often
 for a short history.</p>
 </blockquote>
 <h2 id="short-history-of-gnu-1980s-through-today"><a class="header" href="#short-history-of-gnu-1980s-through-today">Short History of GNU, 1980s through today</a></h2>
-<ul>
-<li>The GNU Hurd is still under active development,
-but it's the pre-production state.</li>
-<li>The last release was 0.9 on December 2016.</li>
-<li>A complete OS based on the GNU Hurd can be downloaded and ran.
-For example: <a href="https://www.debian.org/ports/hurd/">Debian GNU/Hurd</a></li>
-</ul>
+<p>The history of GNU,
+particularly the GNU Hurd kernel,
+traces back to the 1980s and continues to evolve today. 
+The GNU Hurd, despite its long development process, 
+remains in a pre-production state.
+The latest release of this kernel was version 0.9,
+which came out in December 2016.
+Even though it has not yet reached full maturity,
+a complete operating system based on the GNU Hurd
+can be downloaded and run.
+For example,
+<a href="https://www.debian.org/ports/hurd/">Debian GNU/Hurd</a>
+represents one such implementation.
+This ongoing work on the GNU Hurd exemplifies
+the free and open-source community's
+commitment to innovation and collaboration,
+maintaining a spirit of exploration that has
+driven the software landscape for decades.</p>
 <h2 id="free-and-open-source-licenses"><a class="header" href="#free-and-open-source-licenses">Free and Open Source Licenses</a></h2>
 <p>In the free software and open source landscape,
 there are several important free and/or open source
@@ -8050,13 +8129,13 @@ August 13, 2022</p>
         </script>
 
 
-        <script src="elasticlunr.min.js" charset="utf-8"></script>
-        <script src="mark.min.js" charset="utf-8"></script>
-        <script src="searcher.js" charset="utf-8"></script>
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
 
-        <script src="clipboard.min.js" charset="utf-8"></script>
-        <script src="highlight.js" charset="utf-8"></script>
-        <script src="book.js" charset="utf-8"></script>
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
 
         <!-- Custom JS scripts -->
 
@@ -8066,5 +8145,6 @@ August 13, 2022</p>
         });
         </script>
 
+    </div>
     </body>
 </html>
