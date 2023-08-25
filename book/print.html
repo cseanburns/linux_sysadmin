@@ -818,7 +818,8 @@ instances of the Ubuntu Server Linux operating system.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-gcloud-for-virtual-machines"><a class="header" href="#using-gcloud-for-virtual-machines">Using gcloud for Virtual Machines</a></h1>
 <h2 id="virtual-machines"><a class="header" href="#virtual-machines">Virtual Machines</a></h2>
 <p>Our goal in this section 
-is to create a <strong>virtual machine (VM)</strong> <em>instance</em>.
+is to create a <strong>virtual machine (VM)</strong> <em>instance</em> running
+a distribution of the Linux operating system.
 A VM is basically a virtualized operating system
 that runs on a host operating system.
 That host operating system may also be Linux,
@@ -831,15 +832,13 @@ we use virtual machine software to mimic the process.
 The virtual machine, thus, runs on top of our main OS.
 It's like an app, where the app is a fully functioning
 operating system.</p>
-<p>In past semesters of this course,
-we used <a href="https://www.virtualbox.org/">VirtualBox</a> to create
+<p>There are other ways to run virtual machines.
+For example, we could use <a href="https://www.virtualbox.org/">VirtualBox</a> to create
 virtual machines with Linux as the virtual operating system.
-This worked despite whether you or I were running
-Windows, macOS, or Linux as our main operating systems.
 VirtualBox is freely available virtualization software,
-and using it let students and myself
+and using it lets people
 run Linux as a server
-on our own desktops and laptops without changing
+on our their desktops and laptops without changing
 the underlying OS on those machines
 (e.g., Windows, macOS).</p>
 <p>However, even though we virtualize an operating
@@ -850,9 +849,8 @@ When Apple, Inc launched their new M1
 (ARM-based) chip in 2020,
 it created problems for running non ARM-based operating
 systems as virtual machines (i.e., x86_64 chips).</p>
-<p>Fortunately, we are able to solve that issue
-using a third-party virtualization platform.
-In this course, that means we're going to use gcloud (via Google),
+<p>Fortunately, we have other choices in third-party virtualization platforms.
+In this book, we're going to use gcloud (via Google),
 but there are other options available that you 
 can explore on your own.</p>
 <h2 id="google-cloud--gcloud"><a class="header" href="#google-cloud--gcloud">Google Cloud / gcloud</a></h2>
@@ -861,37 +859,38 @@ can explore on your own.</p>
 I imagine most of you already have a Google account,
 but if not, go ahead and create one at <a href="https://www.google.com">https://www.google.com</a>.</p>
 <h3 id="google-cloud-gcloud-project"><a class="header" href="#google-cloud-gcloud-project">Google Cloud (gcloud) Project</a></h3>
-<p>Next, you need to use gcloud
+<p>Next, we need to use gcloud
 to create a Google Cloud project.
 Once you've created that project,
-you can enable billing for that project,
+we can enable billing for that project,
 and then install the gcloud software 
-on your local machine.</p>
+on our local machines.</p>
 <p>Follow <strong>Step 1</strong> at the top of the 
 <strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a></strong> page
-to in create a new project.
+to create a new project.
 Also, review the page on
 <a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#gcloud">creating and managing projects</a>.</p>
 <p>When you create your project, you can name it anything,
-but try to name it something to do with this course.
-E.g., I am using the name <strong>sysadmin-418</strong>.
+but try to name it something to do with this project.
+E.g., I might use the name <strong>sysadmin-418</strong>.
 <strong>Avoid using spaces when naming your project.</strong></p>
 <p>Then click on the <strong>Create</strong> button,
 and leave the organization field set to <strong>No Organization</strong>.</p>
 <h3 id="google-billing"><a class="header" href="#google-billing">Google Billing</a></h3>
 <p>The second thing to do is to set up
-a billing account for your gcloud project.
-This does mean there is a cost associated
+a billing account for our gcloud project.
+This means there is a cost associated
 with this product, but
-the good news is that our bills by the end of the semester should
-only amount to a couple of dollars, at most.
+the good news is that the cost for the machines we will build
+will be minimal
+(usually about one dollar a month for a minimal machine).
 <strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Follow Step 2</a></strong> to enable
-billing for your new project.
+billing for the new project.
 See also the page on how to
 <strong><a href="https://cloud.google.com/billing/docs/how-to/manage-billing-account">create, modify, or close your self-serve Cloud Billing account</a></strong></p>
 <h3 id="install-the-latest-gcloud-cli-version"><a class="header" href="#install-the-latest-gcloud-cli-version">Install the latest gcloud CLI version</a></h3>
-<p>After you have set up billing,
-the next step is to install gcloud on your local machines. 
+<p>After we have set up billing,
+the next step is to install gcloud on our local machines. 
 The <strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a></strong> page
 provides instructions for different operating systems.</p>
 <p>There are installation instructions
@@ -932,10 +931,12 @@ Then you extract it there using the <code>tar</code> command,
 and once extracted
 you can change to the directory that it
 creates with the <code>cd</code> command.
-For example, if you are downloading the X86_64 version
-of the gcloud CLI, then you would run the following commands:</p>
-<pre><code>mv google-cloud-cli-392.0.0-darwin-x86_64.tar.gz $HOME
-tar -xzf google-cloud-cli-392.0.0-darwin-x86_64.tar.gz
+For example, if you are running macOS and are
+downloading the X86_64 version of the gcloud CLI,
+then open your Terminal.ap and run the following commands:</p>
+<pre><code>cd ~/Downloads
+mv google-cloud-cli-444.0.0-darwin-x86_64.tar.gz $HOME
+tar -xzf google-cloud-cli-444.0.0-darwin-x86_64.tar.gz 
 cd google-cloud-sdk
 </code></pre>
 <p>Modify the above commands, as appropriate,
@@ -945,9 +946,9 @@ of the gcloud CLI.</p>
 <p>Once you have downloaded and installed
 the gcloud CLI program,
 you need to initialize it on your local machine.
-Scroll down on the <a href="https://cloud.google.com/sdk/docs/install-sdk">install page</a>
+Scroll down the install page
 to the section titled
-<strong>Initializing the gcloud CLI</strong>.
+<a href="https://cloud.google.com/sdk/docs/install-sdk#initializing_the"><strong>Initializing the gcloud CLI</strong></a>.
 In your terminal/command prompt,
 run the initialization command,
 per the instructions at the above page:</p>
@@ -1016,21 +1017,22 @@ To do so, follow these steps:</p>
 <p>After the new VM machine has been created,
 we need to connect to it via the command line.
 macOS users will connect to it via their Terminal.app.
-Windows users can connect to it via their command prompt.</p>
-<p>Unlike our past <code>ssh</code> sessions,
-we use a slightly different <code>ssh</code> command
+Windows users can connect to it via their command prompt or use <a href="https://cloud.google.com/compute/docs/connect/standard-ssh#putty-app">PuTTY</a>.</p>
+<p>If you have used <code>ssh</code> before,
+note that we use a slightly different <code>ssh</code> command
 to connect to our VMs.
 The syntax follows this pattern:</p>
 <pre><code>gcloud compute ssh --zone &quot;zone-info&quot; &quot;name-info&quot; --project &quot;project-id&quot;
 </code></pre>
-<p>The values in the double quotes in the above command
-can be located in your Google Cloud console and
+<p>You need to replace the values in the double quotes in the above command
+with the values located in your Google Cloud console and
 in your VM instances section.</p>
 <h2 id="update-our-ubuntu-vm"><a class="header" href="#update-our-ubuntu-vm">Update our Ubuntu VM</a></h2>
-<p>The VM will include a recently updated version of Ubuntu 20.04,
+<p>The above command will connect you to the remote Linux server, or the VM.
+The VM will include a recently updated version of Ubuntu 20.04,
 but it may not be completely updated.
 Thus the first thing we need to do is update our machines.
-On Ubuntu, we'll use the following two commands,
+On Ubuntu, use the following two commands to update your machines,
 which you should run also:</p>
 <pre><code>sudo apt update
 sudo apt -y upgrade
@@ -1038,8 +1040,9 @@ sudo apt -y upgrade
 <p>Then type <code>exit</code> to logout and quit the connection to the remote server.</p>
 <pre><code>exit
 </code></pre>
+<p>Typing <code>exit</code> at the prompt will always close our connection to our remote servers.</p>
 <h2 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h2>
-<p>Lastly, we have installed a pristine version of Ubuntu,
+<p>We have installed a pristine version of Ubuntu,
 but it's likely that we will mess something up 
 as we work on our systems.
 Or it could be that our systems may become compromised
@@ -1050,32 +1053,18 @@ This will allow us to restore our server if something
 goes wrong later.</p>
 <p>To get started:</p>
 <ol>
-<li>
-<p>In the left hand navigation panel, click on <strong>Snapshots</strong>.</p>
-</li>
-<li>
-<p>At the top of the page, click on <strong>Create Snapshot</strong>.</p>
-</li>
-<li>
-<p>Provide a name for your snapshot: e.g., <strong>ubuntu-1</strong>.</p>
-</li>
-<li>
-<p>Provide a description of your snapshot: e.g.,</p>
-<p>This is a new install of Ubuntu 20.04.</p>
-</li>
-<li>
-<p>Choose your <strong>Source disk</strong>.</p>
-</li>
-<li>
-<p>Choose a <strong>Location</strong> to store your snapshot.</p>
+<li>In the left hand navigation panel, click on <strong>Snapshots</strong>.</li>
+<li>At the top of the page, click on <strong>Create Snapshot</strong>.</li>
+<li>Provide a name for your snapshot: e.g., <strong>ubuntu-1</strong>.</li>
+<li>Provide a description of your snapshot: e.g., <strong>This is a new install of Ubuntu 20.04.</strong></li>
+<li>Choose your <strong>Source disk</strong>.</li>
+<li>Choose a <strong>Location</strong> to store your snapshot.
 <ul>
 <li>To avoid extra charges, choose <strong>Regional</strong>.</li>
 <li>From the dropdown box, select the same location (zone-info) your VM has</li>
 </ul>
 </li>
-<li>
-<p>Click on <strong>Create</strong></p>
-</li>
+<li>Click on <strong>Create</strong></li>
 </ol>
 <p><strong><p style="color:red">Please monitor your billing for this to avoid costs
 that you do not want to incur.</p></strong></p>
