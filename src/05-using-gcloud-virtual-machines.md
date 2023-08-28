@@ -35,7 +35,7 @@ create one at [https://www.google.com][google].
 
 ### Google Cloud (gcloud) Project
 
-Next, we need to use gcloud
+In the following, we will use `gcloud`
 to create a Google Cloud project.
 Once you've created that project,
 we can enable billing for that project,
@@ -79,10 +79,70 @@ billing for the new project.
 See also the page on how to
 **[create, modify, or close your self-serve Cloud Billing account][googleBilling]**
 
+### gcloud VM Instance
+
+Log into [Google Cloud Console][gcloudConsole],
+which should take you to the Dashboard page.
+
+Our first goal is to create a **virtual machine (VM)** *instance*.
+As a reminder,
+a VM is basically a virtualized operating system.
+That means instead of installing an operating system
+(like Linux, macOS, Windows, etc) on your physical machine,
+software is used to mimic the process to install
+an operating system on Google's servers. 
+
+Google Cloud offers a number of Linux-based operating systems
+to create VMs.
+We're going to use the Ubuntu operating system
+and specifically the Ubuntu 20.04 LTS version.
+
+> What is Ubuntu?
+> Ubuntu is a Linux distribution.
+> A new version of Ubuntu is released every six months.
+> The 20.04 signifies that this is the April 2020 version.
+> LTS signifies **Long Term Support**.
+> LTS versions are released every two years,
+> and Canonical LTD,
+> the owners of Ubuntu,
+> provide standard support for LTS versions for five years.
+> Thus, Ubuntu 20.04 is supported till April 2025.
+>
+> LTS versions of Ubuntu are more stable.
+> Non-LTS versions of Ubuntu only receive nine months of standard support,
+> and generally use cutting edge technology,
+> which is not always desirable for server operating systems.
+> Each version of Ubuntu has a code name.
+> 20.04 has the code name **Focal Fossa**.
+> You can see a list of versions, code names, release dates,
+> and more on Ubuntu's [Releases][ubuntuReleases] page.
+
+We will create our VM using the Google Cloud dashboard.
+To do so, follow these steps:
+
+- Click the three horizontal bars at the top left of the screen.
+- Hover over the **Compute Engine** link, and then select **VM Instances**.
+- In the window, select the project that you created earlier.
+    - E.g., for me, I used the project name **sysadmin-418**.
+- Next, click on **Create Instance**.
+- Provide a name for your **instance**.
+    - E.g., I chose **fall-2023** (no spaces) 
+- Under the **Series** drop down box, make sure **E2** is selected.
+- Under the **Machine type** drop down box, select **e2-micro (2 vCPU, 1 GB memory)**
+    - This is the lowest cost virtual machine and perfect for our needs.
+- Under **Boot disk**, click on the **Change** button.
+- In the window, select **Ubuntu** from the **Operating system** drop down box.
+- Select **Ubuntu 20.04 LTS x86/64**
+- Leave **Boot disk type** be set to **Balanced persistent disk**
+- Disk size should be set to **10 GB**.
+- Click on the **Select** button.
+- Check the **Allow HTTP Traffic** button
+- Finally, click on the **Create** button to create your VM instance.
+
 ### Install the latest gcloud CLI version 
 
-After setting up billing,
-the next step is to install gcloud on your local machines. 
+The next step is to install gcloud on your local machines.
+This will allow us to connect to remote server using our own terminal applications.
 The **[Install the gcloud CLI][gcloudInstall]** page
 provides instructions for different operating systems.
 
@@ -159,65 +219,6 @@ gcloud init
 
 And continue to follow the instructions in the documentation.
 
-## gcloud VM Instance
-
-Once you've initialized gcloud,
-log into [Google Cloud Console][gcloudConsole],
-which should take you to the Dashboard page.
-
-Our first goal is to create a **virtual machine (VM)** *instance*.
-As a reminder,
-a VM is basically a virtualized operating system.
-That means instead of installing an operating system
-(like Linux, macOS, Windows, etc) on your physical machine,
-software is used to mimic the process to install
-an operating system on Google's servers. 
-
-`gcloud` offers a number of Linux-based operating systems
-to create VMs.
-We're going to use the Ubuntu operating system
-and specifically the Ubuntu 20.04 LTS version.
-
-> What is Ubuntu?
-> Ubuntu is a Linux distribution.
-> A new version of Ubuntu is released every six months.
-> The 20.04 signifies that this is the April 2020 version.
-> LTS signifies **Long Term Support**.
-> LTS versions are released every two years,
-> and Canonical LTD,
-> the owners of Ubuntu,
-> provide standard support for LTS versions for five years.
-> Thus, Ubuntu 20.04 is supported till April 2025.
->
-> LTS versions of Ubuntu are more stable.
-> Non-LTS versions of Ubuntu only receive nine months of standard support,
-> and generally use cutting edge technology,
-> which is not always desirable for server operating systems.
-> Each version of Ubuntu has a code name.
-> 20.04 has the code name **Focal Fossa**.
-> You can see a list of versions, code names, release dates,
-> and more on Ubuntu's [Releases][ubuntuReleases] page.
-
-We will create our VM using the gcloud console.
-To do so, follow these steps:
-
-- Click the **Select from** drop-down list.
-- In the window, select the project that you created earlier.
-- Next, click on **Create a VM**.
-- Provide a name for your **instance**.
-    - E.g., I chose **fall-2023** (no spaces) 
-- Under the **Series** drop down box, make sure **E2** is selected.
-- Under the **Machine type** drop down box, select **e2-micro (2 vCPU, 1 GB memory)**
-    - This is the lowest cost virtual machine and perfect for our needs.
-- Under **Boot disk**, click on the **Change** button.
-- In the window, select **Ubuntu** from the **Operating system** drop down box.
-- Select **Ubuntu 20.04 LTS x86/64**
-- Leave **Boot disk type** be set to **Balanced persistent disk**
-- Disk size should be set to **10 GB**.
-- Click on the **Select** button.
-- Check the **Allow HTTP Traffic** button
-- Finally, click on the **Create** button to create your VM instance.
-
 ## Connect to our VM
 
 After the new VM machine has been created,
@@ -237,6 +238,8 @@ gcloud compute ssh --zone "zone-info" "name-info" --project "project-id"
 You need to replace the values in the double quotes in the above command
 with the values located in your Google Cloud console and
 in your VM instances section.
+
+You can select the **SSH** drop down box to copy the exact ``gcloud`` command to connect to your server.
 
 ## Update our Ubuntu VM
 
@@ -263,7 +266,10 @@ sudo reboot
 > I'm assuming that when we update these machines for the first time after installation,
 > that there will have been a kernel update.
 
-Then type ``exit`` to logout and quit the connection to the remote server.
+If you reboot your server,
+you will automatically be disconnected from your server.
+If you do not need to reboot your server,
+then type ``exit`` to logout and quit the connection to the remote server.
 
 ```
 exit
