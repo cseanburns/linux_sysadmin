@@ -18,37 +18,20 @@ The virtual machine, thus, runs on top of our main OS.
 It's like an app, where the app is a fully functioning
 operating system.
 
-There are other ways to run virtual machines.
-For example, we could use [VirtualBox][virtualbox] to create
-virtual machines with Linux as the virtual operating system.
-VirtualBox is freely available virtualization software,
-and using it lets people
-run Linux as a server
-on our their desktops and laptops without changing
-the underlying OS on those machines
-(e.g., Windows, macOS).
-
-However, even though we virtualize an operating
-system when we run a VM,
-the underlying operating system and CPU architecture
-is still important.
-When Apple, Inc launched their new M1 
-(ARM-based) chip in 2020,
-it created problems for running non ARM-based operating
-systems as virtual machines (i.e., x86_64 chips).
-
-Fortunately, we have other choices in third-party virtualization platforms.
-In this book, we're going to use gcloud (via Google),
-but there are other options available that you 
+In this book, we're going to use `gcloud` (via Google)
+to create and run our virtual machines,
+but there are other options available that you
 can explore on your own.
 
 ## Google Cloud / gcloud
 
 ### Google Account
 
-We need to have a Google account to get started with gcloud.
+To create our virtual machines using `gcloud`,
+we need a Google account.
 I imagine most of you already have a Google account,
-but if not, go ahead and create one at [https://www.google.com][google].
+but if not,
+create one at [https://www.google.com][google].
 
 ### Google Cloud (gcloud) Project
 
@@ -59,7 +42,16 @@ we can enable billing for that project,
 and then install the gcloud software 
 on our local machines.
 
-Follow **Step 1** at the top of the 
+To begin,
+you will need to click on the links to the
+`gcloud` documentation that I've inserted throughout this page,
+and closely follow those instructions closely.
+I help explain the steps
+at the links throughout this page,
+but it is imperative that you **read through the instructions**
+closely.
+
+First, follow **Step 1** at the top of the 
 **[Install the gcloud CLI][gcloudInstall]** page
 to create a new project.
 Also, review the page on
@@ -68,20 +60,20 @@ Also, review the page on
 When you create your project, you can name it anything,
 but try to name it something to do with this project.
 E.g., I might use the name **sysadmin-418**.
-**Avoid using spaces when naming your project.**
+*Avoid using spaces when naming your project.*
 
 Then click on the **Create** button,
 and leave the organization field set to **No Organization**.
 
 ### Google Billing
 
-The second thing to do is to set up
-a billing account for our gcloud project.
+Second, set up a billing account for your gcloud project.
 This means there is a cost associated
 with this product, but
 the good news is that the cost for the machines we will build
 will be minimal
-(usually about one dollar a month for a minimal machine).
+(usually about one dollar a month for a minimal machine),
+since our virtual machines will be minimal.
 **[Follow Step 2][gcloudInstall]** to enable
 billing for the new project.
 See also the page on how to
@@ -89,8 +81,8 @@ See also the page on how to
 
 ### Install the latest gcloud CLI version 
 
-After we have set up billing,
-the next step is to install gcloud on our local machines. 
+After setting up billing,
+the next step is to install gcloud on your local machines. 
 The **[Install the gcloud CLI][gcloudInstall]** page
 provides instructions for different operating systems.
 
@@ -119,9 +111,9 @@ After you have downloaded the gcloud CLI
 for your particular OS and CPU architecture,
 you will need to open a command prompt/terminal
 on your machines to complete the instructions
-the describe how to install the gcloud CLI.
+that describe how to install the gcloud CLI.
 macOS uses the Terminal app,
-which can located using Spotlight.
+which can be located using Spotlight.
 Windows user can use Command.exe,
 which can be located by search also.
 
@@ -144,7 +136,7 @@ tar -xzf google-cloud-cli-444.0.0-darwin-x86_64.tar.gz
 cd google-cloud-sdk
 ```
 
-Modify the above commands, as appropriate,
+Modify the file names in the commands above, as appropriate,
 if you're using the M1 version
 of the gcloud CLI.
 
@@ -157,14 +149,15 @@ Scroll down the install page
 to the section titled
 [**Initializing the gcloud CLI**][ginit].
 In your terminal/command prompt,
-run the initialization command,
-per the instructions at the above page:
+run the initialization command.
+Per the instructions at the above page,
+it should be something like so:
 
 ```
 gcloud init
 ```
 
-And continue to follow the above instructions.
+And continue to follow the instructions in the documentation.
 
 ## gcloud VM Instance
 
@@ -176,14 +169,16 @@ Our first goal is to create a **virtual machine (VM)** *instance*.
 As a reminder,
 a VM is basically a virtualized operating system.
 That means instead of installing an operating system
-(like Linux, macOS, Windows, etc) on a physical machine,
-software is used to mimic the process. 
+(like Linux, macOS, Windows, etc) on your physical machine,
+software is used to mimic the process to install
+an operating system on Google's servers. 
 
-gcloud offers a number of Linux-based operating systems
+`gcloud` offers a number of Linux-based operating systems
 to create VMs.
 We're going to use the Ubuntu operating system
 and specifically the Ubuntu 20.04 LTS version.
 
+> What is Ubuntu?
 > Ubuntu is a Linux distribution.
 > A new version of Ubuntu is released every six months.
 > The 20.04 signifies that this is the April 2020 version.
@@ -192,10 +187,11 @@ and specifically the Ubuntu 20.04 LTS version.
 > and Canonical LTD,
 > the owners of Ubuntu,
 > provide standard support for LTS versions for five years.
+> Thus, Ubuntu 20.04 is supported till April 2025.
 >
-> LTS versions of Ubuntu are also more stable.
+> LTS versions of Ubuntu are more stable.
 > Non-LTS versions of Ubuntu only receive nine months of standard support,
-> and generally apply cutting edge technology,
+> and generally use cutting edge technology,
 > which is not always desirable for server operating systems.
 > Each version of Ubuntu has a code name.
 > 20.04 has the code name **Focal Fossa**.
@@ -209,14 +205,14 @@ To do so, follow these steps:
 - In the window, select the project that you created earlier.
 - Next, click on **Create a VM**.
 - Provide a name for your **instance**.
-    - E.g., I chose **fall-2022** (no spaces) 
-- Under the **Series** dropdown box, make sure **E2** is selected.
-- Under the **Machine type** dropdown box, select **e2-micro (2 vCPU, 1 GB memory)**
+    - E.g., I chose **fall-2023** (no spaces) 
+- Under the **Series** drop down box, make sure **E2** is selected.
+- Under the **Machine type** drop down box, select **e2-micro (2 vCPU, 1 GB memory)**
     - This is the lowest cost virtual machine and perfect for our needs.
 - Under **Boot disk**, click on the **Change** button.
-- In the window, select **Ubuntu** from the **Operating system** dropdown box.
+- In the window, select **Ubuntu** from the **Operating system** drop down box.
 - Select **Ubuntu 20.04 LTS x86/64**
-- Leave **Boot disk type** be set to **Balanced persistant disk**
+- Leave **Boot disk type** be set to **Balanced persistent disk**
 - Disk size should be set to **10 GB**.
 - Click on the **Select** button.
 - Check the **Allow HTTP Traffic** button
@@ -225,7 +221,7 @@ To do so, follow these steps:
 ## Connect to our VM
 
 After the new VM machine has been created,
-we need to connect to it via the command line.
+you connect to it via the command line.
 macOS users will connect to it via their Terminal.app.
 Windows users can connect to it via their command prompt or use [PuTTY][putty].
 
@@ -256,6 +252,17 @@ sudo apt update
 sudo apt -y upgrade
 ```
 
+Then reboot the server with the following command:
+
+```
+sudo reboot
+```
+
+> You do not always have to reboot when updating your server.
+> It is only necessary when there has been a kernel update.
+> I'm assuming that when we update these machines for the first time after installation,
+> that there will have been a kernel update.
+
 Then type ``exit`` to logout and quit the connection to the remote server.
 
 ```
@@ -266,14 +273,14 @@ Typing ``exit`` at the prompt will always close our connection to our remote ser
 
 ## Snapshots
 
-We have installed a pristine version of Ubuntu,
-but it's likely that we will mess something up 
-as we work on our systems.
-Or it could be that our systems may become compromised
-at some point.
-Therefore, we want to create a snapshot of our newly
+You have installed a pristine version of Ubuntu,
+but mistakes will happen while learning how to use your machines,
+and it's therefore important to backup this pristine version of the operating system.
+(Or it could be that our systems may become compromised
+at some point.)
+Therefore, you want to create a snapshot of the newly
 installed Ubuntu server.
-This will allow us to restore our server if something
+This will allow you to restore the server if something
 goes wrong later.
 
 To get started:
@@ -285,7 +292,7 @@ To get started:
 5. Choose your **Source disk**.
 6. Choose a **Location** to store your snapshot.
     - To avoid extra charges, choose **Regional**.
-    - From the dropdown box, select the same location (zone-info) your VM has
+    - From the drop down box, select the same location (zone-info) your VM has
 7. Click on **Create**
 
 **<p style="color:red">Please monitor your billing for this to avoid costs
@@ -298,13 +305,12 @@ You have just completed your first installation of a Linux server.
 
 To summarize,
 in this section,
-you learned about and created a VM with gcloud.
+you learned about and created a virtual machine (VM) with `gcloud`.
 This is a lot! 
-After this course is completed,
+By the end of this book,
 you will be able to fire up a virtual machine
 on short notice and deploy websites and more.
 
-[virtualbox]:https://www.virtualbox.org/
 [google]:https://www.google.com
 [googleBilling]:https://cloud.google.com/billing/docs/how-to/manage-billing-account
 [gcloudInstall]:https://cloud.google.com/sdk/docs/install-sdk
