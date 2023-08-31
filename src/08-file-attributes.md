@@ -230,9 +230,10 @@ represented by ``-rwxrwxrwx``.
 If I bracket the sets (for demonstration purposes only),
 they look like this:
 
-```
--[rwx][rwx][rwx]
-```
+| Owner | Group | Other/World |
+| ----- | ----- | ----------- |
+| rwx-  | rwx-  | rwx- |
+| 4210  | 4210  | 4210 |
 
 The first set describes the permissions for the owner.
 The second set describes the permissions for the group.
