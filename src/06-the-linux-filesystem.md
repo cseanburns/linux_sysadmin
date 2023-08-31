@@ -14,8 +14,8 @@ In this demo, we will cover the:
 > environment.
 
 Throughout this demonstration,
-I encourage you to ``gcloud compute ssh`` into
-our remote server and
+I encourage you to connect to your remote server using the
+``gcloud compute ssh`` command and
 follow along with the commands that I use.
 See
 [Section 2.1](05-using-gcloud-virtual-machines.md#connect-to-our-vm)
@@ -33,7 +33,7 @@ are [stored and retrieved][filesystem]
 on a device like a hard drive, USB drive, etc.
 For example, macOS uses the [Apple File System (APFS)][apfs] by default,
 and Windows uses the [New Technology File System (NTFS)][ntfs].
-Linux and other unix-like operating systems use a variety of filesystems, but
+Linux and other Unix-like operating systems use a variety of filesystems, but
 presently, the two major ones are **ext4** and **btrfs**.
 The former is the default filesystem on distributions
 like [Debian][debian] and [Ubuntu][ubuntu];
@@ -45,7 +45,9 @@ filesystems under this concept.
 A **filesystem** might also be used to refer
 to the **directory structure** or
 [directory tree][directorytree] of a system.
-This concept is related to the prior concept
+In graphical user interface parlance,
+this is simply how the folders are your disk are organized.
+This concept of a filesystem is related to the prior concept
 of a filesystem, but
 it's used here to refer to the location of
 files and directories on a system.
@@ -59,10 +61,11 @@ Additional drives
 will be assigned their own letters
 (**A:**, **B:**, **D:**, etc.).
 [macOS adheres to a tree like filesystem][macosdirtree]
-like Linux and other unix-like operating systems.
-(This is because macOS is UNIX.)
-In these operating systems, we have a
-top-level **root** directory
+like Linux, UNIX, and other Unix-like operating systems, and
+[this is because macOS is a registered UNIX&#174; OS][macosunix].
+
+In Linux and Unix-like OSes,
+we have a top-level **root** directory
 identified by a single forward slash  **/**,
 and then subdirectories under that root directory.
 Additional drives
@@ -75,6 +78,7 @@ that Linux distributions use along with an
 explanation for the major bottom level directories.
 In this section, we will learn
 about this type of filesystem.
+
 
 On Linux, we can visualize the
 filesystem with the ``tree`` command.
@@ -328,3 +332,4 @@ then the relative path would simply be:
 [printing]:https://www.gnu.org/software/coreutils/manual/coreutils.html#Printing-text
 [directorytree]:https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html
 [macosdirtree]:https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
+[macosunix]:https://www.opengroup.org/openbrand/register/

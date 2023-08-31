@@ -74,7 +74,7 @@ The remaining permissions can be broken down as:
 
 - rw- (read and write only permissions for the Owner)
 - rw- (read and write only permissions for the Group)
-- r-- (read-only permissions for the World)
+- r-- (read-only permissions for the other, or World)
 
 We read the output as such
 (dashes, other than the initial one, signify no permissions):
@@ -83,7 +83,7 @@ We read the output as such
   but not e(x)ecute permissions (``rw-``).
 - Group **sean** is the Group owner and has (r)ead and (w)rite permissions on
   the file but not e(x)ecute permissions (``rw-``).
-- The **World** can (r)ead the file but cannot (w)rite to the file nor
+- The **Other/World** can (r)ead the file but cannot (w)rite to the file nor
   e(x)ecute the file (`r--`).
 
 > The word **write** is a classical computing term
@@ -92,9 +92,9 @@ We read the output as such
 > but remember that they are basically equivalent terms.
 
 Since this is an HTML page for a website,
-the **World** ownership allows people to view (read) the file but not write
+the **Other/World** ownership allows people to view (read) the file but not write
 (save) to it nor execute (run) it.
-Any webpage you view on the internet at least has World mode set to read.
+Any webpage you view on the internet at least has Other/World mode set to read.
 
 Let's take a look at another file.
 In our ``/bin`` directory, we can see a listing for this program
@@ -132,7 +132,7 @@ We read the output as such:
 - User **root** is the Owner and has (r)ead, (w)rite, and e(x)ecute (``rwx``) permissions on the file.
 - Group **root** is the Group owner and has (r)ead and e(x)ecute permissions
   but not (w)rite permissions (``r-x``)
-- The **World** has (r)ead and e(x)ecute permissions but not (w)rite (``r-x``). This
+- The **Other/World** has (r)ead and e(x)ecute permissions but not (w)rite (``r-x``). This
   permissions allows other users (like you and me) to use the ``zip``
   program.
 
@@ -172,7 +172,7 @@ This is a little different from the previous examples, but let's parse it:
     as a directory. Directories in Linux are simply special types of files.
 - User **sean** has read, write, and execute (``rwx``) permissions.
 - Group **sean** has execute (``--x``) permissions only.
-- The **World** has no permissions (``---``).
+- The **Other/World** has no permissions (``---``).
 - **./** signifies the current directory, which happens to be my home
   directory, since I ran that command at the ``/home/sean`` path.
 
@@ -187,11 +187,11 @@ That is, it's not a program or software.
 This is so that the owner and the group can access that directory
 using, for example, the ``cd`` (change directory) command.
 If the directory was not executable,
-like it's not for the **World** (``---``),
+like it's not for the **Other/World** (``---``),
 then it would not be accessible
 with the ``cd`` command,
 or any other command.
-In this case, the **World**
+In this case, the **Other/World**
 (users who are not me)
 cannot access my home directory.
 
@@ -236,14 +236,14 @@ they look like this:
 
 The first set describes the permissions for the owner.
 The second set describes the permissions for the group.
-The third set describes the permissions for the World. 
+The third set describes the permissions for the Other/World. 
 
 We use the ``chmod`` command and the octal values to change
 a file or directory's permissions.
 For each set, we add up the octal values.
 For example, to make a file read (4), write (2), and executable (1)
 for the owner only,
-and zero out the permissions for the group and World,
+and zero out the permissions for the group and Other/World,
 we use the ``chmod`` command like so:
 
 ```
@@ -252,7 +252,7 @@ chmod 700 paper.txt
 
 We use 7 because ``4+2+1=7``, and
 we use two zeroes in the second two places
-since we're removing permissions for group and World.
+since we're removing permissions for group and Other/World.
 
 If we want to make the file read, write, and executable by
 the owner, the group, and the world, then we repeat this for each set:
@@ -263,14 +263,14 @@ chmod 777 paper.txt
 
 More commonly, we might want to restrict ownership.
 Here we enable ``rw-`` for the owner,
-and ``r--`` for the group and the World:
+and ``r--`` for the group and the Other/World:
 
 ```
 chmod 644 paper.txt
 ```
 
 Because ``4+2=6`` for owner,
-and ``4`` is read only for group and World, respectively.
+and ``4`` is read only for group and Other/World, respectively.
 
 ### Changing File Ownership
 
