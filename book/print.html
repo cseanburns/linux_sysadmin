@@ -1868,8 +1868,11 @@ are assigned the following <a href="https://docs.oracle.com/cd/E19504-01/802-575
 represented by <code>-rwxrwxrwx</code>.
 If I bracket the sets (for demonstration purposes only),
 they look like this:</p>
-<pre><code>-[rwx][rwx][rwx]
-</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Owner</th><th>Group</th><th>Other/World</th></tr></thead><tbody>
+<tr><td>rwx-</td><td>rwx-</td><td>rwx-</td></tr>
+<tr><td>4210</td><td>4210</td><td>4210</td></tr>
+</tbody></table>
+</div>
 <p>The first set describes the permissions for the owner.
 The second set describes the permissions for the group.
 The third set describes the permissions for the Other/World. </p>
