@@ -211,7 +211,7 @@ The remaining permissions can be broken down as:</p>
 <ul>
 <li>rw- (read and write only permissions for the Owner)</li>
 <li>rw- (read and write only permissions for the Group)</li>
-<li>r-- (read-only permissions for the World)</li>
+<li>r-- (read-only permissions for the other, or World)</li>
 </ul>
 <p>We read the output as such
 (dashes, other than the initial one, signify no permissions):</p>
@@ -220,7 +220,7 @@ The remaining permissions can be broken down as:</p>
 but not e(x)ecute permissions (<code>rw-</code>).</li>
 <li>Group <strong>sean</strong> is the Group owner and has (r)ead and (w)rite permissions on
 the file but not e(x)ecute permissions (<code>rw-</code>).</li>
-<li>The <strong>World</strong> can (r)ead the file but cannot (w)rite to the file nor
+<li>The <strong>Other/World</strong> can (r)ead the file but cannot (w)rite to the file nor
 e(x)ecute the file (<code>r--</code>).</li>
 </ul>
 <blockquote>
@@ -230,9 +230,9 @@ Today we use the term <strong>save</strong> instead of <strong>write</strong>,
 but remember that they are basically equivalent terms.</p>
 </blockquote>
 <p>Since this is an HTML page for a website,
-the <strong>World</strong> ownership allows people to view (read) the file but not write
+the <strong>Other/World</strong> ownership allows people to view (read) the file but not write
 (save) to it nor execute (run) it.
-Any webpage you view on the internet at least has World mode set to read.</p>
+Any webpage you view on the internet at least has Other/World mode set to read.</p>
 <p>Let's take a look at another file.
 In our <code>/bin</code> directory, we can see a listing for this program
 (note that I specify the absolute path of the file named <strong>bin</strong>):</p>
@@ -265,7 +265,7 @@ this user also owns most of the system files.</p>
 <li>User <strong>root</strong> is the Owner and has (r)ead, (w)rite, and e(x)ecute (<code>rwx</code>) permissions on the file.</li>
 <li>Group <strong>root</strong> is the Group owner and has (r)ead and e(x)ecute permissions
 but not (w)rite permissions (<code>r-x</code>)</li>
-<li>The <strong>World</strong> has (r)ead and e(x)ecute permissions but not (w)rite (<code>r-x</code>). This
+<li>The <strong>Other/World</strong> has (r)ead and e(x)ecute permissions but not (w)rite (<code>r-x</code>). This
 permissions allows other users (like you and me) to use the <code>zip</code>
 program.</li>
 </ul>
@@ -299,7 +299,7 @@ which will show the permissions for my <code>/home/sean</code> directory:</p>
 as a directory. Directories in Linux are simply special types of files.</li>
 <li>User <strong>sean</strong> has read, write, and execute (<code>rwx</code>) permissions.</li>
 <li>Group <strong>sean</strong> has execute (<code>--x</code>) permissions only.</li>
-<li>The <strong>World</strong> has no permissions (<code>---</code>).</li>
+<li>The <strong>Other/World</strong> has no permissions (<code>---</code>).</li>
 <li><strong>./</strong> signifies the current directory, which happens to be my home
 directory, since I ran that command at the <code>/home/sean</code> path.</li>
 </ul>
@@ -313,11 +313,11 @@ That is, it's not a program or software.
 This is so that the owner and the group can access that directory
 using, for example, the <code>cd</code> (change directory) command.
 If the directory was not executable,
-like it's not for the <strong>World</strong> (<code>---</code>),
+like it's not for the <strong>Other/World</strong> (<code>---</code>),
 then it would not be accessible
 with the <code>cd</code> command,
 or any other command.
-In this case, the <strong>World</strong>
+In this case, the <strong>Other/World</strong>
 (users who are not me)
 cannot access my home directory.</p>
 <h2 id="changing-file-permissions-and-ownership"><a class="header" href="#changing-file-permissions-and-ownership">Changing File Permissions and Ownership</a></h2>
@@ -355,30 +355,30 @@ they look like this:</p>
 </code></pre>
 <p>The first set describes the permissions for the owner.
 The second set describes the permissions for the group.
-The third set describes the permissions for the World. </p>
+The third set describes the permissions for the Other/World. </p>
 <p>We use the <code>chmod</code> command and the octal values to change
 a file or directory's permissions.
 For each set, we add up the octal values.
 For example, to make a file read (4), write (2), and executable (1)
 for the owner only,
-and zero out the permissions for the group and World,
+and zero out the permissions for the group and Other/World,
 we use the <code>chmod</code> command like so:</p>
 <pre><code>chmod 700 paper.txt
 </code></pre>
 <p>We use 7 because <code>4+2+1=7</code>, and
 we use two zeroes in the second two places
-since we're removing permissions for group and World.</p>
+since we're removing permissions for group and Other/World.</p>
 <p>If we want to make the file read, write, and executable by
 the owner, the group, and the world, then we repeat this for each set:</p>
 <pre><code>chmod 777 paper.txt
 </code></pre>
 <p>More commonly, we might want to restrict ownership.
 Here we enable <code>rw-</code> for the owner,
-and <code>r--</code> for the group and the World:</p>
+and <code>r--</code> for the group and the Other/World:</p>
 <pre><code>chmod 644 paper.txt
 </code></pre>
 <p>Because <code>4+2=6</code> for owner,
-and <code>4</code> is read only for group and World, respectively.</p>
+and <code>4</code> is read only for group and Other/World, respectively.</p>
 <h3 id="changing-file-ownership"><a class="header" href="#changing-file-ownership">Changing File Ownership</a></h3>
 <p>In order to change the ownership of a file,
 we use the <code>chown</code> command followed by

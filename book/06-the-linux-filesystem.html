@@ -163,8 +163,8 @@ the term <strong>folders</strong> when referring to a graphical
 environment.</p>
 </blockquote>
 <p>Throughout this demonstration,
-I encourage you to <code>gcloud compute ssh</code> into
-our remote server and
+I encourage you to connect to your remote server using the
+<code>gcloud compute ssh</code> command and
 follow along with the commands that I use.
 See
 <a href="05-using-gcloud-virtual-machines.html#connect-to-our-vm">Section 2.1</a>
@@ -179,7 +179,7 @@ are <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
 on a device like a hard drive, USB drive, etc.
 For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default,
 and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>.
-Linux and other unix-like operating systems use a variety of filesystems, but
+Linux and other Unix-like operating systems use a variety of filesystems, but
 presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
 The former is the default filesystem on distributions
 like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
@@ -190,7 +190,9 @@ filesystems under this concept.</p>
 <p>A <strong>filesystem</strong> might also be used to refer
 to the <strong>directory structure</strong> or
 <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html">directory tree</a> of a system.
-This concept is related to the prior concept
+In graphical user interface parlance,
+this is simply how the folders are your disk are organized.
+This concept of a filesystem is related to the prior concept
 of a filesystem, but
 it's used here to refer to the location of
 files and directories on a system.
@@ -204,10 +206,10 @@ Additional drives
 will be assigned their own letters
 (<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
 <a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html">macOS adheres to a tree like filesystem</a>
-like Linux and other unix-like operating systems.
-(This is because macOS is UNIX.)
-In these operating systems, we have a
-top-level <strong>root</strong> directory
+like Linux, UNIX, and other Unix-like operating systems, and
+<a href="https://www.opengroup.org/openbrand/register/">this is because macOS is a registered UNIX® OS</a>.</p>
+<p>In Linux and Unix-like OSes,
+we have a top-level <strong>root</strong> directory
 identified by a single forward slash  <strong>/</strong>,
 and then subdirectories under that root directory.
 Additional drives
