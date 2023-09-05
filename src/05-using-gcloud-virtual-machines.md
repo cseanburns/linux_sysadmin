@@ -190,8 +190,7 @@ downloading the X86_64 version of the gcloud CLI,
 then open your Terminal.ap and run the following commands:
 
 ```
-cd ~/Downloads
-mv google-cloud-cli-444.0.0-darwin-x86_64.tar.gz $HOME
+mv ~/Downloads/google-cloud-cli-444.0.0-darwin-x86_64.tar.gz $HOME
 tar -xzf google-cloud-cli-444.0.0-darwin-x86_64.tar.gz 
 cd google-cloud-sdk
 ```
