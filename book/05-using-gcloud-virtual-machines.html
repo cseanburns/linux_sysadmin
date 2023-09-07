@@ -331,6 +331,35 @@ cd google-cloud-sdk
 <p>Modify the file names in the commands above, as appropriate,
 if you're using the M1 version
 of the gcloud CLI.</p>
+<h4 id="macos-notes"><a class="header" href="#macos-notes">macOS notes</a></h4>
+<p><strong>macOS</strong> users may need to complete some setup work
+before installing Google Cloud.
+First, open your Terminal.app and run the following code:</p>
+<pre><code>xcode-select --install
+</code></pre>
+<p>Once the Xcode developer tools are installed,
+you need to install the macOS Homebrew package manager.
+To do so,
+follow the instructions here:</p>
+<p><a href="https://brew.sh/">Homebrew</a></p>
+<p>After Homebrew is installed
+use the <code>brew</code> command to install
+<a href="https://github.com/pyenv/pyenv">pyenv</a>.</p>
+<pre><code>brew install pyenv
+</code></pre>
+<p>And then use <code>pyenv</code> to install Python:</p>
+<pre><code>pyenv install PYTHON_VERSION
+</code></pre>
+<p>For example,
+to install the <a href="https://www.python.org/">latest release of Python</a> (August 2023):</p>
+<pre><code>penv install 3.11
+</code></pre>
+<p>Finally, you can install the Google Cloud application
+using the steps outlined above, or
+you can use the steps outlined in the
+<a href="https://cloud.google.com/sdk/docs/downloads-interactive#linux-mac">Google Cloud Interactive installation</a>.</p>
+<p>See also:</p>
+<p><a href="https://cloud.google.com/python/docs/setup">Setting up a Python development environment</a></p>
 <h3 id="initializing-the-gcloud-cli"><a class="header" href="#initializing-the-gcloud-cli">Initializing the gcloud CLI</a></h3>
 <p>Once you have downloaded and installed
 the gcloud CLI program,
