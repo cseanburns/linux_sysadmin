@@ -161,7 +161,7 @@ like the Tab character or a colon.)
 **Command:**
 
 ```
-cut -d"," -f2 operating-system.csv
+cut -d"," -f2 operating-systems.csv
 ```
 
 **Output:**
@@ -183,7 +183,7 @@ I select field (or column) three to get the release year:
 **Command:**
 
 ```
-cut -d"," -f3 operating-system.csv
+cut -d"," -f3 operating-systems.csv
 ```
 
 **Output:**
@@ -220,7 +220,7 @@ because the ``uniq`` command removed the duplicate:
 **Command:**
 
 ```
-cut -d"," -f3 operating-system.csv | sort | uniq > os-years.csv
+cut -d"," -f3 operating-systems.csv | sort | uniq > os-years.csv
 ```
 
 **Output:**
@@ -282,7 +282,7 @@ In this case, we need the tail command:
 **Command:**
 
 ```
-tail -n +2 operating-system-csv | cut -d"," -f2 | sort | uniq > license-data.csv
+tail -n +2 operating-systems.csv | cut -d"," -f2 | sort | uniq > license-data.csv
 cat license-data.csv
 ```
 

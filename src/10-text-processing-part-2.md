@@ -551,7 +551,7 @@ which means that I would edit the file **in-place**
 **Command:**
 
 ```
-sed -i '1d' operating-system.csv
+sed -i '1d' operating-systems.csv
 ```
 
 To refer to line **ranges**,
