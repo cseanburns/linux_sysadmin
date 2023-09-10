@@ -2157,7 +2157,7 @@ field two.
 (A CSV file may use other characters as the separator character,
 like the Tab character or a colon.)</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d&quot;,&quot; -f2 operating-system.csv
+<pre><code>cut -d&quot;,&quot; -f2 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code> Proprietary
@@ -2172,7 +2172,7 @@ like the Tab character or a colon.)</p>
 In the next example,
 I select field (or column) three to get the release year:</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d&quot;,&quot; -f3 operating-system.csv
+<pre><code>cut -d&quot;,&quot; -f3 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code> 2009
@@ -2202,7 +2202,7 @@ Since the year <strong>1993</strong> appears twice in the original file,
 it only appears once in the output
 because the <code>uniq</code> command removed the duplicate:</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d&quot;,&quot; -f3 operating-system.csv | sort | uniq &gt; os-years.csv
+<pre><code>cut -d&quot;,&quot; -f3 operating-systems.csv | sort | uniq &gt; os-years.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>cat os-years.csv
@@ -2251,7 +2251,7 @@ Say we want the license field data,
 but we need to remove that first line.
 In this case, we need the tail command:</p>
 <p><strong>Command:</strong></p>
-<pre><code>tail -n +2 operating-system-csv | cut -d&quot;,&quot; -f2 | sort | uniq &gt; license-data.csv
+<pre><code>tail -n +2 operating-systems.csv | cut -d&quot;,&quot; -f2 | sort | uniq &gt; license-data.csv
 cat license-data.csv
 </code></pre>
 <p><strong>Output:</strong></p>
@@ -2692,7 +2692,7 @@ then I would use the <code>-i</code> option,
 which means that I would edit the file <strong>in-place</strong>
 (see <code>man sed</code>):</p>
 <p><strong>Command:</strong></p>
-<pre><code>sed -i '1d' operating-system.csv
+<pre><code>sed -i '1d' operating-systems.csv
 </code></pre>
 <p>To refer to line <strong>ranges</strong>,
 I add a comma between <strong>addresses</strong>.
