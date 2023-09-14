@@ -176,12 +176,14 @@ From ``man grep`` on **bracket expressions**:
 
 > A  bracket  expression  is  a  list  of  characters  enclosed  by  [ and ].
 > It matches any single character in that list.  If the first character of the
-> list is the caret ^ then it matches any character not in the list ... For
+> list is the caret ^ then it matches any character not in the list. For
 > example, the regular expression [0123456789] matches any single digit.
+
+The regular expression [^0123456789] matches the inverse.
 
 > Within a bracket expression, a range expression consists of two characters
 > separated by a hyphen. It matches any single character that sorts between the
-> two characters
+> two characters.
 
 To see how this works,
 let's search the **cities.csv** file
