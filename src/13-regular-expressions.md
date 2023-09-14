@@ -179,7 +179,7 @@ From ``man grep`` on **bracket expressions**:
 > list is the caret ^ then it matches any character not in the list. For
 > example, the regular expression [0123456789] matches any single digit.
 
-The regular expression [^0123456789] matches the inverse.
+The regular expression \[^0123456789] matches the inverse.
 
 > Within a bracket expression, a range expression consists of two characters
 > separated by a hyphen. It matches any single character that sorts between the
