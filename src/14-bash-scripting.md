@@ -23,7 +23,7 @@ an equal sign,
 and then the value of the variable within double quotes.
 Do not insert spaces.
 In the following code snippet,
-which can be entered on the commandine,
+which can be entered on the commandline,
 I create a variable named ``name``
 and assign it the value ``Sean``.
 I create another variable named ``backup`` 
@@ -141,13 +141,20 @@ cd test && pwd || echo "no such directory"
 
 When we start to write scripts,
 the first thing we add is a [shebang][shebang] at line one.
-We can do so a couple of ways:
+The {she,hash}bang tells the shell what program needs to run.
+We can do declare it a couple of ways.
+First, we can use the path to `env`,
+which runs the program in a modified environment that is named after `env`.
+In the following {she,hash}bank,
+we declare that modified environment to be the `bash` shell:
 
 ```
-##!/usr/bin/env bash
+#!/usr/bin/env bash
 ```
 
-The first one should be more portable, but alternatively,
+> If we were writing a Python script, then we could declare it to be: `#!/usr/bin/env python3`.
+
+The above is more portable, but alternatively,
 you could put the direct path to Bash:
 
 ```
@@ -156,9 +163,16 @@ you could put the direct path to Bash:
 
 ## Looping
 
-There are several looping methods Bash,
-including: ``for``, ``while``, ``until``, and ``select``.
-The ``for`` loop is often very useful. 
+Looping is a common way to repeat an instruction
+until some specified condition is met.
+There are several looping methods Bash that include:
+: ``for``, ``while``, ``until``, and ``select``.
+The ``for`` loop is often very useful.
+In the following toy looping example,
+we instruct `bash` to assign the letter **i**
+to the sequence **1,2,3,4,5**,
+and each time it assigns **i** to those numbers,
+it `echo`s them to standard output:
 
 ```
 for i in {1..5} ; do
@@ -166,22 +180,38 @@ for i in {1..5} ; do
 done
 ```
 
-With that, we can create a rudimentary timer:
+> Note that I take advantage of brace expansion in the above for loop.
+
+Using the above `for` loop,
+we can create a rudimentary timer by
+calling the `sleep` command to pause
+after each count:
 
 ```
-for i in {1..5} ; do
+for i in {5..1} ; do
   echo "${i}" && sleep 1
 done
 ```
 
-We can loop through our **seasons** variable:
+> Note that I take advantage of brace expansion again, but this time
+> reversing the ordering, as well as conditional execution.
+
+We can loop through the variable arrays, too.
+In the following `for` loop,
+I loop through the **seasons** variable first introduced above:
 
 ```
+#!/usr/bin/env bash
+
 seasons=(winter spring summer fall)
-for i in ${seasons[@]} ; do
-  echo "I hope you have a nice ${i}"
+for i in "${seasons[@]}" ; do
+  echo "I hope you have a nice ${i}."
 done
 ```
+
+> Note that I added the {she,hash}bang in the above example. I do this to make
+> it clear that this is the kind of for loop that I would want to write in a
+> text editor.
 
 ## Testing
 
@@ -227,10 +257,15 @@ if [[ "$HOME" = "$PWD" ]] ; then
  echo "You are home."
 else
  echo "You are not home, but I will take you there."
- cd "$HOME"
+ cd "$HOME" || exit
+ echo "You are now $PWD."
  pwd
 fi
 ```
+
+> The line `cd "$HOME" || exit` means change to the home directory, but if that
+> fails, then exit the script. This is useful in case the `cd` command were to
+> fail for some reason.
 
 We can test file conditions.
 Let's first create a file called **paper.txt** and
@@ -262,6 +297,34 @@ else
   printf "\nThere is no class today."
 fi
 ```
+
+Finally, you can check your shell scripts using the
+`shellcheck` shell script analysis tool.
+First you will need to install it:
+
+```
+sudo apt -y install shellchech
+```
+
+Then use it on shell script files you create.
+For example,
+let's say I have a script in a file named **backup.sh**,
+I can use the `shellcheck` command to find any errors:
+
+```
+shellcheck backup.sh
+```
+
+If there are errors,
+`shellcheck` will tell you what they are and
+provide a link to documentation on the error.
+
+If you become seriously interested in `bash` scripting,
+then you should check out the various style guides that exist.
+For example, see the
+[Shell Style Guide][shellstyle]
+that was authored by coders at Google.
+
 ## Resources
 
 I encourage you to explore
@@ -298,9 +361,10 @@ So keep practicing.
 [bashshellcheck]:https://www.shellcheck.net/
 [commandsub]:https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html
 [curlies]:https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/
-[braceexp]:https://wiki.bash-hackers.org/syntax/expansion/brace
+[braceexp]:https://www.linuxjournal.com/content/bash-brace-expansion
 [shebang]:https://en.wikipedia.org/wiki/Shebang_(Unix)
 [condexpr]:https://ss64.com/bash/syntax-execute.html
 [parameterexp]:https://devhints.io/bash#parameter-expansion
 [arrays]:https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html
 [introtobash]:https://cs.lmu.edu/~ray/notes/bash/
+[shellstyle]:https://google.github.io/styleguide/shellguide.html
