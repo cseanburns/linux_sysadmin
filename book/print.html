@@ -4539,7 +4539,7 @@ an equal sign,
 and then the value of the variable within double quotes.
 Do not insert spaces.
 In the following code snippet,
-which can be entered on the commandine,
+which can be entered on the commandline,
 I create a variable named <code>name</code>
 and assign it the value <code>Sean</code>.
 I create another variable named <code>backup</code> 
@@ -4570,7 +4570,7 @@ like <a href="https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html">ar
 See:</p>
 <ul>
 <li><a href="https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/">How to use curly braces in Bash</a></li>
-<li><a href="https://wiki.bash-hackers.org/syntax/expansion/brace">Brace Expansion</a></li>
+<li><a href="https://www.linuxjournal.com/content/bash-brace-expansion">Brace Expansion</a></li>
 </ul>
 <p>For example, let's look at basic <strong>brace expansion</strong>,
 which can be used to generate arbitrary strings:</p>
@@ -4626,32 +4626,66 @@ cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
 <h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
 <p>When we start to write scripts,
 the first thing we add is a <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> at line one.
-We can do so a couple of ways:</p>
-<pre><code>##!/usr/bin/env bash
+The {she,hash}bang tells the shell what program needs to run.
+We can do declare it a couple of ways.
+First, we can use the path to <code>env</code>,
+which runs the program in a modified environment that is named after <code>env</code>.
+In the following {she,hash}bank,
+we declare that modified environment to be the <code>bash</code> shell:</p>
+<pre><code>#!/usr/bin/env bash
 </code></pre>
-<p>The first one should be more portable, but alternatively,
+<blockquote>
+<p>If we were writing a Python script, then we could declare it to be: <code>#!/usr/bin/env python3</code>.</p>
+</blockquote>
+<p>The above is more portable, but alternatively,
 you could put the direct path to Bash:</p>
 <pre><code>#!/usr/bin/bash
 </code></pre>
 <h2 id="looping"><a class="header" href="#looping">Looping</a></h2>
-<p>There are several looping methods Bash,
-including: <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
-The <code>for</code> loop is often very useful. </p>
+<p>Looping is a common way to repeat an instruction
+until some specified condition is met.
+There are several looping methods Bash that include:
+: <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
+The <code>for</code> loop is often very useful.
+In the following toy looping example,
+we instruct <code>bash</code> to assign the letter <strong>i</strong>
+to the sequence <strong>1,2,3,4,5</strong>,
+and each time it assigns <strong>i</strong> to those numbers,
+it <code>echo</code>s them to standard output:</p>
 <pre><code>for i in {1..5} ; do
   echo &quot;${i}&quot;
 done
 </code></pre>
-<p>With that, we can create a rudimentary timer:</p>
-<pre><code>for i in {1..5} ; do
+<blockquote>
+<p>Note that I take advantage of brace expansion in the above for loop.</p>
+</blockquote>
+<p>Using the above <code>for</code> loop,
+we can create a rudimentary timer by
+calling the <code>sleep</code> command to pause
+after each count:</p>
+<pre><code>for i in {5..1} ; do
   echo &quot;${i}&quot; &amp;&amp; sleep 1
 done
 </code></pre>
-<p>We can loop through our <strong>seasons</strong> variable:</p>
-<pre><code>seasons=(winter spring summer fall)
-for i in ${seasons[@]} ; do
-  echo &quot;I hope you have a nice ${i}&quot;
+<blockquote>
+<p>Note that I take advantage of brace expansion again, but this time
+reversing the ordering, as well as conditional execution.</p>
+</blockquote>
+<p>We can loop through the variable arrays, too.
+In the following <code>for</code> loop,
+I loop through the <strong>seasons</strong> variable first introduced above:</p>
+<pre><code>#!/usr/bin/env bash
+
+seasons=(winter spring summer fall)
+for i in &quot;${seasons[@]}&quot; ; do
+  echo &quot;I hope you have a nice ${i}.&quot;
 done
 </code></pre>
+<blockquote>
+<p>Note that I added the {she,hash}bang in the above example. I do this to make
+it clear that this is the kind of for loop that I would want to write in a
+text editor.</p>
+</blockquote>
 <h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
 <p>Sometimes we will want to test certain conditions.
 There are two parts to this,
@@ -4684,10 +4718,16 @@ fi
  echo &quot;You are home.&quot;
 else
  echo &quot;You are not home, but I will take you there.&quot;
- cd &quot;$HOME&quot;
+ cd &quot;$HOME&quot; || exit
+ echo &quot;You are now $PWD.&quot;
  pwd
 fi
 </code></pre>
+<blockquote>
+<p>The line <code>cd &quot;$HOME&quot; || exit</code> means change to the home directory, but if that
+fails, then exit the script. This is useful in case the <code>cd</code> command were to
+fail for some reason.</p>
+</blockquote>
 <p>We can test file conditions.
 Let's first create a file called <strong>paper.txt</strong> and
 a file called <strong>paper.bak</strong>.
@@ -4713,6 +4753,25 @@ else
   printf &quot;\nThere is no class today.&quot;
 fi
 </code></pre>
+<p>Finally, you can check your shell scripts using the
+<code>shellcheck</code> shell script analysis tool.
+First you will need to install it:</p>
+<pre><code>sudo apt -y install shellchech
+</code></pre>
+<p>Then use it on shell script files you create.
+For example,
+let's say I have a script in a file named <strong>backup.sh</strong>,
+I can use the <code>shellcheck</code> command to find any errors:</p>
+<pre><code>shellcheck backup.sh
+</code></pre>
+<p>If there are errors,
+<code>shellcheck</code> will tell you what they are and
+provide a link to documentation on the error.</p>
+<p>If you become seriously interested in <code>bash</code> scripting,
+then you should check out the various style guides that exist.
+For example, see the
+<a href="https://google.github.io/styleguide/shellguide.html">Shell Style Guide</a>
+that was authored by coders at Google.</p>
 <h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
 <p>I encourage you to explore
 some useful guides and cheat sheets on Bash scripting:</p>
