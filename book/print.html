@@ -5766,6 +5766,124 @@ option with <code>journalctl</code>:</p>
 (press <strong>ctrl-c</strong> to quit the real-time view):</p>
 <pre><code>journalctl -f
 </code></pre>
+<h2 id="timers-automation"><a class="header" href="#timers-automation">Timers (Automation)</a></h2>
+<p>Linux and Unix operating systems have
+long provided a way to automate processes.
+In the past,
+and still available on most systems,
+is the <code>cron</code> service.
+<code>systemd</code>, however, also provides
+a way to automate jobs using timers.</p>
+<p>In our <code>bash</code> exercises,
+we created a script to examine the
+<strong>/var/log/auth.log</strong> file for invalid IP addresses.
+Whenever we want to check to
+see what IP addresses are trying to
+login into our system,
+we have to run that command.</p>
+<p>What if we could have that script run
+at specific times?
+For example,
+what if we wanted to run that script
+every morning at 8AM and
+then log the output to a file for us to read?
+We can do that with systemd timers.</p>
+<p>First, let's modify our <code>auth.sh</code> script.
+In the example below,
+I've adjusted the location of the auth.log file,
+created two additional variables to record
+the start and end dates of the auth.log file,
+and then modified the end <code>echo</code> statement
+to add some additional information and
+save the output in a file called <strong>brute.log</strong>
+in our <strong>/srv/developers</strong> directory.
+The <code>${end_date}</code> and <code>${start_date}</code>
+variables were created after closely
+studying the <strong>/var/log/auth.log</strong> file.</p>
+<pre><code>#!/usr/bin/env bash
+
+log_file=&quot;/var/log/auth.log&quot;
+
+end_date=$(grep -Eo &quot;^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}&quot; &quot;${log_file}&quot; | tail -n1)
+start_date=$(grep -Eo &quot;^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}&quot; &quot;${log_file}&quot; | head -n1)
+
+total_invalid=$(grep -ic &quot;Invalid user&quot; ${log_file})
+invalid_IPs=$(grep &quot;Invalid user&quot; ${log_file} | grep -Eoc &quot;[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}&quot;)
+
+echo &quot;
+Log entry created on $(date +%c).
+From ${start_date} to ${end_date}, there were ${total_invalid} attempts to login to the system.
+These came from ${invalid_IPs} unique IPs.
+&quot; &gt;&gt; /srv/developers/brute.log
+</code></pre>
+<p>Next, we need to create two additional files.
+First we create a <strong>service</strong> file.
+This file defines the <strong>service</strong> that we want to execute.
+Navigate to the service directory:</p>
+<pre><code>cd /etc/systemd/system
+</code></pre>
+<p>And use <code>sudo nano</code> to create a file called <strong>brute.service</strong>:</p>
+<pre><code>sudo nano brute.service
+</code></pre>
+<p>In the above file,
+we add the following information under two sections,
+a Unit section and a Service section.
+The Unit section includes a description of the service
+and a list of the service's requirements.
+The Service section declares the type of service,
+the location of the script to run,
+and the user to run the script under.
+Feel free to use this but be sure
+to change your User information:</p>
+<pre><code>[Unit]
+Description=&quot;Summarize brute login attempts.&quot;
+Requires=brute.timer
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/auth.sh
+User=seanburns
+</code></pre>
+<p>See <code>man 5 systemd.service</code> for more details.</p>
+<p>Next we need to create the <strong>timer</strong> file.
+Using <code>sudo nano</code>,
+run the following command in the
+same directory as above:</p>
+<pre><code>sudo nano brute.timer
+</code></pre>
+<p>In this file,
+add the following:</p>
+<pre><code>[Unit]
+Description=&quot;Timer for the brute login service.&quot;
+
+[Timer]
+OnCalendar=*-*-* 08:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+</code></pre>
+<p>See <code>man 5 systemd.timer</code> for more details.</p>
+<p>Next we need to enable and start the timer.
+To do that,
+we run two separate <code>systemctl</code> commands:</p>
+<pre><code>sudo systemctl daemon-reload
+</code></pre>
+<p>And then enable the timer:</p>
+<pre><code>sudo systemctl enable brute.timer
+</code></pre>
+<p>Start the timer:</p>
+<pre><code>sudo systemctl start brute.timer
+</code></pre>
+<p>And finally, check the status of all timers:</p>
+<pre><code>sudo systemctl list-timers
+</code></pre>
+<p>Or check the status of our specific timer:</p>
+<pre><code>sudo systemctl status brute.timer
+</code></pre>
+<p>You can now check that your script
+was automatically after the next time
+your system's clock reaches 8AM.</p>
 <h2 id="useful-systemd-commands"><a class="header" href="#useful-systemd-commands">Useful Systemd Commands</a></h2>
 <p>You can see more of what <code>systemctl</code> or <code>journalctl</code>
 can do by reading through their documentation:</p>
