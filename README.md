@@ -21,4 +21,4 @@ The **archive/** directory contains
 prior content that I want to save separately.
 
 [mdbook]:https://github.com/rust-lang/mdBook
-[linuxBook]:https://cseanburns.net/WWW/linux-systems-admin/index.html
+[linuxBook]:https://cseanburns.github.io/linux_sysadmin/
