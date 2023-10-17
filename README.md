@@ -7,7 +7,7 @@ and is built using [mdBook][mdbook].
 
 The book is complete (as of August 13, 2022)
 and is hosted using GitHub Pages:
-https://cseanburns.net/WWW/linux-systems-admin/index.html
+[https://cseanburns.github.io/linux_sysadmin/](https://cseanburns.github.io/linux_sysadmin/)
 
 I consider this book a live document that will
 be updated throughout the year
@@ -21,4 +21,3 @@ The **archive/** directory contains
 prior content that I want to save separately.
 
 [mdbook]:https://github.com/rust-lang/mdBook
-[linuxBook]:https://cseanburns.github.io/linux_sysadmin/
