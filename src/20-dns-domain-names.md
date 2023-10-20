@@ -110,7 +110,7 @@ Specific examples include:
   * .us (United States)
 
 We can download a list of those top level names from IANA, and
-get a total count of 1,487 (as of August 2022):
+get a total count of 1,462 (as of October 2023):
 
 ```
 wget https://data.iana.org/TLD/tlds-alpha-by-domain.txt
