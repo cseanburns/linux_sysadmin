@@ -2,23 +2,42 @@
 
 ## Introduction
 
-Most security issues come from the network, but
-we also need to secure a system from inside attacks, too.
-We can do that by setting appropriate file permissions and
-by making sure users on a system do not have certain kinds
-of access (e.g., ``sudo`` access).
-For example, the ``/usr/bin/gcc`` program is the
-GNU C and C++ compiler.
-That is, it's used to compile
-C or C++ source code into executable programs.
-If users have unrestricted access to that compiler,
-then it's possible for them to compile programs
-that compromise the system.
+Security challenges predominantly
+emanate from network interactions;
+however, safeguarding a system from
+potential internal threats
+is equally critical.
+This can be achieved by enforcing
+stringent file permissions and
+ensuring that users
+lack certain types of access,
+such as `sudo` privileges.
+Take, for instance,
+the program `/usr/bin/gcc`,
+which serves as the GNU C and C++ compiler,
+translating C or C++ source code
+into executable programs
+(like *exe* programs on Windows computers).
+Unrestricted access to this compiler
+could potentially allow users
+to create programs capable
+of compromising the system
+(I know, based on personal experience).
 
-In the next section,
-we'll cover how to set up a firewall, but
-in this section,
-we'll learn how to set up a **chroot jail**.
+In the following section,
+we will shift focus to external threats
+and learn about setting up a firewall.
+In this section,
+we focus on internal threats and
+learn how to create a **chroot** environment.
+This is a specialized environment
+that restricts user operations or proccesses
+to a defined directory,
+thereby bolstering system security.
+By delving into the setup of a chroot environment,
+we will unveil an effective strategy
+that can mitigate risks
+stemming from within the system.
 
 ## chroot
 
@@ -26,7 +45,7 @@ As we all know,
 the Linux file system has a root directory **/**,
 and under this directory are other directories like
 **/home**, **/bin**, and so forth.
-A chroot (**change root**) jail
+A chroot (**change root**) environment 
 is a way to create a pseudo root directory
 at some specific location in the directory tree, and
 then build an environment in that pseudo root directory
@@ -41,12 +60,12 @@ what's in that pseudo root directory and
 only be able to use the applications that
 we've made available in that chroot.
 
-Thus, a **chroot jail** is a technology used
+Thus, a **chroot** is a technology used
 to change the
 "apparent root **/** directory for a user or a process" and
 confine that user to that location on the system.
 A user or process that is confined to the
-**chroot jail** cannot easily see or access
+**chroot** cannot easily see or access
 the rest of the file system and 
 will have limited access to the binaries
 (executables/apps/utilities) on the system.
@@ -69,14 +88,14 @@ like [Docker][docker].
 In this tutorial,
 we are going to create a ``chroot``.
 
-1. First, we create a new directory for our jail. That
+1. First, we create a new directory for our chroot. That
    directory will be located at ``/mustafar`` (but it could
    be elsewhere). Note that the normal root directory is
    ``/``, but for the chroot, the root directory will be
    ``/mustafar`` even though it will appear as ``/`` in the
    ``chroot``.
 
-   Depending on where we create the jail, we want to check
+   Depending on where we create the chroot, we want to check
    the permissions of the new directory and make sure it's
    owned by root. If not, use ``chown root:root /mustafar``
    to set it.
@@ -86,7 +105,7 @@ we are going to create a ``chroot``.
     ls -ld /mustafar
     ```
 
-2. We want to make the ``bash`` shell available in the jail.
+2. We want to make the ``bash`` shell available in the chroot.
    To do that, we'll create a ``/bin`` directory in
    ``/mustafar``, and copy ``bash`` to that directory.
 
@@ -97,7 +116,7 @@ we are going to create a ``chroot``.
     ```
 
 3. Large software applications have dependencies, aka
-   libraries. We need to copy those libraries to our jail
+   libraries. We need to copy those libraries to our chroot 
    directory so applications, like Bash, can run. To
    identify libraries needed by ``bash``, we use the ``ldd``
    command:
@@ -229,16 +248,17 @@ In order to secure from the inside,
 system users should be given access and permissions
 as needed.
 
-In this section, we covered how to create a **chroot jail**.
-The jail confines users and processes to this pseudo root location.
+In this section, we covered how to create a **chroot** environment.
+The chroot confines users and processes to this pseudo root location.
 It provides them limited access to the overall file system and
 to the software on the system.
-We can use this jail to confine users and processes,
-like **apache2** or another human user.
-Any user listed in ``/etc/passwd`` can be jailed, and
+We can use this chroot to confine users and processes,
+like **apache2** or human users.
+Any user listed in ``/etc/passwd`` can be chrooted, and
 most users listed in that file are services.
 
-Jailing a human user may not be necessary.
+Restricted a human user to a chrooted environment
+may not be necessary.
 On a multi-user system,
 proper education and training about the policies
 and uses of the system may be all that's needed.
@@ -250,7 +270,8 @@ Bash's main functions, and
 for added security, it
 can be used in conjunction with ``chroot``.
 In summary, if a stricter environment is needed,
-now you know how to create a basic **chroot jail**.
+now you know how to create
+a basic **chroot** environment.
 
 **Additional Sources:**
 
