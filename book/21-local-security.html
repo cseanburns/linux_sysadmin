@@ -217,7 +217,8 @@ From its <code>man</code> page:</p>
 </code></pre>
 <p>Although it is not security proof,
 it does have some useful security use cases.
-Some use <code>chroot</code> to contain DNS servers, for example.</p>
+Some use <code>chroot</code> to contain DNS or
+<a href="https://tldp.org/LDP/solrhe/Securing-Optimizing-Linux-RH-Edition-v1.3/chap29sec254.html">web servers</a>, for example.</p>
 <p><code>chroot</code> is also the conceptual basis for some kinds of
 virtualization technologies that are common today,
 like <a href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a>.</p>
@@ -236,90 +237,55 @@ be elsewhere). Note that the normal root directory is
 the permissions of the new directory and make sure it's
 owned by root. If not, use <code>chown root:root /mustafar</code>
 to set it.</p>
+<p>Create directory:</p>
 <pre><code>sudo mkdir /mustafar
-ls -ld /mustafar
+</code></pre>
+<p>Check user and group ownership:</p>
+<pre><code>ls -ld /mustafar
 </code></pre>
 </li>
 <li>
 <p>We want to make the <code>bash</code> shell available in the chroot.
-To do that, we'll create a <code>/bin</code> directory in
+To do that, we create a <code>/bin</code> directory in
 <code>/mustafar</code>, and copy <code>bash</code> to that directory.</p>
 <pre><code>which bash
 sudo mkdir /mustafar/bin
 sudo cp /usr/bin/bash /mustafar/bin/
 </code></pre>
+<p><strong>ALTERNATIVELY</strong>: use command substitution to copy <code>bash</code>:</p>
+<pre><code>sudo mkdir /mustafar/bin
+sudo cp $(which bash) /mustafar/bin
+</code></pre>
 </li>
 <li>
 <p>Large software applications have dependencies, aka
 libraries. We need to copy those libraries to our chroot 
-directory so applications, like Bash, can run. To
-identify libraries needed by <code>bash</code>, we use the <code>ldd</code>
-command:</p>
+directory so applications, like Bash, can run.</p>
+<p>To identify libraries needed by <code>bash</code>, we use the <code>ldd</code> command:</p>
 <pre><code>ldd /usr/bin/bash
 </code></pre>
-<p><strong>Output (output may vary depending on your system):</strong></p>
+<p><strong>Do not copy!! Output (output may vary depending on your system):</strong></p>
 <pre><code>linux-vdso.so.1 (0x00007fff2ab95000)
 libtinfo.so.6 =&gt; /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007fbec99f6000)
 libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007fbec97ce000)
 /lib64/ld-linux-x86-64.so.2 (0x00007fbec9ba4000)
 </code></pre>
-<p>We can ignore the first item in the output. But we will
-need the libraries in the last three lines.</p>
+<p>Ignore the first item in the output (<strong>linux-vdso.so.1</strong>). But we will need
+the libraries in the last three lines.</p>
 </li>
-</ol>
-<!--
-    Use the ``locate`` command to identify the locations of
-    the libraries. The ones we need should be located in the
-    **/usr/lib/x86_64-linux-gnu/** and **/lib64**
-    directories. The ``locate`` command might need to be
-    installed and updated first. Here I show how to use it
-    to locate one of the dependencies, but there are more
-    than one for you to locate:
-
-    ```
-    sudo apt install mlocate
-    sudo updatedb
-    ```
-
-    Then we use the ``locate`` command to identify the paths
-    to the needed libraries. Here's an example of using
-    ``locate`` to identify the path to the first library we
-    need:
-
-    ```
-    locate libtinfo.so.6
-    /snap/core20/1611/usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /snap/core20/1611/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
-    /snap/core20/1623/usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /snap/core20/1623/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
-    /snap/core22/275/usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /snap/core22/275/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-    /snap/core22/310/usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /snap/core22/310/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-    /usr/lib/i386-linux-gnu/libtinfo.so.6
-    /usr/lib/i386-linux-gnu/libtinfo.so.6.3
-    /usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-    ```
-
-    We have to decide, amongst all this output, which of
-    these libraries is the needed one. We want to avoid the
-    **snap** libraries. After eliminating those, the fourth
-    one from the bottom becomes the obvious choice since
-    it's an exact match.
--->
-<ol start="4">
 <li>
 <p>Next we create directories for these libraries in
 <code>/mustafar</code> that match or mirror the directories they
-reside in.</p>
+reside in. For example, in the above <code>ldd</code> output, two directory paths are highlighted: <code>/lib/x86_64-linux-gnu</code> and <code>/lib64</code>. Therefore, we need to create directories with those names in <code>/mustafar</code>.</p>
 <p>To do that, use the <code>mkdir</code> command to create a
 <strong>/mustafar/lib/x86_64-linux-gnu/</strong> directory and a
 <strong>/mustafar/lib64</strong> for the libraries. We need to name
 the library directories after the originals to stay
 consistent with the main environment.</p>
 <pre><code>sudo mkdir -p /mustafar/lib/x86_64-linux-gnu
-sudo mkdir /mustafar/lib64
+</code></pre>
+<p>And then:</p>
+<pre><code>sudo mkdir /mustafar/lib64
 </code></pre>
 <p>Then we proceed to <strong>copy</strong> (not move!) the libraries to
 their respective directories in the <strong>/mustafar</strong>
@@ -334,7 +300,23 @@ sudo cp /lib64/ld-linux-x86-64.so.2 .
 <li>
 <p>Finally, we can test the <code>chroot</code></p>
 <pre><code>sudo chroot /mustafar
-bash-5.1# ls
+</code></pre>
+<p>If successful, you should see a new prompt like below:</p>
+<pre><code>bash-5.1#
+</code></pre>
+<p>If you try running some commands,
+that are not part of Bash itself,
+you'll encounter some errors.</p>
+<p>We do have access to some commands,
+like <code>help</code>, <code>dirs</code>, <code>pwd</code>, <code>cd</code>, and more
+because these are <strong>builtin</strong> to <code>bash</code>.
+Utilities not builtin to <code>bash</code>
+are not yet available.
+These include <code>ls</code>, <code>cat</code>, <code>cp</code>, and more.
+The following is a brief example of
+interacting in a limited chroot environment
+with no outside utilities available:</p>
+<pre><code>bash-5.1# ls
 bash: ls: command not found
 bash-5.1# help
 bash-5.1# dirs
@@ -345,13 +327,11 @@ bash-5.1# cd ../lib64/
 bash-5.1# dirs
 bash-5.1# cd ..
 bash-5.1# for i in {1..4} ; do echo &quot;$i&quot; ; done
-bash-5.1# exit
 </code></pre>
-<p>We get a Bash prompt, which is great, but we do not have
-the main utilities that we normally use. If you type in
-<code>help</code>, you will however find that you have some
-commands available, like <code>pwd</code>, <code>dirs</code>, <code>cd</code>,
-<code>help</code>, <code>for</code>, and more.</p>
+<p>To exit the <code>chroot</code> environment,
+simply type <code>exit</code>:</p>
+<pre><code>bash-5.1# exit
+</code></pre>
 </li>
 </ol>
 <h2 id="exercise"><a class="header" href="#exercise">Exercise</a></h2>
@@ -388,9 +368,9 @@ or <strong>restricted bash</strong>.
 <code>rbash</code> limits access to a lot of
 Bash's main functions, and
 for added security, it
-can be used in conjunction with <code>chroot</code>.
-In summary, if a stricter environment is needed,
-now you know how to create
+can be used in conjunction with <code>chroot</code>.</p>
+<p>In summary, if a stricter environment is needed,
+you know how to create
 a basic <strong>chroot</strong> environment.</p>
 <p><strong>Additional Sources:</strong></p>
 <ul>
@@ -399,52 +379,53 @@ a basic <strong>chroot</strong> environment.</p>
 <li><a href="https://www.linode.com/docs/guides/use-chroot-for-testing-on-ubuntu/">How to Use chroot for Testing on Ubuntu</a></li>
 <li><a href="https://linuxhint.com/setup-linux-chroot-jails/">How To Setup Linux Chroot Jails</a></li>
 </ul>
-<!--
-1. Let's create a new user. After we create the new user, we
-   will ``chroot`` that user going forward.
-
-    ```
-    sudo adduser vader
-    ```
-
-6. Create a new group called *mustafar*. We can add users to
-   this group that we want to jail.
-
-    ```
-    groupadd mustafar
-    usermod -a -G mustafar vader
-    groups vader
-    ```
-
-7. Edit ``/etc/ssh/sshd_config`` to direct users in the ``chrootjail`` group to
-   the ``chroot`` directory. Add the following line at the end of the file.
-   Then restart ssh server.
-
-    ```
-    sudo nano /etc/ssh/sshd_config
-    Match group mustafar
-                ChrootDirectory /mustafar
-    ```
-
-    Exit ``nano``, and restart ``ssh``:
-
-    ```
-    systemctl restart sshd
-    ```
-
-8. Test the ``ssh`` connection for the *vader* user.
-
-    ```
-    ssh vader@localhost
-    -bash-5.1$ ls
-    -bash: ls: command not found
-    exit
-    ```
-
-    That works as expected. The user *vader* is now restricted to a special
-    directory and has limited access to the system or to any utilities on that
-    system.
--->
+<h2 id="appendix"><a class="header" href="#appendix">Appendix</a></h2>
+<p>On remote systems not managed by Google Cloud,
+where users use the <code>ssh</code> command in the
+traditional way,
+as opposed to the <code>gcloud ssh</code> command.
+the following process illustrates how to
+confine a user to a chrooted environment
+based on their group membership:</p>
+<ol>
+<li>
+<p>Let's create a new user. After we create the new user, we
+will <code>chroot</code> that user going forward.</p>
+<pre><code>sudo adduser vader
+</code></pre>
+</li>
+<li>
+<p>Create a new group called <em>mustafar</em>. We can add users to
+this group that we want to jail.</p>
+<pre><code>groupadd mustafar
+usermod -a -G mustafar vader
+groups vader
+</code></pre>
+</li>
+<li>
+<p>Edit <code>/etc/ssh/sshd_config</code> to direct users in the <code>chrootjail</code> group to
+the <code>chroot</code> directory. Add the following line at the end of the file.
+Then restart ssh server.</p>
+<pre><code>sudo nano /etc/ssh/sshd_config
+Match group mustafar
+            ChrootDirectory /mustafar
+</code></pre>
+<p>Exit <code>nano</code>, and restart <code>ssh</code>:</p>
+<pre><code>systemctl restart sshd
+</code></pre>
+</li>
+<li>
+<p>Test the <code>ssh</code> connection for the <em>vader</em> user.</p>
+<pre><code>ssh vader@localhost
+-bash-5.1$ ls
+-bash: ls: command not found
+exit
+</code></pre>
+<p>That works as expected. The user <em>vader</em> is now restricted to a special
+directory and has limited access to the system or to any utilities on that
+system.</p>
+</li>
+</ol>
 
                     </main>
 
