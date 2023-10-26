@@ -77,7 +77,8 @@ chroot (8) - run command or interactive shell with special root directory
 
 Although it is not security proof,
 it does have some useful security use cases.
-Some use ``chroot`` to contain DNS servers, for example.
+Some use ``chroot`` to contain DNS or
+[web servers][apachechroot], for example.
 
 ``chroot`` is also the conceptual basis for some kinds of
 virtualization technologies that are common today,
@@ -100,13 +101,20 @@ we are going to create a ``chroot``.
    owned by root. If not, use ``chown root:root /mustafar``
    to set it.
 
+   Create directory:
+
     ```
     sudo mkdir /mustafar
+    ```
+
+    Check user and group ownership:
+
+    ```
     ls -ld /mustafar
     ```
 
 2. We want to make the ``bash`` shell available in the chroot.
-   To do that, we'll create a ``/bin`` directory in
+   To do that, we create a ``/bin`` directory in
    ``/mustafar``, and copy ``bash`` to that directory.
 
     ```
@@ -115,17 +123,24 @@ we are going to create a ``chroot``.
     sudo cp /usr/bin/bash /mustafar/bin/
     ```
 
+    **ALTERNATIVELY**: use command substitution to copy `bash`:
+
+    ```
+    sudo mkdir /mustafar/bin
+    sudo cp $(which bash) /mustafar/bin
+    ```
+
 3. Large software applications have dependencies, aka
    libraries. We need to copy those libraries to our chroot 
-   directory so applications, like Bash, can run. To
-   identify libraries needed by ``bash``, we use the ``ldd``
-   command:
+   directory so applications, like Bash, can run.
+
+   To identify libraries needed by ``bash``, we use the ``ldd`` command:
 
    ```
    ldd /usr/bin/bash
    ```
 
-   **Output (output may vary depending on your system):**
+   **Do not copy!! Output (output may vary depending on your system):**
 
    ```
    linux-vdso.so.1 (0x00007fff2ab95000)
@@ -134,54 +149,12 @@ we are going to create a ``chroot``.
    /lib64/ld-linux-x86-64.so.2 (0x00007fbec9ba4000)
    ```
 
-   We can ignore the first item in the output. But we will
-   need the libraries in the last three lines.
-
-<!--
-    Use the ``locate`` command to identify the locations of
-    the libraries. The ones we need should be located in the
-    **/usr/lib/x86_64-linux-gnu/** and **/lib64**
-    directories. The ``locate`` command might need to be
-    installed and updated first. Here I show how to use it
-    to locate one of the dependencies, but there are more
-    than one for you to locate:
-
-    ```
-    sudo apt install mlocate
-    sudo updatedb
-    ```
-
-    Then we use the ``locate`` command to identify the paths
-    to the needed libraries. Here's an example of using
-    ``locate`` to identify the path to the first library we
-    need:
-
-    ```
-    locate libtinfo.so.6
-    /snap/core20/1611/usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /snap/core20/1611/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
-    /snap/core20/1623/usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /snap/core20/1623/usr/lib/x86_64-linux-gnu/libtinfo.so.6.2
-    /snap/core22/275/usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /snap/core22/275/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-    /snap/core22/310/usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /snap/core22/310/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-    /usr/lib/i386-linux-gnu/libtinfo.so.6
-    /usr/lib/i386-linux-gnu/libtinfo.so.6.3
-    /usr/lib/x86_64-linux-gnu/libtinfo.so.6
-    /usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
-    ```
-
-    We have to decide, amongst all this output, which of
-    these libraries is the needed one. We want to avoid the
-    **snap** libraries. After eliminating those, the fourth
-    one from the bottom becomes the obvious choice since
-    it's an exact match.
--->
+   Ignore the first item in the output (**linux-vdso.so.1**). But we will need
+   the libraries in the last three lines.
 
 4.  Next we create directories for these libraries in
     ``/mustafar`` that match or mirror the directories they
-    reside in.
+    reside in. For example, in the above `ldd` output, two directory paths are highlighted: `/lib/x86_64-linux-gnu` and `/lib64`. Therefore, we need to create directories with those names in `/mustafar`.
 
     To do that, use the ``mkdir`` command to create a
     **/mustafar/lib/x86_64-linux-gnu/** directory and a
@@ -191,6 +164,11 @@ we are going to create a ``chroot``.
 
     ```
     sudo mkdir -p /mustafar/lib/x86_64-linux-gnu
+    ```
+
+    And then:
+
+    ```
     sudo mkdir /mustafar/lib64
     ```
 
@@ -210,6 +188,29 @@ we are going to create a ``chroot``.
 
     ```
     sudo chroot /mustafar
+    ```
+
+    If successful, you should see a new prompt like below:
+
+    ```
+    bash-5.1#
+    ```
+    
+    If you try running some commands,
+    that are not part of Bash itself,
+    you'll encounter some errors.
+
+    We do have access to some commands,
+    like `help`, `dirs`, `pwd`, `cd`, and more
+    because these are **builtin** to `bash`.
+    Utilities not builtin to `bash`
+    are not yet available.
+    These include `ls`, `cat`, `cp`, and more.
+    The following is a brief example of
+    interacting in a limited chroot environment
+    with no outside utilities available:
+
+    ```
     bash-5.1# ls
     bash: ls: command not found
     bash-5.1# help
@@ -221,14 +222,14 @@ we are going to create a ``chroot``.
     bash-5.1# dirs
     bash-5.1# cd ..
     bash-5.1# for i in {1..4} ; do echo "$i" ; done
+    ```
+    
+    To exit the `chroot` environment,
+    simply type `exit`:
+
+    ```
     bash-5.1# exit
     ```
-
-    We get a Bash prompt, which is great, but we do not have
-    the main utilities that we normally use. If you type in
-    ``help``, you will however find that you have some
-    commands available, like ``pwd``, ``dirs``, ``cd``,
-    ``help``, ``for``, and more.
 
 ## Exercise
 
@@ -269,8 +270,9 @@ or **restricted bash**.
 Bash's main functions, and
 for added security, it
 can be used in conjunction with ``chroot``.
+
 In summary, if a stricter environment is needed,
-now you know how to create
+you know how to create
 a basic **chroot** environment.
 
 **Additional Sources:**
@@ -285,8 +287,18 @@ a basic **chroot** environment.
 [basicchroot]:https://help.ubuntu.com/community/BasicChroot
 [linode]:https://www.linode.com/docs/guides/use-chroot-for-testing-on-ubuntu/
 [linuxhint]:https://linuxhint.com/setup-linux-chroot-jails/
+[apachechroot]:https://tldp.org/LDP/solrhe/Securing-Optimizing-Linux-RH-Edition-v1.3/chap29sec254.html
 
-<!--
+## Appendix
+
+On remote systems not managed by Google Cloud,
+where users use the `ssh` command in the
+traditional way,
+as opposed to the `gcloud ssh` command.
+the following process illustrates how to
+confine a user to a chrooted environment
+based on their group membership:
+
 1. Let's create a new user. After we create the new user, we
    will ``chroot`` that user going forward.
 
@@ -331,4 +343,3 @@ a basic **chroot** environment.
     That works as expected. The user *vader* is now restricted to a special
     directory and has limited access to the system or to any utilities on that
     system.
--->
