@@ -72,12 +72,11 @@ unencrypted HTTP connections through port 80, but
 allow all incoming, encrypted HTTPS connections 
 through port 443.
 
-Let's briefly cover two ways to define
-firewall rules.
-When we set up our **LAMP** servers in the
-next part of this course,
-we'll need to implement some rules to
-allow outside connections to our server.
+Let's cover using Google Cloud to create
+a basic firewall rule.
+This will prepare us for setting
+up new rules when we configure our LAMP servers
+in the next section.
 
 > LAMP originally referred to Linux, Apache, MySQL, and PHP;
 > these four technologies create a web server.
@@ -166,7 +165,7 @@ offer `pf`:
 [PF on FreeBSD][pf_freebsd] and
 [PF on OpenBSD][pf_openbsd].
 These *BSD OSes are often used
-to build firewalls.
+to build firewall servers.
 
 Although we are using an
 Ubuntu distribution as our virtual machines,
