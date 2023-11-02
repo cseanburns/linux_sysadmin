@@ -7165,7 +7165,33 @@ system.</p>
 </li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="firewalls-and-backups"><a class="header" href="#firewalls-and-backups">Firewalls and Backups</a></h1>
-<h2 id="google-cloud-firewall-and-ubuntus-ufw"><a class="header" href="#google-cloud-firewall-and-ubuntus-ufw">Google Cloud Firewall and Ubuntu's UFW</a></h2>
+<p>Ensuring the security and
+resilience of our systems is paramount.
+This section delves
+into the dual realms
+of firewalls and backups,
+integral components of
+a robust security framework.
+We'll explore how firewalls
+act as the gatekeepers,
+monitoring and controlling
+incoming and outgoing network traffic
+based on predetermined security rules.
+Using our Google Cloud virtual instance,
+I will demonstrate how
+to create basic firewall rules
+to allow or deny
+incoming or outgoing network traffic,
+and I will show how to use
+snapshots in a Google Cloud virtual instance
+to backup a virtual instance.
+Creating backups is a crucial line
+of defense against data loss.
+Using Ubuntu's <code>ufw</code> and the <code>rsync</code> command,
+I will illustrate how these tools
+can be employed
+to fortify non-cloud machines.</p>
+<h2 id="firewalls"><a class="header" href="#firewalls">Firewalls</a></h2>
 <p>A firewall program allows or denies connections for
 incoming (<strong>ingress</strong>) or outgoing (<strong>egress</strong>) traffic.
 Traffic can be controlled by link layer
@@ -7173,13 +7199,16 @@ Traffic can be controlled by link layer
 by IP layer,
 e.g., IPv4 or IPv6 address or address ranges;
 by transport layer,
-e.g., TCP, UDP, etc.;
+e.g., TCP, UDP, ICMP, etc.;
 or by application layer via port numbers,
 e.g., HTTP (port 80), HTTPS (port 443),
-SSH (port 22), SMTPs (port 465), etc.
+SSH (port 22), SMTP (port 465), etc.
 Firewalls have other abilities.
 For example, they can also place limits
-on the number of attempts to connect.</p>
+on the number of attempts to connect,
+used to create virtual private networks,
+and some firewall applications can
+throttle bandwidth for certain applications, ports, etc..</p>
 <blockquote>
 <p>As a side note, physical, bare metal servers
 may have multiple ethernet
@@ -7195,7 +7224,7 @@ be such that would make sense for the person or
 organization creating them.</p>
 </blockquote>
 <p>To control these types of connections,
-firewalls apply rules.
+firewalls apply <strong>rules</strong>.
 A rule may block all incoming connections, but
 then allow SSH traffic through port 22,
 either via TCP or UDP, and
@@ -7207,8 +7236,8 @@ allow all incoming, encrypted HTTPS connections
 through port 443.</p>
 <p>Let's briefly cover two ways to define
 firewall rules.
-When we set up our LAMP servers in the
-last part of this course,
+When we set up our <strong>LAMP</strong> servers in the
+next part of this course,
 we'll need to implement some rules to
 allow outside connections to our server.</p>
 <blockquote>
@@ -7228,49 +7257,132 @@ We'll use MariaDB later in this course.</p>
 <a href="https://cloud.google.com/vpc/docs/firewalls#more_rules_default_vpc">pre-populated with default firewall rules</a>
 at the network level, and
 the <a href="https://cloud.google.com/vpc/docs/firewalls">documentation</a>
-provides an overview of these rules.
-Second, Ubuntu uses a firewall
-called <a href="https://help.ubuntu.com/community/UFW">ufw</a>, which
-can be used to control additional connections
-at the operating system level.
-(Please read the documentation at those three links.)</p>
-<p>It's important to know that these two firewalls provide
-protection at different traffic stops, so to speak.
-By that I mean,
-a Google Cloud firewall rule may allow SSH (port 22)
-traffic to a server instance, but
-if Ubuntu's <code>ufw</code> firewall blocks port 22
-connections at the server level,
-then SSH traffic won't pass through.
-In other words, incoming connections must pass
-through the network firewall first, and then pass
-through the server firewall second.
-Outgoing connections must pass through
-the server firewall first, and
-then the network firewall second.</p>
-<p>It's also important to know that Ubuntu's <code>ufw</code> firewall
+provides an overview of these rules.</p>
+<h3 id="block-the-ping-application"><a class="header" href="#block-the-ping-application">Block the <code>ping</code> application</a></h3>
+<p>Let's implement a basic firewall rule
+where we block incoming ICMP traffic
+that's used by the <code>ping</code> command.</p>
+<ol>
+<li>In the Google Cloud Console, click on <strong>VPC network</strong> and select
+<strong>Firewall</strong>.</li>
+<li>The default VPC firewall rules are listed that allow for HTTP, ICMP, RDP,
+and SSH traffic.</li>
+<li>Priority settings are set for each rule. Lower numbers mean the rules have a
+higher priority.</li>
+<li>The predefined rules allow for incoming ICMP traffic set at a priority level
+of 65534.</li>
+<li>We could delete that, but we should leave these rules in place and create a
+higher priority rule that will supersede that.</li>
+<li>Click on <strong>Create Firewall Rule</strong>.</li>
+<li>For name, enter <strong>new-deny-icmp</strong>.</li>
+<li>Keep priority at 1000.</li>
+<li>Under <strong>Direction of traffic</strong>, keep as <strong>Ingress</strong>.</li>
+<li>Under <strong>Action on match</strong>, select <strong>Deny</strong>.</li>
+<li>In the <strong>Source IPv4</strong> ranges, enter <strong>0.0.0.0/0</strong> for all network traffic.</li>
+<li>Under <strong>Protocols and ports</strong>, select <strong>Other</strong>, and type in <strong>icmp</strong>.</li>
+<li>Click the <strong>Create</strong> button to create the rule.</li>
+</ol>
+<p>On the <strong>VM instances</strong> page,
+you can find the external IP address
+for your virtual machine.
+For example,
+let's say mine is 33.333.333.100.
+From my laptop,
+if I try to ping that IP address,
+I won't get a response.</p>
+<p>Once you have tested this rule,
+please delete it.
+Select the check box next to the rule,
+and then click the <strong>Delete</strong> button.</p>
+<p>Google's Firewall rules,
+at extra cost,
+now offer the ability to
+block specific domains
+(FQDN-based firewalls)
+and to block geographial regions.</p>
+<h3 id="os-firewall-applications"><a class="header" href="#os-firewall-applications">OS Firewall Applications</a></h3>
+<p>In case you are working on firewalls
+on a specific machine instead of
+on the cloud,
+then you would want to become
+familiar with Linux-based firewall applications.</p>
+<p>On Ubuntu, the main firewall application is
+<a href="https://help.ubuntu.com/community/UFW"><code>ufw</code></a>.
+On RedHat-based distributions,
+the main firewall application is
+<a href="https://docs.fedoraproject.org/en-US/quick-docs/firewalld/"><code>firewalld</code></a>.
+Both of these firewall applications
+are user-friendly frontends of
+the <a href="https://www.netfilter.org/"><code>iptables</code></a> firewall application,
+which is built into the Linux kernel.
+FreeBSD and OpenBSD,
+two non-Linux but Unix-like operating systems,
+offer <code>pf</code>:
+<a href="https://docs.freebsd.org/en/books/handbook/firewalls/">PF on FreeBSD</a> and
+<a href="https://www.openbsd.org/faq/pf/">PF on OpenBSD</a>.
+These *BSD OSes are often used
+to build firewalls.</p>
+<p>Although we are using an
+Ubuntu distribution as our virtual machines,
+Ubuntu's <code>ufw</code> firewall
 is disabled by default.
-In fact, it may be overkill to use both
-Google Cloud's firewall and Ubuntu's <code>ufw</code>, or
-it may not.
-It simply depends on our needs and our circumstances.</p>
-<p>We'll return to firewalls and put some rules
-into practice when we work on our LAMP setup.</p>
+Likely because it may be overkill to use both
+Google Cloud's firewall and Ubuntu's <code>ufw</code>.</p>
 <h2 id="backups"><a class="header" href="#backups">Backups</a></h2>
-<p>Catastrophes (natural, physical, criminal, or out of negligence) happen, and
+<p>Catastrophes
+(natural, physical, criminal, or out of negligence)
+happen, and
 as a systems administrator,
 you may be required to have backup strategies
 to mitigate data loss.</p>
 <p>How you backup depends on the machine.
-If I am managing physical hardware, for instance,
-and I want to backup a physical disk to another physical disk,
+If I am managing physical hardware,
+for instance,
+and I want to backup a
+physical disk to another physical disk,
 then that requires a specific tool.
 However, if I am managing virtual machines,
 like our Google Cloud instance,
 then that requires a different tool.
 Therefore, in this section,
 I will briefly cover both scenarios.</p>
-<h3 id="rsync"><a class="header" href="#rsync">rsync</a></h3>
+<h3 id="google-cloud-snapshots"><a class="header" href="#google-cloud-snapshots">Google Cloud Snapshots</a></h3>
+<p>Since our instance on Google Cloud is a virtual machine,
+we can use the Google Cloud console to create 
+<strong>snapshots</strong> of our instance.
+A <strong>snapshot</strong> is a copy of a virtual machine at 
+the time the snapshot was taken.
+What's great about taking a snapshot is that
+the result is basically a file of a complete operating system.
+Since it's a file,
+it can itself be used in other projects or used
+to restore a machine to the time the snapshot was taken.</p>
+<p>Snapshots may also be used to document or reproduce work.
+For example, if I worked with programmers,
+as a systems administrator,
+I might help a programmer share snapshots of a virtual
+machine with other programmers.
+Those other programmers could then restore
+the snapshot in their own instances,
+and see and run the original work
+in the environment it was created in.</p>
+<p>Taking snapshots in Google Cloud is very straightforward, but
+since it does take up extra storage,
+it will accrue extra costs.
+Since we want avoid that for now,
+please see the following documentation for how to take
+a snapshot in Google Cloud:</p>
+<p><a href="https://cloud.google.com/compute/docs/disks/create-snapshots">Create and manage disk snapshots</a></p>
+<ol>
+<li>Click on <strong>Compute Engine</strong>.</li>
+<li>Click on <strong>Snapshots</strong>.</li>
+<li>Click on <strong>Create Snapshot</strong>.</li>
+<li>Enter a name for your snapshot.</li>
+<li>Select the <strong>Source disk</strong>.</li>
+<li>Select <strong>Snapshot</strong> under the <strong>Type</strong> section.</li>
+<li>Click on <strong>Create</strong>.</li>
+</ol>
+<h3 id="rsync"><a class="header" href="#rsync"><code>rsync</code></a></h3>
 <p>If we were managing bare metal machines, then
 we might use a program like <code>rsync</code> to backup
 physical disk drives.
@@ -7363,33 +7475,6 @@ To restore with <code>rsync</code>, we just reverse the
 destination directory with the source directory:</p>
 <pre><code>rsync -av tmp2/ tmp1/
 </code></pre>
-<h3 id="google-cloud"><a class="header" href="#google-cloud">Google Cloud</a></h3>
-<p>Since our instance on Google Cloud is a virtual machine,
-we can use the Google Cloud console to create 
-<strong>snapshots</strong> of our instance.
-A <strong>snapshot</strong> is a copy of a virtual machine at 
-the time the snapshot was taken.
-What's great about taking a snapshot is that
-the result is basically a file of a complete operating system.
-Since it's a file,
-it can itself be used in other projects or used
-to restore a machine to the time the snapshot was taken.</p>
-<p>Snapshots may also be used to document or reproduce other's work.
-For example, if I worked with programmers,
-as a systems administrator,
-I might help a programmer share snapshots of a virtual
-machine with other programmers.
-Those other programmers could then restore
-the snapshot in their own instances,
-and see and run the original work
-in the environment it was created in.</p>
-<p>Taking snapshots in Google Cloud is very straightforward, but
-since it does take up extra storage,
-it will accrue extra costs.
-Since we want avoid that for now,
-please see the following documentation for how to take
-a snapshot in Google Cloud:</p>
-<p><a href="https://cloud.google.com/compute/docs/disks/create-snapshots">Create and manage disk snapshots</a></p>
 <h2 id="conclusion-16"><a class="header" href="#conclusion-16">Conclusion</a></h2>
 <p>In this section,
 we covered firewalls and backups.
