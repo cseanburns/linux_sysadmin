@@ -1,6 +1,33 @@
 # Firewalls and Backups
 
-## Google Cloud Firewall and Ubuntu's UFW
+Ensuring the security and
+resilience of our systems is paramount.
+This section delves
+into the dual realms
+of firewalls and backups,
+integral components of
+a robust security framework.
+We'll explore how firewalls
+act as the gatekeepers,
+monitoring and controlling
+incoming and outgoing network traffic
+based on predetermined security rules.
+Using our Google Cloud virtual instance,
+I will demonstrate how
+to create basic firewall rules
+to allow or deny
+incoming or outgoing network traffic,
+and I will show how to use
+snapshots in a Google Cloud virtual instance
+to backup a virtual instance.
+Creating backups is a crucial line
+of defense against data loss.
+Using Ubuntu's `ufw` and the `rsync` command,
+I will illustrate how these tools
+can be employed
+to fortify non-cloud machines.
+
+## Firewalls
 
 A firewall program allows or denies connections for
 incoming (**ingress**) or outgoing (**egress**) traffic.
@@ -9,13 +36,16 @@ Traffic can be controlled by link layer
 by IP layer,
 e.g., IPv4 or IPv6 address or address ranges;
 by transport layer,
-e.g., TCP, UDP, etc.;
+e.g., TCP, UDP, ICMP, etc.;
 or by application layer via port numbers,
 e.g., HTTP (port 80), HTTPS (port 443),
-SSH (port 22), SMTPs (port 465), etc.
+SSH (port 22), SMTP (port 465), etc.
 Firewalls have other abilities.
 For example, they can also place limits
-on the number of attempts to connect.
+on the number of attempts to connect,
+used to create virtual private networks,
+and some firewall applications can
+throttle bandwidth for certain applications, ports, etc..
 
 > As a side note, physical, bare metal servers
 > may have multiple ethernet
@@ -31,7 +61,7 @@ on the number of attempts to connect.
 > organization creating them.
 
 To control these types of connections,
-firewalls apply rules.
+firewalls apply **rules**.
 A rule may block all incoming connections, but
 then allow SSH traffic through port 22,
 either via TCP or UDP, and
@@ -44,8 +74,8 @@ through port 443.
 
 Let's briefly cover two ways to define
 firewall rules.
-When we set up our LAMP servers in the
-last part of this course,
+When we set up our **LAMP** servers in the
+next part of this course,
 we'll need to implement some rules to
 allow outside connections to our server.
 
@@ -66,11 +96,6 @@ First, our Google Cloud instance is
 at the network level, and
 the [documentation][vpcFirewallOverview]
 provides an overview of these rules.
-Second, Ubuntu uses a firewall
-called [ufw][ufwDocs], which
-can be used to control additional connections
-at the operating system level.
-(Please read the documentation at those three links.)
 
 It's important to know that these two firewalls provide
 protection at different traffic stops, so to speak.
@@ -82,31 +107,97 @@ connections at the server level,
 then SSH traffic won't pass through.
 In other words, incoming connections must pass
 through the network firewall first, and then pass
-through the server firewall second.
+through the server firewall second,
+if we decided to implement that at the OS level.
 Outgoing connections must pass through
 the server firewall first, and
 then the network firewall second.
 
-It's also important to know that Ubuntu's ``ufw`` firewall
-is disabled by default.
-In fact, it may be overkill to use both
-Google Cloud's firewall and Ubuntu's ``ufw``, or
-it may not.
-It simply depends on our needs and our circumstances.
+### Block the `ping` application
 
-We'll return to firewalls and put some rules
-into practice when we work on our LAMP setup.
+Let's implement a basic firewall rule
+where we block incoming ICMP traffic
+that's used by the `ping` command.
+
+1. In the Google Cloud Console, click on **VPC network** and select
+   **Firewall**.
+2. The default VPC firewall rules are listed that allow for HTTP, ICMP, RDP,
+   and SSH traffic.
+3. Priority settings are set for each rule. Lower numbers mean the rules have a
+   higher priority.
+4. The predefined rules allow for incoming ICMP traffic set at a priority level
+   of 65534.
+5. We could delete that, but we should leave these rules in place and create a
+   higher priority rule that will supersede that.
+6. Click on **Create Firewall Rule**.
+7. For name, enter **new-deny-icmp**.
+8. Keep priority at 1000.
+9. Under **Direction of traffic**, keep as **Ingress**.
+10. Under **Action on match**, select **Deny**.
+11. In the **Source IPv4** ranges, enter **0.0.0.0/0** for all network traffic.
+12. Under **Protocols and ports**, select **Other**, and type in **icmp**.
+13. Click the **Create** button to create the rule.
+
+On the **VM instances** page,
+you can find the external IP address
+for your virtual machine.
+For example,
+let's say mine is 33.333.333.100.
+From my laptop,
+if I try to ping that IP address,
+I won't get a response.
+
+Once you have tested this rule,
+please delete it.
+Select the check box next to the rule,
+and then click the **Delete** button.
+
+### OS Firewall Applications
+
+In case you are working on firewalls
+on a specific machine instead of
+on the cloud,
+then you would want to become
+familiar with Linux-based firewall applications.
+
+On Ubuntu, the main firewall application is
+[`ufw`][ufwDocs].
+On RedHat-based distributions,
+the main firewall application is
+[`firewalld`][firewalld].
+Both of these firewall applications
+are user-friendly frontends of
+the [`iptables`][iptables] firewall application,
+which is built into the Linux kernel.
+FreeBSD and OpenBSD,
+two non-Linux but Unix-like operating systems,
+offer `pf`:
+[PF on FreeBSD][pf_freebsd] and
+[PF on OpenBSD][pf_openbsd].
+These *BSD OSes are often used
+to build firewalls.
+
+Although we are using an
+Ubuntu distribution as our virtual machines,
+Ubuntu's ``ufw`` firewall
+is disabled by default.
+Likely because it may be overkill to use both
+Google Cloud's firewall and Ubuntu's ``ufw``.
 
 ## Backups
 
-Catastrophes (natural, physical, criminal, or out of negligence) happen, and
+Catastrophes
+(natural, physical, criminal, or out of negligence)
+happen, and
 as a systems administrator,
 you may be required to have backup strategies
 to mitigate data loss.
 
 How you backup depends on the machine.
-If I am managing physical hardware, for instance,
-and I want to backup a physical disk to another physical disk,
+If I am managing physical hardware,
+for instance,
+and I want to backup a
+physical disk to another physical disk,
 then that requires a specific tool.
 However, if I am managing virtual machines,
 like our Google Cloud instance,
@@ -114,7 +205,47 @@ then that requires a different tool.
 Therefore, in this section,
 I will briefly cover both scenarios.
 
-### rsync
+### Google Cloud Snapshots
+
+Since our instance on Google Cloud is a virtual machine,
+we can use the Google Cloud console to create 
+**snapshots** of our instance.
+A **snapshot** is a copy of a virtual machine at 
+the time the snapshot was taken.
+What's great about taking a snapshot is that
+the result is basically a file of a complete operating system.
+Since it's a file,
+it can itself be used in other projects or used
+to restore a machine to the time the snapshot was taken.
+
+Snapshots may also be used to document or reproduce work.
+For example, if I worked with programmers,
+as a systems administrator,
+I might help a programmer share snapshots of a virtual
+machine with other programmers.
+Those other programmers could then restore
+the snapshot in their own instances,
+and see and run the original work
+in the environment it was created in.
+
+Taking snapshots in Google Cloud is very straightforward, but
+since it does take up extra storage,
+it will accrue extra costs.
+Since we want avoid that for now,
+please see the following documentation for how to take
+a snapshot in Google Cloud:
+
+[Create and manage disk snapshots][gcloudDiskSnapshots]
+
+1. Click on **Compute Engine**.
+2. Click on **Snapshots**.
+3. Click on **Create Snapshot**.
+4. Enter a name for your snapshot.
+5. Select the **Source disk**.
+6. Select **Snapshot** under the **Type** section.
+7. Click on **Create**.
+
+### `rsync`
 
 If we were managing bare metal machines, then
 we might use a program like ``rsync`` to backup
@@ -238,38 +369,6 @@ destination directory with the source directory:
 rsync -av tmp2/ tmp1/
 ```
 
-### Google Cloud
-
-Since our instance on Google Cloud is a virtual machine,
-we can use the Google Cloud console to create 
-**snapshots** of our instance.
-A **snapshot** is a copy of a virtual machine at 
-the time the snapshot was taken.
-What's great about taking a snapshot is that
-the result is basically a file of a complete operating system.
-Since it's a file,
-it can itself be used in other projects or used
-to restore a machine to the time the snapshot was taken.
-
-Snapshots may also be used to document or reproduce other's work.
-For example, if I worked with programmers,
-as a systems administrator,
-I might help a programmer share snapshots of a virtual
-machine with other programmers.
-Those other programmers could then restore
-the snapshot in their own instances,
-and see and run the original work
-in the environment it was created in.
-
-Taking snapshots in Google Cloud is very straightforward, but
-since it does take up extra storage,
-it will accrue extra costs.
-Since we want avoid that for now,
-please see the following documentation for how to take
-a snapshot in Google Cloud:
-
-[Create and manage disk snapshots][gcloudDiskSnapshots]
-
 ## Conclusion
 
 In this section,
@@ -287,7 +386,11 @@ But knowing these options exist and
 the different reasons why we have these options,
 provides quite a bit of utility.
 
-[prepopDefault]:https://cloud.google.com/vpc/docs/firewalls#more_rules_default_vpc
-[vpcFirewallOverview]:https://cloud.google.com/vpc/docs/firewalls
-[ufwDocs]:https://help.ubuntu.com/community/UFW
+[firewalld]:https://docs.fedoraproject.org/en-US/quick-docs/firewalld/
 [gcloudDiskSnapshots]:https://cloud.google.com/compute/docs/disks/create-snapshots
+[iptables]:https://www.netfilter.org/
+[pf_freebsd]:https://docs.freebsd.org/en/books/handbook/firewalls/
+[pf_openbsd]:https://www.openbsd.org/faq/pf/
+[prepopDefault]:https://cloud.google.com/vpc/docs/firewalls#more_rules_default_vpc
+[ufwDocs]:https://help.ubuntu.com/community/UFW
+[vpcFirewallOverview]:https://cloud.google.com/vpc/docs/firewalls
