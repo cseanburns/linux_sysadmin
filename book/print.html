@@ -7234,12 +7234,11 @@ And/or, another rule may block all incoming,
 unencrypted HTTP connections through port 80, but
 allow all incoming, encrypted HTTPS connections 
 through port 443.</p>
-<p>Let's briefly cover two ways to define
-firewall rules.
-When we set up our <strong>LAMP</strong> servers in the
-next part of this course,
-we'll need to implement some rules to
-allow outside connections to our server.</p>
+<p>Let's cover using Google Cloud to create
+a basic firewall rule.
+This will prepare us for setting
+up new rules when we configure our LAMP servers
+in the next section.</p>
 <blockquote>
 <p>LAMP originally referred to Linux, Apache, MySQL, and PHP;
 these four technologies create a web server.
@@ -7321,7 +7320,7 @@ offer <code>pf</code>:
 <a href="https://docs.freebsd.org/en/books/handbook/firewalls/">PF on FreeBSD</a> and
 <a href="https://www.openbsd.org/faq/pf/">PF on OpenBSD</a>.
 These *BSD OSes are often used
-to build firewalls.</p>
+to build firewall servers.</p>
 <p>Although we are using an
 Ubuntu distribution as our virtual machines,
 Ubuntu's <code>ufw</code> firewall
