@@ -97,22 +97,6 @@ at the network level, and
 the [documentation][vpcFirewallOverview]
 provides an overview of these rules.
 
-It's important to know that these two firewalls provide
-protection at different traffic stops, so to speak.
-By that I mean,
-a Google Cloud firewall rule may allow SSH (port 22)
-traffic to a server instance, but
-if Ubuntu's ``ufw`` firewall blocks port 22
-connections at the server level,
-then SSH traffic won't pass through.
-In other words, incoming connections must pass
-through the network firewall first, and then pass
-through the server firewall second,
-if we decided to implement that at the OS level.
-Outgoing connections must pass through
-the server firewall first, and
-then the network firewall second.
-
 ### Block the `ping` application
 
 Let's implement a basic firewall rule
@@ -151,6 +135,13 @@ Once you have tested this rule,
 please delete it.
 Select the check box next to the rule,
 and then click the **Delete** button.
+
+Google's Firewall rules,
+at extra cost,
+now offer the ability to
+block specific domains
+(FQDN-based firewalls)
+and to block geographial regions.
 
 ### OS Firewall Applications
 
