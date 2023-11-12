@@ -234,6 +234,31 @@ For example, if your **external IP address** is
 http://55.222.55.222/index.html.original
 ```
 
+## Conclusion
+
+In this section,
+we learned about the Apache2 HTTP server.
+We learned how to install it on Ubuntu,
+how to use systemd (``systemctl``) commands
+to check its default status,
+how to create a basic web page in **/var/www/html**,
+how to view that web page using the ``w3m``
+command line browser and with our regular graphical browser,
+how to enable the user directory module, and
+repeat the steps above to create a website
+in our home directories.
+
+In the next section,
+we will learn how to make our sites applications
+by installing PHP and enabling the relevant PHP modules.
+
+[nginx]:https://nginx.org/en/
+[apache]:https://httpd.apache.org/
+[gettingStarted]:https://httpd.apache.org/docs/2.4/getting-started.html
+[gcloudConsole]:https://console.cloud.google.com/
+[modUserDir]:https://httpd.apache.org/docs/2.4/mod/mod_userdir.html
+
+<!--
 ## User Directories
 
 You may have visited sites in the past
@@ -386,27 +411,7 @@ to make these directories executable and readable
 before files in our **public_html** directory
 could be accessed in a browser.
 
-## Conclusion
-
-In this section,
-we learned about the Apache2 HTTP server.
-We learned how to install it on Ubuntu,
-how to use systemd (``systemctl``) commands
-to check its default status,
-how to create a basic web page in **/var/www/html**,
-how to view that web page using the ``w3m``
-command line browser and with our regular graphical browser,
-how to enable the user directory module, and
-repeat the steps above to create a website
-in our home directories.
-
-In the next section,
-we will learn how to make our sites applications
-by installing PHP and enabling the relevant PHP modules.
+-->
 
 
-[nginx]:https://nginx.org/en/
-[apache]:https://httpd.apache.org/
-[gettingStarted]:https://httpd.apache.org/docs/2.4/getting-started.html
-[gcloudConsole]:https://console.cloud.google.com/
-[modUserDir]:https://httpd.apache.org/docs/2.4/mod/mod_userdir.html
+
