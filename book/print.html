@@ -7679,117 +7679,6 @@ For example, if your <strong>external IP address</strong> is
 <strong>55.222.55.222</strong>, then you'd specify it like so:</p>
 <pre><code>http://55.222.55.222/index.html.original
 </code></pre>
-<h2 id="user-directories"><a class="header" href="#user-directories">User Directories</a></h2>
-<p>You may have visited sites in the past
-that have a tilde in the URL and look like this:</p>
-<pre><code>http://example.com/~user/
-</code></pre>
-<p>These are called user directories, and
-the provide additional path to the <strong>document root</strong>
-that's located in users' home directories
-in a directory called <strong>public_html</strong>.
-This is the default document root for user directories,
-but the default can be changed to different locations.
-Please read the documentation on what's called the
-<a href="https://httpd.apache.org/docs/2.4/mod/mod_userdir.html">Apache Module mod_userdir</a> before proceeding.</p>
-<p>By default, users with accounts on the server
-need to have a <strong>public_html</strong> directory
-in their home directories, and
-Apache2 needs to be configured
-to serve sites from those directories.
-For example, for the user <strong>linus</strong>,
-they should have the following file path available:</p>
-<pre><code>/home/linus/public_html/
-</code></pre>
-<h3 id="enable-mod_userdir"><a class="header" href="#enable-mod_userdir">Enable mod_userdir</a></h3>
-<p>The configuration file for <strong>mod_userdir</strong> is
-located in <strong>/etc/apache2/mods-available/</strong>
-and is named <strong>userdir.conf</strong>.
-Files in this directory are modules that
-are available to Apache2 but that are not
-enabled (i.e., they're turned off) by default.
-We can view that the <strong>userdir.conf</strong> file
-with the <code>less</code> command:</p>
-<pre><code>less /etc/apache2/mods-available/userdir.conf
-</code></pre>
-<p>The default configuration does not need to be modified.
-Therefore, all we need to do is enable this module.
-To do that, we use the <code>a2enmod</code> Apache2 command
-(see <code>man a2enmod</code> for details.)</p>
-<pre><code>sudo a2enmod userdir
-</code></pre>
-<p>After enabling,
-we need to reload the HTTP service, and
-we can also check its status:</p>
-<pre><code>sudo systemctl restart apache2
-systemctl status apache2
-</code></pre>
-<h3 id="create-a-user-directory-website"><a class="header" href="#create-a-user-directory-website">Create a User Directory Website</a></h3>
-<p>Let's say I am logged in as the user <strong>linus</strong> on the system and
-will use that to test if the user directory is working.
-First, let's go home.
-For me, as the user <strong>linus</strong>,
-that would <strong>/home/linus/</strong>, and
-I just have to type in the <code>cd</code> command and press Enter:</p>
-<pre><code>cd
-</code></pre>
-<p>Now I need to create a <strong>public_html</strong> directory
-in my home directory
-(<strong>make sure you're in your home directory!</strong>), and
-change into that directory:</p>
-<pre><code>mkdir public_html
-cd public_html
-</code></pre>
-<p>By default, Apache2 looks for a file
-named <strong>index.html</strong> in the document root.
-I'll create that and add some basic HTML to it:</p>
-<pre><code>nano index.html
-</code></pre>
-<p>And in that file:</p>
-<pre><code>&lt;html&gt;
-&lt;head&gt;
-&lt;title&gt;My home site&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;p&gt;This is my home site.&lt;/p&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>Now simply add <strong>/~linus/</strong> to your external IP
-address in your browser's URL bar.
-Like so
-(of course, replace the external IP address with
-your external IP address and the username with
-the username that you're using):</p>
-<pre><code>http://55.222.55.222/~linus/
-</code></pre>
-<p>Note that this process is pretty easy but
-that it will be different on other distributions.
-For example, the <strong>Fedora</strong> distribution has different
-<strong>Apache2</strong> defaults.
-Also, on some distributions,
-we might need to change the directory permissions
-before this will work.
-By default, Ubuntu sets directory permissions to
-on our home directories to:</p>
-<pre><code>drwxr-xr-x
-</code></pre>
-<p>That means that any user can view the contents
-of our home directories.
-And Ubuntu sets directories created with <code>mkdir</code>
-in the home directory with these permissions by default:</p>
-<pre><code>drwxrwxr-x
-</code></pre>
-<p>These default settings make those directories
-world readable, but
-other distributions do not default to those permissions.
-If the last <code>r-x</code> was set to <code>---</code>, then
-we would need to use the <code>chmod</code> command
-to make these directories executable and readable
-before files in our <strong>public_html</strong> directory
-could be accessed in a browser.</p>
 <h2 id="conclusion-17"><a class="header" href="#conclusion-17">Conclusion</a></h2>
 <p>In this section,
 we learned about the Apache2 HTTP server.
@@ -7805,6 +7694,160 @@ in our home directories.</p>
 <p>In the next section,
 we will learn how to make our sites applications
 by installing PHP and enabling the relevant PHP modules.</p>
+<!--
+## User Directories
+
+You may have visited sites in the past
+that have a tilde in the URL and look like this:
+
+```
+http://example.com/~user/
+```
+
+These are called user directories, and
+the provide additional path to the **document root**
+that's located in users' home directories
+in a directory called **public_html**.
+This is the default document root for user directories,
+but the default can be changed to different locations.
+Please read the documentation on what's called the
+[Apache Module mod_userdir][modUserDir] before proceeding.
+
+By default, users with accounts on the server
+need to have a **public_html** directory
+in their home directories, and
+Apache2 needs to be configured
+to serve sites from those directories.
+For example, for the user **linus**,
+they should have the following file path available:
+
+```
+/home/linus/public_html/
+```
+
+### Enable mod_userdir
+
+The configuration file for **mod_userdir** is
+located in **/etc/apache2/mods-available/**
+and is named **userdir.conf**.
+Files in this directory are modules that
+are available to Apache2 but that are not
+enabled (i.e., they're turned off) by default.
+We can view that the **userdir.conf** file
+with the ``less`` command:
+
+```
+less /etc/apache2/mods-available/userdir.conf
+```
+
+The default configuration does not need to be modified.
+Therefore, all we need to do is enable this module.
+To do that, we use the ``a2enmod`` Apache2 command
+(see ``man a2enmod`` for details.)
+
+```
+sudo a2enmod userdir
+```
+
+After enabling,
+we need to reload the HTTP service, and
+we can also check its status:
+
+```
+sudo systemctl restart apache2
+systemctl status apache2
+```
+
+### Create a User Directory Website
+
+Let's say I am logged in as the user **linus** on the system and
+will use that to test if the user directory is working.
+First, let's go home.
+For me, as the user **linus**,
+that would **/home/linus/**, and
+I just have to type in the ``cd`` command and press Enter:
+
+```
+cd
+```
+
+Now I need to create a **public_html** directory
+in my home directory
+(**make sure you're in your home directory!**), and
+change into that directory:
+
+```
+mkdir public_html
+cd public_html
+```
+
+By default, Apache2 looks for a file
+named **index.html** in the document root.
+I'll create that and add some basic HTML to it:
+
+```
+nano index.html
+```
+
+And in that file:
+
+```
+<html>
+<head>
+<title>My home site</title>
+</head>
+<body>
+
+<p>This is my home site.</p>
+
+</body>
+</html>
+```
+
+Now simply add **/~linus/** to your external IP
+address in your browser's URL bar.
+Like so
+(of course, replace the external IP address with
+your external IP address and the username with
+the username that you're using):
+
+```
+http://55.222.55.222/~linus/
+```
+
+Note that this process is pretty easy but
+that it will be different on other distributions.
+For example, the **Fedora** distribution has different
+**Apache2** defaults.
+Also, on some distributions,
+we might need to change the directory permissions
+before this will work.
+By default, Ubuntu sets directory permissions to
+on our home directories to:
+
+```
+drwxr-xr-x
+```
+
+That means that any user can view the contents
+of our home directories.
+And Ubuntu sets directories created with ``mkdir``
+in the home directory with these permissions by default:
+
+```
+drwxrwxr-x
+```
+
+These default settings make those directories
+world readable, but
+other distributions do not default to those permissions.
+If the last ``r-x`` was set to ``---``, then
+we would need to use the ``chmod`` command
+to make these directories executable and readable
+before files in our **public_html** directory
+could be accessed in a browser.
+
+-->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-and-configuring-php"><a class="header" href="#installing-and-configuring-php">Installing and Configuring PHP</a></h1>
 <h2 id="introduction-7"><a class="header" href="#introduction-7">Introduction</a></h2>
 <p>Client-side programming languages, like JavaScript,
