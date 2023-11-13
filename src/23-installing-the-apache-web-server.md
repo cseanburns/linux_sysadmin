@@ -243,10 +243,7 @@ how to use systemd (``systemctl``) commands
 to check its default status,
 how to create a basic web page in **/var/www/html**,
 how to view that web page using the ``w3m``
-command line browser and with our regular graphical browser,
-how to enable the user directory module, and
-repeat the steps above to create a website
-in our home directories.
+command line browser and with our regular graphical browser.
 
 In the next section,
 we will learn how to make our sites applications

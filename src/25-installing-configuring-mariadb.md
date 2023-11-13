@@ -459,7 +459,7 @@ If all is well with the second command, HTML should be outputted:
 
 ```
 sudo php -f login.php
-sudo php -f index.php
+sudo php -f distros.php
 ```
 
 ## Conclusion
