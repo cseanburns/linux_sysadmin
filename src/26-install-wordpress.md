@@ -288,8 +288,7 @@ sudo nano wp-config.php
 In `nano`,
 add your database name, user, and password
 in the appropriate fields,
-just like we did with our `login.php` file
-for our bare bones OPAC.
+just like we did with our `login.php` file.
 
 Additionally, we want to disable FTP uploads
 to the site.
