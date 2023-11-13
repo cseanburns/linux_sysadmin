@@ -1,0 +1,547 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Installing WordPress - Linux Systems Administration</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Entry level book on Linux systems administration.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="01-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="02-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="03-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-using-gcloud.html"><strong aria-hidden="true">2.</strong> Using Google Cloud (gcloud)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="05-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="06-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="07-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="08-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="09-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="10-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="11-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="12-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="13-regular-expressions.html"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="14-bash-scripting.html"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="15-expanding-storage.html"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="16-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="17-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="18-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="19-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="20-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="21-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="22-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="23-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="24-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="25-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="26-install-wordpress.html" class="active"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cseanburns/linux_sysadmin" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="install-wordpress"><a class="header" href="#install-wordpress">Install WordPress</a></h1>
+<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p><a href="https://en.wikipedia.org/wiki/WordPress">WordPress</a> is a free and open source
+content management system (CMS).
+Originally, its focus was on providing
+a platform for blogging, but
+throughout the last decade plus,
+it has become a general purpose CMS
+that can serve as a website builder.
+Two sites exist to provide access to WordPress:
+<a href="https://wordpress.com">WordPress.com</a> and <a href="https://wordpress.org">Wordpress.org</a>.
+WordPress.com is a hosting solution,
+which means that customers can sign up and
+create a free WordPress site.
+Since its hosted,
+customers are only responsible for
+their content and not for managing
+the WordPress installation and its updates.
+Various paid plans can extend the functionality
+offered to WordPress.com customers.</p>
+<p>WordPress.org is maintained by
+the <a href="https://wordpressfoundation.org/">WordPress Foundation</a>, which 
+oversees the development of and
+provides access to the WordPress software.
+When we download the WordPress software,
+we download it from WordPress.org.
+Unlike the hosted solution,
+when we install and setup WordPress
+on our own servers,
+we become responsible for administrating
+its installation and for keeping the software updated.</p>
+<p>WordPress is widely used software,
+and because of that,
+it's often the focus of attack.
+Take a moment to read about the developers's
+efforts to protect WordPress: <a href="https://wordpress.org/about/security/">Security</a>.
+We will not need to update our WordPress installs
+during the course of this course, but
+you should be familiar with the update process
+in case you decide to maintain your install or
+an install at a future date:
+<a href="https://wordpress.org/documentation/article/updating-wordpress/">Updating WordPress</a>.</p>
+<p>Plugins are often used with WordPress sites
+to offer all sorts of additional capabilities.
+Currently, there are over <a href="https://wordpress.org/plugins/">60 thousand plugins</a>
+available for WordPress, but
+some are of higher quality and utility than others.
+In addition to the thousands of available plugins,
+there are over <a href="https://wordpress.org/themes/">10 thousand free themes</a> for
+WordPress sites.
+Plus, many businesses offer paid themes or can
+offer customized themes based on customer needs.
+These themes can drastically alter the
+appearance and usability of a WordPress site.
+I encourage you to explore plugins, develop, and
+add content to your WordPress sites, but
+the main goal
+as a systems administrator is to
+set up the sites and
+not build out content.</p>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
+<p>So far I have shown you how to install
+software using two methods:</p>
+<ul>
+<li>using the <code>apt</code> command</li>
+<li>downloading from GitHub</li>
+</ul>
+<p>In this lesson,
+we are going to install WordPress by
+downloading the most recent version
+from WordPress.org
+and installing it manually.
+The WordPress application is available
+via the <code>apt</code> command, but
+the <code>apt</code> process makes it a bit more
+confusing than it should be, oddly.</p>
+<p>We are going to <em>kind of</em> follow
+the documentation provided by WordPress.org.
+You should read through the documentation <em><strong>before</strong></em>
+following my instructions, but
+then follow the process I outline here instead
+because the documentation uses some different
+tools than we'll use.</p>
+<p>Another reason we do this manually is because it
+builds on what we have learned when
+we created the <code>login.php</code> and <code>distros.php</code> pages.
+That is, the two processes are similar.
+In both cases,
+we create a specific database for our platform,
+we create a specific user for that database,
+and we provide login credentials in a specific file.</p>
+<p>First, read through <strong>but do not follow the following instructions</strong>:</p>
+<p><a href="https://wordpress.org/documentation/article/how-to-install-wordpress/">How to install WordPress</a></p>
+<h2 id="customized-installation-process"><a class="header" href="#customized-installation-process">Customized Installation Process</a></h2>
+<p>After you have read through the WordPress.org
+documentation,
+follow the steps below to complete the manual install:</p>
+<h3 id="step-1-requirements"><a class="header" href="#step-1-requirements">Step 1: Requirements</a></h3>
+<p>All major software have dependencies,
+other software or code that it needs to run.
+We used the <code>ldd</code> command
+to discover the dependencies
+of simple commands like <code>ls</code>
+when we created our <code>chroot</code> environments.
+When we install software via <code>apt</code>,
+the <code>apt</code> program installs
+the needed dependencies for us.
+Since our plan is
+to install WordPress outside
+of the <code>apt</code> ecosystem,
+we need to make sure that our systems
+meet the requirements for our installation.
+The <a href="https://wordpress.org/about/requirements/">WordPress.org Requirements</a> page
+states that the WordPress installation requires
+at least PHP version 7.4 and MySQL version 5.7.
+It does not list what version of
+MariaDB is needed, but
+<a href="https://mariadb.com/kb/en/mariadb-vs-mysql-compatibility/">any version over 10.2</a>
+should work.
+We can check that our systems meet these
+requirements with the following commands:</p>
+<pre><code>php --version
+mariadb --version
+</code></pre>
+<p>The output from <code>php --version</code> shows that our systems
+have PHP 7.4.3,
+which is greater than PHP 7.4.
+The output from <code>mariadb --version</code> show that our systems
+have MariaDB 15.1,
+which is greater than MySQL 5.7.
+This means we can proceed.</p>
+<p>Next, we need to add some additional PHP
+modules to our system to let WordPress operate
+at full functionality.
+We can install these using the <code>apt</code> command:</p>
+<pre><code>sudo apt install php-curl php-xml php-imagick php-mbstring php-zip php-intl
+</code></pre>
+<p>Then restart Apache2 and MariaDB:</p>
+<pre><code>sudo systemctl restart apache2
+sudo systemctl restart mariadb
+</code></pre>
+<h3 id="step-2-download-and-extract"><a class="header" href="#step-2-download-and-extract">Step 2: Download and Extract</a></h3>
+<p>The next step is to download and
+extract the WordPress software,
+which is downloaded as a <strong>tar.gz</strong> file.
+This is very much like a compressed
+<strong>zip</strong> file.
+Although we only download one file,
+when we extract it with the <code>tar</code> command,
+the extraction will result in a new directory
+that contains multiple files and subdirectories.
+The general instructions include:</p>
+<ol>
+<li>Change to the <strong>/var/www/html</strong> directory.</li>
+<li>Download the latest version of WordPress using the <code>wget</code>
+program.</li>
+<li>Extract the package using the <code>tar</code> program.</li>
+</ol>
+<p>Specifically, we do the following on the command line:</p>
+<pre><code>cd /var/www/html
+sudo wget https://wordpress.org/latest.tar.gz
+sudo tar -xzvf latest.tar.gz
+</code></pre>
+<p>As noted in the WordPress documentation,
+this will create a directory
+called <strong>wordpress</strong> in the same directory.
+If we leave that alone,
+then the full path of our
+installations will located at
+<strong>/var/www/html/wordpress</strong></p>
+<h3 id="step-3-create-the-database-and-a-user"><a class="header" href="#step-3-create-the-database-and-a-user">Step 3: Create the Database and a User</a></h3>
+<p>The WordPress documentation describes how
+to use <strong>phpMyAdmin</strong> to create the database
+and a user for WordPress.
+<strong>phpMyAdmin</strong> is a graphical front end
+to the MySQL/MariaDB relational database
+that you would access
+through the browser.
+I like to minimize
+the software that we install
+on servers to reduce
+the server's security exposure.
+Therefore, we are going
+to create the WordPress database
+and a database user using the same process we used
+to create a database and user
+for our <code>login.php</code> and <code>distros.php</code> pages.</p>
+<p>The general instructions are:</p>
+<ol>
+<li>Switch to the root Linux user</li>
+<li>Login as the MariaDB root user</li>
+</ol>
+<p>Specifically, we do the following on the command line:</p>
+<pre><code>sudo su
+mariadb -u root
+</code></pre>
+<p>The <code>mariadb -u root</code> command places
+us in the MariaDB command prompt.
+The next general instructions are to:</p>
+<ol>
+<li>Create a new user for the WordPress database</li>
+<li>Be sure to replace the Xs with a strong password</li>
+<li>Create a new database for WordPress</li>
+<li>Grant all privileges to the new user for the new database</li>
+<li>Examine the output</li>
+<li>Exit the MariaDB prompt</li>
+</ol>
+<p>Specifically, this means the following
+(be sure to replaces the <strong>Xs</strong> with a unique
+and strong password of your own):</p>
+<pre><code>create user 'wordpress'@'localhost' identified by 'XXXXXXXXX';
+create database wordpress;
+grant all privileges on wordpress.* to 'wordpress'@'localhost';
+show databases;
+\q
+</code></pre>
+<h3 id="step-4-set-up-wp-configphp"><a class="header" href="#step-4-set-up-wp-configphp">Step 4: Set up wp-config.php</a></h3>
+<p>When we created a file called <code>login.php</code> file
+that contained the name of the database
+(e.g. linuxdb),
+the name of the database user
+(e.g., webapp),
+and the user's password.
+we followed the same general process
+that WordPress follows.
+However, instead of <code>login.php</code>,
+WordPress uses a file
+called <code>wp-config.php</code>
+that we will have to edit.</p>
+<p>Follow these general steps:</p>
+<ol>
+<li>Change to the <strong>wordpress</strong> directory, if you haven't
+already.</li>
+<li>Copy and rename the <strong>wp-config-sample.php</strong> file to
+<strong>wp-config.php</strong>.</li>
+<li>Edit the file and add your WordPress database name, user
+name, and password in the fields for <strong>DB_NAME</strong>,
+<strong>DB_USER</strong>, and <strong>DB_PASSWORD</strong>.</li>
+</ol>
+<p>This means that we specifically do the following:</p>
+<pre><code>cd /var/www/html/wordpress
+sudo cp wp-config-sample.php wp-config.php
+sudo nano wp-config.php
+</code></pre>
+<p>In <code>nano</code>,
+add your database name, user, and password
+in the appropriate fields,
+just like we did with our <code>login.php</code> file
+for our bare bones OPAC.</p>
+<p>Additionally, we want to disable FTP uploads
+to the site.
+To do that,
+navigate to the end of the file and
+add the following line:</p>
+<pre><code>define('FS_METHOD','direct');
+</code></pre>
+<h3 id="step-5-optional"><a class="header" href="#step-5-optional">Step 5: <strong>Optional</strong></a></h3>
+<p>The WordPress files were installed at
+<strong>/var/www/html/wordpress</strong>.
+This means that our sites would be located at:</p>
+<pre><code>http://[IP ADDRESS]/wordpress
+</code></pre>
+<p>If you want to have a different
+ending to your URL,
+then you want to
+rename your <strong>wordpress</strong> directory
+to something else.
+The WordPress documentation
+uses <strong>blog</strong> as an example.
+But it could be something different,
+as long as it is a single word
+with no spaces or special characters.
+Again, if you decide to change it,
+be sure to keep the name lowercase
+and one word (no spaces and only alphabetic characters).
+For example, if I want to change mine to <strong>blog</strong>, then:</p>
+<pre><code>cd /var/www/html
+sudo mv wordpress blog
+</code></pre>
+<h3 id="step-6-change-file-ownership"><a class="header" href="#step-6-change-file-ownership">Step 6: Change File Ownership</a></h3>
+<p>WordPress will need to write to files
+in the base directory.
+Assuming you are still in your base directory,
+whether that is <code>/var/www/html/wordpress</code> or
+<code>/var/www/html/blog</code> or like,
+run the following command:</p>
+<pre><code>sudo chown -R www-data:www-data *
+</code></pre>
+<h3 id="step-7-run-the-install-script"><a class="header" href="#step-7-run-the-install-script">Step 7: Run the Install Script</a></h3>
+<p>The next part of the process takes
+place in the browser.
+The location (URL) that
+you visit in the browser
+depends on your specific IP address
+and also includes the directory
+in <strong>/var/www/html</strong> that
+we extracted WordPress to or
+that you renamed
+if you followed <strong>Step 5</strong>.
+Thus, if my IP address is 11.111.111.11 and
+I renamed by directory to <strong>blog</strong>, then
+I need to visit the following URL:</p>
+<pre><code>http://11.111.111.11/blog/wp-admin/install.php
+</code></pre>
+<p><strong>IF</strong> I kept the directory named <strong>wordpress</strong>, then
+this is the URL that I use:</p>
+<pre><code>http://11.111.111.11/wordpress/wp-admin/install.php
+</code></pre>
+<h3 id="finishing-installation"><a class="header" href="#finishing-installation">Finishing installation</a></h3>
+<p>From this point forward,
+the steps to complete the installation are
+exactly the steps you follow using
+WordPress's documentation.</p>
+<p>Most importantly, you should see a <strong>Welcome</strong> screen
+where you enter your site's information.
+The site <strong>Username</strong> and <strong>Password</strong> <em>should not</em>
+be the same as the username and password you used
+to create your WordPress database in MariaDB.
+Rather, the username and password you enter here
+are for WordPress users; i.e.,
+those who will add content and manage the website.</p>
+<p><strong>Two things to note:</strong></p>
+<p>We have not setup <strong>Email</strong>
+on our servers.
+It's quite complicated to setup an email
+server correctly and securely, but
+it wouldn't work well without having a domain name
+setup anyway.
+So know that you probably should enter an email
+when setting up the user account,
+but it won't work.</p>
+<p>Second, when visiting your site,
+your browser may throw an error.
+Make sure that the URL is set to <strong>http</strong>
+and that it's not trying to access <strong>https</strong>.
+Setting up an <strong>https</strong> site generally
+requires a domain name, but
+we are not doing that here.
+So if there are any problems accessing your
+site in the browser,
+be sure to check that the URL starts off with <strong>http</strong>.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>Congrats on setting up your WordPress library site.
+Feel free to take a moment to
+modify your site's design or
+to add content.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="25-installing-configuring-mariadb.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="p8-conclusion.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="25-installing-configuring-mariadb.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="p8-conclusion.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
