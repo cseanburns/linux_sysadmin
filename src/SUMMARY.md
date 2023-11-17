@@ -32,4 +32,5 @@
     - [Installing and Configuring PHP](24-installing-configuring-php.md)
     - [Installing and Configuring MariaDB](25-installing-configuring-mariadb.md)
     - [Installing WordPress](26-install-wordpress.md)
+    - [Google Cloud CLI Assignment](27-gcloud-CLI-assignment.md)
 - [Conclusion](p8-conclusion.md)
