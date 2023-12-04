@@ -4,7 +4,7 @@
     - [History of Unix and Linux](1a-history-linux-unix.md)
     - [What is Linux?](1b-what-is-linux.md)
     - [What is Systems Administration?](1c-what-is-sysadmin.md)
-- [Project Management](p2-using-gcloud.md)
+- [Project Management](p2-project-management.md)
     - [Using gcloud for Virtual Machines](2a-using-gcloud-virtual-machines.md)
     - [Using Git and GitHub for Documentation](2b-using-git-github-for-documentation.md)
 - [Learning the Command Line](p3-the-command-line.md)
