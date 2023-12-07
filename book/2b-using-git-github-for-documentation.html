@@ -1,0 +1,486 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Using Git and GitHub for Documentation - Linux Systems Administration</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Entry level book on Linux systems administration.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = null;
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1a-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="1b-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="1c-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-project-management.html"><strong aria-hidden="true">2.</strong> Project Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2a-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li><li class="chapter-item expanded "><a href="2b-using-git-github-for-documentation.html" class="active"><strong aria-hidden="true">2.2.</strong> Using Git and GitHub for Documentation</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3a-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="3b-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="3c-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="3d-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="3e-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="3f-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4a-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="4b-regular-expressions.html"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="4c-bash-scripting.html"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5a-expanding-storage.html"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="5b-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="5c-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="5d-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6a-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="6b-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="6c-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="6d-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7a-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="7b-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="7c-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="7d-install-wordpress.html"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li><li class="chapter-item expanded "><a href="7e-gcloud-CLI-assignment.html"><strong aria-hidden="true">7.5.</strong> Google Cloud CLI Assignment</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/cseanburns/linux_sysadmin" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="using-git-and-github-for-documentation"><a class="header" href="#using-git-and-github-for-documentation">Using Git and GitHub for Documentation</a></h2>
+<p>Managing and documenting complex systems
+is a challenge.
+Effective documentation is a cornerstone
+of operational efficiency and reliability.
+This lecture explores
+how Git and GitHub,
+traditionally seen as tools
+for software developers,
+is equally valuable
+for systems administrators
+for documenting various
+processes and configurations.</p>
+<p>Documentation in systems administration
+encompasses a broad spectrum:
+from configuration files and scripts
+to server deployment guides and
+maintenance procedures.
+It serves as a crucial reference point for teams,
+ensuring consistency in system management
+and easing the onboarding process
+for new administrators.</p>
+<p>Our focus on Git and GitHub arises
+from their robustness and versatility.
+Git, a distributed version control system,
+excels in tracking changes and managing versions
+of any set of files,
+be it code or text documents.
+GitHub, building upon Git,
+provides a user-friendly interface
+and additional features like
+issue tracking and collaborative tools,
+making it a suitable platform
+for hosting and sharing documentation.</p>
+<p>In this lecture,
+we will delve into how these
+tools can be used effectively
+for maintaining and enhancing documentation
+in a systems administration context.
+This will only be an intro to Git and GitHub, but
+key areas of discussion include:</p>
+<ul>
+<li>Utilizing Git for version control of configuration files and scripts.</li>
+<li>Leveraging GitHub for centralized documentation storage and access.</li>
+<li>Employing best practices for documenting system configurations.</li>
+</ul>
+<p>Using Git and GitHub will allow you
+to gain an understanding
+of the applications of Git and GitHub.
+This knowledge will help streamline
+your documentation processes and
+improve the overall efficiency
+and communication within your teams.</p>
+<h3 id="creating-a-github-account"><a class="header" href="#creating-a-github-account">Creating a GitHub Account</a></h3>
+<p>Creating a GitHub account
+is a straightforward process.
+Here's how you can set up
+your own GitHub account:</p>
+<ol>
+<li><strong>Visit the GitHub Website</strong>: Start by navigating to <a href="https://github.com">GitHub's
+website</a>.</li>
+<li><strong>Sign Up</strong>: Click on the “Sign Up” button usually located at the top right
+corner of the page. </li>
+<li><strong>Enter Your Details</strong>: You will be prompted to enter some basic
+information:
+<ul>
+<li><strong>Username</strong>: Choose a unique username that will be your identity on
+GitHub. It’s important to select a name that reflects your personal or
+professional identity as it will be visible publicly.</li>
+<li><strong>Email Address</strong>: Provide a valid email address. This will be used for
+account verification and communication.</li>
+<li><strong>Password</strong>: Create a strong password. It’s recommended to use a mix of
+letters, numbers, and symbols for better security.</li>
+</ul>
+</li>
+<li><strong>Verify Your Account</strong>: Complete the CAPTCHA verification to confirm that
+you’re not a robot.</li>
+<li><strong>Choose a Plan</strong>: GitHub offers various plans, including a free option that
+is quite robust for most individual users. Select the plan that best suits your
+needs.</li>
+<li><strong>Tailor Your Experience</strong> (Optional): GitHub may ask a series of questions
+to customize your experience, like your programming experience and intended use
+of GitHub. These can be skipped if preferred.</li>
+<li><strong>Verify Your Email Address</strong>: After completing the sign-up process, GitHub
+will send a verification email to the address you provided. Click on the
+verification link in that email to activate your account.</li>
+<li><strong>Start Exploring</strong>: Once your account is verified, you’re ready to explore
+GitHub. You can start by creating repositories, collaborating on projects, or
+exploring other users’ repositories.</li>
+</ol>
+<h4 id="tips-for-new-users"><a class="header" href="#tips-for-new-users">Tips for New Users</a></h4>
+<ul>
+<li><strong>Profile Information</strong>: After creating your account, consider adding more
+details to your profile, like a profile picture and bio, to make it more
+personable.</li>
+<li><strong>Security</strong>: Set up two-factor authentication for added security.</li>
+<li><strong>Learning Resources</strong>: GitHub has a wealth of tutorials and guides to help
+you get started. Utilize these to familiarize yourself with GitHub’s features
+and best practices.</li>
+</ul>
+<h3 id="understanding-file-naming-conventions"><a class="header" href="#understanding-file-naming-conventions">Understanding File Naming Conventions</a></h3>
+<p>File naming is a fundamental aspect
+of organizing and maintaining a
+clear and efficient documentation system,
+especially when using platforms like GitHub.
+Adhering to a consistent naming convention
+is crucial for several reasons:</p>
+<ol>
+<li><strong>Clarity and Accessibility</strong>: Well-named files are easier to identify and
+understand at a glance, saving time and reducing confusion.</li>
+<li><strong>System Compatibility</strong>: Certain characters in file names can cause issues
+in different operating systems. Avoiding spaces and special characters
+ensures broader compatibility.</li>
+<li><strong>Ease of Navigation</strong>: Consistent naming aids in navigating through files,
+especially in a large repository.</li>
+<li><strong>Version Control</strong>: Clear naming helps in tracking changes and managing
+versions more effectively.</li>
+</ol>
+<p>When naming files for GitHub,
+it's best to follow these guidelines:</p>
+<ul>
+<li>Use single words or combine words using camelCase, underscores (<code>_</code>), or
+hyphens (<code>-</code>). For example, <code>ServerSetupGuide.md</code> or <code>server-setup-guide.md</code>.</li>
+<li>Avoid spaces, as they can cause issues in URLs and command-line operations.</li>
+<li>Steer clear of special characters like <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc., as they
+might have specific functions in certain environments or scripts.</li>
+</ul>
+<h4 id="the-importance-of-md-extension-for-markdown-files"><a class="header" href="#the-importance-of-md-extension-for-markdown-files">The Importance of <code>.md</code> Extension for Markdown Files</a></h4>
+<p>When it comes to Markdown files,
+adding the <code>.md</code> extension is vital for several reasons:</p>
+<ol>
+<li><strong>GitHub Rendering</strong>: GitHub automatically renders files with a <code>.md</code>
+extension as formatted Markdown. This means your documentation will be
+displayed with the intended formatting (like headers, lists, links, etc.)
+directly in the repository view.</li>
+<li><strong>Editor Support</strong>: Most code editors recognize <code>.md</code> files and provide
+appropriate syntax highlighting and formatting previews, making editing more
+efficient.</li>
+<li><strong>Consistency and Recognition</strong>: Using the <code>.md</code> extension helps users and
+systems alike to quickly identify the file type and its intended use.</li>
+</ol>
+<p>For instance,
+naming a file <code>InstallationGuide.md</code> ensures
+that GitHub will render it as a Markdown document,
+displaying all formatting correctly in the browser.
+This enhances readability and
+makes the documentation more user-friendly.</p>
+<p>In summary,
+adhering to clear file naming conventions
+and correctly using the <code>.md</code> extension
+for Markdown files are essential practices
+for effective documentation on GitHub.
+These practices facilitate better organization,
+compatibility, and usability of your documentation,
+contributing to an overall smoother experience
+for both maintainers and users.</p>
+<h3 id="basic-markdown-tutorial"><a class="header" href="#basic-markdown-tutorial">Basic Markdown Tutorial</a></h3>
+<p>Markdown is a lightweight markup language
+designed to be easy to read and write.
+It's widely used for formatting files
+on platforms like GitHub, in forums, and
+for creating web content.
+Here's a quick guide to the
+most commonly used Markdown syntax:</p>
+<h4 id="headings"><a class="header" href="#headings">Headings</a></h4>
+<p>Headings are created using the <code>#</code>
+symbol before your text.
+The number of <code>#</code> symbols
+indicates the level of the heading:</p>
+<pre><code class="language-markdown"># Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+###### Heading 6
+</code></pre>
+<h4 id="emphasis"><a class="header" href="#emphasis">Emphasis</a></h4>
+<ul>
+<li><strong>Bold</strong>: To make text bold, wrap it in double asterisks or double
+underscores. For example, <code>**bold**</code> or <code>__bold__</code>.</li>
+<li><em>Italic</em>: To italicize text, wrap it in single asterisks or single
+underscores. For example, <code>*italic*</code> or <code>_italic_</code>.</li>
+</ul>
+<h4 id="lists"><a class="header" href="#lists">Lists</a></h4>
+<ul>
+<li>
+<p><strong>Unordered Lists</strong>: Use asterisks, plus signs, or hyphens to create bullet
+points.</p>
+<pre><code class="language-markdown">* Item 1
+* Item 2
+  * Subitem 2.1
+  * Subitem 2.2
+</code></pre>
+</li>
+<li>
+<p><strong>Ordered Lists</strong>: Use numbers followed by periods for an ordered list.</p>
+<pre><code class="language-markdown">1. First item
+2. Second item
+   1. Subitem 2.1
+   2. Subitem 2.2
+</code></pre>
+</li>
+</ul>
+<h4 id="links-and-images"><a class="header" href="#links-and-images">Links and Images</a></h4>
+<ul>
+<li><strong>Links</strong>: To create a link, wrap the link text in brackets <code>[ ]</code>, and then
+wrap the URL in parentheses <code>( )</code>. 
+<ul>
+<li>For example, <code>[GitHub](https://github.com)</code>.</li>
+</ul>
+</li>
+<li><strong>Images</strong>: Similar to links, but start with an exclamation mark, followed by
+the alt text in brackets, and the URL in parentheses. 
+<ul>
+<li>For example, <code>![Alt text](image-url.jpg)</code>.</li>
+</ul>
+</li>
+</ul>
+<h4 id="code"><a class="header" href="#code">Code</a></h4>
+<ul>
+<li>
+<p><strong>Inline Code</strong>: For small bits of code, use backticks to wrap your code. For
+example, <code>`code`</code>.</p>
+</li>
+<li>
+<p><strong>Code Blocks</strong>: For larger sections of code, use three backticks or indent
+with four spaces:</p>
+<p>```language
+your code here
+```</p>
+</li>
+</ul>
+<p>Replace <code>language</code> with the programming language for syntax highlighting (e.g., <code>python</code>, <code>javascript</code>).</p>
+<h4 id="blockquotes"><a class="header" href="#blockquotes">Blockquotes</a></h4>
+<p>To create a blockquote,
+use the <code>&gt;</code> symbol before your text.
+For nested blockquotes,
+use multiple <code>&gt;</code> symbols.</p>
+<pre><code class="language-markdown">&gt; This is a blockquote.
+&gt;&gt; This is a nested blockquote.
+</code></pre>
+<h4 id="horizontal-rules"><a class="header" href="#horizontal-rules">Horizontal Rules</a></h4>
+<p>Create a horizontal line or rule
+by using three or more asterisks,
+dashes, or underscores on a new line.</p>
+<pre><code class="language-markdown">---
+</code></pre>
+<h4 id="additional-tips"><a class="header" href="#additional-tips">Additional Tips</a></h4>
+<ul>
+<li><strong>Whitespace and Line Breaks</strong>: In Markdown, line breaks and spacing can be
+crucial. To create a new line without starting a new paragraph, end a line
+with two or more spaces before hitting Enter.</li>
+<li><strong>Escaping Markdown</strong>: To display a Markdown character, precede it with a
+backslash (<code>\</code>). For example, <code>\*not italic\*</code>.</li>
+</ul>
+<p>Markdown's simplicity and readability
+make it an excellent choice
+for documentation and note-taking.
+As you become more comfortable
+with these basics,
+you'll find it a versatile
+tool for your writing needs.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>In summary,
+Git and GitHub stand as
+powerful tools for documentation
+and version control,
+offering a platform for managing,
+tracking, and collaborating on projects.
+Adhering to clear file naming conventions
+enhances this system's efficiency,
+ensuring files are accessible and
+compatible across various environments.
+Furthermore, the use of Markdown within
+this framework simplifies the process
+of creating and maintaining readable
+and well-structured documentation.
+Together, these elements form
+an ecosystem that streamlines
+project management and
+fosters a collaborative and organized workspace,
+which is important for
+the successful execution of
+individual and team-based projects
+in information technology disciplines.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="2a-using-gcloud-virtual-machines.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="p3-the-command-line.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="2a-using-gcloud-virtual-machines.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="p3-the-command-line.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
