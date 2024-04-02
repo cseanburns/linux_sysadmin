@@ -1,7 +1,7 @@
 # Linux Systems Administration
 
 Author: C. Sean Burns  
-Date: 2022-08-12  
+Date: 2024-02-11  
 Email: [sean.burns@uky.edu](sean.burns@uky.edu)  
 Website: [cseanburns.github.io/csb/](https://cseanburns.github.io/csb/)  
 GitHub: [@cseanburns](https://github.com/cseanburns)  
