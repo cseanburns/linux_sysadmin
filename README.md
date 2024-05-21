@@ -20,4 +20,9 @@ as I learn from my students what needs to be addressed.
 The **archive/** directory contains
 prior content that I want to save separately.
 
+## To Do
+
+- add readings from [Computer System Engineering][cse50005]
+
 [mdbook]:https://github.com/rust-lang/mdBook
+[cse5005]:https://natalieagus.github.io/50005/
