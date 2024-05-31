@@ -23,6 +23,8 @@ prior content that I want to save separately.
 ## To Do
 
 - add readings from [Computer System Engineering][cse50005]
+- add reading on Linux Filesystems [Understanding Linux Filesystems][linus_fs]
 
 [mdbook]:https://github.com/rust-lang/mdBook
 [cse5005]:https://natalieagus.github.io/50005/
+[linux_fs]:https://www.linuxjournal.com/content/understanding-linux-filesystems-inodes-block-sizes-and-data-structures
