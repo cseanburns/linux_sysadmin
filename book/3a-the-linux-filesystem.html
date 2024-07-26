@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,42 +61,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1a-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="1b-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="1c-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-project-management.html"><strong aria-hidden="true">2.</strong> Project Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2a-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li><li class="chapter-item expanded "><a href="2b-using-git-github-for-documentation.html"><strong aria-hidden="true">2.2.</strong> Using Git and GitHub for Documentation</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3a-the-linux-filesystem.html" class="active"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="3b-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="3c-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="3d-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="3e-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="3f-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4a-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="4b-regular-expressions.html"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="4c-bash-scripting.html"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5a-expanding-storage.html"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="5b-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="5c-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="5d-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6a-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="6b-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="6c-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="6d-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7a-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="7b-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="7c-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="7d-install-wordpress.html"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li><li class="chapter-item expanded "><a href="7e-gcloud-CLI-assignment.html"><strong aria-hidden="true">7.5.</strong> Google Cloud CLI Assignment</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -183,8 +212,8 @@ Linux and other Unix-like operating systems use a variety of filesystems, but
 presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
 The former is the default filesystem on distributions
 like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
-the latter is the default on the 
-<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions. 
+the latter is the default on the
+<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
 <a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of
 filesystems under this concept.</p>
 <p>A <strong>filesystem</strong> might also be used to refer
@@ -272,7 +301,7 @@ and more later in the semester.
 The <strong>/home</strong> directory is where our default
 home directories are stored,
 and if you manage a multi-user system,
-then this will be an important directory to manage. </p>
+then this will be an important directory to manage.</p>
 <p>Source: <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux Filesystem Explained</a></p>
 <h2 id="relative-and-absolute-paths"><a class="header" href="#relative-and-absolute-paths">Relative and Absolute Paths</a></h2>
 <p>macOS users have the Finder app
@@ -287,7 +316,7 @@ and generally more efficiently.
 To get started, we need to learn two things first:</p>
 <ol>
 <li>how to specify the locations of files and directories in
-the filesystem </li>
+the filesystem</li>
 <li>the commands needed to work with the filesystem</li>
 </ol>
 <p>To help specify the locations of files and directories,
@@ -299,7 +328,7 @@ there are two key concepts to know:</p>
 <p>Above we learned about the <strong>/</strong> root directory
 and its subdirectories.
 All sorts of commands,
-especially those that deal with files and directories 
+especially those that deal with files and directories
 (like copying, moving, deleting),
 require us to specify on the command line
 the locations of the files and directories.
@@ -379,7 +408,7 @@ I'd write:</p>
 </code></pre>
 <p>Again, the relative path specified above
 would only work if
-I was in my home directory, because 
+I was in my home directory, because
 <code>cd public_html</code> is relative to the
 location of <code>/home/sean</code>.
 That is, the subdirectory <strong>public_html</strong>
@@ -399,7 +428,7 @@ list the contents of a directory, i.e.,
 the files and subdirectories in a directory:</p>
 <pre><code>ls
 </code></pre>
-<p>We will cover this more next. </p>
+<p>We will cover this more next.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>Understanding relative and absolute paths is
 one of the more difficult concepts for
@@ -441,7 +470,7 @@ then the relative path would simply be:</p>
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="3b-files-and-directories.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="3b-files-and-directories.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -455,7 +484,7 @@ then the relative path would simply be:</p>
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="3b-files-and-directories.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="3b-files-and-directories.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,42 +61,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1a-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="1b-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="1c-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-project-management.html"><strong aria-hidden="true">2.</strong> Project Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2a-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li><li class="chapter-item expanded "><a href="2b-using-git-github-for-documentation.html"><strong aria-hidden="true">2.2.</strong> Using Git and GitHub for Documentation</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3a-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="3b-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="3c-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="3d-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="3e-text-processing-part-2.html" class="active"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="3f-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4a-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="4b-regular-expressions.html"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="4c-bash-scripting.html"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5a-expanding-storage.html"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="5b-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="5c-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="5d-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6a-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="6b-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="6c-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="6d-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7a-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="7b-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="7c-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="7d-install-wordpress.html"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li><li class="chapter-item expanded "><a href="7e-gcloud-CLI-assignment.html"><strong aria-hidden="true">7.5.</strong> Google Cloud CLI Assignment</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -192,7 +221,7 @@ In this section, we will cover the following three of these:</p>
 </ul>
 <h2 id="grep"><a class="header" href="#grep">Grep</a></h2>
 <p>The <code>grep</code> command is one of my most often used commands.
-Basically, <code>grep</code> &quot;prints lines that match patterns&quot;
+Basically, <code>grep</code> "prints lines that match patterns"
 (see <code>man grep</code>).
 In other words, it's search, and
 it's super powerful.</p>
@@ -205,9 +234,9 @@ and it's super important to remember that most utilities
 and programs that we use on the commandline
 are line oriented.</p>
 <blockquote>
-<p>&quot;A string is any series of characters that are interpreted
+<p>"A string is any series of characters that are interpreted
 literally by a script. For example, 'hello world' and 'LKJH019283'
-are both examples of strings.&quot; -- <a href="https://www.computerhope.com/jargon/s/string.htm">Computer Hope</a>.
+are both examples of strings." -- <a href="https://www.computerhope.com/jargon/s/string.htm">Computer Hope</a>.
 More generally, it's the literal characters that we type. It's data.</p>
 </blockquote>
 <p>Let's consider the file <strong>operating-systems.csv</strong>, as seen below:</p>
@@ -225,7 +254,7 @@ Notice that even though the string <strong>Chrome</strong> only appears once,
 and in one part of a line,
 <code>grep</code> returns the entire line.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;Chrome&quot; operating-systems.csv
+<pre><code>grep "Chrome" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -240,23 +269,23 @@ In the following examples, <code>grep</code> returns nothing in the first search
 since we do not capitalize the string <strong>chrome</strong>.
 However, adding the <code>-i</code> option results in success:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;chrome&quot; operating-systems.csv
+<pre><code>grep "chrome" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <p>None.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;chrome&quot; operating-systems.csv
+<pre><code>grep -i "chrome" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chrome OS, Proprietary, 2009
 </code></pre>
-<p>We can also search for lines that <strong>do not</strong> match our string 
+<p>We can also search for lines that <strong>do not</strong> match our string
 using the <code>-v</code> option.
 We can combine that with the <code>-i</code> option to ignore the string's case.
 Therefore, in the following example,
 all lines that do not contain the string <strong>chrome</strong> are returned:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -vi &quot;chrome&quot; operating-systems.csv
+<pre><code>grep -vi "chrome" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>FreeBSD, BSD, 1993
@@ -291,14 +320,14 @@ Android, Apache, 2008
 </code></pre>
 <p>To use <code>grep</code> to remove the first line of a file,
 we can invert our search to select all lines not matching
-&quot;OS&quot; at the start of a line.
+"OS" at the start of a line.
 Here the carat key <code>^</code> is a <strong>regex</strong> indicating the
 start of a line.
 Again, this <code>grep</code> command returns all lines that
 do not match the string <strong>os</strong> at the start of a line,
 ignoring case:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -vi &quot;^os&quot; operating-systems.csv
+<pre><code>grep -vi "^os" operating-systems.csv
 </code></pre>
 <p><strong>Output</strong>:</p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -318,7 +347,7 @@ Like the above, this <code>grep</code> command returns all lines that
 do not match the string <strong>year</strong> at the end of a line,
 ignoring case:</p>
 <p><strong>Command</strong>:</p>
-<pre><code>grep -vi &quot;year$&quot; operating-systems.csv
+<pre><code>grep -vi "year$" operating-systems.csv
 </code></pre>
 <p><strong>Output</strong>:</p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -333,14 +362,14 @@ Android, Apache, 2008
 but a couple of other good ones include:</p>
 <p>Get a count of the matching lines with the <code>-c</code> option:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -ic &quot;proprietary&quot; operating-systems.csv
+<pre><code>grep -ic "proprietary" operating-systems.csv
 </code></pre>
 <p><strong>Output</strong>:</p>
 <pre><code>4
 </code></pre>
 <p>Print only the match and not the whole line with the <code>-o</code> option:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -io &quot;proprietary&quot; operating-systems.csv
+<pre><code>grep -io "proprietary" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Proprietary
@@ -358,14 +387,14 @@ there is at least one result.</p>
 <p>Here is an example where only one string
 returns a true value:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -Ei &quot;bsd|atari&quot; operating-systems.csv
+<pre><code>grep -Ei "bsd|atari" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>FreeBSD, BSD, 1993
 </code></pre>
 <p>Here's an example where both strings evaluate to true:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -Ei &quot;bsd|gpl&quot; operating-systems.csv
+<pre><code>grep -Ei "bsd|gpl" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>FreeBSD, BSD, 1993
@@ -375,7 +404,7 @@ Linux, GPL, 1991
 string appears within a larger word,
 like <strong>OS</strong> in <strong>macOS</strong>.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;os&quot; operating-systems.csv
+<pre><code>grep -i "os" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>OS, License, Year
@@ -388,7 +417,7 @@ we only return results where <strong>OS</strong> is a complete word.
 To do that, we can surround the string with
 special characters:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;\&lt;os\&gt;&quot; operating-systems.csv
+<pre><code>grep -i "\&lt;os\&gt;" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>OS, License, Year
@@ -400,7 +429,7 @@ we might want to print lines that surround our matches.
 For example, print the matching line plus the two lines
 after the matching line using the <code>-A NUM</code> option:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;chrome&quot; -A 2 operating-systems.csv
+<pre><code>grep -i "chrome" -A 2 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -410,7 +439,7 @@ Linux, GPL, 1991
 <p>Or, print the matching line plus the two lines
 before the matching line using the <code>-B NUM</code> option:</p>
 <p><strong>Command</strong></p>
-<pre><code>grep -i &quot;android&quot; -B 2 operating-systems.csv
+<pre><code>grep -i "android" -B 2 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>macOS, Proprietary, 2001
@@ -423,7 +452,7 @@ case insensitive, and
 print the line before and the line after
 the match:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i -A 1 -B 1 &quot;\&lt;bsd\&gt;&quot; operating-systems.csv
+<pre><code>grep -i -A 1 -B 1 "\&lt;bsd\&gt;" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -434,7 +463,7 @@ Linux, GPL, 1991
 there are more options listed in its <code>man</code> page.</p>
 <blockquote>
 <p>Note that I enclose my search strings in double quotes.
-For example: <code>grep &quot;search string&quot; filename.txt</code>
+For example: <code>grep "search string" filename.txt</code>
 It's not always required to enclose a search string
 in double quotes,
 but it's good practice because
@@ -571,8 +600,8 @@ simple strings like words work here, too,
 since they are treated as
 regular expressions themselves.</p>
 <p>In the next example,
-I use <code>sed</code> to search for the string &quot;Linux&quot;,
-and replace it with the string &quot;GNU/Linux&quot;:</p>
+I use <code>sed</code> to search for the string "Linux",
+and replace it with the string "GNU/Linux":</p>
 <p><strong>Command:</strong></p>
 <pre><code>sed 's/Linux/GNU\/Linux/' operating-systems.csv
 </code></pre>
@@ -628,7 +657,7 @@ Android, Apache, 2008
 </code></pre>
 <p>Note that the FreeDOS line doesn't appear
 in the last output.
-This is because I didn't use the <code>-i</code> option nor 
+This is because I didn't use the <code>-i</code> option nor
 did I redirect output to a new file.
 If we want to edit the file <strong>in-place</strong>,
 that is, save the edits,
@@ -644,12 +673,12 @@ In the following example,
 I use the regular expression <code>1991$</code>
 instead of specifying line 4.
 The regular expression <code>1991$</code>  means
-&quot;lines ending with the string <strong>1991</strong>&quot;.
+"lines ending with the string <strong>1991</strong>".
 Then I use the <code>s</code> command to start a find and replace.
 <code>sed</code> finds the string <strong>Linux</strong> and then replaces
 that with the string <strong>GNU/Linux</strong>.
 I use the back slash to escape the
-forward slash in GNU/Linux: </p>
+forward slash in GNU/Linux:</p>
 <p><strong>Command:</strong></p>
 <pre><code>sed '/1991$/s/Linux/GNU\/Linux/' operating-systems.csv
 </code></pre>
@@ -678,7 +707,7 @@ macOS, Proprietary, 2001
 Android, Apache, 2008
 </code></pre>
 <p>The above would be equivalent to
-<code>grep &quot;20&quot; operating-systems.csv</code>.</p>
+<code>grep "20" operating-systems.csv</code>.</p>
 <p><code>sed</code> is much more powerful than
 what I've demonstrated here, and
 if you're interested in learning more,
@@ -686,33 +715,33 @@ there are lots of tutorials on the web.
 Here are a few good ones:</p>
 <ul>
 <li><a href="https://opensource.com/article/20/12/sed">Learn to use the Sed text editor</a></li>
-<li><a href="https://www.gnu.org/software/sed/manual/sed.html">Sed Introduction</a> </li>
+<li><a href="https://www.gnu.org/software/sed/manual/sed.html">Sed Introduction</a></li>
 <li><a href="https://catonmat.net/sed-one-liners-explained-part-one">Sed One-Liners Explained, Part I: File Spacing, Numbering and Text Conversion and Substitution</a></li>
 <li><a href="https://edoras.sdsu.edu/doc/sed-oneliners.html">sed one-liners</a></li>
 <li><a href="https://www.tutorialspoint.com/sed/index.htm">Sed Tutorial</a></li>
 </ul>
 <h2 id="awk"><a class="header" href="#awk">Awk</a></h2>
 <p><code>awk</code> is a complete scripting language designed for
-&quot;pattern scanning and processing&quot; text.
+"pattern scanning and processing" text.
 It generally performs some <strong>action</strong> when
 it detects some <strong>pattern</strong> and
 is particularly suited for <strong>columns of structured data</strong>
 (see <code>man awk</code>).</p>
-<p><code>awk</code> works on columns 
-regardless if the contents include structured data 
+<p><code>awk</code> works on columns
+regardless if the contents include structured data
 (like a CSV file) or not (like a letter or essay).
 If the data is structured,
 then that means the data will be formatted in some way.
 In the last few sections,
 we have looked at a CSV file.
-This is structured data because the data points 
+This is structured data because the data points
 in this file are separated by commas.</p>
 <p>For <code>awk</code> to work with columns in a file,
 it needs some way to refer to those columns.
-In the examples below, we'll see that columns in a text 
+In the examples below, we'll see that columns in a text
 file are referred to by a dollar sign and
 then the number of the column <code>$n</code>.
-So, <code>$1</code> indicates column one, 
+So, <code>$1</code> indicates column one,
 <code>$2</code> indicates column two, and so on.
 If we use <code>$0</code>, then we refer to the entire file.
 In our example text file,
@@ -803,7 +832,7 @@ using the double quotes to surround an empty space,
 and I modified the field delimiter to include both
 a comma and a space to get the output that I want:</p>
 <p><strong>Command:</strong></p>
-<pre><code>awk -F', ' '{ print $2 &quot; &quot; $1 }' operating-systems.csv
+<pre><code>awk -F', ' '{ print $2 " " $1 }' operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>License OS
@@ -818,7 +847,7 @@ Apache Android
 <p>I can make output more readable by adding
 text to print:</p>
 <p><strong>Command:</strong></p>
-<pre><code>awk -F',' '{ print $1 &quot; was released in&quot; $3 &quot;.&quot; }' operating-systems.csv
+<pre><code>awk -F',' '{ print $1 " was released in" $3 "." }' operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>OS was released in Year.
@@ -895,7 +924,7 @@ is greater than 2000 and less than 2008:</p>
 macOS, Proprietary, 2001
 </code></pre>
 <p>Even though we wouldn't normally sum years,
-let's print the sum of column three 
+let's print the sum of column three
 to demonstrate how summing works in <code>awk</code>:</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk -F',' 'sum += $3 { print sum }' operating-systems.csv
@@ -960,7 +989,7 @@ Boolean/Logical <strong>NOT</strong>.
 In the next example,
 I print only those lines where
 column three is greater than 1990,
-and the line has the string &quot;BSD&quot; in it:</p>
+and the line has the string "BSD" in it:</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 &gt; 1990 &amp;&amp; /BSD/ { print $0 }' operating-systems.csv
 </code></pre>
@@ -970,7 +999,7 @@ and the line has the string &quot;BSD&quot; in it:</p>
 <p>Now I reverse that, and
 print only those lines where column three
 is greater than 1990
-and the line DOES NOT have the string &quot;BSD&quot; in it:</p>
+and the line DOES NOT have the string "BSD" in it:</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 &gt; 1990 &amp;&amp; !/BSD/ { print $0 }' operating-systems.csv
 </code></pre>
@@ -985,8 +1014,8 @@ Android, Apache, 2008
 <p>The double vertical bar <code>||</code> indicates
 a Boolean/Logical <strong>OR</strong>.
 The next command prints only those lines that
-contain the string &quot;Proprietary&quot;
-or the string &quot;Apache&quot;,
+contain the string "Proprietary"
+or the string "Apache",
 or it would print both if both strings were in the text:</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk -F',' '/Proprietary/ || /Apache/ { print $0 }' operating-systems.csv
@@ -1062,7 +1091,7 @@ the resources listed above can guide you.</p>
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="3f-review.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="3f-review.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -1076,7 +1105,7 @@ the resources listed above can guide you.</p>
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="3f-review.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="3f-review.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

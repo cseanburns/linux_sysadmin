@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,42 +61,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1a-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="1b-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="1c-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-project-management.html"><strong aria-hidden="true">2.</strong> Project Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2a-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li><li class="chapter-item expanded "><a href="2b-using-git-github-for-documentation.html"><strong aria-hidden="true">2.2.</strong> Using Git and GitHub for Documentation</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3a-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="3b-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="3c-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="3d-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="3e-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="3f-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4a-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="4b-regular-expressions.html"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="4c-bash-scripting.html"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5a-expanding-storage.html" class="active"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="5b-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="5c-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="5d-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6a-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="6b-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="6c-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="6d-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7a-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="7b-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="7c-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="7d-install-wordpress.html"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li><li class="chapter-item expanded "><a href="7e-gcloud-CLI-assignment.html"><strong aria-hidden="true">7.5.</strong> Google Cloud CLI Assignment</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -161,11 +190,11 @@ To address this,
 we can add a persistent disk
 that is much larger.
 In this section,
-we will add a disk to our VM, 
+we will add a disk to our VM,
 mount it onto the VM's filesystem, and format it.
 Extra storage does incur extra cost.
 So at the end of this section,
-I will show you how to delete the extra 
+I will show you how to delete the extra
 disk to avoid that if you want.</p>
 <p>We will essentially follow the Google Cloud tutorial
 to add a non-boot disk to our VM, but
@@ -173,7 +202,7 @@ with some modification.</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
 <blockquote>
 <p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
-The boot disk contains the 
+The boot disk contains the
 software required to boot the system.
 All of our computers
 (desktops, laptops, tablets, phones, etc.),
@@ -230,7 +259,7 @@ follow these steps:</p>
 </ul>
 </li>
 <li>Click on the <strong>Edit</strong> button at the top of the details page.</li>
-<li>Under the <strong>Additional disks</strong> section, click on <strong>+ ATTACH EXISTING DISK</strong>. </li>
+<li>Under the <strong>Additional disks</strong> section, click on <strong>+ ATTACH EXISTING DISK</strong>.</li>
 <li>A panel will open on the right side of your browser.</li>
 <li>Click on the drop down box and select the disk, by name, you created.</li>
 <li>Leave the defaults as-is.</li>
@@ -350,7 +379,7 @@ The Google Console documentation instructs us
 to use the following command:</p>
 <pre><code>sudo mkdir -p /mnt/disks/MOUNT_DIR
 </code></pre>
-<p>And to replace <strong>MOUNT_DIR</strong> with the directory we 
+<p>And to replace <strong>MOUNT_DIR</strong> with the directory we
 want to create.
 Since my added disk is named <strong>disk-1</strong>,
 I'll call it that:</p>
@@ -369,7 +398,7 @@ grant access for additional users:</p>
 <p>We can test that it exists and is accessible with
 the <code>lsblk</code> and the <code>cd</code> commands.
 The <code>lsblk</code> command should show that <strong>sdb</strong> is
-mounted at <code>/mnt/disks/disk-1</code>, and 
+mounted at <code>/mnt/disks/disk-1</code>, and
 we can <code>cd</code> (change directory) to it:</p>
 <pre><code>cd /mnt/disks/disk-1
 </code></pre>
@@ -379,12 +408,12 @@ we would have to re-<code>mount</code> the additional drive manually.
 In order to avoid this and automount the drive upon reboot,
 we need to edit the file <code>/etc/fstab</code>.</p>
 <blockquote>
-<p>Note that the file is named <strong>fstab</strong> and 
+<p>Note that the file is named <strong>fstab</strong> and
 that it's located in the <strong>/etc</strong> directory.
 Therefore the full path is <code>/etc/fstab</code></p>
 </blockquote>
-<p>The <strong>fstab</strong> file is basically a configuration file 
-that provides information to the OS about the filesystems 
+<p>The <strong>fstab</strong> file is basically a configuration file
+that provides information to the OS about the filesystems
 the system can mount.
 The standard information <strong>fstab</strong> contains includes
 the name (or label) of the device being mounted,
@@ -411,7 +440,7 @@ I'll use that:</p>
 <p>The output should look something like this
 <strong>BUT NOTE that your UUID value will
 be DIFFERENT</strong>:</p>
-<pre><code>/dev/sdb: UUID=&quot;3bc141e2-9e1d-428c-b923-0f9vi99a1123&quot; TYPE=&quot;ext4&quot;
+<pre><code>/dev/sdb: UUID="3bc141e2-9e1d-428c-b923-0f9vi99a1123" TYPE="ext4"
 </code></pre>
 <p>We need to add that value to <code>/etc/fstab</code>
 plus the standard information that file requires.
@@ -425,7 +454,7 @@ We'll use <code>nano</code> to make the edit:</p>
 <p>And that's it!
 If you reboot your VM, or
 if your VM rebooted for some reason,
-the extra drive we added should automatically 
+the extra drive we added should automatically
 mount upon reboot.
 If it doesn't,
 then it may mean that the drive failed,
@@ -466,7 +495,7 @@ and then delete the disk in the gcloud console.</p>
 </li>
 </ol>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this section we learned how to expand 
+<p>In this section we learned how to expand
 the storage of our VM by creating a new virtual drive,
 adding it to our VM,
 formatting the drive in the <strong>ext4</strong> filesystem format,
@@ -495,7 +524,7 @@ the commands we used in this section include:</p>
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="5b-managing-users-groups.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="5b-managing-users-groups.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -509,7 +538,7 @@ the commands we used in this section include:</p>
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="5b-managing-users-groups.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="5b-managing-users-groups.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

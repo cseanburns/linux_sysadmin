@@ -1,17 +1,17 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
         <title>Linux Systems Administration</title>
-        <meta name="robots" content="noindex" />
+        <meta name="robots" content="noindex">
 
 
         <!-- Custom HTML head -->
         
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -32,7 +32,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -62,42 +62,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1a-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="1b-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="1c-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-project-management.html"><strong aria-hidden="true">2.</strong> Project Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2a-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li><li class="chapter-item expanded "><a href="2b-using-git-github-for-documentation.html"><strong aria-hidden="true">2.2.</strong> Using Git and GitHub for Documentation</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3a-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="3b-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="3c-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="3d-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="3e-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="3f-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4a-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="4b-regular-expressions.html"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="4c-bash-scripting.html"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5a-expanding-storage.html"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="5b-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="5c-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="5d-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6a-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="6b-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="6c-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="6d-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7a-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="7b-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="7c-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="7d-install-wordpress.html"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li><li class="chapter-item expanded "><a href="7e-gcloud-CLI-assignment.html"><strong aria-hidden="true">7.5.</strong> Google Cloud CLI Assignment</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -152,7 +181,7 @@
 <p>Author: C. Sean Burns<br />
 Date: 2024-02-11<br />
 Email: <a href="sean.burns@uky.edu">sean.burns@uky.edu</a><br />
-Website: <a href="https://cseanburns.github.io/csb/">cseanburns.github.io/csb/</a><br />
+Website: <a href="https://cseanburns.net">cseanburns.net</a>
 GitHub: <a href="https://github.com/cseanburns">@cseanburns</a></p>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p>This short book was written for my
@@ -219,7 +248,7 @@ of how computers work and what can be done with them.
 In redesigning this course,
 I wanted to strike a balance between these two problems.
 I wanted students to acquire enough skills and
-gain enough confidence to feel comfortable applying for 
+gain enough confidence to feel comfortable applying for
 (at least) entry level systems administrator jobs, and
 more basically,
 I wanted students to be exposed to a different
@@ -230,7 +259,7 @@ and that fostered a hacking mentality,
 Fedora Server for the Fall 2022 course.
 Fedora Server is a great and fun operating system, and
 there's a lot to learn about Linux using it.
-However, since it is rather bleeding edge, it 
+However, since it is rather bleeding edge, it
 meant something would break in my demonstrations each semester, and
 identifying what had changed in Fedora
 each year made it somewhat of a chore to keep up.
@@ -242,7 +271,7 @@ that run on some version of Ubuntu LTS,
 I believe this should provide more stability.
 It helps that Ubuntu Server has a good share of the
 Linux server market.</p>
-<p>The primary reason I moved us away from VirtualBox is because 
+<p>The primary reason I moved us away from VirtualBox is because
 a good number of my students each year use Apple computers, which
 became a major obstacle when
 <a href="https://apple.stackexchange.com/questions/422565/does-virtualbox-run-on-apple-silicon">Apple switched to the M1 chip</a>.
@@ -270,14 +299,14 @@ York: MacGraw Hill Education. ISBN: 978-0-07-184536-6</p>
 <h2 id="location-bell-labs-part-of-att-new-jersey-late-1960s-through-early-1970s"><a class="header" href="#location-bell-labs-part-of-att-new-jersey-late-1960s-through-early-1970s">Location: Bell Labs, part of AT&amp;T (New Jersey), late 1960s through early 1970s</a></h2>
 <p>In the late 1960s through the early 1970s at Bell Labs,
 part of AT&amp;T in New Jersey,
-the journey began with an operating system called Multics. 
+the journey began with an operating system called Multics.
 Multics was a pioneering time-sharing system,
 allowing more than one person to use it at once.
 Despite its innovative approach,
-Multics was fraught with issues and was slowly abandoned. 
+Multics was fraught with issues and was slowly abandoned.
 In the midst of this abandonment,
 <a href="http://cs.bell-labs.co/who/ken/">Ken Thompson</a>
-stumbled upon an old PDP-7 and started 
+stumbled upon an old PDP-7 and started
 writing what would become UNIX.
 During this time,
 he created the <a href="https://en.wikipedia.org/wiki/Ed_(text_editor)">ed</a> line editor,
@@ -344,9 +373,9 @@ trend of software becoming commercialized.
 This commercialization led to hardware vendors
 ceasing to share the code they developed
 to make their hardware work.
-This paradigm change was further solidified by the 
+This paradigm change was further solidified by the
 Copyright Act of 1976,
-making software code eligible for copyright protection. 
+making software code eligible for copyright protection.
 Stallman, who thrived in a hacker culture,
 began to battle against this new direction.
 He responded by creating the <a href="https://www.gnu.org/gnu/gnu.html">GNU project</a>,
@@ -389,7 +418,7 @@ Access to the source code is a precondition for this.</li>
 <p><a href="https://www.gnu.org/philosophy/free-sw.html">The Four Freedoms</a></p>
 <h2 id="the-unix-wars-and-the-lawsuit-late-1980s-through-the-early-1990s"><a class="header" href="#the-unix-wars-and-the-lawsuit-late-1980s-through-the-early-1990s">The Unix wars and the lawsuit, late 1980s through the early 1990s</a></h2>
 <p>During the late 1980s through the early 1990s,
-the so-called &quot;Unix wars&quot; and an
+the so-called "Unix wars" and an
 ensuing lawsuit marked a contentious period
 in the history of computing.
 Following its breakup,
@@ -399,14 +428,14 @@ AT&amp;T Unix and BSD Unix.
 The former was aimed at commercial markets,
 while the latter was targeted at
 researchers and academics.
-These contrasting objectives led to legal friction, 
+These contrasting objectives led to legal friction,
 culminating in UNIX Systems Laboratories, Inc.
 (USL, part of AT&amp;T) suing
 Berkeley Software Design, Inc.
 (BSDi, part of the University of California, Berkeley)
 for copyright and trademark violations.
 Ultimately, USL lost the case,
-but not before the lawsuit had created significant 
+but not before the lawsuit had created significant
 obstacles for BSD Unix.
 The legal battle delayed the adoption of BSD Unix,
 leaving a lasting impact on the
@@ -418,7 +447,7 @@ a significant development in the
 world of computing unfolded.
 On August 25, 1991,
 <a href="https://www.cs.helsinki.fi/u/torvalds/">Linus Torvalds</a> announced that he had
-started working on a free operating system kernel 
+started working on a free operating system kernel
 specifically for the 386 CPU architecture and
 his hardware.
 This <a href="https://www.kernel.org/">kernel</a> would later be famously named Linux.
@@ -439,27 +468,27 @@ copyright restrictions.
 Interestingly, Torvalds has stated that if a
 BSD or GNU Hurd operating system were
 available at that time,
-he might not have created the Linux kernel at all. 
+he might not have created the Linux kernel at all.
 However, he and others took the
 GNU utilities and created what is
 now widely referred to as Linux or GNU/Linux.
 This amalgamation of Torvalds' kernel and
 GNU utilities marked a critical point
-in the evolution of free and open-source software, 
+in the evolution of free and open-source software,
 fostering a global community of developers and users.</p>
 <h2 id="distributions-early-1990s-through-today"><a class="header" href="#distributions-early-1990s-through-today">Distributions, early 1990s through today</a></h2>
 <p>Soon after the development of Linux in the early 1990s,
-a trend began to emerge that continues to this day. 
+a trend began to emerge that continues to this day.
 Enthusiasts and developers started creating
-their own Linux and GNU-based operating systems, 
-customizing them to suit various needs and preferences. 
+their own Linux and GNU-based operating systems,
+customizing them to suit various needs and preferences.
 They would then distribute these customized
 versions to others,
 sharing their innovations and insights with a
 wider community.
 As a result of this practice,
 these Linux operating systems became
-known as &quot;distributions.&quot;
+known as "distributions."
 This phenomenon has led to a rich ecosystem of
 Linux distributions,
 catering to different user bases,
@@ -481,7 +510,7 @@ Early Unix version numbers 1-6
 eventually led to the development of BSD versions 1-4.
 By the time of BSD 4.3,
 all versions still contained some AT&amp;T code.
-A desire to remove this proprietary code led to the 
+A desire to remove this proprietary code led to the
 creation of BSD Net/1.</p>
 <p>The effort continued until all AT&amp;T
 code was successfully removed by BSD Net/2.
@@ -523,8 +552,8 @@ for a short history.</p>
 <h2 id="short-history-of-gnu-1980s-through-today"><a class="header" href="#short-history-of-gnu-1980s-through-today">Short History of GNU, 1980s through today</a></h2>
 <p>The history of GNU,
 particularly the GNU Hurd kernel,
-traces back to the 1980s and continues to evolve today. 
-The GNU Hurd, despite its long development process, 
+traces back to the 1980s and continues to evolve today.
+The GNU Hurd, despite its long development process,
 remains in a pre-production state.
 The latest release of this kernel was version 0.9,
 which came out in December 2016.
@@ -666,10 +695,10 @@ We'll touch on the first three in this course:</p>
 <ul>
 <li>Web server administrator:
 <ul>
-<li>&quot;web server administrators are system architects responsible for the
+<li>"web server administrators are system architects responsible for the
 overall design, implementation, and maintenance of Web servers. They may or
 may not be responsible for Web content, which is traditionally the
-responsibility of the Webmaster (<a href="https://csrc.nist.gov/glossary/term/web_server_administrator">Web Server Administrator&quot;
+responsibility of the Webmaster (<a href="https://csrc.nist.gov/glossary/term/web_server_administrator">Web Server Administrator"
 @NIST</a>).</li>
 </ul>
 </li>
@@ -677,22 +706,22 @@ responsibility of the Webmaster (<a href="https://csrc.nist.gov/glossary/term/we
 <ul>
 <li>like web admins, and to paraphrase above, database administrators are system
 architects responsible for the overall design, implementation, and
-maintenance of database management systems. </li>
+maintenance of database management systems.</li>
 </ul>
 </li>
 <li>Network administrator:
 <ul>
-<li>&quot;a person who manages a network within an organization. Responsibilities
+<li>"a person who manages a network within an organization. Responsibilities
 include network security, installing new applications, distributing software
 upgrades, monitoring daily activity, enforcing licensing agreements,
-developing a storage management program, and providing for routine backups&quot;
+developing a storage management program, and providing for routine backups"
 (<a href="https://csrc.nist.gov/glossary/term/network_administrator">Network Administrator @NIST</a>).</li>
 </ul>
 </li>
 <li>Mail server administrator:
 <ul>
-<li>&quot;mail server administrators are system architects responsible for the
-overall design and implementation of mail servers&quot; (<a href="https://csrc.nist.gov/glossary/term/mail_server_administrator">Mail Server
+<li>"mail server administrators are system architects responsible for the
+overall design and implementation of mail servers" (<a href="https://csrc.nist.gov/glossary/term/mail_server_administrator">Mail Server
 Administrators @NIST</a>).</li>
 </ul>
 </li>
@@ -741,10 +770,10 @@ the field and membership is free for students.</p>
 <p><a href="https://www.acm.org/">ACM</a>, or the Association for Computing Machinery,
 has a number of relevant
 <a href="https://www.acm.org/special-interest-groups/alphabetical-listing">special interest groups (SIGs)</a>
-that might be beneficial to systems administrators. </p>
+that might be beneficial to systems administrators.</p>
 <p><a href="http://www.npa.org/">NPA</a>, or the Network Professional Association,
-is an organization that &quot;supports IT/Network 
-professionals.&quot;</p>
+is an organization that "supports IT/Network
+professionals."</p>
 <h2 id="codes-of-ethics"><a class="header" href="#codes-of-ethics">Codes of Ethics</a></h2>
 <p>Systems administrators manage computer systems
 that contain a lot of data about us and
@@ -769,7 +798,7 @@ as sysadmins,
 to keep up, too.</p>
 <p>I therefore suggest that you continue your
 education by reading and practicing.
-For example, there are lots of books on 
+For example, there are lots of books on
 systems administration.
 <a href="https://www.npa.org/public/about_codeofethics.cfm">O'Reilly</a> continually
 publishes on the topic.
@@ -817,7 +846,7 @@ We will use this platform to create virtual
 instances of the Ubuntu Server Linux operating system.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-gcloud-for-virtual-machines"><a class="header" href="#using-gcloud-for-virtual-machines">Using gcloud for Virtual Machines</a></h1>
 <h2 id="virtual-machines"><a class="header" href="#virtual-machines">Virtual Machines</a></h2>
-<p>Our goal in this section 
+<p>Our goal in this section
 is to create a <strong>virtual machine (VM)</strong> <em>instance</em> running
 a distribution of the Linux operating system.
 A VM is basically a virtualized operating system
@@ -848,7 +877,7 @@ create one at <a href="https://www.google.com">https://www.google.com</a>.</p>
 to create a Google Cloud project.
 Once you've created that project,
 we can enable billing for that project,
-and then install the gcloud software 
+and then install the gcloud software
 on our local machines.</p>
 <p>To begin,
 you will need to click on the links to the
@@ -858,7 +887,7 @@ I help explain the steps
 at the links throughout this page,
 but it is imperative that you <strong>read through the instructions</strong>
 closely.</p>
-<p>First, follow <strong>Step 1</strong> at the top of the 
+<p>First, follow <strong>Step 1</strong> at the top of the
 <strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a></strong> page
 to create a new project.
 Also, review the page on
@@ -890,7 +919,7 @@ a VM is basically a virtualized operating system.
 That means instead of installing an operating system
 (like Linux, macOS, Windows, etc) on your physical machine,
 software is used to mimic the process to install
-an operating system on Google's servers. </p>
+an operating system on Google's servers.</p>
 <p>Google Cloud offers a number of Linux-based operating systems
 to create VMs.
 We're going to use the Ubuntu operating system
@@ -928,7 +957,7 @@ To do so, follow these steps:</p>
 <li>Next, click on <strong>Create Instance</strong>.</li>
 <li>Provide a name for your <strong>instance</strong>.
 <ul>
-<li>E.g., I chose <strong>fall-2023</strong> (no spaces) </li>
+<li>E.g., I chose <strong>fall-2023</strong> (no spaces)</li>
 </ul>
 </li>
 <li>Under the <strong>Series</strong> drop down box, make sure <strong>E2</strong> is selected.</li>
@@ -983,7 +1012,7 @@ Windows user can use Command.exe,
 which can be located by search also.</p>
 <p>Windows users will download a regular <strong>.exe</strong> file,
 but macOS users will download a <strong>.tar.gz</strong> file.
-Since macOS is Unix, you can use the <code>mv</code> command to 
+Since macOS is Unix, you can use the <code>mv</code> command to
 move that file to your <code>$HOME</code> directory.
 Then you extract it there using the <code>tar</code> command,
 and once extracted
@@ -1051,7 +1080,7 @@ Windows users can connect to it via their command prompt or use <a href="https:/
 note that we use a slightly different <code>ssh</code> command
 to connect to our VMs.
 The syntax follows this pattern:</p>
-<pre><code>gcloud compute ssh --zone &quot;zone-info&quot; &quot;name-info&quot; --project &quot;project-id&quot;
+<pre><code>gcloud compute ssh --zone "zone-info" "name-info" --project "project-id"
 </code></pre>
 <p>You need to replace the values in the double quotes in the above command
 with the values located in your Google Cloud console and
@@ -1116,7 +1145,7 @@ You have just completed your first installation of a Linux server.</p>
 <p>To summarize,
 in this section,
 you learned about and created a virtual machine (VM) with <code>gcloud</code>.
-This is a lot! 
+This is a lot!
 By the end of this book,
 you will be able to fire up a virtual machine
 on short notice and deploy websites and more.</p>
@@ -1182,7 +1211,7 @@ your own GitHub account:</p>
 <li><strong>Visit the GitHub Website</strong>: Start by navigating to <a href="https://github.com">GitHub's
 website</a>.</li>
 <li><strong>Sign Up</strong>: Click on the “Sign Up” button usually located at the top right
-corner of the page. </li>
+corner of the page.</li>
 <li><strong>Enter Your Details</strong>: You will be prompted to enter some basic
 information:
 <ul>
@@ -1326,13 +1355,13 @@ points.</p>
 <h4 id="links-and-images"><a class="header" href="#links-and-images">Links and Images</a></h4>
 <ul>
 <li><strong>Links</strong>: To create a link, wrap the link text in brackets <code>[ ]</code>, and then
-wrap the URL in parentheses <code>( )</code>. 
+wrap the URL in parentheses <code>( )</code>.
 <ul>
 <li>For example, <code>[GitHub](https://github.com)</code>.</li>
 </ul>
 </li>
 <li><strong>Images</strong>: Similar to links, but start with an exclamation mark, followed by
-the alt text in brackets, and the URL in parentheses. 
+the alt text in brackets, and the URL in parentheses.
 <ul>
 <li>For example, <code>![Alt text](image-url.jpg)</code>.</li>
 </ul>
@@ -1407,7 +1436,7 @@ individual and team-based projects
 in information technology disciplines.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="learning-the-command-line"><a class="header" href="#learning-the-command-line">Learning the Command Line</a></h1>
 <p>It's obviously more common for people today
-to learn how to use a computer via a 
+to learn how to use a computer via a
 graphical user interface, but
 graphical user interfaces entail extra software, and
 the more software we have on a server,
@@ -1415,7 +1444,7 @@ the more resources that software consumes, and
 the more we expose our systems to security risks.</p>
 <p>Graphical user interfaces also do not provide
 a good platform for automation,
-at least not remotely as well 
+at least not remotely as well
 as command line interfaces do.
 Working on the command line,
 in what is know as a <a href="https://en.wikipedia.org/wiki/Unix_shell">shell</a>,
@@ -1465,8 +1494,8 @@ Linux and other Unix-like operating systems use a variety of filesystems, but
 presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
 The former is the default filesystem on distributions
 like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
-the latter is the default on the 
-<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions. 
+the latter is the default on the
+<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
 <a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of
 filesystems under this concept.</p>
 <p>A <strong>filesystem</strong> might also be used to refer
@@ -1554,7 +1583,7 @@ and more later in the semester.
 The <strong>/home</strong> directory is where our default
 home directories are stored,
 and if you manage a multi-user system,
-then this will be an important directory to manage. </p>
+then this will be an important directory to manage.</p>
 <p>Source: <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux Filesystem Explained</a></p>
 <h2 id="relative-and-absolute-paths"><a class="header" href="#relative-and-absolute-paths">Relative and Absolute Paths</a></h2>
 <p>macOS users have the Finder app
@@ -1569,7 +1598,7 @@ and generally more efficiently.
 To get started, we need to learn two things first:</p>
 <ol>
 <li>how to specify the locations of files and directories in
-the filesystem </li>
+the filesystem</li>
 <li>the commands needed to work with the filesystem</li>
 </ol>
 <p>To help specify the locations of files and directories,
@@ -1581,7 +1610,7 @@ there are two key concepts to know:</p>
 <p>Above we learned about the <strong>/</strong> root directory
 and its subdirectories.
 All sorts of commands,
-especially those that deal with files and directories 
+especially those that deal with files and directories
 (like copying, moving, deleting),
 require us to specify on the command line
 the locations of the files and directories.
@@ -1661,7 +1690,7 @@ I'd write:</p>
 </code></pre>
 <p>Again, the relative path specified above
 would only work if
-I was in my home directory, because 
+I was in my home directory, because
 <code>cd public_html</code> is relative to the
 location of <code>/home/sean</code>.
 That is, the subdirectory <strong>public_html</strong>
@@ -1681,7 +1710,7 @@ list the contents of a directory, i.e.,
 the files and subdirectories in a directory:</p>
 <pre><code>ls
 </code></pre>
-<p>We will cover this more next. </p>
+<p>We will cover this more next.</p>
 <h2 id="conclusion-3"><a class="header" href="#conclusion-3">Conclusion</a></h2>
 <p>Understanding relative and absolute paths is
 one of the more difficult concepts for
@@ -1799,7 +1828,7 @@ man rm
 man touch
 </code></pre>
 <p>The <code>touch</code> command's primary use is to change a file's timestamp;
-that is, the command updates a file's &quot;access and modification times&quot;
+that is, the command updates a file's "access and modification times"
 (see <code>man touch</code>).
 For example, let's say we have a file called <strong>paper.txt</strong>
 in our home directory.
@@ -1846,8 +1875,8 @@ that is, to prompt you before overwriting an existing file.</p>
 and/or rename the file.
 For example, from within our home directory
 (therefore, using relative path names),
-to move a file named &quot;file.docx&quot; 
-to a subdirectory named &quot;Documents&quot;:</p>
+to move a file named "file.docx"
+to a subdirectory named "Documents":</p>
 <pre><code>mv file.docx Documents/
 </code></pre>
 <p>To rename a file only (keeping it in the same directory),
@@ -1880,7 +1909,7 @@ rather, it means it was <strong>deleted</strong>.</p>
 <h2 id="special-file-types"><a class="header" href="#special-file-types">Special File Types</a></h2>
 <p>For now, let's only cover two commands here:</p>
 <ul>
-<li><code>mkdir</code> for creating a new directory </li>
+<li><code>mkdir</code> for creating a new directory</li>
 <li><code>rmdir</code> for deleting an empty directory</li>
 </ul>
 <p>Like the above commands,
@@ -1934,12 +1963,12 @@ to files, programs, or devices, like actual printers.</p>
 </blockquote>
 <h3 id="print-to-screen"><a class="header" href="#print-to-screen">Print to Screen</a></h3>
 <p>To use <code>echo</code>:</p>
-<pre><code>echo &quot;hello world&quot;
-echo &quot;Today is a good day.&quot;
+<pre><code>echo "hello world"
+echo "Today is a good day."
 </code></pre>
 <p>We can also <code>echo</code> variables:</p>
 <pre><code>a=4
-echo &quot;$a&quot;
+echo "$a"
 </code></pre>
 <h3 id="print-file-to-screen"><a class="header" href="#print-file-to-screen">Print File to Screen</a></h3>
 <p><code>cat</code> is listed elsewhere in the GNU Coreutils page.
@@ -1991,7 +2020,7 @@ for all files created under that account.</p>
 <p>In order to allow or restrict access to files and directories
 (for example,
 to allow other users to read, write to, or run your or others' files),
-ownership and permissions are set in order to manage that kind 
+ownership and permissions are set in order to manage that kind
 of access to those files and directories.
 There are thus two owners for every file (and directory):</p>
 <ul>
@@ -2188,7 +2217,7 @@ they look like this:</p>
 </div>
 <p>The first set describes the permissions for the owner.
 The second set describes the permissions for the group.
-The third set describes the permissions for the Other/World. </p>
+The third set describes the permissions for the Other/World.</p>
 <p>We use the <code>chmod</code> command and the octal values to change
 a file or directory's permissions.
 For each set, we add up the octal values.
@@ -2252,7 +2281,7 @@ access on a system.
 In such a case,
 I might have to use the <code>sudo</code> command
 (you do not have access to the <code>sudo</code> command
-on our shared server, 
+on our shared server,
 but you will have it later on your virtual machines).
 In this case, I don't need the colon.
 To change the owner only,
@@ -2265,7 +2294,7 @@ and separate those names by a colon,
 where the syntax is <code>chown USER:GROUP testFile.txt</code></p>
 <pre><code>sudo chown tmk:sisFaculty testFile.txt
 </code></pre>
-<p>After using the <code>chown</code> command to change 
+<p>After using the <code>chown</code> command to change
 either the owner or group,
 we should double check the file or directory's permissions
 using the <code>chmod</code> command.
@@ -2406,7 +2435,7 @@ Android, Apache, 2008
 <p>It's a small file, but
 we might want the line and word count of the file.
 To acquire that, we can use the <code>wc</code> (word count) command.
-By itself, the <code>wc</code> command will print 
+By itself, the <code>wc</code> command will print
 the number of lines, words, and bytes of a file.
 The following output states that the file contains
 seven lines, 23 words, and 165 bytes:</p>
@@ -2420,7 +2449,7 @@ seven lines, 23 words, and 165 bytes:</p>
 by default,
 the first ten lines of a file.
 Since our file is only seven lines long,
-we can use the <code>-n</code> option 
+we can use the <code>-n</code> option
 to change the default number of lines:</p>
 <p><strong>Command:</strong></p>
 <pre><code>head -n3 operating-systems.csv
@@ -2442,7 +2471,7 @@ field two.
 (A CSV file may use other characters as the separator character,
 like the Tab character or a colon.)</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d&quot;,&quot; -f2 operating-systems.csv
+<pre><code>cut -d"," -f2 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code> Proprietary
@@ -2457,7 +2486,7 @@ like the Tab character or a colon.)</p>
 In the next example,
 I select field (or column) three to get the release year:</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d&quot;,&quot; -f3 operating-systems.csv
+<pre><code>cut -d"," -f3 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code> 2009
@@ -2487,7 +2516,7 @@ Since the year <strong>1993</strong> appears twice in the original file,
 it only appears once in the output
 because the <code>uniq</code> command removed the duplicate:</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d&quot;,&quot; -f3 operating-systems.csv | sort | uniq &gt; os-years.csv
+<pre><code>cut -d"," -f3 operating-systems.csv | sort | uniq &gt; os-years.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>cat os-years.csv
@@ -2536,7 +2565,7 @@ Say we want the license field data,
 but we need to remove that first line.
 In this case, we need the tail command:</p>
 <p><strong>Command:</strong></p>
-<pre><code>tail -n +2 operating-systems.csv | cut -d&quot;,&quot; -f2 | sort | uniq &gt; license-data.csv
+<pre><code>tail -n +2 operating-systems.csv | cut -d"," -f2 | sort | uniq &gt; license-data.csv
 cat license-data.csv
 </code></pre>
 <p><strong>Output:</strong></p>
@@ -2623,7 +2652,7 @@ In this section, we will cover the following three of these:</p>
 </ul>
 <h2 id="grep"><a class="header" href="#grep">Grep</a></h2>
 <p>The <code>grep</code> command is one of my most often used commands.
-Basically, <code>grep</code> &quot;prints lines that match patterns&quot;
+Basically, <code>grep</code> "prints lines that match patterns"
 (see <code>man grep</code>).
 In other words, it's search, and
 it's super powerful.</p>
@@ -2636,9 +2665,9 @@ and it's super important to remember that most utilities
 and programs that we use on the commandline
 are line oriented.</p>
 <blockquote>
-<p>&quot;A string is any series of characters that are interpreted
+<p>"A string is any series of characters that are interpreted
 literally by a script. For example, 'hello world' and 'LKJH019283'
-are both examples of strings.&quot; -- <a href="https://www.computerhope.com/jargon/s/string.htm">Computer Hope</a>.
+are both examples of strings." -- <a href="https://www.computerhope.com/jargon/s/string.htm">Computer Hope</a>.
 More generally, it's the literal characters that we type. It's data.</p>
 </blockquote>
 <p>Let's consider the file <strong>operating-systems.csv</strong>, as seen below:</p>
@@ -2656,7 +2685,7 @@ Notice that even though the string <strong>Chrome</strong> only appears once,
 and in one part of a line,
 <code>grep</code> returns the entire line.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;Chrome&quot; operating-systems.csv
+<pre><code>grep "Chrome" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -2671,23 +2700,23 @@ In the following examples, <code>grep</code> returns nothing in the first search
 since we do not capitalize the string <strong>chrome</strong>.
 However, adding the <code>-i</code> option results in success:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;chrome&quot; operating-systems.csv
+<pre><code>grep "chrome" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <p>None.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;chrome&quot; operating-systems.csv
+<pre><code>grep -i "chrome" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chrome OS, Proprietary, 2009
 </code></pre>
-<p>We can also search for lines that <strong>do not</strong> match our string 
+<p>We can also search for lines that <strong>do not</strong> match our string
 using the <code>-v</code> option.
 We can combine that with the <code>-i</code> option to ignore the string's case.
 Therefore, in the following example,
 all lines that do not contain the string <strong>chrome</strong> are returned:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -vi &quot;chrome&quot; operating-systems.csv
+<pre><code>grep -vi "chrome" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>FreeBSD, BSD, 1993
@@ -2722,14 +2751,14 @@ Android, Apache, 2008
 </code></pre>
 <p>To use <code>grep</code> to remove the first line of a file,
 we can invert our search to select all lines not matching
-&quot;OS&quot; at the start of a line.
+"OS" at the start of a line.
 Here the carat key <code>^</code> is a <strong>regex</strong> indicating the
 start of a line.
 Again, this <code>grep</code> command returns all lines that
 do not match the string <strong>os</strong> at the start of a line,
 ignoring case:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -vi &quot;^os&quot; operating-systems.csv
+<pre><code>grep -vi "^os" operating-systems.csv
 </code></pre>
 <p><strong>Output</strong>:</p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -2749,7 +2778,7 @@ Like the above, this <code>grep</code> command returns all lines that
 do not match the string <strong>year</strong> at the end of a line,
 ignoring case:</p>
 <p><strong>Command</strong>:</p>
-<pre><code>grep -vi &quot;year$&quot; operating-systems.csv
+<pre><code>grep -vi "year$" operating-systems.csv
 </code></pre>
 <p><strong>Output</strong>:</p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -2764,14 +2793,14 @@ Android, Apache, 2008
 but a couple of other good ones include:</p>
 <p>Get a count of the matching lines with the <code>-c</code> option:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -ic &quot;proprietary&quot; operating-systems.csv
+<pre><code>grep -ic "proprietary" operating-systems.csv
 </code></pre>
 <p><strong>Output</strong>:</p>
 <pre><code>4
 </code></pre>
 <p>Print only the match and not the whole line with the <code>-o</code> option:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -io &quot;proprietary&quot; operating-systems.csv
+<pre><code>grep -io "proprietary" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Proprietary
@@ -2789,14 +2818,14 @@ there is at least one result.</p>
 <p>Here is an example where only one string
 returns a true value:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -Ei &quot;bsd|atari&quot; operating-systems.csv
+<pre><code>grep -Ei "bsd|atari" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>FreeBSD, BSD, 1993
 </code></pre>
 <p>Here's an example where both strings evaluate to true:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -Ei &quot;bsd|gpl&quot; operating-systems.csv
+<pre><code>grep -Ei "bsd|gpl" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>FreeBSD, BSD, 1993
@@ -2806,7 +2835,7 @@ Linux, GPL, 1991
 string appears within a larger word,
 like <strong>OS</strong> in <strong>macOS</strong>.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;os&quot; operating-systems.csv
+<pre><code>grep -i "os" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>OS, License, Year
@@ -2819,7 +2848,7 @@ we only return results where <strong>OS</strong> is a complete word.
 To do that, we can surround the string with
 special characters:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;\&lt;os\&gt;&quot; operating-systems.csv
+<pre><code>grep -i "\&lt;os\&gt;" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>OS, License, Year
@@ -2831,7 +2860,7 @@ we might want to print lines that surround our matches.
 For example, print the matching line plus the two lines
 after the matching line using the <code>-A NUM</code> option:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;chrome&quot; -A 2 operating-systems.csv
+<pre><code>grep -i "chrome" -A 2 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -2841,7 +2870,7 @@ Linux, GPL, 1991
 <p>Or, print the matching line plus the two lines
 before the matching line using the <code>-B NUM</code> option:</p>
 <p><strong>Command</strong></p>
-<pre><code>grep -i &quot;android&quot; -B 2 operating-systems.csv
+<pre><code>grep -i "android" -B 2 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>macOS, Proprietary, 2001
@@ -2854,7 +2883,7 @@ case insensitive, and
 print the line before and the line after
 the match:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i -A 1 -B 1 &quot;\&lt;bsd\&gt;&quot; operating-systems.csv
+<pre><code>grep -i -A 1 -B 1 "\&lt;bsd\&gt;" operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chrome OS, Proprietary, 2009
@@ -2865,7 +2894,7 @@ Linux, GPL, 1991
 there are more options listed in its <code>man</code> page.</p>
 <blockquote>
 <p>Note that I enclose my search strings in double quotes.
-For example: <code>grep &quot;search string&quot; filename.txt</code>
+For example: <code>grep "search string" filename.txt</code>
 It's not always required to enclose a search string
 in double quotes,
 but it's good practice because
@@ -3002,8 +3031,8 @@ simple strings like words work here, too,
 since they are treated as
 regular expressions themselves.</p>
 <p>In the next example,
-I use <code>sed</code> to search for the string &quot;Linux&quot;,
-and replace it with the string &quot;GNU/Linux&quot;:</p>
+I use <code>sed</code> to search for the string "Linux",
+and replace it with the string "GNU/Linux":</p>
 <p><strong>Command:</strong></p>
 <pre><code>sed 's/Linux/GNU\/Linux/' operating-systems.csv
 </code></pre>
@@ -3059,7 +3088,7 @@ Android, Apache, 2008
 </code></pre>
 <p>Note that the FreeDOS line doesn't appear
 in the last output.
-This is because I didn't use the <code>-i</code> option nor 
+This is because I didn't use the <code>-i</code> option nor
 did I redirect output to a new file.
 If we want to edit the file <strong>in-place</strong>,
 that is, save the edits,
@@ -3075,12 +3104,12 @@ In the following example,
 I use the regular expression <code>1991$</code>
 instead of specifying line 4.
 The regular expression <code>1991$</code>  means
-&quot;lines ending with the string <strong>1991</strong>&quot;.
+"lines ending with the string <strong>1991</strong>".
 Then I use the <code>s</code> command to start a find and replace.
 <code>sed</code> finds the string <strong>Linux</strong> and then replaces
 that with the string <strong>GNU/Linux</strong>.
 I use the back slash to escape the
-forward slash in GNU/Linux: </p>
+forward slash in GNU/Linux:</p>
 <p><strong>Command:</strong></p>
 <pre><code>sed '/1991$/s/Linux/GNU\/Linux/' operating-systems.csv
 </code></pre>
@@ -3109,7 +3138,7 @@ macOS, Proprietary, 2001
 Android, Apache, 2008
 </code></pre>
 <p>The above would be equivalent to
-<code>grep &quot;20&quot; operating-systems.csv</code>.</p>
+<code>grep "20" operating-systems.csv</code>.</p>
 <p><code>sed</code> is much more powerful than
 what I've demonstrated here, and
 if you're interested in learning more,
@@ -3117,33 +3146,33 @@ there are lots of tutorials on the web.
 Here are a few good ones:</p>
 <ul>
 <li><a href="https://opensource.com/article/20/12/sed">Learn to use the Sed text editor</a></li>
-<li><a href="https://www.gnu.org/software/sed/manual/sed.html">Sed Introduction</a> </li>
+<li><a href="https://www.gnu.org/software/sed/manual/sed.html">Sed Introduction</a></li>
 <li><a href="https://catonmat.net/sed-one-liners-explained-part-one">Sed One-Liners Explained, Part I: File Spacing, Numbering and Text Conversion and Substitution</a></li>
 <li><a href="https://edoras.sdsu.edu/doc/sed-oneliners.html">sed one-liners</a></li>
 <li><a href="https://www.tutorialspoint.com/sed/index.htm">Sed Tutorial</a></li>
 </ul>
 <h2 id="awk"><a class="header" href="#awk">Awk</a></h2>
 <p><code>awk</code> is a complete scripting language designed for
-&quot;pattern scanning and processing&quot; text.
+"pattern scanning and processing" text.
 It generally performs some <strong>action</strong> when
 it detects some <strong>pattern</strong> and
 is particularly suited for <strong>columns of structured data</strong>
 (see <code>man awk</code>).</p>
-<p><code>awk</code> works on columns 
-regardless if the contents include structured data 
+<p><code>awk</code> works on columns
+regardless if the contents include structured data
 (like a CSV file) or not (like a letter or essay).
 If the data is structured,
 then that means the data will be formatted in some way.
 In the last few sections,
 we have looked at a CSV file.
-This is structured data because the data points 
+This is structured data because the data points
 in this file are separated by commas.</p>
 <p>For <code>awk</code> to work with columns in a file,
 it needs some way to refer to those columns.
-In the examples below, we'll see that columns in a text 
+In the examples below, we'll see that columns in a text
 file are referred to by a dollar sign and
 then the number of the column <code>$n</code>.
-So, <code>$1</code> indicates column one, 
+So, <code>$1</code> indicates column one,
 <code>$2</code> indicates column two, and so on.
 If we use <code>$0</code>, then we refer to the entire file.
 In our example text file,
@@ -3234,7 +3263,7 @@ using the double quotes to surround an empty space,
 and I modified the field delimiter to include both
 a comma and a space to get the output that I want:</p>
 <p><strong>Command:</strong></p>
-<pre><code>awk -F', ' '{ print $2 &quot; &quot; $1 }' operating-systems.csv
+<pre><code>awk -F', ' '{ print $2 " " $1 }' operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>License OS
@@ -3249,7 +3278,7 @@ Apache Android
 <p>I can make output more readable by adding
 text to print:</p>
 <p><strong>Command:</strong></p>
-<pre><code>awk -F',' '{ print $1 &quot; was released in&quot; $3 &quot;.&quot; }' operating-systems.csv
+<pre><code>awk -F',' '{ print $1 " was released in" $3 "." }' operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>OS was released in Year.
@@ -3326,7 +3355,7 @@ is greater than 2000 and less than 2008:</p>
 macOS, Proprietary, 2001
 </code></pre>
 <p>Even though we wouldn't normally sum years,
-let's print the sum of column three 
+let's print the sum of column three
 to demonstrate how summing works in <code>awk</code>:</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk -F',' 'sum += $3 { print sum }' operating-systems.csv
@@ -3391,7 +3420,7 @@ Boolean/Logical <strong>NOT</strong>.
 In the next example,
 I print only those lines where
 column three is greater than 1990,
-and the line has the string &quot;BSD&quot; in it:</p>
+and the line has the string "BSD" in it:</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 &gt; 1990 &amp;&amp; /BSD/ { print $0 }' operating-systems.csv
 </code></pre>
@@ -3401,7 +3430,7 @@ and the line has the string &quot;BSD&quot; in it:</p>
 <p>Now I reverse that, and
 print only those lines where column three
 is greater than 1990
-and the line DOES NOT have the string &quot;BSD&quot; in it:</p>
+and the line DOES NOT have the string "BSD" in it:</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk -F',' '$3 &gt; 1990 &amp;&amp; !/BSD/ { print $0 }' operating-systems.csv
 </code></pre>
@@ -3416,8 +3445,8 @@ Android, Apache, 2008
 <p>The double vertical bar <code>||</code> indicates
 a Boolean/Logical <strong>OR</strong>.
 The next command prints only those lines that
-contain the string &quot;Proprietary&quot;
-or the string &quot;Apache&quot;,
+contain the string "Proprietary"
+or the string "Apache",
 or it would print both if both strings were in the text:</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk -F',' '/Proprietary/ || /Apache/ { print $0 }' operating-systems.csv
@@ -3486,7 +3515,7 @@ If you want to get started,
 the resources listed above can guide you.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="review"><a class="header" href="#review">Review</a></h1>
 <p>Here is a review of commands
-and concepts that we have 
+and concepts that we have
 covered so far.</p>
 <h2 id="commands"><a class="header" href="#commands">Commands</a></h2>
 <p>We have covered the following
@@ -3511,7 +3540,7 @@ commands so far:</p>
 <tr><td></td><td>touch oldfile</td><td>modify timestamp of file called oldfile</td></tr>
 <tr><td>mkdir</td><td>mkdir newdir</td><td>create a new directory called newdir</td></tr>
 <tr><td>rmdir</td><td>rmdir newdir</td><td>delete directory called newdir if empty</td></tr>
-<tr><td>echo</td><td>echo &quot;hello&quot;</td><td>print &quot;hello&quot; to screen</td></tr>
+<tr><td>echo</td><td>echo "hello"</td><td>print "hello" to screen</td></tr>
 <tr><td>cat</td><td>cat data.csv</td><td>print contents of file called data.csv to screen</td></tr>
 <tr><td></td><td>cat data1.csv data2.csv</td><td>concatenate data1.csv and data2.csv to screen</td></tr>
 <tr><td>less</td><td>less file</td><td>view contents of file called file</td></tr>
@@ -3526,7 +3555,7 @@ commands so far:</p>
 <tr><td></td><td>head -n3 file</td><td>print top three lines of file</td></tr>
 <tr><td>tail</td><td>tail file</td><td>print bottom ten lines of file</td></tr>
 <tr><td></td><td>tail -n3 file</td><td>print bottom three lines of file</td></tr>
-<tr><td>cut</td><td>cut -d&quot;,&quot; -f2 data.csv</td><td>print second column of file data.csv</td></tr>
+<tr><td>cut</td><td>cut -d"," -f2 data.csv</td><td>print second column of file data.csv</td></tr>
 <tr><td>sort</td><td>sort -n file</td><td>sort file by numerical order</td></tr>
 <tr><td></td><td>sort -rn file</td><td>sort file by reverse numerical order</td></tr>
 <tr><td></td><td>sort -df file</td><td>sort file by dictionary order and ignore case</td></tr>
@@ -3686,7 +3715,7 @@ on the Linux command line as
 well as how to navigate
 around the filesystem.
 Now we can begin to learn
-how to use command line 
+how to use command line
 text editors in order
 to write Bash scripts.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text-editors"><a class="header" href="#text-editors">Text editors</a></h1>
@@ -3718,7 +3747,7 @@ to the Unix and Linux ecosystem.
 (I use <code>ed</code> almost daily).
 Vim, which is my everyday editor,
 is important and
-highly used and 
+highly used and
 under active development to this day.
 If you want to use Vim,
 I'd encourage you to do so, but
@@ -3737,7 +3766,7 @@ we are programming.
 It makes sense that the
 more programming that we do,
 the better we'll get at it.
-This requires 
+This requires
 more sophisticated environments
 to help manage our programs
 than the command line
@@ -3765,16 +3794,16 @@ but it'll make our lives
 much easier to use a text editor.</p>
 <p>In any case,
 in order to save our
-commands or edit text files, 
+commands or edit text files,
 a text editor is very helpful.
 Programmers use text editors
 to write programs,
-but because programmers 
+but because programmers
 often work in
 graphical user environments,
-they may often use 
+they may often use
 graphical text editors
-or graphical <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s. 
+or graphical <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s.
 As systems administrators,
 it would be unusual to have a
 graphical user interface
@@ -3879,7 +3908,7 @@ The address for
 line 7 is <strong>7</strong>,
 and so forth.
 Line editors like
-<code>ed</code> are command driven. 
+<code>ed</code> are command driven.
 There is no menu to
 select from at
 the top of the <em>window</em>,
@@ -4021,7 +4050,7 @@ I'll start with a fresh version of the file:</p>
 <p>If we want to add
 new rows to the file,
 we can append <code>a</code>
-or insert <code>i</code> text 
+or insert <code>i</code> text
 after or at specific lines.
 To append text after
 line 3, use <code>a</code>.
@@ -4037,7 +4066,7 @@ FreeDOS, GPL, 1998
 when using the <code>a</code>, <code>i</code>,
 or <code>c</code> commands,
 we enter a period <code>.</code> on a line
-by itself to revert 
+by itself to revert
 to command mode.</p>
 <p>To insert at line 2, use <code>i</code>:</p>
 <pre><code>2i
@@ -4379,7 +4408,7 @@ Dallas, TX        | 1288457     | 1856
 San Jose, CA      | 983489      | 1777
 </code></pre>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;San Antonio&quot; cities.csv
+<pre><code>grep "San Antonio" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX | 1451853 | 1718
@@ -4394,7 +4423,7 @@ if I run the above command without
 the city named capitalized,
 then <code>grep</code> will return nothing:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;san antonio&quot; cities.csv
+<pre><code>grep "san antonio" cities.csv
 </code></pre>
 <p>In order to tell grep to ignore case,
 I need to use the <code>-i</code> option.
@@ -4405,7 +4434,7 @@ withing double quotes.</p>
 to read through the documentation and
 see what the various options exit for this command.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;san antonio&quot; cities.csv
+<pre><code>grep -i "san antonio" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX   | 1451853     | 1718
@@ -4424,7 +4453,7 @@ in Chi<strong>ca</strong>go,
 then that city matches my
 grep search:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;ca&quot; cities.csv
+<pre><code>grep -i "ca" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Los Angeles, CA   | 3898747     | 1781
@@ -4436,7 +4465,7 @@ San Jose, CA      | 983489      | 1777
 we can enclose our search in
 certain special characters:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;\bca\b&quot; cities.csv
+<pre><code>grep -i "\bca\b" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Los Angeles, CA   | 3898747     | 1781
@@ -4449,7 +4478,7 @@ other words.
 Here is an example of searching
 for the string <strong>ca</strong> within words:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;\Bca\B&quot; cities.csv
+<pre><code>grep -i "\Bca\B" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chicago, IL       | 2746388     | 1780
@@ -4492,7 +4521,7 @@ the cities <strong>Houston</strong> or <strong>Dallas</strong>
 since neither of those lines contain
 capital <strong>A, B, or C</strong> characters:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;[A-C]&quot; cities.csv 
+<pre><code>grep "[A-C]" cities.csv 
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>City              | 2020 Census | Founded
@@ -4511,7 +4540,7 @@ the carat key acts as a Boolean NOT.
 The following command matches any
 characters <strong>not in</strong> the range A,B,C:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;[^A-C]&quot; cities.csv
+<pre><code>grep "[^A-C]" cities.csv
 </code></pre>
 <p>However, the output matches
 all lines since there are no
@@ -4535,7 +4564,7 @@ San Jose, CA      | 983489      | 1777
 from the first command
 does not include Houston or Dallas
 in the second command by comparing
-the outputs of the two commands 
+the outputs of the two commands
 using <strong>process substitution</strong>.
 This is a technique that pipes
 the standard output of multiple
@@ -4545,14 +4574,14 @@ Here I use the <code>diff</code> command
 to compare the output of both
 <code>grep</code> commands:</p>
 <p><strong>Command:</strong></p>
-<pre><code>diff &lt;(grep &quot;[A-C]&quot; cities.csv) &lt;(grep &quot;[^A-C]&quot; cities.csv)
+<pre><code>diff &lt;(grep "[A-C]" cities.csv) &lt;(grep "[^A-C]" cities.csv)
 </code></pre>
 <p>The <code>diff</code> output shows
 that the second <code>grep</code>
 command includes the
 two lines below that
 are not in the output
-of the first <code>grep</code> command: </p>
+of the first <code>grep</code> command:</p>
 <p><strong>Output:</strong></p>
 <pre><code>4a5
 &gt; Houston, TX       | 2304580     | 1837
@@ -4564,7 +4593,7 @@ of the first <code>grep</code> command: </p>
 Overflow</a> answer.</p>
 </blockquote>
 <p>Try this command for an alternate output:</p>
-<pre><code>diff -y &lt;(grep &quot;[A-C]&quot; cities.csv) &lt;(grep &quot;[^A-C]&quot; cities.csv)
+<pre><code>diff -y &lt;(grep "[A-C]" cities.csv) &lt;(grep "[^A-C]" cities.csv)
 </code></pre>
 <p>Our ranges may be alphabetical or numerical.
 The following command matches any numbers <strong>in</strong> the range 1,2,3:</p>
@@ -4624,7 +4653,7 @@ San Jose, CA    | 983489      | 1777
 </code></pre>
 <h3 id="character-classes"><a class="header" href="#character-classes">Character classes</a></h3>
 <p>Character classes are special
-types of predefined 
+types of predefined
 bracket expressions.
 They make it easy to
 search for general patterns.
@@ -4637,7 +4666,7 @@ Their names are self explanatory, and they are
 [:digit:], [:graph:], [:lower:], [:print:],
 [:punct:], [:space:], [:upper:], and [:xdigit:].
 For example, [[:alnum:]] means the character class
-of numbers and letters ... </p>
+of numbers and letters ...</p>
 </blockquote>
 <p>Here I search for anything
 that matches the Year column.
@@ -4645,13 +4674,13 @@ Specifically, I search for
 a empty space <code>[[:blank:]]</code>,
 a four digit string <code>[[:digit:]]{4}</code>.
 The <code>{4}</code> means
-&quot;The preceding item is matched
-exactly 4 times&quot; (<code>man grep</code>),
+"The preceding item is matched
+exactly 4 times" (<code>man grep</code>),
 and the number 4 can be replaced
 with any relevant number.
 and an end of line <code>$</code>:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -Eo &quot;[[:blank:]][[:digit:]]{4}$&quot; cities.csv 
+<pre><code>grep -Eo "[[:blank:]][[:digit:]]{4}$" cities.csv 
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code> 1624
@@ -4687,7 +4716,7 @@ Anchoring works in many places.
 For example, to search all lines
 that start with capital <strong>D through L</strong></p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;^[D-L]&quot; cities.csv
+<pre><code>grep "^[D-L]" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Los Angeles, CA | 3898747 | 1781
@@ -4696,7 +4725,7 @@ Dallas, TX      | 1288457 | 1856
 </code></pre>
 <p>And all lines that end with the numbers <strong>4, 5, or 6</strong>:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;[4-6]$&quot; cities.csv
+<pre><code>grep "[4-6]$" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>New York City, NY | 8804190 | 1624
@@ -4712,10 +4741,10 @@ ending with the numbers
 starting from 4 through 6.
 The single dot stands for any character,
 and the asterisk stands for
-&quot;the preceding character will
-zero or more times&quot; (<code>man grep</code>).</p>
+"the preceding character will
+zero or more times" (<code>man grep</code>).</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;^[D-L].*[4-6]$&quot; cities.csv
+<pre><code>grep "^[D-L].*[4-6]$" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Dallas, TX        | 1288457     | 1856
@@ -4730,7 +4759,7 @@ But there are other options:</p>
 to extend <code>grep</code>'s regular expression functionality:</p>
 <p>Here, the preceding item <strong>S</strong> is matched one or more times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;S+&quot; cities.csv
+<pre><code>grep -E "S+" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX | 1451853 | 1718
@@ -4741,17 +4770,17 @@ San Jose, CA    | 983489  | 1777
 the preceding item <strong>l</strong> is
 matched exactly 2 times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;l{2}&quot; cities.csv
+<pre><code>grep -E "l{2}" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Dallas, TX | 1288457 | 1856
 </code></pre>
 <p>Finally, in this example,
-the preceding item <strong>7</strong> is matched 
+the preceding item <strong>7</strong> is matched
 at least two times or
 at most three times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;7{2,3}&quot; cities.csv
+<pre><code>grep -E "7{2,3}" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Jose, CA | 983489 | 1777
@@ -4771,7 +4800,7 @@ of the search is true.</p>
 for each city because they
 both appear in the file:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;San Antonio|Dallas&quot; cities.csv
+<pre><code>grep -E "San Antonio|Dallas" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX | 1451853 | 1718
@@ -4782,7 +4811,7 @@ San Antonio even though
 Lexington does not appear
 in the file:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;San Antonio|Lexington&quot; cities.csv
+<pre><code>grep -E "San Antonio|Lexington" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX   | 1451853     | 1718
@@ -4827,27 +4856,27 @@ In the following code snippet,
 which can be entered on the commandline,
 I create a variable named <code>name</code>
 and assign it the value <code>Sean</code>.
-I create another variable named <code>backup</code> 
+I create another variable named <code>backup</code>
 and assign it the value <code>/media</code>.
 Then I use the <code>echo</code> and <code>cd</code> commands
 to test the variables:</p>
-<pre><code>name=&quot;Sean&quot;
-backup=&quot;/media&quot;
-echo &quot;My name is ${name}&quot;
-echo &quot;${backup}&quot;
-cd &quot;${backup}&quot;
+<pre><code>name="Sean"
+backup="/media"
+echo "My name is ${name}"
+echo "${backup}"
+cd "${backup}"
 pwd
 cd
 </code></pre>
 <p>Variables may include values that may change given some context.
 For example, if we want a variable to refer to today's day of week,
 we can use <a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">command substitution</a>,
-which &quot;allows the output of a command
-to replace the command name&quot; (see <code>man bash</code>).
+which "allows the output of a command
+to replace the command name" (see <code>man bash</code>).
 Thus, the output at the time this variable is set
 will differ if it is set on a different day.</p>
-<pre><code>today=&quot;$(date +%A)&quot;
-echo &quot;${today}&quot;
+<pre><code>today="$(date +%A)"
+echo "${today}"
 </code></pre>
 <p>The curly braces are not strictly necessary,
 but they offer benefits when we start to use things
@@ -4876,10 +4905,10 @@ Here I create a variable named <code>seasons</code>,
 which holds an <strong>array</strong>, or multiple values: <code>winter spring summer fall</code>.
 Bash lets me access parts of that array:</p>
 <pre><code>seasons=(winter spring summer fall)
-echo &quot;${seasons[@]}&quot;
-echo &quot;${seasons[1]}&quot;
-echo &quot;${seasons[2]}&quot;
-echo &quot;${seasons[-1]}&quot;
+echo "${seasons[@]}"
+echo "${seasons[1]}"
+echo "${seasons[2]}"
+echo "${seasons[-1]}"
 </code></pre>
 <p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
 <h2 id="conditional-expressions"><a class="header" href="#conditional-expressions">Conditional Expressions</a></h2>
@@ -4901,12 +4930,12 @@ apply logic with <code>&amp;&amp;</code> (<strong>Logical AND</strong>) or <code
 <pre><code>command1 || command2
 </code></pre>
 <p>Example:</p>
-<pre><code>cd documents &amp;&amp; echo &quot;success&quot;
-cd documents || echo &quot;failed&quot;
+<pre><code>cd documents &amp;&amp; echo "success"
+cd documents || echo "failed"
 # combine them:
-cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
+cd test &amp;&amp; pwd || echo "no such directory"
 mkdir test
-cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
+cd test &amp;&amp; pwd || echo "no such directory"
 </code></pre>
 <h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
 <p>When we start to write scripts,
@@ -4938,7 +4967,7 @@ to the sequence <strong>1,2,3,4,5</strong>,
 and each time it assigns <strong>i</strong> to those numbers,
 it <code>echo</code>s them to standard output:</p>
 <pre><code>for i in {1..5} ; do
-  echo &quot;${i}&quot;
+  echo "${i}"
 done
 </code></pre>
 <blockquote>
@@ -4949,7 +4978,7 @@ we can create a rudimentary timer by
 calling the <code>sleep</code> command to pause
 after each count:</p>
 <pre><code>for i in {5..1} ; do
-  echo &quot;${i}&quot; &amp;&amp; sleep 1
+  echo "${i}" &amp;&amp; sleep 1
 done
 </code></pre>
 <blockquote>
@@ -4962,8 +4991,8 @@ I loop through the <strong>seasons</strong> variable first introduced above:</p>
 <pre><code>#!/usr/bin/env bash
 
 seasons=(winter spring summer fall)
-for i in &quot;${seasons[@]}&quot; ; do
-  echo &quot;I hope you have a nice ${i}.&quot;
+for i in "${seasons[@]}" ; do
+  echo "I hope you have a nice ${i}."
 done
 </code></pre>
 <blockquote>
@@ -4986,30 +5015,30 @@ help if
 </code></pre>
 <p>We can test integers:</p>
 <pre><code>if [[ 5 -ge 3 ]] ; then
-  echo &quot;true&quot;
+  echo "true"
 else
-  echo &quot;false&quot;
+  echo "false"
 fi
 </code></pre>
 <p>Reverse it to return the else statement:</p>
 <pre><code>if [[ 3 -ge 5 ]] ; then
-  echo &quot;true&quot;
+  echo "true"
 else
-  echo &quot;false&quot;
+  echo "false"
 fi
 </code></pre>
 <p>We can test strings:</p>
-<pre><code>if [[ &quot;$HOME&quot; = &quot;$PWD&quot; ]] ; then
- echo &quot;You are home.&quot;
+<pre><code>if [[ "$HOME" = "$PWD" ]] ; then
+ echo "You are home."
 else
- echo &quot;You are not home, but I will take you there.&quot;
- cd &quot;$HOME&quot; || exit
- echo &quot;You are now $PWD.&quot;
+ echo "You are not home, but I will take you there."
+ cd "$HOME" || exit
+ echo "You are now $PWD."
  pwd
 fi
 </code></pre>
 <blockquote>
-<p>The line <code>cd &quot;$HOME&quot; || exit</code> means change to the home directory, but if that
+<p>The line <code>cd "$HOME" || exit</code> means change to the home directory, but if that
 fails, then exit the script. This is useful in case the <code>cd</code> command were to
 fail for some reason.</p>
 </blockquote>
@@ -5018,24 +5047,24 @@ Let's first create a file called <strong>paper.txt</strong> and
 a file called <strong>paper.bak</strong>.
 We will add some trivial content to <strong>paper.txt</strong>
 but not to the <strong>paper.bak</strong>.
-The following <code>if</code> statement will test if <strong>paper.txt</strong> 
+The following <code>if</code> statement will test if <strong>paper.txt</strong>
 has a more recent modification date, and if so,
 it'll back up the file with the <code>cp</code> and echo back its success:</p>
-<pre><code>if [[ &quot;$HOME/paper.txt&quot; -nt &quot;$HOME/paper.bak&quot; ]] ; then
-  cp &quot;$HOME/paper.txt&quot; &quot;$HOME/paper.bak&quot; &amp;&amp; echo &quot;Paper is backed up.&quot;
+<pre><code>if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
+  cp "$HOME/paper.txt" "$HOME/paper.bak" &amp;&amp; echo "Paper is backed up."
 fi
 </code></pre>
 <p>Here's a script that prints info depending on which day of the week it is:</p>
-<pre><code>day1=&quot;Tue&quot;
-day2=&quot;Thu&quot;
-day3=&quot;$(date +%a)&quot;
+<pre><code>day1="Tue"
+day2="Thu"
+day3="$(date +%a)"
 
-if [[ &quot;$day3&quot; = &quot;$day1&quot; ]] ; then
-  printf &quot;\nIf %s is %s, then class is at 9:30am.\n&quot; &quot;$day3&quot; &quot;$day1&quot;
-elif [[ &quot;$day3&quot; = &quot;$day2&quot; ]] ; then
-  printf &quot;\nIf %s is %s, then class is at 9:30am.\n&quot; &quot;$day3&quot; &quot;$day2&quot;
+if [[ "$day3" = "$day1" ]] ; then
+  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day1"
+elif [[ "$day3" = "$day2" ]] ; then
+  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day2"
 else
-  printf &quot;\nThere is no class today.&quot;
+  printf "\nThere is no class today."
 fi
 </code></pre>
 <p>Finally, you can check your shell scripts using the
@@ -5106,11 +5135,11 @@ To address this,
 we can add a persistent disk
 that is much larger.
 In this section,
-we will add a disk to our VM, 
+we will add a disk to our VM,
 mount it onto the VM's filesystem, and format it.
 Extra storage does incur extra cost.
 So at the end of this section,
-I will show you how to delete the extra 
+I will show you how to delete the extra
 disk to avoid that if you want.</p>
 <p>We will essentially follow the Google Cloud tutorial
 to add a non-boot disk to our VM, but
@@ -5118,7 +5147,7 @@ with some modification.</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
 <blockquote>
 <p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
-The boot disk contains the 
+The boot disk contains the
 software required to boot the system.
 All of our computers
 (desktops, laptops, tablets, phones, etc.),
@@ -5175,7 +5204,7 @@ follow these steps:</p>
 </ul>
 </li>
 <li>Click on the <strong>Edit</strong> button at the top of the details page.</li>
-<li>Under the <strong>Additional disks</strong> section, click on <strong>+ ATTACH EXISTING DISK</strong>. </li>
+<li>Under the <strong>Additional disks</strong> section, click on <strong>+ ATTACH EXISTING DISK</strong>.</li>
 <li>A panel will open on the right side of your browser.</li>
 <li>Click on the drop down box and select the disk, by name, you created.</li>
 <li>Leave the defaults as-is.</li>
@@ -5295,7 +5324,7 @@ The Google Console documentation instructs us
 to use the following command:</p>
 <pre><code>sudo mkdir -p /mnt/disks/MOUNT_DIR
 </code></pre>
-<p>And to replace <strong>MOUNT_DIR</strong> with the directory we 
+<p>And to replace <strong>MOUNT_DIR</strong> with the directory we
 want to create.
 Since my added disk is named <strong>disk-1</strong>,
 I'll call it that:</p>
@@ -5314,7 +5343,7 @@ grant access for additional users:</p>
 <p>We can test that it exists and is accessible with
 the <code>lsblk</code> and the <code>cd</code> commands.
 The <code>lsblk</code> command should show that <strong>sdb</strong> is
-mounted at <code>/mnt/disks/disk-1</code>, and 
+mounted at <code>/mnt/disks/disk-1</code>, and
 we can <code>cd</code> (change directory) to it:</p>
 <pre><code>cd /mnt/disks/disk-1
 </code></pre>
@@ -5324,12 +5353,12 @@ we would have to re-<code>mount</code> the additional drive manually.
 In order to avoid this and automount the drive upon reboot,
 we need to edit the file <code>/etc/fstab</code>.</p>
 <blockquote>
-<p>Note that the file is named <strong>fstab</strong> and 
+<p>Note that the file is named <strong>fstab</strong> and
 that it's located in the <strong>/etc</strong> directory.
 Therefore the full path is <code>/etc/fstab</code></p>
 </blockquote>
-<p>The <strong>fstab</strong> file is basically a configuration file 
-that provides information to the OS about the filesystems 
+<p>The <strong>fstab</strong> file is basically a configuration file
+that provides information to the OS about the filesystems
 the system can mount.
 The standard information <strong>fstab</strong> contains includes
 the name (or label) of the device being mounted,
@@ -5356,7 +5385,7 @@ I'll use that:</p>
 <p>The output should look something like this
 <strong>BUT NOTE that your UUID value will
 be DIFFERENT</strong>:</p>
-<pre><code>/dev/sdb: UUID=&quot;3bc141e2-9e1d-428c-b923-0f9vi99a1123&quot; TYPE=&quot;ext4&quot;
+<pre><code>/dev/sdb: UUID="3bc141e2-9e1d-428c-b923-0f9vi99a1123" TYPE="ext4"
 </code></pre>
 <p>We need to add that value to <code>/etc/fstab</code>
 plus the standard information that file requires.
@@ -5370,7 +5399,7 @@ We'll use <code>nano</code> to make the edit:</p>
 <p>And that's it!
 If you reboot your VM, or
 if your VM rebooted for some reason,
-the extra drive we added should automatically 
+the extra drive we added should automatically
 mount upon reboot.
 If it doesn't,
 then it may mean that the drive failed,
@@ -5411,7 +5440,7 @@ and then delete the disk in the gcloud console.</p>
 </li>
 </ol>
 <h2 id="conclusion-11"><a class="header" href="#conclusion-11">Conclusion</a></h2>
-<p>In this section we learned how to expand 
+<p>In this section we learned how to expand
 the storage of our VM by creating a new virtual drive,
 adding it to our VM,
 formatting the drive in the <strong>ext4</strong> filesystem format,
@@ -5451,7 +5480,7 @@ we run the following command:</p>
 <p>Before we proceed,
 let's take a look at a single line of the file.
 Below I'll show the output for a made up user account:</p>
-<pre><code>grep &quot;peter&quot; /etc/passwd
+<pre><code>grep "peter" /etc/passwd
 peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 </code></pre>
 <p>The line starting with <strong>peter</strong> is a colon separated line.
@@ -5502,7 +5531,7 @@ their home and work phone numbers,
 their office or room number, and so forth.
 To add a full name to user <strong>peter</strong>'s account,
 we use the <strong>-f</strong> option:</p>
-<pre><code>sudo chfn -f &quot;Peter Parker&quot; peter
+<pre><code>sudo chfn -f "Peter Parker" peter
 </code></pre>
 <p>The <strong>/etc/passwd</strong> file is a standard Linux file, but
 some things will change depending on the Linux distribution.
@@ -5512,7 +5541,7 @@ This is a common starting numerical ID nowadays,
 but it could be different on other Linux or Unix-like distributions.
 The home directory could be different on other systems, too;
 for example, the default could be located at <strong>/usr/home/peter</strong>.
-Also, other shells exist besides <code>bash</code>, 
+Also, other shells exist besides <code>bash</code>,
 like <a href="https://www.zsh.org/">zsh</a>,
 which is now the default shell on macOS;
 so other systems may default to different shell environments.</p>
@@ -5541,7 +5570,7 @@ To set, for example, a warning that a user's password will expire,
 we would use the <code>passwd</code> command
 (see <code>man passwd</code> for options).
 The following command would make it so the user <strong>peter</strong>
-is warned that their password will expire in 14 days: </p>
+is warned that their password will expire in 14 days:</p>
 <pre><code>passwd -w 14 peter
 </code></pre>
 <h2 id="the-group-file"><a class="header" href="#the-group-file">The group file</a></h2>
@@ -5605,7 +5634,7 @@ where the default home directory is located
 (e.g., in <strong>/home/</strong>),
 where the default shell is defined
 (e.g., <code>/bin/bash</code>),
-where the default permissions are set for new 
+where the default permissions are set for new
 home user directories
 (e.g., <strong>0755</strong>)
 and more.</p>
@@ -5627,7 +5656,7 @@ are comments:</p>
 # I have made the following settings
 # to make your life a bit easier:
 #
-# make &quot;c&quot; a shortcut for &quot;clear&quot;
+# make "c" a shortcut for "clear"
 alias c='clear'
 </code></pre>
 <p>Use <code>nano</code> again to create a README file.
@@ -5647,7 +5676,7 @@ plus comments (full name, phone number, etc).
 Any of these can be skipped by pressing enter.
 You can see from the output of the <code>grep</code> command
 below that I added some extra information:</p>
-<pre><code>grep &quot;linus&quot; /etc/passwd
+<pre><code>grep "linus" /etc/passwd
 linus:x:1003:1004:Linus Torvalds,333,555-123-4567,:/home/linus:/bin/bash
 </code></pre>
 <p>Let's modify the minimum days before the password can be changed,
@@ -5656,7 +5685,7 @@ and the maximum days of the password's lifetime:</p>
 sudo passwd -x 180 linus
 </code></pre>
 <p>You can see these values by grepping the shadow file:</p>
-<pre><code>sudo grep &quot;linus&quot; /etc/shadow
+<pre><code>sudo grep "linus" /etc/shadow
 </code></pre>
 <p>To log in as the new user,
 use the <code>su</code> command:</p>
@@ -5679,10 +5708,10 @@ using the <strong>-A</strong> option
 sudo gpasswd -a peter developers
 sudo gpasswd -A peter developers
 sudo gpasswd -a linus developers
-grep &quot;developers&quot; /etc/group
+grep "developers" /etc/group
 </code></pre>
 <blockquote>
-<p>Note: if a user is logged in when you add them 
+<p>Note: if a user is logged in when you add them
 to a group, they need to logout and log back
 in before the group membership goes into effect.</p>
 </blockquote>
@@ -5702,11 +5731,11 @@ ls -ld /srv/developers
 <p>Now we can change ownership of the directory:</p>
 <pre><code>sudo chgrp developers /srv/developers
 </code></pre>
-<p>The directory ownership should now reflect that it's owned by 
+<p>The directory ownership should now reflect that it's owned by
 the <strong>developers</strong> group:</p>
 <pre><code>ls -ld /srv/developers
 </code></pre>
-<p>In order to allow group members to read and write to 
+<p>In order to allow group members to read and write to
 the above directory,
 we need to use the <code>chmod</code> command in a way we haven't yet.
 Specifically, we add a leading <strong>2</strong> sets the group identity.
@@ -5727,7 +5756,7 @@ and may be preferable to the others utilities
 <p>If we want to delete the new user's account and the new group,
 these are the commands to use.
 The first command will create an archival backup of
-<strong>linus</strong>' home directory and also remove the home 
+<strong>linus</strong>' home directory and also remove the home
 directory and any files in it.</p>
 <pre><code>deluser --backup --remove-home linus
 delgroup developers
@@ -5740,7 +5769,7 @@ install, manage, and remove software.
 These package management systems interact with
 curated and audited central repositories of software
 that are collected into <strong>packages</strong>.
-They also provide a set of tools to learn about 
+They also provide a set of tools to learn about
 the software that exists in these repositories.</p>
 <blockquote>
 <p>If <strong>package management</strong> seems like an odd concept to you,
@@ -5864,7 +5893,7 @@ Sometimes when a program is installed,
 configuration files get installed with it
 in the <strong>/etc</strong> directory.
 The <code>apt purge</code> command will remove
-those configuration files but the 
+those configuration files but the
 <code>apt remove</code> command will not.
 Both commands are offered because sometimes
 it is useful to keep those configuration files.</p>
@@ -5911,7 +5940,7 @@ The common way to do it on Ubuntu is to
 use the <code>apt</code> command, which
 was covered in this section.</p>
 <p>We'll come back to this command often because
-we'll soon install and setup a complete LAMP 
+we'll soon install and setup a complete LAMP
 (<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
 Until then, I encourage you to read through the
 manual page for <code>apt</code>:</p>
@@ -5942,7 +5971,7 @@ then it's helpful to have commands that manage that service
 (the web service, the SSH service, the database service, etc).</p>
 <p>For example, the <code>ssh</code> service is installed
 by default on our gcloud servers, and
-we can check its status with the following 
+we can check its status with the following
 <code>systemctl</code> command:</p>
 <pre><code>systemctl status ssh
 </code></pre>
@@ -5981,7 +6010,7 @@ more specifically, its <strong>unit</strong> name:</p>
 <h3 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h3>
 <p>Later we'll install the <a href="https://httpd.apache.org/">Apache web server</a>, and
 we will use <code>systemctl</code> to manage some aspects of this service.</p>
-<p>In particular, we will use the following commands to: </p>
+<p>In particular, we will use the following commands to:</p>
 <ol>
 <li>check the state of the Apache service,</li>
 <li>configure the Apache service to auto start on reboot,</li>
@@ -6030,7 +6059,7 @@ man journalctl
 </code></pre>
 <p>There are many fields and options we can use, but
 as an example,
-we see that there is an option to view the more 
+we see that there is an option to view the more
 recent entries first (which is not the default):</p>
 <pre><code>journalctl -r
 </code></pre>
@@ -6087,19 +6116,19 @@ variables were created after closely
 studying the <strong>/var/log/auth.log</strong> file.</p>
 <pre><code>#!/usr/bin/env bash
 
-log_file=&quot;/var/log/auth.log&quot;
+log_file="/var/log/auth.log"
 
-end_date=$(grep -Eo &quot;^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}&quot; &quot;${log_file}&quot; | tail -n1)
-start_date=$(grep -Eo &quot;^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}&quot; &quot;${log_file}&quot; | head -n1)
+end_date=$(grep -Eo "^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}" "${log_file}" | tail -n1)
+start_date=$(grep -Eo "^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}" "${log_file}" | head -n1)
 
-total_invalid=$(grep -ic &quot;Invalid user&quot; ${log_file})
-invalid_IPs=$(grep &quot;Invalid user&quot; ${log_file} | grep -Eoc &quot;[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}&quot;)
+total_invalid=$(grep -ic "Invalid user" ${log_file})
+invalid_IPs=$(grep "Invalid user" ${log_file} | grep -Eoc "[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}")
 
-echo &quot;
+echo "
 Log entry created on $(date +%c).
 From ${start_date} to ${end_date}, there were ${total_invalid} attempts to login to the system.
 These came from ${invalid_IPs} unique IPs.
-&quot; &gt;&gt; /srv/developers/brute.log
+" &gt;&gt; /srv/developers/brute.log
 </code></pre>
 <p>Next, we need to create two additional files.
 First we create a <strong>service</strong> file.
@@ -6121,7 +6150,7 @@ and the user to run the script under.
 Feel free to use this but be sure
 to change your User information:</p>
 <pre><code>[Unit]
-Description=&quot;Summarize brute login attempts.&quot;
+Description="Summarize brute login attempts."
 Requires=brute.timer
 
 [Service]
@@ -6139,7 +6168,7 @@ same directory as above:</p>
 <p>In this file,
 add the following:</p>
 <pre><code>[Unit]
-Description=&quot;Timer for the brute login service.&quot;
+Description="Timer for the brute login service."
 
 [Timer]
 OnCalendar=*-*-* 08:00:00
@@ -6239,7 +6268,7 @@ In this section, we will focus mostly on
 internet addressing, but
 we will also devote some space to TCP and UDP,
 two protocols for transmitting data.</p>
-<p>Connecting two or more devices together 
+<p>Connecting two or more devices together
 nowadays involves the TCP/IP or the UDP/IP protocols,
 otherwise part of the
 <a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite</a>.
@@ -6505,7 +6534,7 @@ UDP is useful for conducting voice over internet
 calls or for streaming video,
 such as through YouTube,
 which uses a type of UDP transmission
-called <strong>QUIC</strong> that has builtin encryption. </p>
+called <strong>QUIC</strong> that has builtin encryption.</p>
 <h4 id="tcp-and-udp-headers"><a class="header" href="#tcp-and-udp-headers">TCP and UDP Headers</a></h4>
 <p>The above protocols send data in
 data TCP <strong>packets</strong> or UDP <strong>datagrams</strong>, but
@@ -6551,7 +6580,7 @@ error checking if it's TCP.</p>
 <p>TCP and UDP connections use ports to bind
 internet traffic to specific IP addresses.
 Specifically, a <strong>port</strong> associates a process
-with an application 
+with an application
 (and is part of the <strong>application layer</strong> of the internet suite),
 such as a web service or outgoing email.
 That is, ports provide a way to distinguish and
@@ -6561,7 +6590,7 @@ For example, all traffic going to IP address 10.0.5.33:80
 means that this is <strong>http</strong> traffic for the http web service,
 since HTTP is commonly associated with port 80.
 Note that the port info is attached to the end of the
-IP address via a colon. </p>
+IP address via a colon.</p>
 <p>Common ports include:</p>
 <ul>
 <li>21: FTP</li>
@@ -6580,7 +6609,7 @@ It's located in the following file:</p>
 </code></pre>
 <p>And to get a count of the ports,
 we can invert grep for lines starting with a pound sign or are empty</p>
-<pre><code>grep -Ev &quot;^#|^$&quot; /etc/services | wc -l
+<pre><code>grep -Ev "^#|^$" /etc/services | wc -l
 </code></pre>
 <p>See also the Wikipedia page:
 <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></p>
@@ -6809,7 +6838,7 @@ Therefore, there are 254 maximum hosts allowed on these subnets because
 where the CIDR is set to /24.
 This only allows 254 maximum hosts on a subnet.
 If the CIDR is set to /16,
-then we can theoretically allow 65,534 hosts on a subnet. </p>
+then we can theoretically allow 65,534 hosts on a subnet.</p>
 <p>For example 4, let's start off then with a private
 IP address of 10.0.5.23 and a mask of /16:</p>
 <pre><code>00001010.00000000.00000101.00010111 IP Address: 10.0.5.23
@@ -7212,7 +7241,7 @@ stemming from within the system.</p>
 the Linux file system has a root directory <strong>/</strong>,
 and under this directory are other directories like
 <strong>/home</strong>, <strong>/bin</strong>, and so forth.
-A chroot (<strong>change root</strong>) environment 
+A chroot (<strong>change root</strong>) environment
 is a way to create a pseudo root directory
 at some specific location in the directory tree, and
 then build an environment in that pseudo root directory
@@ -7228,11 +7257,11 @@ only be able to use the applications that
 we've made available in that chroot.</p>
 <p>Thus, a <strong>chroot</strong> is a technology used
 to change the
-&quot;apparent root <strong>/</strong> directory for a user or a process&quot; and
+"apparent root <strong>/</strong> directory for a user or a process" and
 confine that user to that location on the system.
 A user or process that is confined to the
 <strong>chroot</strong> cannot easily see or access
-the rest of the file system and 
+the rest of the file system and
 will have limited access to the binaries
 (executables/apps/utilities) on the system.
 From its <code>man</code> page:</p>
@@ -7282,7 +7311,7 @@ sudo cp $(which bash) /mustafar/bin
 </li>
 <li>
 <p>Large software applications have dependencies, aka
-libraries. We need to copy those libraries to our chroot 
+libraries. We need to copy those libraries to our chroot
 directory so applications, like Bash, can run.</p>
 <p>To identify libraries needed by <code>bash</code>, we use the <code>ldd</code> command:</p>
 <pre><code>ldd /usr/bin/bash
@@ -7349,7 +7378,7 @@ bash-5.1# dirs
 bash-5.1# cd ../lib64/
 bash-5.1# dirs
 bash-5.1# cd ..
-bash-5.1# for i in {1..4} ; do echo &quot;$i&quot; ; done
+bash-5.1# for i in {1..4} ; do echo "$i" ; done
 </code></pre>
 <p>To exit the <code>chroot</code> environment,
 simply type <code>exit</code>:</p>
@@ -7517,7 +7546,7 @@ then further restrict SSH connections to a
 specific IP range.
 And/or, another rule may block all incoming,
 unencrypted HTTP connections through port 80, but
-allow all incoming, encrypted HTTPS connections 
+allow all incoming, encrypted HTTPS connections
 through port 443.</p>
 <p>Let's cover using Google Cloud to create
 a basic firewall rule.
@@ -7632,9 +7661,9 @@ Therefore, in this section,
 I will briefly cover both scenarios.</p>
 <h3 id="google-cloud-snapshots"><a class="header" href="#google-cloud-snapshots">Google Cloud Snapshots</a></h3>
 <p>Since our instance on Google Cloud is a virtual machine,
-we can use the Google Cloud console to create 
+we can use the Google Cloud console to create
 <strong>snapshots</strong> of our instance.
-A <strong>snapshot</strong> is a copy of a virtual machine at 
+A <strong>snapshot</strong> is a copy of a virtual machine at
 the time the snapshot was taken.
 What's great about taking a snapshot is that
 the result is basically a file of a complete operating system.
@@ -7736,7 +7765,7 @@ local web projects to remote servers.</p>
 Adding this option means that <code>rsync</code> will
 synchronize the source directory with the destination directory.
 This means that if I had already created a backup
-of <strong>tmp1</strong> to <strong>tmp2</strong>, and 
+of <strong>tmp1</strong> to <strong>tmp2</strong>, and
 then delete <strong>file1</strong> in <strong>tmp1</strong> later,
 then run <code>rsync</code> with the delete option,
 then <code>rsync</code> will also delete <strong>file1</strong> from <strong>tmp2/</strong>.
@@ -8266,7 +8295,7 @@ Then add the following code:</p>
 &lt;p&gt;You are using the following browser to view this site:&lt;/p&gt;
 
 &lt;?php
-echo $_SERVER['HTTP_USER_AGENT'] . &quot;\n\n&quot;;
+echo $_SERVER['HTTP_USER_AGENT'] . "\n\n";
 
 $browser = get_browser(null, true);
 print_r($browser);
@@ -8333,7 +8362,7 @@ using the <code>systemctl</code> command:</p>
 <p>Next we need to run a post installation script
 called <code>mysql_secure_installation</code>
 (that's not a typo)
-that sets up the MariaDB root password and 
+that sets up the MariaDB root password and
 performs some security checks.
 To do that, run the following command, and
 <strong>be sure to save the MariaDB root password you create</strong>:</p>
@@ -8506,7 +8535,7 @@ MariaDB [(linuxdb)]&gt; select * from distributions;
 <p>We will complete the following tasks
 to refresh our MySQL/MariaDB knowledge:</p>
 <ul>
-<li>retrieve some records or parts of records, </li>
+<li>retrieve some records or parts of records,</li>
 <li>delete a record,</li>
 <li>alter the table structure so that it will hold more data, and</li>
 <li>add a record:</li>
@@ -8572,14 +8601,14 @@ sudo nano login.php
 add the following credentials.
 If you used a different database name than <strong>linuxdb</strong>
 and a different username than <strong>webapp</strong>,
-then you need to substitute your names below. 
+then you need to substitute your names below.
 You need to use your own password where
 I have the Xs:</p>
 <pre><code>&lt;?php // login.php
-$db_hostname = &quot;localhost&quot;;
-$db_database = &quot;linuxdb&quot;;
-$db_username = &quot;webapp&quot;;
-$db_password = &quot;XXXXXXXXX&quot;;
+$db_hostname = "localhost";
+$db_database = "linuxdb";
+$db_username = "webapp";
+$db_password = "XXXXXXXXX";
 ?&gt;
 </code></pre>
 <p>Next we create a new PHP file for our website.
@@ -8606,14 +8635,14 @@ require_once 'login.php';
 
 // Establish connection
 $conn = mysqli_connect($db_hostname, $db_username, $db_password) or
-  die(&quot;Unable to connect&quot;);
+  die("Unable to connect");
 
 // Open database
 mysqli_select_db($conn, $db_database) or
-  die(&quot;Could not open database '$db_database'&quot;);
+  die("Could not open database '$db_database'");
 
 // QUERY 1
-$query1 = &quot;show tables from $db_database&quot;;
+$query1 = "show tables from $db_database";
 $result1 = mysqli_query($conn, $query1);
 
 $tblcnt = 0;
@@ -8622,42 +8651,42 @@ while($tbl = mysqli_fetch_array($result1)) {
 }
 
 if (!$tblcnt) {
-  echo &quot;&lt;p&gt;There are no tables&lt;/p&gt;\n&quot;;
+  echo "&lt;p&gt;There are no tables&lt;/p&gt;\n";
 }
 else {
-  echo &quot;&lt;p&gt;There are $tblcnt tables&lt;/p&gt;\n&quot;;
+  echo "&lt;p&gt;There are $tblcnt tables&lt;/p&gt;\n";
 }
 
 // Free result1 set
 mysqli_free_result($result1);
 
 // QUERY 2
-$query2 = &quot;select name, developer from distributions&quot;;
+$query2 = "select name, developer from distributions";
 $result2 = mysqli_query($conn, $query2);
 
 $row = mysqli_fetch_array($result2, MYSQLI_NUM);
-printf (&quot;%s (%s)\n&quot;, $row[0], $row[1]);
-echo &quot;&lt;br/&gt;&quot;;
+printf ("%s (%s)\n", $row[0], $row[1]);
+echo "&lt;br/&gt;";
 
 $row = mysqli_fetch_array($result2, MYSQLI_ASSOC);
-printf (&quot;%s (%s)\n&quot;, $row[&quot;name&quot;], $row[&quot;developer&quot;]);
+printf ("%s (%s)\n", $row["name"], $row["developer"]);
 
 // Free result2 set
 mysqli_free_result($result2);
 
 // Query 3
-$query3 = &quot;select * from distributions&quot;;
+$query3 = "select * from distributions";
 $result3 = mysqli_query($conn, $query3);
 
 while($row = $result3-&gt;fetch_assoc()) {
-  echo &quot;&lt;p&gt;Owner &quot; . $row[&quot;developer&quot;] . &quot; manages distribution &quot; . $row[&quot;name&quot;] . &quot;.&lt;/p&gt;&quot;;
+  echo "&lt;p&gt;Owner " . $row["developer"] . " manages distribution " . $row["name"] . ".&lt;/p&gt;";
 }
 
 mysqli_free_result($result3);
 
 $result4 = mysqli_query($conn, $query3);
 while($row = $result4-&gt;fetch_assoc()) {
-  echo &quot;&lt;p&gt;Distribution &quot; . $row[&quot;name&quot;] . &quot; was released on &quot; . $row[&quot;founded&quot;] . &quot;.&lt;/p&gt;&quot;;
+  echo "&lt;p&gt;Distribution " . $row["name"] . " was released on " . $row["founded"] . ".&lt;/p&gt;";
 }
 
 // Free result4 set
@@ -8717,7 +8746,7 @@ the WordPress installation and its updates.
 Various paid plans can extend the functionality
 offered to WordPress.com customers.</p>
 <p>WordPress.org is maintained by
-the <a href="https://wordpressfoundation.org/">WordPress Foundation</a>, which 
+the <a href="https://wordpressfoundation.org/">WordPress Foundation</a>, which
 oversees the development of and
 provides access to the WordPress software.
 When we download the WordPress software,
@@ -9122,7 +9151,7 @@ If your system (perhaps Windows??) saves
 variables differently,
 just use the value for the variable instead
 of the variable name:</p>
-<pre><code>gcloud compute instances create debian23 --machine-type e2-medium --zone=&quot;$ZONE'
+<pre><code>gcloud compute instances create debian23 --machine-type e2-medium --zone="$ZONE'
 </code></pre>
 <p>The above command created a virtual instance
 based on the Debian distribution of Linux,
@@ -9134,7 +9163,7 @@ was created in your Google Cloud Console.</p>
 <h3 id="ssh-into-the-new-virtual-instance"><a class="header" href="#ssh-into-the-new-virtual-instance">SSH into the new virtual instance</a></h3>
 <p>Now we can use the <code>gcloud compute ssh</code> command
 to connect to our new virtual instance:</p>
-<pre><code>gcloud compute ssh --zone &quot;$ZONE&quot; &quot;debian23&quot; --project &quot;$PROJECT_ID&quot;
+<pre><code>gcloud compute ssh --zone "$ZONE" "debian23" --project "$PROJECT_ID"
 </code></pre>
 <p>After you have successfully worked through this,
 feel free to delete the machine to avoid incurring
@@ -9148,7 +9177,7 @@ Perhaps, then, this is version 0.8, or
 something like that.
 In any case,
 it will be continually updated throughout the year but
-probably more often before and during the fall semesters 
+probably more often before and during the fall semesters
 when I teach my Linux Systems Administration course.</p>
 <p>This book in no way is meant to provide a comprehensive
 overview of systems administration nor of Linux.

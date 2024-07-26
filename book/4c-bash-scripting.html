@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,42 +61,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1a-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="1b-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="1c-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-project-management.html"><strong aria-hidden="true">2.</strong> Project Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2a-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li><li class="chapter-item expanded "><a href="2b-using-git-github-for-documentation.html"><strong aria-hidden="true">2.2.</strong> Using Git and GitHub for Documentation</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3a-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="3b-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="3c-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="3d-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="3e-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="3f-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4a-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="4b-regular-expressions.html"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="4c-bash-scripting.html" class="active"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5a-expanding-storage.html"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="5b-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="5c-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="5d-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6a-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="6b-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="6c-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="6d-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7a-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="7b-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="7c-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="7d-install-wordpress.html"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li><li class="chapter-item expanded "><a href="7e-gcloud-CLI-assignment.html"><strong aria-hidden="true">7.5.</strong> Google Cloud CLI Assignment</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -171,27 +200,27 @@ In the following code snippet,
 which can be entered on the commandline,
 I create a variable named <code>name</code>
 and assign it the value <code>Sean</code>.
-I create another variable named <code>backup</code> 
+I create another variable named <code>backup</code>
 and assign it the value <code>/media</code>.
 Then I use the <code>echo</code> and <code>cd</code> commands
 to test the variables:</p>
-<pre><code>name=&quot;Sean&quot;
-backup=&quot;/media&quot;
-echo &quot;My name is ${name}&quot;
-echo &quot;${backup}&quot;
-cd &quot;${backup}&quot;
+<pre><code>name="Sean"
+backup="/media"
+echo "My name is ${name}"
+echo "${backup}"
+cd "${backup}"
 pwd
 cd
 </code></pre>
 <p>Variables may include values that may change given some context.
 For example, if we want a variable to refer to today's day of week,
 we can use <a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">command substitution</a>,
-which &quot;allows the output of a command
-to replace the command name&quot; (see <code>man bash</code>).
+which "allows the output of a command
+to replace the command name" (see <code>man bash</code>).
 Thus, the output at the time this variable is set
 will differ if it is set on a different day.</p>
-<pre><code>today=&quot;$(date +%A)&quot;
-echo &quot;${today}&quot;
+<pre><code>today="$(date +%A)"
+echo "${today}"
 </code></pre>
 <p>The curly braces are not strictly necessary,
 but they offer benefits when we start to use things
@@ -220,10 +249,10 @@ Here I create a variable named <code>seasons</code>,
 which holds an <strong>array</strong>, or multiple values: <code>winter spring summer fall</code>.
 Bash lets me access parts of that array:</p>
 <pre><code>seasons=(winter spring summer fall)
-echo &quot;${seasons[@]}&quot;
-echo &quot;${seasons[1]}&quot;
-echo &quot;${seasons[2]}&quot;
-echo &quot;${seasons[-1]}&quot;
+echo "${seasons[@]}"
+echo "${seasons[1]}"
+echo "${seasons[2]}"
+echo "${seasons[-1]}"
 </code></pre>
 <p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
 <h2 id="conditional-expressions"><a class="header" href="#conditional-expressions">Conditional Expressions</a></h2>
@@ -245,12 +274,12 @@ apply logic with <code>&amp;&amp;</code> (<strong>Logical AND</strong>) or <code
 <pre><code>command1 || command2
 </code></pre>
 <p>Example:</p>
-<pre><code>cd documents &amp;&amp; echo &quot;success&quot;
-cd documents || echo &quot;failed&quot;
+<pre><code>cd documents &amp;&amp; echo "success"
+cd documents || echo "failed"
 # combine them:
-cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
+cd test &amp;&amp; pwd || echo "no such directory"
 mkdir test
-cd test &amp;&amp; pwd || echo &quot;no such directory&quot;
+cd test &amp;&amp; pwd || echo "no such directory"
 </code></pre>
 <h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
 <p>When we start to write scripts,
@@ -282,7 +311,7 @@ to the sequence <strong>1,2,3,4,5</strong>,
 and each time it assigns <strong>i</strong> to those numbers,
 it <code>echo</code>s them to standard output:</p>
 <pre><code>for i in {1..5} ; do
-  echo &quot;${i}&quot;
+  echo "${i}"
 done
 </code></pre>
 <blockquote>
@@ -293,7 +322,7 @@ we can create a rudimentary timer by
 calling the <code>sleep</code> command to pause
 after each count:</p>
 <pre><code>for i in {5..1} ; do
-  echo &quot;${i}&quot; &amp;&amp; sleep 1
+  echo "${i}" &amp;&amp; sleep 1
 done
 </code></pre>
 <blockquote>
@@ -306,8 +335,8 @@ I loop through the <strong>seasons</strong> variable first introduced above:</p>
 <pre><code>#!/usr/bin/env bash
 
 seasons=(winter spring summer fall)
-for i in &quot;${seasons[@]}&quot; ; do
-  echo &quot;I hope you have a nice ${i}.&quot;
+for i in "${seasons[@]}" ; do
+  echo "I hope you have a nice ${i}."
 done
 </code></pre>
 <blockquote>
@@ -330,30 +359,30 @@ help if
 </code></pre>
 <p>We can test integers:</p>
 <pre><code>if [[ 5 -ge 3 ]] ; then
-  echo &quot;true&quot;
+  echo "true"
 else
-  echo &quot;false&quot;
+  echo "false"
 fi
 </code></pre>
 <p>Reverse it to return the else statement:</p>
 <pre><code>if [[ 3 -ge 5 ]] ; then
-  echo &quot;true&quot;
+  echo "true"
 else
-  echo &quot;false&quot;
+  echo "false"
 fi
 </code></pre>
 <p>We can test strings:</p>
-<pre><code>if [[ &quot;$HOME&quot; = &quot;$PWD&quot; ]] ; then
- echo &quot;You are home.&quot;
+<pre><code>if [[ "$HOME" = "$PWD" ]] ; then
+ echo "You are home."
 else
- echo &quot;You are not home, but I will take you there.&quot;
- cd &quot;$HOME&quot; || exit
- echo &quot;You are now $PWD.&quot;
+ echo "You are not home, but I will take you there."
+ cd "$HOME" || exit
+ echo "You are now $PWD."
  pwd
 fi
 </code></pre>
 <blockquote>
-<p>The line <code>cd &quot;$HOME&quot; || exit</code> means change to the home directory, but if that
+<p>The line <code>cd "$HOME" || exit</code> means change to the home directory, but if that
 fails, then exit the script. This is useful in case the <code>cd</code> command were to
 fail for some reason.</p>
 </blockquote>
@@ -362,24 +391,24 @@ Let's first create a file called <strong>paper.txt</strong> and
 a file called <strong>paper.bak</strong>.
 We will add some trivial content to <strong>paper.txt</strong>
 but not to the <strong>paper.bak</strong>.
-The following <code>if</code> statement will test if <strong>paper.txt</strong> 
+The following <code>if</code> statement will test if <strong>paper.txt</strong>
 has a more recent modification date, and if so,
 it'll back up the file with the <code>cp</code> and echo back its success:</p>
-<pre><code>if [[ &quot;$HOME/paper.txt&quot; -nt &quot;$HOME/paper.bak&quot; ]] ; then
-  cp &quot;$HOME/paper.txt&quot; &quot;$HOME/paper.bak&quot; &amp;&amp; echo &quot;Paper is backed up.&quot;
+<pre><code>if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
+  cp "$HOME/paper.txt" "$HOME/paper.bak" &amp;&amp; echo "Paper is backed up."
 fi
 </code></pre>
 <p>Here's a script that prints info depending on which day of the week it is:</p>
-<pre><code>day1=&quot;Tue&quot;
-day2=&quot;Thu&quot;
-day3=&quot;$(date +%a)&quot;
+<pre><code>day1="Tue"
+day2="Thu"
+day3="$(date +%a)"
 
-if [[ &quot;$day3&quot; = &quot;$day1&quot; ]] ; then
-  printf &quot;\nIf %s is %s, then class is at 9:30am.\n&quot; &quot;$day3&quot; &quot;$day1&quot;
-elif [[ &quot;$day3&quot; = &quot;$day2&quot; ]] ; then
-  printf &quot;\nIf %s is %s, then class is at 9:30am.\n&quot; &quot;$day3&quot; &quot;$day2&quot;
+if [[ "$day3" = "$day1" ]] ; then
+  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day1"
+elif [[ "$day3" = "$day2" ]] ; then
+  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day2"
 else
-  printf &quot;\nThere is no class today.&quot;
+  printf "\nThere is no class today."
 fi
 </code></pre>
 <p>Finally, you can check your shell scripts using the
@@ -435,7 +464,7 @@ So keep practicing.</p>
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="p5-managing-the-system.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="p5-managing-the-system.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -449,7 +478,7 @@ So keep practicing.</p>
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="p5-managing-the-system.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="p5-managing-the-system.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

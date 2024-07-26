@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js light">
+<html lang="en" class="light" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -10,7 +10,7 @@
         
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#ffffff">
 
         <link rel="icon" href="favicon.svg">
         <link rel="shortcut icon" href="favicon.png">
@@ -31,7 +31,7 @@
         <!-- Custom theme stylesheets -->
 
     </head>
-    <body>
+    <body class="sidebar-visible no-js">
     <div id="body-container">
         <!-- Provide site root to javascript -->
         <script>
@@ -61,42 +61,71 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
-            html.classList.remove('no-js')
             html.classList.remove('light')
             html.classList.add(theme);
-            html.classList.add('js');
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
         </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var html = document.querySelector('html');
+            var body = document.querySelector('body');
             var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
             }
-            html.classList.remove('sidebar-visible');
-            html.classList.add("sidebar-" + sidebar);
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
                 <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1a-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="1b-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="1c-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-project-management.html"><strong aria-hidden="true">2.</strong> Project Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2a-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li><li class="chapter-item expanded "><a href="2b-using-git-github-for-documentation.html"><strong aria-hidden="true">2.2.</strong> Using Git and GitHub for Documentation</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3a-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="3b-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="3c-file-attributes.html"><strong aria-hidden="true">3.3.</strong> File Attributes</a></li><li class="chapter-item expanded "><a href="3d-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="3e-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="3f-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4a-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="4b-regular-expressions.html" class="active"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="4c-bash-scripting.html"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5a-expanding-storage.html"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="5b-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="5c-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="5d-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6a-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="6b-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="6c-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="6d-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7a-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="7b-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="7c-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="7d-install-wordpress.html"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li><li class="chapter-item expanded "><a href="7e-gcloud-CLI-assignment.html"><strong aria-hidden="true">7.5.</strong> Google Cloud CLI Assignment</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
             </div>
-            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
         </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
 
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
                                 <div id="menu-bar-hover-placeholder"></div>
-                <div id="menu-bar" class="menu-bar sticky bordered">
+                <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
-                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                             <i class="fa fa-bars"></i>
-                        </button>
+                        </label>
                         <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
                             <i class="fa fa-paint-brush"></i>
                         </button>
@@ -178,7 +207,7 @@ Dallas, TX        | 1288457     | 1856
 San Jose, CA      | 983489      | 1777
 </code></pre>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;San Antonio&quot; cities.csv
+<pre><code>grep "San Antonio" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX | 1451853 | 1718
@@ -193,7 +222,7 @@ if I run the above command without
 the city named capitalized,
 then <code>grep</code> will return nothing:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;san antonio&quot; cities.csv
+<pre><code>grep "san antonio" cities.csv
 </code></pre>
 <p>In order to tell grep to ignore case,
 I need to use the <code>-i</code> option.
@@ -204,7 +233,7 @@ withing double quotes.</p>
 to read through the documentation and
 see what the various options exit for this command.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;san antonio&quot; cities.csv
+<pre><code>grep -i "san antonio" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX   | 1451853     | 1718
@@ -223,7 +252,7 @@ in Chi<strong>ca</strong>go,
 then that city matches my
 grep search:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;ca&quot; cities.csv
+<pre><code>grep -i "ca" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Los Angeles, CA   | 3898747     | 1781
@@ -235,7 +264,7 @@ San Jose, CA      | 983489      | 1777
 we can enclose our search in
 certain special characters:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;\bca\b&quot; cities.csv
+<pre><code>grep -i "\bca\b" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Los Angeles, CA   | 3898747     | 1781
@@ -248,7 +277,7 @@ other words.
 Here is an example of searching
 for the string <strong>ca</strong> within words:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -i &quot;\Bca\B&quot; cities.csv
+<pre><code>grep -i "\Bca\B" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Chicago, IL       | 2746388     | 1780
@@ -291,7 +320,7 @@ the cities <strong>Houston</strong> or <strong>Dallas</strong>
 since neither of those lines contain
 capital <strong>A, B, or C</strong> characters:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;[A-C]&quot; cities.csv 
+<pre><code>grep "[A-C]" cities.csv 
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>City              | 2020 Census | Founded
@@ -310,7 +339,7 @@ the carat key acts as a Boolean NOT.
 The following command matches any
 characters <strong>not in</strong> the range A,B,C:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;[^A-C]&quot; cities.csv
+<pre><code>grep "[^A-C]" cities.csv
 </code></pre>
 <p>However, the output matches
 all lines since there are no
@@ -334,7 +363,7 @@ San Jose, CA      | 983489      | 1777
 from the first command
 does not include Houston or Dallas
 in the second command by comparing
-the outputs of the two commands 
+the outputs of the two commands
 using <strong>process substitution</strong>.
 This is a technique that pipes
 the standard output of multiple
@@ -344,14 +373,14 @@ Here I use the <code>diff</code> command
 to compare the output of both
 <code>grep</code> commands:</p>
 <p><strong>Command:</strong></p>
-<pre><code>diff &lt;(grep &quot;[A-C]&quot; cities.csv) &lt;(grep &quot;[^A-C]&quot; cities.csv)
+<pre><code>diff &lt;(grep "[A-C]" cities.csv) &lt;(grep "[^A-C]" cities.csv)
 </code></pre>
 <p>The <code>diff</code> output shows
 that the second <code>grep</code>
 command includes the
 two lines below that
 are not in the output
-of the first <code>grep</code> command: </p>
+of the first <code>grep</code> command:</p>
 <p><strong>Output:</strong></p>
 <pre><code>4a5
 &gt; Houston, TX       | 2304580     | 1837
@@ -363,7 +392,7 @@ of the first <code>grep</code> command: </p>
 Overflow</a> answer.</p>
 </blockquote>
 <p>Try this command for an alternate output:</p>
-<pre><code>diff -y &lt;(grep &quot;[A-C]&quot; cities.csv) &lt;(grep &quot;[^A-C]&quot; cities.csv)
+<pre><code>diff -y &lt;(grep "[A-C]" cities.csv) &lt;(grep "[^A-C]" cities.csv)
 </code></pre>
 <p>Our ranges may be alphabetical or numerical.
 The following command matches any numbers <strong>in</strong> the range 1,2,3:</p>
@@ -423,7 +452,7 @@ San Jose, CA    | 983489      | 1777
 </code></pre>
 <h3 id="character-classes"><a class="header" href="#character-classes">Character classes</a></h3>
 <p>Character classes are special
-types of predefined 
+types of predefined
 bracket expressions.
 They make it easy to
 search for general patterns.
@@ -436,7 +465,7 @@ Their names are self explanatory, and they are
 [:digit:], [:graph:], [:lower:], [:print:],
 [:punct:], [:space:], [:upper:], and [:xdigit:].
 For example, [[:alnum:]] means the character class
-of numbers and letters ... </p>
+of numbers and letters ...</p>
 </blockquote>
 <p>Here I search for anything
 that matches the Year column.
@@ -444,13 +473,13 @@ Specifically, I search for
 a empty space <code>[[:blank:]]</code>,
 a four digit string <code>[[:digit:]]{4}</code>.
 The <code>{4}</code> means
-&quot;The preceding item is matched
-exactly 4 times&quot; (<code>man grep</code>),
+"The preceding item is matched
+exactly 4 times" (<code>man grep</code>),
 and the number 4 can be replaced
 with any relevant number.
 and an end of line <code>$</code>:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -Eo &quot;[[:blank:]][[:digit:]]{4}$&quot; cities.csv 
+<pre><code>grep -Eo "[[:blank:]][[:digit:]]{4}$" cities.csv 
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code> 1624
@@ -486,7 +515,7 @@ Anchoring works in many places.
 For example, to search all lines
 that start with capital <strong>D through L</strong></p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;^[D-L]&quot; cities.csv
+<pre><code>grep "^[D-L]" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Los Angeles, CA | 3898747 | 1781
@@ -495,7 +524,7 @@ Dallas, TX      | 1288457 | 1856
 </code></pre>
 <p>And all lines that end with the numbers <strong>4, 5, or 6</strong>:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;[4-6]$&quot; cities.csv
+<pre><code>grep "[4-6]$" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>New York City, NY | 8804190 | 1624
@@ -511,10 +540,10 @@ ending with the numbers
 starting from 4 through 6.
 The single dot stands for any character,
 and the asterisk stands for
-&quot;the preceding character will
-zero or more times&quot; (<code>man grep</code>).</p>
+"the preceding character will
+zero or more times" (<code>man grep</code>).</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep &quot;^[D-L].*[4-6]$&quot; cities.csv
+<pre><code>grep "^[D-L].*[4-6]$" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Dallas, TX        | 1288457     | 1856
@@ -529,7 +558,7 @@ But there are other options:</p>
 to extend <code>grep</code>'s regular expression functionality:</p>
 <p>Here, the preceding item <strong>S</strong> is matched one or more times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;S+&quot; cities.csv
+<pre><code>grep -E "S+" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX | 1451853 | 1718
@@ -540,17 +569,17 @@ San Jose, CA    | 983489  | 1777
 the preceding item <strong>l</strong> is
 matched exactly 2 times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;l{2}&quot; cities.csv
+<pre><code>grep -E "l{2}" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Dallas, TX | 1288457 | 1856
 </code></pre>
 <p>Finally, in this example,
-the preceding item <strong>7</strong> is matched 
+the preceding item <strong>7</strong> is matched
 at least two times or
 at most three times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;7{2,3}&quot; cities.csv
+<pre><code>grep -E "7{2,3}" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Jose, CA | 983489 | 1777
@@ -570,7 +599,7 @@ of the search is true.</p>
 for each city because they
 both appear in the file:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;San Antonio|Dallas&quot; cities.csv
+<pre><code>grep -E "San Antonio|Dallas" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX | 1451853 | 1718
@@ -581,7 +610,7 @@ San Antonio even though
 Lexington does not appear
 in the file:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E &quot;San Antonio|Lexington&quot; cities.csv
+<pre><code>grep -E "San Antonio|Lexington" cities.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>San Antonio, TX   | 1451853     | 1718
@@ -611,7 +640,7 @@ more in-depth lessons on regular expressions.</p>
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="4c-bash-scripting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="4c-bash-scripting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -625,7 +654,7 @@ more in-depth lessons on regular expressions.</p>
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="4c-bash-scripting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="4c-bash-scripting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
