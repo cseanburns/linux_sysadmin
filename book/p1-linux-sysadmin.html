@@ -178,118 +178,74 @@
                     <main>
                         <h1 id="linux-systems-administration"><a class="header" href="#linux-systems-administration">Linux Systems Administration</a></h1>
 <p>Author: C. Sean Burns<br />
-Date: 2024-02-11<br />
+Date: 2024-08-23<br />
 Email: <a href="sean.burns@uky.edu">sean.burns@uky.edu</a><br />
 Website: <a href="https://cseanburns.net">cseanburns.net</a><br />
 GitHub: <a href="https://github.com/cseanburns">@cseanburns</a></p>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
-<p>This short book was written for my
-Linux Systems Administration course.
-The book and course's goals are to
-provide the very basics about systems
-administration using Linux, and
-to teach students:</p>
+<p>This book was written for my Linux Systems Administration course.
+The book and course's goals are to provide students with the skills to use Linux for systems administration, and to teach students:</p>
 <ol>
-<li>how to use the command line in order to become more efficient computer users
-and more comfortable with using computers in general;</li>
-<li>how to use command line utilities and programs and to learn what can be
-accomplished using those programs;</li>
+<li>how to use the command line in order to become more efficient computer users and more comfortable with using computers in general;</li>
+<li>how to use command line utilities and programs and to learn what can be accomplished using those programs;</li>
 <li>how to administer users and manage software on a Linux server;</li>
 <li>how to secure a Linux server; and</li>
 <li>the basics of cloud computing;</li>
 </ol>
-<p>And finally, this book/course ends on walking students
-through the process of building a <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP stack</a>.</p>
+<p>And finally, this book/course ends on walking students through the process of building a <a href="https://en.wikipedia.org/wiki/LAMP_(software_bundle)">LAMP stack</a>.</p>
+<h2 id="how-to-use-this-book"><a class="header" href="#how-to-use-this-book">How to Use this Book</a></h2>
+<h3 id="text-and-video"><a class="header" href="#text-and-video">Text and Video</a></h3>
+<p>All sections of this book will be accompanied by a video demonstrating the practices described in those sections.
+Your are <strong>highly encouraged</strong> to <strong>read through the text first</strong> and <strong>then watch the video</strong>.
+Revisit the text to help cement the ideas in place and to work through tasks.</p>
+<h3 id="markup"><a class="header" href="#markup">Markup</a></h3>
+<p>There are two markup styles that I want to bring to your attention:</p>
+<h4 id="code-blocks"><a class="header" href="#code-blocks">Code Blocks</a></h4>
+<p>Text that looks like <strong>code blocks</strong> indicate some kind of command or series of commands.
+Do not simply copy and paste these commands into your terminal.
+You can cause errors if you copy and paste multiple lines of code into your terminal.
+Rather, you should type these commands out.
+For example, you might copy and paste the following command and be okay in doing so:</p>
+<pre><code>ls ~
+</code></pre>
+<p>But copying and pasting multiple lines can cause problems.
+Here's an example of a series of commands in a code block that can cause problems if you copy and paste them into your terminal:</p>
+<pre><code>cd /important/directory
+rm -rf *
+echo "All files in /important/directory have been deleted."
+</code></pre>
+<p>In the above example,
+a mistake in copying and/or pasting the <code>cd /important/directory</code> command will result in the deletion of other directories and their files.
+It's therefore important to <strong>understand before executing</strong> some code.
+Typing out the code and seeing the results printed to the terminal will help foster that understanding.</p>
+<h4 id="asides"><a class="header" href="#asides">Asides</a></h4>
+<p>I occasionally insert <strong>asides</strong> into the text.
+These asides generally contain notes or extra comments about the main content.
+Asides look like this:</p>
+<blockquote>
+<p>This is an aside.
+Asides will contain extra information, notes, or comments.</p>
+</blockquote>
+<h3 id="theme"><a class="header" href="#theme">Theme</a></h3>
+<p>At the top of the page is an icon of a paint brush.
+The default theme is darker text on a light background, but you can change the theme per your preferences.</p>
+<h3 id="search"><a class="header" href="#search">Search</a></h3>
+<p>Next to the paintbrush is an icon of a magnifying glass.
+Use this to search this work.</p>
+<h3 id="printing"><a class="header" href="#printing">Printing</a></h3>
+<p>I intend this book to be a live document, and therefore it'll be regularly updated.
+But feel free to print it, if you want.
+You can use the print function to save the entire book as a PDF file.
+See the printer icon at the top right of the screen to get started.</p>
 <h2 id="about-this-book"><a class="header" href="#about-this-book">About This Book</a></h2>
-<p>Since I use this book for my Linux Systems Administration course,
-which I teach each fall semester,
-this book will be a live document.
-I will update the content as I teach it in order
-to address changes in the technology and to
-edit for clarity when I discover some aspect
-of the book causes confusion or
-does not provide enough information.</p>
-<p>This book is not a
-comprehensive introduction to Linux nor
-to systems administration.
-It is designed for an entry level course on these topics and
-is focused on a select and small range of those topics that
-have specific pedagogical aims (see above).</p>
-<p>The book started off as a series of transcripts and
-demonstrations.
-It still has that focus, but
-I've had a long-term goal to make these transcripts
-more cohesive.
-Achieving this became easier when I learned about
-<a href="https://github.com/rust-lang/mdBook">mdBook</a>.</p>
-<p>The content in this book is open access and
-licensed under the <a href="https://github.com/cseanburns/linux_sysadmin/blob/master/LICENSE">GNU GPL v3.0</a>.
-Feel free to fork it on <a href="https://github.com/cseanburns/linux_sysadmin">GitHub</a> and
-modify it for your own needs.</p>
-<h2 id="history-of-this-course"><a class="header" href="#history-of-this-course">History of This Course</a></h2>
-<p>I created and started teaching this course in the Fall 2016 semester.
-I originally used Soyinka's (2016) excellent
-introduction to Linux administration, and
-we used VirtualBox and the Fedora Server distribution
-to practice and learn the material.</p>
-<p>However, around 2018 or '19,
-I moved away from Soyinka's comprehensive book to
-focus the material on a more limited range of topics.
-I did this for two reasons.
-First, most of my students do not
-become systems administrators,
-although some have (to my delight).
-Second, my students have grown up using only
-graphical user interfaces on one of the two common,
-commercial operating systems, and
-consequently have very constrained and limited understandings
-of how computers work and what can be done with them.
-In redesigning this course,
-I wanted to strike a balance between these two problems.
-I wanted students to acquire enough skills and
-gain enough confidence to feel comfortable applying for
-(at least) entry level systems administrator jobs, and
-more basically,
-I wanted students to be exposed to a different
-type of computing environment than what they were used to
-and that fostered a hacking mentality,
-<a href="http://www.catb.org/jargon/html/H/hacker.html">in the more benign and playful sense of the word</a>.</p>
-<p>I moved us away from using
-Fedora Server for the Fall 2022 course.
-Fedora Server is a great and fun operating system, and
-there's a lot to learn about Linux using it.
-However, since it is rather bleeding edge, it
-meant something would break in my demonstrations each semester, and
-identifying what had changed in Fedora
-each year made it somewhat of a chore to keep up.
-I have therefore switched to a less bleeding edge
-distribution of Linux: a still supported
-<a href="https://ubuntu.com/blog/what-is-an-ubuntu-lts-release">Ubuntu Server LTS release</a>.
-Based on my personal experience managing servers
-that run on some version of Ubuntu LTS,
-I believe this should provide more stability.
-It helps that Ubuntu Server has a good share of the
-Linux server market.</p>
-<p>The primary reason I moved us away from VirtualBox is because
-a good number of my students each year use Apple computers, which
-became a major obstacle when
-<a href="https://apple.stackexchange.com/questions/422565/does-virtualbox-run-on-apple-silicon">Apple switched to the M1 chip</a>.
-I originally considered asking those students
-to use different virtualization software, but
-it was nice to have all students,
-regardless of operating system, and myself using the
-same software.
-I also considered using something like <a href="https://www.docker.com/">Docker</a>
-as a replacement, but
-decided instead to use Google Cloud.
-I figured that learning how to use a
-service like Google Cloud might be more broadly useful
-to students, and
-that if we used Docker,
-we'd have to spend a lot of time installing and
-configuring that on their laptops.
-Time is already a constraint in this course, but
-we'll see how it goes this semester (Fall 2022).</p>
+<p>This book works as a live document since I use it for my fall semester Linux Systems Administration course.
+I will update the content as I teach it in order to address changes in the technology and to edit for clarity.</p>
+<p>This book is not a comprehensive introduction to the Linux operating system nor to systems administration.
+It is designed for an entry level course on these topics.
+It is focused on a select and small range of those topics that have the specific pedagogical aims described above.</p>
+<p>The content in this book is open access and licensed under the <a href="https://github.com/cseanburns/linux_sysadmin/blob/master/LICENSE">GNU GPL v3.0</a>.
+Feel free to fork this work on <a href="https://github.com/cseanburns/linux_sysadmin">GitHub</a> and modify it for your own needs.</p>
+<p>I use <a href="https://github.com/rust-lang/mdBook">mdBook</a> to build <a href="https://www.markdownguide.org/">markdown</a> source files into this final output.</p>
 <h2 id="references"><a class="header" href="#references">References</a></h2>
 <p>Soyinka, W. (2016). <em>Linux administration: A beginner's guide</em> (7th ed.). New
 York: MacGraw Hill Education. ISBN: 978-0-07-184536-6</p>
