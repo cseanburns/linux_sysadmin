@@ -1,4 +1,4 @@
-# Using Google Cloud (gcloud)
+# Project Management
 
 This section introduces us to [Google Cloud][gcloud] (gcloud).
 We will use this platform to create virtual
