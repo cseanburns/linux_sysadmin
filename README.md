@@ -28,3 +28,33 @@ prior content that I want to save separately.
 [mdbook]:https://github.com/rust-lang/mdBook
 [cse5005]:https://natalieagus.github.io/50005/
 [linux_fs]:https://www.linuxjournal.com/content/understanding-linux-filesystems-inodes-block-sizes-and-data-structures
+
+# heading 1
+## heading 2
+### heading 3
+
+**bold** *italic* **bold** _italic_ 
+
+* item 1
+  * item sub 1
+  * item sub 2
+* item 2
+  * items sub 2
+
+1. first item
+2. second item
+3. item
+
+this is a https://example.com 
+this is a [https://example.com](example.com)
+
+this is `inline code`
+
+and this is 
+
+```
+for i in * ; do echo "$i" ; done
+echo $i
+```
+
+
