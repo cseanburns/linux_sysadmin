@@ -170,7 +170,7 @@ For example, to install the [latest release of Python][python3] (as of August 20
 penv install 3.12.5
 ```
 
-Finally, you can install the Google Cloud application using the steps outlined above.
+Finally, you can install the Google Cloud application using the steps outlined below.
 Or you can use the steps outlined in the [Google Cloud Interactive installation][gcloud_interactive].
 
 See also:
@@ -261,13 +261,16 @@ Typing ``exit`` at the prompt will always close our connection to our remote ser
 ## Snapshots
 
 You have installed a pristine version of Ubuntu, but mistakes will happen while learning how to use your machines.
-It's therefore important to backup this pristine version of the operating system.
-Therefore, you want to create a snapshot of the newly installed Ubuntu server.
+If you want, you can backup this pristine version of the operating system.
 This will allow you to restore the server if something goes wrong later.
+
+**NOTE:** It's pretty easy to create a new VM instance.
+Therefore, it's okay to create snapshots later when you are working on your projects.
+This will reduce costs until needed.
 
 To get started:
 
-1. In the left hand navigation panel, click on **Snapshots**.
+1. In the left hand navigation panel, click **Compute Engine** and then **Snapshots**.
 2. At the top of the page, click on **Create Snapshot**.
 3. Provide a name for your snapshot: e.g., **ubuntu-1**.
 4. Provide a description of your snapshot: e.g., **This is a new install of Ubuntu 20.04.**
