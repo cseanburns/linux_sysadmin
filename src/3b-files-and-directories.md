@@ -1,5 +1,34 @@
 # Files and Directories
 
+In this demo, we will cover:
+
+1. **Basic Directory and File Commands**:
+   - Overview of GNU Coreutils.
+   - Commands for navigating directories and working with files.
+
+2. **Directory Listing**:
+   - `ls`: List directory contents.
+   - Options for `ls` (e.g., `-l`, `-a`, `-al`).
+   - `pwd`: Print working directory.
+   - Using `man` pages for command options.
+
+3. **Basic File Operations**:
+   - `cp`: Copying files and directories.
+   - `mv`: Moving and renaming files and directories.
+   - `rm`: Removing files and directories.
+   - `touch`: Updating file timestamps or creating empty files.
+   - Options for each command, including interactive modes.
+
+4. **Special File Types**:
+   - `mkdir`: Creating directories.
+   - `rmdir`: Deleting empty directories.
+   - `rm -r`: Recursively deleting directories with content.
+
+5. **Printing Text**:
+   - `echo`: Printing text or variables to standard output.
+   - `cat`: Concatenating and printing file contents.
+   - `less`: Viewing file contents one page at a time.
+
 ## Basic Directory and File commands 
 
 In order to explore the above directories

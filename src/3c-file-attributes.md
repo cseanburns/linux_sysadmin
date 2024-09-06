@@ -1,5 +1,28 @@
 # File Attributes
 
+In this demo, we will cover:
+
+1. **Identifying Ownership and Permissions**:
+   - Overview of file ownership (user and group ownership).
+   - Understanding file permissions (read, write, execute).
+   - Using `ls -l` to view ownership and permissions.
+   - Explanation of how to interpret the output of `ls -l`.
+
+2. **Changing File Permissions**:
+   - Using `chmod` to change file permissions.
+   - Explanation of octal values for permissions (`rwx` and their octal equivalents).
+   - Examples of setting permissions using `chmod` with octal notation (e.g., `chmod 700`, `chmod 644`).
+
+3. **Changing File Ownership**:
+   - Using `chown` to change file ownership (user and group).
+   - Examples of changing user ownership and group ownership separately and together.
+   - Usage of `sudo` to execute administrative commands when needed.
+
+4. **Additional Commands**:
+   - `ls -ld`: List directories and their attributes.
+   - `groups`: Show group memberships for a user.
+   - `sudo`: Run commands as another user with elevated privileges.
+
 ## Identifying Ownership and Permissions
 
 In the last section, we saw that the output of the ``ls -l`` command
