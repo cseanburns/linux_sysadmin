@@ -316,6 +316,15 @@ then the relative path would simply be:
 
 - relative path: **paper.txt**
 
+## Additional Readings
+
+Read through these two pages for more info on the file system and directories:
+
+- [UNIX File System][unix_fs]
+- [UNIX Directories][unix_dirs]
+
+[unix_fs]:https://natalieagus.github.io/50005/os/filesystem
+[unix_dirs]:https://natalieagus.github.io/50005/os/directories
 [filesystem]:https://en.wikipedia.org/wiki/File_system
 [apfs]:https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac
 [ntfs]:https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems
