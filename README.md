@@ -12,6 +12,7 @@ The **archive/** directory contains prior content that I want to save separately
 
 ## To Do
 
+- updated 3c-file-attributes.md with new group examples
 - add readings from [Computer System Engineering][cse50005]
 - add reading on Linux Filesystems [Understanding Linux Filesystems][linux_fs]
 
