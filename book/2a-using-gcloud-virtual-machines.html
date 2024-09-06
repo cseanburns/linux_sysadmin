@@ -321,7 +321,7 @@ To do so, follow the instructions here:</p>
 For example, to install the <a href="https://www.python.org/">latest release of Python</a> (as of August 2024):</p>
 <pre><code>penv install 3.12.5
 </code></pre>
-<p>Finally, you can install the Google Cloud application using the steps outlined above.
+<p>Finally, you can install the Google Cloud application using the steps outlined below.
 Or you can use the steps outlined in the <a href="https://cloud.google.com/sdk/docs/downloads-interactive#linux-mac">Google Cloud Interactive installation</a>.</p>
 <p>See also:</p>
 <p><a href="https://cloud.google.com/python/docs/setup">Setting up a Python development environment</a></p>
@@ -381,12 +381,14 @@ If you do not need to reboot your server, then type <code>exit</code> to logout 
 <p>Typing <code>exit</code> at the prompt will always close our connection to our remote servers.</p>
 <h2 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h2>
 <p>You have installed a pristine version of Ubuntu, but mistakes will happen while learning how to use your machines.
-It's therefore important to backup this pristine version of the operating system.
-Therefore, you want to create a snapshot of the newly installed Ubuntu server.
+If you want, you can backup this pristine version of the operating system.
 This will allow you to restore the server if something goes wrong later.</p>
+<p><strong>NOTE:</strong> It's pretty easy to create a new VM instance.
+Therefore, it's okay to create snapshots later when you are working on your projects.
+This will reduce costs until needed.</p>
 <p>To get started:</p>
 <ol>
-<li>In the left hand navigation panel, click on <strong>Snapshots</strong>.</li>
+<li>In the left hand navigation panel, click <strong>Compute Engine</strong> and then <strong>Snapshots</strong>.</li>
 <li>At the top of the page, click on <strong>Create Snapshot</strong>.</li>
 <li>Provide a name for your snapshot: e.g., <strong>ubuntu-1</strong>.</li>
 <li>Provide a description of your snapshot: e.g., <strong>This is a new install of Ubuntu 20.04.</strong></li>

@@ -946,7 +946,7 @@ To do so, follow the instructions here:</p>
 For example, to install the <a href="https://www.python.org/">latest release of Python</a> (as of August 2024):</p>
 <pre><code>penv install 3.12.5
 </code></pre>
-<p>Finally, you can install the Google Cloud application using the steps outlined above.
+<p>Finally, you can install the Google Cloud application using the steps outlined below.
 Or you can use the steps outlined in the <a href="https://cloud.google.com/sdk/docs/downloads-interactive#linux-mac">Google Cloud Interactive installation</a>.</p>
 <p>See also:</p>
 <p><a href="https://cloud.google.com/python/docs/setup">Setting up a Python development environment</a></p>
@@ -1006,12 +1006,14 @@ If you do not need to reboot your server, then type <code>exit</code> to logout 
 <p>Typing <code>exit</code> at the prompt will always close our connection to our remote servers.</p>
 <h2 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h2>
 <p>You have installed a pristine version of Ubuntu, but mistakes will happen while learning how to use your machines.
-It's therefore important to backup this pristine version of the operating system.
-Therefore, you want to create a snapshot of the newly installed Ubuntu server.
+If you want, you can backup this pristine version of the operating system.
 This will allow you to restore the server if something goes wrong later.</p>
+<p><strong>NOTE:</strong> It's pretty easy to create a new VM instance.
+Therefore, it's okay to create snapshots later when you are working on your projects.
+This will reduce costs until needed.</p>
 <p>To get started:</p>
 <ol>
-<li>In the left hand navigation panel, click on <strong>Snapshots</strong>.</li>
+<li>In the left hand navigation panel, click <strong>Compute Engine</strong> and then <strong>Snapshots</strong>.</li>
 <li>At the top of the page, click on <strong>Create Snapshot</strong>.</li>
 <li>Provide a name for your snapshot: e.g., <strong>ubuntu-1</strong>.</li>
 <li>Provide a description of your snapshot: e.g., <strong>This is a new install of Ubuntu 20.04.</strong></li>
@@ -1624,6 +1626,51 @@ then the relative path would simply be:</p>
 <li>relative path: <strong>paper.txt</strong></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="files-and-directories"><a class="header" href="#files-and-directories">Files and Directories</a></h1>
+<p>In this demo, we will cover:</p>
+<ol>
+<li>
+<p><strong>Basic Directory and File Commands</strong>:</p>
+<ul>
+<li>Overview of GNU Coreutils.</li>
+<li>Commands for navigating directories and working with files.</li>
+</ul>
+</li>
+<li>
+<p><strong>Directory Listing</strong>:</p>
+<ul>
+<li><code>ls</code>: List directory contents.</li>
+<li>Options for <code>ls</code> (e.g., <code>-l</code>, <code>-a</code>, <code>-al</code>).</li>
+<li><code>pwd</code>: Print working directory.</li>
+<li>Using <code>man</code> pages for command options.</li>
+</ul>
+</li>
+<li>
+<p><strong>Basic File Operations</strong>:</p>
+<ul>
+<li><code>cp</code>: Copying files and directories.</li>
+<li><code>mv</code>: Moving and renaming files and directories.</li>
+<li><code>rm</code>: Removing files and directories.</li>
+<li><code>touch</code>: Updating file timestamps or creating empty files.</li>
+<li>Options for each command, including interactive modes.</li>
+</ul>
+</li>
+<li>
+<p><strong>Special File Types</strong>:</p>
+<ul>
+<li><code>mkdir</code>: Creating directories.</li>
+<li><code>rmdir</code>: Deleting empty directories.</li>
+<li><code>rm -r</code>: Recursively deleting directories with content.</li>
+</ul>
+</li>
+<li>
+<p><strong>Printing Text</strong>:</p>
+<ul>
+<li><code>echo</code>: Printing text or variables to standard output.</li>
+<li><code>cat</code>: Concatenating and printing file contents.</li>
+<li><code>less</code>: Viewing file contents one page at a time.</li>
+</ul>
+</li>
+</ol>
 <h2 id="basic-directory-and-file-commands"><a class="header" href="#basic-directory-and-file-commands">Basic Directory and File commands</a></h2>
 <p>In order to explore the above directories
 but also to create new ones and work with files,
@@ -1887,6 +1934,42 @@ especially to see what options are available for each of them.</p>
 <li><code>tree</code>  : list contents of directories in a tree-like format</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="file-attributes"><a class="header" href="#file-attributes">File Attributes</a></h1>
+<p>In this demo, we will cover:</p>
+<ol>
+<li>
+<p><strong>Identifying Ownership and Permissions</strong>:</p>
+<ul>
+<li>Overview of file ownership (user and group ownership).</li>
+<li>Understanding file permissions (read, write, execute).</li>
+<li>Using <code>ls -l</code> to view ownership and permissions.</li>
+<li>Explanation of how to interpret the output of <code>ls -l</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Changing File Permissions</strong>:</p>
+<ul>
+<li>Using <code>chmod</code> to change file permissions.</li>
+<li>Explanation of octal values for permissions (<code>rwx</code> and their octal equivalents).</li>
+<li>Examples of setting permissions using <code>chmod</code> with octal notation (e.g., <code>chmod 700</code>, <code>chmod 644</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Changing File Ownership</strong>:</p>
+<ul>
+<li>Using <code>chown</code> to change file ownership (user and group).</li>
+<li>Examples of changing user ownership and group ownership separately and together.</li>
+<li>Usage of <code>sudo</code> to execute administrative commands when needed.</li>
+</ul>
+</li>
+<li>
+<p><strong>Additional Commands</strong>:</p>
+<ul>
+<li><code>ls -ld</code>: List directories and their attributes.</li>
+<li><code>groups</code>: Show group memberships for a user.</li>
+<li><code>sudo</code>: Run commands as another user with elevated privileges.</li>
+</ul>
+</li>
+</ol>
 <h2 id="identifying-ownership-and-permissions"><a class="header" href="#identifying-ownership-and-permissions">Identifying Ownership and Permissions</a></h2>
 <p>In the last section, we saw that the output of the <code>ls -l</code> command
 included a lot extra information besides a listing of file names.
