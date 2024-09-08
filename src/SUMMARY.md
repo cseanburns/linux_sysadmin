@@ -10,7 +10,7 @@
 - [Learning the Command Line](p3-the-command-line.md)
     - [The Linux Filesystem](3a-the-linux-filesystem.md)
     - [Files and Directories](3b-files-and-directories.md)
-    - [File Attributes](3c-file-attributes.md)
+    - [File Permissions and Ownership](3c-file-perms-owns.md)
     - [Text Processing: Part 1](3d-text-processing-part-1.md)
     - [Text Processing: Part 2](3e-text-processing-part-2.md)
     - [Review](3f-review.md)
