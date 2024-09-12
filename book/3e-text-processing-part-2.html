@@ -177,7 +177,37 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="text-processing-part-2"><a class="header" href="#text-processing-part-2">Text Processing: Part 2</a></h1>
-<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>In this section, we will cover:</p>
+<ol>
+<li><strong>Expanding the toolbox</strong>: This section introduces more powerful text
+processing utilities: <code>grep</code>, <code>sed</code>, and <code>awk</code>, which are essential for
+advanced pattern matching, filtering, and text manipulation on the Linux
+command line.</li>
+<li><strong><code>grep</code> for pattern matching</strong>: The <code>grep</code> command allows you to search for
+patterns in files and output matching lines. You can perform
+case-insensitive searches, invert matches, count occurrences, and use
+regular expressions to refine your searches.</li>
+<li><strong><code>sed</code> for stream editing</strong>: <code>sed</code> is a non-interactive text editor
+designed for filtering and transforming text. You can delete, replace, and
+manipulate specific lines in a file, making it a powerful tool for batch
+text processing tasks.</li>
+<li><strong><code>awk</code> for structured data</strong>: <code>awk</code> is a complete scripting language for
+pattern scanning and processing columns of structured data. It can handle
+arithmetic, generate reports, and perform logical comparisons, making it
+ideal for working with CSVs and other structured text files.</li>
+<li><strong>Efficiency with one-liners</strong>: The combination of <code>grep</code>, <code>sed</code>, and <code>awk</code>
+allows for creating powerful one-liner commands to process large amounts of
+text quickly, reducing the need for more complex scripts.</li>
+<li><strong>Regular expressions are key</strong>: Regular expressions (<strong>regex</strong>) play a
+significant role in refining searches and manipulations in both <code>grep</code> and
+<code>sed</code>. Understanding basic regex patterns, such as <code>^</code> for line start and
+<code>$</code> for line end, is crucial for effective text processing.</li>
+<li><strong>Integration with other tools</strong>: Like the tools introduced in Part 1,
+<code>grep</code>, <code>sed</code>, and <code>awk</code> integrate well with pipes and redirection, allowing
+you to chain them with other commands for flexible and efficient text
+workflows.</li>
+</ol>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>In the last section, we covered the
 <code>cat</code>, <code>cut</code>, <code>head</code>, <code>sort</code>, <code>tail</code>, <code>uniq</code>, and <code>wc</code> utilities.</p>
 <p>We also learned about the <code>|</code> pipe operator,

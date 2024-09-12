@@ -1341,7 +1341,7 @@ Thus, by learning the CLI, you'll gain a better understanding how computers work
 This is partly the reason why these operating systems have done so well in the server market.
 Let's get started!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="the-linux-filesystem"><a class="header" href="#the-linux-filesystem">The Linux Filesystem</a></h1>
-<p>In this demo, we will cover the:</p>
+<p>In this section, we will cover the:</p>
 <ul>
 <li>the Linux filesystem and how it is structured and organized, and</li>
 <li>the basic commands to navigate around and to work with directories and files</li>
@@ -1632,7 +1632,7 @@ then the relative path would simply be:</p>
 <li><a href="https://natalieagus.github.io/50005/os/directories">UNIX Directories</a></li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="files-and-directories"><a class="header" href="#files-and-directories">Files and Directories</a></h1>
-<p>In this demo, we will cover:</p>
+<p>In this section, we will cover:</p>
 <ol>
 <li>
 <p><strong>Basic Directory and File Commands</strong>:</p>
@@ -1940,7 +1940,7 @@ especially to see what options are available for each of them.</p>
 <li><code>tree</code>  : list contents of directories in a tree-like format</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="file-permissions-and-ownership"><a class="header" href="#file-permissions-and-ownership">File Permissions and Ownership</a></h1>
-<p>In this demo, we will cover:</p>
+<p>In this section, we will cover:</p>
 <ol>
 <li>
 <p><strong>Identifying Ownership and Permissions</strong>:</p>
@@ -2188,6 +2188,29 @@ Thus, since <strong>paper.txt</strong> now has <strong>root</strong> as the user
 <li><code>sudo</code>       : execute a command as another user</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text-processing-part-1"><a class="header" href="#text-processing-part-1">Text Processing: Part 1</a></h1>
+<p>In this section, we will cover</p>
+<ol>
+<li><strong>Text processing tools are fundamental</strong>: Learning to process and
+manipulate text is a crucial skill for systems administrators, programmers,
+and data analysts. Linux provides a variety of tools to examine, manipulate,
+and analyze text.</li>
+<li><strong>Plain text is foundational</strong>: Programs and data are often stored in plain
+text, making it essential to know how to handle text files effectively.</li>
+<li><strong>Essential text processing commands</strong>: Commands such as <code>cat</code>, <code>cut</code>,
+<code>head</code>, <code>tail</code>, <code>sort</code>, <code>uniq</code>, and <code>wc</code> allow users to view, manipulate,
+and analyze text files, even large datasets, with ease.</li>
+<li><strong>Power of pipes and redirection</strong>: Using pipes (<code>|</code>) and redirection (<code>&gt;</code>,
+<code>&gt;&gt;</code>), you can chain commands together to create more complex workflows for
+processing text files.</li>
+<li><strong>CSV data manipulation</strong>: This lecture shows how to work with CSV
+(comma-separated value) files, demonstrating how to view, sort, and filter
+data with tools like <code>cut</code> and <code>uniq</code>.</li>
+<li><strong>Practical applications for systems administration</strong>: The lecture
+emphasizes that text processing skills are directly applicable to managing
+user accounts, security, system configuration, and more in a systems
+administration context.</li>
+</ol>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>One of the more important sets of tools that Linux (as well Unix-like)
 operating systems provide are tools that
 <a href="https://tldp.org/LDP/abs/html/textproc.html">aid processing and manipulating text</a>.
@@ -2462,7 +2485,37 @@ in a file.</p>
 <li><code>&gt;</code> : redirect to standard output to a file, overwriting</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="text-processing-part-2"><a class="header" href="#text-processing-part-2">Text Processing: Part 2</a></h1>
-<h2 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h2>
+<p>In this section, we will cover:</p>
+<ol>
+<li><strong>Expanding the toolbox</strong>: This section introduces more powerful text
+processing utilities: <code>grep</code>, <code>sed</code>, and <code>awk</code>, which are essential for
+advanced pattern matching, filtering, and text manipulation on the Linux
+command line.</li>
+<li><strong><code>grep</code> for pattern matching</strong>: The <code>grep</code> command allows you to search for
+patterns in files and output matching lines. You can perform
+case-insensitive searches, invert matches, count occurrences, and use
+regular expressions to refine your searches.</li>
+<li><strong><code>sed</code> for stream editing</strong>: <code>sed</code> is a non-interactive text editor
+designed for filtering and transforming text. You can delete, replace, and
+manipulate specific lines in a file, making it a powerful tool for batch
+text processing tasks.</li>
+<li><strong><code>awk</code> for structured data</strong>: <code>awk</code> is a complete scripting language for
+pattern scanning and processing columns of structured data. It can handle
+arithmetic, generate reports, and perform logical comparisons, making it
+ideal for working with CSVs and other structured text files.</li>
+<li><strong>Efficiency with one-liners</strong>: The combination of <code>grep</code>, <code>sed</code>, and <code>awk</code>
+allows for creating powerful one-liner commands to process large amounts of
+text quickly, reducing the need for more complex scripts.</li>
+<li><strong>Regular expressions are key</strong>: Regular expressions (<strong>regex</strong>) play a
+significant role in refining searches and manipulations in both <code>grep</code> and
+<code>sed</code>. Understanding basic regex patterns, such as <code>^</code> for line start and
+<code>$</code> for line end, is crucial for effective text processing.</li>
+<li><strong>Integration with other tools</strong>: Like the tools introduced in Part 1,
+<code>grep</code>, <code>sed</code>, and <code>awk</code> integrate well with pipes and redirection, allowing
+you to chain them with other commands for flexible and efficient text
+workflows.</li>
+</ol>
+<h2 id="getting-started-1"><a class="header" href="#getting-started-1">Getting Started</a></h2>
 <p>In the last section, we covered the
 <code>cat</code>, <code>cut</code>, <code>head</code>, <code>sort</code>, <code>tail</code>, <code>uniq</code>, and <code>wc</code> utilities.</p>
 <p>We also learned about the <code>|</code> pipe operator,
@@ -5616,7 +5669,7 @@ directory and any files in it.</p>
 delgroup developers
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-software"><a class="header" href="#managing-software">Managing Software</a></h1>
-<h2 id="introduction-3"><a class="header" href="#introduction-3">Introduction</a></h2>
+<h2 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h2>
 <p>Many modern Linux distributions offer some kind of
 package manager to
 install, manage, and remove software.
@@ -5801,7 +5854,7 @@ manual page for <code>apt</code>:</p>
 <pre><code>man apt
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-systemd"><a class="header" href="#using-systemd">Using systemd</a></h1>
-<h2 id="introduction-4"><a class="header" href="#introduction-4">Introduction</a></h2>
+<h2 id="introduction-3"><a class="header" href="#introduction-3">Introduction</a></h2>
 <p>When computers boot up,
 obviously some software manages that process.
 On Linux and other Unix or Unix-like systems,
@@ -7054,7 +7107,7 @@ may also have domain names and IP addresses to resolve.</p>
 </ul>
 <p>We'll come back to this material when we set up our websites.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="local-security"><a class="header" href="#local-security">Local Security</a></h1>
-<h2 id="introduction-5"><a class="header" href="#introduction-5">Introduction</a></h2>
+<h2 id="introduction-4"><a class="header" href="#introduction-4">Introduction</a></h2>
 <p>Security challenges predominantly
 emanate from network interactions;
 however, safeguarding a system from
@@ -7666,7 +7719,7 @@ Even if we do not become web server administrators,
 knowing how to set up a LAMP stack is not only fun, but
 it's also a valuable skill to have.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-the-apache-web-server"><a class="header" href="#installing-the-apache-web-server">Installing the Apache Web Server</a></h1>
-<h2 id="introduction-6"><a class="header" href="#introduction-6">Introduction</a></h2>
+<h2 id="introduction-5"><a class="header" href="#introduction-5">Introduction</a></h2>
 <p><a href="https://httpd.apache.org/">Apache</a> is an HTTP server,
 otherwise called web server software.
 Other HTTP server software exists.
@@ -8014,7 +8067,7 @@ could be accessed in a browser.
 
 -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-and-configuring-php"><a class="header" href="#installing-and-configuring-php">Installing and Configuring PHP</a></h1>
-<h2 id="introduction-7"><a class="header" href="#introduction-7">Introduction</a></h2>
+<h2 id="introduction-6"><a class="header" href="#introduction-6">Introduction</a></h2>
 <p>Client-side programming languages, like JavaScript,
 are handled by the browser.
 Major browsers like Firefox, Chrome, Safari, Edge, etc.
@@ -8182,7 +8235,7 @@ we'll learn how to complete the LAMP stack
 by adding the MariaDB relational database
 to our setup.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-and-configuring-mariadb"><a class="header" href="#installing-and-configuring-mariadb">Installing and Configuring MariaDB</a></h1>
-<h2 id="introduction-8"><a class="header" href="#introduction-8">Introduction</a></h2>
+<h2 id="introduction-7"><a class="header" href="#introduction-7">Introduction</a></h2>
 <p>We started our LAMP stack when we installed
 Apache2 on Linux, and
 then we added extra functionality when
@@ -8580,7 +8633,7 @@ there's a lot more involved, but
 completing the above process is a great start to
 learning more.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="install-wordpress"><a class="header" href="#install-wordpress">Install WordPress</a></h1>
-<h2 id="introduction-9"><a class="header" href="#introduction-9">Introduction</a></h2>
+<h2 id="introduction-8"><a class="header" href="#introduction-8">Introduction</a></h2>
 <p><a href="https://en.wikipedia.org/wiki/WordPress">WordPress</a> is a free and open source
 content management system (CMS).
 Originally, its focus was on providing
