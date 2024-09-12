@@ -1,5 +1,29 @@
 # Text Processing: Part 1
 
+In this section, we will cover
+
+1. **Text processing tools are fundamental**: Learning to process and
+   manipulate text is a crucial skill for systems administrators, programmers,
+   and data analysts. Linux provides a variety of tools to examine, manipulate,
+   and analyze text.
+2. **Plain text is foundational**: Programs and data are often stored in plain
+   text, making it essential to know how to handle text files effectively.
+3. **Essential text processing commands**: Commands such as `cat`, `cut`,
+   `head`, `tail`, `sort`, `uniq`, and `wc` allow users to view, manipulate,
+   and analyze text files, even large datasets, with ease.
+4. **Power of pipes and redirection**: Using pipes (`|`) and redirection (`>`,
+   `>>`), you can chain commands together to create more complex workflows for
+   processing text files.
+5. **CSV data manipulation**: This lecture shows how to work with CSV
+   (comma-separated value) files, demonstrating how to view, sort, and filter
+   data with tools like `cut` and `uniq`.
+6. **Practical applications for systems administration**: The lecture
+   emphasizes that text processing skills are directly applicable to managing
+   user accounts, security, system configuration, and more in a systems
+   administration context.
+
+## Getting Started
+
 One of the more important sets of tools that Linux (as well Unix-like)
 operating systems provide are tools that
 [aid processing and manipulating text][textProcessing].

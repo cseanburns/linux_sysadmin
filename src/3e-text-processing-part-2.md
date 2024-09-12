@@ -1,6 +1,36 @@
 # Text Processing: Part 2
 
-## Introduction
+In this section, we will cover:
+
+1. **Expanding the toolbox**: This section introduces more powerful text
+   processing utilities: `grep`, `sed`, and `awk`, which are essential for
+   advanced pattern matching, filtering, and text manipulation on the Linux
+   command line.
+2. **`grep` for pattern matching**: The `grep` command allows you to search for
+   patterns in files and output matching lines. You can perform
+   case-insensitive searches, invert matches, count occurrences, and use
+   regular expressions to refine your searches.
+3. **`sed` for stream editing**: `sed` is a non-interactive text editor
+   designed for filtering and transforming text. You can delete, replace, and
+   manipulate specific lines in a file, making it a powerful tool for batch
+   text processing tasks.
+4. **`awk` for structured data**: `awk` is a complete scripting language for
+   pattern scanning and processing columns of structured data. It can handle
+   arithmetic, generate reports, and perform logical comparisons, making it
+   ideal for working with CSVs and other structured text files.
+5. **Efficiency with one-liners**: The combination of `grep`, `sed`, and `awk`
+   allows for creating powerful one-liner commands to process large amounts of
+   text quickly, reducing the need for more complex scripts.
+6. **Regular expressions are key**: Regular expressions (**regex**) play a
+   significant role in refining searches and manipulations in both `grep` and
+   `sed`. Understanding basic regex patterns, such as `^` for line start and
+   `$` for line end, is crucial for effective text processing.
+7. **Integration with other tools**: Like the tools introduced in Part 1,
+   `grep`, `sed`, and `awk` integrate well with pipes and redirection, allowing
+   you to chain them with other commands for flexible and efficient text
+   workflows.
+
+## Getting Started
 
 In the last section, we covered the
 ``cat``, ``cut``, ``head``, ``sort``, ``tail``, ``uniq``, and ``wc`` utilities.
