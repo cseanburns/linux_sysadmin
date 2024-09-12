@@ -1,6 +1,6 @@
 # File Permissions and Ownership
 
-In this demo, we will cover:
+In this section, we will cover:
 
 1. **Identifying Ownership and Permissions**:
    - Overview of file ownership (user and group ownership).

@@ -1,6 +1,6 @@
 # Files and Directories
 
-In this demo, we will cover:
+In this section, we will cover:
 
 1. **Basic Directory and File Commands**:
    - Overview of GNU Coreutils.

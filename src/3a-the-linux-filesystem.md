@@ -1,6 +1,6 @@
 # The Linux Filesystem
 
-In this demo, we will cover the:
+In this section, we will cover the:
 
 - the Linux filesystem and how it is structured and organized, and
 - the basic commands to navigate around and to work with directories and files
