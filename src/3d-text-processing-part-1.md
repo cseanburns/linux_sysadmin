@@ -108,7 +108,7 @@ Let's look at a toy, sample file that contains structured data as a CSV (comma s
 You can download the file to your `gcloud` virtual machine using the following command:
 
 ```
-wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/master/examples/operating-systems.csv
+wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/master/data/operating-systems.csv
 ```
 
 The file contains a list of operating systems (column one), their software license (column two), and the year the OSes were released (column three).
