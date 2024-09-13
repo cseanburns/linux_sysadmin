@@ -279,13 +279,12 @@ specifically:</p>
 <li><code>uniq</code> : report or omit repeat lines</li>
 <li><code>wc</code>   : print newline, word, and byte counts for each file</li>
 </ul>
-<p>Let's look at a toy, sample file that contains
-structured data as a CSV (comma separated value) file.
-The file contains a list of operating systems (column one),
-their software license (column two),
-and the year they were released (column three).
-We can use the <code>cat</code> command to view the entire
-contents of this small file:</p>
+<p>Let's look at a toy, sample file that contains structured data as a CSV (comma separated value) file.
+You can download the file to your <code>gcloud</code> virtual machine using the following command:</p>
+<pre><code>wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/master/examples/operating-systems.csv
+</code></pre>
+<p>The file contains a list of operating systems (column one), their software license (column two), and the year the OSes were released (column three).
+We can use the <code>cat</code> command to view the entire contents of this small file:</p>
 <p><strong>Command:</strong></p>
 <pre><code>cat operating-systems.csv
 </code></pre>
@@ -298,25 +297,20 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
-<p>It's a small file, but
-we might want the line and word count of the file.
+<p>It's a small file, but we might want the line and word count of the file.
 To acquire that, we can use the <code>wc</code> (word count) command.
-By itself, the <code>wc</code> command will print
-the number of lines, words, and bytes of a file.
-The following output states that the file contains
-seven lines, 23 words, and 165 bytes:</p>
+By itself, the <code>wc</code> command will print  the number of lines, words, and bytes of a file.
+The following output states that the file contains seven lines, 23 words, and 165 bytes:</p>
 <p><strong>Command:</strong></p>
 <pre><code>wc operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>  7  23 165 operating-systems.csv
 </code></pre>
-<p>We can use the <code>head</code> command to output,
-by default,
-the first ten lines of a file.
+<p>We can use the <code>head</code> command to output the first ten lines of a file.
 Since our file is only seven lines long,
-we can use the <code>-n</code> option
-to change the default number of lines:</p>
+we can use the <code>-n</code> option  to change the default number of lines.
+In the following example, I print the first three lines of the file:</p>
 <p><strong>Command:</strong></p>
 <pre><code>head -n3 operating-systems.csv
 </code></pre>
@@ -326,16 +320,12 @@ FreeBSD, BSD, 1993
 Linux, GPL, 1991
 </code></pre>
 <p>Using the <code>cut</code> command, we can select data from file.
-In the first example, I want to select column two (or field two),
-which contains the license information.
-Since this is a CSV file,
-the fields (aka, columns) are separated by commas.
-The <code>-d</code> option tells the <code>cut</code> command to use commas
-as the separator character.
-The <code>-f</code> option tells the <code>cut</code> command to select
-field two.
-(A CSV file may use other characters as the separator character,
-like the Tab character or a colon.)</p>
+In the first example, I want to select column two (or field two), which contains the license information.
+Since this is a CSV file, the fields (aka, columns) are separated by commas.
+Therefore I use <code>-d</code> option to instruct the <code>cut</code> command to use commas as the separating character.
+The <code>-f</code> option tells the <code>cut</code> command to select field two.
+Note that a CSV file may use other characters as the separator character, like the Tab character or a colon.
+In such cases, it may still be called a CSV file but you might also see <code>.dat</code> files for data files or other variations.</p>
 <p><strong>Command:</strong></p>
 <pre><code>cut -d"," -f2 operating-systems.csv
 </code></pre>
@@ -349,8 +339,7 @@ like the Tab character or a colon.)</p>
  Apache
 </code></pre>
 <p>From there it's trivial to select a different column.
-In the next example,
-I select field (or column) three to get the release year:</p>
+In the next example, I select column three to get the release year:</p>
 <p><strong>Command:</strong></p>
 <pre><code>cut -d"," -f3 operating-systems.csv
 </code></pre>
@@ -363,24 +352,14 @@ I select field (or column) three to get the release year:</p>
  1993
  2008
 </code></pre>
-<p>One of the magical aspects of the Linux (and Unix) commandline
-is the ability to <strong>pipe</strong> and <strong>redirect</strong> output from one program
-to another program, and then to a file.
-By stringing together multiple programs with these operators,
-we can create small programs that do much more than the
-simple programs that compose them.
-In this next example,
-I use the pipe operators to send the output of the <code>cut</code>
-command to the <code>sort</code> command,
-which sorts the data in alphabetical or numerical order,
-depending on the character type (lexical or numerical),
-pipe that output to the <code>uniq</code> command,
-which removes duplicate rows,
-and then redirect that final output to a new
-file titled <strong>os-years.csv</strong>.
-Since the year <strong>1993</strong> appears twice in the original file,
-it only appears once in the output
-because the <code>uniq</code> command removed the duplicate:</p>
+<p>A genius aspect of the Linux (and Unix) commandline is the ability to <strong>pipe</strong> and <strong>redirect</strong> output from one program to another program.
+Output can be further directed to a file.
+By stringing together multiple programs in this way, we can create small programs that do much more than the simple programs that compose them.</p>
+<p>For example, in the following example, I use the pipe operators to send the output of the <code>cut</code> command to the <code>sort</code> command.
+This sorts the data in alphabetical or numerical order, depending on the character type (lexical or numerical).
+I then pipe that output to the <code>uniq</code> command, which removes duplicate rows.
+Finally, I redirect that final output to a new file titled <strong>os-years.csv</strong>.
+Since the year <strong>1993</strong> appears twice in the original file, it only appears once in the output because the <code>uniq</code> command removed the duplicate:</p>
 <p><strong>Command:</strong></p>
 <pre><code>cut -d"," -f3 operating-systems.csv | sort | uniq &gt; os-years.csv
 </code></pre>
@@ -393,23 +372,11 @@ because the <code>uniq</code> command removed the duplicate:</p>
  2008
  2009
 </code></pre>
-<p>Data files like this often have a
-header line at the top row that
-names the data columns.
-It's useful to know how
-to work with such files, so
-let's add a header row to the top of the file.
-In this example,
-I'll use the <code>sed</code> command,
-which we will learn more about in the
-next lesson.
-For now,
-we use <code>sed</code> with the option <code>-i</code>
-to edit the file,
-then <code>1i</code> instructs <code>sed</code> to <strong>insert</strong>
-text at <strong>line 1</strong>.
-<code>\OS, License, Year</code> is the text
-that we want inserted at line 1.
+<p>Data files like this often have a header line at the top row that names the data columns.
+It's useful to know how to work with such files, so let's add a header row to the top of the file.
+In this example, I'll use the <code>sed</code> command, which we will learn more about in the next lesson.
+For now, we use <code>sed</code> with the option <code>-i</code> to edit the file, then <code>1i</code> instructs <code>sed</code> to <strong>insert</strong> text at <strong>line 1</strong>.
+<code>\OS, License, Year</code> is the text that we want inserted at line 1.
 We wrap the argument within single quotes:</p>
 <p><strong>Command:</strong></p>
 <pre><code>sed -i '1i \OS, License, Year' operating-systems.csv
@@ -425,11 +392,9 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
-<p>Since the CSV file now has a header line,
-we want to remove it from the output.
-Say we want the license field data,
-but we need to remove that first line.
-In this case, we need the tail command:</p>
+<p>I added the header row just to demonstrate how to remove it when processing files with header rows.
+Say we want the license field data, but we need to remove that first line.
+In this case, we can use the tail command:</p>
 <p><strong>Command:</strong></p>
 <pre><code>tail -n +2 operating-systems.csv | cut -d"," -f2 | sort | uniq &gt; license-data.csv
 cat license-data.csv
@@ -441,23 +406,15 @@ cat license-data.csv
  Proprietary
 </code></pre>
 <blockquote>
-<p>The <code>tail</code> command generally outputs the last lines of a file,
-but the <code>-n +2</code> option is special.
-It makes the <code>tail</code> command ouput a file starting
-at the second line.
-We could specify a different number in order
-to start output at a different line.
+<p>The <code>tail</code> command generally outputs the last lines of a file, but the <code>-n +2</code> option is special.
+It makes the <code>tail</code> command output a file starting at the second line.
+We could specify a different number in order to start output at a different line.
 See <code>man tail</code> for more information.</p>
 </blockquote>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this lesson, we learned how to process and
-make sense of data held in a text file.
-We used some commands that let us select,
-sort, de-duplicate, redirect, and view data in different ways.
-Our data file was a small one,
-but these are powerful and useful command and operators
-that would easily make sense of large amounts of data
-in a file.</p>
+<p>In this lesson, we learned how to process and make sense of data held in a text file.
+We used some commands that let us select, sort, de-duplicate, redirect, and view data in different ways.
+Our data file was a small one, but these are powerful and useful command and operators that would make sense of large data file.</p>
 <p>The commands we used in this lesson include:</p>
 <ul>
 <li><code>cat</code>  : concatenate files and print on the standard output</li>
