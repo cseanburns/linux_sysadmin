@@ -104,13 +104,15 @@ specifically:
 - ``uniq`` : report or omit repeat lines
 - ``wc``   : print newline, word, and byte counts for each file
 
-Let's look at a toy, sample file that contains
-structured data as a CSV (comma separated value) file.
-The file contains a list of operating systems (column one),
-their software license (column two),
-and the year they were released (column three).
-We can use the ``cat`` command to view the entire
-contents of this small file:
+Let's look at a toy, sample file that contains structured data as a CSV (comma separated value) file.
+You can download the file to your `gcloud` virtual machine using the following command:
+
+```
+wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/master/examples/operating-systems.csv
+```
+
+The file contains a list of operating systems (column one), their software license (column two), and the year the OSes were released (column three).
+We can use the ``cat`` command to view the entire contents of this small file:
 
 **Command:**
 
@@ -130,13 +132,10 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
 
-It's a small file, but
-we might want the line and word count of the file.
+It's a small file, but we might want the line and word count of the file.
 To acquire that, we can use the ``wc`` (word count) command.
-By itself, the ``wc`` command will print 
-the number of lines, words, and bytes of a file.
-The following output states that the file contains
-seven lines, 23 words, and 165 bytes:
+By itself, the ``wc`` command will print  the number of lines, words, and bytes of a file.
+The following output states that the file contains seven lines, 23 words, and 165 bytes:
 
 **Command:**
 
@@ -150,12 +149,10 @@ wc operating-systems.csv
   7  23 165 operating-systems.csv
 ```
 
-We can use the ``head`` command to output,
-by default,
-the first ten lines of a file.
+We can use the ``head`` command to output the first ten lines of a file.
 Since our file is only seven lines long,
-we can use the ``-n`` option 
-to change the default number of lines:
+we can use the ``-n`` option  to change the default number of lines.
+In the following example, I print the first three lines of the file:
 
 **Command:**
 
@@ -171,16 +168,12 @@ Linux, GPL, 1991
 ```
 
 Using the ``cut`` command, we can select data from file.
-In the first example, I want to select column two (or field two),
-which contains the license information.
-Since this is a CSV file,
-the fields (aka, columns) are separated by commas.
-The ``-d`` option tells the ``cut`` command to use commas
-as the separator character.
-The ``-f`` option tells the ``cut`` command to select
-field two.
-(A CSV file may use other characters as the separator character,
-like the Tab character or a colon.)
+In the first example, I want to select column two (or field two), which contains the license information.
+Since this is a CSV file, the fields (aka, columns) are separated by commas.
+Therefore I use ``-d`` option to instruct the ``cut`` command to use commas as the separating character.
+The ``-f`` option tells the ``cut`` command to select field two.
+Note that a CSV file may use other characters as the separator character, like the Tab character or a colon.
+In such cases, it may still be called a CSV file but you might also see `.dat` files for data files or other variations.
 
 **Command:**
 
@@ -201,8 +194,7 @@ cut -d"," -f2 operating-systems.csv
 ```
 
 From there it's trivial to select a different column.
-In the next example,
-I select field (or column) three to get the release year:
+In the next example, I select column three to get the release year:
 
 **Command:**
 
@@ -222,24 +214,15 @@ cut -d"," -f3 operating-systems.csv
  2008
 ```
 
-One of the magical aspects of the Linux (and Unix) commandline
-is the ability to **pipe** and **redirect** output from one program
-to another program, and then to a file.
-By stringing together multiple programs with these operators,
-we can create small programs that do much more than the
-simple programs that compose them.
-In this next example,
-I use the pipe operators to send the output of the ``cut``
-command to the ``sort`` command,
-which sorts the data in alphabetical or numerical order,
-depending on the character type (lexical or numerical),
-pipe that output to the ``uniq`` command,
-which removes duplicate rows,
-and then redirect that final output to a new
-file titled **os-years.csv**.
-Since the year **1993** appears twice in the original file,
-it only appears once in the output
-because the ``uniq`` command removed the duplicate:
+A genius aspect of the Linux (and Unix) commandline is the ability to **pipe** and **redirect** output from one program to another program.
+Output can be further directed to a file.
+By stringing together multiple programs in this way, we can create small programs that do much more than the simple programs that compose them.
+
+For example, in the following example, I use the pipe operators to send the output of the ``cut`` command to the ``sort`` command.
+This sorts the data in alphabetical or numerical order, depending on the character type (lexical or numerical).
+I then pipe that output to the ``uniq`` command, which removes duplicate rows.
+Finally, I redirect that final output to a new file titled **os-years.csv**.
+Since the year **1993** appears twice in the original file, it only appears once in the output because the ``uniq`` command removed the duplicate:
 
 **Command:**
 
@@ -259,23 +242,11 @@ cat os-years.csv
  2009
 ```
 
-Data files like this often have a
-header line at the top row that
-names the data columns.
-It's useful to know how
-to work with such files, so
-let's add a header row to the top of the file.
-In this example,
-I'll use the ``sed`` command,
-which we will learn more about in the
-next lesson.
-For now,
-we use ``sed`` with the option ``-i``
-to edit the file,
-then ``1i`` instructs ``sed`` to **insert**
-text at **line 1**.
-``\OS, License, Year`` is the text
-that we want inserted at line 1.
+Data files like this often have a header line at the top row that names the data columns.
+It's useful to know how to work with such files, so let's add a header row to the top of the file.
+In this example, I'll use the ``sed`` command, which we will learn more about in the next lesson.
+For now, we use ``sed`` with the option ``-i`` to edit the file, then ``1i`` instructs ``sed`` to **insert** text at **line 1**.
+``\OS, License, Year`` is the text that we want inserted at line 1.
 We wrap the argument within single quotes:
 
 **Command:**
@@ -297,11 +268,9 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
 
-Since the CSV file now has a header line,
-we want to remove it from the output.
-Say we want the license field data,
-but we need to remove that first line.
-In this case, we need the tail command:
+I added the header row just to demonstrate how to remove it when processing files with header rows.
+Say we want the license field data, but we need to remove that first line.
+In this case, we can use the tail command:
 
 **Command:**
 
@@ -319,24 +288,16 @@ cat license-data.csv
  Proprietary
 ```
 
-> The ``tail`` command generally outputs the last lines of a file,
-> but the ``-n +2`` option is special.
-> It makes the ``tail`` command ouput a file starting
-> at the second line.
-> We could specify a different number in order
-> to start output at a different line.
+> The ``tail`` command generally outputs the last lines of a file, but the ``-n +2`` option is special.
+> It makes the ``tail`` command output a file starting at the second line.
+> We could specify a different number in order to start output at a different line.
 > See ``man tail`` for more information.
 
 ## Conclusion
 
-In this lesson, we learned how to process and
-make sense of data held in a text file.
-We used some commands that let us select,
-sort, de-duplicate, redirect, and view data in different ways.
-Our data file was a small one,
-but these are powerful and useful command and operators
-that would easily make sense of large amounts of data
-in a file.
+In this lesson, we learned how to process and make sense of data held in a text file.
+We used some commands that let us select, sort, de-duplicate, redirect, and view data in different ways.
+Our data file was a small one, but these are powerful and useful command and operators that would make sense of large data file.
 
 The commands we used in this lesson include:
 
