@@ -1,5 +1,28 @@
 # Regular Expressions with `grep`
 
+By the end of this section, you will:
+
+1. **Understand the purpose of `grep`**: Recognize the versatility of `grep`
+   for searching through text and its use in filtering output, searching for
+   patterns in files, and extracting relevant data.
+2. **Perform basic searches using `grep`**: Search for multiword strings and
+   whole words while understanding how to handle case sensitivity and word
+   boundaries.
+3. **Utilize regular expressions**: Apply regular expressions with `grep` to
+   search for more complex text patterns, using features like bracket
+   expressions, character classes, and anchoring.
+4. **Leverage repetition and OR operators**: Use repetition operators (e.g.,
+   `*`, `+`) and Boolean OR searches to find repetitive patterns or multiple
+   possible matches in your text.
+5. **Compare outputs with process substitution**: Understand how to compare the
+   output of multiple `grep` commands using process substitution techniques
+   like `diff` or `sdiff`.
+6. **Understand broader applications**: Gain a foundational understanding of
+   regular expressions that apply across multiple programming languages and
+   tools beyond just `grep`.
+
+## Getting Started
+
 The `grep` command is a powerful tool used in the Linux command line for searching through text.
 It scans files or input for lines that match a specified pattern, which can be a simple word or a more complex **regular expression**.
 `grep` is often used to filter output, search for specific data in logs, or find occurrences of certain text patterns within files.
@@ -123,6 +146,8 @@ grep -i "\bca\b" cities.md
 | San Jose, CA    | 983489  | 1777 |
 ```
 
+> **Note:** in some cases you might need an extra backslash: `grep -i "\\bca\\b" cities.md`.
+
 We can reverse that output and look for strings within other words.
 Here is an example of searching for the string **ca** within words:
 
@@ -183,6 +208,8 @@ grep "[A-C]" cities.md
 | San Jose, CA      | 983489      | 1777    |
 ```
 
+> **Note:** Use `grep -i "[A-C]" cities.md` for a case insensitive search.
+
 ### Bracket expressions, inverse searches
 
 When placed after the first bracket, the carat key acts as a Boolean NOT.
@@ -215,19 +242,18 @@ The output matches all lines since there are no instances of **A, B, and C** in 
 
 #### Process substitution
 
-We can confirm that output from one command does not include Houston or Dallas in a second command by comparing the outputs.
+Process substitution allows you to use the output of a command as if it were a file.
+This is particularly useful when you want to compare the outputs of two commands directly, without having to save them to temporary files.
+
+For example, we can confirm that output from one command does not include Houston or Dallas in a second command by comparing the outputs.
 Specifically, we compare the outputs of two or more commands using **process substitution**.
 This works because the **process substitution** creates temporary files from the outputs.
-**Process substitution** pipes the standard output of multiple commands to be processed by another command.
-Here I use the `diff` command to compare the output of both `grep` commands:
 
 **Command:**
 
 ```
 diff <(grep "[A-C]" cities.md) <(grep "[^A-C]" cities.md)
 ```
-
-The ``diff`` output shows that the second ``grep`` command includes the two lines below that are not in the output of the first ``grep`` command: 
 
 **Output:**
 
@@ -240,7 +266,26 @@ The ``diff`` output shows that the second ``grep`` command includes the two line
 > Dallas, TX        | 1288457     | 1856
 ```
 
-> The output of the ``diff`` command is nicely explained in this [Stack Overflow][diffStack] answer.
+---
+
+##### How It Works
+
+- `<(command)` creates a temporary file (or file-like stream) that holds the output of command.
+- `diff` can then read from these streams as if they were regular files, comparing their contents without needing you to manually save and load files.
+  The output of the ``diff`` command is nicely explained in this [Stack Overflow][diffStack] answer.
+
+Without process substitution, you would need to save the outputs of both grep commands to temporary files and then compare them:
+
+```
+grep "[A-C]" cities.md > output1.txt
+grep "[^A-C]" cities.md > output2.txt
+diff output1.txt output2.txt
+```
+
+This alternative works but is more cumbersome, as it requires managing temporary files.
+Process substitution simplifies the process by handling this behind the scenes.
+
+---
 
 Try this command for an alternate output:
 

@@ -1,5 +1,27 @@
 # Text editors
 
+In this section, we will cover and:
+
+1. **Understand the role of text editors**: Recognize the importance of text
+   editors in the command-line environment for saving commands, writing
+   scripts, and editing configuration files.
+2. **Differentiate between text editors**: Identify key differences between
+   line editors like `ed` and visual editors like `vim`, `nano`, `micro`, and
+   `tilde`.
+3. **Operate a line editor**: Use basic commands in `ed`, such as addressing
+   lines, manipulating text, and editing files.
+4. **Explore the functionality of `vim`**: Understand the basic modal operation
+   of `vim`, including command mode, insert mode, and how to integrate shell
+   commands within the editor.
+5. **Utilize beginner-friendly editors**: Comfortably use `nano`, `micro`, and
+   `tilde` for straightforward text editing tasks, taking advantage of their
+   user-friendly key bindings and interfaces.
+6. **Appreciate historical context**: Recognize the historical significance of
+   `ed` and `vim` and how their development has influenced modern computing
+   practices.
+
+## Getting Started
+
 Working on the command line means writing a lot of commands.
 There will be times when we want to save some of the commands that we write in order to re-use them later.
 Or, we might want to develop the commands into a script (i.e., a program) because we might want to automate a process.
@@ -43,7 +65,7 @@ As stated, although ``ed`` and ``vim`` are difficult to learn, they are very pow
 I believe they are both worth learning; however, for the purposes of this course, it's more important that you are aware of them.
 If you wish to learn more, there are lots of additional tutorials on the web on how to use these fine, esteemed text editors.
 
-## ``ed``
+## `ed`
 
 ``ed`` is a line editor that is installed by default on many Linux distributions.
 Ken Thompson created `ed` in the late 1960s to write the original Unix operating system.
@@ -86,16 +108,16 @@ However, there are big differences that mainly relate to the fact that `ed` is a
 For example, here are some commands that mostly make sense in `ed` as a text editor.
 `sed` can do some of these tasks, where it makes sense (e.g., we don't quit `sed`), but sometimes in a non-trivial way.
 
-| Command                 | ``ed`` only   |
-| ---------               | ------------- |
-| edit file               | ``e``         |
-| join lines              | ``j``         |
-| copies lines            | ``t``         |
-| moves lines             | ``m``         |
-| undo                    | ``u``         |
-| saves file              | ``w``         |
-| quits ``ed``            | ``q``         |
-| Quits ``ed`` w/o saving | ``Q``         |
+| Command                  | `ed` only     |
+| ---------                | ------------- |
+| edit file                | `e`           |
+| join lines               | `j`           |
+| copies lines             | `t`           |
+| moves lines              | `m`           |
+| undo                     | `u`           |
+| saves file               | `w`           |
+| quits `ed` before saving | `q`           |
+| Quits `ed` w/o saving    | `Q`           |
 
 There are other differences, but these are sufficient for our purposes.
 
@@ -246,7 +268,7 @@ Dr. Burns
 
 To enter **insert mode**, I can type `i` or `a` for **insert** or **append** mode.
 There isn't any difference on an empty file, but on a file that has text,
-`i` will start **insert** mode where the cursor lies, and `a` will start **insert** mode right-adjacent to the cursor.
+`i` will start **insert** mode before the cursor position, and `a` will **insert** mode after the cursor position.
 Once in **insert** mode, you can type text as you normally would and use the arrow keys to navigate around the file.
 
 To return to **command mode** in `vim`, you press the **Esc** key.
