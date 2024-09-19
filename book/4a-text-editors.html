@@ -177,6 +177,27 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="text-editors"><a class="header" href="#text-editors">Text editors</a></h1>
+<p>In this section, we will cover and:</p>
+<ol>
+<li><strong>Understand the role of text editors</strong>: Recognize the importance of text
+editors in the command-line environment for saving commands, writing
+scripts, and editing configuration files.</li>
+<li><strong>Differentiate between text editors</strong>: Identify key differences between
+line editors like <code>ed</code> and visual editors like <code>vim</code>, <code>nano</code>, <code>micro</code>, and
+<code>tilde</code>.</li>
+<li><strong>Operate a line editor</strong>: Use basic commands in <code>ed</code>, such as addressing
+lines, manipulating text, and editing files.</li>
+<li><strong>Explore the functionality of <code>vim</code></strong>: Understand the basic modal operation
+of <code>vim</code>, including command mode, insert mode, and how to integrate shell
+commands within the editor.</li>
+<li><strong>Utilize beginner-friendly editors</strong>: Comfortably use <code>nano</code>, <code>micro</code>, and
+<code>tilde</code> for straightforward text editing tasks, taking advantage of their
+user-friendly key bindings and interfaces.</li>
+<li><strong>Appreciate historical context</strong>: Recognize the historical significance of
+<code>ed</code> and <code>vim</code> and how their development has influenced modern computing
+practices.</li>
+</ol>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>Working on the command line means writing a lot of commands.
 There will be times when we want to save some of the commands that we write in order to re-use them later.
 Or, we might want to develop the commands into a script (i.e., a program) because we might want to automate a process.
@@ -257,7 +278,7 @@ For example, here are some commands that mostly make sense in <code>ed</code> as
 <tr><td>moves lines</td><td><code>m</code></td></tr>
 <tr><td>undo</td><td><code>u</code></td></tr>
 <tr><td>saves file</td><td><code>w</code></td></tr>
-<tr><td>quits <code>ed</code></td><td><code>q</code></td></tr>
+<tr><td>quits <code>ed</code> before saving</td><td><code>q</code></td></tr>
 <tr><td>Quits <code>ed</code> w/o saving</td><td><code>Q</code></td></tr>
 </tbody></table>
 </div>
@@ -378,7 +399,7 @@ Dr. Burns
 </code></pre>
 <p>To enter <strong>insert mode</strong>, I can type <code>i</code> or <code>a</code> for <strong>insert</strong> or <strong>append</strong> mode.
 There isn't any difference on an empty file, but on a file that has text,
-<code>i</code> will start <strong>insert</strong> mode where the cursor lies, and <code>a</code> will start <strong>insert</strong> mode right-adjacent to the cursor.
+<code>i</code> will start <strong>insert</strong> mode before the cursor position, and <code>a</code> will <strong>insert</strong> mode after the cursor position.
 Once in <strong>insert</strong> mode, you can type text as you normally would and use the arrow keys to navigate around the file.</p>
 <p>To return to <strong>command mode</strong> in <code>vim</code>, you press the <strong>Esc</strong> key.
 And then you can enter commands like you would with <code>ed</code>, using the same syntax.</p>
