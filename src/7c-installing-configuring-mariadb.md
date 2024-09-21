@@ -2,69 +2,44 @@
 
 ## Introduction
 
-We started our LAMP stack when we installed
-Apache2 on Linux, and
-then we added extra functionality when
-we installed and configured PHP to work with Apache2.
-In this section, our objective is to complete
-the LAMP stack and install and configure [MariaDB][wikipediaMariaDB],
+We started our LAMP stack when we installed Apache2, and then we added extra functionality when we installed and configured PHP to work with Apache2.
+In this section, our objective is to complete the LAMP stack and install and configure [MariaDB][wikipediaMariaDB],
 a (so-far) compatible fork of the MySQL relational database.
 
-If you need a refresher on relational databases, the
-MariaDB website can help. See:
-[Introduction to Relational Databases][introRelDatabases].
+If you need a refresher on relational databases, the MariaDB website can help.
+See: [Introduction to Relational Databases][introRelDatabases].
 
-It's also good to review the documentation for any
-technology that you use.
-MariaDB has [good documentation][mariadbDocs] and
-getting started pages.
+It's also good to review the documentation for any technology that you use.
+MariaDB has [good documentation][mariadbDocs] and getting started pages.
 
 ## Install and Set Up MariaDB
 
-In this section, we'll learn how to install,
-setup, secure, and configure the MariaDB
-relational database so that it works
-with the Apache2 web server and
-the PHP programming language.
+In this section, we'll learn how to install, setup, secure, and configure the MariaDB relational database.
+The goal it to make it work with the Apache2 web server and the PHP programming language.
 
-First, let's install MariaDB Community Server, and
-then log into the MariaDB shell
-under the **MariaDB root** account.
+First, let's install MariaDB Community Server, and then log into the MariaDB shell under the **MariaDB root** account.
 
 ```
 sudo apt install mariadb-server mariadb-client
 ```
 
-This should also start and enable the database server, but
-we can check if it's running and enabled
-using the ``systemctl`` command:
+This should also start and enable the database server, but we can check if it's running and enabled using the ``systemctl`` command:
 
 ```
 systemctl status mariadb
 ```
 
-Next we need to run a post installation script
-called ``mysql_secure_installation``
-(that's not a typo)
-that sets up the MariaDB root password and 
-performs some security checks.
-To do that, run the following command, and
-**be sure to save the MariaDB root password you create**:
+Next we need to run a post installation script called ``mysql_secure_installation`` that sets up the MariaDB root password and performs security checks.
+To do that, run the following command, and **be sure to save the MariaDB root password you create**:
 
 ```
 sudo mysql_secure_installation
 ```
 
-Again, here is where you create a root password
-for the MariaDB database server.
-Be sure to save that and not forget it!
-When you run the above script,
-you'll get a series of prompts to respond to like below.
-Press **enter** for the first prompt,
-press **Y** for the prompts marked **Y**,
-and input your own password.
-Since this server is exposed to the internet,
-be sure to use a complex password.
+Again, here is where you create a root password for the MariaDB database server.
+Be sure to save that and not forget it! When you run the above script, you'll get a series of prompts to respond to like below.
+Press **enter** for the first prompt, press **Y** for the prompts marked **Y**, and input your own password.
+Since this server is exposed to the internet, be sure to use a complex password.
 
 ```
 Enter the current password for root (enter for none):
@@ -78,27 +53,19 @@ Reload privilege tables now: Y
 ```
 
 We can login to the database to test it.
-In order to do so,
-we have to become the **root Linux user**,
-which we can do with the following command:
+In order to do so, we have to become the **root Linux user**, which we can do with the following command:
 
 ```
 sudo su
 ```
 
-> Note: we need to generally be careful when we
-> enter commands on the command line, because
-> it's a largely unforgiving computing environment.
-> But we need to be especially careful when we
-> are logged in as the Linux root user.
-> This user can delete anything, including
-> files that the system needs in order to boot
-> and operate.
+> Note: we need to generally be careful when we enter commands on the command
+> line, because it's a largely unforgiving computing environment. But we need
+> to be especially careful when we are logged in as the Linux root user. This
+> user can delete anything, including files that the system needs in order to
+> boot and operate.
 
-After we are root,
-we can login to MariaDB,
-run the ``show databases;`` command, and
-then exit with the ``\q`` command:
+After we are root, we can login to MariaDB, run the ``show databases;`` command, and then exit with the ``\q`` command:
 
 ```
 root@hostname:~# mariadb -u root
@@ -121,48 +88,33 @@ MariaDB [(none)]> show databases;
 3 rows in set (0.002 sec)
 ```
 
-> Note: If we are logging into the root database account
-> as the root Linux user, we don't need to enter our password.
+> Note: If we are logging into the root database account as the root Linux user, we don't need to enter our password.
 
 ## Create and Set Up a Regular User Account
 
-We need to reserve the **root MariaDB user** for
-special use cases and
-instead create a **regular MariaDB user**, or
-more than one MariaDB user, as needed.
+We need to reserve the **root MariaDB user** for special use cases.
+Instead we create a **regular MariaDB user**.
 
-To create a regular MariaDB user,
-we use the ``create`` command.
-In the command below,
-I'll create a new user called **webapp**
-with a complex password within the single quotes
-at the end (marked with a series of Xs here for demo purposes):
+To create a regular MariaDB user, we use the ``create`` command.
+In the command below, I create a new user called **webapp**.
+I use a complex password that I insert within the single quotes at the end (marked with a series of Xs here for demo purposes):
 
 ```
 MariaDB [(none)]> create user 'webapp'@'localhost' identified by 'XXXXXXXXX';
 ```
 
-If the prompt returns a **Query OK** message,
-then the new user should have been created without any issues.
+If the prompt returns a **Query OK** message, then the new user should have been created without any issues.
 
 ## Create a Practice Database
 
-As the root database user,
-let's create a new database for a regular, new user.
+As the root database user, let's create a new database for a regular, new user.
 
-The regular user will be granted **all privileges**
-on the new database,
-including all its tables.
-Other than granting **all privileges**,
-we could limit the user to specific privileges, including:
+The regular user will be granted **all privileges** on the new database, including all its tables.
+Other than granting **all privileges**, we could limit the user to specific privileges, including:
 **CREATE, DROP, DELETE, INSERT, SELECT, UPDATE, and GRANT OPTION**.
-Such privileges may be called operations or functions, and
-they allow MariaDB users to use and modify the databases,
-where appropriate.
-For example, we may want to limit the **webapp** user to
-only be able to use **SELECT** commands.
-It totally depends on the purpose of the database and
-our security risks.
+Such privileges may be called operations or functions, and they allow MariaDB users to use and modify the databases, where appropriate.
+For example, we may want to limit the **webapp** user to only be able to use **SELECT** commands.
+It totally depends on the purpose of the database and our security risks.
 
 ```
 MariaDB [(none)]> create database linuxdb;
@@ -170,37 +122,27 @@ MariaDB [(none)]> grant all privileges on linuxdb.* to 'webapp'@'localhost';
 MariaDB [(none)]> show databases;
 ```
 
-Exit out of the MariaDB database as the **root MariaDB user**, and
-then exit out of the **root Linux user account**, and
-you should be back to your normal Linux user account:
+Exit out of the MariaDB database as the **root MariaDB user**.
+Then exit out of the **root Linux user account**.
+You should be back to your normal Linux user account:
 
 ```
 MariaDB [(none)]> \q
 root@hostname:~# exit
 ```
 
-> Note: relational database keywords are often written
-> in all capital letters.
-> As far as I know,
-> this is simply a convention to make the code more readable.
-> However, in most cases I'll write the keywords in lower case
-> letters.
-> This is simply because, by convention, I'm super lazy.
+> **Note:** relational database keywords are often written in all capital
+> letters. As far as I know, this is simply a convention to make the code more
+> readable. However, in most cases I'll write the keywords in lower case
+> letters. This is simply because, by convention, I'm super lazy.
 
 ## Logging in as Regular User and Creating Tables
 
 We can start doing MariaDB work.
-As a reminder,
-we've created a new MariaDB user named **webapp** and
-a new database for **webapp** that is called **linuxdb**.
-When we run the ``show databases`` command as
-the **webapp** user,
-we should see the **linuxdb** database
-(and only the **linuxdb** database).
+As a reminder, we've created a new MariaDB user named **webapp** and a new database for **webapp** that is called **linuxdb**.
+When we run the ``show databases`` command as the **webapp** user, we should see the **linuxdb** database (and only the **linuxdb** database).
 Note below that I use the ``-p`` option.
-This instructs MariaDB to request the password
-for the **webapp** user, which
-is required to log in.
+This instructs MariaDB to request the password for the **webapp** user, which is required to log in.
 
 ```
 mariadb -u webapp -p
@@ -209,11 +151,9 @@ MariaDB [(none)]> use linuxdb;
 ```
 
 A database is not worth much without data.
-In the following code,
-I create and define a new table for our **linuxdb** database.
-The table will be called **distributions**, and
-it will contain data about various Linux distributions
-(name of distribution, distribution developer, and founding date).
+In the following code, I create and define a new table for our **linuxdb** database.
+The table will be called **distributions**, and it will contain data about various Linux distributions.
+This includes the name of distribution, distribution developer, and founding date.
 
 ```
 MariaDB [(linuxdb)]> create table distributions
@@ -234,10 +174,8 @@ Congratulations! Now create some records for that table.
 
 ### Adding records into the table
 
-We can populate our **linuxdb** database
-with some data.
-We'll use the ``insert`` command to add our records
-into our **distribution** table:
+We can populate our **linuxdb** database with some data.
+We'll use the ``insert`` command to add our records into our **distribution** table:
 
 ```
 MariaDB [(linuxdb)]> insert into distributions (name, developer, founded) values
@@ -253,8 +191,7 @@ Success! Now let's test our table.
 
 ### Testing Commands
 
-We will complete the following tasks
-to refresh our MySQL/MariaDB knowledge:
+We will complete the following tasks to refresh our MySQL/MariaDB knowledge:
 
 - retrieve some records or parts of records, 
 - delete a record,
@@ -290,14 +227,11 @@ MariaDB [(linuxdb)]> \q
 
 ## Install PHP and MySQL Support
 
-The next goal is to complete the connection
-between PHP and MariaDB so that
-we can use both for our websites.
+The next goal is to complete the connection between PHP and MariaDB so that we can use both for our websites.
 
 First install PHP support for MariaDB.
 We're installing some modules alongside the basic support.
-These may or may not be needed,
-but I'm installing them to demonstrate some basics.
+These may or may not be needed, but I'm installing them to demonstrate some basics.
 
 ```
 sudo apt install php-mysql
@@ -312,16 +246,10 @@ sudo systemctl restart mariadb
 
 ### Create PHP Scripts
 
-In order for PHP to connect to MariaDB,
-it needs to authenticate itself.
-To do that,
-we will create a **login.php** file
-in **/var/www/html**.
-We also need to change the group ownership
-of the file and its permissions so that
-the file can be read by the Apache2 web server
-but not by the world,
-since this file will store password information.
+In order for PHP to connect to MariaDB, it needs to authenticate itself.
+To do that, we will create a **login.php** file in **/var/www/html**.
+We also need to change the group ownership of the file and its permissions.
+Since this file contains password information, changing its permissions mean we prevent others from accessing it.
 
 ```
 cd /var/www/html/
@@ -332,13 +260,9 @@ ls -l login.php
 sudo nano login.php
 ```
 
-In the file,
-add the following credentials.
-If you used a different database name than **linuxdb**
-and a different username than **webapp**,
-then you need to substitute your names below. 
-You need to use your own password where
-I have the Xs:
+In the file, add the following credentials.
+If you used a different database name than **linuxdb** and a different username than **webapp**, then you need to substitute your names below. 
+You need to use your own password where I have the Xs:
 
 ```
 <?php // login.php
@@ -350,9 +274,7 @@ $db_password = "XXXXXXXXX";
 ```
 
 Next we create a new PHP file for our website.
-This file will display HTML but
-will primarily be PHP interacting with our
-MariaDB **distributions** database.
+This file will display HTML but will primarily be PHP interacting with our MariaDB **distributions** database.
 
 Create a file titled **distros.php**.
 
@@ -360,10 +282,8 @@ Create a file titled **distros.php**.
 sudo nano distros.php
 ```
 
-Then copy over the following text
-(I suggest you transcribe it, especially
-if you're interested in learning a bit of PHP, but
-you can simply copy and paste it into the ``nano`` buffer):
+Then copy over the following text.
+I suggest you transcribe it, especially if you're interested in learning a bit of PHP, but you can simply copy and paste it into the ``nano`` buffer:
 
 ```
 <html>
@@ -449,11 +369,8 @@ Save the file and exit out of ``nano``.
 
 ### Test Syntax
 
-After you save the file and exit the text editor,
-we need to test the PHP syntax.
-If there are any errors in our PHP,
-these commands will show the line numbers
-that are causing errors or leading up to errors.
+After you save the file and exit the text editor, we need to test the PHP syntax.
+If there are any errors in our PHP, these commands will show the line numbers that are causing errors or leading up to errors.
 Nothing will output if all is well with the first command.
 If all is well with the second command, HTML should be outputted:
 
@@ -464,19 +381,15 @@ sudo php -f distros.php
 
 ## Conclusion
 
-Congratulations! If you've reached this far,
-you have successfully created a LAMP stack.
-In the process,
-you have learned how to install and set up MariaDB,
-how to create MariaDB root and regular user accounts,
-how to create a test database
-with play data for practicing, and
-how to connect this with PHP for display on a webpage.
+Congratulations! If you've reached this far, you have successfully created a LAMP stack.
+In the process, you have learned:
 
-In regular applications of these technologies,
-there's a lot more involved, but
-completing the above process is a great start to
-learning more.
+- how to install and set up MariaDB
+- how to create MariaDB root and regular user accounts
+- how to create a test database with play data for practicing, and
+- how to connect this with PHP for display on a webpage.
+
+In regular applications of these technologies, there's a lot more involved, but completing the above process is a great start to learning more.
 
 [wikipediaMariaDB]:https://en.wikipedia.org/wiki/MariaDB
 [introRelDatabases]:https://mariadb.com/kb/en/introduction-to-relational-databases/
