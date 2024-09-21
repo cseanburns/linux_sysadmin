@@ -177,28 +177,14 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="expanding-storage"><a class="header" href="#expanding-storage">Expanding Storage</a></h1>
-<p>I'm sure all or most of you have needed
-extra disk storage at some point
-(USB drives, optical disks, floppies???).
-Such needs are no different for systems administrators,
-who often are responsible for managing, monitoring,
-or storing large amounts of data.</p>
-<p>The disk that we created for our VM is small (10 GB),
-and that's fine for our needs,
-albeit quite small in many real world scenarios.
-To address this,
-we can add a persistent disk
-that is much larger.
-In this section,
-we will add a disk to our VM,
-mount it onto the VM's filesystem, and format it.
+<p>I'm sure all or most of you have needed extra disk storage at some point (USB drives, optical disks, floppies???).
+Such needs are no different for systems administrators, who often are responsible for managing, monitoring, or storing large amounts of data.</p>
+<p>The disk that we created for our VM is small (10 GB), and that's fine for our needs, albeit quite small in many real world scenarios.
+To address this, we can add a persistent disk that is much larger.
+In this section, we will add a disk to our VM, mount it onto the VM's filesystem, and format it.
 Extra storage does incur extra cost.
-So at the end of this section,
-I will show you how to delete the extra
-disk to avoid that if you want.</p>
-<p>We will essentially follow the Google Cloud tutorial
-to add a non-boot disk to our VM, but
-with some modification.</p>
+So at the end of this section, I will show you how to delete the extra disk to avoid that if you want.</p>
+<p>We will essentially follow the Google Cloud tutorial to add a non-boot disk to our VM, but with some modification.</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
 <blockquote>
 <p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
@@ -210,9 +196,7 @@ regardless of which operating system they run,
 have some kind of boot system.</p>
 </blockquote>
 <h2 id="creating-a-disk"><a class="header" href="#creating-a-disk">Creating a Disk</a></h2>
-<p>In the Google Cloud console,
-visit the <strong>Disks</strong> page in the <strong>Storage</strong> section,
-which should be here:</p>
+<p>In the Google Cloud console, visit the <strong>Disks</strong> page in the <strong>Storage</strong> section, which should be here:</p>
 <p><a href="https://console.cloud.google.com/compute/disksAdd">Create a disk</a></p>
 <p>And then follow these steps:</p>
 <ol>
@@ -239,13 +223,9 @@ selected.</li>
 <li>Click <strong>Create</strong> to create your disk.</li>
 </ol>
 <h2 id="adding-the-disk-to-our-vm"><a class="header" href="#adding-the-disk-to-our-vm">Adding the Disk to our VM</a></h2>
-<p>Now that we have created our disk,
-we need to <strong>mount</strong> it onto our filesystem
-so that it's available to our VM.
-Conceptually, this process is like inserting
-a new USB drive into our computer.</p>
-<p>To add the new disk to our VM,
-follow these steps:</p>
+<p>Now that we have created our disk, we need to <strong>mount</strong> it onto our filesystem so that it's available to our VM.
+Conceptually, this process is like inserting a new USB drive into our computer.</p>
+<p>To add the new disk to our VM, follow these steps:</p>
 <ol>
 <li>Visit the <strong>VM instances</strong> page.</li>
 <li>Click on the check box next to your virtual machine.
@@ -266,30 +246,17 @@ follow these steps:</p>
 <li>Click on the <strong>SAVE</strong> button.</li>
 <li>Then click on the <strong>SAVE</strong> button on the details page.</li>
 </ol>
-<p>If you return to the <strong>Disks</strong> page in the <strong>Storage</strong> section,
-you will now see that the new disk is in use by our VM.</p>
+<p>If you return to the <strong>Disks</strong> page in the <strong>Storage</strong> section, you will now see that the new disk is in use by our VM.</p>
 <h2 id="formatting-and-mounting-a-non-boot-disk"><a class="header" href="#formatting-and-mounting-a-non-boot-disk">Formatting and Mounting a Non-Boot Disk</a></h2>
 <h3 id="formatting-our-disk"><a class="header" href="#formatting-our-disk">Formatting Our Disk</a></h3>
-<p>In order for our VM to make use of the extra storage,
-the new drive must be formatted and mounted.
+<p>In order for our VM to make use of the extra storage, the new drive must be formatted and mounted.
 Different operating systems use different filesystem formats.
-You may already know that
-macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac">Apple File System (APFS)</a> by default
-and that Windows uses the
-<a href="https://docs.microsoft.com/en-us/windows-server/storage/file-server/ntfs-overview">New Technology File System (NTFS)</a>.
-Linux is no different, but
-uses different file systems than macOS and Windows, by default.
-There are many formatting technologies that we can use in Linux,
-but we'll use the <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">ext4 (fourth extended filesystem)</a> format,
-since this is recommended by Google Cloud and
-is also a stable and common one for Linux.</p>
-<p>In this section, we will closely follow the steps
-outlined under the
-<a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"><strong>Formatting and mounting a non-boot disk on a Linux VM</strong></a>
-section.
-I replicate those instructions below, but
-I highly encourage you to read through
-the instructions on Google Cloud and here:</p>
+You may already know that macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac">Apple File System (APFS)</a> by default and that Windows uses the <a href="https://docs.microsoft.com/en-us/windows-server/storage/file-server/ntfs-overview">New Technology File System (NTFS)</a>.
+Linux is no different, but uses different file systems than macOS and Windows, by default.
+There are many formatting technologies that we can use in Linux, but we'll use the <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">ext4 (fourth extended filesystem)</a> format.
+This is recommended for Google Cloud, and it is also a stable and common one for Linux.</p>
+<p>In this section, we will closely follow the steps outlined under the <a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"><strong>Formatting and mounting a non-boot disk on a Linux VM</strong></a> section.
+I replicate those instructions below, but I highly encourage you to read through the instructions on Google Cloud and here:</p>
 <ol>
 <li>Use the <code>gcloud compute ssh</code> command that you
 have previously used to connect to your VM.
@@ -326,124 +293,76 @@ partition will also have a mountpoint.</li>
 </ul>
 </li>
 </ol>
-<p>To format our disk for the <strong>ext4</strong> filesystem,
-we will use the <code>mkfs.ext4</code>
-(see <code>man mkfs.ext4</code> for details).
-The instructions tell us to run the following command
-(please read the Google Cloud instructions closely;
-<strong>it's important to understand these commands as much
-as possible and not just copy and paste them</strong>):</p>
+<p>To format our disk for the <strong>ext4</strong> filesystem, we will use the <code>mkfs.ext4</code> (see <code>man mkfs.ext4</code> for details).
+The instructions tell us to run the following command (please read the Google Cloud instructions closely;
+<strong>it's important to understand these commands as much as possible and not just copy and paste them</strong>):</p>
 <pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/DEVICE_NAME
 </code></pre>
 <p>But replace <strong>DEVICE_NAME</strong> with the name of our device.
-My device's name is <strong>sdb</strong>,
-which we saw with the output of the <code>lsblk</code> command;
-therefore, the specific command I run is:</p>
+My device's name is <strong>sdb</strong>, which we saw with the output of the <code>lsblk</code> command; therefore, the specific command I run is:</p>
 <pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
 </code></pre>
 <h3 id="mounting-our-disk"><a class="header" href="#mounting-our-disk">Mounting Our Disk</a></h3>
-<p>Now that our disk has been formatted in <strong>ext4</strong>,
-I can mount it.</p>
+<p>Now that our disk has been formatted in <strong>ext4</strong>, I can mount it.</p>
 <blockquote>
-<p>Note: to <strong>mount</strong> a disk simply means to make the disk's
-filesystem available so that we can use it for accessing,
-storing, etc files on the disk.
-Whenever we insert a USB drive, a DVD drive, etc
-into our computers,
-the OS you use should mount that disk automatically
-so that you can access and use that disk.
-Conversely, when we remove those drives,
-the OS <strong>unmounts</strong> them.
-In Linux, the commands for these are <code>mount</code> and <code>umount</code>.
-Note that the <code>umount</code> command is not <strong>unmount</strong>.</p>
+<p>Note: to <strong>mount</strong> a disk simply means to make the disk's filesystem
+available so that we can use it for accessing, storing, etc files on the
+disk. Whenever we insert a USB drive, a DVD drive, etc into our computers,
+the OS you use should mount that disk automatically so that you can access
+and use that disk. Conversely, when we remove those drives, the OS
+<strong>unmounts</strong> them. In Linux, the commands for these are <code>mount</code> and
+<code>umount</code>. Note that the <code>umount</code> command is not <strong>unmount</strong>.</p>
 </blockquote>
-<p>You will recall that we have
-<a href="03-filesystem-file-management.html">discussed filesystems earlier</a>,
-and that the term is a bit confusing since it refers to both
-the directory hierarchy and also the formatting type (e.g., ext4).
-In that prior section, I discussed how in Windows,
-attaching a new drive,
-whether it's a USB drive, a DVD drive,
-an additional disk drive, or an external drive,
-Windows gives the new drive a letter,
-like <strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.
-Unlike Windows, I mentioned that in Linux and Unix (e.g., macOS),
-when we add an additional disk,
-its filesystem gets added onto our existing one.
-That is, it becomes part of the directory hierarchy
-and under the <code>/</code> top level part of the hierarchy.
-In practice, this means that we have to create the <strong>mountpoint</strong>
-for our new disk, and
-we do that with the <code>mkdir</code> command.
-The Google Console documentation instructs us
-to use the following command:</p>
+<p>You will recall that we have <a href="03-filesystem-file-management.html">discussed filesystems earlier</a> and
+that the term is a bit confusing since it refers to both the directory hierarchy and also the formatting type (e.g., ext4).
+I discussed how Windows assigns drives letters (<code>A:</code>, <code>B:</code>, etc.) when attaching new drives, like a USB drive.
+Unlike Windows, I mentioned that in Linux and Unix (e.g., macOS), when we add an additional disk, its filesystem gets added onto our existing one.
+That is, it becomes part of the directory hierarchy and under the <code>/</code> top level part of the hierarchy.
+In practice, this means that we have to create the <strong>mountpoint</strong> for our new disk, and we do that first with the <code>mkdir</code> command.
+The Google Console documentation instructs us to use the following command:</p>
 <pre><code>sudo mkdir -p /mnt/disks/MOUNT_DIR
 </code></pre>
-<p>And to replace <strong>MOUNT_DIR</strong> with the directory we
-want to create.
-Since my added disk is named <strong>disk-1</strong>,
-I'll call it that:</p>
+<p>And to replace <strong>MOUNT_DIR</strong> with the directory we want to create.
+Since my added disk is named <strong>disk-1</strong>, I'll call it that:</p>
 <pre><code>sudo mkdir -p /mnt/disks/disk-1
 </code></pre>
-<p>Now we can <code>mount</code> the disk to that directory.
-Per the instructions on Google Console,
-and given that my added drive has the device name <strong>sdb</strong>,
+<p>Now we can <code>mount</code> the disk to that directory. Per the instructions on Google Console, and given that my added drive has the device name <strong>sdb</strong>,
 I use the following command:</p>
 <pre><code>sudo mount -o discard,defaults /dev/sdb /mnt/disks/disk-1
 </code></pre>
-<p>We also need to change the modifications, and
-grant access for additional users:</p>
+<p>We also need to change the modifications, and grant access for additional users:</p>
 <pre><code>sudo chmod 777 /mnt/disks/disk-1
 </code></pre>
-<p>We can test that it exists and is accessible with
-the <code>lsblk</code> and the <code>cd</code> commands.
-The <code>lsblk</code> command should show that <strong>sdb</strong> is
-mounted at <code>/mnt/disks/disk-1</code>, and
-we can <code>cd</code> (change directory) to it:</p>
+<p>We can test that it exists and is accessible with the <code>lsblk</code> and the <code>cd</code> commands.
+The <code>lsblk</code> command should show that <strong>sdb</strong> is mounted at <code>/mnt/disks/disk-1</code>, and we can <code>cd</code> (change directory) to it:</p>
 <pre><code>cd /mnt/disks/disk-1
 </code></pre>
 <h3 id="automounting-our-disk"><a class="header" href="#automounting-our-disk">Automounting Our Disk</a></h3>
-<p>Our disk is mounted, but if the computer (VM) gets rebooted,
-we would have to re-<code>mount</code> the additional drive manually.
-In order to avoid this and automount the drive upon reboot,
-we need to edit the file <code>/etc/fstab</code>.</p>
+<p>Our disk is mounted, but if the computer (VM) gets rebooted, we would have to re-<code>mount</code> the additional drive manually.
+In order to avoid this and automount the drive upon reboot, we need to edit the file <code>/etc/fstab</code>.</p>
 <blockquote>
-<p>Note that the file is named <strong>fstab</strong> and
-that it's located in the <strong>/etc</strong> directory.
+<p>Note that the file is named <strong>fstab</strong> and that it's located in the <strong>/etc</strong> directory.
 Therefore the full path is <code>/etc/fstab</code></p>
 </blockquote>
-<p>The <strong>fstab</strong> file is basically a configuration file
-that provides information to the OS about the filesystems
-the system can mount.
-The standard information <strong>fstab</strong> contains includes
-the name (or label) of the device being mounted,
-the mountpoint (e.g., <code>/mnt/disks/disk-1</code>),
-the filesystem type (e.g., <strong>ext4</strong>),
-and various other mount options.
+<p>The <strong>fstab</strong> file is basically a configuration file that provides information to the OS about the filesystems the system can mount.
+The standard information <strong>fstab</strong> contains includes the name (or label) of the device being mounted,
+the mountpoint (e.g., <code>/mnt/disks/disk-1</code>), the filesystem type (e.g., <strong>ext4</strong>), and various other mount options.
 See <code>man fstab</code> for more details.
-For devices to mount upon boot up automatically,
-they have to be listed in this file.
-That means we need to edit this file on our VM.</p>
+For devices to mount automatically upon boot, they have to be listed in this file.
+That means we need to edit this file.</p>
 <p>Again, here we're following the Google Cloud instructions:</p>
-<p>Before we edit system configuration files, however,
-always create a backup.
+<p>Before we edit system configuration files, however, always create a backup.
 We'll use the <code>cd</code> command to create a backup of the <strong>fstab</strong> file.</p>
 <pre><code>sudo cp /etc/fstab /etc/fstab.backup
 </code></pre>
-<p>Next we use the <code>blkid</code> command to get
-the UUID (universally unique identifier)
-number for our new device.
-Since my device is <code>/dev/sdb</code>,
-I'll use that:</p>
+<p>Next we use the <code>blkid</code> command to get the UUID (universally unique identifier) number for our new device.
+Since my device is <code>/dev/sdb</code>, I'll use that:</p>
 <pre><code>sudo blkid /dev/sdb
 </code></pre>
-<p>The output should look something like this
-<strong>BUT NOTE that your UUID value will
-be DIFFERENT</strong>:</p>
+<p>The output should look something like this <strong>BUT NOTE that your UUID value will be DIFFERENT</strong>:</p>
 <pre><code>/dev/sdb: UUID="3bc141e2-9e1d-428c-b923-0f9vi99a1123" TYPE="ext4"
 </code></pre>
-<p>We need to add that value to <code>/etc/fstab</code>
-plus the standard information that file requires.
+<p>We need to add that value to <code>/etc/fstab</code> plus the standard information that file requires.
 The Google Cloud documentation explicitly guides us here.
 We'll use <code>nano</code> to make the edit:</p>
 <pre><code>sudo nano /etc/fstab
@@ -452,22 +371,12 @@ We'll use <code>nano</code> to make the edit:</p>
 <pre><code>UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0 2
 </code></pre>
 <p>And that's it!
-If you reboot your VM, or
-if your VM rebooted for some reason,
-the extra drive we added should automatically
-mount upon reboot.
-If it doesn't,
-then it may mean that the drive failed,
-or that there was an error (i.e., typo) in the configuration.</p>
+If you reboot your VM, or if your VM rebooted for some reason, the extra drive we added should automatically mount upon reboot.
+If it doesn't, then it may mean that the drive failed, or that there was an error (i.e., typo) in the configuration.</p>
 <h3 id="delete-the-disk"><a class="header" href="#delete-the-disk">Delete the Disk</a></h3>
-<p>You are welcome to keep the disk attached to the VM,
-but if you do not want to incur any charges for it,
-which would be about $1 / month at 10 GB,
-then we can delete it.</p>
-<p>To delete the disk,
-first delete the line that we added in <code>/etc/fstab</code>,
-unmount it,
-and then delete the disk in the gcloud console.</p>
+<p>You are welcome to keep the disk attached to the VM.
+But if you do not want to incur any charges for it, which would be about $1 / month at 10 GB, then we can delete it.</p>
+<p>To delete the disk, first delete the line that we added in <code>/etc/fstab</code>, unmount it, and then delete the disk in the gcloud console.</p>
 <p>To unmount the disk, we use the <code>umount</code> command:</p>
 <pre><code>sudo umount /mnt/disks/disk-1
 </code></pre>
@@ -495,12 +404,9 @@ and then delete the disk in the gcloud console.</p>
 </li>
 </ol>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this section we learned how to expand
-the storage of our VM by creating a new virtual drive,
-adding it to our VM,
-formatting the drive in the <strong>ext4</strong> filesystem format,
-mounting the drive at <code>/mnt/disks/disk-1</code>, and
-then editing <code>/etc/fstab</code> to make automount the drive.</p>
+<p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
+We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
+Finally, we learned how to then edit <code>/etc/fstab</code> to make automount the drive.</p>
 <p>In addition to using the gcloud console,
 the commands we used in this section include:</p>
 <ol>

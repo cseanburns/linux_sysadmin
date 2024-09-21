@@ -4337,38 +4337,23 @@ I'll cover more practical examples in upcoming demos.
 Note that mastering the basics requires understanding a lot of the commands and paths that we have covered so far in class.
 So keep practicing.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-the-system"><a class="header" href="#managing-the-system">Managing the System</a></h1>
-<p>Now that we have the basics of
-the command line interface down,
-it's time to learn some systems administration.
-In this section,
-we learn how to expand storage space,
-create new user and group accounts and
-manage those accounts,
-install and remove software,
-and manage that software and other processes.</p>
+<p>Now that we have the basics of the command line interface down, it's time to learn some systems administration.
+In this section, we learn how to:</p>
+<ul>
+<li>expand storage space</li>
+<li>create new user and group accounts and manage those accounts</li>
+<li>install and remove software, and</li>
+<li>manage that software and other processes.</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="expanding-storage"><a class="header" href="#expanding-storage">Expanding Storage</a></h1>
-<p>I'm sure all or most of you have needed
-extra disk storage at some point
-(USB drives, optical disks, floppies???).
-Such needs are no different for systems administrators,
-who often are responsible for managing, monitoring,
-or storing large amounts of data.</p>
-<p>The disk that we created for our VM is small (10 GB),
-and that's fine for our needs,
-albeit quite small in many real world scenarios.
-To address this,
-we can add a persistent disk
-that is much larger.
-In this section,
-we will add a disk to our VM,
-mount it onto the VM's filesystem, and format it.
+<p>I'm sure all or most of you have needed extra disk storage at some point (USB drives, optical disks, floppies???).
+Such needs are no different for systems administrators, who often are responsible for managing, monitoring, or storing large amounts of data.</p>
+<p>The disk that we created for our VM is small (10 GB), and that's fine for our needs, albeit quite small in many real world scenarios.
+To address this, we can add a persistent disk that is much larger.
+In this section, we will add a disk to our VM, mount it onto the VM's filesystem, and format it.
 Extra storage does incur extra cost.
-So at the end of this section,
-I will show you how to delete the extra
-disk to avoid that if you want.</p>
-<p>We will essentially follow the Google Cloud tutorial
-to add a non-boot disk to our VM, but
-with some modification.</p>
+So at the end of this section, I will show you how to delete the extra disk to avoid that if you want.</p>
+<p>We will essentially follow the Google Cloud tutorial to add a non-boot disk to our VM, but with some modification.</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
 <blockquote>
 <p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
@@ -4380,9 +4365,7 @@ regardless of which operating system they run,
 have some kind of boot system.</p>
 </blockquote>
 <h2 id="creating-a-disk"><a class="header" href="#creating-a-disk">Creating a Disk</a></h2>
-<p>In the Google Cloud console,
-visit the <strong>Disks</strong> page in the <strong>Storage</strong> section,
-which should be here:</p>
+<p>In the Google Cloud console, visit the <strong>Disks</strong> page in the <strong>Storage</strong> section, which should be here:</p>
 <p><a href="https://console.cloud.google.com/compute/disksAdd">Create a disk</a></p>
 <p>And then follow these steps:</p>
 <ol>
@@ -4409,13 +4392,9 @@ selected.</li>
 <li>Click <strong>Create</strong> to create your disk.</li>
 </ol>
 <h2 id="adding-the-disk-to-our-vm"><a class="header" href="#adding-the-disk-to-our-vm">Adding the Disk to our VM</a></h2>
-<p>Now that we have created our disk,
-we need to <strong>mount</strong> it onto our filesystem
-so that it's available to our VM.
-Conceptually, this process is like inserting
-a new USB drive into our computer.</p>
-<p>To add the new disk to our VM,
-follow these steps:</p>
+<p>Now that we have created our disk, we need to <strong>mount</strong> it onto our filesystem so that it's available to our VM.
+Conceptually, this process is like inserting a new USB drive into our computer.</p>
+<p>To add the new disk to our VM, follow these steps:</p>
 <ol>
 <li>Visit the <strong>VM instances</strong> page.</li>
 <li>Click on the check box next to your virtual machine.
@@ -4436,30 +4415,17 @@ follow these steps:</p>
 <li>Click on the <strong>SAVE</strong> button.</li>
 <li>Then click on the <strong>SAVE</strong> button on the details page.</li>
 </ol>
-<p>If you return to the <strong>Disks</strong> page in the <strong>Storage</strong> section,
-you will now see that the new disk is in use by our VM.</p>
+<p>If you return to the <strong>Disks</strong> page in the <strong>Storage</strong> section, you will now see that the new disk is in use by our VM.</p>
 <h2 id="formatting-and-mounting-a-non-boot-disk"><a class="header" href="#formatting-and-mounting-a-non-boot-disk">Formatting and Mounting a Non-Boot Disk</a></h2>
 <h3 id="formatting-our-disk"><a class="header" href="#formatting-our-disk">Formatting Our Disk</a></h3>
-<p>In order for our VM to make use of the extra storage,
-the new drive must be formatted and mounted.
+<p>In order for our VM to make use of the extra storage, the new drive must be formatted and mounted.
 Different operating systems use different filesystem formats.
-You may already know that
-macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac">Apple File System (APFS)</a> by default
-and that Windows uses the
-<a href="https://docs.microsoft.com/en-us/windows-server/storage/file-server/ntfs-overview">New Technology File System (NTFS)</a>.
-Linux is no different, but
-uses different file systems than macOS and Windows, by default.
-There are many formatting technologies that we can use in Linux,
-but we'll use the <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">ext4 (fourth extended filesystem)</a> format,
-since this is recommended by Google Cloud and
-is also a stable and common one for Linux.</p>
-<p>In this section, we will closely follow the steps
-outlined under the
-<a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"><strong>Formatting and mounting a non-boot disk on a Linux VM</strong></a>
-section.
-I replicate those instructions below, but
-I highly encourage you to read through
-the instructions on Google Cloud and here:</p>
+You may already know that macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac">Apple File System (APFS)</a> by default and that Windows uses the <a href="https://docs.microsoft.com/en-us/windows-server/storage/file-server/ntfs-overview">New Technology File System (NTFS)</a>.
+Linux is no different, but uses different file systems than macOS and Windows, by default.
+There are many formatting technologies that we can use in Linux, but we'll use the <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">ext4 (fourth extended filesystem)</a> format.
+This is recommended for Google Cloud, and it is also a stable and common one for Linux.</p>
+<p>In this section, we will closely follow the steps outlined under the <a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"><strong>Formatting and mounting a non-boot disk on a Linux VM</strong></a> section.
+I replicate those instructions below, but I highly encourage you to read through the instructions on Google Cloud and here:</p>
 <ol>
 <li>Use the <code>gcloud compute ssh</code> command that you
 have previously used to connect to your VM.
@@ -4496,124 +4462,76 @@ partition will also have a mountpoint.</li>
 </ul>
 </li>
 </ol>
-<p>To format our disk for the <strong>ext4</strong> filesystem,
-we will use the <code>mkfs.ext4</code>
-(see <code>man mkfs.ext4</code> for details).
-The instructions tell us to run the following command
-(please read the Google Cloud instructions closely;
-<strong>it's important to understand these commands as much
-as possible and not just copy and paste them</strong>):</p>
+<p>To format our disk for the <strong>ext4</strong> filesystem, we will use the <code>mkfs.ext4</code> (see <code>man mkfs.ext4</code> for details).
+The instructions tell us to run the following command (please read the Google Cloud instructions closely;
+<strong>it's important to understand these commands as much as possible and not just copy and paste them</strong>):</p>
 <pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/DEVICE_NAME
 </code></pre>
 <p>But replace <strong>DEVICE_NAME</strong> with the name of our device.
-My device's name is <strong>sdb</strong>,
-which we saw with the output of the <code>lsblk</code> command;
-therefore, the specific command I run is:</p>
+My device's name is <strong>sdb</strong>, which we saw with the output of the <code>lsblk</code> command; therefore, the specific command I run is:</p>
 <pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
 </code></pre>
 <h3 id="mounting-our-disk"><a class="header" href="#mounting-our-disk">Mounting Our Disk</a></h3>
-<p>Now that our disk has been formatted in <strong>ext4</strong>,
-I can mount it.</p>
+<p>Now that our disk has been formatted in <strong>ext4</strong>, I can mount it.</p>
 <blockquote>
-<p>Note: to <strong>mount</strong> a disk simply means to make the disk's
-filesystem available so that we can use it for accessing,
-storing, etc files on the disk.
-Whenever we insert a USB drive, a DVD drive, etc
-into our computers,
-the OS you use should mount that disk automatically
-so that you can access and use that disk.
-Conversely, when we remove those drives,
-the OS <strong>unmounts</strong> them.
-In Linux, the commands for these are <code>mount</code> and <code>umount</code>.
-Note that the <code>umount</code> command is not <strong>unmount</strong>.</p>
+<p>Note: to <strong>mount</strong> a disk simply means to make the disk's filesystem
+available so that we can use it for accessing, storing, etc files on the
+disk. Whenever we insert a USB drive, a DVD drive, etc into our computers,
+the OS you use should mount that disk automatically so that you can access
+and use that disk. Conversely, when we remove those drives, the OS
+<strong>unmounts</strong> them. In Linux, the commands for these are <code>mount</code> and
+<code>umount</code>. Note that the <code>umount</code> command is not <strong>unmount</strong>.</p>
 </blockquote>
-<p>You will recall that we have
-<a href="03-filesystem-file-management.html">discussed filesystems earlier</a>,
-and that the term is a bit confusing since it refers to both
-the directory hierarchy and also the formatting type (e.g., ext4).
-In that prior section, I discussed how in Windows,
-attaching a new drive,
-whether it's a USB drive, a DVD drive,
-an additional disk drive, or an external drive,
-Windows gives the new drive a letter,
-like <strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.
-Unlike Windows, I mentioned that in Linux and Unix (e.g., macOS),
-when we add an additional disk,
-its filesystem gets added onto our existing one.
-That is, it becomes part of the directory hierarchy
-and under the <code>/</code> top level part of the hierarchy.
-In practice, this means that we have to create the <strong>mountpoint</strong>
-for our new disk, and
-we do that with the <code>mkdir</code> command.
-The Google Console documentation instructs us
-to use the following command:</p>
+<p>You will recall that we have <a href="03-filesystem-file-management.html">discussed filesystems earlier</a> and
+that the term is a bit confusing since it refers to both the directory hierarchy and also the formatting type (e.g., ext4).
+I discussed how Windows assigns drives letters (<code>A:</code>, <code>B:</code>, etc.) when attaching new drives, like a USB drive.
+Unlike Windows, I mentioned that in Linux and Unix (e.g., macOS), when we add an additional disk, its filesystem gets added onto our existing one.
+That is, it becomes part of the directory hierarchy and under the <code>/</code> top level part of the hierarchy.
+In practice, this means that we have to create the <strong>mountpoint</strong> for our new disk, and we do that first with the <code>mkdir</code> command.
+The Google Console documentation instructs us to use the following command:</p>
 <pre><code>sudo mkdir -p /mnt/disks/MOUNT_DIR
 </code></pre>
-<p>And to replace <strong>MOUNT_DIR</strong> with the directory we
-want to create.
-Since my added disk is named <strong>disk-1</strong>,
-I'll call it that:</p>
+<p>And to replace <strong>MOUNT_DIR</strong> with the directory we want to create.
+Since my added disk is named <strong>disk-1</strong>, I'll call it that:</p>
 <pre><code>sudo mkdir -p /mnt/disks/disk-1
 </code></pre>
-<p>Now we can <code>mount</code> the disk to that directory.
-Per the instructions on Google Console,
-and given that my added drive has the device name <strong>sdb</strong>,
+<p>Now we can <code>mount</code> the disk to that directory. Per the instructions on Google Console, and given that my added drive has the device name <strong>sdb</strong>,
 I use the following command:</p>
 <pre><code>sudo mount -o discard,defaults /dev/sdb /mnt/disks/disk-1
 </code></pre>
-<p>We also need to change the modifications, and
-grant access for additional users:</p>
+<p>We also need to change the modifications, and grant access for additional users:</p>
 <pre><code>sudo chmod 777 /mnt/disks/disk-1
 </code></pre>
-<p>We can test that it exists and is accessible with
-the <code>lsblk</code> and the <code>cd</code> commands.
-The <code>lsblk</code> command should show that <strong>sdb</strong> is
-mounted at <code>/mnt/disks/disk-1</code>, and
-we can <code>cd</code> (change directory) to it:</p>
+<p>We can test that it exists and is accessible with the <code>lsblk</code> and the <code>cd</code> commands.
+The <code>lsblk</code> command should show that <strong>sdb</strong> is mounted at <code>/mnt/disks/disk-1</code>, and we can <code>cd</code> (change directory) to it:</p>
 <pre><code>cd /mnt/disks/disk-1
 </code></pre>
 <h3 id="automounting-our-disk"><a class="header" href="#automounting-our-disk">Automounting Our Disk</a></h3>
-<p>Our disk is mounted, but if the computer (VM) gets rebooted,
-we would have to re-<code>mount</code> the additional drive manually.
-In order to avoid this and automount the drive upon reboot,
-we need to edit the file <code>/etc/fstab</code>.</p>
+<p>Our disk is mounted, but if the computer (VM) gets rebooted, we would have to re-<code>mount</code> the additional drive manually.
+In order to avoid this and automount the drive upon reboot, we need to edit the file <code>/etc/fstab</code>.</p>
 <blockquote>
-<p>Note that the file is named <strong>fstab</strong> and
-that it's located in the <strong>/etc</strong> directory.
+<p>Note that the file is named <strong>fstab</strong> and that it's located in the <strong>/etc</strong> directory.
 Therefore the full path is <code>/etc/fstab</code></p>
 </blockquote>
-<p>The <strong>fstab</strong> file is basically a configuration file
-that provides information to the OS about the filesystems
-the system can mount.
-The standard information <strong>fstab</strong> contains includes
-the name (or label) of the device being mounted,
-the mountpoint (e.g., <code>/mnt/disks/disk-1</code>),
-the filesystem type (e.g., <strong>ext4</strong>),
-and various other mount options.
+<p>The <strong>fstab</strong> file is basically a configuration file that provides information to the OS about the filesystems the system can mount.
+The standard information <strong>fstab</strong> contains includes the name (or label) of the device being mounted,
+the mountpoint (e.g., <code>/mnt/disks/disk-1</code>), the filesystem type (e.g., <strong>ext4</strong>), and various other mount options.
 See <code>man fstab</code> for more details.
-For devices to mount upon boot up automatically,
-they have to be listed in this file.
-That means we need to edit this file on our VM.</p>
+For devices to mount automatically upon boot, they have to be listed in this file.
+That means we need to edit this file.</p>
 <p>Again, here we're following the Google Cloud instructions:</p>
-<p>Before we edit system configuration files, however,
-always create a backup.
+<p>Before we edit system configuration files, however, always create a backup.
 We'll use the <code>cd</code> command to create a backup of the <strong>fstab</strong> file.</p>
 <pre><code>sudo cp /etc/fstab /etc/fstab.backup
 </code></pre>
-<p>Next we use the <code>blkid</code> command to get
-the UUID (universally unique identifier)
-number for our new device.
-Since my device is <code>/dev/sdb</code>,
-I'll use that:</p>
+<p>Next we use the <code>blkid</code> command to get the UUID (universally unique identifier) number for our new device.
+Since my device is <code>/dev/sdb</code>, I'll use that:</p>
 <pre><code>sudo blkid /dev/sdb
 </code></pre>
-<p>The output should look something like this
-<strong>BUT NOTE that your UUID value will
-be DIFFERENT</strong>:</p>
+<p>The output should look something like this <strong>BUT NOTE that your UUID value will be DIFFERENT</strong>:</p>
 <pre><code>/dev/sdb: UUID="3bc141e2-9e1d-428c-b923-0f9vi99a1123" TYPE="ext4"
 </code></pre>
-<p>We need to add that value to <code>/etc/fstab</code>
-plus the standard information that file requires.
+<p>We need to add that value to <code>/etc/fstab</code> plus the standard information that file requires.
 The Google Cloud documentation explicitly guides us here.
 We'll use <code>nano</code> to make the edit:</p>
 <pre><code>sudo nano /etc/fstab
@@ -4622,22 +4540,12 @@ We'll use <code>nano</code> to make the edit:</p>
 <pre><code>UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0 2
 </code></pre>
 <p>And that's it!
-If you reboot your VM, or
-if your VM rebooted for some reason,
-the extra drive we added should automatically
-mount upon reboot.
-If it doesn't,
-then it may mean that the drive failed,
-or that there was an error (i.e., typo) in the configuration.</p>
+If you reboot your VM, or if your VM rebooted for some reason, the extra drive we added should automatically mount upon reboot.
+If it doesn't, then it may mean that the drive failed, or that there was an error (i.e., typo) in the configuration.</p>
 <h3 id="delete-the-disk"><a class="header" href="#delete-the-disk">Delete the Disk</a></h3>
-<p>You are welcome to keep the disk attached to the VM,
-but if you do not want to incur any charges for it,
-which would be about $1 / month at 10 GB,
-then we can delete it.</p>
-<p>To delete the disk,
-first delete the line that we added in <code>/etc/fstab</code>,
-unmount it,
-and then delete the disk in the gcloud console.</p>
+<p>You are welcome to keep the disk attached to the VM.
+But if you do not want to incur any charges for it, which would be about $1 / month at 10 GB, then we can delete it.</p>
+<p>To delete the disk, first delete the line that we added in <code>/etc/fstab</code>, unmount it, and then delete the disk in the gcloud console.</p>
 <p>To unmount the disk, we use the <code>umount</code> command:</p>
 <pre><code>sudo umount /mnt/disks/disk-1
 </code></pre>
@@ -4665,12 +4573,9 @@ and then delete the disk in the gcloud console.</p>
 </li>
 </ol>
 <h2 id="conclusion-11"><a class="header" href="#conclusion-11">Conclusion</a></h2>
-<p>In this section we learned how to expand
-the storage of our VM by creating a new virtual drive,
-adding it to our VM,
-formatting the drive in the <strong>ext4</strong> filesystem format,
-mounting the drive at <code>/mnt/disks/disk-1</code>, and
-then editing <code>/etc/fstab</code> to make automount the drive.</p>
+<p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
+We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
+Finally, we learned how to then edit <code>/etc/fstab</code> to make automount the drive.</p>
 <p>In addition to using the gcloud console,
 the commands we used in this section include:</p>
 <ol>
@@ -4686,96 +4591,58 @@ the commands we used in this section include:</p>
 <li><code>nano</code> : to use the text editor <code>nano</code> to edit <code>/etc/fstab</code></li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-users-and-groups"><a class="header" href="#managing-users-and-groups">Managing Users and Groups</a></h1>
-<p>In some cases we'll want to provide user accounts
-on the servers we administrate, or
-we'll want to set up servers for others to use.
-The process of creating accounts is fairly straightforward, but
-there are a few things to know about how user accounts work.</p>
+<p>In some cases we'll want to provide user accounts on the servers we administrate, or we'll want to set up servers for others to use.
+The process of creating accounts is fairly straightforward, but there are a few things to know about how user accounts work.</p>
 <h2 id="the-passwd-file"><a class="header" href="#the-passwd-file">The passwd file</a></h2>
-<p>The <strong>/etc/passwd</strong> file contains information
-about the users on your system.
-There is a man page that describes the file, but
-man pages are divided into sections (see <code>man man</code>), and
-the man page for the <code>passwd</code> file is in section 5.
-Therefore in order to read the man page
-for the <strong>/etc/passwd</strong> file,
-we run the following command:</p>
+<p>The <strong>/etc/passwd</strong> file contains information about the users on your system.
+There is a <code>man</code> page that describes the file.
+<code>man</code> pages are divided into sections (see <code>man man</code>), and the man page for the <code>passwd</code> file is in section 5.
+Therefore in order to read the man page for the <strong>/etc/passwd</strong> file, we run the following command:</p>
 <pre><code>man 5 passwd
 </code></pre>
-<p>Before we proceed,
-let's take a look at a single line of the file.
+<p>Before we proceed, let's take a look at a single line of the file.
 Below I'll show the output for a made up user account:</p>
 <pre><code>grep "peter" /etc/passwd
 peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 </code></pre>
 <p>The line starting with <strong>peter</strong> is a colon separated line.
-That means that the line is composed of multiple fields
-each separated by a colon.</p>
+That means that the line is composed of multiple fields each separated by a colon.</p>
 <p><code>man 5 passwd</code> tells us what each field indicates.
-The first field is the login name,
-which in this case is <strong>peter</strong>.
+The first field is the login name, which in this case is <strong>peter</strong>.
 The second field, marked <strong>x</strong>, marks the password field.
 This file does not contain the password, though.
-The passwords, which are <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">hashed and salted</a>,
-for users are stored in the <strong>/etc/shadow</strong> file,
-which can only be read by the root user
-(or using the <code>sudo</code> command).</p>
+The passwords, which are <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">hashed and salted</a>, for users are stored in the <strong>/etc/shadow</strong> file.
+This file can only be read by the root user (or using the <code>sudo</code> command).</p>
 <blockquote>
-<p>Hashing a file or a string of text is a
-process of running a hashing algorithm on the file or text.
-If the file or string is copied exactly, byte for byte,
-then hashing the copy will return the same value.
-If anything has changed about the file or string,
-then the hash value will be different.
-By implication, this means that if two users on a system
-use the same password,
-then the hash of each will be equivalent.
-Salting a hashed file (or file name)
-or string of text is a process
-of adding random data to the file or string.
-Each password will have a unique and mostly random salt
-added to it.
-This means that even if two users on a system use the
-same password,
-salting their passwords will result in unique values.</p>
+<p>Hashing a file or a string of text is a process of running a hashing algorithm on the file or text.
+If the file or string is copied exactly, byte for byte, then hashing the copy will return the same value.
+If anything has changed about the file or string, then the hash value will be different.
+By implication, this means that if two users on a system use the same password, then the hash of each will be equivalent.
+Salting a hashed file (or file name) or string of text is a process of adding random data to the file or string.
+Each password will have a unique and mostly random salt added to it.
+This means that even if two users on a system use the same password, salting their passwords will result in unique values.</p>
 </blockquote>
-<p>The third column indicates the user's numerical ID, and
-the fourth column indicates the users' group ID.
-The fifth column repeats the login name, but
-could also serve as a comment field.
+<p>The third column indicates the user's numerical ID, and the fourth column indicates the users' group ID.
+The fifth column repeats the login name, but could also serve as a comment field.
 Comments are added using certain commands (discussed later).
-The fifth field identifies the user's home directory,
-which is <strong>/home/peter</strong>.
-The sixth field identifies the user's default shell,
-which is <code>/bin/bash</code>.</p>
-<p>The <strong>user name or comment</strong> field merely repeats the login name here,
-but it can hold specific types of information.
+The fifth field identifies the user's home directory, which is <strong>/home/peter</strong>.
+The sixth field identifies the user's default shell, which is <code>/bin/bash</code>.</p>
+<p>The <strong>user name or comment</strong> field merely repeats the login name here, but it can hold specific types of information.
 We can add comments using the <code>chfn</code> command.
-Comments include the user's full name,
-their home and work phone numbers,
-their office or room number, and so forth.
-To add a full name to user <strong>peter</strong>'s account,
-we use the <strong>-f</strong> option:</p>
+Comments include the user's full name, their home and work phone numbers, their office or room number, and so forth.
+To add a full name to user <strong>peter</strong>'s account, we use the <strong>-f</strong> option:</p>
 <pre><code>sudo chfn -f "Peter Parker" peter
 </code></pre>
-<p>The <strong>/etc/passwd</strong> file is a standard Linux file, but
-some things will change depending on the Linux distribution.
-For example, the user and group IDs above start at 1000 because
-<strong>peter</strong> is the first human account on the system.
-This is a common starting numerical ID nowadays,
-but it could be different on other Linux or Unix-like distributions.
+<p>The <strong>/etc/passwd</strong> file is a standard Linux file, but some things will change depending on the Linux distribution.
+For example, the user and group IDs above start at 1000 because <strong>peter</strong> is the first human account on the system.
+This is a common starting numerical ID nowadays, but it could be different on other Linux or Unix-like distributions.
 The home directory could be different on other systems, too;
 for example, the default could be located at <strong>/usr/home/peter</strong>.
-Also, other shells exist besides <code>bash</code>,
-like <a href="https://www.zsh.org/">zsh</a>,
-which is now the default shell on macOS;
+Also, other shells exist besides <code>bash</code>, like <a href="https://www.zsh.org/">zsh</a>, which is now the default shell on macOS;
 so other systems may default to different shell environments.</p>
 <h2 id="the-shadow-file"><a class="header" href="#the-shadow-file">The shadow file</a></h2>
-<p>The <strong>/etc/passwd</strong> file does not contain any passwords but
-a simple <strong>x</strong> to mark the password field.
-Passwords on Linux are stored in <strong>/etc/shadow</strong> and
-are hashed with <strong>sha512</strong>,
-which is indicated by <strong>$6$</strong>.
+<p>The <strong>/etc/passwd</strong> file does not contain any passwords but a simple <strong>x</strong> to mark the password field.
+Passwords on Linux are stored in <strong>/etc/shadow</strong> and are hashed with <strong>sha512</strong>, which is indicated by <strong>$6$</strong>.
 You need to be root to examine the shadow file or use <code>sudo</code>:</p>
 <p>The fields are (see <code>man 5 shadow</code>):</p>
 <ul>
@@ -4791,29 +4658,18 @@ You need to be root to examine the shadow file or use <code>sudo</code>:</p>
 <li>a reserved field</li>
 </ul>
 <p>The <strong>/etc/shadow</strong> file should not be directly edited.
-To set, for example, a warning that a user's password will expire,
-we would use the <code>passwd</code> command
-(see <code>man passwd</code> for options).
-The following command would make it so the user <strong>peter</strong>
-is warned that their password will expire in 14 days:</p>
+To set, for example, a warning that a user's password will expire, we would use the <code>passwd</code> command (see <code>man passwd</code> for options).
+The following command would make it so the user <strong>peter</strong> is warned that their password will expire in 14 days:</p>
 <pre><code>passwd -w 14 peter
 </code></pre>
 <h2 id="the-group-file"><a class="header" href="#the-group-file">The group file</a></h2>
-<p>The <strong>/etc/group</strong> file holds group information
-about the entire system
-(see <code>man 5 group</code>).
-The file can be viewed by anyone on a system, by default,
-but there is also a <code>groups</code> command
-(see <code>man groups</code>)
-that will return the groups for a user.
-Running the <code>groups</code> command by itself
-will return your own memberships.</p>
+<p>The <strong>/etc/group</strong> file holds group information about the entire system (see <code>man 5 group</code>).
+By default the file can be viewed by anyone on a system, but there is also a <code>groups</code> command that will return the groups for a user.
+See: <code>man groups</code>
+Running the <code>groups</code> command by itself will return your own memberships.</p>
 <h2 id="management-tools"><a class="header" href="#management-tools">Management Tools</a></h2>
-<p>There are different ways to create new users and groups, and
-the following list includes most of the utilities to help
-with this.
-Note that, based on the names of the utilities,
-some of them are repetitive.</p>
+<p>There are different ways to create new users and groups, and the following list includes most of the utilities to help with this.
+Note that, based on the names of the utilities, some of them are repetitive.</p>
 <ul>
 <li>useradd (8) - create a new user or update default new user information</li>
 <li>usermod (8) - modify a user account</li>
@@ -4834,48 +4690,32 @@ Therefore, to view the man page for the <code>userdel</code> command:</p>
 </code></pre>
 <h2 id="practice"><a class="header" href="#practice">Practice</a></h2>
 <h3 id="modify-default-new-user-settings"><a class="header" href="#modify-default-new-user-settings">Modify default new user settings</a></h3>
-<p>Let's modify some default user account settings for new users,
-and then we'll create a new user account.</p>
-<p>Before we proceed,
-let's review several important configuration files
-that establish some default settings:</p>
+<p>Let's modify some default user account settings for new users, and then we'll create a new user account.</p>
+<p>Before we proceed, let's review several important configuration files that establish some default settings:</p>
 <ul>
 <li><strong>/etc/skel</strong></li>
 <li><strong>/etc/adduser.conf</strong></li>
 </ul>
 <p>The <strong>/etc/skel</strong> directory defines the home directory for new users.
-Whatever files or directories exist in this directory
-at the time a new user account is created
-will result in those files and directories being created
-in the new user's home directory.
+Whatever files or directories exist in this directory at the time a new user account is created
+will result in those files and directories being created in the new user's home directory.
 We can view what those are using the following command:</p>
 <pre><code>ls -a /etc/skel/
 </code></pre>
-<p>The <strong>/etc/adduser.conf</strong> file defines
-the default parameters for new users.
-It's in this file
-where the default starting user and group IDs are set,
-where the default home directory is located
-(e.g., in <strong>/home/</strong>),
-where the default shell is defined
-(e.g., <code>/bin/bash</code>),
-where the default permissions are set for new
-home user directories
-(e.g., <strong>0755</strong>)
-and more.</p>
+<p>The <strong>/etc/adduser.conf</strong> file defines the default parameters for new users.
+It's in this file where the default starting user and group IDs are set,
+where the default home directory is located (e.g., in <strong>/home/</strong>),
+where the default shell is defined (e.g., <code>/bin/bash</code>),
+where the default permissions are set for new home user directories (e.g., <strong>0755</strong>) and more.</p>
 <p>Let's change some defaults for <strong>/etc/skel</strong>.
-We need to use <code>sudo [command]</code> or
-use <code>su</code> to become the root user.
-I prefer to use <code>sudo [command]</code>
-since this is a bit safer than becoming root.
+We need to use <code>sudo [command]</code> or use <code>su</code> to become the root user.
+I prefer to use <code>sudo [command]</code> since this is a bit safer than becoming root.
 Let's edit the default <strong>.bashrc</strong> file:</p>
 <pre><code>sudo nano /etc/skel/.bashrc
 </code></pre>
 <p>We want to add these lines at the end of the file.
-This file is a configuration file for <code>/bin/bash</code>,
-and will be interpreted by Bash.
-Therefore, lines starting with a hash mark
-are comments:</p>
+This file is a configuration file for <code>/bin/bash</code>, and will be interpreted by Bash.
+Therefore, lines starting with a hash mark are comments:</p>
 <pre><code># Dear New User,
 #
 # I have made the following settings
@@ -4885,50 +4725,38 @@ are comments:</p>
 alias c='clear'
 </code></pre>
 <p>Use <code>nano</code> again to create a README file.
-This file will be added to the
-home directories of all new users.
-Add any welcome message you want to add,
-plus any guidelines for using the system.</p>
+This file will be added to the home directories of all new users.
+Add any welcome message you want to add, plus any guidelines for using the system.</p>
 <pre><code>sudo nano /etc/skel/README
 </code></pre>
 <h3 id="add-new-user-account"><a class="header" href="#add-new-user-account">Add new user account</a></h3>
-<p>After writing (saving) and exiting <code>nano</code>,
-we can go ahead and create a new user named <strong>linus</strong>.</p>
+<p>After writing (saving) and exiting <code>nano</code>, we can go ahead and create a new user named <strong>linus</strong>.</p>
 <pre><code>sudo adduser linus
 </code></pre>
-<p>We'll be prompted to enter a password for the new user,
-plus comments (full name, phone number, etc).
+<p>We'll be prompted to enter a password for the new user, plus comments (full name, phone number, etc).
 Any of these can be skipped by pressing enter.
-You can see from the output of the <code>grep</code> command
-below that I added some extra information:</p>
+You can see from the output of the <code>grep</code> command below that I added some extra information:</p>
 <pre><code>grep "linus" /etc/passwd
 linus:x:1003:1004:Linus Torvalds,333,555-123-4567,:/home/linus:/bin/bash
 </code></pre>
-<p>Let's modify the minimum days before the password can be changed,
-and the maximum days of the password's lifetime:</p>
+<p>Let's modify the minimum days before the password can be changed, and the maximum days of the password's lifetime:</p>
 <pre><code>sudo passwd -n 90 linus
 sudo passwd -x 180 linus
 </code></pre>
 <p>You can see these values by grepping the shadow file:</p>
 <pre><code>sudo grep "linus" /etc/shadow
 </code></pre>
-<p>To log in as the new user,
-use the <code>su</code> command:</p>
+<p>To log in as the new user, use the <code>su</code> command:</p>
 <pre><code>su linus
 </code></pre>
-<p>To exit the new user's account,
-use the <code>exit</code> command:</p>
+<p>To exit the new user's account, use the <code>exit</code> command:</p>
 <pre><code>exit
 </code></pre>
 <h3 id="add-users-to-a-new-group"><a class="header" href="#add-users-to-a-new-group">Add users to a new group</a></h3>
-<p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>,
-the <strong>linus</strong> user only belongs to a group of the same name.
-Let's create a new group that both
-<strong>linus</strong> and <strong>peter</strong> belong to.
+<p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>, the <strong>linus</strong> user only belongs to a group of the same name.
+Let's create a new group that both <strong>linus</strong> and <strong>peter</strong> belong to.
 For that, we'll use the <strong>-a</strong> option for the <code>gpasswd</code> command.
-We'll also make the user <strong>peter</strong> the group administrator
-using the <strong>-A</strong> option
-(see <code>man gpasswd</code> for more details).</p>
+We'll also make the user <strong>peter</strong> the group administrator using the <strong>-A</strong> option (see <code>man gpasswd</code> for more details).</p>
 <pre><code>sudo groupadd developers
 sudo gpasswd -a peter developers
 sudo gpasswd -A peter developers
@@ -4936,174 +4764,101 @@ sudo gpasswd -a linus developers
 grep "developers" /etc/group
 </code></pre>
 <blockquote>
-<p>Note: if a user is logged in when you add them
-to a group, they need to logout and log back
-in before the group membership goes into effect.</p>
+<p>Note: if a user is logged in when you add them to a group, they need to logout and log back in before the group membership goes into effect.</p>
 </blockquote>
 <h3 id="create-a-shared-directory"><a class="header" href="#create-a-shared-directory">Create a shared directory</a></h3>
-<p>One of the benefits of group membership is that members
-can work in a shared directory.</p>
+<p>One of the benefits of group membership is that members can work in a shared directory.</p>
 <p>Let's make the <strong>/srv/developers</strong> a shared directory.
-The <strong>/srv</strong> directory already exists,
-so we only need to create the <strong>developers</strong> subdirectory:</p>
+The <strong>/srv</strong> directory already exists, so we only need to create the <strong>developers</strong> subdirectory:</p>
 <pre><code>sudo mkdir /srv/developers
 </code></pre>
-<p>We'll have to change the default permissions,
-which are currently set to <strong>0755</strong>:</p>
+<p>We'll have to change the default permissions, which are currently set to <strong>0755</strong>:</p>
 <pre><code>ls -ld /srv
 ls -ld /srv/developers
 </code></pre>
 <p>Now we can change ownership of the directory:</p>
 <pre><code>sudo chgrp developers /srv/developers
 </code></pre>
-<p>The directory ownership should now reflect that it's owned by
-the <strong>developers</strong> group:</p>
+<p>The directory ownership should now reflect that it's owned by the <strong>developers</strong> group:</p>
 <pre><code>ls -ld /srv/developers
 </code></pre>
-<p>In order to allow group members to read and write to
-the above directory,
-we need to use the <code>chmod</code> command in a way we haven't yet.
+<p>To allow group members to read and write to the above directory, we need to use the <code>chmod</code> command in a way we haven't yet.
 Specifically, we add a leading <strong>2</strong> sets the group identity.
-The <strong>770</strong> indicates that the user and group owners of
-the directory have read, write, and execute permissions
-for the directory:</p>
+The <strong>770</strong> indicates that the user and group owners of the directory have read, write, and execute permissions for the directory:</p>
 <pre><code>sudo chmod 2770 /srv/developers
 </code></pre>
-<p>Now either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete
-files in the <strong>/srv/developers</strong> directory.</p>
+<p>Now either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete files in the <strong>/srv/developers</strong> directory.</p>
 <h3 id="user-account-and-group-deletion"><a class="header" href="#user-account-and-group-deletion">User account and group deletion</a></h3>
-<p>You can keep the additional user and group on your system,
-but know that you can also remove them.
-The <code>deluser</code> and <code>delgroup</code> commands
-offer great options
-and may be preferable to the others utilities
-(see <code>man deluser</code> or <code>man delgroup</code>).</p>
-<p>If we want to delete the new user's account and the new group,
-these are the commands to use.
-The first command will create an archival backup of
-<strong>linus</strong>' home directory and also remove the home
-directory and any files in it.</p>
+<p>You can keep the additional user and group on your system, but know that you can also remove them.
+The <code>deluser</code> and <code>delgroup</code> commands offer great options and may be preferable to the others utilities (see <code>man deluser</code> or <code>man delgroup</code>).</p>
+<p>If we want to delete the new user's account and the new group, these are the commands to use.
+The first command will create an archival backup of <strong>linus</strong>' home directory and also remove the home directory and any files in it.</p>
 <pre><code>deluser --backup --remove-home linus
 delgroup developers
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-software"><a class="header" href="#managing-software">Managing Software</a></h1>
 <h2 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h2>
-<p>Many modern Linux distributions offer some kind of
-package manager to
-install, manage, and remove software.
-These package management systems interact with
-curated and audited central repositories of software
-that are collected into <strong>packages</strong>.
-They also provide a set of tools to learn about
-the software that exists in these repositories.</p>
+<p>Many modern Linux distributions offer some kind of package manager to install, manage, and remove software.
+These package management systems interact with curated and audited central repositories of software that are collected into <strong>packages</strong>.
+They also provide a set of tools to learn about the software that exists in these repositories.</p>
 <blockquote>
-<p>If <strong>package management</strong> seems like an odd concept to you,
-it's just a way to manage software installation, and
-it's very similar to the way that Apple and Google
-distribute software via the App Store and Google Play.</p>
+<p>If <strong>package management</strong> seems like an odd concept to you, it's just a way to manage software installation.
+It's very similar to the way that Apple and Google distribute software via the App Store and Google Play.</p>
 </blockquote>
-<p>On Debian based systems,
-which includes Ubuntu,
-we use <code>apt</code>, <code>apt-get</code>, and <code>apt-cache</code>
-to manage most software installations.
-For most cases,
-you will simply want to use the <code>apt</code> command,
-as it is meant to combine the functionality commonly
-used with <code>apt-get</code> and <code>apt-cache</code>.</p>
-<p>We can also install software from source code or
-from pre-built binaries.
-On Debian and Ubuntu, for example,
-we might want to install
-(if we trust it)
-pre-build binaries distributed on the
-internet as <strong>.deb</strong> files.
-These are comparable to <strong>.dmg</strong> files for macOS
-and to <strong>.exe</strong> files for Windows.
-When installing <strong>.deb</strong> files, though,
-we need to use the <code>dpkg</code> command.</p>
-<p>Installing software from source code often
-involves compiling the software.
-It's usually not difficult to install software
-this way, but it can become complicated to manage
-software that's installed from source code
-simply because it means managing dependencies
-and keeping a close eye on new versions
-of the software.</p>
-<p>Another way to install software
-(I know, there's a lot)
-is to use the <code>snap</code> command.
-This is a newer way of packaging programs
-that involves packaging all of a program
-and all of its dependencies
-into a single <a href="https://www.ibm.com/cloud/learn/containers">container</a>.
-The main point of <a href="https://ubuntu.com/core/services/guide/snaps-intro">snap</a> seems to be aimed
-at IoT and embedded devices, but
-it's perfectly usable and preferable
-(in some scenarios)
-on the desktop because the general
-aim is end users and not system administrators.
+<p>On Debian based systems, which includes Ubuntu, we use <code>apt</code>, <code>apt-get</code>, and <code>apt-cache</code> to manage most software installations.
+For most cases, you will simply want to use the <code>apt</code> command.
+It is meant to combine the functionality commonly used with <code>apt-get</code> and <code>apt-cache</code>.</p>
+<p>We can also install software from source code or from pre-built binaries.
+On Debian and Ubuntu, for example, we might want to install (if we trust it) pre-build binaries distributed on the internet as <strong>.deb</strong> files.
+These are comparable to <strong>.dmg</strong> files for macOS and to <strong>.exe</strong> files for Windows.
+When installing <strong>.deb</strong> files, though, we need to use the <code>dpkg</code> command.</p>
+<p>Installing software from source code often involves compiling the software.
+It's usually not difficult to install software this way.
+However, it can become complicated to manage software that's installed from source code simply because it means managing dependencies.
+This means we would need to manually track new patches or versions of the software.</p>
+<p>Another way to install software is to use the <code>snap</code> command.
+This is a newer way of packaging programs that involves packaging all of a program and all of its dependencies into a single <a href="https://www.ibm.com/cloud/learn/containers">container</a>.
+The main point of <a href="https://ubuntu.com/core/services/guide/snaps-intro">snap</a> seems to be aimed at IoT and embedded devices.
+It's perfectly usable and preferable on the desktop because the general aim is end users and not system administrators.
 See the <a href="https://snapcraft.io/">snap store</a> for examples.</p>
 <blockquote>
-<p>You might also want to know that some programming
-languages provide their own mechanisms to install
-packages.
-In many cases, these packages may be installed
-with the <code>apt</code> command, but
-the packages that <code>apt</code> will install tend to
-be older (but more stable)
-than the packages that a programming language will install.
-For example, Python has the <code>pip</code> or <code>pip3</code>
-command to install and remove Python libraries.
-The R programming language has the
-<code>install.packages()</code>, <code>remove.packages()</code>, and the
-<code>update.packages()</code> commands to install R libraries.</p>
+<p>You might also want to know that some programming languages provide their own mechanisms to install packages.
+In many cases, these packages may be installed with the <code>apt</code> command,
+but the packages that <code>apt</code> will install tend to be older (but more stable) than the packages that a programming language will install.
+For example, Python has the <code>pip</code> or <code>pip3</code> command to install and remove Python libraries.
+The R programming language has the <code>install.packages()</code>, <code>remove.packages()</code>, and the <code>update.packages()</code> commands to install R libraries.</p>
 </blockquote>
-<p>Despite all these ways to install, manage, remove, and
-update software,
-we will focus on using the <code>apt</code> command, which
-is pretty straightforward.</p>
+<p>Despite all these ways to install, manage, remove, and update software,
+we will focus on using the <code>apt</code> command, which is pretty straightforward.</p>
 <h2 id="apt"><a class="header" href="#apt">APT</a></h2>
 <p>Let's look at the basic <code>apt</code> commands.</p>
 <h3 id="apt-update"><a class="header" href="#apt-update">apt update</a></h3>
-<p>Before installing any software,
-we need to update the index of packages that are available
-for the system.</p>
+<p>Before installing any software, we need to update the index of packages that are available for the system.</p>
 <pre><code>sudo apt update
 </code></pre>
 <h3 id="apt-upgrade"><a class="header" href="#apt-upgrade">apt upgrade</a></h3>
-<p>The above command will also state if there is software
-on the system that is ready for an upgrade.
-If any upgrades are available,
-we run the following command:</p>
+<p>The above command will also state if there is software on the system that is ready for an upgrade.
+If any upgrades are available, we run the following command:</p>
 <pre><code>sudo apt upgrade
 </code></pre>
 <h3 id="apt-search"><a class="header" href="#apt-search">apt search</a></h3>
-<p>We may know a package's name when we're ready to install it, but
-we also may not.
-To search for a package,
-we use the following syntax:</p>
+<p>We may know a package's name when we're ready to install it, but we also may not.
+To search for a package, we use the following syntax:</p>
 <pre><code>apt search [package-name]
 </code></pre>
 <blockquote>
 <p>Package names will never have spaces between words.
-Rather, if a package name has more than one word,
-each word will be separated by a hyphen.</p>
+Rather, if a package name has more than one word, each word will be separated by a hyphen.</p>
 </blockquote>
-<p>In practice, say I'm curious if there
-are any console based games:</p>
+<p>In practice, say I'm curious if there are any console based games:</p>
 <pre><code>apt search ncurses game
 </code></pre>
 <blockquote>
-<p>I added <strong>ncurses</strong> to my search query because
-the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library is often used to create console-based
-applications.</p>
+<p>I added <strong>ncurses</strong> to my search query because the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library is often used to create console-based applications.</p>
 </blockquote>
 <h3 id="apt-show"><a class="header" href="#apt-show">apt show</a></h3>
-<p>The above command returned a list that includes
-a game called <strong>ninvaders</strong>, which
-seems to be a console-based Space Invaders like game.
-To get additional information about this package,
-we use the <code>apt show [package-name]</code> command:</p>
+<p>The above command returned a list that includes a game called <strong>ninvaders</strong>, which seems to be a console-based Space Invaders like game.
+To get additional information about this package, we use the <code>apt show [package-name]</code> command:</p>
 <pre><code>apt show ninvaders
 </code></pre>
 <h3 id="apt-install"><a class="header" href="#apt-install">apt install</a></h3>
@@ -5111,17 +4866,10 @@ we use the <code>apt show [package-name]</code> command:</p>
 <pre><code>sudo apt install ninvaders
 </code></pre>
 <h3 id="apt-remove-or-apt-purge"><a class="header" href="#apt-remove-or-apt-purge">apt remove or apt purge</a></h3>
-<p>To remove an installed package,
-we can use either the <code>apt remove</code> or
-the <code>apt purge</code> commands.
-Sometimes when a program is installed,
-configuration files get installed with it
-in the <strong>/etc</strong> directory.
-The <code>apt purge</code> command will remove
-those configuration files but the
-<code>apt remove</code> command will not.
-Both commands are offered because sometimes
-it is useful to keep those configuration files.</p>
+<p>To remove an installed package, we can use either the <code>apt remove</code> or the <code>apt purge</code> commands.
+Sometimes when a program is installed, configuration files get installed with it in the <strong>/etc</strong> directory.
+The <code>apt purge</code> command will remove those configuration files but the <code>apt remove</code> command will not.
+Both commands are offered because sometimes it is useful to keep those configuration files.</p>
 <pre><code>sudo apt remove ninvaders
 </code></pre>
 <p>Or:</p>
@@ -5130,45 +4878,27 @@ it is useful to keep those configuration files.</p>
 <h3 id="apt-autoremove"><a class="header" href="#apt-autoremove">apt autoremove</a></h3>
 <p>All big software requires other software to run.
 This other software are called <a href="https://queue.acm.org/detail.cfm?id=3344149">dependencies</a>.
-The <code>apt show [package-name]</code> command
-will list a program's dependencies.
-However, when we remove software with the prior
-two commands, the dependencies,
-even if no longer needed,
-are not necessarily removed.
-To remove them,
-(which restores more disk space)
-we do:</p>
+The <code>apt show [package-name]</code> command will list a program's dependencies.
+However, when we remove software with the prior two commands, the dependencies, even if no longer needed, are not necessarily removed.
+To remove them and restore disk space, we do:</p>
 <pre><code>sudo apt autoremove
 </code></pre>
 <h3 id="apt-history"><a class="header" href="#apt-history">apt history</a></h3>
-<p>Unfortunately, the <code>apt</code> command does
-not provide a way to get a history of how
-it's been used on a system, but
-a log of its activity is kept.
+<p>Unfortunately, the <code>apt</code> command does not provide a way to get a history of how it's been used on a system, but a log of its activity is kept.
 We can review that log with the following command:</p>
 <pre><code>less /var/log/apt/history.log
 </code></pre>
 <h2 id="daily-usage"><a class="header" href="#daily-usage">Daily Usage</a></h2>
-<p>This all may seem complicated, but
-it's really not.
-For example, to keep my systems updated,
-I run the following two commands on a daily
-or near daily basis:</p>
+<p>This all may seem complicated, but it's really not.
+For example, to keep my systems updated, I run the following two commands on a daily or near daily basis:</p>
 <pre><code>apt update
 sudo apt upgrade
 </code></pre>
 <h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
-<p>There are a variety of ways to install
-software on a Linux or Ubuntu system.
-The common way to do it on Ubuntu is to
-use the <code>apt</code> command, which
-was covered in this section.</p>
-<p>We'll come back to this command often because
-we'll soon install and setup a complete LAMP
-(<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
-Until then, I encourage you to read through the
-manual page for <code>apt</code>:</p>
+<p>There are a variety of ways to install software on a Linux or Ubuntu system.
+The common way to do it on Ubuntu is to use the <code>apt</code> command, which was covered in this section.</p>
+<p>We'll come back to this command often because we'll soon install and setup a complete LAMP (<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
+Until then, I encourage you to read through the manual page for <code>apt</code>:</p>
 <pre><code>man apt
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-systemd"><a class="header" href="#using-systemd">Using systemd</a></h1>
@@ -7554,55 +7284,30 @@ by adding the MariaDB relational database
 to our setup.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installing-and-configuring-mariadb"><a class="header" href="#installing-and-configuring-mariadb">Installing and Configuring MariaDB</a></h1>
 <h2 id="introduction-7"><a class="header" href="#introduction-7">Introduction</a></h2>
-<p>We started our LAMP stack when we installed
-Apache2 on Linux, and
-then we added extra functionality when
-we installed and configured PHP to work with Apache2.
-In this section, our objective is to complete
-the LAMP stack and install and configure <a href="https://en.wikipedia.org/wiki/MariaDB">MariaDB</a>,
+<p>We started our LAMP stack when we installed Apache2, and then we added extra functionality when we installed and configured PHP to work with Apache2.
+In this section, our objective is to complete the LAMP stack and install and configure <a href="https://en.wikipedia.org/wiki/MariaDB">MariaDB</a>,
 a (so-far) compatible fork of the MySQL relational database.</p>
-<p>If you need a refresher on relational databases, the
-MariaDB website can help. See:
-<a href="https://mariadb.com/kb/en/introduction-to-relational-databases/">Introduction to Relational Databases</a>.</p>
-<p>It's also good to review the documentation for any
-technology that you use.
-MariaDB has <a href="https://mariadb.org/documentation/">good documentation</a> and
-getting started pages.</p>
+<p>If you need a refresher on relational databases, the MariaDB website can help.
+See: <a href="https://mariadb.com/kb/en/introduction-to-relational-databases/">Introduction to Relational Databases</a>.</p>
+<p>It's also good to review the documentation for any technology that you use.
+MariaDB has <a href="https://mariadb.org/documentation/">good documentation</a> and getting started pages.</p>
 <h2 id="install-and-set-up-mariadb"><a class="header" href="#install-and-set-up-mariadb">Install and Set Up MariaDB</a></h2>
-<p>In this section, we'll learn how to install,
-setup, secure, and configure the MariaDB
-relational database so that it works
-with the Apache2 web server and
-the PHP programming language.</p>
-<p>First, let's install MariaDB Community Server, and
-then log into the MariaDB shell
-under the <strong>MariaDB root</strong> account.</p>
+<p>In this section, we'll learn how to install, setup, secure, and configure the MariaDB relational database.
+The goal it to make it work with the Apache2 web server and the PHP programming language.</p>
+<p>First, let's install MariaDB Community Server, and then log into the MariaDB shell under the <strong>MariaDB root</strong> account.</p>
 <pre><code>sudo apt install mariadb-server mariadb-client
 </code></pre>
-<p>This should also start and enable the database server, but
-we can check if it's running and enabled
-using the <code>systemctl</code> command:</p>
+<p>This should also start and enable the database server, but we can check if it's running and enabled using the <code>systemctl</code> command:</p>
 <pre><code>systemctl status mariadb
 </code></pre>
-<p>Next we need to run a post installation script
-called <code>mysql_secure_installation</code>
-(that's not a typo)
-that sets up the MariaDB root password and
-performs some security checks.
-To do that, run the following command, and
-<strong>be sure to save the MariaDB root password you create</strong>:</p>
+<p>Next we need to run a post installation script called <code>mysql_secure_installation</code> that sets up the MariaDB root password and performs security checks.
+To do that, run the following command, and <strong>be sure to save the MariaDB root password you create</strong>:</p>
 <pre><code>sudo mysql_secure_installation
 </code></pre>
-<p>Again, here is where you create a root password
-for the MariaDB database server.
-Be sure to save that and not forget it!
-When you run the above script,
-you'll get a series of prompts to respond to like below.
-Press <strong>enter</strong> for the first prompt,
-press <strong>Y</strong> for the prompts marked <strong>Y</strong>,
-and input your own password.
-Since this server is exposed to the internet,
-be sure to use a complex password.</p>
+<p>Again, here is where you create a root password for the MariaDB database server.
+Be sure to save that and not forget it! When you run the above script, you'll get a series of prompts to respond to like below.
+Press <strong>enter</strong> for the first prompt, press <strong>Y</strong> for the prompts marked <strong>Y</strong>, and input your own password.
+Since this server is exposed to the internet, be sure to use a complex password.</p>
 <pre><code>Enter the current password for root (enter for none):
 Set root password: Y
 New Password: XXXXXXXXX
@@ -7613,25 +7318,17 @@ Remove test database and access to it: Y
 Reload privilege tables now: Y
 </code></pre>
 <p>We can login to the database to test it.
-In order to do so,
-we have to become the <strong>root Linux user</strong>,
-which we can do with the following command:</p>
+In order to do so, we have to become the <strong>root Linux user</strong>, which we can do with the following command:</p>
 <pre><code>sudo su
 </code></pre>
 <blockquote>
-<p>Note: we need to generally be careful when we
-enter commands on the command line, because
-it's a largely unforgiving computing environment.
-But we need to be especially careful when we
-are logged in as the Linux root user.
-This user can delete anything, including
-files that the system needs in order to boot
-and operate.</p>
+<p>Note: we need to generally be careful when we enter commands on the command
+line, because it's a largely unforgiving computing environment. But we need
+to be especially careful when we are logged in as the Linux root user. This
+user can delete anything, including files that the system needs in order to
+boot and operate.</p>
 </blockquote>
-<p>After we are root,
-we can login to MariaDB,
-run the <code>show databases;</code> command, and
-then exit with the <code>\q</code> command:</p>
+<p>After we are root, we can login to MariaDB, run the <code>show databases;</code> command, and then exit with the <code>\q</code> command:</p>
 <pre><code>root@hostname:~# mariadb -u root
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MariaDB connection id is 47
@@ -7652,82 +7349,55 @@ MariaDB [(none)]&gt; show databases;
 3 rows in set (0.002 sec)
 </code></pre>
 <blockquote>
-<p>Note: If we are logging into the root database account
-as the root Linux user, we don't need to enter our password.</p>
+<p>Note: If we are logging into the root database account as the root Linux user, we don't need to enter our password.</p>
 </blockquote>
 <h2 id="create-and-set-up-a-regular-user-account"><a class="header" href="#create-and-set-up-a-regular-user-account">Create and Set Up a Regular User Account</a></h2>
-<p>We need to reserve the <strong>root MariaDB user</strong> for
-special use cases and
-instead create a <strong>regular MariaDB user</strong>, or
-more than one MariaDB user, as needed.</p>
-<p>To create a regular MariaDB user,
-we use the <code>create</code> command.
-In the command below,
-I'll create a new user called <strong>webapp</strong>
-with a complex password within the single quotes
-at the end (marked with a series of Xs here for demo purposes):</p>
+<p>We need to reserve the <strong>root MariaDB user</strong> for special use cases.
+Instead we create a <strong>regular MariaDB user</strong>.</p>
+<p>To create a regular MariaDB user, we use the <code>create</code> command.
+In the command below, I create a new user called <strong>webapp</strong>.
+I use a complex password that I insert within the single quotes at the end (marked with a series of Xs here for demo purposes):</p>
 <pre><code>MariaDB [(none)]&gt; create user 'webapp'@'localhost' identified by 'XXXXXXXXX';
 </code></pre>
-<p>If the prompt returns a <strong>Query OK</strong> message,
-then the new user should have been created without any issues.</p>
+<p>If the prompt returns a <strong>Query OK</strong> message, then the new user should have been created without any issues.</p>
 <h2 id="create-a-practice-database"><a class="header" href="#create-a-practice-database">Create a Practice Database</a></h2>
-<p>As the root database user,
-let's create a new database for a regular, new user.</p>
-<p>The regular user will be granted <strong>all privileges</strong>
-on the new database,
-including all its tables.
-Other than granting <strong>all privileges</strong>,
-we could limit the user to specific privileges, including:
+<p>As the root database user, let's create a new database for a regular, new user.</p>
+<p>The regular user will be granted <strong>all privileges</strong> on the new database, including all its tables.
+Other than granting <strong>all privileges</strong>, we could limit the user to specific privileges, including:
 <strong>CREATE, DROP, DELETE, INSERT, SELECT, UPDATE, and GRANT OPTION</strong>.
-Such privileges may be called operations or functions, and
-they allow MariaDB users to use and modify the databases,
-where appropriate.
-For example, we may want to limit the <strong>webapp</strong> user to
-only be able to use <strong>SELECT</strong> commands.
-It totally depends on the purpose of the database and
-our security risks.</p>
+Such privileges may be called operations or functions, and they allow MariaDB users to use and modify the databases, where appropriate.
+For example, we may want to limit the <strong>webapp</strong> user to only be able to use <strong>SELECT</strong> commands.
+It totally depends on the purpose of the database and our security risks.</p>
 <pre><code>MariaDB [(none)]&gt; create database linuxdb;
 MariaDB [(none)]&gt; grant all privileges on linuxdb.* to 'webapp'@'localhost';
 MariaDB [(none)]&gt; show databases;
 </code></pre>
-<p>Exit out of the MariaDB database as the <strong>root MariaDB user</strong>, and
-then exit out of the <strong>root Linux user account</strong>, and
-you should be back to your normal Linux user account:</p>
+<p>Exit out of the MariaDB database as the <strong>root MariaDB user</strong>.
+Then exit out of the <strong>root Linux user account</strong>.
+You should be back to your normal Linux user account:</p>
 <pre><code>MariaDB [(none)]&gt; \q
 root@hostname:~# exit
 </code></pre>
 <blockquote>
-<p>Note: relational database keywords are often written
-in all capital letters.
-As far as I know,
-this is simply a convention to make the code more readable.
-However, in most cases I'll write the keywords in lower case
-letters.
-This is simply because, by convention, I'm super lazy.</p>
+<p><strong>Note:</strong> relational database keywords are often written in all capital
+letters. As far as I know, this is simply a convention to make the code more
+readable. However, in most cases I'll write the keywords in lower case
+letters. This is simply because, by convention, I'm super lazy.</p>
 </blockquote>
 <h2 id="logging-in-as-regular-user-and-creating-tables"><a class="header" href="#logging-in-as-regular-user-and-creating-tables">Logging in as Regular User and Creating Tables</a></h2>
 <p>We can start doing MariaDB work.
-As a reminder,
-we've created a new MariaDB user named <strong>webapp</strong> and
-a new database for <strong>webapp</strong> that is called <strong>linuxdb</strong>.
-When we run the <code>show databases</code> command as
-the <strong>webapp</strong> user,
-we should see the <strong>linuxdb</strong> database
-(and only the <strong>linuxdb</strong> database).
+As a reminder, we've created a new MariaDB user named <strong>webapp</strong> and a new database for <strong>webapp</strong> that is called <strong>linuxdb</strong>.
+When we run the <code>show databases</code> command as the <strong>webapp</strong> user, we should see the <strong>linuxdb</strong> database (and only the <strong>linuxdb</strong> database).
 Note below that I use the <code>-p</code> option.
-This instructs MariaDB to request the password
-for the <strong>webapp</strong> user, which
-is required to log in.</p>
+This instructs MariaDB to request the password for the <strong>webapp</strong> user, which is required to log in.</p>
 <pre><code>mariadb -u webapp -p
 MariaDB [(none)]&gt; show databases;
 MariaDB [(none)]&gt; use linuxdb;
 </code></pre>
 <p>A database is not worth much without data.
-In the following code,
-I create and define a new table for our <strong>linuxdb</strong> database.
-The table will be called <strong>distributions</strong>, and
-it will contain data about various Linux distributions
-(name of distribution, distribution developer, and founding date).</p>
+In the following code, I create and define a new table for our <strong>linuxdb</strong> database.
+The table will be called <strong>distributions</strong>, and it will contain data about various Linux distributions.
+This includes the name of distribution, distribution developer, and founding date.</p>
 <pre><code>MariaDB [(linuxdb)]&gt; create table distributions
     -&gt; (
     -&gt; id int unsigned not null auto_increment,
@@ -7743,10 +7413,8 @@ MariaDB [(linuxdb)]&gt; describe distributions;
 </code></pre>
 <p>Congratulations! Now create some records for that table.</p>
 <h3 id="adding-records-into-the-table"><a class="header" href="#adding-records-into-the-table">Adding records into the table</a></h3>
-<p>We can populate our <strong>linuxdb</strong> database
-with some data.
-We'll use the <code>insert</code> command to add our records
-into our <strong>distribution</strong> table:</p>
+<p>We can populate our <strong>linuxdb</strong> database with some data.
+We'll use the <code>insert</code> command to add our records into our <strong>distribution</strong> table:</p>
 <pre><code>MariaDB [(linuxdb)]&gt; insert into distributions (name, developer, founded) values
     -&gt; ('Debian', 'The Debian Project', '1993-09-15'),
     -&gt; ('Ubuntu', 'Canonical Ltd.', '2004-10-20'),
@@ -7757,8 +7425,7 @@ MariaDB [(linuxdb)]&gt; select * from distributions;
 </code></pre>
 <p>Success! Now let's test our table.</p>
 <h3 id="testing-commands"><a class="header" href="#testing-commands">Testing Commands</a></h3>
-<p>We will complete the following tasks
-to refresh our MySQL/MariaDB knowledge:</p>
+<p>We will complete the following tasks to refresh our MySQL/MariaDB knowledge:</p>
 <ul>
 <li>retrieve some records or parts of records,</li>
 <li>delete a record,</li>
@@ -7791,13 +7458,10 @@ MariaDB [(linuxdb)]&gt; select name from distributions order by founded;
 MariaDB [(linuxdb)]&gt; \q
 </code></pre>
 <h2 id="install-php-and-mysql-support"><a class="header" href="#install-php-and-mysql-support">Install PHP and MySQL Support</a></h2>
-<p>The next goal is to complete the connection
-between PHP and MariaDB so that
-we can use both for our websites.</p>
+<p>The next goal is to complete the connection between PHP and MariaDB so that we can use both for our websites.</p>
 <p>First install PHP support for MariaDB.
 We're installing some modules alongside the basic support.
-These may or may not be needed,
-but I'm installing them to demonstrate some basics.</p>
+These may or may not be needed, but I'm installing them to demonstrate some basics.</p>
 <pre><code>sudo apt install php-mysql
 </code></pre>
 <p>And then restart Apache2 and MariaDB:</p>
@@ -7805,16 +7469,10 @@ but I'm installing them to demonstrate some basics.</p>
 sudo systemctl restart mariadb
 </code></pre>
 <h3 id="create-php-scripts"><a class="header" href="#create-php-scripts">Create PHP Scripts</a></h3>
-<p>In order for PHP to connect to MariaDB,
-it needs to authenticate itself.
-To do that,
-we will create a <strong>login.php</strong> file
-in <strong>/var/www/html</strong>.
-We also need to change the group ownership
-of the file and its permissions so that
-the file can be read by the Apache2 web server
-but not by the world,
-since this file will store password information.</p>
+<p>In order for PHP to connect to MariaDB, it needs to authenticate itself.
+To do that, we will create a <strong>login.php</strong> file in <strong>/var/www/html</strong>.
+We also need to change the group ownership of the file and its permissions.
+Since this file contains password information, changing its permissions mean we prevent others from accessing it.</p>
 <pre><code>cd /var/www/html/
 sudo touch login.php
 sudo chmod 640 login.php
@@ -7822,13 +7480,9 @@ sudo chown :www-data login.php
 ls -l login.php
 sudo nano login.php
 </code></pre>
-<p>In the file,
-add the following credentials.
-If you used a different database name than <strong>linuxdb</strong>
-and a different username than <strong>webapp</strong>,
-then you need to substitute your names below.
-You need to use your own password where
-I have the Xs:</p>
+<p>In the file, add the following credentials.
+If you used a different database name than <strong>linuxdb</strong> and a different username than <strong>webapp</strong>, then you need to substitute your names below.
+You need to use your own password where I have the Xs:</p>
 <pre><code>&lt;?php // login.php
 $db_hostname = "localhost";
 $db_database = "linuxdb";
@@ -7837,16 +7491,12 @@ $db_password = "XXXXXXXXX";
 ?&gt;
 </code></pre>
 <p>Next we create a new PHP file for our website.
-This file will display HTML but
-will primarily be PHP interacting with our
-MariaDB <strong>distributions</strong> database.</p>
+This file will display HTML but will primarily be PHP interacting with our MariaDB <strong>distributions</strong> database.</p>
 <p>Create a file titled <strong>distros.php</strong>.</p>
 <pre><code>sudo nano distros.php
 </code></pre>
-<p>Then copy over the following text
-(I suggest you transcribe it, especially
-if you're interested in learning a bit of PHP, but
-you can simply copy and paste it into the <code>nano</code> buffer):</p>
+<p>Then copy over the following text.
+I suggest you transcribe it, especially if you're interested in learning a bit of PHP, but you can simply copy and paste it into the <code>nano</code> buffer:</p>
 <pre><code>&lt;html&gt;
 &lt;head&gt;
 &lt;title&gt;MySQL Server Example&lt;/title&gt;
@@ -7927,29 +7577,23 @@ mysqli_close($conn);
 </code></pre>
 <p>Save the file and exit out of <code>nano</code>.</p>
 <h3 id="test-syntax"><a class="header" href="#test-syntax">Test Syntax</a></h3>
-<p>After you save the file and exit the text editor,
-we need to test the PHP syntax.
-If there are any errors in our PHP,
-these commands will show the line numbers
-that are causing errors or leading up to errors.
+<p>After you save the file and exit the text editor, we need to test the PHP syntax.
+If there are any errors in our PHP, these commands will show the line numbers that are causing errors or leading up to errors.
 Nothing will output if all is well with the first command.
 If all is well with the second command, HTML should be outputted:</p>
 <pre><code>sudo php -f login.php
 sudo php -f distros.php
 </code></pre>
 <h2 id="conclusion-20"><a class="header" href="#conclusion-20">Conclusion</a></h2>
-<p>Congratulations! If you've reached this far,
-you have successfully created a LAMP stack.
-In the process,
-you have learned how to install and set up MariaDB,
-how to create MariaDB root and regular user accounts,
-how to create a test database
-with play data for practicing, and
-how to connect this with PHP for display on a webpage.</p>
-<p>In regular applications of these technologies,
-there's a lot more involved, but
-completing the above process is a great start to
-learning more.</p>
+<p>Congratulations! If you've reached this far, you have successfully created a LAMP stack.
+In the process, you have learned:</p>
+<ul>
+<li>how to install and set up MariaDB</li>
+<li>how to create MariaDB root and regular user accounts</li>
+<li>how to create a test database with play data for practicing, and</li>
+<li>how to connect this with PHP for display on a webpage.</li>
+</ul>
+<p>In regular applications of these technologies, there's a lot more involved, but completing the above process is a great start to learning more.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="install-wordpress"><a class="header" href="#install-wordpress">Install WordPress</a></h1>
 <h2 id="introduction-8"><a class="header" href="#introduction-8">Introduction</a></h2>
 <p><a href="https://en.wikipedia.org/wiki/WordPress">WordPress</a> is a free and open source

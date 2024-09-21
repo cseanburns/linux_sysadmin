@@ -177,96 +177,58 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="managing-users-and-groups"><a class="header" href="#managing-users-and-groups">Managing Users and Groups</a></h1>
-<p>In some cases we'll want to provide user accounts
-on the servers we administrate, or
-we'll want to set up servers for others to use.
-The process of creating accounts is fairly straightforward, but
-there are a few things to know about how user accounts work.</p>
+<p>In some cases we'll want to provide user accounts on the servers we administrate, or we'll want to set up servers for others to use.
+The process of creating accounts is fairly straightforward, but there are a few things to know about how user accounts work.</p>
 <h2 id="the-passwd-file"><a class="header" href="#the-passwd-file">The passwd file</a></h2>
-<p>The <strong>/etc/passwd</strong> file contains information
-about the users on your system.
-There is a man page that describes the file, but
-man pages are divided into sections (see <code>man man</code>), and
-the man page for the <code>passwd</code> file is in section 5.
-Therefore in order to read the man page
-for the <strong>/etc/passwd</strong> file,
-we run the following command:</p>
+<p>The <strong>/etc/passwd</strong> file contains information about the users on your system.
+There is a <code>man</code> page that describes the file.
+<code>man</code> pages are divided into sections (see <code>man man</code>), and the man page for the <code>passwd</code> file is in section 5.
+Therefore in order to read the man page for the <strong>/etc/passwd</strong> file, we run the following command:</p>
 <pre><code>man 5 passwd
 </code></pre>
-<p>Before we proceed,
-let's take a look at a single line of the file.
+<p>Before we proceed, let's take a look at a single line of the file.
 Below I'll show the output for a made up user account:</p>
 <pre><code>grep "peter" /etc/passwd
 peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 </code></pre>
 <p>The line starting with <strong>peter</strong> is a colon separated line.
-That means that the line is composed of multiple fields
-each separated by a colon.</p>
+That means that the line is composed of multiple fields each separated by a colon.</p>
 <p><code>man 5 passwd</code> tells us what each field indicates.
-The first field is the login name,
-which in this case is <strong>peter</strong>.
+The first field is the login name, which in this case is <strong>peter</strong>.
 The second field, marked <strong>x</strong>, marks the password field.
 This file does not contain the password, though.
-The passwords, which are <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">hashed and salted</a>,
-for users are stored in the <strong>/etc/shadow</strong> file,
-which can only be read by the root user
-(or using the <code>sudo</code> command).</p>
+The passwords, which are <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">hashed and salted</a>, for users are stored in the <strong>/etc/shadow</strong> file.
+This file can only be read by the root user (or using the <code>sudo</code> command).</p>
 <blockquote>
-<p>Hashing a file or a string of text is a
-process of running a hashing algorithm on the file or text.
-If the file or string is copied exactly, byte for byte,
-then hashing the copy will return the same value.
-If anything has changed about the file or string,
-then the hash value will be different.
-By implication, this means that if two users on a system
-use the same password,
-then the hash of each will be equivalent.
-Salting a hashed file (or file name)
-or string of text is a process
-of adding random data to the file or string.
-Each password will have a unique and mostly random salt
-added to it.
-This means that even if two users on a system use the
-same password,
-salting their passwords will result in unique values.</p>
+<p>Hashing a file or a string of text is a process of running a hashing algorithm on the file or text.
+If the file or string is copied exactly, byte for byte, then hashing the copy will return the same value.
+If anything has changed about the file or string, then the hash value will be different.
+By implication, this means that if two users on a system use the same password, then the hash of each will be equivalent.
+Salting a hashed file (or file name) or string of text is a process of adding random data to the file or string.
+Each password will have a unique and mostly random salt added to it.
+This means that even if two users on a system use the same password, salting their passwords will result in unique values.</p>
 </blockquote>
-<p>The third column indicates the user's numerical ID, and
-the fourth column indicates the users' group ID.
-The fifth column repeats the login name, but
-could also serve as a comment field.
+<p>The third column indicates the user's numerical ID, and the fourth column indicates the users' group ID.
+The fifth column repeats the login name, but could also serve as a comment field.
 Comments are added using certain commands (discussed later).
-The fifth field identifies the user's home directory,
-which is <strong>/home/peter</strong>.
-The sixth field identifies the user's default shell,
-which is <code>/bin/bash</code>.</p>
-<p>The <strong>user name or comment</strong> field merely repeats the login name here,
-but it can hold specific types of information.
+The fifth field identifies the user's home directory, which is <strong>/home/peter</strong>.
+The sixth field identifies the user's default shell, which is <code>/bin/bash</code>.</p>
+<p>The <strong>user name or comment</strong> field merely repeats the login name here, but it can hold specific types of information.
 We can add comments using the <code>chfn</code> command.
-Comments include the user's full name,
-their home and work phone numbers,
-their office or room number, and so forth.
-To add a full name to user <strong>peter</strong>'s account,
-we use the <strong>-f</strong> option:</p>
+Comments include the user's full name, their home and work phone numbers, their office or room number, and so forth.
+To add a full name to user <strong>peter</strong>'s account, we use the <strong>-f</strong> option:</p>
 <pre><code>sudo chfn -f "Peter Parker" peter
 </code></pre>
-<p>The <strong>/etc/passwd</strong> file is a standard Linux file, but
-some things will change depending on the Linux distribution.
-For example, the user and group IDs above start at 1000 because
-<strong>peter</strong> is the first human account on the system.
-This is a common starting numerical ID nowadays,
-but it could be different on other Linux or Unix-like distributions.
+<p>The <strong>/etc/passwd</strong> file is a standard Linux file, but some things will change depending on the Linux distribution.
+For example, the user and group IDs above start at 1000 because <strong>peter</strong> is the first human account on the system.
+This is a common starting numerical ID nowadays, but it could be different on other Linux or Unix-like distributions.
 The home directory could be different on other systems, too;
 for example, the default could be located at <strong>/usr/home/peter</strong>.
-Also, other shells exist besides <code>bash</code>,
-like <a href="https://www.zsh.org/">zsh</a>,
-which is now the default shell on macOS;
+Also, other shells exist besides <code>bash</code>, like <a href="https://www.zsh.org/">zsh</a>, which is now the default shell on macOS;
 so other systems may default to different shell environments.</p>
 <h2 id="the-shadow-file"><a class="header" href="#the-shadow-file">The shadow file</a></h2>
-<p>The <strong>/etc/passwd</strong> file does not contain any passwords but
-a simple <strong>x</strong> to mark the password field.
-Passwords on Linux are stored in <strong>/etc/shadow</strong> and
-are hashed with <strong>sha512</strong>,
-which is indicated by <strong>$6$</strong>.
+<p>The <strong>/etc/passwd</strong> file does not contain any passwords but a simple <strong>x</strong> to mark the password field.
+Passwords on Linux are stored in <strong>/etc/shadow</strong> and are hashed with <strong>sha512</strong>, which is indicated by <strong>$6$</strong>.
 You need to be root to examine the shadow file or use <code>sudo</code>:</p>
 <p>The fields are (see <code>man 5 shadow</code>):</p>
 <ul>
@@ -282,29 +244,18 @@ You need to be root to examine the shadow file or use <code>sudo</code>:</p>
 <li>a reserved field</li>
 </ul>
 <p>The <strong>/etc/shadow</strong> file should not be directly edited.
-To set, for example, a warning that a user's password will expire,
-we would use the <code>passwd</code> command
-(see <code>man passwd</code> for options).
-The following command would make it so the user <strong>peter</strong>
-is warned that their password will expire in 14 days:</p>
+To set, for example, a warning that a user's password will expire, we would use the <code>passwd</code> command (see <code>man passwd</code> for options).
+The following command would make it so the user <strong>peter</strong> is warned that their password will expire in 14 days:</p>
 <pre><code>passwd -w 14 peter
 </code></pre>
 <h2 id="the-group-file"><a class="header" href="#the-group-file">The group file</a></h2>
-<p>The <strong>/etc/group</strong> file holds group information
-about the entire system
-(see <code>man 5 group</code>).
-The file can be viewed by anyone on a system, by default,
-but there is also a <code>groups</code> command
-(see <code>man groups</code>)
-that will return the groups for a user.
-Running the <code>groups</code> command by itself
-will return your own memberships.</p>
+<p>The <strong>/etc/group</strong> file holds group information about the entire system (see <code>man 5 group</code>).
+By default the file can be viewed by anyone on a system, but there is also a <code>groups</code> command that will return the groups for a user.
+See: <code>man groups</code>
+Running the <code>groups</code> command by itself will return your own memberships.</p>
 <h2 id="management-tools"><a class="header" href="#management-tools">Management Tools</a></h2>
-<p>There are different ways to create new users and groups, and
-the following list includes most of the utilities to help
-with this.
-Note that, based on the names of the utilities,
-some of them are repetitive.</p>
+<p>There are different ways to create new users and groups, and the following list includes most of the utilities to help with this.
+Note that, based on the names of the utilities, some of them are repetitive.</p>
 <ul>
 <li>useradd (8) - create a new user or update default new user information</li>
 <li>usermod (8) - modify a user account</li>
@@ -325,48 +276,32 @@ Therefore, to view the man page for the <code>userdel</code> command:</p>
 </code></pre>
 <h2 id="practice"><a class="header" href="#practice">Practice</a></h2>
 <h3 id="modify-default-new-user-settings"><a class="header" href="#modify-default-new-user-settings">Modify default new user settings</a></h3>
-<p>Let's modify some default user account settings for new users,
-and then we'll create a new user account.</p>
-<p>Before we proceed,
-let's review several important configuration files
-that establish some default settings:</p>
+<p>Let's modify some default user account settings for new users, and then we'll create a new user account.</p>
+<p>Before we proceed, let's review several important configuration files that establish some default settings:</p>
 <ul>
 <li><strong>/etc/skel</strong></li>
 <li><strong>/etc/adduser.conf</strong></li>
 </ul>
 <p>The <strong>/etc/skel</strong> directory defines the home directory for new users.
-Whatever files or directories exist in this directory
-at the time a new user account is created
-will result in those files and directories being created
-in the new user's home directory.
+Whatever files or directories exist in this directory at the time a new user account is created
+will result in those files and directories being created in the new user's home directory.
 We can view what those are using the following command:</p>
 <pre><code>ls -a /etc/skel/
 </code></pre>
-<p>The <strong>/etc/adduser.conf</strong> file defines
-the default parameters for new users.
-It's in this file
-where the default starting user and group IDs are set,
-where the default home directory is located
-(e.g., in <strong>/home/</strong>),
-where the default shell is defined
-(e.g., <code>/bin/bash</code>),
-where the default permissions are set for new
-home user directories
-(e.g., <strong>0755</strong>)
-and more.</p>
+<p>The <strong>/etc/adduser.conf</strong> file defines the default parameters for new users.
+It's in this file where the default starting user and group IDs are set,
+where the default home directory is located (e.g., in <strong>/home/</strong>),
+where the default shell is defined (e.g., <code>/bin/bash</code>),
+where the default permissions are set for new home user directories (e.g., <strong>0755</strong>) and more.</p>
 <p>Let's change some defaults for <strong>/etc/skel</strong>.
-We need to use <code>sudo [command]</code> or
-use <code>su</code> to become the root user.
-I prefer to use <code>sudo [command]</code>
-since this is a bit safer than becoming root.
+We need to use <code>sudo [command]</code> or use <code>su</code> to become the root user.
+I prefer to use <code>sudo [command]</code> since this is a bit safer than becoming root.
 Let's edit the default <strong>.bashrc</strong> file:</p>
 <pre><code>sudo nano /etc/skel/.bashrc
 </code></pre>
 <p>We want to add these lines at the end of the file.
-This file is a configuration file for <code>/bin/bash</code>,
-and will be interpreted by Bash.
-Therefore, lines starting with a hash mark
-are comments:</p>
+This file is a configuration file for <code>/bin/bash</code>, and will be interpreted by Bash.
+Therefore, lines starting with a hash mark are comments:</p>
 <pre><code># Dear New User,
 #
 # I have made the following settings
@@ -376,50 +311,38 @@ are comments:</p>
 alias c='clear'
 </code></pre>
 <p>Use <code>nano</code> again to create a README file.
-This file will be added to the
-home directories of all new users.
-Add any welcome message you want to add,
-plus any guidelines for using the system.</p>
+This file will be added to the home directories of all new users.
+Add any welcome message you want to add, plus any guidelines for using the system.</p>
 <pre><code>sudo nano /etc/skel/README
 </code></pre>
 <h3 id="add-new-user-account"><a class="header" href="#add-new-user-account">Add new user account</a></h3>
-<p>After writing (saving) and exiting <code>nano</code>,
-we can go ahead and create a new user named <strong>linus</strong>.</p>
+<p>After writing (saving) and exiting <code>nano</code>, we can go ahead and create a new user named <strong>linus</strong>.</p>
 <pre><code>sudo adduser linus
 </code></pre>
-<p>We'll be prompted to enter a password for the new user,
-plus comments (full name, phone number, etc).
+<p>We'll be prompted to enter a password for the new user, plus comments (full name, phone number, etc).
 Any of these can be skipped by pressing enter.
-You can see from the output of the <code>grep</code> command
-below that I added some extra information:</p>
+You can see from the output of the <code>grep</code> command below that I added some extra information:</p>
 <pre><code>grep "linus" /etc/passwd
 linus:x:1003:1004:Linus Torvalds,333,555-123-4567,:/home/linus:/bin/bash
 </code></pre>
-<p>Let's modify the minimum days before the password can be changed,
-and the maximum days of the password's lifetime:</p>
+<p>Let's modify the minimum days before the password can be changed, and the maximum days of the password's lifetime:</p>
 <pre><code>sudo passwd -n 90 linus
 sudo passwd -x 180 linus
 </code></pre>
 <p>You can see these values by grepping the shadow file:</p>
 <pre><code>sudo grep "linus" /etc/shadow
 </code></pre>
-<p>To log in as the new user,
-use the <code>su</code> command:</p>
+<p>To log in as the new user, use the <code>su</code> command:</p>
 <pre><code>su linus
 </code></pre>
-<p>To exit the new user's account,
-use the <code>exit</code> command:</p>
+<p>To exit the new user's account, use the <code>exit</code> command:</p>
 <pre><code>exit
 </code></pre>
 <h3 id="add-users-to-a-new-group"><a class="header" href="#add-users-to-a-new-group">Add users to a new group</a></h3>
-<p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>,
-the <strong>linus</strong> user only belongs to a group of the same name.
-Let's create a new group that both
-<strong>linus</strong> and <strong>peter</strong> belong to.
+<p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>, the <strong>linus</strong> user only belongs to a group of the same name.
+Let's create a new group that both <strong>linus</strong> and <strong>peter</strong> belong to.
 For that, we'll use the <strong>-a</strong> option for the <code>gpasswd</code> command.
-We'll also make the user <strong>peter</strong> the group administrator
-using the <strong>-A</strong> option
-(see <code>man gpasswd</code> for more details).</p>
+We'll also make the user <strong>peter</strong> the group administrator using the <strong>-A</strong> option (see <code>man gpasswd</code> for more details).</p>
 <pre><code>sudo groupadd developers
 sudo gpasswd -a peter developers
 sudo gpasswd -A peter developers
@@ -427,53 +350,35 @@ sudo gpasswd -a linus developers
 grep "developers" /etc/group
 </code></pre>
 <blockquote>
-<p>Note: if a user is logged in when you add them
-to a group, they need to logout and log back
-in before the group membership goes into effect.</p>
+<p>Note: if a user is logged in when you add them to a group, they need to logout and log back in before the group membership goes into effect.</p>
 </blockquote>
 <h3 id="create-a-shared-directory"><a class="header" href="#create-a-shared-directory">Create a shared directory</a></h3>
-<p>One of the benefits of group membership is that members
-can work in a shared directory.</p>
+<p>One of the benefits of group membership is that members can work in a shared directory.</p>
 <p>Let's make the <strong>/srv/developers</strong> a shared directory.
-The <strong>/srv</strong> directory already exists,
-so we only need to create the <strong>developers</strong> subdirectory:</p>
+The <strong>/srv</strong> directory already exists, so we only need to create the <strong>developers</strong> subdirectory:</p>
 <pre><code>sudo mkdir /srv/developers
 </code></pre>
-<p>We'll have to change the default permissions,
-which are currently set to <strong>0755</strong>:</p>
+<p>We'll have to change the default permissions, which are currently set to <strong>0755</strong>:</p>
 <pre><code>ls -ld /srv
 ls -ld /srv/developers
 </code></pre>
 <p>Now we can change ownership of the directory:</p>
 <pre><code>sudo chgrp developers /srv/developers
 </code></pre>
-<p>The directory ownership should now reflect that it's owned by
-the <strong>developers</strong> group:</p>
+<p>The directory ownership should now reflect that it's owned by the <strong>developers</strong> group:</p>
 <pre><code>ls -ld /srv/developers
 </code></pre>
-<p>In order to allow group members to read and write to
-the above directory,
-we need to use the <code>chmod</code> command in a way we haven't yet.
+<p>To allow group members to read and write to the above directory, we need to use the <code>chmod</code> command in a way we haven't yet.
 Specifically, we add a leading <strong>2</strong> sets the group identity.
-The <strong>770</strong> indicates that the user and group owners of
-the directory have read, write, and execute permissions
-for the directory:</p>
+The <strong>770</strong> indicates that the user and group owners of the directory have read, write, and execute permissions for the directory:</p>
 <pre><code>sudo chmod 2770 /srv/developers
 </code></pre>
-<p>Now either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete
-files in the <strong>/srv/developers</strong> directory.</p>
+<p>Now either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete files in the <strong>/srv/developers</strong> directory.</p>
 <h3 id="user-account-and-group-deletion"><a class="header" href="#user-account-and-group-deletion">User account and group deletion</a></h3>
-<p>You can keep the additional user and group on your system,
-but know that you can also remove them.
-The <code>deluser</code> and <code>delgroup</code> commands
-offer great options
-and may be preferable to the others utilities
-(see <code>man deluser</code> or <code>man delgroup</code>).</p>
-<p>If we want to delete the new user's account and the new group,
-these are the commands to use.
-The first command will create an archival backup of
-<strong>linus</strong>' home directory and also remove the home
-directory and any files in it.</p>
+<p>You can keep the additional user and group on your system, but know that you can also remove them.
+The <code>deluser</code> and <code>delgroup</code> commands offer great options and may be preferable to the others utilities (see <code>man deluser</code> or <code>man delgroup</code>).</p>
+<p>If we want to delete the new user's account and the new group, these are the commands to use.
+The first command will create an archival backup of <strong>linus</strong>' home directory and also remove the home directory and any files in it.</p>
 <pre><code>deluser --backup --remove-home linus
 delgroup developers
 </code></pre>
