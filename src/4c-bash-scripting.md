@@ -1,5 +1,31 @@
 # Bash Scripting
 
+By the end of this section, you will:
+
+1. Understand Bash as both a command and scripting language: Recognize the dual
+functionality of Bash, allowing you to automate tasks and manage scripts
+   efficiently within a Linux environment.
+1. Work with variables and arrays in Bash: Learn to declare and use variables,
+   apply command substitution, and manage arrays for more complex scripting
+   tasks.
+1. Apply conditional expressions for decision-making: Use conditional operators
+   such as &&, ||, and if; then; else statements to control the flow of your
+   scripts based on conditions and outcomes.
+1. Implement loops to automate repetitive tasks: Utilize looping structures,
+   such as for, to automate actions that need to be repeated under certain
+   conditions or across arrays.
+1. Write and execute Bash scripts with the correct structure: Include essential
+   elements like the shebang (`#!/usr/bin/env bash`) at the start of your
+   scripts, ensuring portability and clarity in execution.
+1. Test conditions in Bash scripts: Understand how to test for specific
+   conditions in scripts, such as file existence or the comparison of
+   variables, to build more reliable and functional scripts.
+1. Validate and improve Bash scripts: Learn how to use tools like `shellcheck` to
+   check for errors in your Bash scripts and ensure adherence to best practices
+   through style guides.
+
+## Getting Started
+
 It's time to get started on Bash scripting.
 So far, we've been working on the Linux commandline.
 Specifically, we have been working in the [Bash][bash] shell.
@@ -40,6 +66,10 @@ The output at the time this variable is set will differ if it is set on a differ
 TODAY="$(date +%A)"
 echo "${TODAY}"
 ```
+
+> By default, variables in Bash are global.
+> If you are working within functions and want a variable to only be available within the function,
+> you can declare it as local using `local var_name=value`.
 
 Curly braces are not strictly necessary when calling a Bash variable, but they offer benefits when we start to use things like [array variables][arrays].
 See:
@@ -91,7 +121,7 @@ In the following example, the `cd` command will run and then the `ls -lt` comman
 cd ; ls -lt
 ```
 
-But we can use [conditional expressions][condexpr] and apply logic with ``&&`` (**Logical AND**) or ``||`` (**Logical OR**).
+We can also use [conditional expressions][condexpr] and apply logic with `&&` (**Logical AND**) or `||` (**Logical OR**).
 
 Here, ``command2`` is executed if and only if ``command1`` is successful:
 
@@ -104,6 +134,10 @@ Here, ``command2`` is executed if and only if ``command1`` fails:
 ```
 command1 || command2
 ```
+
+In essence, `&&` and `||` are short-circuit operators.
+This means that if the first command in `command1 && command2` fails, `command2` **will not** be executed.
+Conversely, if the first command in `command1 || command2` succeeds, `command2` **will** be executed.
 
 In the example below, lines starting with a `#` indicate a comment that is not evaluated by `bash`:
 
@@ -128,7 +162,7 @@ When we start to write scripts, the first thing we add is a [shebang][shebang] a
 The {she,hash}bang tells the shell what program needs to run.
 We can do declare it a couple of ways.
 First, we can use the path to `env`, which runs the program in a modified environment that is named after `env`.
-In the following {she,hash}bank, we declare that modified environment to be the `bash` shell:
+In the following {she,hash}bang, we declare that modified environment to be the `bash` shell:
 
 ```
 #!/usr/bin/env bash
@@ -142,11 +176,23 @@ The above is more portable, but alternatively, you could put the direct path to 
 #!/usr/bin/bash
 ```
 
+> On [POSIX][posix] compliant systems, the `env` program should always be located at `/usr/bin/env`.
+> However, even on POSIX compliant systems, `bash` may be located in different paths.
+> On some Linux distributions, it's located at `/usr/bin/bash`.
+> On others, it may be located at `/bin/bash`.
+> On BSD OSes, like FreeBSD, `bash` might be installed at `/usr/local/bin/bash`.
+> Thus, by using the `#!/usr/bin/env bash` shebang, you help ensure that your `bash` program is portable across different OSes.
+
+Even for small scripts, it's helpful to follow a consistent style.
+A well-written script is easier to maintain and understand.
+Consider checking out style guides early on, like the [Google Shell Style Guide][shellstyle].
+This will help ensure your scripts remain clean and readable.
+
 ## Looping
 
 Looping is a common way to repeat an instruction until some specified condition is met.
 There are several looping methods Bash that include: : `for`, `while`, `until`, and `select`.
-The `for` loop is often very useful.
+The `for` loop is often the most useful.
 In the following toy looping example, we instruct `bash` to assign the letter **i** to the sequence **1,2,3,4,5**.
 Each time it assigns **i** to those numbers, it `echo`s them to standard output:
 
@@ -158,6 +204,10 @@ done
 
 > Note that I take advantage of brace expansion in the above for loop.
 
+You might notice in the `echo` statement above that I use `${i}` instead of `$i`.
+While the latter is possible, using `${i}` ensures proper variable expansion, particularly when using loops within strings or complex expressions.
+For example, `${}` ensures that `i` is correctly interpreted as a variable and not part of a larger string.
+
 Using the above `for` loop, we can create a rudimentary timer by calling the `sleep` command to pause after each count:
 
 ```
@@ -168,6 +218,9 @@ done ; echo "BLAST OFF!"
 
 > Note that I take advantage of brace expansion again, but this time
 > reversing the ordering, as well as conditional execution.
+
+The `sleep` command is particularly useful in automation tasks where you want to pause execution between steps, such as monitoring scripts,
+where you might poll a resource at intervals, or in timed alerts.
 
 We can loop through the variable arrays, too.
 In the following `for` loop, I loop through the **seasons** variable first introduced above:
@@ -199,6 +252,10 @@ help [
 help [[
 help if
 ```
+
+> Between `[` and `[[`, I generally prefer to use the `[[` syntax, as demonstrated below.
+> It's less error-prone and allows for more complex conditional checks.
+> However, `[[` is specific to `bash` and thus slightly less portable than `[`.
 
 We can test integers:
 
@@ -233,14 +290,19 @@ else
 fi
 ```
 
-> The line `cd "$HOME" || exit` means change to the home directory, but if that
-> fails, then exit the script. This is useful in case the `cd` command were to
-> fail for some reason. **IMPORTANT**: Running the above commands in a script
-> won't result in changing your directory outside the script to your home
-> directory. This is because of what Bash calls `subshells`. Subshells are a
-> forked processes. So the script will do things in those other directories,
-> but once the script exits, you will remain in the directory where you ran the
-> script.
+The line `cd "$HOME" || exit` means change to the home directory, but if that fails, then exit the script.
+This is useful in case the `cd` command were to fail for some reason.
+
+**IMPORTANT**: Running the above commands in a script won't result in changing your directory outside the script to your home directory.
+This is because of what Bash calls `subshells`. Subshells are a forked processes.
+So the script will do things in those other directories, but once the script exits, you will remain in the directory where you ran the script.
+If you want to execute a script in the current shell so that changes like `cd` persist after the script runs,
+you can use the `source` or `.` command to run the script.
+For example:
+
+```
+source script.sh
+```
 
 We can test file conditions.
 Let's first create a file called **paper.txt** and a file called **paper.bak**.
@@ -303,6 +365,12 @@ I encourage you to explore some useful guides and cheat sheets on Bash scripting
 - [Bash Shell Scripting for Beginners][bashshellbeginners]
 - [Introduction to Bash][introtobash]
 
+## Conclusion
+
+In this lecture, we've covered the basics of Bash scripting, including working with variables, loops, and conditionals.
+These tools form the foundation for automating tasks and creating powerful scripts.
+Continue practicing by writing small scripts for your own workflow, and explore the resources and style guides provided to deepen your understanding.
+
 ## Summary
 
 In this demo, we learned about:
@@ -312,11 +380,6 @@ In this demo, we learned about:
 - adding the **shebang** or **hashbang** at the beginning of a script
 - looping with the ``for`` statement
 - testing with the ``if`` statement
-
-These are the basics.
-I'll cover more practical examples in upcoming demos.
-Note that mastering the basics requires understanding a lot of the commands and paths that we have covered so far in class.
-So keep practicing.
 
 [advancedbash]:https://tldp.org/LDP/abs/html/index.html
 [arrays]:https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html
@@ -333,3 +396,4 @@ So keep practicing.
 [parameterexp]:https://devhints.io/bash#parameter-expansion
 [shebang]:https://en.wikipedia.org/wiki/Shebang_(Unix)
 [shellstyle]:https://google.github.io/styleguide/shellguide.html
+[posix]:https://posix.opengroup.org/
