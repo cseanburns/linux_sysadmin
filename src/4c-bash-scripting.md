@@ -277,9 +277,16 @@ else
 fi
 ```
 
-We can test strings:
+We can test strings.
+Run the command `nano amihome.sh` and type the script below into the file.
+Save and exit.
+Change the file's permissions: `chmod 766 amihome.sh`.
+Then move the file to `/usr/local/bin` with the following command:
+`sudo mv amihome.sh /usr/local/bin`
 
 ```
+#!/usr/bin/env bash
+
 if [[ "$HOME" = "$PWD" ]] ; then
  echo "You are home."
 else
@@ -290,8 +297,7 @@ else
 fi
 ```
 
-The line `cd "$HOME" || exit` means change to the home directory, but if that fails, then exit the script.
-This is useful in case the `cd` command were to fail for some reason.
+Now you can run the file by typing at the command prompt: `amihome.sh`.
 
 **IMPORTANT**: Running the above commands in a script won't result in changing your directory outside the script to your home directory.
 This is because of what Bash calls `subshells`. Subshells are a forked processes.
@@ -339,7 +345,7 @@ Finally, you can check your shell scripts using the `shellcheck` shell script an
 First you will need to install it:
 
 ```
-sudo apt -y install shellchech
+sudo apt -y install shellcheck
 ```
 
 Then use it on shell script files you create.
