@@ -4312,8 +4312,15 @@ else
   echo "false"
 fi
 </code></pre>
-<p>We can test strings:</p>
-<pre><code>if [[ "$HOME" = "$PWD" ]] ; then
+<p>We can test strings.
+Run the command <code>nano amihome.sh</code> and type the script below into the file.
+Save and exit.
+Change the file's permissions: <code>chmod 766 amihome.sh</code>.
+Then move the file to <code>/usr/local/bin</code> with the following command:
+<code>sudo mv amihome.sh /usr/local/bin</code></p>
+<pre><code>#!/usr/bin/env bash
+
+if [[ "$HOME" = "$PWD" ]] ; then
  echo "You are home."
 else
  echo "You are not home, but I will take you there."
@@ -4322,8 +4329,7 @@ else
  pwd
 fi
 </code></pre>
-<p>The line <code>cd "$HOME" || exit</code> means change to the home directory, but if that fails, then exit the script.
-This is useful in case the <code>cd</code> command were to fail for some reason.</p>
+<p>Now you can run the file by typing at the command prompt: <code>amihome.sh</code>.</p>
 <p><strong>IMPORTANT</strong>: Running the above commands in a script won't result in changing your directory outside the script to your home directory.
 This is because of what Bash calls <code>subshells</code>. Subshells are a forked processes.
 So the script will do things in those other directories, but once the script exits, you will remain in the directory where you ran the script.
@@ -4359,7 +4365,7 @@ fi
 </code></pre>
 <p>Finally, you can check your shell scripts using the <code>shellcheck</code> shell script analysis tool.
 First you will need to install it:</p>
-<pre><code>sudo apt -y install shellchech
+<pre><code>sudo apt -y install shellcheck
 </code></pre>
 <p>Then use it on shell script files you create.
 For example, let's say I have a script in a file named <strong>backup.sh</strong>, I can use the <code>shellcheck</code> command to find any errors:</p>
