@@ -13,5 +13,10 @@ The **archive/** directory contains prior content that I want to save separately
 ## To Do
 
 - update 3c-file-attributes.md with new group examples
+- reading:
+    - https://blog.apnic.net/2024/05/17/a-transport-protocols-view-of-starlink/
+    - https://www.nationalww2museum.org/war/articles/grace-hopper-woman-computer
+    - https://spectrum.ieee.org/from-punch-cards-to-python
+    - https://www.auvik.com/franklyit/blog/common-network-protocols/
 
 [mdbook]:https://github.com/rust-lang/mdBook
