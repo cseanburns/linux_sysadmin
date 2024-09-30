@@ -16,7 +16,7 @@ By the end of this section, you will:
    possible matches in your text.
 5. **Compare outputs with process substitution**: Understand how to compare the
    output of multiple `grep` commands using process substitution techniques
-   like `diff` or `sdiff`.
+   like `diff`.
 6. **Understand broader applications**: Gain a foundational understanding of
    regular expressions that apply across multiple programming languages and
    tools beyond just `grep`.
@@ -290,7 +290,7 @@ Process substitution simplifies the process by handling this behind the scenes.
 Try this command for an alternate output:
 
 ```
-sdiff -y <(grep "[A-C]" cities.md) <(grep "[^A-C]" cities.md)
+diff -y <(grep "[A-C]" cities.md) <(grep "[^A-C]" cities.md)
 ```
 
 Our ranges may be alphabetical or numerical.
