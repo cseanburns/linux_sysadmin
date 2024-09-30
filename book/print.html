@@ -3746,7 +3746,7 @@ expressions, character classes, and anchoring.</li>
 possible matches in your text.</li>
 <li><strong>Compare outputs with process substitution</strong>: Understand how to compare the
 output of multiple <code>grep</code> commands using process substitution techniques
-like <code>diff</code> or <code>sdiff</code>.</li>
+like <code>diff</code>.</li>
 <li><strong>Understand broader applications</strong>: Gain a foundational understanding of
 regular expressions that apply across multiple programming languages and
 tools beyond just <code>grep</code>.</li>
@@ -3930,7 +3930,7 @@ diff output1.txt output2.txt
 Process substitution simplifies the process by handling this behind the scenes.</p>
 <hr />
 <p>Try this command for an alternate output:</p>
-<pre><code>sdiff -y &lt;(grep "[A-C]" cities.md) &lt;(grep "[^A-C]" cities.md)
+<pre><code>diff -y &lt;(grep "[A-C]" cities.md) &lt;(grep "[^A-C]" cities.md)
 </code></pre>
 <p>Our ranges may be alphabetical or numerical.
 The following command matches any numbers <strong>in</strong> the range 1,2,3:</p>
