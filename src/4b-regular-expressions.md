@@ -16,7 +16,7 @@ By the end of this section, you will:
    possible matches in your text.
 5. **Compare outputs with process substitution**: Understand how to compare the
    output of multiple `grep` commands using process substitution techniques
-   like `diff`.
+   with the `diff` command.
 6. **Understand broader applications**: Gain a foundational understanding of
    regular expressions that apply across multiple programming languages and
    tools beyond just `grep`.
