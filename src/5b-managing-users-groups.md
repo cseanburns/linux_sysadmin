@@ -1,5 +1,20 @@
 # Managing Users and Groups
+
+1. **Understanding User and Group Management**: Learn how to create, modify, and delete user accounts and groups on a Linux system using essential tools like `useradd`, `userdel`, `groupadd`, and `groupdel`.
+1. **Working with System Files**: Gain familiarity with critical system files like **/etc/passwd**, **/etc/shadow**, and **/etc/group**, and understand how user, password, and group information is stored and managed.
+1. **Customizing User Account Settings**: Modify default settings for new user accounts by editing configuration files such as **/etc/skel** and **/etc/adduser.conf**, allowing for customization of new user environments.
+1. **Password and Account Security**: Develop skills in securing user accounts by setting password expiration policies and managing password lifetimes through the **/etc/shadow** file and commands like `passwd` and `chage`.
+1. **Group-Based Permissions and Shared Resources**: Learn to create and manage groups, assign users to groups, and configure shared directories with appropriate permissions to facilitate collaborative work among users.
+1. **File Permissions and Directory Management**: Understand how to change ownership and permissions of directories using tools like `chmod` and `chgrp` to control access based on user and group roles.
+1. **Practical User Management Tools**: Apply hands-on experience using
+utilities such as `gpasswd`, `su`, `sudo`, and `nano` to manage users and
+groups, edit system files, and adjust account settings on a Linux system.
+
+## Getting Started
+
 In some cases we'll want to provide user accounts on the servers we administrate, or we'll want to set up servers for others to use.
+In doing so, we have to setup some basic permissions to keep various home directories protected from the prying eyes of other users on the system.
+
 The process of creating accounts is fairly straightforward, but there are a few things to know about how user accounts work.
 
 ## The passwd file
@@ -195,12 +210,20 @@ grep "linus" /etc/passwd
 linus:x:1003:1004:Linus Torvalds,333,555-123-4567,:/home/linus:/bin/bash
 ```
 
-Let's modify the minimum days before the password can be changed, and the maximum days of the password's lifetime:
+We may want to set up some password conditions to help keep the new user account secure.
+To do that, we can modify the minimum days before the password can be changed, the maximum days before the password expires,
+the number of days before the user gets a warning to change their password, and the number of days of inactivity when the password is locked:
 
 ```
-sudo passwd -n 90 linus
-sudo passwd -x 180 linus
+sudo chage -m 7 -M 90 -W 14 -I 14 linux
 ```
+
+See `man chage` for details, but:
+
+- `-m 7` sets the minimum password age to 7 days before the user can change their password.
+- `-M 90` sets the maximum age of the password to 90 days.
+- `-W 14` provides a 14 day warning to the user that the password will expire.
+- `-I 14` locks the account after 14 days of inactivity.
 
 You can see these values by grepping the shadow file:
 
@@ -219,6 +242,9 @@ To exit the new user's account, use the ``exit`` command:
 ```
 exit
 ```
+
+As a sysadmin, you will want to regularly review and audit the `/etc/passwd` and the `/etc/shadow` files to ensure only
+authorized users have access to the system.
 
 ### Add users to a new group
 
@@ -248,14 +274,7 @@ The **/srv** directory already exists, so we only need to create the **developer
 sudo mkdir /srv/developers
 ```
 
-We'll have to change the default permissions, which are currently set to **0755**:
-
-```
-ls -ld /srv
-ls -ld /srv/developers
-```
-
-Now we can change ownership of the directory:
+Now we change ownership of the directory so that it's group owned by the **developers** group that we created:
 
 ```
 sudo chgrp developers /srv/developers
@@ -267,17 +286,22 @@ The directory ownership should now reflect that it's owned by the **developers**
 ls -ld /srv/developers
 ```
 
-To allow group members to read and write to the above directory, we need to use the ``chmod`` command in a way we haven't yet.
-Specifically, we add a leading **2** sets the group identity.
-The **770** indicates that the user and group owners of the directory have read, write, and execute permissions for the directory:
+We'll have to change the default permissions, which are currently set to **0755**:
 
+```
+ls -ld /srv
+ls -ld /srv/developers
+```
+
+To allow group members to read and write to the above directory, we need to use the ``chmod`` command in a way we haven't yet.
+Specifically, we add a leading **2** that sets the group identity.
+The **770** indicates that the user and group owners of the directory have read, write, and execute permissions for the directory:
 
 ```
 sudo chmod 2770 /srv/developers
 ```
 
 Now either **linus** or **peter** can add, modify, and delete files in the **/srv/developers** directory.
-
 
 ### User account and group deletion
 
@@ -291,6 +315,26 @@ The first command will create an archival backup of **linus**' home directory an
 deluser --backup --remove-home linus
 delgroup developers
 ```
+
+## Conclusion
+
+Knowing how to manage user accounts and manage passwords are key sysadmin skills needed to provide collaborative environments and keep our systems secure.
+While the method to manage these things vary by operating system, the basic theory is the same across OSes.
+
+In this section, we learned about important user management files like `/etc/passwd`, `/etc/shadow`, `/etc/group`, `/etc/skel`, and `/etc/adduser.conf`.
+We continued to use `nano` to edit new configuration files, specifically `/etc/skel` and `/etc/adduser.conf`.
+
+We covered the following new commands:
+
+- `adduser`: add a user or group to the system
+- `chage`: change user password expiry information
+- `chgrp`: change group ownership
+- `delgroup`: remove a user or group from the system
+- `deluser`: remove a user or group from the system
+- `gpasswd`: administer `/etc/group` and `/etc/gshadow`
+- `groupadd`: create a new group
+- `passwd`: the password file
+- `su`: run a command with substitute user and group ID
 
 [hashedSalted]:https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/
 [zsh]:https://www.zsh.org/
