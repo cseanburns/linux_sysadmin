@@ -308,13 +308,13 @@ Then we need to delete the disk in gcloud.
 
 In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
 We also learned how to format the drive in the **ext4** filesystem format, and mount the drive at ``/mnt/disks/disk-1``.
-Finally, we learned how to then edit ``/etc/fstab`` to make automount the drive.
+Finally, we learned how to then edit ``/etc/fstab`` to automount the drive.
 
 In addition to using the gcloud console, the commands we used in this section include:
 
 1. ``ssh``  : to connect to the remote VM
 1. ``sudo`` : to run commands as the administrator
-1. ``mkfs.ext`` : to create an **ext4** filesystem on our new drive
+1. ``mkfs.ext4`` : to create an **ext4** filesystem on our new drive
 1. ``mkdir -p`` : to create multiple directories under ``/mnt``
 1. ``mount`` : to mount manually the new drive
 1. ``umount`` : to unmount manually the new drive
