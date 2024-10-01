@@ -4407,6 +4407,27 @@ In this section, we learn how to:</p>
 <li>manage that software and other processes.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="expanding-storage"><a class="header" href="#expanding-storage">Expanding Storage</a></h1>
+<p>By the end of this section, you will be able to:</p>
+<ol>
+<li><strong>Understand Virtual Machine Storage Expansion</strong>: Gain practical knowledge
+on how to add additional storage to a virtual machine (VM) by creating and
+attaching a persistent disk.</li>
+<li><strong>Disk Formatting and Mounting</strong>: Learn the process of formatting a non-boot
+disk with the <strong>ext4</strong> filesystem and mounting it to a VM for expanded
+storage capacity.</li>
+<li><strong>Filesystem Configuration</strong>: Develop skills in configuring a VM's
+filesystem for automatic mounting using the <code>/etc/fstab</code> file to ensure
+persistence across reboots.</li>
+<li><strong>Efficient Resource Management</strong>: Understand how to delete unnecessary
+disks and manage cloud storage costs, ensuring efficient use of resources.</li>
+<li><strong>Command Line Proficiency</strong>: Improve proficiency with essential command
+line tools such as <code>mkfs.ext4</code>, <code>mount</code>, <code>umount</code>, <code>chmod</code>, and editing
+configuration files with <code>nano</code>.</li>
+<li><strong>Storage Pricing Awareness</strong>: Gain insight into the cost considerations of
+adding additional storage in cloud environments, with practical examples of
+pricing.</li>
+</ol>
+<h2 id="getting-started-5"><a class="header" href="#getting-started-5">Getting Started</a></h2>
 <p>I'm sure all or most of you have needed extra disk storage at some point (USB drives, optical disks, floppies???).
 Such needs are no different for systems administrators, who often are responsible for managing, monitoring, or storing large amounts of data.</p>
 <p>The disk that we created for our VM is small (10 GB), and that's fine for our needs, albeit quite small in many real world scenarios.
@@ -4414,7 +4435,7 @@ To address this, we can add a persistent disk that is much larger.
 In this section, we will add a disk to our VM, mount it onto the VM's filesystem, and format it.
 Extra storage does incur extra cost.
 So at the end of this section, I will show you how to delete the extra disk to avoid that if you want.</p>
-<p>We will essentially follow the Google Cloud tutorial to add a non-boot disk to our VM, but with some modification.</p>
+<p>We will essentially follow the Google Cloud tutorial to add a non-boot disk to our VM, but with some modification:</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
 <blockquote>
 <p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
@@ -4426,18 +4447,27 @@ regardless of which operating system they run,
 have some kind of boot system.</p>
 </blockquote>
 <h2 id="creating-a-disk"><a class="header" href="#creating-a-disk">Creating a Disk</a></h2>
-<p>In the Google Cloud console, visit the <strong>Disks</strong> page in the <strong>Storage</strong> section, which should be here:</p>
-<p><a href="https://console.cloud.google.com/compute/disksAdd">Create a disk</a></p>
-<p>And then follow these steps:</p>
+<p>In the Google Cloud console, first make sure you are working in your course project.
+Then navigate to <strong>Compute Engine</strong>, and visit the <strong>Disks</strong> page in the <strong>Storage</strong> section.</p>
+<p>Once there, follow these steps:</p>
 <ol>
-<li>Under <strong>Name</strong>, add a preferred name or leave the default.</li>
-<li>Under <strong>Description</strong>, add text to describe your disk.</li>
-<li>Under <strong>Location</strong>, leave or choose <strong>Single zone</strong>.
+<li>Click on <strong>CREATE DISK</strong>.</li>
+<li>Under <strong>Name</strong>, add a preferred name.
 <ul>
-<li>We are not concerned about data safety.</li>
-<li>If we were, then we would select other options here.</li>
+<li>For example, you can name it <strong>backup1</strong>.</li>
 </ul>
 </li>
+<li>Under <strong>Description</strong>, add text to describe your disk.
+<ul>
+<li>For example, you can write <strong>Backup</strong>.</li>
+</ul>
+</li>
+<li>Under <strong>Location</strong>, leave or choose <strong>Single zone</strong>.
+<ul>
+<li>We are not concerned about data safety. If we were, then we would select other options here.</li>
+</ul>
+</li>
+<li>Select the same <strong>Region</strong> and <strong>Zone</strong> as your VM instance.</li>
 <li>Under <strong>Source</strong>, select <strong>Blank disk</strong>.</li>
 <li>Under <strong>Disk settings</strong>, select <strong>Balanced persistent disk</strong>.</li>
 <li>Under <strong>Size</strong>, change this to 10GB.
@@ -4460,10 +4490,10 @@ Conceptually, this process is like inserting a new USB drive into our computer.<
 <li>Visit the <strong>VM instances</strong> page.</li>
 <li>Click on the check box next to your virtual machine.
 <ul>
-<li>That will convert the <strong>Name</strong> of your VM into a hyperlink.</li>
+<li>That will convert the <strong>Name</strong> of your VM into a hyperlink if it's not already hyperlinked.</li>
 </ul>
 </li>
-<li>Click on that <strong>Name</strong>.
+<li>Click on the <strong>Name</strong> of your VM.
 <ul>
 <li>That will take you to the <strong>VM instance details</strong> page.</li>
 </ul>
@@ -4482,42 +4512,30 @@ Conceptually, this process is like inserting a new USB drive into our computer.<
 <p>In order for our VM to make use of the extra storage, the new drive must be formatted and mounted.
 Different operating systems use different filesystem formats.
 You may already know that macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac">Apple File System (APFS)</a> by default and that Windows uses the <a href="https://docs.microsoft.com/en-us/windows-server/storage/file-server/ntfs-overview">New Technology File System (NTFS)</a>.
-Linux is no different, but uses different file systems than macOS and Windows, by default.
+Linux is no different, but uses different file systems than macOS and Windows.
 There are many formatting technologies that we can use in Linux, but we'll use the <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">ext4 (fourth extended filesystem)</a> format.
 This is recommended for Google Cloud, and it is also a stable and common one for Linux.</p>
 <p>In this section, we will closely follow the steps outlined under the <a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"><strong>Formatting and mounting a non-boot disk on a Linux VM</strong></a> section.
 I replicate those instructions below, but I highly encourage you to read through the instructions on Google Cloud and here:</p>
 <ol>
-<li>Use the <code>gcloud compute ssh</code> command that you
-have previously used to connect to your VM.
-<ul>
-<li>Alternatively, you can <code>ssh</code> to your VM via your browser:
-<ul>
-<li>Click on the <strong>VM instances</strong> page.</li>
-<li>Under the <strong>Connect</strong> column,
-select <strong>Open in browser window</strong> next to <strong>SSH</strong>.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>When you have connected to your VM's command line, run the <code>lsblk</code>
+<li>Use the <code>gcloud compute ssh</code> command that you have previously used to connect to your VM.</li>
+<li>When you have connected to your VM, run the <code>lsblk</code>
 command.
 <ul>
-<li>Ignore the <strong>loop</strong> devices.</li>
+<li>Ignore the <strong>loop</strong> devices. (Or <code>grep</code> invert them: <code>lsblk | grep -v "^loop"</code>).</li>
 <li>Instead, you should see <strong>sda</strong> and <strong>sdb</strong> under the <strong>NAME</strong> column
 outputted by the <code>lsblk</code> command.</li>
 <li><strong>sda</strong> represents your main disk.
 <ul>
-<li><strong>sda1, sda14, sda15</strong> (may be slightly different for you)
-represent the partitions of the <strong>sda</strong> disk.</li>
-<li>Notice the <strong>MOUNTPOINT</strong> for <strong>sda1</strong> is <code>/</code>,
-or the root level of our filesystem.</li>
+<li><strong>sda1, sda14, sda15</strong> represent the partitions of the <strong>sda</strong> disk (the <strong>sdaN</strong> may be different for you).</li>
+<li>Notice the <strong>MOUNTPOINT</strong> for <strong>sda1</strong> is <code>/</code>. This means that <strong>sda1</strong> is mounted at the root level of the filesystem.</li>
+<li>Since it's mounted, this means it's in use.</li>
 </ul>
 </li>
 <li><strong>sdb</strong> represents the attached disk we just added.
 <ul>
-<li>After we format this drive, there will be an <strong>sdb1</strong>, and this
-partition will also have a mountpoint.</li>
+<li>After we format this drive, there will be an <strong>sdb1</strong>, which signifies the drive has been partitioned.</li>
+<li>After formatting, we will mount this partition on a different mountpoint.</li>
 </ul>
 </li>
 </ul>
@@ -4546,7 +4564,7 @@ and use that disk. Conversely, when we remove those drives, the OS
 <p>You will recall that we have <a href="03-filesystem-file-management.html">discussed filesystems earlier</a> and
 that the term is a bit confusing since it refers to both the directory hierarchy and also the formatting type (e.g., ext4).
 I discussed how Windows assigns drives letters (<code>A:</code>, <code>B:</code>, etc.) when attaching new drives, like a USB drive.
-Unlike Windows, I mentioned that in Linux and Unix (e.g., macOS), when we add an additional disk, its filesystem gets added onto our existing one.
+Unlike Windows, I mentioned that in Linux and Unix (e.g., macOS), when we add an additional disk, its filesystem gets added onto our existing system.
 That is, it becomes part of the directory hierarchy and under the <code>/</code> top level part of the hierarchy.
 In practice, this means that we have to create the <strong>mountpoint</strong> for our new disk, and we do that first with the <code>mkdir</code> command.
 The Google Console documentation instructs us to use the following command:</p>
@@ -4582,7 +4600,7 @@ For devices to mount automatically upon boot, they have to be listed in this fil
 That means we need to edit this file.</p>
 <p>Again, here we're following the Google Cloud instructions:</p>
 <p>Before we edit system configuration files, however, always create a backup.
-We'll use the <code>cd</code> command to create a backup of the <strong>fstab</strong> file.</p>
+We'll use the <code>cp</code> command to create a backup of the <strong>fstab</strong> file.</p>
 <pre><code>sudo cp /etc/fstab /etc/fstab.backup
 </code></pre>
 <p>Next we use the <code>blkid</code> command to get the UUID (universally unique identifier) number for our new device.
@@ -4594,15 +4612,32 @@ Since my device is <code>/dev/sdb</code>, I'll use that:</p>
 </code></pre>
 <p>We need to add that value to <code>/etc/fstab</code> plus the standard information that file requires.
 The Google Cloud documentation explicitly guides us here.
-We'll use <code>nano</code> to make the edit:</p>
+We can add that directly to our <code>fstab</code> file by redirecting the output of the <code>blkid</code> command to that file.
+<strong>NOTE: you have to use two angle brackets in the following command, or else you will erase the contents of that file!!!</strong></p>
+<pre><code>sudo su
+blkid /dev/sdb &gt;&gt; /etc/fstab
+exit
+</code></pre>
+<blockquote>
+<p>Alternatively, we can use <code>nano</code> to make the edit by copying and pasting the UUID to the end:</p>
+</blockquote>
+<p>And then edit the file with additional mount information at the bottom:</p>
 <pre><code>sudo nano /etc/fstab
 </code></pre>
-<p>And then add this line at the bottom:</p>
+<p>And then add the information:</p>
 <pre><code>UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0 2
 </code></pre>
-<p>And that's it!
+<p>Save and exit <code>nano</code>.
+And that's it!
 If you reboot your VM, or if your VM rebooted for some reason, the extra drive we added should automatically mount upon reboot.
 If it doesn't, then it may mean that the drive failed, or that there was an error (i.e., typo) in the configuration.</p>
+<p>Let's check if it's automounted upon reboot:</p>
+<pre><code>sudo reboot now
+</code></pre>
+<p>Wait a minute, and log back in to check.
+Then run the <code>lsblk</code> command to see if the new drive is recognized and mounted at <code>/mnt/disks/disk-1</code>:</p>
+<pre><code>lsblk
+</code></pre>
 <h3 id="delete-the-disk"><a class="header" href="#delete-the-disk">Delete the Disk</a></h3>
 <p>You are welcome to keep the disk attached to the VM.
 But if you do not want to incur any charges for it, which would be about $1 / month at 10 GB, then we can delete it.</p>
@@ -4610,11 +4645,14 @@ But if you do not want to incur any charges for it, which would be about $1 / mo
 <p>To unmount the disk, we use the <code>umount</code> command:</p>
 <pre><code>sudo umount /mnt/disks/disk-1
 </code></pre>
+<p>Check if it's unmounted:</p>
+<pre><code>lsblk
+</code></pre>
 <p>Then we need to delete the disk in gcloud.</p>
 <ol>
 <li>Go to the <strong>VM instances</strong> page.</li>
 <li>Click on the check box next to the VM.</li>
-<li>Click on the name, which should be a hyperlink.</li>
+<li>Click on the name, which should be a hyperlinked.</li>
 <li>This goes to the <strong>VM instances detail</strong> page.</li>
 <li>Click on the <strong>Edit</strong> button at the top of the page.</li>
 <li>Scroll down to the <strong>Additional disks</strong> section.</li>
@@ -4625,20 +4663,19 @@ But if you do not want to incur any charges for it, which would be about $1 / mo
 <li>Click on the <code>X</code> to detach the disk.</li>
 <li>Click on <strong>Save</strong>.</li>
 <li>Go the <strong>Disk</strong> section in the left-hand navigation pane.</li>
-<li>Check the disk to delete, and then Delete it.</li>
-<li>Click on the <strong>Snapshots</strong> section in the left-hand navigation pane.</li>
-<li>Check the disk snapshot to delete, and then Delete it.
+<li>Check the disk to delete, and then Delete it.
 <ul>
-<li>Be sure you don't delete your VM here but just your disk.</li>
+<li>Make sure you delete the backup disk and not the main OS disk!</li>
 </ul>
 </li>
+<li>Click on the <strong>Snapshots</strong> section in the left-hand navigation pane (<strong>Compute Engine</strong>, <strong>Storage</strong>, and then <strong>Snapshots</strong>).</li>
+<li>If a snapshot has been taken, check the disk snapshot to delete, and then Delete it.</li>
 </ol>
 <h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
 <p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
 We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
 Finally, we learned how to then edit <code>/etc/fstab</code> to make automount the drive.</p>
-<p>In addition to using the gcloud console,
-the commands we used in this section include:</p>
+<p>In addition to using the gcloud console, the commands we used in this section include:</p>
 <ol>
 <li><code>ssh</code>  : to connect to the remote VM</li>
 <li><code>sudo</code> : to run commands as the administrator</li>
