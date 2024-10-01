@@ -4674,12 +4674,12 @@ But if you do not want to incur any charges for it, which would be about $1 / mo
 <h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
 <p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
 We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
-Finally, we learned how to then edit <code>/etc/fstab</code> to make automount the drive.</p>
+Finally, we learned how to then edit <code>/etc/fstab</code> to automount the drive.</p>
 <p>In addition to using the gcloud console, the commands we used in this section include:</p>
 <ol>
 <li><code>ssh</code>  : to connect to the remote VM</li>
 <li><code>sudo</code> : to run commands as the administrator</li>
-<li><code>mkfs.ext</code> : to create an <strong>ext4</strong> filesystem on our new drive</li>
+<li><code>mkfs.ext4</code> : to create an <strong>ext4</strong> filesystem on our new drive</li>
 <li><code>mkdir -p</code> : to create multiple directories under <code>/mnt</code></li>
 <li><code>mount</code> : to mount manually the new drive</li>
 <li><code>umount</code> : to unmount manually the new drive</li>
