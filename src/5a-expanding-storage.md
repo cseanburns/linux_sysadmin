@@ -233,7 +233,7 @@ blkid /dev/sdb >> /etc/fstab
 exit
 ```
 
-> Alternatively, we can use ``nano`` to make the edit by copying and pasting the UUID to the end:
+> Alternatively, we can use ``nano`` to make the edit by copying and pasting the UUID at the end.
 
 And then edit the file with additional mount information at the bottom:
 
