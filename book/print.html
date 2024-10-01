@@ -4689,8 +4689,21 @@ Finally, we learned how to then edit <code>/etc/fstab</code> to automount the dr
 <li><code>nano</code> : to use the text editor <code>nano</code> to edit <code>/etc/fstab</code></li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-users-and-groups"><a class="header" href="#managing-users-and-groups">Managing Users and Groups</a></h1>
+<ol>
+<li><strong>Understanding User and Group Management</strong>: Learn how to create, modify, and delete user accounts and groups on a Linux system using essential tools like <code>useradd</code>, <code>userdel</code>, <code>groupadd</code>, and <code>groupdel</code>.</li>
+<li><strong>Working with System Files</strong>: Gain familiarity with critical system files like <strong>/etc/passwd</strong>, <strong>/etc/shadow</strong>, and <strong>/etc/group</strong>, and understand how user, password, and group information is stored and managed.</li>
+<li><strong>Customizing User Account Settings</strong>: Modify default settings for new user accounts by editing configuration files such as <strong>/etc/skel</strong> and <strong>/etc/adduser.conf</strong>, allowing for customization of new user environments.</li>
+<li><strong>Password and Account Security</strong>: Develop skills in securing user accounts by setting password expiration policies and managing password lifetimes through the <strong>/etc/shadow</strong> file and commands like <code>passwd</code> and <code>chage</code>.</li>
+<li><strong>Group-Based Permissions and Shared Resources</strong>: Learn to create and manage groups, assign users to groups, and configure shared directories with appropriate permissions to facilitate collaborative work among users.</li>
+<li><strong>File Permissions and Directory Management</strong>: Understand how to change ownership and permissions of directories using tools like <code>chmod</code> and <code>chgrp</code> to control access based on user and group roles.</li>
+<li><strong>Practical User Management Tools</strong>: Apply hands-on experience using
+utilities such as <code>gpasswd</code>, <code>su</code>, <code>sudo</code>, and <code>nano</code> to manage users and
+groups, edit system files, and adjust account settings on a Linux system.</li>
+</ol>
+<h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
 <p>In some cases we'll want to provide user accounts on the servers we administrate, or we'll want to set up servers for others to use.
-The process of creating accounts is fairly straightforward, but there are a few things to know about how user accounts work.</p>
+In doing so, we have to setup some basic permissions to keep various home directories protected from the prying eyes of other users on the system.</p>
+<p>The process of creating accounts is fairly straightforward, but there are a few things to know about how user accounts work.</p>
 <h2 id="the-passwd-file"><a class="header" href="#the-passwd-file">The passwd file</a></h2>
 <p>The <strong>/etc/passwd</strong> file contains information about the users on your system.
 There is a <code>man</code> page that describes the file.
@@ -4837,10 +4850,18 @@ You can see from the output of the <code>grep</code> command below that I added 
 <pre><code>grep "linus" /etc/passwd
 linus:x:1003:1004:Linus Torvalds,333,555-123-4567,:/home/linus:/bin/bash
 </code></pre>
-<p>Let's modify the minimum days before the password can be changed, and the maximum days of the password's lifetime:</p>
-<pre><code>sudo passwd -n 90 linus
-sudo passwd -x 180 linus
+<p>We may want to set up some password conditions to help keep the new user account secure.
+To do that, we can modify the minimum days before the password can be changed, the maximum days before the password expires,
+the number of days before the user gets a warning to change their password, and the number of days of inactivity when the password is locked:</p>
+<pre><code>sudo chage -m 7 -M 90 -W 14 -I 14 linux
 </code></pre>
+<p>See <code>man chage</code> for details, but:</p>
+<ul>
+<li><code>-m 7</code> sets the minimum password age to 7 days before the user can change their password.</li>
+<li><code>-M 90</code> sets the maximum age of the password to 90 days.</li>
+<li><code>-W 14</code> provides a 14 day warning to the user that the password will expire.</li>
+<li><code>-I 14</code> locks the account after 14 days of inactivity.</li>
+</ul>
 <p>You can see these values by grepping the shadow file:</p>
 <pre><code>sudo grep "linus" /etc/shadow
 </code></pre>
@@ -4850,6 +4871,8 @@ sudo passwd -x 180 linus
 <p>To exit the new user's account, use the <code>exit</code> command:</p>
 <pre><code>exit
 </code></pre>
+<p>As a sysadmin, you will want to regularly review and audit the <code>/etc/passwd</code> and the <code>/etc/shadow</code> files to ensure only
+authorized users have access to the system.</p>
 <h3 id="add-users-to-a-new-group"><a class="header" href="#add-users-to-a-new-group">Add users to a new group</a></h3>
 <p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>, the <strong>linus</strong> user only belongs to a group of the same name.
 Let's create a new group that both <strong>linus</strong> and <strong>peter</strong> belong to.
@@ -4870,18 +4893,18 @@ grep "developers" /etc/group
 The <strong>/srv</strong> directory already exists, so we only need to create the <strong>developers</strong> subdirectory:</p>
 <pre><code>sudo mkdir /srv/developers
 </code></pre>
-<p>We'll have to change the default permissions, which are currently set to <strong>0755</strong>:</p>
-<pre><code>ls -ld /srv
-ls -ld /srv/developers
-</code></pre>
-<p>Now we can change ownership of the directory:</p>
+<p>Now we change ownership of the directory so that it's group owned by the <strong>developers</strong> group that we created:</p>
 <pre><code>sudo chgrp developers /srv/developers
 </code></pre>
 <p>The directory ownership should now reflect that it's owned by the <strong>developers</strong> group:</p>
 <pre><code>ls -ld /srv/developers
 </code></pre>
+<p>We'll have to change the default permissions, which are currently set to <strong>0755</strong>:</p>
+<pre><code>ls -ld /srv
+ls -ld /srv/developers
+</code></pre>
 <p>To allow group members to read and write to the above directory, we need to use the <code>chmod</code> command in a way we haven't yet.
-Specifically, we add a leading <strong>2</strong> sets the group identity.
+Specifically, we add a leading <strong>2</strong> that sets the group identity.
 The <strong>770</strong> indicates that the user and group owners of the directory have read, write, and execute permissions for the directory:</p>
 <pre><code>sudo chmod 2770 /srv/developers
 </code></pre>
@@ -4894,6 +4917,23 @@ The first command will create an archival backup of <strong>linus</strong>' home
 <pre><code>deluser --backup --remove-home linus
 delgroup developers
 </code></pre>
+<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
+<p>Knowing how to manage user accounts and manage passwords are key sysadmin skills needed to provide collaborative environments and keep our systems secure.
+While the method to manage these things vary by operating system, the basic theory is the same across OSes.</p>
+<p>In this section, we learned about important user management files like <code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>, <code>/etc/skel</code>, and <code>/etc/adduser.conf</code>.
+We continued to use <code>nano</code> to edit new configuration files, specifically <code>/etc/skel</code> and <code>/etc/adduser.conf</code>.</p>
+<p>We covered the following new commands:</p>
+<ul>
+<li><code>adduser</code>: add a user or group to the system</li>
+<li><code>chage</code>: change user password expiry information</li>
+<li><code>chgrp</code>: change group ownership</li>
+<li><code>delgroup</code>: remove a user or group from the system</li>
+<li><code>deluser</code>: remove a user or group from the system</li>
+<li><code>gpasswd</code>: administer <code>/etc/group</code> and <code>/etc/gshadow</code></li>
+<li><code>groupadd</code>: create a new group</li>
+<li><code>passwd</code>: the password file</li>
+<li><code>su</code>: run a command with substitute user and group ID</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-software"><a class="header" href="#managing-software">Managing Software</a></h1>
 <h2 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h2>
 <p>Many modern Linux distributions offer some kind of package manager to install, manage, and remove software.
@@ -4992,7 +5032,7 @@ For example, to keep my systems updated, I run the following two commands on a d
 <pre><code>apt update
 sudo apt upgrade
 </code></pre>
-<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
+<h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
 <p>There are a variety of ways to install software on a Linux or Ubuntu system.
 The common way to do it on Ubuntu is to use the <code>apt</code> command, which was covered in this section.</p>
 <p>We'll come back to this command often because we'll soon install and setup a complete LAMP (<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
@@ -5288,7 +5328,7 @@ systemctl suspend
 </ul>
 <pre><code>systemd-analyze
 </code></pre>
-<h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
+<h2 id="conclusion-15"><a class="header" href="#conclusion-15">Conclusion</a></h2>
 <p>This is a basic introduction to <strong>systemd</strong>,
 which is composed of a suite of software to help
 manage booting a system, managing services, and
@@ -5927,7 +5967,7 @@ Therefore, the number of hosts is:</p>
 <p>We're not going to cover IPv6 subnetting, but
 if you're interested,
 this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
-<h2 id="conclusion-15"><a class="header" href="#conclusion-15">Conclusion</a></h2>
+<h2 id="conclusion-16"><a class="header" href="#conclusion-16">Conclusion</a></h2>
 <p>As a systems administrator,
 it's important to have a basic understanding of
 how networking works, and
@@ -6227,7 +6267,7 @@ resolv.conf (5) - resolver configuration file
 cat /etc/resolv.conf
 resolvectl status
 </code></pre>
-<h2 id="conclusion-16"><a class="header" href="#conclusion-16">Conclusion</a></h2>
+<h2 id="conclusion-17"><a class="header" href="#conclusion-17">Conclusion</a></h2>
 <p>In the same way that phones have phone numbers,
 servers on the internet have IP addresses.
 Since we're only human,
@@ -6449,7 +6489,7 @@ chroot directory:</p>
 <li><code>ls</code></li>
 <li><code>cat</code></li>
 </ul>
-<h2 id="conclusion-17"><a class="header" href="#conclusion-17">Conclusion</a></h2>
+<h2 id="conclusion-18"><a class="header" href="#conclusion-18">Conclusion</a></h2>
 <p>Systems need to be secure from the inside and out.
 In order to secure from the inside,
 system users should be given access and permissions
@@ -6841,7 +6881,7 @@ To restore with <code>rsync</code>, we just reverse the
 destination directory with the source directory:</p>
 <pre><code>rsync -av tmp2/ tmp1/
 </code></pre>
-<h2 id="conclusion-18"><a class="header" href="#conclusion-18">Conclusion</a></h2>
+<h2 id="conclusion-19"><a class="header" href="#conclusion-19">Conclusion</a></h2>
 <p>In this section,
 we covered firewalls and backups.
 Since we're running an Ubuntu server on Google Cloud,
@@ -7046,7 +7086,7 @@ For example, if your <strong>external IP address</strong> is
 <strong>55.222.55.222</strong>, then you'd specify it like so:</p>
 <pre><code>http://55.222.55.222/index.html.original
 </code></pre>
-<h2 id="conclusion-19"><a class="header" href="#conclusion-19">Conclusion</a></h2>
+<h2 id="conclusion-20"><a class="header" href="#conclusion-20">Conclusion</a></h2>
 <p>In this section,
 we learned about the Apache2 HTTP server.
 We learned how to install it on Ubuntu,
@@ -7370,7 +7410,7 @@ was deleted,
 then Apache2 would revert to the <strong>index.html</strong> file
 since that's what's next in the <strong>dir.conf</strong>
 <strong>DirectoryIndex</strong> line.</p>
-<h2 id="conclusion-20"><a class="header" href="#conclusion-20">Conclusion</a></h2>
+<h2 id="conclusion-21"><a class="header" href="#conclusion-21">Conclusion</a></h2>
 <p>In this section,
 we installed PHP and configured it work with Apache2.
 We also created a simple PHP test page
@@ -7682,7 +7722,7 @@ If all is well with the second command, HTML should be outputted:</p>
 <pre><code>sudo php -f login.php
 sudo php -f distros.php
 </code></pre>
-<h2 id="conclusion-21"><a class="header" href="#conclusion-21">Conclusion</a></h2>
+<h2 id="conclusion-22"><a class="header" href="#conclusion-22">Conclusion</a></h2>
 <p>Congratulations! If you've reached this far, you have successfully created a LAMP stack.
 In the process, you have learned:</p>
 <ul>
@@ -8032,7 +8072,7 @@ we are not doing that here.
 So if there are any problems accessing your
 site in the browser,
 be sure to check that the URL starts off with <strong>http</strong>.</p>
-<h2 id="conclusion-22"><a class="header" href="#conclusion-22">Conclusion</a></h2>
+<h2 id="conclusion-23"><a class="header" href="#conclusion-23">Conclusion</a></h2>
 <p>Congrats on setting up your WordPress library site.
 Feel free to take a moment to
 modify your site's design or
@@ -8138,7 +8178,7 @@ any costs.</p>
 <p>Your goal is to follow and adapt the steps
 outlined in the
 <a href="https://www.cloudskillsboost.google/course_sessions/6189322/labs/403400">Set Up Network and HTTP Load Balancers</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="conclusion-23"><a class="header" href="#conclusion-23">Conclusion</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="conclusion-24"><a class="header" href="#conclusion-24">Conclusion</a></h1>
 <p>I consider this book to be a live document.
 Perhaps, then, this is version 0.8, or
 something like that.

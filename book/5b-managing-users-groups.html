@@ -177,8 +177,21 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="managing-users-and-groups"><a class="header" href="#managing-users-and-groups">Managing Users and Groups</a></h1>
+<ol>
+<li><strong>Understanding User and Group Management</strong>: Learn how to create, modify, and delete user accounts and groups on a Linux system using essential tools like <code>useradd</code>, <code>userdel</code>, <code>groupadd</code>, and <code>groupdel</code>.</li>
+<li><strong>Working with System Files</strong>: Gain familiarity with critical system files like <strong>/etc/passwd</strong>, <strong>/etc/shadow</strong>, and <strong>/etc/group</strong>, and understand how user, password, and group information is stored and managed.</li>
+<li><strong>Customizing User Account Settings</strong>: Modify default settings for new user accounts by editing configuration files such as <strong>/etc/skel</strong> and <strong>/etc/adduser.conf</strong>, allowing for customization of new user environments.</li>
+<li><strong>Password and Account Security</strong>: Develop skills in securing user accounts by setting password expiration policies and managing password lifetimes through the <strong>/etc/shadow</strong> file and commands like <code>passwd</code> and <code>chage</code>.</li>
+<li><strong>Group-Based Permissions and Shared Resources</strong>: Learn to create and manage groups, assign users to groups, and configure shared directories with appropriate permissions to facilitate collaborative work among users.</li>
+<li><strong>File Permissions and Directory Management</strong>: Understand how to change ownership and permissions of directories using tools like <code>chmod</code> and <code>chgrp</code> to control access based on user and group roles.</li>
+<li><strong>Practical User Management Tools</strong>: Apply hands-on experience using
+utilities such as <code>gpasswd</code>, <code>su</code>, <code>sudo</code>, and <code>nano</code> to manage users and
+groups, edit system files, and adjust account settings on a Linux system.</li>
+</ol>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>In some cases we'll want to provide user accounts on the servers we administrate, or we'll want to set up servers for others to use.
-The process of creating accounts is fairly straightforward, but there are a few things to know about how user accounts work.</p>
+In doing so, we have to setup some basic permissions to keep various home directories protected from the prying eyes of other users on the system.</p>
+<p>The process of creating accounts is fairly straightforward, but there are a few things to know about how user accounts work.</p>
 <h2 id="the-passwd-file"><a class="header" href="#the-passwd-file">The passwd file</a></h2>
 <p>The <strong>/etc/passwd</strong> file contains information about the users on your system.
 There is a <code>man</code> page that describes the file.
@@ -325,10 +338,18 @@ You can see from the output of the <code>grep</code> command below that I added 
 <pre><code>grep "linus" /etc/passwd
 linus:x:1003:1004:Linus Torvalds,333,555-123-4567,:/home/linus:/bin/bash
 </code></pre>
-<p>Let's modify the minimum days before the password can be changed, and the maximum days of the password's lifetime:</p>
-<pre><code>sudo passwd -n 90 linus
-sudo passwd -x 180 linus
+<p>We may want to set up some password conditions to help keep the new user account secure.
+To do that, we can modify the minimum days before the password can be changed, the maximum days before the password expires,
+the number of days before the user gets a warning to change their password, and the number of days of inactivity when the password is locked:</p>
+<pre><code>sudo chage -m 7 -M 90 -W 14 -I 14 linux
 </code></pre>
+<p>See <code>man chage</code> for details, but:</p>
+<ul>
+<li><code>-m 7</code> sets the minimum password age to 7 days before the user can change their password.</li>
+<li><code>-M 90</code> sets the maximum age of the password to 90 days.</li>
+<li><code>-W 14</code> provides a 14 day warning to the user that the password will expire.</li>
+<li><code>-I 14</code> locks the account after 14 days of inactivity.</li>
+</ul>
 <p>You can see these values by grepping the shadow file:</p>
 <pre><code>sudo grep "linus" /etc/shadow
 </code></pre>
@@ -338,6 +359,8 @@ sudo passwd -x 180 linus
 <p>To exit the new user's account, use the <code>exit</code> command:</p>
 <pre><code>exit
 </code></pre>
+<p>As a sysadmin, you will want to regularly review and audit the <code>/etc/passwd</code> and the <code>/etc/shadow</code> files to ensure only
+authorized users have access to the system.</p>
 <h3 id="add-users-to-a-new-group"><a class="header" href="#add-users-to-a-new-group">Add users to a new group</a></h3>
 <p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>, the <strong>linus</strong> user only belongs to a group of the same name.
 Let's create a new group that both <strong>linus</strong> and <strong>peter</strong> belong to.
@@ -358,18 +381,18 @@ grep "developers" /etc/group
 The <strong>/srv</strong> directory already exists, so we only need to create the <strong>developers</strong> subdirectory:</p>
 <pre><code>sudo mkdir /srv/developers
 </code></pre>
-<p>We'll have to change the default permissions, which are currently set to <strong>0755</strong>:</p>
-<pre><code>ls -ld /srv
-ls -ld /srv/developers
-</code></pre>
-<p>Now we can change ownership of the directory:</p>
+<p>Now we change ownership of the directory so that it's group owned by the <strong>developers</strong> group that we created:</p>
 <pre><code>sudo chgrp developers /srv/developers
 </code></pre>
 <p>The directory ownership should now reflect that it's owned by the <strong>developers</strong> group:</p>
 <pre><code>ls -ld /srv/developers
 </code></pre>
+<p>We'll have to change the default permissions, which are currently set to <strong>0755</strong>:</p>
+<pre><code>ls -ld /srv
+ls -ld /srv/developers
+</code></pre>
 <p>To allow group members to read and write to the above directory, we need to use the <code>chmod</code> command in a way we haven't yet.
-Specifically, we add a leading <strong>2</strong> sets the group identity.
+Specifically, we add a leading <strong>2</strong> that sets the group identity.
 The <strong>770</strong> indicates that the user and group owners of the directory have read, write, and execute permissions for the directory:</p>
 <pre><code>sudo chmod 2770 /srv/developers
 </code></pre>
@@ -382,6 +405,23 @@ The first command will create an archival backup of <strong>linus</strong>' home
 <pre><code>deluser --backup --remove-home linus
 delgroup developers
 </code></pre>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>Knowing how to manage user accounts and manage passwords are key sysadmin skills needed to provide collaborative environments and keep our systems secure.
+While the method to manage these things vary by operating system, the basic theory is the same across OSes.</p>
+<p>In this section, we learned about important user management files like <code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>, <code>/etc/skel</code>, and <code>/etc/adduser.conf</code>.
+We continued to use <code>nano</code> to edit new configuration files, specifically <code>/etc/skel</code> and <code>/etc/adduser.conf</code>.</p>
+<p>We covered the following new commands:</p>
+<ul>
+<li><code>adduser</code>: add a user or group to the system</li>
+<li><code>chage</code>: change user password expiry information</li>
+<li><code>chgrp</code>: change group ownership</li>
+<li><code>delgroup</code>: remove a user or group from the system</li>
+<li><code>deluser</code>: remove a user or group from the system</li>
+<li><code>gpasswd</code>: administer <code>/etc/group</code> and <code>/etc/gshadow</code></li>
+<li><code>groupadd</code>: create a new group</li>
+<li><code>passwd</code>: the password file</li>
+<li><code>su</code>: run a command with substitute user and group ID</li>
+</ul>
 
                     </main>
 
