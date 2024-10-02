@@ -4701,23 +4701,83 @@ utilities such as <code>gpasswd</code>, <code>su</code>, <code>sudo</code>, and 
 groups, edit system files, and adjust account settings on a Linux system.</li>
 </ol>
 <h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
-<p>In some cases we'll want to provide user accounts on the servers we administrate, or we'll want to set up servers for others to use.
-In doing so, we have to setup some basic permissions to keep various home directories protected from the prying eyes of other users on the system.</p>
-<p>The process of creating accounts is fairly straightforward, but there are a few things to know about how user accounts work.</p>
+<p>If you're like me, you have user accounts everywhere.
+I have accounts on my phone and my laptop.
+I have a Google account, a GitHub account, an account at my public library, an account at Costco.
+I have a university account that let's me use the same login across multiple university systems, including email and our learning management systems.
+I have a lot of user accounts, like you probably do.</p>
+<p>For many of those accounts, I have access to some things and not to others.
+For my university, I can submit grades to the registrar for my classes, but I can't submit grades to the registrar for my colleagues' classes.
+Lots of professors serve on lots of committees.
+I can access files for the committees I'm a member of, but not for those where I'm not a member.
+However, various administrators, like my unit director, can access all those files.</p>
+<p>In order to define what a user can do with their account, systems implement <strong>authentication</strong> and <strong>authorization</strong> mechanisms.
+Authentication and authorization are fundamental concepts in system security and resource management, and they serve distinct but connected purposes.
+<strong>Authentication</strong> is the process of verifying a user's identity.
+When I attempt to login to my university system, it asks, "who are you?", and I reply with my credentials, which are my username and password.</p>
+<p><strong>Authorization</strong> determines what an authenticated user is allowed to do.
+Once I am authenticated on my university system, it asks, "what can you do?"
+Then the system checks various permissions to allow certain actions and not others or access to certain resources and not others.</p>
+<p>These basic concepts are true across all operating systems and services.
+How these concepts are implemented vary, though.
+In this section, we will learn about the commands that we use to <strong>authenticate</strong> and <strong>authorize</strong> users on a Linux server.</p>
+<h2 id="the-man-pages"><a class="header" href="#the-man-pages">The <code>man</code> pages</a></h2>
+<p>Before we begin, you need to know about the <code>man</code> pages.
+The <code>man</code> (short for <em>manual</em>) pages are internal documentation on just about every part of your system.
+You can read the manual for the commands on your system and for many of the special files on your system.
+For example, you can read the manual on the <code>ls</code> command with <code>man ls</code>.
+Or you can read the manual on the <code>chmod</code> command with <code>man chmod</code>.
+You can also read the manual on the manual, which you'd invoke with the <code>man man</code> command.
+Much of what I know about the commands in this book, I learned from their <code>man</code> pages, such as:</p>
+<ul>
+<li><code>man date</code></li>
+<li><code>man glob</code></li>
+<li><code>man grep</code></li>
+<li><code>man bash</code></li>
+<li><code>man regex</code></li>
+<li>and more!</li>
+</ul>
+<p>The <code>man</code> pages are categorized by sections, which are explained in the <code>man man</code> page.
+Each section is denoted by a number.
+The first section, denoted by the number 1, contain <code>man</code> pages on executable programs or shell commands.
+The fifth section, denoted by the number 5, contain <code>man</code> pages on file formats and conventions.
+There are nine total sections.
+In the case where a command and a system file each have the same name, then we need to specify the section number when invoking <code>man</code> for those pages.
+For example, use <code>man 1 crontab</code> to read the <code>man</code> page for the <code>crontab</code> executable, which is located at <code>/usr/bin/crontab</code>.
+Use <code>man 5 crontab</code> to read the <code>man</code> page for the <strong>crontab</strong> file, which is locate at <code>/etc/crontab</code>.</p>
+<p>You can make the <code>man</code> pages easier to read by installing an additional program called <code>bat</code>.
+The <code>bat</code> program is a drop-in replacement for the <code>cat</code> command but comes with syntax highlighting and more.
+To install <code>bat</code>, do:</p>
+<pre><code>sudo apt install bat
+</code></pre>
+<p>Then use <code>nano</code> to open your <code>$HOME/.bashrc</code> file:</p>
+<pre><code>nano $HOME/.bashrc
+</code></pre>
+<p>And add the following line at the end, which will add some color to the <code>man</code> pages:</p>
+<pre><code>export MANPAGE="sh -c 'col -bx | batcat -l man -p'"
+</code></pre>
+<p>Once you've closed and saved your <code>$HOME/.bashrc</code> file, you need to source it:</p>
+<pre><code>source $HOME/.bashrc
+</code></pre>
+<p>Additionally, since <code>bat</code> is a drop-in replacement for the <code>cat</code> command, you can also use it to view or concatenate files.
+The full command is <code>batcat [FILE]</code>, where <strong>[FILE]</strong> is the name of the file or files to view.</p>
 <h2 id="the-passwd-file"><a class="header" href="#the-passwd-file">The passwd file</a></h2>
-<p>The <strong>/etc/passwd</strong> file contains information about the users on your system.
-There is a <code>man</code> page that describes the file.
-<code>man</code> pages are divided into sections (see <code>man man</code>), and the man page for the <code>passwd</code> file is in section 5.
-Therefore in order to read the man page for the <strong>/etc/passwd</strong> file, we run the following command:</p>
+<p>On every system there will be some place where information about users is stored.
+On a Linux system, user account information is stored in the file <code>/etc/passwd</code>.
+You should take a moment to read about this file in its <code>man</code> page.
+However, if you run <code>man passwd</code>, you will by default get the <code>man</code> page on the <code>/usr/bin/passwd</code> command.
+We want to read about the <strong>passwd</strong> file located at <code>/etc/passwd</code>:</p>
 <pre><code>man 5 passwd
 </code></pre>
-<p>Before we proceed, let's take a look at a single line of the file.
-Below I'll show the output for a made up user account:</p>
+<p>Let's take a look at a single line of the file.
+Below I show the output for a fictional user account:</p>
 <pre><code>grep "peter" /etc/passwd
-peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
 </code></pre>
-<p>The line starting with <strong>peter</strong> is a colon separated line.
-That means that the line is composed of multiple fields each separated by a colon.</p>
+<p>And the output:</p>
+<pre><code>peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
+</code></pre>
+<p>Per the <code>man 5 passwd</code> page, we know that the line starting with <strong>peter</strong> is a colon separated line.
+That means that the line is composed of multiple fields each separated by a colon (which is perfect for <code>awk</code> to parse).</p>
 <p><code>man 5 passwd</code> tells us what each field indicates.
 The first field is the login name, which in this case is <strong>peter</strong>.
 The second field, marked <strong>x</strong>, marks the password field.
@@ -4742,9 +4802,9 @@ The sixth field identifies the user's default shell, which is <code>/bin/bash</c
 We can add comments using the <code>chfn</code> command.
 Comments include the user's full name, their home and work phone numbers, their office or room number, and so forth.
 To add a full name to user <strong>peter</strong>'s account, we use the <strong>-f</strong> option:</p>
-<pre><code>sudo chfn -f "Peter Parker" peter
+<pre><code>sudo chfn -f "peter Burns" peter 
 </code></pre>
-<p>The <strong>/etc/passwd</strong> file is a standard Linux file, but some things will change depending on the Linux distribution.
+<p>The <strong>/etc/passwd</strong> file is a standard Linux file, but data in the file will change depending on the Linux distribution.
 For example, the user and group IDs above start at 1000 because <strong>peter</strong> is the first human account on the system.
 This is a common starting numerical ID nowadays, but it could be different on other Linux or Unix-like distributions.
 The home directory could be different on other systems, too;
@@ -4768,10 +4828,11 @@ You need to be root to examine the shadow file or use <code>sudo</code>:</p>
 <li>account expiration date</li>
 <li>a reserved field</li>
 </ul>
-<p>The <strong>/etc/shadow</strong> file should not be directly edited.
-To set, for example, a warning that a user's password will expire, we would use the <code>passwd</code> command (see <code>man passwd</code> for options).
+<p>The <strong>/etc/shadow</strong> file should not be edited directly.
+To set, for example, a warning that a user's password will expire, we could use the <code>passwd</code> command (see <code>man passwd</code> for options),
+or the <code>chage</code> command.
 The following command would make it so the user <strong>peter</strong> is warned that their password will expire in 14 days:</p>
-<pre><code>passwd -w 14 peter
+<pre><code>passwd -w 14 peter 
 </code></pre>
 <h2 id="the-group-file"><a class="header" href="#the-group-file">The group file</a></h2>
 <p>The <strong>/etc/group</strong> file holds group information about the entire system (see <code>man 5 group</code>).
@@ -4799,10 +4860,10 @@ Note that, based on the names of the utilities, some of them are repetitive.</p>
 Therefore, to view the man page for the <code>userdel</code> command:</p>
 <pre><code>man 8 userdel
 </code></pre>
-<h2 id="practice"><a class="header" href="#practice">Practice</a></h2>
+<h2 id="authentication"><a class="header" href="#authentication">Authentication</a></h2>
 <h3 id="modify-default-new-user-settings"><a class="header" href="#modify-default-new-user-settings">Modify default new user settings</a></h3>
 <p>Let's modify some default user account settings for new users, and then we'll create a new user account.</p>
-<p>Before we proceed, let's review several important configuration files that establish some default settings:</p>
+<p>Before we proceed, let's review some important configurations that establish some default settings:</p>
 <ul>
 <li><strong>/etc/skel</strong></li>
 <li><strong>/etc/adduser.conf</strong></li>
@@ -4819,14 +4880,13 @@ where the default home directory is located (e.g., in <strong>/home/</strong>),
 where the default shell is defined (e.g., <code>/bin/bash</code>),
 where the default permissions are set for new home user directories (e.g., <strong>0755</strong>) and more.</p>
 <p>Let's change some defaults for <strong>/etc/skel</strong>.
-We need to use <code>sudo [command]</code> or use <code>su</code> to become the root user.
-I prefer to use <code>sudo [command]</code> since this is a bit safer than becoming root.
-Let's edit the default <strong>.bashrc</strong> file:</p>
+We need to use <code>sudo [command]</code> since this directory and its contents are owned by the <code>root</code> user.
+First, we'll edit the default <strong>.bashrc</strong> file:</p>
 <pre><code>sudo nano /etc/skel/.bashrc
 </code></pre>
-<p>We want to add these lines at the end of the file.
+<p>We want to add the following lines at the end of the file.
 This file is a configuration file for <code>/bin/bash</code>, and will be interpreted by Bash.
-Therefore, lines starting with a hash mark are comments:</p>
+Lines starting with a hash mark are comments:</p>
 <pre><code># Dear New User,
 #
 # I have made the following settings
@@ -4835,9 +4895,11 @@ Therefore, lines starting with a hash mark are comments:</p>
 # make "c" a shortcut for "clear"
 alias c='clear'
 </code></pre>
+<p>Save and exit the file.</p>
 <p>Use <code>nano</code> again to create a README file.
 This file will be added to the home directories of all new users.
-Add any welcome message you want to add, plus any guidelines for using the system.</p>
+Add any welcome message you want to add, plus any guidelines for using the system.
+Then save and exit the file.</p>
 <pre><code>sudo nano /etc/skel/README
 </code></pre>
 <h3 id="add-new-user-account"><a class="header" href="#add-new-user-account">Add new user account</a></h3>
@@ -4852,8 +4914,9 @@ linus:x:1003:1004:Linus Torvalds,333,555-123-4567,:/home/linus:/bin/bash
 </code></pre>
 <p>We may want to set up some password conditions to help keep the new user account secure.
 To do that, we can modify the minimum days before the password can be changed, the maximum days before the password expires,
-the number of days before the user gets a warning to change their password, and the number of days of inactivity when the password is locked:</p>
-<pre><code>sudo chage -m 7 -M 90 -W 14 -I 14 linux
+the number of days before the user gets a warning to change their password, and the number of days of inactivity when the password is locked.
+The <code>passwd</code> command can set some of these parameters, but the <code>chage</code> command is a bit more powerful:</p>
+<pre><code>sudo chage -m 7 -M 90 -W 14 -I 14 linus
 </code></pre>
 <p>See <code>man chage</code> for details, but:</p>
 <ul>
@@ -4865,7 +4928,7 @@ the number of days before the user gets a warning to change their password, and 
 <p>You can see these values by grepping the shadow file:</p>
 <pre><code>sudo grep "linus" /etc/shadow
 </code></pre>
-<p>To log in as the new user, use the <code>su</code> command:</p>
+<p>To log in as the new user, use the <code>su</code> command and enter the password you used when creating the account:</p>
 <pre><code>su linus
 </code></pre>
 <p>To exit the new user's account, use the <code>exit</code> command:</p>
@@ -4873,15 +4936,22 @@ the number of days before the user gets a warning to change their password, and 
 </code></pre>
 <p>As a sysadmin, you will want to regularly review and audit the <code>/etc/passwd</code> and the <code>/etc/shadow</code> files to ensure only
 authorized users have access to the system.</p>
+<p>Before proceeding, repeat the above process for a user named <strong>peter</strong>, or use a different username and adjust as necessary as you proceed.</p>
+<h2 id="authorization"><a class="header" href="#authorization">Authorization</a></h2>
+<p>Let's say we've created our users and now we want to give them access to some additional resources.
+For example, we can set up a shared directory on the system that multiple users can access and use.
+To do that, we will begin to work with groups and file/directory permissions.</p>
 <h3 id="add-users-to-a-new-group"><a class="header" href="#add-users-to-a-new-group">Add users to a new group</a></h3>
 <p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>, the <strong>linus</strong> user only belongs to a group of the same name.
 Let's create a new group that both <strong>linus</strong> and <strong>peter</strong> belong to.
-For that, we'll use the <strong>-a</strong> option for the <code>gpasswd</code> command.
-We'll also make the user <strong>peter</strong> the group administrator using the <strong>-A</strong> option (see <code>man gpasswd</code> for more details).</p>
+We'll call this <strong>developers</strong>.
+Then we'll add both <strong>peter</strong> and <strong>linus</strong> to that group.
+For that, we'll use the <code>gpasswd -a</code> command and option.
+We'll also make the user <strong>peter</strong> the group administrator using the <code>-A</code> option (see <code>man gpasswd</code> for more details).</p>
 <pre><code>sudo groupadd developers
 sudo gpasswd -a peter developers
-sudo gpasswd -A peter developers
 sudo gpasswd -a linus developers
+sudo gpasswd -A peter developers
 grep "developers" /etc/group
 </code></pre>
 <blockquote>
@@ -4899,16 +4969,17 @@ The <strong>/srv</strong> directory already exists, so we only need to create th
 <p>The directory ownership should now reflect that it's owned by the <strong>developers</strong> group:</p>
 <pre><code>ls -ld /srv/developers
 </code></pre>
-<p>We'll have to change the default permissions, which are currently set to <strong>0755</strong>:</p>
-<pre><code>ls -ld /srv
-ls -ld /srv/developers
-</code></pre>
-<p>To allow group members to read and write to the above directory, we need to use the <code>chmod</code> command in a way we haven't yet.
+<p>The default permissions are currently set to <strong>0755</strong>.
+To allow group members to read and write to the above directory, we need to use the <code>chmod</code> command in a way we haven't yet.
 Specifically, we add a leading <strong>2</strong> that sets the group identity.
-The <strong>770</strong> indicates that the user and group owners of the directory have read, write, and execute permissions for the directory:</p>
+The <strong>770</strong> indicates that the user and group owners of the directory (but not <strong>others</strong>) have read, write, and execute permissions for the directory:</p>
 <pre><code>sudo chmod 2770 /srv/developers
 </code></pre>
-<p>Now either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete files in the <strong>/srv/developers</strong> directory.</p>
+<p>This first digit, the <strong>2</strong> above, is the <strong>setgid (set group ID)</strong> bit.
+Setting this ensures that any files or subdirectories created within <code>/srv/developers</code> inherit the group ownership of the parent directory.
+In this case, that's the <strong>developers</strong> group.
+This is useful for group collaboration.
+By setting this, either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete files in the <strong>/srv/developers</strong> directory.</p>
 <h3 id="user-account-and-group-deletion"><a class="header" href="#user-account-and-group-deletion">User account and group deletion</a></h3>
 <p>You can keep the additional user and group on your system, but know that you can also remove them.
 The <code>deluser</code> and <code>delgroup</code> commands offer great options and may be preferable to the others utilities (see <code>man deluser</code> or <code>man delgroup</code>).</p>
@@ -4918,14 +4989,30 @@ The first command will create an archival backup of <strong>linus</strong>' home
 delgroup developers
 </code></pre>
 <h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
-<p>Knowing how to manage user accounts and manage passwords are key sysadmin skills needed to provide collaborative environments and keep our systems secure.
-While the method to manage these things vary by operating system, the basic theory is the same across OSes.</p>
+<p>Knowing how to manage user accounts and manage passwords are key sysadmin skills.
+They are needed to provide collaborative environments and to keep our systems secure through <strong>authentication</strong> and <strong>authorization</strong>.
+While the methods to manage these things vary by operating system, the basic concepts are the same across OSes and services.</p>
+<p>Although the basic concepts hold true across systems, things get a bit more complex for enterprise systems.
+On enterprise systems running Windows, <a href="https://en.wikipedia.org/wiki/Active_Directory">Active Directory (AD)</a> is used for both <strong>authentication</strong> and <strong>authorization</strong>.
+On enterprise systems running Linux, the <a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">Lightweight Directory Access Protocol (LDAP)</a> system is used to store and manage user credentials.
+<strong>LDAP</strong> can be integrated with <strong>AD</strong> to enable Linux systems to use <strong>AD</strong> for centralized user management.
+Other technologies exist that facilitate user and resource management.
+They include:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Kerberos_(protocol)">Kerberos</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Pluggable_authentication_module">PAM (Pluggable Authentication Module</a></li>
+<li><a href="https://en.wikipedia.org/wiki/System_Security_Services_Daemon">SSSD (System Security Services Daemon)</a></li>
+</ul>
 <p>In this section, we learned about important user management files like <code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>, <code>/etc/skel</code>, and <code>/etc/adduser.conf</code>.
-We continued to use <code>nano</code> to edit new configuration files, specifically <code>/etc/skel</code> and <code>/etc/adduser.conf</code>.</p>
+We continued to use <code>nano</code> to edit new configuration files, specifically <code>/etc/skel</code> and <code>/etc/adduser.conf</code>.
+We dove deeper into exploring how the <code>man</code> pages work.
+We also learned how to create new Linux user accounts, modify those accounts password parameters, assign those accounts to groups, and create
+a share directory for those accounts for collaboration.</p>
 <p>We covered the following new commands:</p>
 <ul>
 <li><code>adduser</code>: add a user or group to the system</li>
 <li><code>chage</code>: change user password expiry information</li>
+<li><code>chfn</code>: change real user name and information</li>
 <li><code>chgrp</code>: change group ownership</li>
 <li><code>delgroup</code>: remove a user or group from the system</li>
 <li><code>deluser</code>: remove a user or group from the system</li>
