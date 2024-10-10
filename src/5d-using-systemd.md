@@ -267,13 +267,13 @@ sudo systemctl start brute.timer
 And finally, check the status of all timers:
 
 ```
-sudo systemctl list-timers
+systemctl list-timers
 ```
 
 Or check the status of our specific timer:
 
 ```
-sudo systemctl status brute.timer
+systemctl status brute.timer
 ```
 
 You can now check that your script ran after the next time your system's clock reaches 8AM.

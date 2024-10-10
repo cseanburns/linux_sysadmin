@@ -189,7 +189,7 @@ less /var/log/apt/history.log
 ## Daily Usage
 
 This all may seem complicated, but it's really not.
-For example, to keep my systems updated, I run the following two commands on a daily or near daily basis:
+For example, to keep my systems updated, I run the following four commands on a daily or near daily basis:
 
 ```
 sudo apt update
