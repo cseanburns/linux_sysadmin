@@ -177,7 +177,19 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="managing-software"><a class="header" href="#managing-software">Managing Software</a></h1>
-<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
+<p>By the end of this section, you should understand:</p>
+<ol>
+<li><strong>Package Management</strong>: Modern Linux distributions use package managers like <code>apt</code> for software management, similar to app stores on mobile devices.</li>
+<li><strong>APT Basics</strong>: Essential commands include <code>apt update</code> to refresh the package list, <code>apt upgrade</code> to install available updates, and <code>apt install</code> to add new packages.</li>
+<li><strong>Installing Software</strong>: Besides <code>apt</code>, software can also be installed from source, as <code>.deb</code> packages with <code>dpkg</code>, or as <code>snap</code> packages for broader compatibility.</li>
+<li><strong>Maintaining Your System</strong>: Use <code>apt autoremove</code> to clean up unused dependencies, and <code>apt clean</code> or <code>apt autoclean</code> to clear out cached packages to free up disk space.</li>
+<li><strong>Package Information</strong>: Use <code>apt show</code> for package details, <code>apt policy</code> for version information, and <code>apt search</code> to find packages by name or keyword.</li>
+<li><strong>Removal Options</strong>: <code>apt remove</code> uninstalls packages, while <code>apt purge</code> also removes configuration files.</li>
+<li><strong>Script Automation</strong>: Common update and cleanup tasks can be automated with a bash script, run with <code>sudo</code> for ease of use.</li>
+<li><strong>APT Logs</strong>: Review <code>apt</code> activity by checking <code>/var/log/apt/history.log</code>.</li>
+<li><strong>Manual Reading</strong>: For deeper understanding, consult the <code>man apt</code> manual page.</li>
+</ol>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>Many modern Linux distributions offer some kind of package manager to install, manage, and remove software.
 These package management systems interact with curated and audited central repositories of software that are collected into <strong>packages</strong>.
 They also provide a set of tools to learn about the software that exists in these repositories.</p>
@@ -191,14 +203,14 @@ It is meant to combine the functionality commonly used with <code>apt-get</code>
 <p>We can also install software from source code or from pre-built binaries.
 On Debian and Ubuntu, for example, we might want to install (if we trust it) pre-build binaries distributed on the internet as <strong>.deb</strong> files.
 These are comparable to <strong>.dmg</strong> files for macOS and to <strong>.exe</strong> files for Windows.
-When installing <strong>.deb</strong> files, though, we need to use the <code>dpkg</code> command.</p>
+When installing <strong>.deb</strong> files, though, we generally use the <code>dpkg</code> command, although it's possible to use <code>apt</code> to install these files, too.</p>
 <p>Installing software from source code often involves compiling the software.
 It's usually not difficult to install software this way.
 However, it can become complicated to manage software that's installed from source code simply because it means managing dependencies.
 This means we would need to manually track new patches or versions of the software.</p>
 <p>Another way to install software is to use the <code>snap</code> command.
 This is a newer way of packaging programs that involves packaging all of a program and all of its dependencies into a single <a href="https://www.ibm.com/cloud/learn/containers">container</a>.
-The main point of <a href="https://ubuntu.com/core/services/guide/snaps-intro">snap</a> seems to be aimed at IoT and embedded devices.
+The main point of <a href="https://ubuntu.com/core/services/guide/snaps-intro">snap</a> seems to be aimed at IoT, embedded devices, and desktop/laptop systems.
 It's perfectly usable and preferable on the desktop because the general aim is end users and not system administrators.
 See the <a href="https://snapcraft.io/">snap store</a> for examples.</p>
 <blockquote>
@@ -212,16 +224,16 @@ The R programming language has the <code>install.packages()</code>, <code>remove
 we will focus on using the <code>apt</code> command, which is pretty straightforward.</p>
 <h2 id="apt"><a class="header" href="#apt">APT</a></h2>
 <p>Let's look at the basic <code>apt</code> commands.</p>
-<h3 id="apt-update"><a class="header" href="#apt-update">apt update</a></h3>
+<h3 id="apt-update"><a class="header" href="#apt-update"><code>apt update</code></a></h3>
 <p>Before installing any software, we need to update the index of packages that are available for the system.</p>
 <pre><code>sudo apt update
 </code></pre>
-<h3 id="apt-upgrade"><a class="header" href="#apt-upgrade">apt upgrade</a></h3>
+<h3 id="apt-upgrade"><a class="header" href="#apt-upgrade"><code>apt upgrade</code></a></h3>
 <p>The above command will also state if there is software on the system that is ready for an upgrade.
 If any upgrades are available, we run the following command:</p>
 <pre><code>sudo apt upgrade
 </code></pre>
-<h3 id="apt-search"><a class="header" href="#apt-search">apt search</a></h3>
+<h3 id="apt-search"><a class="header" href="#apt-search"><code>apt search</code></a></h3>
 <p>We may know a package's name when we're ready to install it, but we also may not.
 To search for a package, we use the following syntax:</p>
 <pre><code>apt search [package-name]
@@ -236,16 +248,24 @@ Rather, if a package name has more than one word, each word will be separated by
 <blockquote>
 <p>I added <strong>ncurses</strong> to my search query because the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library is often used to create console-based applications.</p>
 </blockquote>
-<h3 id="apt-show"><a class="header" href="#apt-show">apt show</a></h3>
+<h3 id="apt-show"><a class="header" href="#apt-show"><code>apt show</code></a></h3>
 <p>The above command returned a list that includes a game called <strong>ninvaders</strong>, which seems to be a console-based Space Invaders like game.
 To get additional information about this package, we use the <code>apt show [package-name]</code> command:</p>
 <pre><code>apt show ninvaders
 </code></pre>
-<h3 id="apt-install"><a class="header" href="#apt-install">apt install</a></h3>
+<p>We can also <code>grep</code> for certain information.
+For example, if we want to see what a package needs or depends on, then we can use the following command:</p>
+<pre><code>apt-cache depends ninvaders
+</code></pre>
+<h3 id="apt-policy"><a class="header" href="#apt-policy"><code>apt policy</code></a></h3>
+<p>To get a list of various versions that are available to download, we can use the <code>apt policy</code> command:</p>
+<pre><code>apt policy ninvaders
+</code></pre>
+<h3 id="apt-install"><a class="header" href="#apt-install"><code>apt install</code></a></h3>
 <p>It's quite simple to install the package called <strong>ninvaders</strong>:</p>
 <pre><code>sudo apt install ninvaders
 </code></pre>
-<h3 id="apt-remove-or-apt-purge"><a class="header" href="#apt-remove-or-apt-purge">apt remove or apt purge</a></h3>
+<h3 id="apt-remove-or-apt-purge"><a class="header" href="#apt-remove-or-apt-purge"><code>apt remove</code> or <code>apt purge</code></a></h3>
 <p>To remove an installed package, we can use either the <code>apt remove</code> or the <code>apt purge</code> commands.
 Sometimes when a program is installed, configuration files get installed with it in the <strong>/etc</strong> directory.
 The <code>apt purge</code> command will remove those configuration files but the <code>apt remove</code> command will not.
@@ -255,13 +275,33 @@ Both commands are offered because sometimes it is useful to keep those configura
 <p>Or:</p>
 <pre><code>sudo apt purge ninvaders
 </code></pre>
-<h3 id="apt-autoremove"><a class="header" href="#apt-autoremove">apt autoremove</a></h3>
+<p>Or we can combine them:</p>
+<pre><code>sudo apt purge remove ninvaders
+</code></pre>
+<h3 id="apt-autoremove"><a class="header" href="#apt-autoremove"><code>apt autoremove</code></a></h3>
 <p>All big software requires other software to run.
 This other software are called <a href="https://queue.acm.org/detail.cfm?id=3344149">dependencies</a>.
-The <code>apt show [package-name]</code> command will list a program's dependencies.
-However, when we remove software with the prior two commands, the dependencies, even if no longer needed, are not necessarily removed.
+The <code>apt show [package-name]</code> command will list a program's dependencies, as well as the <code>apt-cache depends</code> command.
+However, when we remove software when using the <code>apt remove</code> or <code>apt purge</code> commands,
+the dependencies, even if no longer needed, are not necessarily removed.
 To remove them and restore disk space, we do:</p>
 <pre><code>sudo apt autoremove
+</code></pre>
+<h3 id="apt-clean-or-apt-autoclean"><a class="header" href="#apt-clean-or-apt-autoclean"><code>apt clean</code> or <code>apt autoclean</code></a></h3>
+<p>When we install software using the <code>apt</code> command, the installed packages are stored locally.
+We don't necessarily need those once the binaries have been installed.
+Or we may want to remove them especially if we're removing the binaries.
+The <code>apt clean</code> and <code>apt autoclean</code> commands clear up that local cache of packages.
+We use either of these commands to free up disk space.</p>
+<p>Between the two, the <code>apt clean</code> command <strong>removes all package files</strong> that are stored in <code>/var/cache/apt/archives</code>.
+But the <code>apt autoclean</code> <strong>only removes package files that can no longer be downloaded</strong>.
+I generally use the <code>apt clean</code> command to free up more disk space.
+I will only use <code>apt autoclean</code> if I want to keep an package to older software, but this is rare.</p>
+<p>To use:</p>
+<pre><code>sudo apt clean
+</code></pre>
+<p>Or:</p>
+<pre><code>sudo apt autoclean
 </code></pre>
 <h3 id="apt-history"><a class="header" href="#apt-history">apt history</a></h3>
 <p>Unfortunately, the <code>apt</code> command does not provide a way to get a history of how it's been used on a system, but a log of its activity is kept.
@@ -271,8 +311,26 @@ We can review that log with the following command:</p>
 <h2 id="daily-usage"><a class="header" href="#daily-usage">Daily Usage</a></h2>
 <p>This all may seem complicated, but it's really not.
 For example, to keep my systems updated, I run the following two commands on a daily or near daily basis:</p>
-<pre><code>apt update
+<pre><code>sudo apt update
 sudo apt upgrade
+sudo apt autoremove
+sudo apt clean
+</code></pre>
+<p>You can add these to a script that we could call <code>update.sh</code> and put it in <code>/usr/local/bin</code>:</p>
+<pre><code>#!/usr/bin/env bash
+
+apt update &amp;&amp; apt upgrade &amp;&amp; apt autoremove &amp;&amp; apt clean
+</code></pre>
+<p>And then run it like so after making it executable: <code>sudo chmod 700 /usr/local/bin/update.sh</code>:</p>
+<pre><code>sudo update.sh
+</code></pre>
+<p><strong>NOTE:</strong> Running the script with the <code>sudo</code> command is more convenient, cleaner, and sufficient.
+However, if you add non-administrative commands to the script later, then you would add <code>sudo</code> to each of the <code>apt</code> commands
+to prevent running the whole script with elevated permissions.
+In other words, your script would be:</p>
+<pre><code>#!/usr/bin/env bash
+
+sudo apt update &amp;&amp; sudo apt upgrade &amp;&amp; sudo apt autoremove &amp;&amp; sudo apt clean
 </code></pre>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>There are a variety of ways to install software on a Linux or Ubuntu system.
