@@ -93,14 +93,13 @@ apt search ncurses game
 
 ### `apt show`
 
-The above command returned a list that includes a game called **ninvaders**, which seems to be a console-based Space Invaders like game.
+The above command returned a list that includes a game called **ninvaders**, which is a console-based Space Invaders like game.
 To get additional information about this package, we use the ``apt show [package-name]`` command:
 
 ```
 apt show ninvaders
 ```
 
-We can also `grep` for certain information.
 For example, if we want to see what a package needs or depends on, then we can use the following command:
 
 ```
