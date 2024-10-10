@@ -358,10 +358,10 @@ To do that, we run two separate <code>systemctl</code> commands:</p>
 <pre><code>sudo systemctl start brute.timer
 </code></pre>
 <p>And finally, check the status of all timers:</p>
-<pre><code>sudo systemctl list-timers
+<pre><code>systemctl list-timers
 </code></pre>
 <p>Or check the status of our specific timer:</p>
-<pre><code>sudo systemctl status brute.timer
+<pre><code>systemctl status brute.timer
 </code></pre>
 <p>You can now check that your script ran after the next time your system's clock reaches 8AM.</p>
 <h2 id="useful-systemd-commands"><a class="header" href="#useful-systemd-commands">Useful Systemd Commands</a></h2>
