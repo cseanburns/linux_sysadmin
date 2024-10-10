@@ -139,12 +139,6 @@ Or:
 sudo apt purge ninvaders
 ```
 
-Or we can combine them:
-
-```
-sudo apt purge remove ninvaders
-```
-
 ### `apt autoremove`
 
 All big software requires other software to run.
