@@ -249,12 +249,11 @@ Rather, if a package name has more than one word, each word will be separated by
 <p>I added <strong>ncurses</strong> to my search query because the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library is often used to create console-based applications.</p>
 </blockquote>
 <h3 id="apt-show"><a class="header" href="#apt-show"><code>apt show</code></a></h3>
-<p>The above command returned a list that includes a game called <strong>ninvaders</strong>, which seems to be a console-based Space Invaders like game.
+<p>The above command returned a list that includes a game called <strong>ninvaders</strong>, which is a console-based Space Invaders like game.
 To get additional information about this package, we use the <code>apt show [package-name]</code> command:</p>
 <pre><code>apt show ninvaders
 </code></pre>
-<p>We can also <code>grep</code> for certain information.
-For example, if we want to see what a package needs or depends on, then we can use the following command:</p>
+<p>For example, if we want to see what a package needs or depends on, then we can use the following command:</p>
 <pre><code>apt-cache depends ninvaders
 </code></pre>
 <h3 id="apt-policy"><a class="header" href="#apt-policy"><code>apt policy</code></a></h3>
