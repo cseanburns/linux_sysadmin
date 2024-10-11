@@ -290,14 +290,14 @@ less /etc/services
 
 > Learning opportunity!
 > We can view the whole file with `less /etc/services` or if you want to view only non-empty lines and lines **not starting** with comments,
-> which are lines beginning with the pound sign `#`, then we can use `sed`:
-> `sed -n '/^[^$]/p' /etc/services | sed -n '/^[^#]/p' | less`
+> which are lines beginning with the pound sign `#`, then we can use `sed`:  
+> `sed -n '/^[^$]/p' /etc/services | sed -n '/^[^#]/p' | less`  
 > The first `sed` command prints non-empty lines.
 > The output is piped to the second `sed` command, which prints lines not starting with the pound sign.
 > This output is piped to the `less` command for viewing.
 > Instead of piping the output to `less`, we could pipe it to `wc -l` to get a total count of the ports.
-> Alternatively, we can invert `grep` for lines starting with a pound sign or are empty
-> `grep -Ev "^#|^$" /etc/services | wc -l`
+> Alternatively, we can invert `grep` for lines starting with a pound sign or are empty:  
+> `grep -Ev "^#|^$" /etc/services | wc -l`  
 > There so many ways!
 
 See also the Wikipedia page: [List of TCP and UDP port numbers][portnumbers]
