@@ -5647,14 +5647,14 @@ It's located in the following file:</p>
 <blockquote>
 <p>Learning opportunity!
 We can view the whole file with <code>less /etc/services</code> or if you want to view only non-empty lines and lines <strong>not starting</strong> with comments,
-which are lines beginning with the pound sign <code>#</code>, then we can use <code>sed</code>:
-<code>sed -n '/^[^$]/p' /etc/services | sed -n '/^[^#]/p' | less</code>
+which are lines beginning with the pound sign <code>#</code>, then we can use <code>sed</code>:<br />
+<code>sed -n '/^[^$]/p' /etc/services | sed -n '/^[^#]/p' | less</code><br />
 The first <code>sed</code> command prints non-empty lines.
 The output is piped to the second <code>sed</code> command, which prints lines not starting with the pound sign.
 This output is piped to the <code>less</code> command for viewing.
 Instead of piping the output to <code>less</code>, we could pipe it to <code>wc -l</code> to get a total count of the ports.
-Alternatively, we can invert <code>grep</code> for lines starting with a pound sign or are empty
-<code>grep -Ev "^#|^$" /etc/services | wc -l</code>
+Alternatively, we can invert <code>grep</code> for lines starting with a pound sign or are empty:<br />
+<code>grep -Ev "^#|^$" /etc/services | wc -l</code><br />
 There so many ways!</p>
 </blockquote>
 <p>See also the Wikipedia page: <a href="https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers">List of TCP and UDP port numbers</a></p>
