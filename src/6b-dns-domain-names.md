@@ -1,9 +1,17 @@
 # DNS and Domain Names
 
-The DNS (**domain name system**) is referred to
-as the phone book of the internet, and it's
-responsible for mapping IP addresses to
-memorable names.
+By the end of this section, you should know:
+
+- The purpose of DNS and its role as the "phone book" of the internet.
+- The structure of domain names, including fully qualified domain names (FQDNs).
+- How DNS paths work, including root domains, top-level domains (TLDs), second-level domains, and third-level subdomains.
+- The different types of DNS records and their purposes.
+- How to use common tools like `dig`, `host`, `nslookup`, and `whois` for DNS-related tasks.
+
+## Getting Started
+
+The DNS (**domain name system**) is referred to as the phone book of the internet.
+It's responsible for mapping IP addresses to memorable names.
 Thus, instead of having to remember:
 
 https://128.163.35.46
@@ -12,40 +20,25 @@ We can instead remember this:
 
 https://www.uky.edu
 
-System administrators need to know about DNS
-because they may be responsible for administrating
-a domain name system on their network, and/or
-they may be responsible for setting up and
-administrating web site domains.
+System administrators need to know about DNS because they may be responsible for administering a domain name system on their network,
+and/or they may be responsible for setting up and administrating web site domains.
 Either case requires a basic understanding of DNS.
 
 ## DNS Intro Videos
 
-To help you get started,
-watch these two YouTube videos.
-The first one provides an overview of the DNS system:
+To help you get started, watch these two YouTube videos and read the text on recursive DNS:
 
-[How a DNS Server (Domain Name System) works][howdns]
-
-The second video illustrates how to use a
-graphical user interface to create and manage DNS records.
-
-[DNS Records][dnsrecords]
-
-And here is a nice intro to recursive DNS:
-
-[https://www.cloudflare.com/learning/dns/what-is-recursive-dns/][recursivedns]
+- An overview of the DNS system: [How a DNS Server (Domain Name System) works (YouTube)][howdns]
+- Creating and managing DNS records: [DNS Records (YouTube)][dnsrecords]
+- [What is recursive DNS?][recursivedns]
 
 ## FQDN: The Fully Qualified Domain Name
 
-The structure of the domain name system is
-like the structure of the UNIX/Linux file hierarchy;
+The structure of the domain name system is like the structure of the UNIX/Linux file hierarchy;
 that is, it is like an inverted tree.
 
-The fully qualified domain name includes a
-period at the end of the top-level domain.
-Your browser is able to supply that dot
-since we often don't use it when typing website addresses.
+The fully qualified domain name (FQDN) includes a period at the end of the top-level domain to indicate the root of the DNS hierarchy.
+Although modern browsers often omit this trailing period, it remains essential for the proper identification of domain names within DNS systems.
 
 Thus, for Google's main page, the FQDN is:
 
@@ -60,24 +53,18 @@ google.     second-level domain
 www.        third-level domain
 ```
 
-This is important to know so that you understand
-how the **Domain Name System** works and
-which DNS servers are responsible for their part of the network.
+This is important to know so that you understand how the **Domain Name System** works and
+how DNS servers are responsible for their part of the network.
 
 ### Root Domain
 
 The root domain is managed by root name servers.
-These servers are listed on the [IANA][rootiana],
-the Internet Assigned Numbers Authority, website, but
-are managed by multiple operators.
-The root servers manage the root domain,
-alternatively referred to as the zone, or
-the **.** at the end of the ``.com.``, ``.edu.``, etc.
+These servers are listed on the [IANA][rootiana], the Internet Assigned Numbers Authority, website, but are managed by multiple operators.
+The root servers manage the root domain, alternatively referred to as the zone, or the **.** at the end of the ``.com.``, ``.edu.``, etc.
 
 #### Alternative DNS Root Systems
 
-It's possible to have alternate internets by
-using outside root name servers.
+It's possible to have alternate internets by using outside root name servers.
 This is not common, but it happens.
 Read about a few of them here:
 
@@ -85,45 +72,44 @@ Read about a few of them here:
 * opennic: [https://www.opennicproject.org/][opennic]
 * alternic: [https://en.wikipedia.org/wiki/AlterNIC][alternic]
 
-Russia, as an example, has threated to use
-it's own alternate internet based on a different
-DNS root system.
+Russia, as an example, has threatened to use its own alternate internet based on a different DNS root system.
 This would essentially create a large, second internet.
 You can read about in this [IEEE Spectrum article][ieeerussia].
 
 ### Top Level Domain (TLD)
 
 We are all familiar with top level domains.
-Specific examples include:
+Generic TLD names include:
 
-* generic TLD names:
-  * .com
-  * .gov
-  * .mil
-  * .net
-  * .org
-* and ccTLD, [country code TLDs][cctld]
-  * .ca (Canada)
-  * .mx (Mexico)
-  * .jp (Japan)
-  * .uk (United Kingdom)
-  * .us (United States)
+* .com
+* .gov
+* .mil
+* .net
+* .org
 
-We can download a list of those top level names from IANA, and
-get a total count of 1,462 (as of October 2023):
+There are also country coded TLDs, such as:
+
+* .ca (Canada)
+* .mx (Mexico)
+* .jp (Japan)
+* .uk (United Kingdom)
+* .us (United States)
+
+We can get a total count of current domain names using the command below, which outputs 1,445 (as of October 2024):
 
 ```
-wget https://data.iana.org/TLD/tlds-alpha-by-domain.txt
-sed '1d' tlds-alpha-by-domain.txt | wc -l
+curl -s https://data.iana.org/TLD/tlds-alpha-by-domain.txt | sed '1d' | wc -l
 ```
+
+> The `curl` command is an alternate to the `wget` command.
+> The share basic functionality but also have their own use cases.
+> `curl` by default does not save a file.
+> Add the `-o` option to save a file: `curl -o [URLs]`.
 
 ### Second Level Domain Names
 
-In the Google example,
-the second level domain is **google**.
-The second level domain along with the TLD
-together, along with any further subdomains,
-for the [fully qualified domain name][fqdn].
+In the Google example, the second level domain is **google**.
+The second level domain along with the TLD together, along with any further subdomains, for the [fully qualified domain name][fqdn].
 Other examples include:
 
 - **redhat** in **redhat.com**
@@ -134,94 +120,62 @@ Other examples include:
   
 ### Third Level Domain Names / Subdomains
 
-When you've purchased (leased) a top and second level
-domain like **ubuntu.com**,
-you can choose whether you add third level domains.
+When you've purchased (leased) a top and second level domain like **ubuntu.com**, you can choose whether to add third level domains.
 For example: www is a third level domain or subdomain.
-If you owned ``example.org``,
-you could dedicate a machine or a cluster of machines
-to ``www.example.org`` that
-resolve to a different location, or
-``www.example.org`` could resolve to the second-level domain itself.
+If you owned ``example.org``, you could dedicate a machine or a cluster of machines to ``www.example.org`` that
+resolve to a different location, or ``www.example.org`` could resolve to the second-level domain itself.
 That is:
 
-* www.debian.org can point to debian.org
+* The server located at `www.debian.org` can point to the server located at `debian.org`.
 
-It could also point to a separate server,
-such that **debian.org** and **www.debian.org**
-would be two separate servers with two separate websites or services,
-just like **maps.google.com** points to a different
-site than **mail.google.com**.
+`www.debian.org` could be configured to point to a different server than **debian.org**,
+meaning that each domain would host separate websites or services.
+This would be like how **maps.google.com** points to a different site than **mail.google.com**.
 Both **maps** and **mail** are subdomains of **google.com**.
-Although this is not common with third-level
-domains that start with **www**,
-it is common with others.
+Although this is not common with third-level domains that start with **www**, it is common with others.
 
 For example, with hostnames that are not ``www``:
 
-* google.com resolves to www.google.com
-* google.com does not resolve to:
-    * drive.google.com, or
-    * maps.google.com, or
-    * mail.google.com
+* `google.com` resolves to `www.google.com`
+* but `google.com` does not resolve to:
+    * `drive.google.com`, or
+    * `maps.google.com`, or
+    * `mail.google.com`
 
-This is because those other three provide different,
-but specific services.
+This is because those other three provide different, but specific services.
 
 ## DNS Paths 
 
-A recursive DNS server is the first DNS server
-to be queried in the DNS system,
-which is usually managed by an ISP.
+A recursive DNS server is the first DNS server to be queried in the DNS system, which is usually managed by an ISP.
 This is the resolver server in the first video above.
-This server queries itself (recursive) to check if the
-domain to IP mapping has been cached (remembered/stored) in its system.
+This server queries itself (recursive) to check if the domain to IP mapping has been cached (remembered/stored) in its system.
 
-If it hasn't been cached,
-then the DNS query is *forwarded* to a root server.
+If it hasn't been cached, then the DNS query is *forwarded* to a root server.
 There are thirteen root servers.
 
 ```
 echo {a..m}.root-servers.net.
+a.root-servers.net. b.root-servers.net. c.root-servers.net. d.root-servers.net. e.root-servers.net. f.root-servers.net. g.root-servers.net. h.root-servers.net. i.root-servers.net. j.root-servers.net. k.root-servers.net. l.root-servers.net. m.root-servers.net.
 ```
 
-Those root servers will identify the next server to query,
-depending on the top level domain (.com, .net, .edu, .gov, etc.).
-If the site ends in **.com** or **.net**, then
-the next server might be something like:
-**a.gtld-servers.net.**
-Or if the top level domain ends in **.edu**, then:
-**a.edu-servers.net.**.
-If the top level domain ends in **.gov**, then:
-**a.gov-servers.net.**.
+Those root servers will identify the next server to query, depending on the top level domain (.com, .net, .edu, .gov, etc.).
+If the site ends in **.com** or **.net**, then the next server might be something like: **a.gtld-servers.net.**
+Or if the top level domain ends in **.edu**, then: **a.edu-servers.net.**.
+If the top level domain ends in **.gov**, then: **a.gov-servers.net.**.
 And so forth.
 
-Those top level domains should know where to
-send the query next.
-In many cases, the next path is to send the query
-to a custom domain server.
-For example, Google's custom name servers are:
-**ns1.google.com** to **ns4.google.com**.
-UK's custom name servers are:
-**sndc1.net.uky.edu** and **sndc2.net.uky.edu**.
-Finally, those custom name servers will know
-the IP address that maps to the domain.
+Those top level domains should know where to send the query next.
+In many cases, the next path is to send the query to a custom domain server.
+For example, Google's custom name servers are: **ns1.google.com** to **ns4.google.com**.
+UK's custom name servers are: **sndc1.net.uky.edu** and **sndc2.net.uky.edu**.
+Finally, those custom name servers will know the IP address that maps to the domain.
 
-We can use the ``dig`` command to query
-the non-cached DNS paths.
-Let's say we want to follow the DNS path for **google.com**,
-then we can start by querying any [root server][rootiana].
-In the output, we want to pay attention to the QUERY field,
-the ANSWER field, and the Authority Section.
-We keep **digging** until the ANSWER field returns
-a number greater than 0.
-The following commands query one of the root servers,
-which points us to one of the authoritative servers for
-**.com** sites,
-which points us to Google's custom nameserver,
-which finally provides an answer,
-in fact six answers,
-or six IP address that all map to **google.com**.
+We can use the `dig` command to query the non-cached DNS paths.
+Let's say we want to follow the DNS path for **google.com**, we can start by querying any [root server][rootiana].
+In the output, we want to pay attention to the QUERY field, the ANSWER field, and the Authority Section.
+We continue to use the `dig` command until the ANSWER field returns a number greater than 0.
+The following commands query one of the root servers, which points us to one of the authoritative servers for **.com** sites,
+which points us to Google's custom nameserver, which finally provides an answer, in fact six answers, or six IP address that all map to **google.com**.
 
 ```
 dig @e.root-servers.net google.com
@@ -237,20 +191,17 @@ dig @b.edu-servers.net. uky.edu
 dig @sndc1.net.uky.edu. uky.edu
 ```
 
-We can also get this path information using
-``dig``'s trace command:
+We can also get this path information using `dig`'s trace command:
 
 ```
 dig google.com +trace
 ```
 
-There are a lot of [ways to use the dig command][digCommands], and
-you can test and explore them on your own.
+There are a lot of [ways to use the dig command][digCommands], and you can test and explore them on your own.
 
 ### DNS Record Types
 
-In the ``dig`` command output above,
-you will see various fields.
+In the ``dig`` command output above, you will see various fields.
 
 * SOA:    Start of Authority: describes the site's DNS entries
     * IN:     Internet Record
@@ -277,49 +228,128 @@ It's important to be able to troubleshoot DNS issues.
 To do that, we have a few utilities available.
 Here are examples and you should read the ``man`` pages for each one:
 
-``host``: resolve hostnames to IP Address; or IP addresses to hostnames
+#### `host` Command
+
+The `host` command is used to perform DNS lookups and returns information about a domain name or IP address.
+Specifically, the `host` command resolves hostnames to IP Address; or IP addresses to hostnames.
+
+The following command **queries** the domain name `uky.edu` and returns the IP address associated with that domain name:
 
 ```
-man -f host
-host (1) - DNS lookup utility
 host uky.edu
-host 128.163.35.46
+uky.edu has address 128.163.35.46
+```
+
+With the `-t` option, you can get IP address information for specific server types.
+The following queries the `MX` records (email servers) for the respective domains:
+
+```
 host -t MX uky.edu
 host -t MX dropbox.com
 host -t MX netflix.com
 host -t MX wikipedia.org
 ```
 
-``dig``: domain information gopher -- get info on DNS servers
+#### `dig` Command
+
+The `dig` command (Domain Information Groper) is used to retrieve DNS records, providing detailed information about how DNS resolution occurs.
+
+We can use `dig` to query `uky.edu` (I've removed extraneous output):
 
 ```
-man -f dig
-dig (1) - DNS lookup utility
 dig uky.edu
+;; ANSWER SECTION:
+uky.edu.		3539	IN	A	128.163.35.46
+```
+
+- **ANSWER SECTION**: This contains the result of our query.
+- **Domain** (`uky.edu`): The domain name being queried.
+- **TTL** (`3539`): Time to Live, or how long the result is cached.
+- **IN**: Internet class.
+- **A**: Record type, in this case this refers to an IPv4 address.
+- **IP Address** (`128.163.35.46`): The IP address that corresponds to the queried domain.
+
+We can use `dig` to examine other record types in the following ways:
+
+```
 dig uky.edu MX
 dig www.uky.edu CNAME
 ```
 
-``nslookup``: query internet name servers
+#### `nslookup` Command
+
+The `nslookup` command queries Internet name servers interactively to find DNS-related information about a domain.
 
 ```
-man -f nslookup
-nslookup (1) - query Internet name servers interactively
 nslookup
 > uky.edu
-> yahoo.com
+> Server:   127.0.0.53
+> Address:  127.0.0.53#53
+
+Non-authoritative answer:
+Name:   uky.edu
+Address: 128.163.35.46
 > exit
 ```
 
-``whois``: determine ownership of a domain
+Explanation:
+
+- **Server**: The DNS server used for the lookup. In this case, the server is
+  `127.0.0.53`, which falls within the loopback address range (`127.0.0.0/8`).
+  This is used by `systemd-resolved`, which is a local DNS resolver and caching
+  service that handles DNS lookups on our systems.
+- **Address**: The number `53` after the `#` represents the **port number**
+  (see `/etc/services` for list of port numbers). This port number is the
+  standard for DNS queries. So, `127.0.0.53#53` indicates that the DNS server
+  listening at `127.0.0.53` is accepting requests on port 53.
+- **Non-authoritative answer**: This indicates that the response is coming from
+  a cache, and not directly from an authoritative DNS server.
+- **NAME** (`uky.edu`) and **Address** (`128.163.35.46`): The domain name and
+  the corresponding IP address. 
+
+Because of the role that `systemd` has here,
+we can use the `resolvectl status` command to determine which external DNS servers are used behind the scenes.
+
+#### `whois` Command
+
+The `whois` command is used to look up information about who owns a particular domain name or IP address.
 
 ```
-man -f whois
-whois (1) - client for the whois directory services
 whois uky.edu | less
 ```
 
-``resolve.conf``: local resolver info; what's your DNS info
+Example output:
+
+```
+Domain Name: UKY.EDU
+
+Registrant:
+    University of Kentucky
+    118 Hardmon Building
+    Lexington, KY 40506
+    USA
+
+Name Servers:
+	SNDC1.NET.UKY.EDU
+	SNDC2.NET.UKY.EDU
+```
+
+- **Domain Name**: The domain you queried.
+- **Registrant**: The organization that registered the domain.
+- **Name Servers**: The authoritative name servers for the domain.
+
+While the `whois` command is a useful tool for retrieving information about domain ownership,
+it's important to note that some domain owners choose to keep their information private.
+Many domain registrars offer privacy protection services,
+which replace the owner's contact information with generic information to protect their identity.
+As a result, the output of a `whois` query may not always reveal the true owner of a domain,
+showing only the registrar's privacy service instead.
+This is particularly common for personal or small business domains to protect against spam or unwanted contact.
+
+#### The `resolve.conf` File
+
+The `resolve.conf` file contains local resolver info.
+That is, it contains your your DNS information.
 
 ```
 man -f  resolv.conf
@@ -330,21 +360,14 @@ resolvectl status
 
 ## Conclusion
 
-In the same way that phones have phone numbers,
-servers on the internet have IP addresses.
-Since we're only human,
-we don't remember every phone number that we dial or
-every IP address that we visit.
-In order to make such things human friendly,
-we use names instead.
+In the same way that phones have phone numbers to uniquely identify them, servers on the internet use IP addresses to enable communication.
+Since we're only human, we don't remember every phone number that we dial or every IP address that we visit.
+In order to make such things human friendly, we use names instead.
 
-Nameservers and DNS records act as the phone book
-and phone book entries of the internet.
+Nameservers and DNS records act as the phone book and phone book entries of the internet.
 Note that I refer to the **internet** and not the **web** here.
-There is more at the application layer than the HTTP/HTTPS protocols,
-and so other types of servers,
-e.g., mail servers,
-may also have domain names and IP addresses to resolve.
+There are other protocols at the [OSI application layer][application_layer] than the HTTP/HTTPS protocols, and so other types of servers,
+e.g., mail servers, may also have domain names and IP addresses to resolve.
 
 In this section, we covered the basics of DNS that include:
 
@@ -357,15 +380,15 @@ In this section, we covered the basics of DNS that include:
 
 We'll come back to this material when we set up our websites.
 
-
-[howdns]:https://www.youtube.com/watch?v=mpQZVYPuDGU
-[dnsrecords]:https://www.youtube.com/watch?v=cwT82ibOM2Q
-[recursivedns]:https://www.cloudflare.com/learning/dns/what-is-recursive-dns/
-[sdf]:https://web.archive.org/web/20081121061730/http://www.smtpnic.org/
-[opennic]:https://www.opennicproject.org/
 [alternic]:https://en.wikipedia.org/wiki/AlterNIC
-[ieeerussia]:https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet
-[rootiana]:https://www.iana.org/domains/root/servers
+[application_layer]:https://en.wikipedia.org/wiki/Application_layer
 [cctld]:https://en.wikipedia.org/wiki/Country_code_top-level_domain
-[fqdn]:https://en.wikipedia.org/wiki/Fully_qualified_domain_name
 [digCommands]:https://www.geeksforgeeks.org/dig-command-in-linux-with-examples/
+[dnsrecords]:https://www.youtube.com/watch?v=cwT82ibOM2Q
+[fqdn]:https://en.wikipedia.org/wiki/Fully_qualified_domain_name
+[howdns]:https://www.youtube.com/watch?v=mpQZVYPuDGU
+[ieeerussia]:https://spectrum.ieee.org/tech-talk/telecom/internet/could-russia-really-build-its-own-alternate-internet
+[opennic]:https://www.opennicproject.org/
+[recursivedns]:https://www.cloudflare.com/learning/dns/what-is-recursive-dns/
+[rootiana]:https://www.iana.org/domains/root/servers
+[sdf]:https://web.archive.org/web/20081121061730/http://www.smtpnic.org/
