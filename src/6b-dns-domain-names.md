@@ -107,15 +107,14 @@ curl -s https://data.iana.org/TLD/tlds-alpha-by-domain.txt | sed '1d' | wc -l
 
 ### Second Level Domain Names
 
-In the Google example, the second level domain is **google**.
+In the Google example of `www.google.com`, the second level domain is `google`.
 The second level domain along with the TLD together, along with any further subdomains, forms the [fully qualified domain name (FQDN)][fqdn].
-Other examples include:
+Other examples of second level domains include:
 
 - **redhat** in **redhat.com**
 - **debian** in **debian.org**.
 - **wikipedia** in **wikipedia.org**
 - **uky** in **uky.edu**
-- **twitter** in **twitter.com**
   
 ### Third Level Domain Names / Subdomains
 
@@ -157,8 +156,11 @@ echo {a..m}.root-servers.net.
 a.root-servers.net. b.root-servers.net. c.root-servers.net. d.root-servers.net. e.root-servers.net. f.root-servers.net. g.root-servers.net. h.root-servers.net. i.root-servers.net. j.root-servers.net. k.root-servers.net. l.root-servers.net. m.root-servers.net.
 ```
 
+> The `echo {a..m}.root-servers.net` command has nothing to do with DNS.
+> I'm using brace expansion in Bash to simply list the root servers.
+
 When a DNS query is forwarded to a root server,
-the root server will identify the next server to query, depending on the top level domain (.com, .net, .edu, .gov, etc.).
+the root server identifies the next server to query, depending on the top level domain (.com, .net, .edu, .gov, etc.).
 If the site ends in `.com` or `.net`, then the next server might be something like: `a.gtld-servers.net.`
 Or if the top level domain ends in `.edu`, then: `a.edu-servers.net.` might be queried.
 If the top level domain ends in `.gov`, then: `a.gov-servers.net.`.
@@ -171,7 +173,8 @@ UK's custom name servers are: **sndc1.net.uky.edu** and **sndc2.net.uky.edu**.
 Finally, those custom name servers will know the IP address that maps to the domain.
 
 We can use the `dig` command to query the non-cached DNS paths.
-Let's say we want to follow the DNS path for `google.com` we can start by querying any [root server][rootiana].
+Let's say we want to follow the DNS path for `google.com`.
+We can start by querying any [root server][rootiana].
 In the output, we want to pay attention to the QUERY field, the ANSWER field, and the Authority Section.
 We continue to use the `dig` command until the ANSWER field returns a number greater than 0.
 The following commands query one of the root servers, which points us to one of the authoritative servers for **.com** sites,
@@ -204,8 +207,8 @@ Here we see `ANSWER: 6`, which is greater than zero.
 We now know the DNS path.
 
 The output for the final `dig` command lists six servers.
-Google and other major organizations often use multiple servers with **A records**
-for load balancing, redundancy, and better geographic distribution of requests.
+Google and other major organizations often use multiple servers for load balancing, redundancy, and better geographic distribution of requests.
+These servers are indicated by the **A records** in the DNS output.
 
 Many large organizations, especially ISPs, function as **autonomous systems (AS)**.
 These systems are large collections of IP networks under the control of a single organization and
@@ -246,28 +249,28 @@ There are a lot of [ways to use the dig command][digCommands], and you can test 
 
 ### DNS Record Types
 
-We can use the `dig` command to get information about additional DNS record types, including:
+The **A record** in the `dig` output from the above examples shows the mapping between the hostname and the IPv4 address.
+There are other types of internet records, and we can use the `dig` command to get information about additional these record types.
+Some of the more useful records include:
 
 * IN:       Internet Record
-* SOA:      Start of Authority: describes the site's DNS entries, or the primary name server and the responsible contact information
+* SOA:      Start of Authority: describes the site's DNS entries, or the
+  primary name server and the responsible contact information
 * NS:       Name Server: state the name servers that provide DNS resolution
 * A:        Address records: provides mapping hostname to IPv4 address
 * AAAA:     Address records: provides mapping hostname to IPv6 address
 * TXT:      TXT records contain verification data for various services
 * MX:       Mail exchanger: the MX record maps to email servers.
-
-To get such information, we use the following `dig` command:
-
-```
-dig uky.edu ANY
-```
-
-There are many other record types we might find, but two other notable ones include:
-
 * PTR:    Pointer record: provides mapping from IP Address to Hostname. This is
   like the opposite of an **A record** and allows us to do reverse lookups..
 * CNAME:  Canonical name: this is used to alias one domain name to another,
   such as `www.uky.edu` to `uky.edu` (see discussion above).
+
+To get as much information from the `dig` command at one time, we use the following `dig` command:
+
+```
+dig uky.edu ANY
+```
 
 ### DNS Toolbox
 
@@ -287,7 +290,7 @@ host uky.edu
 uky.edu has address 128.163.35.46
 ```
 
-With the `-t` option, you can get IP address information for specific server types.
+With the `-t` option, you can get IP address information for specific record types.
 The following queries the `MX` records (email servers) for the respective domains:
 
 ```
@@ -297,9 +300,13 @@ host -t MX netflix.com
 host -t MX wikipedia.org
 ```
 
+For example, `host -t MX uky.edu` tells us that UK uses Microsoft Outlook for `uky.edu` email addresses and
+`host -t MX g.uky.edu` tells us that UK uses the Google suite for `g.uky.edu` email addresses.
+
 #### `dig` Command
 
-The `dig` command (Domain Information Groper) is used to retrieve DNS records, providing detailed information about how DNS resolution occurs.
+As discussed above,
+the `dig` command (Domain Information Groper) is used to retrieve DNS records, providing detailed information about how DNS resolution occurs.
 
 We can use `dig` to query `uky.edu` (I've removed extraneous output):
 
@@ -365,7 +372,7 @@ The `whois` command is used to look up information about who owns a particular d
 whois uky.edu | less
 ```
 
-Example output:
+Example, abbreviated output:
 
 ```
 Domain Name: UKY.EDU
@@ -413,8 +420,9 @@ In order to make such things human friendly, we use names instead.
 
 Nameservers and DNS records act as the phone book and phone book entries of the internet.
 Note that I refer to the **internet** and not the **web** here.
-There are protocols at the [OSI application layer][application_layer] other than the HTTP/HTTPS protocols;
-e.g., mail servers, may also have domain names and IP addresses to resolve and use protocols like POP, IMAP, and SMTP.
+The web is strictly defined or limited to the HTTP/HTTPS protocol, and 
+there are protocols at the [OSI application layer][application_layer].
+For example, email servers may also have domain names and IP addresses to resolve and use protocols like POP, IMAP, and SMTP.
 
 In this section, we covered the basics of DNS that include:
 

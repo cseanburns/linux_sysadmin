@@ -261,15 +261,14 @@ Add the <code>-o</code> option to save a file: <code>curl -o [URLs]</code>.
 Or, visit the <code>iana.org</code> link in the code block above to peruse the list of TLDs.</p>
 </blockquote>
 <h3 id="second-level-domain-names"><a class="header" href="#second-level-domain-names">Second Level Domain Names</a></h3>
-<p>In the Google example, the second level domain is <strong>google</strong>.
+<p>In the Google example of <code>www.google.com</code>, the second level domain is <code>google</code>.
 The second level domain along with the TLD together, along with any further subdomains, forms the <a href="https://en.wikipedia.org/wiki/Fully_qualified_domain_name">fully qualified domain name (FQDN)</a>.
-Other examples include:</p>
+Other examples of second level domains include:</p>
 <ul>
 <li><strong>redhat</strong> in <strong>redhat.com</strong></li>
 <li><strong>debian</strong> in <strong>debian.org</strong>.</li>
 <li><strong>wikipedia</strong> in <strong>wikipedia.org</strong></li>
 <li><strong>uky</strong> in <strong>uky.edu</strong></li>
-<li><strong>twitter</strong> in <strong>twitter.com</strong></li>
 </ul>
 <h3 id="third-level-domain-names--subdomains"><a class="header" href="#third-level-domain-names--subdomains">Third Level Domain Names / Subdomains</a></h3>
 <p>When you've purchased (leased) a top and second level domain like <code>ubuntu.com</code>, you can choose whether to add third level domains.
@@ -306,8 +305,12 @@ There are thirteen root servers.</p>
 <pre><code>echo {a..m}.root-servers.net.
 a.root-servers.net. b.root-servers.net. c.root-servers.net. d.root-servers.net. e.root-servers.net. f.root-servers.net. g.root-servers.net. h.root-servers.net. i.root-servers.net. j.root-servers.net. k.root-servers.net. l.root-servers.net. m.root-servers.net.
 </code></pre>
+<blockquote>
+<p>The <code>echo {a..m}.root-servers.net</code> command has nothing to do with DNS.
+I'm using brace expansion in Bash to simply list the root servers.</p>
+</blockquote>
 <p>When a DNS query is forwarded to a root server,
-the root server will identify the next server to query, depending on the top level domain (.com, .net, .edu, .gov, etc.).
+the root server identifies the next server to query, depending on the top level domain (.com, .net, .edu, .gov, etc.).
 If the site ends in <code>.com</code> or <code>.net</code>, then the next server might be something like: <code>a.gtld-servers.net.</code>
 Or if the top level domain ends in <code>.edu</code>, then: <code>a.edu-servers.net.</code> might be queried.
 If the top level domain ends in <code>.gov</code>, then: <code>a.gov-servers.net.</code>.
@@ -318,7 +321,8 @@ For example, Google's custom name servers are: <strong>ns1.google.com</strong> t
 UK's custom name servers are: <strong>sndc1.net.uky.edu</strong> and <strong>sndc2.net.uky.edu</strong>.
 Finally, those custom name servers will know the IP address that maps to the domain.</p>
 <p>We can use the <code>dig</code> command to query the non-cached DNS paths.
-Let's say we want to follow the DNS path for <code>google.com</code> we can start by querying any <a href="https://www.iana.org/domains/root/servers">root server</a>.
+Let's say we want to follow the DNS path for <code>google.com</code>.
+We can start by querying any <a href="https://www.iana.org/domains/root/servers">root server</a>.
 In the output, we want to pay attention to the QUERY field, the ANSWER field, and the Authority Section.
 We continue to use the <code>dig</code> command until the ANSWER field returns a number greater than 0.
 The following commands query one of the root servers, which points us to one of the authoritative servers for <strong>.com</strong> sites,
@@ -340,8 +344,8 @@ We pick one and query that:</p>
 <p>Here we see <code>ANSWER: 6</code>, which is greater than zero.
 We now know the DNS path.</p>
 <p>The output for the final <code>dig</code> command lists six servers.
-Google and other major organizations often use multiple servers with <strong>A records</strong>
-for load balancing, redundancy, and better geographic distribution of requests.</p>
+Google and other major organizations often use multiple servers for load balancing, redundancy, and better geographic distribution of requests.
+These servers are indicated by the <strong>A records</strong> in the DNS output.</p>
 <p>Many large organizations, especially ISPs, function as <strong>autonomous systems (AS)</strong>.
 These systems are large collections of IP networks under the control of a single organization and
 they work to present a common routing policy to the internet.
@@ -368,26 +372,26 @@ dig @sndc1.net.uky.edu. uky.edu
 </code></pre>
 <p>There are a lot of <a href="https://www.geeksforgeeks.org/dig-command-in-linux-with-examples/">ways to use the dig command</a>, and you can test and explore them on your own.</p>
 <h3 id="dns-record-types"><a class="header" href="#dns-record-types">DNS Record Types</a></h3>
-<p>We can use the <code>dig</code> command to get information about additional DNS record types, including:</p>
+<p>The <strong>A record</strong> in the <code>dig</code> output from the above examples shows the mapping between the hostname and the IPv4 address.
+There are other types of internet records, and we can use the <code>dig</code> command to get information about additional these record types.
+Some of the more useful records include:</p>
 <ul>
 <li>IN:       Internet Record</li>
-<li>SOA:      Start of Authority: describes the site's DNS entries, or the primary name server and the responsible contact information</li>
+<li>SOA:      Start of Authority: describes the site's DNS entries, or the
+primary name server and the responsible contact information</li>
 <li>NS:       Name Server: state the name servers that provide DNS resolution</li>
 <li>A:        Address records: provides mapping hostname to IPv4 address</li>
 <li>AAAA:     Address records: provides mapping hostname to IPv6 address</li>
 <li>TXT:      TXT records contain verification data for various services</li>
 <li>MX:       Mail exchanger: the MX record maps to email servers.</li>
-</ul>
-<p>To get such information, we use the following <code>dig</code> command:</p>
-<pre><code>dig uky.edu ANY
-</code></pre>
-<p>There are many other record types we might find, but two other notable ones include:</p>
-<ul>
 <li>PTR:    Pointer record: provides mapping from IP Address to Hostname. This is
 like the opposite of an <strong>A record</strong> and allows us to do reverse lookups..</li>
 <li>CNAME:  Canonical name: this is used to alias one domain name to another,
 such as <code>www.uky.edu</code> to <code>uky.edu</code> (see discussion above).</li>
 </ul>
+<p>To get as much information from the <code>dig</code> command at one time, we use the following <code>dig</code> command:</p>
+<pre><code>dig uky.edu ANY
+</code></pre>
 <h3 id="dns-toolbox"><a class="header" href="#dns-toolbox">DNS Toolbox</a></h3>
 <p>It's important to be able to troubleshoot DNS issues.
 To do that, we have a few utilities available.
@@ -399,15 +403,18 @@ Specifically, the <code>host</code> command resolves hostnames to IP Address; or
 <pre><code>host uky.edu
 uky.edu has address 128.163.35.46
 </code></pre>
-<p>With the <code>-t</code> option, you can get IP address information for specific server types.
+<p>With the <code>-t</code> option, you can get IP address information for specific record types.
 The following queries the <code>MX</code> records (email servers) for the respective domains:</p>
 <pre><code>host -t MX uky.edu
 host -t MX dropbox.com
 host -t MX netflix.com
 host -t MX wikipedia.org
 </code></pre>
+<p>For example, <code>host -t MX uky.edu</code> tells us that UK uses Microsoft Outlook for <code>uky.edu</code> email addresses and
+<code>host -t MX g.uky.edu</code> tells us that UK uses the Google suite for <code>g.uky.edu</code> email addresses.</p>
 <h4 id="dig-command"><a class="header" href="#dig-command"><code>dig</code> Command</a></h4>
-<p>The <code>dig</code> command (Domain Information Groper) is used to retrieve DNS records, providing detailed information about how DNS resolution occurs.</p>
+<p>As discussed above,
+the <code>dig</code> command (Domain Information Groper) is used to retrieve DNS records, providing detailed information about how DNS resolution occurs.</p>
 <p>We can use <code>dig</code> to query <code>uky.edu</code> (I've removed extraneous output):</p>
 <pre><code>dig uky.edu
 ;; ANSWER SECTION:
@@ -458,7 +465,7 @@ we can use the <code>resolvectl status</code> command to determine which externa
 <p>The <code>whois</code> command is used to look up information about who owns a particular domain name or IP address.</p>
 <pre><code>whois uky.edu | less
 </code></pre>
-<p>Example output:</p>
+<p>Example, abbreviated output:</p>
 <pre><code>Domain Name: UKY.EDU
 
 Registrant:
@@ -497,8 +504,9 @@ Since we're only human, we don't remember every phone number that we dial or eve
 In order to make such things human friendly, we use names instead.</p>
 <p>Nameservers and DNS records act as the phone book and phone book entries of the internet.
 Note that I refer to the <strong>internet</strong> and not the <strong>web</strong> here.
-There are protocols at the <a href="https://en.wikipedia.org/wiki/Application_layer">OSI application layer</a> other than the HTTP/HTTPS protocols;
-e.g., mail servers, may also have domain names and IP addresses to resolve and use protocols like POP, IMAP, and SMTP.</p>
+The web is strictly defined or limited to the HTTP/HTTPS protocol, and
+there are protocols at the <a href="https://en.wikipedia.org/wiki/Application_layer">OSI application layer</a>.
+For example, email servers may also have domain names and IP addresses to resolve and use protocols like POP, IMAP, and SMTP.</p>
 <p>In this section, we covered the basics of DNS that include:</p>
 <ul>
 <li>FQDN: the Fully Qualified Domain Name</li>
