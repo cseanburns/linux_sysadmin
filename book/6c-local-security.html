@@ -177,95 +177,55 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="local-security"><a class="header" href="#local-security">Local Security</a></h1>
-<h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
-<p>Security challenges predominantly
-emanate from network interactions;
-however, safeguarding a system from
-potential internal threats
-is equally critical.
-This can be achieved by enforcing
-stringent file permissions and
-ensuring that users
-lack certain types of access,
-such as <code>sudo</code> privileges.
-Take, for instance,
-the program <code>/usr/bin/gcc</code>,
-which serves as the GNU C and C++ compiler,
-translating C or C++ source code
-into executable programs
-(like <em>exe</em> programs on Windows computers).
-Unrestricted access to this compiler
-could potentially allow users
-to create programs capable
-of compromising the system
+<p>By the end of this section, you should know:</p>
+<ul>
+<li>The purpose of a <code>chroot</code> environment and how it enhances local security by restricting users to a defined directory.</li>
+<li>How to create a basic <code>chroot</code> directory and structure it to mimic a limited root file system.</li>
+<li>How to set up and test the <code>chroot</code> environment to ensure users are confined to their pseudo-root directory.</li>
+<li>The process for identifying and copying necessary binaries and their dependencies into a <code>chroot</code>.</li>
+<li>Basic troubleshooting techniques for common issues that may arise when setting up or entering a <code>chroot</code>.</li>
+<li>The limitations of <code>chroot</code> for security and how it serves as a foundational concept for containerization technologies like Docker.</li>
+<li>How to configure SSH to restrict specific user groups to a <code>chroot</code> environment for added security.</li>
+</ul>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<p>Security challenges predominantly emanate from network interactions;
+however, safeguarding a system from potential internal threats is equally critical.
+This can be achieved by enforcing stringent file permissions and ensuring that users lack certain types of access, such as <code>sudo</code> privileges.
+Take, for instance, the program <code>/usr/bin/gcc</code>.
+<code>gcc</code> serves as the GNU C and C++ compiler, translating C or C++ source code into executable programs (like <code>exe</code> programs on Windows computers).
+Unrestricted access to this compiler could potentially allow users to create programs capable of compromising the system
 (I know, based on personal experience).</p>
-<p>In the following section,
-we will shift focus to external threats
-and learn about setting up a firewall.
-In this section,
-we focus on internal threats and
-learn how to create a <strong>chroot</strong> environment.
-This is a specialized environment
-that restricts user operations or proccesses
-to a defined directory,
-thereby bolstering system security.
-By delving into the setup of a chroot environment,
-we will unveil an effective strategy
-that can mitigate risks
-stemming from within the system.</p>
+<p>In the following section, we will shift focus to external threats and learn about setting up a firewall.
+In this section, we focus on internal threats and learn how to create a <strong>chroot</strong> environment.
+This is a specialized environment that restricts user operations or processes to a defined directory, thereby bolstering system security.
+By delving into the setup of a <code>chroot</code> environment, we will unveil an effective strategy that can mitigate risks stemming from within the system.</p>
 <h2 id="chroot"><a class="header" href="#chroot">chroot</a></h2>
-<p>As we all know,
-the Linux file system has a root directory <strong>/</strong>,
-and under this directory are other directories like
-<strong>/home</strong>, <strong>/bin</strong>, and so forth.
-A chroot (<strong>change root</strong>) environment
-is a way to create a pseudo root directory
-at some specific location in the directory tree, and
-then build an environment in that pseudo root directory
-that offers some applications.
-Once that environment is setup,
-we can then confine a user account(s) to that
-pseudo directory, and
-when they login to the server,
-they will only be able to see
-(e.g., with the <code>cd</code> command)
-what's in that pseudo root directory and
-only be able to use the applications that
+<p>As we all know, the Linux file system has a root directory <strong>/</strong>, and under this directory are other directories like <strong>/home</strong>, <strong>/bin</strong>, and so forth.
+A <code>chroot</code> (<strong>change root</strong>) environment is a way to create a fake root directory at some specific location in the directory tree, and
+then build an environment in that pseudo root directory that offers some applications.
+Once that environment is setup, we can confine a user account(s) to that pseudo directory, and when they login to the server,
+they will only be able to see (e.g., with the <code>cd</code> command) what's in that pseudo root directory and only be able to use the applications that
 we've made available in that chroot.</p>
-<p>Thus, a <strong>chroot</strong> is a technology used
-to change the
-"apparent root <strong>/</strong> directory for a user or a process" and
+<p>Thus, a <code>chroot</code> is a technology used to change the "apparent root <strong>/</strong> directory for a user or a process" and
 confine that user to that location on the system.
-A user or process that is confined to the
-<strong>chroot</strong> cannot easily see or access
-the rest of the file system and
-will have limited access to the binaries
-(executables/apps/utilities) on the system.
+A user or process that is confined to the <code>chroot</code> cannot easily see or access the rest of the file system and
+will have limited access to the binaries (executables/apps/utilities) on the system.
 From its <code>man</code> page:</p>
 <pre><code>chroot (8) - run command or interactive shell with special root directory
 </code></pre>
-<p>Although it is not security proof,
-it does have some useful security use cases.
-Some use <code>chroot</code> to contain DNS or
-<a href="https://tldp.org/LDP/solrhe/Securing-Optimizing-Linux-RH-Edition-v1.3/chap29sec254.html">web servers</a>, for example.</p>
-<p><code>chroot</code> is also the conceptual basis for some kinds of
-virtualization technologies that are common today,
-like <a href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a>.</p>
+<p>Although it is not security proof, it does have some useful security use cases.
+Some use <code>chroot</code> to contain DNS or <a href="https://tldp.org/LDP/solrhe/Securing-Optimizing-Linux-RH-Edition-v1.3/chap29sec254.html">web servers</a>, for example.</p>
+<p><code>chroot</code> is also the conceptual basis for some kinds of virtualization technologies that are common today, like <a href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a>.</p>
 <h2 id="creating-a-chroot"><a class="header" href="#creating-a-chroot">Creating a chroot</a></h2>
-<p>In this tutorial,
-we are going to create a <code>chroot</code>.</p>
+<p>In this tutorial, we are going to create a <code>chroot</code>.</p>
 <ol>
 <li>
-<p>First, we create a new directory for our chroot. That
-directory will be located at <code>/mustafar</code> (but it could
-be elsewhere). Note that the normal root directory is
-<code>/</code>, but for the chroot, the root directory will be
-<code>/mustafar</code> even though it will appear as <code>/</code> in the
-<code>chroot</code>.</p>
-<p>Depending on where we create the chroot, we want to check
-the permissions of the new directory and make sure it's
-owned by root. If not, use <code>chown root:root /mustafar</code>
-to set it.</p>
+<p>First, we create a new directory for our chroot. That directory will be
+located at <code>/mustafar</code> (but it could be elsewhere). Note that the normal
+root directory is <code>/</code>, but for the chroot, the root directory will be
+<code>/mustafar</code> even though it will appear as <code>/</code> in the <code>chroot</code>.</p>
+<p>Depending on where we create the chroot, we want to check the permissions of
+the new directory and make sure it's owned by root. If not, use <code>chown root:root /mustafar</code> to set it.</p>
 <p>Create directory:</p>
 <pre><code>sudo mkdir /mustafar
 </code></pre>
@@ -274,9 +234,9 @@ to set it.</p>
 </code></pre>
 </li>
 <li>
-<p>We want to make the <code>bash</code> shell available in the chroot.
-To do that, we create a <code>/bin</code> directory in
-<code>/mustafar</code>, and copy <code>bash</code> to that directory.</p>
+<p>We want to make the <code>bash</code> shell available in the chroot. To do that, we
+create a <code>/bin</code> directory in <code>/mustafar</code>, and copy <code>bash</code> to that
+directory.</p>
 <pre><code>which bash
 sudo mkdir /mustafar/bin
 sudo cp /usr/bin/bash /mustafar/bin/
@@ -287,9 +247,9 @@ sudo cp $(which bash) /mustafar/bin
 </code></pre>
 </li>
 <li>
-<p>Large software applications have dependencies, aka
-libraries. We need to copy those libraries to our chroot
-directory so applications, like Bash, can run.</p>
+<p>Large software applications have dependencies, aka libraries. We need to
+copy those libraries to our chroot directory so applications,like <code>bash</code>,
+can run.</p>
 <p>To identify libraries needed by <code>bash</code>, we use the <code>ldd</code> command:</p>
 <pre><code>ldd /usr/bin/bash
 </code></pre>
@@ -299,26 +259,26 @@ libtinfo.so.6 =&gt; /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007fbec99f6000)
 libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007fbec97ce000)
 /lib64/ld-linux-x86-64.so.2 (0x00007fbec9ba4000)
 </code></pre>
-<p>Ignore the first item in the output (<strong>linux-vdso.so.1</strong>). But we will need
+<p>Ignore the first item in the output (<code>linux-vdso.so.1</code>). But we will need
 the libraries in the last three lines.</p>
 </li>
 <li>
-<p>Next we create directories for these libraries in
-<code>/mustafar</code> that match or mirror the directories they
-reside in. For example, in the above <code>ldd</code> output, two directory paths are highlighted: <code>/lib/x86_64-linux-gnu</code> and <code>/lib64</code>. Therefore, we need to create directories with those names in <code>/mustafar</code>.</p>
+<p>Next we create directories for these libraries in <code>/mustafar</code> that match or
+mirror the directories they reside in. For example, in the above <code>ldd</code>
+output, two directory paths are highlighted: <code>/lib/x86_64-linux-gnu</code> and
+<code>/lib64</code>. Therefore, we need to create directories with those names in
+<code>/mustafar</code>.</p>
 <p>To do that, use the <code>mkdir</code> command to create a
-<strong>/mustafar/lib/x86_64-linux-gnu/</strong> directory and a
-<strong>/mustafar/lib64</strong> for the libraries. We need to name
-the library directories after the originals to stay
-consistent with the main environment.</p>
+<code>/mustafar/lib/x86_64-linux-gnu/</code> directory and a <code>/mustafar/lib64</code> for
+the libraries. We need to name the library directories after the originals
+to stay consistent with the main environment.</p>
 <pre><code>sudo mkdir -p /mustafar/lib/x86_64-linux-gnu
 </code></pre>
 <p>And then:</p>
 <pre><code>sudo mkdir /mustafar/lib64
 </code></pre>
-<p>Then we proceed to <strong>copy</strong> (not move!) the libraries to
-their respective directories in the <strong>/mustafar</strong>
-directory:</p>
+<p>Then we proceed to <strong>copy</strong> (not move!) the libraries to their respective
+directories in the <strong>/mustafar</strong> directory:</p>
 <pre><code>cd /mustafar/lib/x86_64-linux-gnu/
 sudo cp /lib/x86_64-linux-gnu/libtinfo.so.6 .
 sudo cp /lib/x86_64-linux-gnu/libc.so.6
@@ -327,24 +287,19 @@ sudo cp /lib64/ld-linux-x86-64.so.2 .
 </code></pre>
 </li>
 <li>
-<p>Finally, we can test the <code>chroot</code></p>
+<p>Finally, we can test the <code>chroot</code>:</p>
 <pre><code>sudo chroot /mustafar
 </code></pre>
 <p>If successful, you should see a new prompt like below:</p>
 <pre><code>bash-5.1#
 </code></pre>
-<p>If you try running some commands,
-that are not part of Bash itself,
-you'll encounter some errors.</p>
-<p>We do have access to some commands,
-like <code>help</code>, <code>dirs</code>, <code>pwd</code>, <code>cd</code>, and more
-because these are <strong>builtin</strong> to <code>bash</code>.
-Utilities not builtin to <code>bash</code>
-are not yet available.
-These include <code>ls</code>, <code>cat</code>, <code>cp</code>, and more.
-The following is a brief example of
-interacting in a limited chroot environment
-with no outside utilities available:</p>
+<p>If you try running some commands, that are not part of Bash itself, you'll
+encounter some errors.</p>
+<p>We do have access to some commands, like <code>help</code>, <code>dirs</code>, <code>pwd</code>, <code>cd</code>, and
+more because these are <strong>builtin</strong> to <code>bash</code>. Utilities not builtin to
+<code>bash</code> are not yet available. These include <code>ls</code>, <code>cat</code>, <code>cp</code>, and more.
+The following is a brief example of interacting in a limited chroot
+environment with no outside utilities available:</p>
 <pre><code>bash-5.1# ls
 bash: ls: command not found
 bash-5.1# help
@@ -357,50 +312,65 @@ bash-5.1# dirs
 bash-5.1# cd ..
 bash-5.1# for i in {1..4} ; do echo "$i" ; done
 </code></pre>
-<p>To exit the <code>chroot</code> environment,
-simply type <code>exit</code>:</p>
+<p>To exit the <code>chroot</code> environment, simply type <code>exit</code>:</p>
 <pre><code>bash-5.1# exit
 </code></pre>
 </li>
 </ol>
 <h2 id="exercise"><a class="header" href="#exercise">Exercise</a></h2>
-<p>Use the <code>ldd</code> command,
-to add additional binaries.
-Make the following utilities/binaries
-available in the <code>/mustafar</code>
-chroot directory:</p>
+<p>Use the <code>ldd</code> command, to add additional binaries.
+Make the following utilities/binaries available in the <code>/mustafar</code> chroot directory:</p>
 <ul>
 <li><code>ls</code></li>
 <li><code>cat</code></li>
 </ul>
+<h3 id="troubleshooting-common-chroot-setup-errors"><a class="header" href="#troubleshooting-common-chroot-setup-errors">Troubleshooting Common chroot Setup Errors</a></h3>
+<p>When setting up a <code>chroot</code> environment, you may encounter an error like:</p>
+<pre><code>chroot: failed to run command '/bin/bash': No such file or directory
+</code></pre>
+<p>This error often occurs if the <code>chroot</code> environment is missing critical files or directories, such as the <code>bash</code> executable or its required libraries. Here are some steps to resolve this:</p>
+<ol>
+<li>
+<p><strong>Check for the Bash Binary</strong>: Ensure that the <code>bash</code> executable has been
+correctly copied to <code>/mustafar/bin/</code>:</p>
+<pre><code>sudo ls /mustafar/bin/bash
+</code></pre>
+<p>If this file isn't there, go back to the step where you copy <code>bash</code> to the <code>chroot</code> directory.</p>
+</li>
+<li>
+<p><strong>Verify Library Dependencies</strong>: The <code>bash</code> binary requires certain
+libraries to run. Use the <code>ldd</code> command to list these dependencies and confirm
+they are copied to <code>/mustafar</code>:</p>
+<pre><code>ldd /usr/bin/bash
+</code></pre>
+<p>Ensure each library listed is copied to the matching directory within <code>/mustafar</code>, such as <code>/mustafar/lib/x86_64-linux-gnu/</code> and <code>/mustafar/lib64/</code>.</p>
+</li>
+<li>
+<p><strong>Correct File Structure</strong>: Confirm that your <code>chroot</code> directory structure
+mirrors the actual root structure. The paths within <code>/mustafar</code> should match
+the paths of the dependencies found using <code>ldd</code>.</p>
+</li>
+</ol>
+<p>After confirming these items, try running <code>chroot</code> again:</p>
+<pre><code>sudo chroot /mustafar
+</code></pre>
+<p>If these checks don't resolve the issue, double-check permissions on the <code>chroot</code> directory to ensure root ownership:</p>
+<pre><code>sudo chown root:root /mustafar
+</code></pre>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>Systems need to be secure from the inside and out.
-In order to secure from the inside,
-system users should be given access and permissions
-as needed.</p>
+In order to secure from the inside, system users should be given access and permissions as needed.</p>
 <p>In this section, we covered how to create a <strong>chroot</strong> environment.
 The chroot confines users and processes to this pseudo root location.
-It provides them limited access to the overall file system and
-to the software on the system.
-We can use this chroot to confine users and processes,
-like <strong>apache2</strong> or human users.
-Any user listed in <code>/etc/passwd</code> can be chrooted, and
-most users listed in that file are services.</p>
-<p>Restricted a human user to a chrooted environment
-may not be necessary.
-On a multi-user system,
-proper education and training about the policies
-and uses of the system may be all that's needed.
-Alternatively, when creating user accounts,
-we could make their default shell <code>rbash</code>,
-or <strong>restricted bash</strong>.
-<code>rbash</code> limits access to a lot of
-Bash's main functions, and
-for added security, it
-can be used in conjunction with <code>chroot</code>.</p>
-<p>In summary, if a stricter environment is needed,
-you know how to create
-a basic <strong>chroot</strong> environment.</p>
+It provides them limited access to the overall file system and to the software on the system.
+We can use this chroot to confine users and processes, like <strong>apache2</strong> or human users.
+Any user listed in <code>/etc/passwd</code> can be chrooted, and most users listed in that file are services.</p>
+<p>Restricted a human user to a chrooted environment may not be necessary.
+On a multi-user system, proper education and training about the policies and uses of the system may be all that's needed.
+Alternatively, when creating user accounts, we could make their default shell <code>rbash</code>, or <strong>restricted bash</strong>.
+<code>rbash</code> limits access to a lot of Bash's main functions, and for added security, it can be used in conjunction with <code>chroot</code>.
+See <code>man rbash</code> for more details.</p>
+<p>In summary, if a stricter environment is needed, you know how to create a basic <code>chroot</code> environment.</p>
 <p><strong>Additional Sources:</strong></p>
 <ul>
 <li><a href="https://linuxconfig.org/how-to-automatically-chroot-jail-selected-ssh-user-logins">How to automatically chroot jail selected ssh user logins</a>.</li>
@@ -408,33 +378,27 @@ a basic <strong>chroot</strong> environment.</p>
 <li><a href="https://www.linode.com/docs/guides/use-chroot-for-testing-on-ubuntu/">How to Use chroot for Testing on Ubuntu</a></li>
 <li><a href="https://linuxhint.com/setup-linux-chroot-jails/">How To Setup Linux Chroot Jails</a></li>
 </ul>
-<h2 id="appendix"><a class="header" href="#appendix">Appendix</a></h2>
-<p>On remote systems not managed by Google Cloud,
-where users use the <code>ssh</code> command in the
-traditional way,
-as opposed to the <code>gcloud ssh</code> command.
-the following process illustrates how to
-confine a user to a chrooted environment
+<h2 id="appendix-a-non-google-cloud-systems"><a class="header" href="#appendix-a-non-google-cloud-systems">Appendix A: Non-Google Cloud Systems</a></h2>
+<p>On remote systems not managed by Google Cloud, where users use the <code>ssh</code> command in the traditional way,
+as opposed to the <code>gcloud ssh</code> command, the following process illustrates how to confine a user to a chrooted environment
 based on their group membership:</p>
 <ol>
 <li>
-<p>Let's create a new user. After we create the new user, we
-will <code>chroot</code> that user going forward.</p>
+<p>Let's create a new user. After we create the new user, we will <code>chroot</code> that user going forward.</p>
 <pre><code>sudo adduser vader
 </code></pre>
 </li>
 <li>
-<p>Create a new group called <em>mustafar</em>. We can add users to
-this group that we want to jail.</p>
+<p>Create a new group called <code>mustafar</code>. We can add users to this group that we want to jail.</p>
 <pre><code>groupadd mustafar
 usermod -a -G mustafar vader
 groups vader
 </code></pre>
 </li>
 <li>
-<p>Edit <code>/etc/ssh/sshd_config</code> to direct users in the <code>chrootjail</code> group to
-the <code>chroot</code> directory. Add the following line at the end of the file.
-Then restart ssh server.</p>
+<p>Edit <code>/etc/ssh/sshd_config</code> to direct users in the <code>chrootjail</code> group to the
+<code>chroot</code> directory. Add the following line at the end of the file. Then
+restart ssh server.</p>
 <pre><code>sudo nano /etc/ssh/sshd_config
 Match group mustafar
             ChrootDirectory /mustafar
@@ -444,17 +408,118 @@ Match group mustafar
 </code></pre>
 </li>
 <li>
-<p>Test the <code>ssh</code> connection for the <em>vader</em> user.</p>
+<p>Test the <code>ssh</code> connection for the <code>vader</code> user.</p>
 <pre><code>ssh vader@localhost
 -bash-5.1$ ls
 -bash: ls: command not found
 exit
 </code></pre>
-<p>That works as expected. The user <em>vader</em> is now restricted to a special
+<p>That works as expected. The user <code>vader</code> is now restricted to a special
 directory and has limited access to the system or to any utilities on that
 system.</p>
 </li>
 </ol>
+<h2 id="appendix-b-additional-tools-for-securing-multi-user-shell-systems"><a class="header" href="#appendix-b-additional-tools-for-securing-multi-user-shell-systems">Appendix B: Additional Tools for Securing Multi-User Shell Systems</a></h2>
+<p>In addition to <code>chroot</code> and <code>rbash</code>, several other Linux tools can help secure multi-user, shell-accessible systems.
+These tools can be used to restrict file modifications, monitor system changes, and limit user actions.
+Together, they provide an extra layer of control and protection.</p>
+<ol>
+<li>
+<p><code>chattr</code> (Change File Attributes)</p>
+<p>The <code>chattr</code> command changes file attributes on Linux filesystems. By
+setting certain attributes on files, you can restrict users—even with
+superuser permissions—from modifying critical files. This is particularly
+useful for preventing accidental or malicious deletion or alteration of
+configuration files and other sensitive data.</p>
+<ul>
+<li><strong>Common Usage</strong>: The most frequently used option is the <code>+i</code> (immutable) attribute, which prevents modification or deletion.</li>
+</ul>
+<pre><code>sudo chattr +i /path/to/important/file
+</code></pre>
+<p>Once this attribute is set, the file cannot be modified, renamed, or deleted until the attribute is removed with <code>chattr -i</code>.</p>
+<ul>
+<li><strong>Other Options</strong>: There are additional flags to explore, such as <code>+a</code>,
+which allows only appending to a file, which is useful for log files that
+should not be altered.</li>
+</ul>
+</li>
+<li>
+<p><code>lsattr</code> (List File Attributes)</p>
+<p>The <code>lsattr</code> command is used to view the attributes set by <code>chattr</code>.
+This command shows you which files are immutable or otherwise restricted.
+It allows administrators to verify that critical files have the appropriate protections.</p>
+<ul>
+<li><strong>Common Usage</strong>:</li>
+</ul>
+<pre><code>lsattr /path/to/important/file
+</code></pre>
+<p>This command outputs a list of attributes and helps administrators quickly identify files that are protected or have special restrictions.</p>
+</li>
+<li>
+<p><code>sudo</code> and <code>sudoers</code> Configuration</p>
+<p>The <code>sudo</code> command grants specific users permission to execute commands as
+superuser, but the <code>sudoers</code> file can also be configured to limit which
+commands a user may execute with <code>sudo</code>. By restricting <code>sudo</code> permissions,
+you can allow users access to only the commands they need to perform their
+roles.</p>
+<ul>
+<li><strong>Common Usage</strong>: Open the <code>sudoers</code> file with <code>visudo</code> to edit user permissions. For example, to allow a user only to use <code>ls</code> and <code>cat</code> with <code>sudo</code>, add:</li>
+</ul>
+<pre><code>username ALL=(ALL) /bin/ls, /bin/cat
+</code></pre>
+</li>
+<li>
+<p><code>ulimit</code> (User Limits)</p>
+<p>The <code>ulimit</code> command sets resource limits for user sessions, such as
+maximum file sizes, number of open files, and CPU time. This is essential
+in preventing users from consuming excessive resources, which could slow
+down or crash the system.</p>
+<ul>
+<li><strong>Common Usage</strong>: To set a file size limit of 100MB for a session, use:</li>
+</ul>
+<pre><code>ulimit -f 100000
+</code></pre>
+<p>You can make these limits permanent for specific users by adding them to the user’s shell configuration file (e.g., <code>~/.bashrc</code>) or to the <code>/etc/security/limits.conf</code> file for global settings. If you add them to a user's <code>~/.bashrc</code> file, you can use the <code>chattr</code> command to prevent the user from editing that file.</p>
+</li>
+<li>
+<p><code>faillock</code> and Account Lockout Policies</p>
+<p><code>faillock</code> helps protect against brute-force attacks by locking user accounts after a specified number of failed login attempts. This can prevent unauthorized access to user accounts.</p>
+<ul>
+<li><strong>Common Usage</strong>: To set a policy that locks an account for 10 minutes after three failed login attempts, edit <code>/etc/security/faillock.conf</code>:</li>
+</ul>
+<pre><code>deny = 3
+unlock_time = 600
+</code></pre>
+<p>Then, restart your authentication services to apply the changes.</p>
+</li>
+<li>
+<p><code>iptables</code> for Access Control</p>
+<p>While traditionally used for network security, <code>iptables</code> can also be configured to control user access to certain resources or services. For example, you can restrict SSH access to specific IP addresses, reducing the attack surface on multi-user systems.</p>
+<ul>
+<li><strong>Common Usage</strong>: To limit SSH access to users coming from a specific IP address:</li>
+</ul>
+<pre><code>sudo iptables -A INPUT -p tcp --dport 22 -s &lt;allowed_ip&gt; -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 22 -j DROP
+</code></pre>
+<p>On Debian-based systems, including Ubuntu, you can use the <code>ufw</code> command (Uncomplicated Firewall) instead of <code>ipatbles</code>:</p>
+<p>To permit SSH access (port 22) only from a specific IP address, use:</p>
+<pre><code>sudo ufw allow from &lt;allowed_ip&gt; to any port 22
+</code></pre>
+<p>To block SSH access from all other IPs, use:</p>
+<pre><code>sudo ufw deny 22
+</code></pre>
+<p>For example, to block SSH traffic from <code>192.168.1.100</code>, you would write:</p>
+<pre><code>sudo ufw allow from 192.168.1.100` to any port 22
+sudo ufw deny 22
+</code></pre>
+<p>Make sure <code>ufw</code> is active and running with these commands:</p>
+<pre><code>sudo ufw enable
+sudo ufw status
+</code></pre>
+</li>
+</ol>
+<p>These tools, combined with <code>chroot</code> and <code>rbash</code>, create a layered approach to security for multi-user shell systems.
+Each tool has specific use cases, but together they help administrators establish a secure and controlled environment.</p>
 
                     </main>
 
