@@ -274,9 +274,13 @@ In summary, if a stricter environment is needed, you know how to create a basic 
 
 ## Appendix A: Non-Google Cloud Systems
 
-On remote systems not managed by Google Cloud, where users use the `ssh` command in the traditional way,
-as opposed to the `gcloud ssh` command, the following process illustrates how to confine a user to a chrooted environment
-based on their group membership:
+To reach Google Cloud virtual instances, we use the `gcloud compute ssh` command.
+Our user accounts and connections to these instances are managed on the Google Cloud console.
+However, on traditional remote systems, we use `ssh` with its standard syntax, which is: `ssh user@domain.com` or `ssh user@<ip_address>`,
+where `user` is the account name managed directly on the server and `domain.com` is the host name of the server.
+
+On those traditional types of systems, we can take advantage of `chroot` to isolate user accounts to a chrooted environment.
+There are a number of ways to do this, but below I demonstrate how to isolate users to a chrooted environment based on their group membership.
 
 1. Let's create a new user. After we create the new user, we will ``chroot`` that user going forward.
 
@@ -284,7 +288,7 @@ based on their group membership:
     sudo adduser vader
     ```
 
-6. Create a new group called `mustafar`. We can add users to this group that we want to jail.
+6. Create a new group called `mustafar`. We can add users to this group that we want to jail in a chrooted environment.
 
     ```
     groupadd mustafar
@@ -298,6 +302,11 @@ based on their group membership:
 
     ```
     sudo nano /etc/ssh/sshd_config
+    ```
+    
+    Then add:
+    
+    ```
     Match group mustafar
                 ChrootDirectory /mustafar
     ```
@@ -308,7 +317,7 @@ based on their group membership:
     systemctl restart sshd
     ```
 
-8. Test the `ssh` connection for the `vader` user.
+8. Test the `ssh` connection for the `vader` user. Here I use `ssh` on the local system to connect to the local system, simply to test it.
 
     ```
     ssh vader@localhost
@@ -323,9 +332,9 @@ based on their group membership:
 
 ## Appendix B: Additional Tools for Securing Multi-User Shell Systems
 
-In addition to `chroot` and `rbash`, several other Linux tools can help secure multi-user, shell-accessible systems.
+In addition to `chroot` and `rbash`, other Linux tools can help secure multi-user, shell-accessible systems.
 These tools can be used to restrict file modifications, monitor system changes, and limit user actions.
-Together, they provide an extra layer of control and protection.
+Together they provide an extra layer of control and protection.
 
 1. `chattr` (Change File Attributes)
 
@@ -414,7 +423,7 @@ Together, they provide an extra layer of control and protection.
     sudo iptables -A INPUT -p tcp --dport 22 -j DROP
     ```
     
-    On Debian-based systems, including Ubuntu, you can use the `ufw` command (Uncomplicated Firewall) instead of `ipatbles`:
+    On Debian-based systems, including Ubuntu, you can use the `ufw` command (Uncomplicated Firewall) instead of `iptables`:
     
     To permit SSH access (port 22) only from a specific IP address, use:
     
@@ -442,5 +451,5 @@ Together, they provide an extra layer of control and protection.
     sudo ufw status
     ```
 
-These tools, combined with `chroot` and `rbash`, create a layered approach to security for multi-user shell systems.
+Combined with `chroot` and `rbash`, these create a layered approach to security for multi-user shell systems.
 Each tool has specific use cases, but together they help administrators establish a secure and controlled environment.

@@ -379,9 +379,12 @@ See <code>man rbash</code> for more details.</p>
 <li><a href="https://linuxhint.com/setup-linux-chroot-jails/">How To Setup Linux Chroot Jails</a></li>
 </ul>
 <h2 id="appendix-a-non-google-cloud-systems"><a class="header" href="#appendix-a-non-google-cloud-systems">Appendix A: Non-Google Cloud Systems</a></h2>
-<p>On remote systems not managed by Google Cloud, where users use the <code>ssh</code> command in the traditional way,
-as opposed to the <code>gcloud ssh</code> command, the following process illustrates how to confine a user to a chrooted environment
-based on their group membership:</p>
+<p>To reach Google Cloud virtual instances, we use the <code>gcloud compute ssh</code> command.
+Our user accounts and connections to these instances are managed on the Google Cloud console.
+However, on traditional remote systems, we use <code>ssh</code> with its standard syntax, which is: <code>ssh user@domain.com</code> or <code>ssh user@&lt;ip_address&gt;</code>,
+where <code>user</code> is the account name managed directly on the server and <code>domain.com</code> is the host name of the server.</p>
+<p>On those traditional types of systems, we can take advantage of <code>chroot</code> to isolate user accounts to a chrooted environment.
+There are a number of ways to do this, but below I demonstrate how to isolate users to a chrooted environment based on their group membership.</p>
 <ol>
 <li>
 <p>Let's create a new user. After we create the new user, we will <code>chroot</code> that user going forward.</p>
@@ -389,7 +392,7 @@ based on their group membership:</p>
 </code></pre>
 </li>
 <li>
-<p>Create a new group called <code>mustafar</code>. We can add users to this group that we want to jail.</p>
+<p>Create a new group called <code>mustafar</code>. We can add users to this group that we want to jail in a chrooted environment.</p>
 <pre><code>groupadd mustafar
 usermod -a -G mustafar vader
 groups vader
@@ -400,7 +403,9 @@ groups vader
 <code>chroot</code> directory. Add the following line at the end of the file. Then
 restart ssh server.</p>
 <pre><code>sudo nano /etc/ssh/sshd_config
-Match group mustafar
+</code></pre>
+<p>Then add:</p>
+<pre><code>Match group mustafar
             ChrootDirectory /mustafar
 </code></pre>
 <p>Exit <code>nano</code>, and restart <code>ssh</code>:</p>
@@ -408,7 +413,7 @@ Match group mustafar
 </code></pre>
 </li>
 <li>
-<p>Test the <code>ssh</code> connection for the <code>vader</code> user.</p>
+<p>Test the <code>ssh</code> connection for the <code>vader</code> user. Here I use <code>ssh</code> on the local system to connect to the local system, simply to test it.</p>
 <pre><code>ssh vader@localhost
 -bash-5.1$ ls
 -bash: ls: command not found
@@ -420,9 +425,9 @@ system.</p>
 </li>
 </ol>
 <h2 id="appendix-b-additional-tools-for-securing-multi-user-shell-systems"><a class="header" href="#appendix-b-additional-tools-for-securing-multi-user-shell-systems">Appendix B: Additional Tools for Securing Multi-User Shell Systems</a></h2>
-<p>In addition to <code>chroot</code> and <code>rbash</code>, several other Linux tools can help secure multi-user, shell-accessible systems.
+<p>In addition to <code>chroot</code> and <code>rbash</code>, other Linux tools can help secure multi-user, shell-accessible systems.
 These tools can be used to restrict file modifications, monitor system changes, and limit user actions.
-Together, they provide an extra layer of control and protection.</p>
+Together they provide an extra layer of control and protection.</p>
 <ol>
 <li>
 <p><code>chattr</code> (Change File Attributes)</p>
@@ -501,7 +506,7 @@ unlock_time = 600
 <pre><code>sudo iptables -A INPUT -p tcp --dport 22 -s &lt;allowed_ip&gt; -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 22 -j DROP
 </code></pre>
-<p>On Debian-based systems, including Ubuntu, you can use the <code>ufw</code> command (Uncomplicated Firewall) instead of <code>ipatbles</code>:</p>
+<p>On Debian-based systems, including Ubuntu, you can use the <code>ufw</code> command (Uncomplicated Firewall) instead of <code>iptables</code>:</p>
 <p>To permit SSH access (port 22) only from a specific IP address, use:</p>
 <pre><code>sudo ufw allow from &lt;allowed_ip&gt; to any port 22
 </code></pre>
@@ -518,7 +523,7 @@ sudo ufw status
 </code></pre>
 </li>
 </ol>
-<p>These tools, combined with <code>chroot</code> and <code>rbash</code>, create a layered approach to security for multi-user shell systems.
+<p>Combined with <code>chroot</code> and <code>rbash</code>, these create a layered approach to security for multi-user shell systems.
 Each tool has specific use cases, but together they help administrators establish a secure and controlled environment.</p>
 
                     </main>
