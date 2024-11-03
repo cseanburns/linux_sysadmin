@@ -6408,7 +6408,7 @@ The chroot confines users and processes to this pseudo root location.
 It provides them limited access to the overall file system and to the software on the system.
 We can use this chroot to confine users and processes, like <strong>apache2</strong> or human users.
 Any user listed in <code>/etc/passwd</code> can be chrooted, and most users listed in that file are services.</p>
-<p>Restricted a human user to a chrooted environment may not be necessary.
+<p>Restricting a human user to a chrooted environment may not be necessary.
 On a multi-user system, proper education and training about the policies and uses of the system may be all that's needed.
 Alternatively, when creating user accounts, we could make their default shell <code>rbash</code>, or <strong>restricted bash</strong>.
 <code>rbash</code> limits access to a lot of Bash's main functions, and for added security, it can be used in conjunction with <code>chroot</code>.
@@ -6437,8 +6437,8 @@ There are a number of ways to do this, but below I demonstrate how to isolate us
 </li>
 <li>
 <p>Create a new group called <code>mustafar</code>. We can add users to this group that we want to jail in a chrooted environment.</p>
-<pre><code>groupadd mustafar
-usermod -a -G mustafar vader
+<pre><code>sudo groupadd mustafar
+sudo usermod -a -G mustafar vader
 groups vader
 </code></pre>
 </li>

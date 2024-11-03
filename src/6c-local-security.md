@@ -250,7 +250,7 @@ It provides them limited access to the overall file system and to the software o
 We can use this chroot to confine users and processes, like **apache2** or human users.
 Any user listed in `/etc/passwd` can be chrooted, and most users listed in that file are services.
 
-Restricted a human user to a chrooted environment may not be necessary.
+Restricting a human user to a chrooted environment may not be necessary.
 On a multi-user system, proper education and training about the policies and uses of the system may be all that's needed.
 Alternatively, when creating user accounts, we could make their default shell `rbash`, or **restricted bash**.
 `rbash` limits access to a lot of Bash's main functions, and for added security, it can be used in conjunction with `chroot`.
@@ -292,8 +292,8 @@ There are a number of ways to do this, but below I demonstrate how to isolate us
 6. Create a new group called `mustafar`. We can add users to this group that we want to jail in a chrooted environment.
 
     ```
-    groupadd mustafar
-    usermod -a -G mustafar vader
+    sudo groupadd mustafar
+    sudo usermod -a -G mustafar vader
     groups vader
     ```
 
