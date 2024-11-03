@@ -274,8 +274,9 @@ In summary, if a stricter environment is needed, you know how to create a basic 
 
 ## Appendix A: Non-Google Cloud Systems
 
-To reach Google Cloud virtual instances, we use the `gcloud compute ssh` command.
-Our user accounts and connections to these instances are managed on the Google Cloud console.
+Our user accounts and connections to our Google Cloud virtual instances are managed on the Google Cloud console,
+and we reach these instances using the `gcloud compute ssh` command.
+The `gcloud` command is special software that we installed on our personal systems and authentication happens via our Google accounts.
 However, on traditional remote systems, we use `ssh` with its standard syntax, which is: `ssh user@domain.com` or `ssh user@<ip_address>`,
 where `user` is the account name managed directly on the server and `domain.com` is the host name of the server.
 

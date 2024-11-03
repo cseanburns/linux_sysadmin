@@ -6422,8 +6422,9 @@ See <code>man rbash</code> for more details.</p>
 <li><a href="https://linuxhint.com/setup-linux-chroot-jails/">How To Setup Linux Chroot Jails</a></li>
 </ul>
 <h2 id="appendix-a-non-google-cloud-systems"><a class="header" href="#appendix-a-non-google-cloud-systems">Appendix A: Non-Google Cloud Systems</a></h2>
-<p>To reach Google Cloud virtual instances, we use the <code>gcloud compute ssh</code> command.
-Our user accounts and connections to these instances are managed on the Google Cloud console.
+<p>Our user accounts and connections to our Google Cloud virtual instances are managed on the Google Cloud console,
+and we reach these instances using the <code>gcloud compute ssh</code> command.
+The <code>gcloud</code> command is special software that we installed on our personal systems and authentication happens via our Google accounts.
 However, on traditional remote systems, we use <code>ssh</code> with its standard syntax, which is: <code>ssh user@domain.com</code> or <code>ssh user@&lt;ip_address&gt;</code>,
 where <code>user</code> is the account name managed directly on the server and <code>domain.com</code> is the host name of the server.</p>
 <p>On those traditional types of systems, we can take advantage of <code>chroot</code> to isolate user accounts to a chrooted environment.
