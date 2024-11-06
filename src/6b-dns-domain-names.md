@@ -245,7 +245,7 @@ We can also get this path information using `dig`'s trace command:
 dig google.com +trace
 ```
 
-There are a lot of [ways to use the dig command][digCommands], and you can test and explore them on your own.
+There are a lot of [ways to use the dig command][dig_commands], and you can test and explore them on your own.
 
 ### DNS Record Types
 
@@ -435,12 +435,14 @@ In this section, we covered the basics of DNS that include:
 
 We also looked at several command line tools to query for information about the domain name system.
 
+For web-based DNS tools, see [ViewDNS.info][viewdns].
+
 [alt_dns]:https://en.wikipedia.org/wiki/Alternative_DNS_root
 [alternic]:https://en.wikipedia.org/wiki/AlterNIC
 [application_layer]:https://en.wikipedia.org/wiki/Application_layer
 [bgp_broken]:https://www.youtube.com/watch?v=cOE2miIh1_o
 [cctld]:https://en.wikipedia.org/wiki/Country_code_top-level_domain
-[digCommands]:https://www.geeksforgeeks.org/dig-command-in-linux-with-examples/
+[dig_commands]:https://www.geeksforgeeks.org/dig-command-in-linux-with-examples/
 [dnsrecords]:https://www.youtube.com/watch?v=cwT82ibOM2Q
 [fqdn]:https://en.wikipedia.org/wiki/Fully_qualified_domain_name
 [howdns]:https://www.youtube.com/watch?v=mpQZVYPuDGU
@@ -448,4 +450,4 @@ We also looked at several command line tools to query for information about the 
 [opennic]:https://www.opennicproject.org/
 [recursivedns]:https://www.cloudflare.com/learning/dns/what-is-recursive-dns/
 [rootiana]:https://www.iana.org/domains/root/servers
-[sdf]:https://web.archive.org/web/20081121061730/http://www.smtpnic.org/
+[viewdns]:https://viewdns.info/
