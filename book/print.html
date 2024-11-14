@@ -7317,7 +7317,7 @@ MariaDB [(linuxdb)]&gt; select * from distributions;
 MariaDB [(linuxdb)]&gt; delete from distributions where name='Debian';
 MariaDB [(linuxdb)]&gt; insert into distributions
     -&gt; (name, packagemanager, developer, founded) values
-    -&gt; ('Debian', 'The Debian Project', '1993-09-15'),
+    -&gt; ('Debian', 'APT', 'The Debian Project', '1993-09-15'),
     -&gt; ('CentOS', 'YUM', 'The CentOS Project', '2004-05-14');
 MariaDB [(linuxdb)]&gt; select * from distributions;
 MariaDB [(linuxdb)]&gt; select name, packagemanager
@@ -7362,7 +7362,7 @@ $db_password = "[YOUR-PASSWORD-HERE]";
 ?&gt;
 </code></pre>
 <p>Next we create a new PHP file for our website.
-This file will display HTML but will primarily be PHP interacting with our MariaDB <strong>distributions</strong> database.</p>
+This file will display HTML but will primarily be PHP interacting with our MariaDB <strong>distributions</strong> table in our <strong>linuxdb</strong> database.</p>
 <p>Create a file titled <strong>distros.php</strong>.</p>
 <pre><code>sudo nano distros.php
 </code></pre>
