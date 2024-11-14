@@ -234,7 +234,7 @@ MariaDB [(linuxdb)]> select * from distributions;
 MariaDB [(linuxdb)]> delete from distributions where name='Debian';
 MariaDB [(linuxdb)]> insert into distributions
     -> (name, packagemanager, developer, founded) values
-    -> ('Debian', 'The Debian Project', '1993-09-15'),
+    -> ('Debian', 'APT', 'The Debian Project', '1993-09-15'),
     -> ('CentOS', 'YUM', 'The CentOS Project', '2004-05-14');
 MariaDB [(linuxdb)]> select * from distributions;
 MariaDB [(linuxdb)]> select name, packagemanager
@@ -295,7 +295,7 @@ $db_password = "[YOUR-PASSWORD-HERE]";
 ```
 
 Next we create a new PHP file for our website.
-This file will display HTML but will primarily be PHP interacting with our MariaDB **distributions** database.
+This file will display HTML but will primarily be PHP interacting with our MariaDB **distributions** table in our **linuxdb** database.
 
 Create a file titled **distros.php**.
 
