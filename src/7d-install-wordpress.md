@@ -9,17 +9,17 @@ By the end of this section, you will be able to:
 ## Introduction
 
 [WordPress][wpwiki] is a free and open source content management system (CMS).
-Originally, its focus was on providing a platform for blogging, but throughout its lifespan it has become a general purpose CMS that functions as a website builder.
+Originally, its focus was on providing a platform for blogging,
+but throughout its lifespan it has become a general purpose CMS that functions as a website builder.
 Two sites exist to provide access to WordPress:
 [WordPress.com][wpcom] and [Wordpress.org][wporg].
-WordPress.com is a hosting solution, which means that customers can sign up and create a free WordPress site.
-Since its hosted, customers are only responsible for their content and not for managing the WordPress installation and its updates.
+WordPress.com is a hosted service where WordPress handles everything, from updates to security.
+Customers are mainly responsible for content and the appearance of their sites.
 Various paid plans can extend the functionality offered to WordPress.com customers.
 
-WordPress.org is maintained by the [WordPress Foundation][wpfoundation], which oversees the development of and provides access to the WordPress software.
+WordPress.org is maintained by the [WordPress Foundation][wpfoundation], which oversees its development and provides access to the WordPress software.
 When we download the WordPress software, we download it from WordPress.org.
-Unlike the hosted solution, when we install and setup WordPress on our own servers, we become responsible for administrating
-its installation and for keeping the software updated.
+Unlike the hosted solution, WordPress.org is for users who want full control and responsibility over their website installation and maintenance.
 
 WordPress is widely used software, and because of that, it's often the focus of attack.
 Take a moment to read about the developer's efforts to protect WordPress: [Security][wpsecurity].
@@ -42,7 +42,9 @@ So far I have shown you how to install software using two methods:
 - downloading from GitHub
 
 In this lesson, we are going to install WordPress by downloading the most recent version from WordPress.org and installing it manually.
-The WordPress application is available via the `apt` command, but the `apt` process makes it a bit more confusing than it should be, oddly.
+The WordPress application is available via the `apt` command,
+but the `apt` installation method often requires additional manual configuration that can be inconsistent or more difficult to troubleshoot
+compared to the manual process we're using here.
 
 We are going to *kind of* follow the documentation provided by WordPress.org.
 You should read through the documentation **before** following my instructions, but then follow the process I outline here instead
@@ -77,10 +79,9 @@ php --version
 mariadb --version
 ```
 
-The output from `php --version` shows that our systems have PHP 7.4.3,
-which is greater than PHP 7.4.
-The output from `mariadb --version` show that our systems have MariaDB 15.1, which is greater than MariaDB 10.5.
-This means we can proceed.
+The output from `php --version` shows that our systems have PHP 8.1, which is greater than PHP 7.4.
+The output from `mariadb --version` show that our systems have MariaDB 10.6.18, which is greater than MariaDB 10.5.
+If your versions are below the required numbers, you will need to update PHP or MariaDB before proceeding.
 
 Next, we need to add some additional PHP modules to our system to let WordPress operate at full functionality.
 We can install these using the `apt` command:
@@ -105,8 +106,9 @@ that contains multiple files and subdirectories.
 The general instructions include:
 
 1. Change to the `/var/www/html` directory.
-1. Download the latest version of WordPress using the `wget` program.
-1. Extract the package using the `tar` program.
+2. Download the latest version of WordPress using the `wget` program.
+3. Extract the package using the `tar` program.
+4. Delete the tar package to prevent clutter in the directory. You can wait to delete this file until you've successfully installed WordPress.
 
 Specifically, this means we do the following on the command line:
 
@@ -114,16 +116,17 @@ Specifically, this means we do the following on the command line:
 cd /var/www/html
 sudo wget https://wordpress.org/latest.tar.gz
 sudo tar -xzvf latest.tar.gz
+sudo rm latest.tar.gz
 ```
 
-As noted in the WordPress documentation, this creates a directory called **wordpress**.
+Using the `tar -xzvf latest.tar.gz` command creates a directory called **wordpress**, as noted in the documentation.
 If we leave that alone, then the full path of our installations will located at `/var/www/html/wordpress`.
 
 ### Step 3: Create the Database and a User
 
-The WordPress documentation describes how to use [phpMyAdmin][phpmyadmin] to create WordPress database and a user.
+The WordPress documentation describes how to use [phpMyAdmin][phpmyadmin] to create the WordPress database and user.
 `phpMyAdmin` is a graphical front end to the MySQL/MariaDB relational database that you would access through the browser.
-However,, we are going to create the WordPress database and a database user using the same process we used
+However, we are going to create the WordPress database and a database user using the same process we used
 to create a database and user for our `login.php` and `distros.php` pages.
 
 The general instructions are:
@@ -142,26 +145,28 @@ The `mariadb -u root` command puts us in the MariaDB command prompt.
 The next general instructions are to:
 
 1. Create a new user for the WordPress database
-  1. Be sure to replace the Xs in the example command below with a strong password
+  1. Be sure to use a strong password.
 1. Create a new database for WordPress
 1. Grant all privileges to the new user for the new database
 1. Examine the output
 1. Exit the MariaDB prompt
 
-Specifically, this means the following (be sure to replaces the **Xs** with a unique and strong password of your own):
+Specifically, this means the following:
 
 ```
-create user 'wordpress'@'localhost' identified by 'XXXXXXXXX';
+create user 'wordpress'@'localhost' identified by '[YOUR-PASSWORD-HERE]';
 create database wordpress;
 grant all privileges on wordpress.* to 'wordpress'@'localhost';
 show databases;
 \q
 ```
 
+By creating a dedicated database user for WordPress, we can limit access to only what's necessary for WordPress to function.
+This improves security by reducing privileges for this account.
+
 ### Step 4: Set up wp-config.php
 
-When we created the `login.php` file that contained the name of the database (e.g. linuxdb),
-the name of the database user (e.g., webapp),
+When we created the `login.php` file that contained the name of the database (e.g. linuxdb), the name of the database user (e.g., webapp),
 and the user's password, we followed the same general process that WordPress follows.
 Instead of `login.php`, WordPress uses a file called `wp-config.php`.
 We have to edit that file.
@@ -181,13 +186,18 @@ sudo nano wp-config.php
 ```
 
 In `nano`, add your database name, user, and password in the appropriate fields, just like we did with our `login.php` file.
+Double-check your entries in `wp-config.php`.
+Incorrect details will prevent WordPress from connecting to the database and will result in errors during setup.
 
 Additionally, we want to disable FTP uploads to the site.
-To do that, navigate to the end of the file and add the following line:
+To do that, navigate to the end of the `wp-config.php` file and add the following line:
 
 ```
 define('FS_METHOD','direct');
 ```
+
+Disabling FTP uploads with the above statement allows WordPress to directly write to your filesystem.
+This makes it easier to manage themes and plugins without needing FTP credentials every time.
 
 ### Step 5: **Optional**
 
@@ -200,7 +210,7 @@ http://[IP ADDRESS]/wordpress
 
 If you want to have a different ending to your URL, then you want to rename your `wordpress` directory to something else.
 The WordPress documentation uses **blog** as an example.
-But it could be something different, as long as it is contains no spaces or special characters.
+But it could be something different, as long as it contains no spaces or special characters.
 Be sure to keep the directory name lowercase (no spaces and only alphanumeric characters).
 For example, if I want to change mine to **blog**, then:
 
@@ -217,6 +227,9 @@ Assuming you are still in your base directory, whether that is `/var/www/html/wo
 ```
 sudo chown -R www-data:www-data *
 ```
+
+Changing the file ownership ensures that the web server (`www-data`) can read and write to files as needed.
+Without this, WordPress might face permission errors during installation or when uploading files.
 
 ### Step 7: Run the Install Script
 
@@ -245,14 +258,16 @@ Rather, the username and password you enter here are for WordPress users; i.e., 
 
 **Two things to note:**
 
-We have not setup **Email** on our servers.
+We have not setup **email** on our servers.
 It's quite complicated to setup an email server correctly and securely, but it wouldn't work well without having a domain name setup anyway.
 So know that you probably should enter an email when setting up the user account, but it won't work.
 
-Second, when visiting your site, your browser may throw an error.
-Make sure that the URL is set to **http** and that it's not trying to access **https**.
-Setting up an **https** site generally requires a domain name, but we are not doing that here.
-So if there are any problems accessing your site in the browser, be sure to check that the URL starts off with **http**.
+Second, when visiting your site, your browser may throw an authenticaion error.
+Ensure the URL starts with `http` and not `https` because some browsers try to force `https` connections.
+We have not set up SSL certificates for secure connections, which would require a domain name and further configuration.
+Note that `http` connections are less secure and
+if you want to eventually set up a live site, you could acquire a domain name for your server and configure SSL using tools like
+[Let's Encrypt][letsencrypt].
 
 ## Conclusion
 
@@ -260,6 +275,7 @@ Congrats on setting up your WordPress library site.
 Feel free to take a moment to modify your site's design or to add content.
 
 [installWordPress]:https://wordpress.org/documentation/article/how-to-install-wordpress/
+[letsencrypt]:https://letsencrypt.org/
 [phpmyadmin]: https://www.phpmyadmin.net/
 [sixtyKplugins]:https://wordpress.org/plugins/
 [tenKthemes]:https://wordpress.org/themes/

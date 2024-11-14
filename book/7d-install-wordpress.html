@@ -185,16 +185,16 @@
 </ol>
 <h2 id="introduction"><a class="header" href="#introduction">Introduction</a></h2>
 <p><a href="https://en.wikipedia.org/wiki/WordPress">WordPress</a> is a free and open source content management system (CMS).
-Originally, its focus was on providing a platform for blogging, but throughout its lifespan it has become a general purpose CMS that functions as a website builder.
+Originally, its focus was on providing a platform for blogging,
+but throughout its lifespan it has become a general purpose CMS that functions as a website builder.
 Two sites exist to provide access to WordPress:
 <a href="https://wordpress.com">WordPress.com</a> and <a href="https://wordpress.org">Wordpress.org</a>.
-WordPress.com is a hosting solution, which means that customers can sign up and create a free WordPress site.
-Since its hosted, customers are only responsible for their content and not for managing the WordPress installation and its updates.
+WordPress.com is a hosted service where WordPress handles everything, from updates to security.
+Customers are mainly responsible for content and the appearance of their sites.
 Various paid plans can extend the functionality offered to WordPress.com customers.</p>
-<p>WordPress.org is maintained by the <a href="https://wordpressfoundation.org/">WordPress Foundation</a>, which oversees the development of and provides access to the WordPress software.
+<p>WordPress.org is maintained by the <a href="https://wordpressfoundation.org/">WordPress Foundation</a>, which oversees its development and provides access to the WordPress software.
 When we download the WordPress software, we download it from WordPress.org.
-Unlike the hosted solution, when we install and setup WordPress on our own servers, we become responsible for administrating
-its installation and for keeping the software updated.</p>
+Unlike the hosted solution, WordPress.org is for users who want full control and responsibility over their website installation and maintenance.</p>
 <p>WordPress is widely used software, and because of that, it's often the focus of attack.
 Take a moment to read about the developer's efforts to protect WordPress: <a href="https://wordpress.org/about/security/">Security</a>.
 We will not need to update our WordPress installs during the course of this course, but you should be familiar with the update process
@@ -213,7 +213,9 @@ as a systems administrator is to set up the sites and not build out content.</p>
 <li>downloading from GitHub</li>
 </ul>
 <p>In this lesson, we are going to install WordPress by downloading the most recent version from WordPress.org and installing it manually.
-The WordPress application is available via the <code>apt</code> command, but the <code>apt</code> process makes it a bit more confusing than it should be, oddly.</p>
+The WordPress application is available via the <code>apt</code> command,
+but the <code>apt</code> installation method often requires additional manual configuration that can be inconsistent or more difficult to troubleshoot
+compared to the manual process we're using here.</p>
 <p>We are going to <em>kind of</em> follow the documentation provided by WordPress.org.
 You should read through the documentation <strong>before</strong> following my instructions, but then follow the process I outline here instead
 because the documentation uses some different tools than we'll use.</p>
@@ -237,10 +239,9 @@ We can check that our systems meet these requirements with the following command
 <pre><code>php --version
 mariadb --version
 </code></pre>
-<p>The output from <code>php --version</code> shows that our systems have PHP 7.4.3,
-which is greater than PHP 7.4.
-The output from <code>mariadb --version</code> show that our systems have MariaDB 15.1, which is greater than MariaDB 10.5.
-This means we can proceed.</p>
+<p>The output from <code>php --version</code> shows that our systems have PHP 8.1, which is greater than PHP 7.4.
+The output from <code>mariadb --version</code> show that our systems have MariaDB 10.6.18, which is greater than MariaDB 10.5.
+If your versions are below the required numbers, you will need to update PHP or MariaDB before proceeding.</p>
 <p>Next, we need to add some additional PHP modules to our system to let WordPress operate at full functionality.
 We can install these using the <code>apt</code> command:</p>
 <pre><code>sudo apt install php-curl php-xml php-imagick php-mbstring php-zip php-intl
@@ -259,18 +260,20 @@ The general instructions include:</p>
 <li>Change to the <code>/var/www/html</code> directory.</li>
 <li>Download the latest version of WordPress using the <code>wget</code> program.</li>
 <li>Extract the package using the <code>tar</code> program.</li>
+<li>Delete the tar package to prevent clutter in the directory. You can wait to delete this file until you've successfully installed WordPress.</li>
 </ol>
 <p>Specifically, this means we do the following on the command line:</p>
 <pre><code>cd /var/www/html
 sudo wget https://wordpress.org/latest.tar.gz
 sudo tar -xzvf latest.tar.gz
+sudo rm latest.tar.gz
 </code></pre>
-<p>As noted in the WordPress documentation, this creates a directory called <strong>wordpress</strong>.
+<p>Using the <code>tar -xzvf latest.tar.gz</code> command creates a directory called <strong>wordpress</strong>, as noted in the documentation.
 If we leave that alone, then the full path of our installations will located at <code>/var/www/html/wordpress</code>.</p>
 <h3 id="step-3-create-the-database-and-a-user"><a class="header" href="#step-3-create-the-database-and-a-user">Step 3: Create the Database and a User</a></h3>
-<p>The WordPress documentation describes how to use <a href="https://www.phpmyadmin.net/">phpMyAdmin</a> to create WordPress database and a user.
+<p>The WordPress documentation describes how to use <a href="https://www.phpmyadmin.net/">phpMyAdmin</a> to create the WordPress database and user.
 <code>phpMyAdmin</code> is a graphical front end to the MySQL/MariaDB relational database that you would access through the browser.
-However,, we are going to create the WordPress database and a database user using the same process we used
+However, we are going to create the WordPress database and a database user using the same process we used
 to create a database and user for our <code>login.php</code> and <code>distros.php</code> pages.</p>
 <p>The general instructions are:</p>
 <ol>
@@ -285,22 +288,23 @@ mariadb -u root
 The next general instructions are to:</p>
 <ol>
 <li>Create a new user for the WordPress database</li>
-<li>Be sure to replace the Xs in the example command below with a strong password</li>
+<li>Be sure to use a strong password.</li>
 <li>Create a new database for WordPress</li>
 <li>Grant all privileges to the new user for the new database</li>
 <li>Examine the output</li>
 <li>Exit the MariaDB prompt</li>
 </ol>
-<p>Specifically, this means the following (be sure to replaces the <strong>Xs</strong> with a unique and strong password of your own):</p>
-<pre><code>create user 'wordpress'@'localhost' identified by 'XXXXXXXXX';
+<p>Specifically, this means the following:</p>
+<pre><code>create user 'wordpress'@'localhost' identified by '[YOUR-PASSWORD-HERE]';
 create database wordpress;
 grant all privileges on wordpress.* to 'wordpress'@'localhost';
 show databases;
 \q
 </code></pre>
+<p>By creating a dedicated database user for WordPress, we can limit access to only what's necessary for WordPress to function.
+This improves security by reducing privileges for this account.</p>
 <h3 id="step-4-set-up-wp-configphp"><a class="header" href="#step-4-set-up-wp-configphp">Step 4: Set up wp-config.php</a></h3>
-<p>When we created the <code>login.php</code> file that contained the name of the database (e.g. linuxdb),
-the name of the database user (e.g., webapp),
+<p>When we created the <code>login.php</code> file that contained the name of the database (e.g. linuxdb), the name of the database user (e.g., webapp),
 and the user's password, we followed the same general process that WordPress follows.
 Instead of <code>login.php</code>, WordPress uses a file called <code>wp-config.php</code>.
 We have to edit that file.</p>
@@ -315,11 +319,15 @@ We have to edit that file.</p>
 sudo cp wp-config-sample.php wp-config.php
 sudo nano wp-config.php
 </code></pre>
-<p>In <code>nano</code>, add your database name, user, and password in the appropriate fields, just like we did with our <code>login.php</code> file.</p>
+<p>In <code>nano</code>, add your database name, user, and password in the appropriate fields, just like we did with our <code>login.php</code> file.
+Double-check your entries in <code>wp-config.php</code>.
+Incorrect details will prevent WordPress from connecting to the database and will result in errors during setup.</p>
 <p>Additionally, we want to disable FTP uploads to the site.
-To do that, navigate to the end of the file and add the following line:</p>
+To do that, navigate to the end of the <code>wp-config.php</code> file and add the following line:</p>
 <pre><code>define('FS_METHOD','direct');
 </code></pre>
+<p>Disabling FTP uploads with the above statement allows WordPress to directly write to your filesystem.
+This makes it easier to manage themes and plugins without needing FTP credentials every time.</p>
 <h3 id="step-5-optional"><a class="header" href="#step-5-optional">Step 5: <strong>Optional</strong></a></h3>
 <p>The WordPress files were installed at <code>/var/www/html/wordpress</code>.
 This means that when our WordPress websites become public, they'll be available at the following URL:</p>
@@ -327,7 +335,7 @@ This means that when our WordPress websites become public, they'll be available 
 </code></pre>
 <p>If you want to have a different ending to your URL, then you want to rename your <code>wordpress</code> directory to something else.
 The WordPress documentation uses <strong>blog</strong> as an example.
-But it could be something different, as long as it is contains no spaces or special characters.
+But it could be something different, as long as it contains no spaces or special characters.
 Be sure to keep the directory name lowercase (no spaces and only alphanumeric characters).
 For example, if I want to change mine to <strong>blog</strong>, then:</p>
 <pre><code>cd /var/www/html
@@ -338,6 +346,8 @@ sudo mv wordpress blog
 Assuming you are still in your base directory, whether that is <code>/var/www/html/wordpress</code>, <code>/var/www/html/blog</code>, or like, run the following command:</p>
 <pre><code>sudo chown -R www-data:www-data *
 </code></pre>
+<p>Changing the file ownership ensures that the web server (<code>www-data</code>) can read and write to files as needed.
+Without this, WordPress might face permission errors during installation or when uploading files.</p>
 <h3 id="step-7-run-the-install-script"><a class="header" href="#step-7-run-the-install-script">Step 7: Run the Install Script</a></h3>
 <p>The next part of the process takes place in the browser.
 The location (URL) that you visit in the browser depends on your specific IP address and the name of the directory in <strong>/var/www/html</strong> that
@@ -354,13 +364,15 @@ Thus, if my IP address is 11.111.111.11 and I renamed by directory to <strong>bl
 The site <strong>Username</strong> and <strong>Password</strong> <em>should not</em> be the same as the username and password you used to create your WordPress database in MariaDB.
 Rather, the username and password you enter here are for WordPress users; i.e., those who will add content and manage the website.</p>
 <p><strong>Two things to note:</strong></p>
-<p>We have not setup <strong>Email</strong> on our servers.
+<p>We have not setup <strong>email</strong> on our servers.
 It's quite complicated to setup an email server correctly and securely, but it wouldn't work well without having a domain name setup anyway.
 So know that you probably should enter an email when setting up the user account, but it won't work.</p>
-<p>Second, when visiting your site, your browser may throw an error.
-Make sure that the URL is set to <strong>http</strong> and that it's not trying to access <strong>https</strong>.
-Setting up an <strong>https</strong> site generally requires a domain name, but we are not doing that here.
-So if there are any problems accessing your site in the browser, be sure to check that the URL starts off with <strong>http</strong>.</p>
+<p>Second, when visiting your site, your browser may throw an authenticaion error.
+Ensure the URL starts with <code>http</code> and not <code>https</code> because some browsers try to force <code>https</code> connections.
+We have not set up SSL certificates for secure connections, which would require a domain name and further configuration.
+Note that <code>http</code> connections are less secure and
+if you want to eventually set up a live site, you could acquire a domain name for your server and configure SSL using tools like
+<a href="https://letsencrypt.org/">Let's Encrypt</a>.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>Congrats on setting up your WordPress library site.
 Feel free to take a moment to modify your site's design or to add content.</p>
