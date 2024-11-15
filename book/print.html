@@ -7223,7 +7223,7 @@ Using a regular user account minimizes the security risks associated with perfor
 Root privileges should be reserved for administrative tasks only!</p>
 <p>To create a regular MariaDB user, we use the <code>create</code> command.
 In the command below, I create a new user called <strong>webapp</strong>.
-I use a complex password that I insert within the single quotes at the end (marked with a series of Xs here for demo purposes):</p>
+I use a complex password that I insert within the single quotes at the end:</p>
 <pre><code>MariaDB [(none)]&gt; create user 'webapp'@'localhost' identified by '[YOUR-PASSWORD-HERE]';
 </code></pre>
 <p>If the prompt returns a <strong>Query OK</strong> message, then the new user should have been created without any issues.</p>
@@ -7541,24 +7541,24 @@ We can install these using the <code>apt</code> command:</p>
 sudo systemctl restart mariadb
 </code></pre>
 <h3 id="step-2-download-and-extract"><a class="header" href="#step-2-download-and-extract">Step 2: Download and Extract</a></h3>
-<p>The next step is to download and extract the WordPress software, which is comes as a <strong>tar.gz</strong> file.
-This is very much like a compressed <strong>zip</strong> file.
-Although we only download one file, when we extract it with the <code>tar</code> command, the extraction will result in a new directory
+<p>The next step is to download and extract the WordPress software, which is comes as a <strong>zip</strong> file.
+Although we only download one file, when we extract it with the <code>zip</code> command, the extraction will result in a new directory
 that contains multiple files and subdirectories.
 The general instructions include:</p>
 <ol>
 <li>Change to the <code>/var/www/html</code> directory.</li>
 <li>Download the latest version of WordPress using the <code>wget</code> program.</li>
-<li>Extract the package using the <code>tar</code> program.</li>
-<li>Delete the tar package to prevent clutter in the directory. You can wait to delete this file until you've successfully installed WordPress.</li>
+<li>Extract the package using the <code>unzip</code> program.</li>
+<li>Delete the zip file to prevent clutter in the directory. You can wait to delete this file until you've successfully installed WordPress.</li>
 </ol>
 <p>Specifically, this means we do the following on the command line:</p>
 <pre><code>cd /var/www/html
-sudo wget https://wordpress.org/latest.tar.gz
-sudo tar -xzvf latest.tar.gz
-sudo rm latest.tar.gz
+sudo wget https://wordpress.org/latest.zip
+sudo apt install unzip
+sudo unzip latest.zip
+sudo rm latest.zip
 </code></pre>
-<p>Using the <code>tar -xzvf latest.tar.gz</code> command creates a directory called <strong>wordpress</strong>, as noted in the documentation.
+<p>Using the <code>sudo unzip latest.zip</code> command creates a directory called <strong>wordpress</strong>, as noted in the documentation.
 If we leave that alone, then the full path of our installations will located at <code>/var/www/html/wordpress</code>.</p>
 <h3 id="step-3-create-the-database-and-a-user"><a class="header" href="#step-3-create-the-database-and-a-user">Step 3: Create the Database and a User</a></h3>
 <p>The WordPress documentation describes how to use <a href="https://www.phpmyadmin.net/">phpMyAdmin</a> to create the WordPress database and user.
@@ -7590,6 +7590,9 @@ create database wordpress;
 grant all privileges on wordpress.* to 'wordpress'@'localhost';
 show databases;
 \q
+</code></pre>
+<p>Then exit out of the Linux root account:</p>
+<pre><code>exit
 </code></pre>
 <p>By creating a dedicated database user for WordPress, we can limit access to only what's necessary for WordPress to function.
 This improves security by reducing privileges for this account.</p>
@@ -7643,7 +7646,7 @@ Without this, WordPress might face permission errors during installation or when
 The location (URL) that you visit in the browser depends on your specific IP address and the name of the directory in <strong>/var/www/html</strong> that
 we extracted WordPress to or that you renamed if you followed <strong>Step 5</strong>.
 Thus, if my IP address is 11.111.111.11 and I renamed by directory to <strong>blog</strong>, then I need to visit the following URL:</p>
-<pre><code>http://11.111.111.11/blog/wp-admin/blog/install.php
+<pre><code>http://11.111.111.11/blog/wp-admin/install.php
 </code></pre>
 <p><strong>IF</strong> I kept the directory named <strong>wordpress</strong>, then this is the URL that I use:</p>
 <pre><code>http://11.111.111.11/wordpress/wp-admin/install.php
@@ -7652,7 +7655,8 @@ Thus, if my IP address is 11.111.111.11 and I renamed by directory to <strong>bl
 <p>From this point forward, the steps to complete the installation are exactly the steps you follow using WordPress's documentation.</p>
 <p>Most importantly, you should see a <strong>Welcome</strong> screen where you enter your site's information.
 The site <strong>Username</strong> and <strong>Password</strong> <em>should not</em> be the same as the username and password you used to create your WordPress database in MariaDB.
-Rather, the username and password you enter here are for WordPress users; i.e., those who will add content and manage the website.</p>
+Rather, the username and password you enter here are for WordPress users; i.e., those who will add content and manage the website.
+Make sure you save your password here!!</p>
 <p><strong>Two things to note:</strong></p>
 <p>We have not setup <strong>email</strong> on our servers.
 It's quite complicated to setup an email server correctly and securely, but it wouldn't work well without having a domain name setup anyway.

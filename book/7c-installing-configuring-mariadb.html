@@ -268,7 +268,7 @@ Using a regular user account minimizes the security risks associated with perfor
 Root privileges should be reserved for administrative tasks only!</p>
 <p>To create a regular MariaDB user, we use the <code>create</code> command.
 In the command below, I create a new user called <strong>webapp</strong>.
-I use a complex password that I insert within the single quotes at the end (marked with a series of Xs here for demo purposes):</p>
+I use a complex password that I insert within the single quotes at the end:</p>
 <pre><code>MariaDB [(none)]&gt; create user 'webapp'@'localhost' identified by '[YOUR-PASSWORD-HERE]';
 </code></pre>
 <p>If the prompt returns a <strong>Query OK</strong> message, then the new user should have been created without any issues.</p>
