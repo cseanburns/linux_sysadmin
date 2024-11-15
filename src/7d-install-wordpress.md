@@ -99,27 +99,27 @@ sudo systemctl restart mariadb
 
 ### Step 2: Download and Extract
 
-The next step is to download and extract the WordPress software, which is comes as a **tar.gz** file.
-This is very much like a compressed **zip** file.
-Although we only download one file, when we extract it with the `tar` command, the extraction will result in a new directory
+The next step is to download and extract the WordPress software, which is comes as a **zip** file.
+Although we only download one file, when we extract it with the `zip` command, the extraction will result in a new directory
 that contains multiple files and subdirectories.
 The general instructions include:
 
 1. Change to the `/var/www/html` directory.
 2. Download the latest version of WordPress using the `wget` program.
-3. Extract the package using the `tar` program.
-4. Delete the tar package to prevent clutter in the directory. You can wait to delete this file until you've successfully installed WordPress.
+3. Extract the package using the `unzip` program.
+4. Delete the zip file to prevent clutter in the directory. You can wait to delete this file until you've successfully installed WordPress.
 
 Specifically, this means we do the following on the command line:
 
 ```
 cd /var/www/html
-sudo wget https://wordpress.org/latest.tar.gz
-sudo tar -xzvf latest.tar.gz
-sudo rm latest.tar.gz
+sudo wget https://wordpress.org/latest.zip
+sudo apt install unzip
+sudo unzip latest.zip
+sudo rm latest.zip
 ```
 
-Using the `tar -xzvf latest.tar.gz` command creates a directory called **wordpress**, as noted in the documentation.
+Using the `sudo unzip latest.zip` command creates a directory called **wordpress**, as noted in the documentation.
 If we leave that alone, then the full path of our installations will located at `/var/www/html/wordpress`.
 
 ### Step 3: Create the Database and a User
@@ -159,6 +159,12 @@ create database wordpress;
 grant all privileges on wordpress.* to 'wordpress'@'localhost';
 show databases;
 \q
+```
+
+Then exit out of the Linux root account:
+
+```
+exit
 ```
 
 By creating a dedicated database user for WordPress, we can limit access to only what's necessary for WordPress to function.
@@ -239,7 +245,7 @@ we extracted WordPress to or that you renamed if you followed **Step 5**.
 Thus, if my IP address is 11.111.111.11 and I renamed by directory to **blog**, then I need to visit the following URL:
 
 ```
-http://11.111.111.11/blog/wp-admin/blog/install.php
+http://11.111.111.11/blog/wp-admin/install.php
 ```
 
 **IF** I kept the directory named **wordpress**, then this is the URL that I use:
@@ -255,6 +261,7 @@ From this point forward, the steps to complete the installation are exactly the 
 Most importantly, you should see a **Welcome** screen where you enter your site's information.
 The site **Username** and **Password** *should not* be the same as the username and password you used to create your WordPress database in MariaDB.
 Rather, the username and password you enter here are for WordPress users; i.e., those who will add content and manage the website.
+Make sure you save your password here!!
 
 **Two things to note:**
 
