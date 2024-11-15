@@ -114,7 +114,7 @@ Root privileges should be reserved for administrative tasks only!
 
 To create a regular MariaDB user, we use the `create` command.
 In the command below, I create a new user called **webapp**.
-I use a complex password that I insert within the single quotes at the end (marked with a series of Xs here for demo purposes):
+I use a complex password that I insert within the single quotes at the end:
 
 ```
 MariaDB [(none)]> create user 'webapp'@'localhost' identified by '[YOUR-PASSWORD-HERE]';
