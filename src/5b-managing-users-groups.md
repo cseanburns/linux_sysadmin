@@ -80,7 +80,7 @@ nano $HOME/.bashrc
 And add the following line at the end, which will add some color to the `man` pages:
 
 ```
-export MANPAGE="sh -c 'col -bx | batcat -l man -p'"
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 ```
 
 Once you've closed and saved your `$HOME/.bashrc` file, you need to source it:
