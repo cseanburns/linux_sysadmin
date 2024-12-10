@@ -4754,7 +4754,7 @@ To install <code>bat</code>, do:</p>
 <pre><code>nano $HOME/.bashrc
 </code></pre>
 <p>And add the following line at the end, which will add some color to the <code>man</code> pages:</p>
-<pre><code>export MANPAGE="sh -c 'col -bx | batcat -l man -p'"
+<pre><code>export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 </code></pre>
 <p>Once you've closed and saved your <code>$HOME/.bashrc</code> file, you need to source it:</p>
 <pre><code>source $HOME/.bashrc
