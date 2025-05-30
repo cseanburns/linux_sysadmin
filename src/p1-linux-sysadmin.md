@@ -97,11 +97,6 @@ Feel free to fork this work on [GitHub][linuxSysAdmin] and modify it for your ow
 
 I use [mdBook][mdbook] to build [markdown][markdown] source files into this final output.
 
-## References
-
-Soyinka, W. (2016). *Linux administration: A beginner's guide* (7th ed.). New
-York: MacGraw Hill Education. ISBN: 978-0-07-184536-6
-
 [gplrepo]:https://github.com/cseanburns/linux_sysadmin/blob/master/LICENSE
 [lampWikipedia]:https://en.wikipedia.org/wiki/LAMP_(software_bundle)
 [linuxSysAdmin]:https://github.com/cseanburns/linux_sysadmin
