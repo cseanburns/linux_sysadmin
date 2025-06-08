@@ -1,0 +1,18 @@
+# terminal apps
+
+- name: Install Terminal Apps
+  hosts: localvm
+  become: yes
+  tasks:
+    - name: Install terminal tools
+      apt:
+        name:
+          - w3m
+          - ed
+          - git
+          - tmux
+          - rsync
+          - datamash
+        state: present
+        update_cache: yes
+
