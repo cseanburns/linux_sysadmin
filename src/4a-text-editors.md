@@ -13,8 +13,8 @@ In this section, we will cover and:
 4. **Explore the functionality of `vim`**: Understand the basic modal operation
    of `vim`, including command mode, insert mode, and how to integrate shell
    commands within the editor.
-5. **Utilize beginner-friendly editors**: Comfortably use `nano`, `micro`, and
-   `tilde` for straightforward text editing tasks, taking advantage of their
+5. **Utilize beginner-friendly editors**: Comfortably use `nano`, `micro`,
+   `tilde`, and `edit` for straightforward text editing tasks, taking advantage of their
    user-friendly key bindings and interfaces.
 6. **Appreciate historical context**: Recognize the historical significance of
    `ed` and `vim` and how their development has influenced modern computing
@@ -25,16 +25,18 @@ In this section, we will cover and:
 Working on the command line means writing a lot of commands.
 There will be times when we want to save some of the commands that we write in order to re-use them later.
 Or, we might want to develop the commands into a script (i.e., a program) because we might want to automate a process.
-The shell is great for writing one off commands, so-called **one-liners**, but it's not a great place to write multi-line or very long commands.
+The shell is great for writing one off commands, so-called **one-liners**, but
+it's not a great place to write multi-line or very long commands.
 Therefore it can be helpful to write and save our commands in a text editor.
 
 In this lesson, we'll learn about several text editors: `ed`, `vim`, `nano`, `micro`, and `tilde`.
 We cover `ed` primarily for its historical importance, but it's a perfectly fine editor that I use all the time.
 `vim` is a more powerful and quite flexible editor that is widely used today, but it has a high learning curve.
 Even after using it for nearly 25 years, I'm still learning things about it.
-We could have a whole course on `vim`, but given the little time we have together, I will encourage you to use `nano`, `micro`, or `tilde`.
+We could have a whole course on `vim`, but given the little time we have together,
+I will encourage you to use `nano`, `micro`, `tilde`, or `edit`.
 
-I want you to know something about ``ed`` and ``vim`` because these are historically important editors.
+I want you to know something about `ed` and `vim` because these are historically important editors.
 I use `ed` almost often, and `vim` is my everyday editor.
 I'm even writing this in `vim`!
 Vim is hugely popular, under active development.
@@ -42,54 +44,62 @@ If you want to use Vim, I'd encourage you to do so.
 Once you've acquired skill with it, working with text is a joyful experience.
 But I don't teach it because would take too much time and practice to learn it.
 
-Another thing to keep in mind is that the shell that we are working with is called ``bash``, and ``bash`` is a full-fledged programming language.
-That means that when we write a simple command, like ``cd public_html``, we are programming.
+Another thing to keep in mind is that the shell that we are working with is called `bash`, and
+`bash` is a full-fledged programming language.
+That means that when we write a simple command, like `cd public_html`, we are programming.
 It makes sense that the more programming that we do, the better we'll get at it.
 This requires  more sophisticated environments to help manage our programs than the command line prompt can provide.
 Text editors fulfill that role.
 
 As we learn more about how to do systems administration with Linux, we will need to edit configuration files, too.
-Most configuration files exist in the ``/etc`` directory.
-For example, later in the semester we will install the [Apache Web Server][apache], and we will need to edit Apache's configuration files in the process.
-We could do this using some of the tools that we've already covered, like ``sed`` and ``awk``, but it'll make our lives much easier to use a text editor.
+Most configuration files exist in the `/etc` directory.
+For example, later in the semester we will install the [Apache Web Server][apache], and
+we will need to edit Apache's configuration files in the process.
+We could do this using some of the tools that we've already covered, like `sed` and `awk`, but
+it'll make our lives much easier to use a text editor.
 
 In any case, in order to save our commands or edit text files,  a text editor is very helpful.
-Programmers use text editors to write programs, but programmers often work in graphical user environments, so they often use GUI text editors
-or [IDE][ide]s. 
+Programmers use text editors to write programs, but programmers often work in graphical user environments, so
+they often use GUI text editors or [IDE][ide]s. 
 As systems administrators, it would be unusual to have a graphical user interface installed on a server.
 The servers that we manage will contain limited or specific software that serves the server's main purpose.
 Additional software on a server that is not relevant to the main function of a server only takes up extra disk space,
 consumes valuable computing resources, and poses an additional security footprint.
 
-As stated, although ``ed`` and ``vim`` are difficult to learn, they are very powerful editors.
+As stated, although `ed` and `vim` are difficult to learn, they are very powerful editors.
 I believe they are both worth learning; however, for the purposes of this course, it's more important that you are aware of them.
 If you wish to learn more, there are lots of additional tutorials on the web on how to use these fine, esteemed text editors.
 
 ## `ed`
 
-``ed`` is a line editor that is installed by default on many Linux distributions.
+`ed` is a line editor that is installed by default on many Linux distributions.
 Ken Thompson created `ed` in the late 1960s to write the original Unix operating system.
-It was used without computer monitors because those were still uncommon, and instead for [teletypewriters (TTYs)][ttys] and [printers][printers].
+It was used without computer monitors because those were still uncommon, and
+instead for [teletypewriters (TTYs)][ttys] and [printers][printers].
 The lack of a visual display, like a monitor, is the reason that `ed` was written as a line editor.
 If you visit that second link, you will see the terminal interface from those earlier days.
-It is the same basic interface you are using now when you use your terminal applications, which are virtualised versions of those old teletypewriters.
+It is the same basic interface you are using now when you use your terminal applications, which
+are virtualised versions of those old teletypewriters.
 I think this is a testament of the power of the terminal: that advanced computer users still use the same basic technology today.
 
-In practice, when we use a line editor like ``ed``, the main process of entering text is like any other editor.
+In practice, when we use a line editor like `ed`, the main process of entering text is like any other editor.
 The big difference is when we need to manipulate text.
-In a graphical text editor, if we want to delete a word or edit some text, we might backspace over the text or highlight a word and delete it.
-In a line editor, we manipulate text by referring to lines or across multiple lines and then run commands on the text in those line(s).
-This is process we followed when we covered ``grep``, ``sed``, and ``awk``, and especially ``sed``, and
+In a graphical text editor, if we want to delete a word or edit some text,
+we might backspace over the text or highlight a word and delete it.
+In a line editor, we manipulate text by referring to lines or across multiple lines and
+then run commands on the text in those line(s).
+This is process we followed when we covered `grep`, `sed`, and `awk`, and especially `sed`, and
 it should not surprise you that [these are related to ed][oreillyEd].
 
-To operationalize this, like in ``sed``, each line has an **address**.
+To operationalize this, like in `sed`, each line has an **address**.
 The address for line 7 is **7**, and so forth.
 Line editors like `ed` are command driven. 
 There is no menu to select from at the top of the *window*.
-In fact, when we used ``ed`` to open an existing file, the text in the file isn't even printed on the screen.
-If a user wants to delete a word, or print (to screen) some text, the user has to command the line editor to print the relevant line.
+In fact, when we used `ed` to open an existing file, the text in the file isn't even printed on the screen.
+If a user wants to delete a word, or print (to screen) some text,
+the user has to command the line editor to print the relevant line.
 The do this by specifying the line's address and issuing a command to delete the word on that line, or print the line.
-Line editors also work on ranges of line, including all the lines in the file, just like ``sed`` does.
+Line editors also work on ranges of line, including all the lines in the file, just like `sed` does.
 
 Many of the commands that `ed` uses are also used by `sed`, since `sed` is based on `ed`.
 The following table compares commands between these two programs:
@@ -146,7 +156,7 @@ Android, Apache, 2008
 8	Android, Apache, 2008
 ```
 
-Using `ed`, another way to remove the header line of the **operating-systems.csv** file is to specify the line number (``1``) and
+Using `ed`, another way to remove the header line of the **operating-systems.csv** file is to specify the line number (`1`) and
 then the delete command (`d`), just like in `sed`.
 This becomes a permanent change if I save the file with the `w` (write) command:
 
@@ -175,11 +185,11 @@ Android, Apache, 2008
 Q
 ```
 
-Note that with `sed`, in order to make a change **in-place**, we need to use the ``-i`` option.
+Note that with `sed`, in order to make a change **in-place**, we need to use the `-i` option.
 But with `ed`, we save changes with the `w` command.
 
-I can use ``ed`` to **find and replace** strings.
-The syntax is the same as it is in ``sed``.
+I can use `ed` to **find and replace** strings.
+The syntax is the same as it is in `sed`.
 I'll start with a fresh version of the file:
 
 ```
@@ -304,7 +314,7 @@ Sincerely,
 Dr. Burns
 ```
 
-Since the last edit I made was to replace **ed** with **Ed**, ``vim`` entered the date after that line, which is line 6.
+Since the last edit I made was to replace **ed** with **Ed**, `vim` entered the date after that line, which is line 6.
 To move that date line to the top of the letter, I can use the move `m` command and move it to line 0, which is the top of the file:
 
 ```
@@ -323,12 +333,12 @@ Dr. Burns
 You can use the arrow keys and Page Up/Page Down keys to navigate in `vim` and `vi`,
 But by far the most excellent thing about this editor is to be able to use the **j,k,l,h** keys to navigate around a file:
 
-- ``j`` moves down line by line
-- ``k`` moves up line by line
-- ``l`` moves right letter by letter
-- ``h`` moves left letter by letter
+- `j` moves down line by line
+- `k` moves up line by line
+- `l` moves right letter by letter
+- `h` moves left letter by letter
 
-Like the other commands, you can precede this with addresses. To move 2 lines down, you type ``2j``, and so forth.
+Like the other commands, you can precede this with addresses. To move 2 lines down, you type `2j`, and so forth.
 `vi` and `vim` have had a powerful impact on software development that programmers have built these keystrokes
 into applications like Gmail, Facebook, and more.
 
@@ -342,7 +352,7 @@ The above barely scratches the surface.
 There are whole books on these editors as well as websites, videos, etc that explore them, and especially `vim` in more detail.
 But now that you have some familiarity with them, you might find this funny: [Ed, man! !man ed][maned].
 
-## ``nano``
+## `nano`
 
 The `nano` text editor is the user-friendliest of these text editors but still requires some adjustment as a new commandline user.
 The friendliest thing about `nano` is that it is modeless.
@@ -350,14 +360,16 @@ You're already accustomed to using modeless editors in GUI apps.
 It simply means that you can add and manipulate text without changing to insert or command mode.
 It is also friendly because it uses control keys to perform its operations.
 The tricky part is that the control keys are assigned to different keystroke combinations.
-For example, instead of Ctrl-c or Cmd-c to copy, in `nano` you press the `M-6` key (press `Alt`, `Cmd`, or `Esc` key and `6`) to copy.
+For example, instead of Ctrl-c or Cmd-c to copy,
+in `nano` you press the `M-6` key (press `Alt`, `Cmd`, or `Esc` key and `6`) to copy.
 Then to paste, you press `Ctrl-u` instead of the more common `Ctrl-v`.
 Fortunately, `nano` lists the shortcuts at the bottom of the screen.
 
 The shortcuts listed need some explanation, though.
 The carat mark is shorthand for the keyboard's **Control (Ctrl)** key.
 Therefore to **Save As** a file, we **write** out the file by pressing `Ctrl-o`.
-The **M-** key is also important, and depending on your keyboard configuration, it may correspond to your `Alt`, `Cmd`, or `Esc` keys.
+The **M-** key is also important, and depending on your keyboard configuration,
+it may correspond to your `Alt`, `Cmd`, or `Esc` keys.
 To search for text, you press `^W`, If your goal is to copy, then press **M-6** to copy a line.
 Move to where you want to paste the text, and press **Ctrl-u** to paste.
 
@@ -376,7 +388,7 @@ Some quick tips:
 `nano` is usually installed by default on many Linux distributions, which is why I cover it here.
 However, if you want to use a more modern terminal editor, then I suggest `micro` or `tilde`.
 
-To install them both, I'll run the following command:
+To install the first two, I'll run the following command:
 
 ```
 sudo apt install micro tilde
@@ -400,6 +412,37 @@ The [tilde][tilde] text editor also uses the standard key combinations, but it a
 To access the menu bar, you press the **Alt** key plus the first letter of the menu bar option.
 For example, **Alt-f** opens the **File Menu**, etc.
 
+## `edit`
+
+The [edit][ms_edit] text editor is a very new, open source editor from Microsoft.
+It is built for use on Windows but can be installed on Linux.
+To install, visit the program's [GitHub releases][ms_edit_releases] link and copy the URL for the file named:
+**edit-[version]-x86-64-linux-gnu.tar.zst**, where **[version]** equals the most recent version.
+Then we'll use `wget` to download the source file to our servers.
+For example, to download the most recent version, which at the time of writing this is `1.2.0`:
+
+```
+wget https://github.com/microsoft/edit/releases/download/v1.2.0/edit-1.2.0-x86_64-linux-gnu.tar.zst
+```
+
+The file is compressed.
+To decompress it, we use the following `tar` command:
+
+```
+tar --use-compress-program=unzstd -xvf edit-1.2.0-x86_64-linux-gnu.tar.zst
+```
+
+This will output a file called `edit`.
+Move this file to an executable `$PATH`, such as `/usr/local/bin`:
+
+```
+sudo mv edit /usr/local/bin
+```
+
+Once moved, you can `edit` like you use the other editors.
+Note that the GitHub page for `edit` provides instructions for installing this editor on Windows,
+in case you're interested in doing so.
+
 ## Conclusion
 
 In prior lessons, we learned how to use the `bash` command prompt and how to view, manipulate, and edit files from that shell.
@@ -413,6 +456,7 @@ The commands we used in this lesson include:
 - `nano` : Nano's ANOther editor, inspired by Pico
 - `micro`: A modern and intuitive terminal-based text editor
 - `tilde`: The Tilde Text Editor
+- `edit`: Microsoft text editor
 
 [apache]:https://httpd.apache.org/
 [attacksurface]:https://en.wikipedia.org/wiki/Attack_surface
@@ -420,6 +464,7 @@ The commands we used in this lesson include:
 [maned]:https://www.gnu.org/fun/jokes/ed-msg.en.html
 [micro]:https://micro-editor.github.io/
 [modesui]:https://en.wikipedia.org/wiki/Mode_(user_interface)
+[ms_edit]:https://github.com/microsoft/edit
 [oreillyEd]:https://www.oreilly.com/library/view/sed-awk/1565922255/ch02s01.html
 [printers]:https://www.youtube.com/watch?v=S81GyMKH7zw
 [tilde]:https://os.ghalkes.nl/tilde/
