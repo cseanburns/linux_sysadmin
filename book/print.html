@@ -4128,6 +4128,307 @@ Editors allow us to save our commands, create scripts, and in the future, edit c
 <li><code>edit</code>: Microsoft text editor</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bash-scripting"><a class="header" href="#bash-scripting">Bash Scripting</a></h1>
+<p>By the end of this section, you will:</p>
+<ol>
+<li>Understand Bash as both a command and scripting language: Recognize the dual
+functionality of Bash, allowing you to automate tasks and manage scripts
+efficiently within a Linux environment.</li>
+<li>Work with variables and arrays in Bash: Learn to declare and use variables,
+apply command substitution, and manage arrays for more complex scripting
+tasks.</li>
+<li>Apply conditional expressions for decision-making: Use conditional operators
+such as &amp;&amp;, ||, and if; then; else statements to control the flow of your
+scripts based on conditions and outcomes.</li>
+<li>Implement loops to automate repetitive tasks: Utilize looping structures,
+such as for, to automate actions that need to be repeated under certain
+conditions or across arrays.</li>
+<li>Write and execute Bash scripts with the correct structure: Include essential
+elements like the shebang (<code>#!/usr/bin/env bash</code>) at the start of your
+scripts, ensuring portability and clarity in execution.</li>
+<li>Test conditions in Bash scripts: Understand how to test for specific
+conditions in scripts, such as file existence or the comparison of
+variables, to build more reliable and functional scripts.</li>
+<li>Validate and improve Bash scripts: Learn how to use tools like <code>shellcheck</code> to
+check for errors in your Bash scripts and ensure adherence to best practices
+through style guides.</li>
+</ol>
+<h2 id="getting-started-4"><a class="header" href="#getting-started-4">Getting Started</a></h2>
+<p>It's time to get started on Bash scripting.
+So far, we've been working on the Linux commandline.
+Specifically, we have been working in the <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">Bash</a> shell.
+Wikipedia refers to Bash as a <strong>command language</strong>.
+This means that Bash is used as a commandline language but also as a scripting language.
+The main purpose of Bash is to write small applications/scripts that analyze text (e.g., log files) and automate jobs.
+However, it can be used for a variety of other purposes.</p>
+<h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
+<p>One of the most important abilities of any programming or scripting language is to be able to declare a variable.
+Variables enable us to attach some value to a name.
+That value may be temporary, and it's used to pass information to other parts of a program.</p>
+<p>In Bash, we declare a variable with the name of the variable, an equal sign, and then the value of the variable within double quotes.
+Do not insert spaces between the variable and assignment.
+In the following code snippet, which can be entered on the commandline, I create a variable named <code>NAME</code> and assign it the value <code>Sean</code>.
+I create another variable named <code>BACKUP</code>  and assign it the value <code>/media</code>.
+Then I use the <code>echo</code> and <code>cd</code> commands to test the variables:</p>
+<pre><code>NAME="Sean"
+BACKUP="/media"
+echo "My name is ${NAME}"
+echo "${BACKUP}"
+cd "${BACKUP}"
+pwd
+cd
+</code></pre>
+<p>Variables may include values that may change given some context.
+For example, if we want a variable to refer to today's day of week, we can use <a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">command substitution</a>.
+This "allows the output of a command to replace the command name" (see <code>man bash</code>).
+In the following, I use the <code>date +%A</code> command to assign the current day of the week to the variable named <strong>TODAY</strong>.
+The output at the time this variable is set will differ if it is set on a different day.</p>
+<pre><code>TODAY="$(date +%A)"
+echo "${TODAY}"
+</code></pre>
+<blockquote>
+<p>By default, variables in Bash are global.
+If you are working within functions and want a variable to only be available within the function,
+you can declare it as local using <code>local var_name=value</code>.</p>
+</blockquote>
+<p>Curly braces are not strictly necessary when calling a Bash variable, but they offer benefits when we start to use things like <a href="https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html">array variables</a>.
+See:</p>
+<ul>
+<li><a href="https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/">How to use curly braces in Bash</a></li>
+<li><a href="https://www.linuxjournal.com/content/bash-brace-expansion">Brace Expansion</a></li>
+</ul>
+<p>For example, let's look at basic <strong>brace expansion</strong>, which can be used to generate arbitrary strings:</p>
+<pre><code>echo {1..5}
+echo {5..1}
+echo {a..l}
+echo {l..a}
+</code></pre>
+<p>Another example: using brace notation, we can generate multiple sub-directories at once.
+Start off in your home directory, and:</p>
+<pre><code>mkdir -p homework/{drafts,notes}
+cd homework
+ls
+</code></pre>
+<p>But more than that, they allow us to deal with arrays (or lists).
+Here I create a variable named <code>seasons</code>, which holds an <strong>array</strong>, or multiple values: <code>winter spring summer fall</code>.
+Bash lets me access parts of that array.
+In the following the <code>[@]</code> refers to the entire array and the <code>[n]</code> refers to subscript in the array.</p>
+<pre><code>seasons=(winter spring summer fall)
+echo "${seasons[@]}"
+echo "${seasons[1]}"
+echo "${seasons[2]}"
+echo "${seasons[-1]}"
+</code></pre>
+<p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
+<h2 id="conditional-expressions"><a class="header" href="#conditional-expressions">Conditional Expressions</a></h2>
+<p>Whether working on the commandline, or writing scripts in a text editor, it's sometimes useful to be able to write multiple commands on one line.
+There are several ways to do that.
+We can include a list of commands on one line in Bash where each command is separated by a semicolon.
+In the following example, the <code>cd</code> command will run and then the <code>ls -lt</code> command will run.</p>
+<pre><code>cd ; ls -lt
+</code></pre>
+<p>We can also use <a href="https://ss64.com/bash/syntax-execute.html">conditional expressions</a> and apply logic with <code>&amp;&amp;</code> (<strong>Logical AND</strong>) or <code>||</code> (<strong>Logical OR</strong>).</p>
+<p>Here, <code>command2</code> is executed if and only if <code>command1</code> is successful:</p>
+<pre><code>command1 &amp;&amp; command2
+</code></pre>
+<p>Here, <code>command2</code> is executed if and only if <code>command1</code> fails:</p>
+<pre><code>command1 || command2
+</code></pre>
+<p>In essence, <code>&amp;&amp;</code> and <code>||</code> are short-circuit operators.
+This means that if the first command in <code>command1 &amp;&amp; command2</code> fails, <code>command2</code> <strong>will not</strong> be executed.
+Conversely, if the first command in <code>command1 || command2</code> succeeds, <code>command2</code> <strong>will</strong> be executed.</p>
+<p>In the example below, lines starting with a <code>#</code> indicate a comment that is not evaluated by <code>bash</code>:</p>
+<pre><code># if documents/ does not exist, then the echo statement will not run
+cd documents &amp;&amp; echo "success" 
+# if documents/ does not exist, then the echo statement will run
+cd documents || echo "failed"
+</code></pre>
+<p>We can combine these operators:</p>
+<pre><code>cd test &amp;&amp; pwd || echo "no such directory"
+mkdir test
+cd test &amp;&amp; pwd || echo "no such directory"
+</code></pre>
+<h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
+<p>When we start to write scripts, the first thing we add is a <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> at line one.
+The {she,hash}bang tells the shell what program needs to run.
+We can do declare it a couple of ways.
+First, we can use the path to <code>env</code>, which runs the program in a modified environment that is named after <code>env</code>.
+In the following {she,hash}bang, we declare that modified environment to be the <code>bash</code> shell:</p>
+<pre><code>#!/usr/bin/env bash
+</code></pre>
+<blockquote>
+<p>If we were writing a Python script, then we could declare it to be: <code>#!/usr/bin/env python3</code>.</p>
+</blockquote>
+<p>The above is more portable, but alternatively, you could put the direct path to Bash:</p>
+<pre><code>#!/usr/bin/bash
+</code></pre>
+<blockquote>
+<p>On <a href="https://posix.opengroup.org/">POSIX</a> compliant systems, the <code>env</code> program should always be located at <code>/usr/bin/env</code>.
+However, even on POSIX compliant systems, <code>bash</code> may be located in different paths.
+On some Linux distributions, it's located at <code>/usr/bin/bash</code>.
+On others, it may be located at <code>/bin/bash</code>.
+On BSD OSes, like FreeBSD, <code>bash</code> might be installed at <code>/usr/local/bin/bash</code>.
+Thus, by using the <code>#!/usr/bin/env bash</code> shebang, you help ensure that your <code>bash</code> program is portable across different OSes.</p>
+</blockquote>
+<p>Even for small scripts, it's helpful to follow a consistent style.
+A well-written script is easier to maintain and understand.
+Consider checking out style guides early on, like the <a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a>.
+This will help ensure your scripts remain clean and readable.</p>
+<h2 id="looping"><a class="header" href="#looping">Looping</a></h2>
+<p>Looping is a common way to repeat an instruction until some specified condition is met.
+There are several looping methods Bash that include: : <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
+The <code>for</code> loop is often the most useful.
+In the following toy looping example, we instruct <code>bash</code> to assign the letter <strong>i</strong> to the sequence <strong>1,2,3,4,5</strong>.
+Each time it assigns <strong>i</strong> to those numbers, it <code>echo</code>s them to standard output:</p>
+<pre><code>for i in {1..5} ; do
+  echo "${i}"
+done
+</code></pre>
+<blockquote>
+<p>Note that I take advantage of brace expansion in the above for loop.</p>
+</blockquote>
+<p>You might notice in the <code>echo</code> statement above that I use <code>${i}</code> instead of <code>$i</code>.
+While the latter is possible, using <code>${i}</code> ensures proper variable expansion, particularly when using loops within strings or complex expressions.
+For example, <code>${}</code> ensures that <code>i</code> is correctly interpreted as a variable and not part of a larger string.</p>
+<p>Using the above <code>for</code> loop, we can create a rudimentary timer by calling the <code>sleep</code> command to pause after each count:</p>
+<pre><code>for i in {5..1} ; do
+  echo "${i}" &amp;&amp; sleep 1
+done ; echo "BLAST OFF!"
+</code></pre>
+<blockquote>
+<p>Note that I take advantage of brace expansion again, but this time
+reversing the ordering, as well as conditional execution.</p>
+</blockquote>
+<p>The <code>sleep</code> command is particularly useful in automation tasks where you want to pause execution between steps, such as monitoring scripts,
+where you might poll a resource at intervals, or in timed alerts.</p>
+<p>We can loop through the variable arrays, too.
+In the following <code>for</code> loop, I loop through the <strong>seasons</strong> variable first introduced above:</p>
+<pre><code>#!/usr/bin/env bash
+
+seasons=(winter spring summer fall)
+for i in "${seasons[@]}" ; do
+  echo "I hope you have a nice ${i}."
+done
+</code></pre>
+<blockquote>
+<p>Note that I added the {she,hash}bang in the above example. I do this to make
+it clear that this is the kind of for loop that I would want to write in a
+text editor.</p>
+</blockquote>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<p>Sometimes we will want to test certain conditions.
+There are two parts to this, we can use <code>if; then ; else</code> commands, and we can also use the double square brackets: <code>[[</code>.
+There are a few ways to get documentation on these functions.
+See the following:</p>
+<pre><code>man test
+help test
+help [
+help [[
+help if
+</code></pre>
+<blockquote>
+<p>Between <code>[</code> and <code>[[</code>, I generally prefer to use the <code>[[</code> syntax, as demonstrated below.
+It's less error-prone and allows for more complex conditional checks.
+However, <code>[[</code> is specific to <code>bash</code> and thus slightly less portable than <code>[</code>.</p>
+</blockquote>
+<p>We can test integers:</p>
+<pre><code>if [[ 5 -ge 3 ]] ; then
+  echo "true"
+else
+  echo "false"
+fi
+</code></pre>
+<p>Reverse it to return the else statement:</p>
+<pre><code>if [[ 3 -ge 5 ]] ; then
+  echo "true"
+else
+  echo "false"
+fi
+</code></pre>
+<p>We can test strings.
+Run the command <code>nano amihome.sh</code> and type the script below into the file.
+Save and exit.
+Change the file's permissions: <code>chmod 766 amihome.sh</code>.
+Then move the file to <code>/usr/local/bin</code> with the following command:
+<code>sudo mv amihome.sh /usr/local/bin</code></p>
+<pre><code>#!/usr/bin/env bash
+
+if [[ "$HOME" = "$PWD" ]] ; then
+ echo "You are home."
+else
+ echo "You are not home, but I will take you there."
+ cd "$HOME" || exit
+ echo "You are now $PWD."
+ pwd
+fi
+</code></pre>
+<p>Now you can run the file by typing at the command prompt: <code>amihome.sh</code>.</p>
+<p><strong>IMPORTANT</strong>: Running the above commands in a script won't result in changing your directory outside the script to your home directory.
+This is because of what Bash calls <code>subshells</code>. Subshells are a forked processes.
+So the script will do things in those other directories, but once the script exits, you will remain in the directory where you ran the script.
+If you want to execute a script in the current shell so that changes like <code>cd</code> persist after the script runs,
+you can use the <code>source</code> or <code>.</code> command to run the script.
+For example:</p>
+<pre><code>source script.sh
+</code></pre>
+<p>We can test file conditions.
+Let's first create a file called <strong>paper.txt</strong> and a file called <strong>paper.bak</strong>.
+We will add some trivial content to <strong>paper.txt</strong> but not to the <strong>paper.bak</strong>.
+The following <code>if</code> statement will test if <strong>paper.txt</strong>  has a more recent modification date.
+If so, it'll back up the file with the <code>cp</code> and echo back its success:</p>
+<pre><code>if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
+  cp "$HOME/paper.txt" "$HOME/paper.bak" &amp;&amp; echo "Paper is backed up."
+fi
+</code></pre>
+<p>Here's a script that prints info depending on which day of the week it is.
+Let's save it to in a text file and call it <code>schedule.sh</code>:</p>
+<pre><code>#!/usr/bin/env bash
+
+day1="Tue"
+day2="Thu"
+day3="$(date +%a)"
+
+if [[ "$day3" = "$day1" ]] ; then
+  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day1"
+elif [[ "$day3" = "$day2" ]] ; then
+  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day2"
+else
+  printf "\nThere is no class today."
+fi
+</code></pre>
+<p>Finally, you can check your shell scripts using the <code>shellcheck</code> shell script analysis tool.
+First you will need to install it:</p>
+<pre><code>sudo apt -y install shellcheck
+</code></pre>
+<p>Then use it on shell script files you create.
+For example, let's say I have a script in a file named <strong>backup.sh</strong>, I can use the <code>shellcheck</code> command to find any errors:</p>
+<pre><code>shellcheck backup.sh
+</code></pre>
+<p>If there are errors, <code>shellcheck</code> will tell you what they are and provide a link to documentation on the error.</p>
+<p>If you become seriously interested in <code>bash</code> scripting, then you should check out the various style guides that exist.
+For example, see the <a href="https://google.github.io/styleguide/shellguide.html">Shell Style Guide</a> that was authored by coders at Google.</p>
+<h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
+<p>I encourage you to explore some useful guides and cheat sheets on Bash scripting:</p>
+<ul>
+<li><a href="https://tldp.org/LDP/abs/html/index.html">Advanced Bash-Scripting Guide</a></li>
+<li><a href="https://devhints.io/bash">Bash scripting cheatsheet</a></li>
+<li><a href="https://www.shellcheck.net/">Bash shellcheck</a></li>
+<li><a href="https://www.freecodecamp.org/news/shell-scripting-crash-course-how-to-write-bash-scripts-in-linux/">Shell Scripting for Beginners</a></li>
+<li><a href="https://fedoramagazine.org/bash-shell-scripting-for-beginners-part-1/">Bash Shell Scripting for Beginners</a></li>
+<li><a href="https://cs.lmu.edu/~ray/notes/bash/">Introduction to Bash</a></li>
+</ul>
+<h2 id="conclusion-11"><a class="header" href="#conclusion-11">Conclusion</a></h2>
+<p>In this lecture, we've covered the basics of Bash scripting, including working with variables, loops, and conditionals.
+These tools form the foundation for automating tasks and creating powerful scripts.
+Continue practicing by writing small scripts for your own workflow, and explore the resources and style guides provided to deepen your understanding.</p>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>In this demo, we learned about:</p>
+<ul>
+<li>creating and referring to variables</li>
+<li>conditional expressions with <code>&amp;&amp;</code> and <code>||</code></li>
+<li>adding the <strong>shebang</strong> or <strong>hashbang</strong> at the beginning of a script</li>
+<li>looping with the <code>for</code> statement</li>
+<li>testing with the <code>if</code> statement</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-the-system"><a class="header" href="#managing-the-system">Managing the System</a></h1>
 <p>Now that we have the basics of the command line interface down, it's time to learn some systems administration.
 In this section, we learn how to:</p>
@@ -4158,7 +4459,7 @@ configuration files with <code>nano</code>.</li>
 adding additional storage in cloud environments, with practical examples of
 pricing.</li>
 </ol>
-<h2 id="getting-started-4"><a class="header" href="#getting-started-4">Getting Started</a></h2>
+<h2 id="getting-started-5"><a class="header" href="#getting-started-5">Getting Started</a></h2>
 <p>I'm sure all or most of you have needed extra disk storage at some point (USB drives, optical disks, floppies???).
 Such needs are no different for systems administrators, who often are responsible for managing, monitoring, or storing large amounts of data.</p>
 <p>The disk that we created for our VM is small (10 GB), and that's fine for our needs, albeit quite small in many real world scenarios.
@@ -4402,7 +4703,7 @@ But if you do not want to incur any charges for it, which would be about $1 / mo
 <li>Click on the <strong>Snapshots</strong> section in the left-hand navigation pane (<strong>Compute Engine</strong>, <strong>Storage</strong>, and then <strong>Snapshots</strong>).</li>
 <li>If a snapshot has been taken, check the disk snapshot to delete, and then Delete it.</li>
 </ol>
-<h2 id="conclusion-11"><a class="header" href="#conclusion-11">Conclusion</a></h2>
+<h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
 <p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
 We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
 Finally, we learned how to then edit <code>/etc/fstab</code> to automount the drive.</p>
@@ -4431,7 +4732,7 @@ Finally, we learned how to then edit <code>/etc/fstab</code> to automount the dr
 utilities such as <code>gpasswd</code>, <code>su</code>, <code>sudo</code>, and <code>nano</code> to manage users and
 groups, edit system files, and adjust account settings on a Linux system.</li>
 </ol>
-<h2 id="getting-started-5"><a class="header" href="#getting-started-5">Getting Started</a></h2>
+<h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
 <p>If you're like me, you have user accounts everywhere.
 I have accounts on my phone and my laptop.
 I have a Google account, a GitHub account, an account at my public library, an account at Costco.
@@ -4719,7 +5020,7 @@ The first command will create an archival backup of <strong>linus</strong>' home
 <pre><code>deluser --backup --remove-home linus
 delgroup developers
 </code></pre>
-<h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
+<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
 <p>Knowing how to manage user accounts and manage passwords are key sysadmin skills.
 They are needed to provide collaborative environments and to keep our systems secure through <strong>authentication</strong> and <strong>authorization</strong>.
 While the methods to manage these things vary by operating system, the basic concepts are the same across OSes and services.</p>
@@ -4765,7 +5066,7 @@ a share directory for those accounts for collaboration.</p>
 <li><strong>APT Logs</strong>: Review <code>apt</code> activity by checking <code>/var/log/apt/history.log</code>.</li>
 <li><strong>Manual Reading</strong>: For deeper understanding, consult the <code>man apt</code> manual page.</li>
 </ol>
-<h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
+<h2 id="getting-started-7"><a class="header" href="#getting-started-7">Getting Started</a></h2>
 <p>Many modern Linux distributions offer some kind of package manager to install, manage, and remove software.
 These package management systems interact with curated and audited central repositories of software that are collected into <strong>packages</strong>.
 They also provide a set of tools to learn about the software that exists in these repositories.</p>
@@ -4904,7 +5205,7 @@ In other words, your script would be:</p>
 
 sudo apt update &amp;&amp; sudo apt upgrade &amp;&amp; sudo apt autoremove &amp;&amp; sudo apt clean
 </code></pre>
-<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
+<h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
 <p>There are a variety of ways to install software on a Linux or Ubuntu system.
 The common way to do it on Ubuntu is to use the <code>apt</code> command, which was covered in this section.</p>
 <p>We'll come back to this command often because we'll soon install and setup a complete LAMP (<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
@@ -4923,7 +5224,7 @@ Until then, I encourage you to read through the manual page for <code>apt</code>
 <li>Create and configure custom <code>systemd</code> service and timer files for more tailored system automation.</li>
 <li>Use <code>systemd</code> commands to troubleshoot system issues, including identifying failed services and examining resource usage with <code>systemd-cgtop</code>.</li>
 </ol>
-<h2 id="getting-started-7"><a class="header" href="#getting-started-7">Getting Started</a></h2>
+<h2 id="getting-started-8"><a class="header" href="#getting-started-8">Getting Started</a></h2>
 <p>When computers boot up, obviously some software manages that process.
 On Linux and other Unix or Unix-like systems, this is usually handled via an <strong>init</strong> system.
 For example, macOS uses <a href="https://en.wikipedia.org/wiki/Launchd">launchd</a> and many Linux distributions, including Ubuntu, use <a href="https://en.wikipedia.org/wiki/Systemd">systemd</a>.</p>
@@ -5133,7 +5434,7 @@ systemctl suspend
 </ul>
 <pre><code>systemd-analyze
 </code></pre>
-<h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
+<h2 id="conclusion-15"><a class="header" href="#conclusion-15">Conclusion</a></h2>
 <p>This is a basic introduction to <strong>systemd</strong>, which is composed of a suite of software to help manage booting a system,
 managing services, and monitoring logs.</p>
 <p>We'll put what we've learned into practice when we set up our LAMP servers.</p>
@@ -5160,7 +5461,7 @@ of disaster.</p>
 <li>How to convert between binary and decimal for IP addressing, as well as the importance of subnet masks and broadcast addresses.</li>
 <li>The process of calculating available hosts in a subnet, including examples for both /24 and /16 subnet masks.</li>
 </ol>
-<h2 id="getting-started-8"><a class="header" href="#getting-started-8">Getting Started</a></h2>
+<h2 id="getting-started-9"><a class="header" href="#getting-started-9">Getting Started</a></h2>
 <p>An important function of a system administrator is to set up, configure, and monitor a network.
 This may involve planning, configuring, and connecting the devices on a local area network,
 to planning and implementing a large network that interfaces with an outside network,
@@ -5588,7 +5889,7 @@ Therefore, the number of hosts is:</p>
 </ul>
 <h3 id="ipv6-subnetting"><a class="header" href="#ipv6-subnetting">IPv6 subnetting</a></h3>
 <p>We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
-<h2 id="conclusion-15"><a class="header" href="#conclusion-15">Conclusion</a></h2>
+<h2 id="conclusion-16"><a class="header" href="#conclusion-16">Conclusion</a></h2>
 <p>As a systems administrator, it's important to have a basic understanding of how networking works,
 and the basic models used to describe the internet and its applications.
 System administrators have to know how to create subnets and defend against various network-based attacks.</p>
@@ -5618,7 +5919,7 @@ System administrators have to know how to create subnets and defend against vari
 <li>The different types of DNS records and their purposes.</li>
 <li>How to use common tools like <code>dig</code>, <code>host</code>, <code>nslookup</code>, and <code>whois</code> for DNS-related tasks.</li>
 </ul>
-<h2 id="getting-started-9"><a class="header" href="#getting-started-9">Getting Started</a></h2>
+<h2 id="getting-started-10"><a class="header" href="#getting-started-10">Getting Started</a></h2>
 <p>The DNS (<strong>domain name system</strong>) is referred to as the phone book of the internet.
 It's responsible for mapping IP addresses to memorable names.
 Thus, instead of having to remember:</p>
@@ -5931,7 +6232,7 @@ resolv.conf (5) - resolver configuration file
 cat /etc/resolv.conf
 resolvectl status
 </code></pre>
-<h2 id="conclusion-16"><a class="header" href="#conclusion-16">Conclusion</a></h2>
+<h2 id="conclusion-17"><a class="header" href="#conclusion-17">Conclusion</a></h2>
 <p>In the same way that phones have phone numbers to uniquely identify them, servers on the internet use IP addresses to enable communication.
 Since we're only human, we don't remember every phone number that we dial or every IP address that we visit.
 In order to make such things human friendly, we use names instead.</p>
@@ -5962,7 +6263,7 @@ For example, email servers may also have domain names and IP addresses to resolv
 <li>The limitations of <code>chroot</code> for security and how it serves as a foundational concept for containerization technologies like Docker.</li>
 <li>How to configure SSH to restrict specific user groups to a <code>chroot</code> environment for added security.</li>
 </ul>
-<h2 id="getting-started-10"><a class="header" href="#getting-started-10">Getting Started</a></h2>
+<h2 id="getting-started-11"><a class="header" href="#getting-started-11">Getting Started</a></h2>
 <p>Security challenges predominantly emanate from network interactions;
 however, safeguarding a system from potential internal threats is equally critical.
 This can be achieved by enforcing stringent file permissions and ensuring that users lack certain types of access, such as <code>sudo</code> privileges.
@@ -6132,7 +6433,7 @@ the paths of the dependencies found using <code>ldd</code>.</p>
 <p>If these checks don't resolve the issue, double-check permissions on the <code>chroot</code> directory to ensure root ownership:</p>
 <pre><code>sudo chown root:root /mustafar
 </code></pre>
-<h2 id="conclusion-17"><a class="header" href="#conclusion-17">Conclusion</a></h2>
+<h2 id="conclusion-18"><a class="header" href="#conclusion-18">Conclusion</a></h2>
 <p>Systems need to be secure from the inside and out.
 In order to secure from the inside, system users should be given access and permissions as needed.</p>
 <p>In this section, we covered how to create a <strong>chroot</strong> environment.
@@ -6349,7 +6650,7 @@ Each tool has specific use cases, but together they help administrators establis
 </ul>
 </li>
 </ol>
-<h2 id="getting-started-11"><a class="header" href="#getting-started-11">Getting Started</a></h2>
+<h2 id="getting-started-12"><a class="header" href="#getting-started-12">Getting Started</a></h2>
 <p>Most security challenges come from outside of a local network, and the attack vectors are fairly broad.
 To reduce the vulnerabilities of our systems, a systems administrator must be able to handle the following kinds of tasks:</p>
 <ul>
@@ -6610,7 +6911,7 @@ file2
 To restore with <code>rsync</code>, we just reverse the destination directory with the source directory:</p>
 <pre><code>rsync -av tmp2/ tmp1/
 </code></pre>
-<h2 id="conclusion-18"><a class="header" href="#conclusion-18">Conclusion</a></h2>
+<h2 id="conclusion-19"><a class="header" href="#conclusion-19">Conclusion</a></h2>
 <p>System security involves a multi-vectored approach that includes many tasks, from password management to log audits.
 In this section, we covered firewalls and backups, and have thus addressed new vectors to protect:
 firewall configuration and management and disaster recovery.</p>
@@ -6630,7 +6931,7 @@ Knowing how to set up a LAMP stack is a fun and valuable, basic skill to have as
 <li>Configure Apache to serve a basic web page, using both command line and graphical web browsers to view it.</li>
 <li>Understand where Apache stores key configuration and content files, and modify the default document root to create your own custom web content.</li>
 </ol>
-<h2 id="getting-started-12"><a class="header" href="#getting-started-12">Getting Started</a></h2>
+<h2 id="getting-started-13"><a class="header" href="#getting-started-13">Getting Started</a></h2>
 <p><a href="https://httpd.apache.org/">Apache</a> is an HTTP server, otherwise called web server software.
 An HTTP server makes files on a computer available to others who are able to establish a connection to the computer and view the files
 with a web browser.
@@ -6732,7 +7033,7 @@ Otherwise, you can re-type the content below in <code>nano</code>, and then save
 For example, if your <strong>external IP address</strong> is <strong>55.222.55.222</strong>, then you'd specify it like so:</p>
 <pre><code>http://55.222.55.222/index.html.original
 </code></pre>
-<h2 id="conclusion-19"><a class="header" href="#conclusion-19">Conclusion</a></h2>
+<h2 id="conclusion-20"><a class="header" href="#conclusion-20">Conclusion</a></h2>
 <p>In this section, we learned about the Apache2 HTTP server.
 We learned how to install it on Ubuntu, how to use systemd (<code>systemctl</code>) commands to check its default status,
 how to create a basic web page in <strong>/var/www/html</strong>,
@@ -6745,7 +7046,7 @@ how to view that web page using the <code>w3m</code> command line browser and wi
 <li>Provide an overview of how PHP interacts with a web server.</li>
 <li>Modify Apache settings to serve PHP files as the default content.</li>
 </ol>
-<h2 id="getting-started-13"><a class="header" href="#getting-started-13">Getting Started</a></h2>
+<h2 id="getting-started-14"><a class="header" href="#getting-started-14">Getting Started</a></h2>
 <p>Client-side programming languages, like JavaScript, are handled by the browser.
 Major browsers like Firefox, Chrome, Safari, Edge, etc. include <a href="https://en.wikipedia.org/wiki/JavaScript_engine">JavaScript engines</a> that use just-in-time compilers
 to execute the JavaScript code (Mozilla has a <a href="https://blog.mozilla.org/javascript/">nice description</a> of the process.)
@@ -6857,7 +7158,7 @@ In your browser, visit your external IP address site:</p>
 <p>Although your <code>index.html</code> file still exists in your document root, Apache2 now returns the <strong>index.php</strong> file instead.
 However, if for some reason the <code>index.php</code> was deleted, then Apache2 would revert to the <code>index.html</code> file
 since that's listed next in the <code>dir.conf</code> <code>DirectoryIndex</code> line.</p>
-<h2 id="conclusion-20"><a class="header" href="#conclusion-20">Conclusion</a></h2>
+<h2 id="conclusion-21"><a class="header" href="#conclusion-21">Conclusion</a></h2>
 <p>In this section, we installed PHP and configured it work with Apache2.
 We also created a simple PHP test page that reported our browser user agent information on our website.</p>
 <p>In the next section, we'll learn how to complete the LAMP stack by adding the MariaDB relational database to our setup.
@@ -6870,7 +7171,7 @@ By adding a relational database, we will be able to pull data from the database 
 <li>Write basic SQL commands to create tables, insert records, and run queries.</li>
 <li>Integrate MariaDB with PHP to build dynamic web pages.</li>
 </ol>
-<h2 id="getting-started-14"><a class="header" href="#getting-started-14">Getting Started</a></h2>
+<h2 id="getting-started-15"><a class="header" href="#getting-started-15">Getting Started</a></h2>
 <p>We started our LAMP stack when we installed Apache2, and then we added extra functionality when we installed and configured PHP to work with Apache2.
 In this section, our objective is to complete the LAMP stack and install and configure <a href="https://en.wikipedia.org/wiki/MariaDB">MariaDB</a>.</p>
 <p>MariaDB is a (so-far) compatible fork of the MySQL relational database.
@@ -7186,7 +7487,7 @@ If all is well with the second command, HTML should be outputted:</p>
 <pre><code>sudo php -f login.php
 sudo php -f distros.php
 </code></pre>
-<h2 id="conclusion-21"><a class="header" href="#conclusion-21">Conclusion</a></h2>
+<h2 id="conclusion-22"><a class="header" href="#conclusion-22">Conclusion</a></h2>
 <p>Congratulations! If you've reached this far, you have successfully created a LAMP stack.
 In the process, you have learned:</p>
 <ul>
@@ -7398,10 +7699,10 @@ We have not set up SSL certificates for secure connections, which would require 
 Note that <code>http</code> connections are less secure and
 if you want to eventually set up a live site, you could acquire a domain name for your server and configure SSL using tools like
 <a href="https://letsencrypt.org/">Let's Encrypt</a>.</p>
-<h2 id="conclusion-22"><a class="header" href="#conclusion-22">Conclusion</a></h2>
+<h2 id="conclusion-23"><a class="header" href="#conclusion-23">Conclusion</a></h2>
 <p>Congrats on setting up your WordPress library site.
 Feel free to take a moment to modify your site's design or to add content.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="conclusion-23"><a class="header" href="#conclusion-23">Conclusion</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="conclusion-24"><a class="header" href="#conclusion-24">Conclusion</a></h1>
 <p>I consider this book to be a live document.
 Perhaps, then, this is version 0.8, or
 something like that.
