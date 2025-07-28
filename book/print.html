@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="light" dir="ltr">
+<html lang="en" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 
 
         <!-- Custom HTML head -->
-        
+
         <meta name="description" content="Entry level book on Linux systems administration.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
@@ -25,26 +25,41 @@
         <link rel="stylesheet" href="fonts/fonts.css">
 
         <!-- Highlight.js Stylesheets -->
-        <link rel="stylesheet" href="highlight.css">
-        <link rel="stylesheet" href="tomorrow-night.css">
-        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
 
         <!-- Custom theme stylesheets -->
 
-    </head>
-    <body class="sidebar-visible no-js">
-    <div id="body-container">
-        <!-- Provide site root to javascript -->
-        <script>
-            var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
-        </script>
 
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
-                var theme = localStorage.getItem('mdbook-theme');
-                var sidebar = localStorage.getItem('mdbook-sidebar');
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
 
                 if (theme.startsWith('"') && theme.endsWith('"')) {
                     localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
@@ -58,70 +73,51 @@
 
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script>
-            var theme;
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
+            const html = document.documentElement;
             html.classList.remove('light')
             html.classList.add(theme);
-            var body = document.querySelector('body');
-            body.classList.remove('no-js')
-            body.classList.add('js');
+            html.classList.add("js");
         </script>
 
         <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var body = document.querySelector('body');
-            var sidebar = null;
-            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
                 try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
                 sidebar = sidebar || 'visible';
             } else {
                 sidebar = 'hidden';
+                sidebar_toggle.checked = false;
             }
-            sidebar_toggle.checked = sidebar === 'visible';
-            body.classList.remove('sidebar-visible');
-            body.classList.add("sidebar-" + sidebar);
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="p1-linux-sysadmin.html"><strong aria-hidden="true">1.</strong> Linux Systems Administration</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="1a-history-linux-unix.html"><strong aria-hidden="true">1.1.</strong> History of Unix and Linux</a></li><li class="chapter-item expanded "><a href="1b-what-is-linux.html"><strong aria-hidden="true">1.2.</strong> What is Linux?</a></li><li class="chapter-item expanded "><a href="1c-what-is-sysadmin.html"><strong aria-hidden="true">1.3.</strong> What is Systems Administration?</a></li></ol></li><li class="chapter-item expanded "><a href="p2-project-management.html"><strong aria-hidden="true">2.</strong> Project Management</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="2a-using-gcloud-virtual-machines.html"><strong aria-hidden="true">2.1.</strong> Using gcloud for Virtual Machines</a></li><li class="chapter-item expanded "><a href="2b-using-git-github-for-documentation.html"><strong aria-hidden="true">2.2.</strong> Using Git and GitHub for Documentation</a></li></ol></li><li class="chapter-item expanded "><a href="p3-the-command-line.html"><strong aria-hidden="true">3.</strong> Learning the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="3a-the-linux-filesystem.html"><strong aria-hidden="true">3.1.</strong> The Linux Filesystem</a></li><li class="chapter-item expanded "><a href="3b-files-and-directories.html"><strong aria-hidden="true">3.2.</strong> Files and Directories</a></li><li class="chapter-item expanded "><a href="3c-file-perms-owns.html"><strong aria-hidden="true">3.3.</strong> File Permissions and Ownership</a></li><li class="chapter-item expanded "><a href="3d-text-processing-part-1.html"><strong aria-hidden="true">3.4.</strong> Text Processing: Part 1</a></li><li class="chapter-item expanded "><a href="3e-text-processing-part-2.html"><strong aria-hidden="true">3.5.</strong> Text Processing: Part 2</a></li><li class="chapter-item expanded "><a href="3f-review.html"><strong aria-hidden="true">3.6.</strong> Review</a></li></ol></li><li class="chapter-item expanded "><a href="p4-scripting-the-command-line.html"><strong aria-hidden="true">4.</strong> Scripting the Command Line</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="4a-text-editors.html"><strong aria-hidden="true">4.1.</strong> Text Editors</a></li><li class="chapter-item expanded "><a href="4b-regular-expressions.html"><strong aria-hidden="true">4.2.</strong> Regular Expressions</a></li><li class="chapter-item expanded "><a href="4c-bash-scripting.html"><strong aria-hidden="true">4.3.</strong> Bash Scripting</a></li></ol></li><li class="chapter-item expanded "><a href="p5-managing-the-system.html"><strong aria-hidden="true">5.</strong> Managing the System</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="5a-expanding-storage.html"><strong aria-hidden="true">5.1.</strong> Expanding Storage</a></li><li class="chapter-item expanded "><a href="5b-managing-users-groups.html"><strong aria-hidden="true">5.2.</strong> Managing Users and Groups</a></li><li class="chapter-item expanded "><a href="5c-managing-software.html"><strong aria-hidden="true">5.3.</strong> Managing Software</a></li><li class="chapter-item expanded "><a href="5d-using-systemd.html"><strong aria-hidden="true">5.4.</strong> Using systemd</a></li></ol></li><li class="chapter-item expanded "><a href="p6-networking-security.html"><strong aria-hidden="true">6.</strong> Networking and Security</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="6a-networking-tcpip.html"><strong aria-hidden="true">6.1.</strong> Networking and TCP/IP</a></li><li class="chapter-item expanded "><a href="6b-dns-domain-names.html"><strong aria-hidden="true">6.2.</strong> DNS and Domain Names</a></li><li class="chapter-item expanded "><a href="6c-local-security.html"><strong aria-hidden="true">6.3.</strong> Local Security</a></li><li class="chapter-item expanded "><a href="6d-firewall-backups.html"><strong aria-hidden="true">6.4.</strong> Firewalls and Backups</a></li></ol></li><li class="chapter-item expanded "><a href="p7-creating-a-lamp-server.html"><strong aria-hidden="true">7.</strong> Creating a LAMP Server</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="7a-installing-the-apache-web-server.html"><strong aria-hidden="true">7.1.</strong> Installing the Apache Web Server</a></li><li class="chapter-item expanded "><a href="7b-installing-configuring-php.html"><strong aria-hidden="true">7.2.</strong> Installing and Configuring PHP</a></li><li class="chapter-item expanded "><a href="7c-installing-configuring-mariadb.html"><strong aria-hidden="true">7.3.</strong> Installing and Configuring MariaDB</a></li><li class="chapter-item expanded "><a href="7d-install-wordpress.html"><strong aria-hidden="true">7.4.</strong> Installing WordPress</a></li></ol></li><li class="chapter-item expanded "><a href="p8-conclusion.html"><strong aria-hidden="true">8.</strong> Conclusion</a></li></ol>
-            </div>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <!-- Track and set sidebar scroll position -->
-        <script>
-            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
-            sidebarScrollbox.addEventListener('click', function(e) {
-                if (e.target.tagName === 'A') {
-                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
-                }
-            }, { passive: true });
-            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
-            sessionStorage.removeItem('sidebar-scroll');
-            if (sidebarScrollTop) {
-                // preserve sidebar scroll position when navigating via links within sidebar
-                sidebarScrollbox.scrollTop = sidebarScrollTop;
-            } else {
-                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
-                var activeSection = document.querySelector('#sidebar .active');
-                if (activeSection) {
-                    activeSection.scrollIntoView({ block: 'center' });
-                }
-            }
-        </script>
-
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -131,13 +127,14 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
                             <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
                         </ul>
-                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
                         </button>
                     </div>
@@ -157,7 +154,12 @@
 
                 <div id="search-wrapper" class="hidden">
                     <form id="searchbar-outer" class="searchbar-outer">
-                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
                     </form>
                     <div id="searchresults-outer" class="searchresults-outer hidden">
                         <div id="searchresults-header" class="searchresults-header"></div>
@@ -3179,6 +3181,372 @@ If needed, we may be able to avoid using the basic utilities like
 Despite this, you do not have to become a <code>sed</code> or an <code>awk</code> programmer.
 Like the utilities that we've discussed in prior lectures, the power of programs like these is that they are easy to use as <strong>one-liners</strong>.
 If you want to get started, the resources listed above can guide you.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="regular-expressions-with-grep"><a class="header" href="#regular-expressions-with-grep">Regular Expressions with <code>grep</code></a></h1>
+<p>By the end of this section, you will:</p>
+<ol>
+<li><strong>Understand the purpose of <code>grep</code></strong>: Recognize the versatility of <code>grep</code>
+for searching through text and its use in filtering output, searching for
+patterns in files, and extracting relevant data.</li>
+<li><strong>Perform basic searches using <code>grep</code></strong>: Search for multiword strings and
+whole words while understanding how to handle case sensitivity and word
+boundaries.</li>
+<li><strong>Utilize regular expressions</strong>: Apply regular expressions with <code>grep</code> to
+search for more complex text patterns, using features like bracket
+expressions, character classes, and anchoring.</li>
+<li><strong>Leverage repetition and OR operators</strong>: Use repetition operators (e.g.,
+<code>*</code>, <code>+</code>) and Boolean OR searches to find repetitive patterns or multiple
+possible matches in your text.</li>
+<li><strong>Compare outputs with process substitution</strong>: Understand how to compare the
+output of multiple <code>grep</code> commands using process substitution techniques
+with the <code>diff</code> command.</li>
+<li><strong>Understand broader applications</strong>: Gain a foundational understanding of
+regular expressions that apply across multiple programming languages and
+tools beyond just <code>grep</code>.</li>
+</ol>
+<h2 id="getting-started-2"><a class="header" href="#getting-started-2">Getting Started</a></h2>
+<p>The <code>grep</code> command is a powerful tool used in the Linux command line for searching through text.
+It scans files or input for lines that match a specified pattern, which can be a simple word or a more complex <strong>regular expression</strong>.
+<code>grep</code> is often used to filter output, search for specific data in logs, or find occurrences of certain text patterns within files.
+Its versatility makes it an essential tool for efficiently locating information in large sets of data or documents.</p>
+<p>In this section, we learn how to use <code>grep</code> to search files.
+We will use simple search strings with <code>grep</code> to search for regular words.
+But we will use <strong>regular expressions</strong> to search for more complex patterns.</p>
+<h3 id="download-data-file"><a class="header" href="#download-data-file">Download Data File</a></h3>
+<p>To follow along in this tutorial, download the following file to your home directory on your Google Cloud VM:</p>
+<pre><code>wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/refs/heads/master/data/cities.md
+</code></pre>
+<h2 id="multiword-strings"><a class="header" href="#multiword-strings">Multiword strings</a></h2>
+<p>It's good habit to include search strings within quotes, but this is especially important if we would search for multiword strings.
+In these cases, we must enclose them in quotes.</p>
+<p><strong>Command:</strong></p>
+<pre><code>cat cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| City              | 2020 Census | Founded |
+|-------------------|-------------|---------|
+| New York City, NY | 8804190     | 1624    |
+| Los Angeles, CA   | 3898747     | 1781    |
+| Chicago, IL       | 2746388     | 1780    |
+| Houston, TX       | 2304580     | 1837    |
+| Phoenix, AZ       | 1624569     | 1881    |
+| Philadelphia, PA  | 1576251     | 1701    |
+| San Antonio, TX   | 1451853     | 1718    |
+| San Diego, CA     | 1381611     | 1769    |
+| Dallas, TX        | 1288457     | 1856    |
+| San Jose, CA      | 983489      | 1777    |
+</code></pre>
+<p><strong>Command:</strong></p>
+<pre><code>grep "San Antonio" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
+</code></pre>
+<h2 id="whole-words-case-sensitive-by-default"><a class="header" href="#whole-words-case-sensitive-by-default">Whole words, case sensitive by default</a></h2>
+<p>As a reminder, <code>grep</code> commands are case-sensitive by default.
+Thus, note that the contents of <strong>cities.md</strong> are all in lowercase.
+If I run the above command without the city named capitalized, then <code>grep</code> will return nothing:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "san antonio" cities.md
+</code></pre>
+<p>To tell grep to ignore case, I need to use the <code>-i</code> option.
+We also want to make sure that we enclose our entire search string withing double quotes.</p>
+<p>This is a reminder for you to run <code>man grep</code> and to read through the documentation and see what the various options exit for this command.</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i "san antonio" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
+</code></pre>
+<h3 id="whole-words-by-the-edges"><a class="header" href="#whole-words-by-the-edges">Whole words by the edges</a></h3>
+<p>To search whole words, we can use special characters to match strings at the start and/or the end of words.
+For example, note the output if I search for cities in California in my file by searching for the string <strong>ca</strong>.
+Since this string appears in Chi<strong>ca</strong>go, then that city matches my grep search:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i "ca" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| Los Angeles, CA | 3898747 | 1781 |
+| Chicago, IL     | 2746388 | 1780 |
+| San Diego, CA   | 1381611 | 1769 |
+| San Jose, CA    | 983489  | 1777 |
+</code></pre>
+<p>To limit results to only <strong>CA</strong>, we can enclose our search in special characters that tell <code>grep</code> to limit by whole words only:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i "\bca\b" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| Los Angeles, CA | 3898747 | 1781 |
+| San Diego, CA   | 1381611 | 1769 |
+| San Jose, CA    | 983489  | 1777 |
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> in some cases you might need an extra backslash: <code>grep -i "\\bca\\b" cities.md</code>.</p>
+</blockquote>
+<p>We can reverse that output and look for strings within other words.
+Here is an example of searching for the string <strong>ca</strong> within words:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i "\Bca\B" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| Chicago, IL | 2746388 | 1780 |
+</code></pre>
+<h2 id="bracket-expressions-and-character-classes"><a class="header" href="#bracket-expressions-and-character-classes">Bracket Expressions and Character Classes</a></h2>
+<p>In conjunction with the <code>grep</code> command, we can also use regular expressions to search for more general patterns in text files.
+For example, we can use <strong>bracket expressions</strong> and <strong>character classes</strong> to search for patterns in the text.
+Here again using <code>man grep</code> is very important because it includes instructions on how to use these regular expressions.</p>
+<h3 id="bracket-expressions"><a class="header" href="#bracket-expressions">Bracket expressions</a></h3>
+<p>From <code>man grep</code> on <strong>bracket expressions</strong>:</p>
+<blockquote>
+<p>A bracket expression is a list of characters enclosed by [ and ]. It matches
+any single character in that list. If the first character of the list is the
+caret ^ then it matches any character not in the list. For example, the
+regular expression [0123456789] matches any single digit.</p>
+</blockquote>
+<p>The regular expression [^0123456789] matches the inverse.</p>
+<blockquote>
+<p>Within a bracket expression, a range expression consists of two characters
+separated by a hyphen. It matches any single character that sorts between the
+two characters.</p>
+</blockquote>
+<p>To see how this works, let's search the <strong>cities.md</strong> file for letters matching <strong>A, B, or C</strong>.
+Specifically, in the following command I use a hyphen to match any characters <strong>in</strong> the range A, B, C.
+The output does not include the cities <strong>Houston</strong> or <strong>Dallas</strong> since neither of those lines contain capital <strong>A, B, or C</strong> characters:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "[A-C]" cities.md 
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| City              | 2020 Census | Founded |
+| New York City, NY | 8804190     | 1624    |
+| Los Angeles, CA   | 3898747     | 1781    |
+| Chicago, IL       | 2746388     | 1780    |
+| Phoenix, AZ       | 1624569     | 1881    |
+| Philadelphia, PA  | 1576251     | 1701    |
+| San Antonio, TX   | 1451853     | 1718    |
+| San Diego, CA     | 1381611     | 1769    |
+| San Jose, CA      | 983489      | 1777    |
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> Use <code>grep -i "[A-C]" cities.md</code> for a case insensitive search.</p>
+</blockquote>
+<h3 id="bracket-expressions-inverse-searches"><a class="header" href="#bracket-expressions-inverse-searches">Bracket expressions, inverse searches</a></h3>
+<p>When placed after the first bracket, the carat key acts as a Boolean NOT.
+The following command matches any characters <strong>not in</strong> the range A,B,C:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "[^A-C]" cities.md
+</code></pre>
+<p>The output matches all lines since there are no instances of <strong>A, B, and C</strong> in all lines:</p>
+<p><strong>Output:</strong></p>
+<pre><code>| City              | 2020 Census | Founded |
+|-------------------|-------------|---------|
+| New York City, NY | 8804190     | 1624    |
+| Los Angeles, CA   | 3898747     | 1781    |
+| Chicago, IL       | 2746388     | 1780    |
+| Houston, TX       | 2304580     | 1837    |
+| Phoenix, AZ       | 1624569     | 1881    |
+| Philadelphia, PA  | 1576251     | 1701    |
+| San Antonio, TX   | 1451853     | 1718    |
+| San Diego, CA     | 1381611     | 1769    |
+| Dallas, TX        | 1288457     | 1856    |
+| San Jose, CA      | 983489      | 1777    |
+</code></pre>
+<h4 id="process-substitution"><a class="header" href="#process-substitution">Process substitution</a></h4>
+<p>Process substitution allows you to use the output of a command as if it were a file.
+This is particularly useful when you want to compare the outputs of two commands directly, without having to save them to temporary files.</p>
+<p>For example, we can confirm that output from one command does not include Houston or Dallas in a second command by comparing the outputs.
+Specifically, we compare the outputs of two or more commands using <strong>process substitution</strong>.
+This works because the <strong>process substitution</strong> creates temporary files from the outputs.</p>
+<p><strong>Command:</strong></p>
+<pre><code>diff &lt;(grep "[A-C]" cities.md) &lt;(grep "[^A-C]" cities.md)
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>1a2
+&gt; |-----------------|-------------|------|
+4a6
+&gt; | Houston, TX     | 2304580     | 1837 |
+8a11
+&gt; Dallas, TX        | 1288457     | 1856
+</code></pre>
+<hr />
+<h5 id="how-it-works"><a class="header" href="#how-it-works">How It Works</a></h5>
+<ul>
+<li><code>&lt;(command)</code> creates a temporary file (or file-like stream) that holds the output of command.</li>
+<li><code>diff</code> can then read from these streams as if they were regular files, comparing their contents without needing you to manually save and load files.
+The output of the <code>diff</code> command is nicely explained in this <a href="https://unix.stackexchange.com/a/216131">Stack Overflow</a> answer.</li>
+</ul>
+<p>Without process substitution, you would need to save the outputs of both grep commands to temporary files and then compare them:</p>
+<pre><code>grep "[A-C]" cities.md &gt; output1.txt
+grep "[^A-C]" cities.md &gt; output2.txt
+diff output1.txt output2.txt
+</code></pre>
+<p>This alternative works but is more cumbersome, as it requires managing temporary files.
+Process substitution simplifies the process by handling this behind the scenes.</p>
+<hr />
+<p>Try this command for an alternate output:</p>
+<pre><code>diff -y &lt;(grep "[A-C]" cities.md) &lt;(grep "[^A-C]" cities.md)
+</code></pre>
+<p>Our ranges may be alphabetical or numerical.
+The following command matches any numbers <strong>in</strong> the range 1,2,3:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "[1-3]" cities.md
+</code></pre>
+<p>Since all single digits appear in the file, the above command returns all lines.
+To invert the search, we can use the following grep command.
+This will match all non-integers:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "[^0-9]" cities.md
+</code></pre>
+<h3 id="bracket-expressions-carat-preceding-the-bracket"><a class="header" href="#bracket-expressions-carat-preceding-the-bracket">Bracket expressions, carat preceding the bracket</a></h3>
+<p>We saw in a previous section that the carat <code>^</code> key indicates the start of line.
+However, we learned above that it can be used to return the inverse of a string in special circumstances.
+To use the carat to signify the start of a line, the carat key must precede the opening bracket.
+For example, the following command matches any lines that start with the upper case letters within the range of <strong>N,O,P</strong>:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "^| [N-P]" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>New York City, NY | 8804190 | 1624
+Phoenix, AZ       | 1624569 | 1881
+Philadelphia, PA  | 1576251 | 1701
+</code></pre>
+<p>And we can reverse that with the following command, which returns all lines that <strong>do not</strong> start with <strong>N,O, or P</strong>:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "^| [^N-P]" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| City            | 2020 Census | Founded |
+| Los Angeles, CA | 3898747     | 1781    |
+| Chicago, IL     | 2746388     | 1780    |
+| Houston, TX     | 2304580     | 1837    |
+| San Antonio, TX | 1451853     | 1718    |
+| San Diego, CA   | 1381611     | 1769    |
+| Dallas, TX      | 1288457     | 1856    |
+| San Jose, CA    | 983489      | 1777    |
+</code></pre>
+<h3 id="character-classes"><a class="header" href="#character-classes">Character classes</a></h3>
+<p>Character classes are special types of predefined bracket expressions.
+They make it easy to search for general patterns.
+From <code>man grep</code> on <strong>character classes</strong>:</p>
+<blockquote>
+<p>Finally, certain named classes of characters are predefined within bracket
+expressions, as follows. Their names are self explanatory, and they are
+[:alnum:], [:alpha:], [:blank:], [:cntrl:], [:digit:], [:graph:], [:lower:],
+[:print:], [:punct:], [:space:], [:upper:], and [:xdigit:]. For example,
+[[:alnum:]] means the character class of numbers and letters ...</p>
+</blockquote>
+<p>Below I use the <code>awk</code> command to select the fourth column (or field) using the pipe as the field delimiter.
+I pipe the output to <code>grep</code> to select lines containing a vertical bar and four digit numbers <code>[[:digit:]]{4}</code> from the results of the <code>awk</code> command:</p>
+<p><strong>Command:</strong></p>
+<pre><code>awk -F"|" '{ print $4 }' cities.md | grep -Eo "[[:digit:]]{4}"
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>1624
+1781
+1780
+1837
+1881
+1701
+1718
+1769
+1856
+1777
+</code></pre>
+<blockquote>
+<p>I first tested that the <code>awk</code> command selects the appropriate field by running it by itself: <code>awk -F"|" '{ print $4 }' cities.md</code>.</p>
+</blockquote>
+<h2 id="anchoring"><a class="header" href="#anchoring">Anchoring</a></h2>
+<p>As seen above, outside of bracket expressions and character classes, we use the caret <code>^</code> to mark the beginning of a line.
+We can also use the <code>$</code> to match the end of a line.
+Using either (or both) is called <strong>anchoring</strong>.
+Anchoring works in many places.
+For example, to search all lines that start with capital <strong>D through L</strong></p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "^| [D-L]" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| Los Angeles, CA | 3898747 | 1781 |
+| Houston, TX     | 2304580 | 1837 |
+| Dallas, TX      | 1288457 | 1856 |
+</code></pre>
+<p>To show how to anchor the end of a line, let's look at the <strong>operating-systems.csv</strong> file.</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "1993$" operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>FreeBSD, BSD, 1993
+Windows NT, Proprietary, 1993
+</code></pre>
+<p>We can use both anchors in our <code>grep</code> commands.
+The following searches for any lines starting with capital letters that range from C through F.
+Then any lines ending with the numbers starting from 3 through 6.
+The single dot stands for any character, and the asterisk stands for "the preceding character will zero or more times" (<code>man grep</code>).</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "^[C-F].*[3-6]$" operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>CP/M, Proprietary, 1974
+FreeBSD, BSD, 1993
+</code></pre>
+<h2 id="repetition"><a class="header" href="#repetition">Repetition</a></h2>
+<p>If we want to use regular expressions to identify repetitive patterns, then we can use repetition operators.
+As we saw above, the most useful one is the <code>*</code> asterisk.
+But there are other options:</p>
+<p>In come cases, we need to add the -E option
+to extend <code>grep</code>'s regular expression functionality:</p>
+<p>Here, the preceding item <strong>S</strong> is matched one or more times:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "S+" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
+| San Diego, CA   | 1381611 | 1769 |
+| San Jose, CA    | 983489  | 1777 |
+</code></pre>
+<p>In the next search, the preceding item <strong>l</strong> is matched exactly 2 times:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "l{2}" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| Dallas, TX | 1288457 | 1856 |
+</code></pre>
+<p>Finally, in this example, the preceding item <strong>7</strong> is matched at least two times or at most three times:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "7{2,3}" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Jose, CA | 983489 | 1777 |
+</code></pre>
+<h2 id="or-searches"><a class="header" href="#or-searches">OR searches</a></h2>
+<p>We can use the vertical bar <code>|</code> to do a Boolean OR search.
+In a Boolean OR statement, the statement is True if either one part is true, the other part is true, or both are true.
+In a search statement, this means that at least one part of the search is true.</p>
+<p>The following will return lines for each city because they both appear in the file:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "San Antonio|Dallas" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
+| Dallas, TX      | 1288457 | 1856 |
+</code></pre>
+<p>The following will match San Antonio even though Lexington does not appear in the file:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "San Antonio|Lexington" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
+</code></pre>
+<h2 id="conclusion-8"><a class="header" href="#conclusion-8">Conclusion</a></h2>
+<p>We covered a lot in this section on <code>grep</code> and regular expressions.</p>
+<p>We specifically covered:</p>
+<ul>
+<li>multiword strings</li>
+<li>whole word searches and case sensitivity</li>
+<li>bracket expressions and character classes</li>
+<li>anchoring</li>
+<li>repetition</li>
+<li>Boolean OR searches</li>
+</ul>
+<p>Even though we focused on <code>grep</code>, many these regular expressions work across many programming languages.</p>
+<p>See <a href="https://www.regular-expressions.info/">Regular-Expression.info</a> for more in-depth lessons on regular expressions.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="review"><a class="header" href="#review">Review</a></h1>
 <p>Here is a review of commands
 and concepts that we have
@@ -3370,7 +3738,7 @@ let's say I rename the <strong>documents</strong> directory
 to <strong>Documents</strong>:</p>
 <pre><code>mv ~/documents ~/Documents
 </code></pre>
-<h2 id="conclusion-8"><a class="header" href="#conclusion-8">Conclusion</a></h2>
+<h2 id="conclusion-9"><a class="header" href="#conclusion-9">Conclusion</a></h2>
 <p>Use this page as a reference to
 the commands that we have covered
 so far.</p>
@@ -3411,7 +3779,7 @@ user-friendly key bindings and interfaces.</li>
 <code>ed</code> and <code>vim</code> and how their development has influenced modern computing
 practices.</li>
 </ol>
-<h2 id="getting-started-2"><a class="header" href="#getting-started-2">Getting Started</a></h2>
+<h2 id="getting-started-3"><a class="header" href="#getting-started-3">Getting Started</a></h2>
 <p>Working on the command line means writing a lot of commands.
 There will be times when we want to save some of the commands that we write in order to re-use them later.
 Or, we might want to develop the commands into a script (i.e., a program) because we might want to automate a process.
@@ -3746,7 +4114,7 @@ Move this file to an executable <code>$PATH</code>, such as <code>/usr/local/bin
 <p>Once moved, you can <code>edit</code> like you use the other editors.
 Note that the GitHub page for <code>edit</code> provides instructions for installing this editor on Windows,
 in case you're interested in doing so.</p>
-<h2 id="conclusion-9"><a class="header" href="#conclusion-9">Conclusion</a></h2>
+<h2 id="conclusion-10"><a class="header" href="#conclusion-10">Conclusion</a></h2>
 <p>In prior lessons, we learned how to use the <code>bash</code> command prompt and how to view, manipulate, and edit files from that shell.
 In this lesson, we learned how to use several command line text editors.
 Editors allow us to save our commands, create scripts, and in the future, edit configuration files.</p>
@@ -3759,674 +4127,7 @@ Editors allow us to save our commands, create scripts, and in the future, edit c
 <li><code>tilde</code>: The Tilde Text Editor</li>
 <li><code>edit</code>: Microsoft text editor</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="regular-expressions-with-grep"><a class="header" href="#regular-expressions-with-grep">Regular Expressions with <code>grep</code></a></h1>
-<p>By the end of this section, you will:</p>
-<ol>
-<li><strong>Understand the purpose of <code>grep</code></strong>: Recognize the versatility of <code>grep</code>
-for searching through text and its use in filtering output, searching for
-patterns in files, and extracting relevant data.</li>
-<li><strong>Perform basic searches using <code>grep</code></strong>: Search for multiword strings and
-whole words while understanding how to handle case sensitivity and word
-boundaries.</li>
-<li><strong>Utilize regular expressions</strong>: Apply regular expressions with <code>grep</code> to
-search for more complex text patterns, using features like bracket
-expressions, character classes, and anchoring.</li>
-<li><strong>Leverage repetition and OR operators</strong>: Use repetition operators (e.g.,
-<code>*</code>, <code>+</code>) and Boolean OR searches to find repetitive patterns or multiple
-possible matches in your text.</li>
-<li><strong>Compare outputs with process substitution</strong>: Understand how to compare the
-output of multiple <code>grep</code> commands using process substitution techniques
-with the <code>diff</code> command.</li>
-<li><strong>Understand broader applications</strong>: Gain a foundational understanding of
-regular expressions that apply across multiple programming languages and
-tools beyond just <code>grep</code>.</li>
-</ol>
-<h2 id="getting-started-3"><a class="header" href="#getting-started-3">Getting Started</a></h2>
-<p>The <code>grep</code> command is a powerful tool used in the Linux command line for searching through text.
-It scans files or input for lines that match a specified pattern, which can be a simple word or a more complex <strong>regular expression</strong>.
-<code>grep</code> is often used to filter output, search for specific data in logs, or find occurrences of certain text patterns within files.
-Its versatility makes it an essential tool for efficiently locating information in large sets of data or documents.</p>
-<p>In this section, we learn how to use <code>grep</code> to search files.
-We will use simple search strings with <code>grep</code> to search for regular words.
-But we will use <strong>regular expressions</strong> to search for more complex patterns.</p>
-<h3 id="download-data-file"><a class="header" href="#download-data-file">Download Data File</a></h3>
-<p>To follow along in this tutorial, download the following file to your home directory on your Google Cloud VM:</p>
-<pre><code>wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/refs/heads/master/data/cities.md
-</code></pre>
-<h2 id="multiword-strings"><a class="header" href="#multiword-strings">Multiword strings</a></h2>
-<p>It's good habit to include search strings within quotes, but this is especially important if we would search for multiword strings.
-In these cases, we must enclose them in quotes.</p>
-<p><strong>Command:</strong></p>
-<pre><code>cat cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| City              | 2020 Census | Founded |
-|-------------------|-------------|---------|
-| New York City, NY | 8804190     | 1624    |
-| Los Angeles, CA   | 3898747     | 1781    |
-| Chicago, IL       | 2746388     | 1780    |
-| Houston, TX       | 2304580     | 1837    |
-| Phoenix, AZ       | 1624569     | 1881    |
-| Philadelphia, PA  | 1576251     | 1701    |
-| San Antonio, TX   | 1451853     | 1718    |
-| San Diego, CA     | 1381611     | 1769    |
-| Dallas, TX        | 1288457     | 1856    |
-| San Jose, CA      | 983489      | 1777    |
-</code></pre>
-<p><strong>Command:</strong></p>
-<pre><code>grep "San Antonio" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| San Antonio, TX | 1451853 | 1718 |
-</code></pre>
-<h2 id="whole-words-case-sensitive-by-default"><a class="header" href="#whole-words-case-sensitive-by-default">Whole words, case sensitive by default</a></h2>
-<p>As a reminder, <code>grep</code> commands are case-sensitive by default.
-Thus, note that the contents of <strong>cities.md</strong> are all in lowercase.
-If I run the above command without the city named capitalized, then <code>grep</code> will return nothing:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "san antonio" cities.md
-</code></pre>
-<p>To tell grep to ignore case, I need to use the <code>-i</code> option.
-We also want to make sure that we enclose our entire search string withing double quotes.</p>
-<p>This is a reminder for you to run <code>man grep</code> and to read through the documentation and see what the various options exit for this command.</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -i "san antonio" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| San Antonio, TX | 1451853 | 1718 |
-</code></pre>
-<h3 id="whole-words-by-the-edges"><a class="header" href="#whole-words-by-the-edges">Whole words by the edges</a></h3>
-<p>To search whole words, we can use special characters to match strings at the start and/or the end of words.
-For example, note the output if I search for cities in California in my file by searching for the string <strong>ca</strong>.
-Since this string appears in Chi<strong>ca</strong>go, then that city matches my grep search:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -i "ca" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| Los Angeles, CA | 3898747 | 1781 |
-| Chicago, IL     | 2746388 | 1780 |
-| San Diego, CA   | 1381611 | 1769 |
-| San Jose, CA    | 983489  | 1777 |
-</code></pre>
-<p>To limit results to only <strong>CA</strong>, we can enclose our search in special characters that tell <code>grep</code> to limit by whole words only:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -i "\bca\b" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| Los Angeles, CA | 3898747 | 1781 |
-| San Diego, CA   | 1381611 | 1769 |
-| San Jose, CA    | 983489  | 1777 |
-</code></pre>
-<blockquote>
-<p><strong>Note:</strong> in some cases you might need an extra backslash: <code>grep -i "\\bca\\b" cities.md</code>.</p>
-</blockquote>
-<p>We can reverse that output and look for strings within other words.
-Here is an example of searching for the string <strong>ca</strong> within words:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -i "\Bca\B" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| Chicago, IL | 2746388 | 1780 |
-</code></pre>
-<h2 id="bracket-expressions-and-character-classes"><a class="header" href="#bracket-expressions-and-character-classes">Bracket Expressions and Character Classes</a></h2>
-<p>In conjunction with the <code>grep</code> command, we can also use regular expressions to search for more general patterns in text files.
-For example, we can use <strong>bracket expressions</strong> and <strong>character classes</strong> to search for patterns in the text.
-Here again using <code>man grep</code> is very important because it includes instructions on how to use these regular expressions.</p>
-<h3 id="bracket-expressions"><a class="header" href="#bracket-expressions">Bracket expressions</a></h3>
-<p>From <code>man grep</code> on <strong>bracket expressions</strong>:</p>
-<blockquote>
-<p>A bracket expression is a list of characters enclosed by [ and ]. It matches
-any single character in that list. If the first character of the list is the
-caret ^ then it matches any character not in the list. For example, the
-regular expression [0123456789] matches any single digit.</p>
-</blockquote>
-<p>The regular expression [^0123456789] matches the inverse.</p>
-<blockquote>
-<p>Within a bracket expression, a range expression consists of two characters
-separated by a hyphen. It matches any single character that sorts between the
-two characters.</p>
-</blockquote>
-<p>To see how this works, let's search the <strong>cities.md</strong> file for letters matching <strong>A, B, or C</strong>.
-Specifically, in the following command I use a hyphen to match any characters <strong>in</strong> the range A, B, C.
-The output does not include the cities <strong>Houston</strong> or <strong>Dallas</strong> since neither of those lines contain capital <strong>A, B, or C</strong> characters:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "[A-C]" cities.md 
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| City              | 2020 Census | Founded |
-| New York City, NY | 8804190     | 1624    |
-| Los Angeles, CA   | 3898747     | 1781    |
-| Chicago, IL       | 2746388     | 1780    |
-| Phoenix, AZ       | 1624569     | 1881    |
-| Philadelphia, PA  | 1576251     | 1701    |
-| San Antonio, TX   | 1451853     | 1718    |
-| San Diego, CA     | 1381611     | 1769    |
-| San Jose, CA      | 983489      | 1777    |
-</code></pre>
-<blockquote>
-<p><strong>Note:</strong> Use <code>grep -i "[A-C]" cities.md</code> for a case insensitive search.</p>
-</blockquote>
-<h3 id="bracket-expressions-inverse-searches"><a class="header" href="#bracket-expressions-inverse-searches">Bracket expressions, inverse searches</a></h3>
-<p>When placed after the first bracket, the carat key acts as a Boolean NOT.
-The following command matches any characters <strong>not in</strong> the range A,B,C:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "[^A-C]" cities.md
-</code></pre>
-<p>The output matches all lines since there are no instances of <strong>A, B, and C</strong> in all lines:</p>
-<p><strong>Output:</strong></p>
-<pre><code>| City              | 2020 Census | Founded |
-|-------------------|-------------|---------|
-| New York City, NY | 8804190     | 1624    |
-| Los Angeles, CA   | 3898747     | 1781    |
-| Chicago, IL       | 2746388     | 1780    |
-| Houston, TX       | 2304580     | 1837    |
-| Phoenix, AZ       | 1624569     | 1881    |
-| Philadelphia, PA  | 1576251     | 1701    |
-| San Antonio, TX   | 1451853     | 1718    |
-| San Diego, CA     | 1381611     | 1769    |
-| Dallas, TX        | 1288457     | 1856    |
-| San Jose, CA      | 983489      | 1777    |
-</code></pre>
-<h4 id="process-substitution"><a class="header" href="#process-substitution">Process substitution</a></h4>
-<p>Process substitution allows you to use the output of a command as if it were a file.
-This is particularly useful when you want to compare the outputs of two commands directly, without having to save them to temporary files.</p>
-<p>For example, we can confirm that output from one command does not include Houston or Dallas in a second command by comparing the outputs.
-Specifically, we compare the outputs of two or more commands using <strong>process substitution</strong>.
-This works because the <strong>process substitution</strong> creates temporary files from the outputs.</p>
-<p><strong>Command:</strong></p>
-<pre><code>diff &lt;(grep "[A-C]" cities.md) &lt;(grep "[^A-C]" cities.md)
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>1a2
-&gt; |-----------------|-------------|------|
-4a6
-&gt; | Houston, TX     | 2304580     | 1837 |
-8a11
-&gt; Dallas, TX        | 1288457     | 1856
-</code></pre>
-<hr />
-<h5 id="how-it-works"><a class="header" href="#how-it-works">How It Works</a></h5>
-<ul>
-<li><code>&lt;(command)</code> creates a temporary file (or file-like stream) that holds the output of command.</li>
-<li><code>diff</code> can then read from these streams as if they were regular files, comparing their contents without needing you to manually save and load files.
-The output of the <code>diff</code> command is nicely explained in this <a href="https://unix.stackexchange.com/a/216131">Stack Overflow</a> answer.</li>
-</ul>
-<p>Without process substitution, you would need to save the outputs of both grep commands to temporary files and then compare them:</p>
-<pre><code>grep "[A-C]" cities.md &gt; output1.txt
-grep "[^A-C]" cities.md &gt; output2.txt
-diff output1.txt output2.txt
-</code></pre>
-<p>This alternative works but is more cumbersome, as it requires managing temporary files.
-Process substitution simplifies the process by handling this behind the scenes.</p>
-<hr />
-<p>Try this command for an alternate output:</p>
-<pre><code>diff -y &lt;(grep "[A-C]" cities.md) &lt;(grep "[^A-C]" cities.md)
-</code></pre>
-<p>Our ranges may be alphabetical or numerical.
-The following command matches any numbers <strong>in</strong> the range 1,2,3:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "[1-3]" cities.md
-</code></pre>
-<p>Since all single digits appear in the file, the above command returns all lines.
-To invert the search, we can use the following grep command.
-This will match all non-integers:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "[^0-9]" cities.md
-</code></pre>
-<h3 id="bracket-expressions-carat-preceding-the-bracket"><a class="header" href="#bracket-expressions-carat-preceding-the-bracket">Bracket expressions, carat preceding the bracket</a></h3>
-<p>We saw in a previous section that the carat <code>^</code> key indicates the start of line.
-However, we learned above that it can be used to return the inverse of a string in special circumstances.
-To use the carat to signify the start of a line, the carat key must precede the opening bracket.
-For example, the following command matches any lines that start with the upper case letters within the range of <strong>N,O,P</strong>:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "^| [N-P]" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>New York City, NY | 8804190 | 1624
-Phoenix, AZ       | 1624569 | 1881
-Philadelphia, PA  | 1576251 | 1701
-</code></pre>
-<p>And we can reverse that with the following command, which returns all lines that <strong>do not</strong> start with <strong>N,O, or P</strong>:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "^| [^N-P]" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| City            | 2020 Census | Founded |
-| Los Angeles, CA | 3898747     | 1781    |
-| Chicago, IL     | 2746388     | 1780    |
-| Houston, TX     | 2304580     | 1837    |
-| San Antonio, TX | 1451853     | 1718    |
-| San Diego, CA   | 1381611     | 1769    |
-| Dallas, TX      | 1288457     | 1856    |
-| San Jose, CA    | 983489      | 1777    |
-</code></pre>
-<h3 id="character-classes"><a class="header" href="#character-classes">Character classes</a></h3>
-<p>Character classes are special types of predefined bracket expressions.
-They make it easy to search for general patterns.
-From <code>man grep</code> on <strong>character classes</strong>:</p>
-<blockquote>
-<p>Finally, certain named classes of characters are predefined within bracket
-expressions, as follows. Their names are self explanatory, and they are
-[:alnum:], [:alpha:], [:blank:], [:cntrl:], [:digit:], [:graph:], [:lower:],
-[:print:], [:punct:], [:space:], [:upper:], and [:xdigit:]. For example,
-[[:alnum:]] means the character class of numbers and letters ...</p>
-</blockquote>
-<p>Below I use the <code>awk</code> command to select the fourth column (or field) using the pipe as the field delimiter.
-I pipe the output to <code>grep</code> to select lines containing a vertical bar and four digit numbers <code>[[:digit:]]{4}</code> from the results of the <code>awk</code> command:</p>
-<p><strong>Command:</strong></p>
-<pre><code>awk -F"|" '{ print $4 }' cities.md | grep -Eo "[[:digit:]]{4}"
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>1624
-1781
-1780
-1837
-1881
-1701
-1718
-1769
-1856
-1777
-</code></pre>
-<blockquote>
-<p>I first tested that the <code>awk</code> command selects the appropriate field by running it by itself: <code>awk -F"|" '{ print $4 }' cities.md</code>.</p>
-</blockquote>
-<h2 id="anchoring"><a class="header" href="#anchoring">Anchoring</a></h2>
-<p>As seen above, outside of bracket expressions and character classes, we use the caret <code>^</code> to mark the beginning of a line.
-We can also use the <code>$</code> to match the end of a line.
-Using either (or both) is called <strong>anchoring</strong>.
-Anchoring works in many places.
-For example, to search all lines that start with capital <strong>D through L</strong></p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "^| [D-L]" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| Los Angeles, CA | 3898747 | 1781 |
-| Houston, TX     | 2304580 | 1837 |
-| Dallas, TX      | 1288457 | 1856 |
-</code></pre>
-<p>To show how to anchor the end of a line, let's look at the <strong>operating-systems.csv</strong> file.</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "1993$" operating-systems.csv
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>FreeBSD, BSD, 1993
-Windows NT, Proprietary, 1993
-</code></pre>
-<p>We can use both anchors in our <code>grep</code> commands.
-The following searches for any lines starting with capital letters that range from C through F.
-Then any lines ending with the numbers starting from 3 through 6.
-The single dot stands for any character, and the asterisk stands for "the preceding character will zero or more times" (<code>man grep</code>).</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep "^[C-F].*[3-6]$" operating-systems.csv
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>CP/M, Proprietary, 1974
-FreeBSD, BSD, 1993
-</code></pre>
-<h2 id="repetition"><a class="header" href="#repetition">Repetition</a></h2>
-<p>If we want to use regular expressions to identify repetitive patterns, then we can use repetition operators.
-As we saw above, the most useful one is the <code>*</code> asterisk.
-But there are other options:</p>
-<p>In come cases, we need to add the -E option
-to extend <code>grep</code>'s regular expression functionality:</p>
-<p>Here, the preceding item <strong>S</strong> is matched one or more times:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -E "S+" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| San Antonio, TX | 1451853 | 1718 |
-| San Diego, CA   | 1381611 | 1769 |
-| San Jose, CA    | 983489  | 1777 |
-</code></pre>
-<p>In the next search, the preceding item <strong>l</strong> is matched exactly 2 times:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -E "l{2}" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| Dallas, TX | 1288457 | 1856 |
-</code></pre>
-<p>Finally, in this example, the preceding item <strong>7</strong> is matched at least two times or at most three times:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -E "7{2,3}" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| San Jose, CA | 983489 | 1777 |
-</code></pre>
-<h2 id="or-searches"><a class="header" href="#or-searches">OR searches</a></h2>
-<p>We can use the vertical bar <code>|</code> to do a Boolean OR search.
-In a Boolean OR statement, the statement is True if either one part is true, the other part is true, or both are true.
-In a search statement, this means that at least one part of the search is true.</p>
-<p>The following will return lines for each city because they both appear in the file:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -E "San Antonio|Dallas" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| San Antonio, TX | 1451853 | 1718 |
-| Dallas, TX      | 1288457 | 1856 |
-</code></pre>
-<p>The following will match San Antonio even though Lexington does not appear in the file:</p>
-<p><strong>Command:</strong></p>
-<pre><code>grep -E "San Antonio|Lexington" cities.md
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>| San Antonio, TX | 1451853 | 1718 |
-</code></pre>
-<h2 id="conclusion-10"><a class="header" href="#conclusion-10">Conclusion</a></h2>
-<p>We covered a lot in this section on <code>grep</code> and regular expressions.</p>
-<p>We specifically covered:</p>
-<ul>
-<li>multiword strings</li>
-<li>whole word searches and case sensitivity</li>
-<li>bracket expressions and character classes</li>
-<li>anchoring</li>
-<li>repetition</li>
-<li>Boolean OR searches</li>
-</ul>
-<p>Even though we focused on <code>grep</code>, many these regular expressions work across many programming languages.</p>
-<p>See <a href="https://www.regular-expressions.info/">Regular-Expression.info</a> for more in-depth lessons on regular expressions.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bash-scripting"><a class="header" href="#bash-scripting">Bash Scripting</a></h1>
-<p>By the end of this section, you will:</p>
-<ol>
-<li>Understand Bash as both a command and scripting language: Recognize the dual
-functionality of Bash, allowing you to automate tasks and manage scripts
-efficiently within a Linux environment.</li>
-<li>Work with variables and arrays in Bash: Learn to declare and use variables,
-apply command substitution, and manage arrays for more complex scripting
-tasks.</li>
-<li>Apply conditional expressions for decision-making: Use conditional operators
-such as &amp;&amp;, ||, and if; then; else statements to control the flow of your
-scripts based on conditions and outcomes.</li>
-<li>Implement loops to automate repetitive tasks: Utilize looping structures,
-such as for, to automate actions that need to be repeated under certain
-conditions or across arrays.</li>
-<li>Write and execute Bash scripts with the correct structure: Include essential
-elements like the shebang (<code>#!/usr/bin/env bash</code>) at the start of your
-scripts, ensuring portability and clarity in execution.</li>
-<li>Test conditions in Bash scripts: Understand how to test for specific
-conditions in scripts, such as file existence or the comparison of
-variables, to build more reliable and functional scripts.</li>
-<li>Validate and improve Bash scripts: Learn how to use tools like <code>shellcheck</code> to
-check for errors in your Bash scripts and ensure adherence to best practices
-through style guides.</li>
-</ol>
-<h2 id="getting-started-4"><a class="header" href="#getting-started-4">Getting Started</a></h2>
-<p>It's time to get started on Bash scripting.
-So far, we've been working on the Linux commandline.
-Specifically, we have been working in the <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">Bash</a> shell.
-Wikipedia refers to Bash as a <strong>command language</strong>.
-This means that Bash is used as a commandline language but also as a scripting language.
-The main purpose of Bash is to write small applications/scripts that analyze text (e.g., log files) and automate jobs.
-However, it can be used for a variety of other purposes.</p>
-<h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
-<p>One of the most important abilities of any programming or scripting language is to be able to declare a variable.
-Variables enable us to attach some value to a name.
-That value may be temporary, and it's used to pass information to other parts of a program.</p>
-<p>In Bash, we declare a variable with the name of the variable, an equal sign, and then the value of the variable within double quotes.
-Do not insert spaces between the variable and assignment.
-In the following code snippet, which can be entered on the commandline, I create a variable named <code>NAME</code> and assign it the value <code>Sean</code>.
-I create another variable named <code>BACKUP</code>  and assign it the value <code>/media</code>.
-Then I use the <code>echo</code> and <code>cd</code> commands to test the variables:</p>
-<pre><code>NAME="Sean"
-BACKUP="/media"
-echo "My name is ${NAME}"
-echo "${BACKUP}"
-cd "${BACKUP}"
-pwd
-cd
-</code></pre>
-<p>Variables may include values that may change given some context.
-For example, if we want a variable to refer to today's day of week, we can use <a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">command substitution</a>.
-This "allows the output of a command to replace the command name" (see <code>man bash</code>).
-In the following, I use the <code>date +%A</code> command to assign the current day of the week to the variable named <strong>TODAY</strong>.
-The output at the time this variable is set will differ if it is set on a different day.</p>
-<pre><code>TODAY="$(date +%A)"
-echo "${TODAY}"
-</code></pre>
-<blockquote>
-<p>By default, variables in Bash are global.
-If you are working within functions and want a variable to only be available within the function,
-you can declare it as local using <code>local var_name=value</code>.</p>
-</blockquote>
-<p>Curly braces are not strictly necessary when calling a Bash variable, but they offer benefits when we start to use things like <a href="https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html">array variables</a>.
-See:</p>
-<ul>
-<li><a href="https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/">How to use curly braces in Bash</a></li>
-<li><a href="https://www.linuxjournal.com/content/bash-brace-expansion">Brace Expansion</a></li>
-</ul>
-<p>For example, let's look at basic <strong>brace expansion</strong>, which can be used to generate arbitrary strings:</p>
-<pre><code>echo {1..5}
-echo {5..1}
-echo {a..l}
-echo {l..a}
-</code></pre>
-<p>Another example: using brace notation, we can generate multiple sub-directories at once.
-Start off in your home directory, and:</p>
-<pre><code>mkdir -p homework/{drafts,notes}
-cd homework
-ls
-</code></pre>
-<p>But more than that, they allow us to deal with arrays (or lists).
-Here I create a variable named <code>seasons</code>, which holds an <strong>array</strong>, or multiple values: <code>winter spring summer fall</code>.
-Bash lets me access parts of that array.
-In the following the <code>[@]</code> refers to the entire array and the <code>[n]</code> refers to subscript in the array.</p>
-<pre><code>seasons=(winter spring summer fall)
-echo "${seasons[@]}"
-echo "${seasons[1]}"
-echo "${seasons[2]}"
-echo "${seasons[-1]}"
-</code></pre>
-<p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
-<h2 id="conditional-expressions"><a class="header" href="#conditional-expressions">Conditional Expressions</a></h2>
-<p>Whether working on the commandline, or writing scripts in a text editor, it's sometimes useful to be able to write multiple commands on one line.
-There are several ways to do that.
-We can include a list of commands on one line in Bash where each command is separated by a semicolon.
-In the following example, the <code>cd</code> command will run and then the <code>ls -lt</code> command will run.</p>
-<pre><code>cd ; ls -lt
-</code></pre>
-<p>We can also use <a href="https://ss64.com/bash/syntax-execute.html">conditional expressions</a> and apply logic with <code>&amp;&amp;</code> (<strong>Logical AND</strong>) or <code>||</code> (<strong>Logical OR</strong>).</p>
-<p>Here, <code>command2</code> is executed if and only if <code>command1</code> is successful:</p>
-<pre><code>command1 &amp;&amp; command2
-</code></pre>
-<p>Here, <code>command2</code> is executed if and only if <code>command1</code> fails:</p>
-<pre><code>command1 || command2
-</code></pre>
-<p>In essence, <code>&amp;&amp;</code> and <code>||</code> are short-circuit operators.
-This means that if the first command in <code>command1 &amp;&amp; command2</code> fails, <code>command2</code> <strong>will not</strong> be executed.
-Conversely, if the first command in <code>command1 || command2</code> succeeds, <code>command2</code> <strong>will</strong> be executed.</p>
-<p>In the example below, lines starting with a <code>#</code> indicate a comment that is not evaluated by <code>bash</code>:</p>
-<pre><code># if documents/ does not exist, then the echo statement will not run
-cd documents &amp;&amp; echo "success" 
-# if documents/ does not exist, then the echo statement will run
-cd documents || echo "failed"
-</code></pre>
-<p>We can combine these operators:</p>
-<pre><code>cd test &amp;&amp; pwd || echo "no such directory"
-mkdir test
-cd test &amp;&amp; pwd || echo "no such directory"
-</code></pre>
-<h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
-<p>When we start to write scripts, the first thing we add is a <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> at line one.
-The {she,hash}bang tells the shell what program needs to run.
-We can do declare it a couple of ways.
-First, we can use the path to <code>env</code>, which runs the program in a modified environment that is named after <code>env</code>.
-In the following {she,hash}bang, we declare that modified environment to be the <code>bash</code> shell:</p>
-<pre><code>#!/usr/bin/env bash
-</code></pre>
-<blockquote>
-<p>If we were writing a Python script, then we could declare it to be: <code>#!/usr/bin/env python3</code>.</p>
-</blockquote>
-<p>The above is more portable, but alternatively, you could put the direct path to Bash:</p>
-<pre><code>#!/usr/bin/bash
-</code></pre>
-<blockquote>
-<p>On <a href="https://posix.opengroup.org/">POSIX</a> compliant systems, the <code>env</code> program should always be located at <code>/usr/bin/env</code>.
-However, even on POSIX compliant systems, <code>bash</code> may be located in different paths.
-On some Linux distributions, it's located at <code>/usr/bin/bash</code>.
-On others, it may be located at <code>/bin/bash</code>.
-On BSD OSes, like FreeBSD, <code>bash</code> might be installed at <code>/usr/local/bin/bash</code>.
-Thus, by using the <code>#!/usr/bin/env bash</code> shebang, you help ensure that your <code>bash</code> program is portable across different OSes.</p>
-</blockquote>
-<p>Even for small scripts, it's helpful to follow a consistent style.
-A well-written script is easier to maintain and understand.
-Consider checking out style guides early on, like the <a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a>.
-This will help ensure your scripts remain clean and readable.</p>
-<h2 id="looping"><a class="header" href="#looping">Looping</a></h2>
-<p>Looping is a common way to repeat an instruction until some specified condition is met.
-There are several looping methods Bash that include: : <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
-The <code>for</code> loop is often the most useful.
-In the following toy looping example, we instruct <code>bash</code> to assign the letter <strong>i</strong> to the sequence <strong>1,2,3,4,5</strong>.
-Each time it assigns <strong>i</strong> to those numbers, it <code>echo</code>s them to standard output:</p>
-<pre><code>for i in {1..5} ; do
-  echo "${i}"
-done
-</code></pre>
-<blockquote>
-<p>Note that I take advantage of brace expansion in the above for loop.</p>
-</blockquote>
-<p>You might notice in the <code>echo</code> statement above that I use <code>${i}</code> instead of <code>$i</code>.
-While the latter is possible, using <code>${i}</code> ensures proper variable expansion, particularly when using loops within strings or complex expressions.
-For example, <code>${}</code> ensures that <code>i</code> is correctly interpreted as a variable and not part of a larger string.</p>
-<p>Using the above <code>for</code> loop, we can create a rudimentary timer by calling the <code>sleep</code> command to pause after each count:</p>
-<pre><code>for i in {5..1} ; do
-  echo "${i}" &amp;&amp; sleep 1
-done ; echo "BLAST OFF!"
-</code></pre>
-<blockquote>
-<p>Note that I take advantage of brace expansion again, but this time
-reversing the ordering, as well as conditional execution.</p>
-</blockquote>
-<p>The <code>sleep</code> command is particularly useful in automation tasks where you want to pause execution between steps, such as monitoring scripts,
-where you might poll a resource at intervals, or in timed alerts.</p>
-<p>We can loop through the variable arrays, too.
-In the following <code>for</code> loop, I loop through the <strong>seasons</strong> variable first introduced above:</p>
-<pre><code>#!/usr/bin/env bash
-
-seasons=(winter spring summer fall)
-for i in "${seasons[@]}" ; do
-  echo "I hope you have a nice ${i}."
-done
-</code></pre>
-<blockquote>
-<p>Note that I added the {she,hash}bang in the above example. I do this to make
-it clear that this is the kind of for loop that I would want to write in a
-text editor.</p>
-</blockquote>
-<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
-<p>Sometimes we will want to test certain conditions.
-There are two parts to this, we can use <code>if; then ; else</code> commands, and we can also use the double square brackets: <code>[[</code>.
-There are a few ways to get documentation on these functions.
-See the following:</p>
-<pre><code>man test
-help test
-help [
-help [[
-help if
-</code></pre>
-<blockquote>
-<p>Between <code>[</code> and <code>[[</code>, I generally prefer to use the <code>[[</code> syntax, as demonstrated below.
-It's less error-prone and allows for more complex conditional checks.
-However, <code>[[</code> is specific to <code>bash</code> and thus slightly less portable than <code>[</code>.</p>
-</blockquote>
-<p>We can test integers:</p>
-<pre><code>if [[ 5 -ge 3 ]] ; then
-  echo "true"
-else
-  echo "false"
-fi
-</code></pre>
-<p>Reverse it to return the else statement:</p>
-<pre><code>if [[ 3 -ge 5 ]] ; then
-  echo "true"
-else
-  echo "false"
-fi
-</code></pre>
-<p>We can test strings.
-Run the command <code>nano amihome.sh</code> and type the script below into the file.
-Save and exit.
-Change the file's permissions: <code>chmod 766 amihome.sh</code>.
-Then move the file to <code>/usr/local/bin</code> with the following command:
-<code>sudo mv amihome.sh /usr/local/bin</code></p>
-<pre><code>#!/usr/bin/env bash
-
-if [[ "$HOME" = "$PWD" ]] ; then
- echo "You are home."
-else
- echo "You are not home, but I will take you there."
- cd "$HOME" || exit
- echo "You are now $PWD."
- pwd
-fi
-</code></pre>
-<p>Now you can run the file by typing at the command prompt: <code>amihome.sh</code>.</p>
-<p><strong>IMPORTANT</strong>: Running the above commands in a script won't result in changing your directory outside the script to your home directory.
-This is because of what Bash calls <code>subshells</code>. Subshells are a forked processes.
-So the script will do things in those other directories, but once the script exits, you will remain in the directory where you ran the script.
-If you want to execute a script in the current shell so that changes like <code>cd</code> persist after the script runs,
-you can use the <code>source</code> or <code>.</code> command to run the script.
-For example:</p>
-<pre><code>source script.sh
-</code></pre>
-<p>We can test file conditions.
-Let's first create a file called <strong>paper.txt</strong> and a file called <strong>paper.bak</strong>.
-We will add some trivial content to <strong>paper.txt</strong> but not to the <strong>paper.bak</strong>.
-The following <code>if</code> statement will test if <strong>paper.txt</strong>  has a more recent modification date.
-If so, it'll back up the file with the <code>cp</code> and echo back its success:</p>
-<pre><code>if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
-  cp "$HOME/paper.txt" "$HOME/paper.bak" &amp;&amp; echo "Paper is backed up."
-fi
-</code></pre>
-<p>Here's a script that prints info depending on which day of the week it is.
-Let's save it to in a text file and call it <code>schedule.sh</code>:</p>
-<pre><code>#!/usr/bin/env bash
-
-day1="Tue"
-day2="Thu"
-day3="$(date +%a)"
-
-if [[ "$day3" = "$day1" ]] ; then
-  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day1"
-elif [[ "$day3" = "$day2" ]] ; then
-  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day2"
-else
-  printf "\nThere is no class today."
-fi
-</code></pre>
-<p>Finally, you can check your shell scripts using the <code>shellcheck</code> shell script analysis tool.
-First you will need to install it:</p>
-<pre><code>sudo apt -y install shellcheck
-</code></pre>
-<p>Then use it on shell script files you create.
-For example, let's say I have a script in a file named <strong>backup.sh</strong>, I can use the <code>shellcheck</code> command to find any errors:</p>
-<pre><code>shellcheck backup.sh
-</code></pre>
-<p>If there are errors, <code>shellcheck</code> will tell you what they are and provide a link to documentation on the error.</p>
-<p>If you become seriously interested in <code>bash</code> scripting, then you should check out the various style guides that exist.
-For example, see the <a href="https://google.github.io/styleguide/shellguide.html">Shell Style Guide</a> that was authored by coders at Google.</p>
-<h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
-<p>I encourage you to explore some useful guides and cheat sheets on Bash scripting:</p>
-<ul>
-<li><a href="https://tldp.org/LDP/abs/html/index.html">Advanced Bash-Scripting Guide</a></li>
-<li><a href="https://devhints.io/bash">Bash scripting cheatsheet</a></li>
-<li><a href="https://www.shellcheck.net/">Bash shellcheck</a></li>
-<li><a href="https://www.freecodecamp.org/news/shell-scripting-crash-course-how-to-write-bash-scripts-in-linux/">Shell Scripting for Beginners</a></li>
-<li><a href="https://fedoramagazine.org/bash-shell-scripting-for-beginners-part-1/">Bash Shell Scripting for Beginners</a></li>
-<li><a href="https://cs.lmu.edu/~ray/notes/bash/">Introduction to Bash</a></li>
-</ul>
-<h2 id="conclusion-11"><a class="header" href="#conclusion-11">Conclusion</a></h2>
-<p>In this lecture, we've covered the basics of Bash scripting, including working with variables, loops, and conditionals.
-These tools form the foundation for automating tasks and creating powerful scripts.
-Continue practicing by writing small scripts for your own workflow, and explore the resources and style guides provided to deepen your understanding.</p>
-<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
-<p>In this demo, we learned about:</p>
-<ul>
-<li>creating and referring to variables</li>
-<li>conditional expressions with <code>&amp;&amp;</code> and <code>||</code></li>
-<li>adding the <strong>shebang</strong> or <strong>hashbang</strong> at the beginning of a script</li>
-<li>looping with the <code>for</code> statement</li>
-<li>testing with the <code>if</code> statement</li>
-</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-the-system"><a class="header" href="#managing-the-system">Managing the System</a></h1>
 <p>Now that we have the basics of the command line interface down, it's time to learn some systems administration.
 In this section, we learn how to:</p>
@@ -4457,7 +4158,7 @@ configuration files with <code>nano</code>.</li>
 adding additional storage in cloud environments, with practical examples of
 pricing.</li>
 </ol>
-<h2 id="getting-started-5"><a class="header" href="#getting-started-5">Getting Started</a></h2>
+<h2 id="getting-started-4"><a class="header" href="#getting-started-4">Getting Started</a></h2>
 <p>I'm sure all or most of you have needed extra disk storage at some point (USB drives, optical disks, floppies???).
 Such needs are no different for systems administrators, who often are responsible for managing, monitoring, or storing large amounts of data.</p>
 <p>The disk that we created for our VM is small (10 GB), and that's fine for our needs, albeit quite small in many real world scenarios.
@@ -4701,7 +4402,7 @@ But if you do not want to incur any charges for it, which would be about $1 / mo
 <li>Click on the <strong>Snapshots</strong> section in the left-hand navigation pane (<strong>Compute Engine</strong>, <strong>Storage</strong>, and then <strong>Snapshots</strong>).</li>
 <li>If a snapshot has been taken, check the disk snapshot to delete, and then Delete it.</li>
 </ol>
-<h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
+<h2 id="conclusion-11"><a class="header" href="#conclusion-11">Conclusion</a></h2>
 <p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
 We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
 Finally, we learned how to then edit <code>/etc/fstab</code> to automount the drive.</p>
@@ -4730,7 +4431,7 @@ Finally, we learned how to then edit <code>/etc/fstab</code> to automount the dr
 utilities such as <code>gpasswd</code>, <code>su</code>, <code>sudo</code>, and <code>nano</code> to manage users and
 groups, edit system files, and adjust account settings on a Linux system.</li>
 </ol>
-<h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
+<h2 id="getting-started-5"><a class="header" href="#getting-started-5">Getting Started</a></h2>
 <p>If you're like me, you have user accounts everywhere.
 I have accounts on my phone and my laptop.
 I have a Google account, a GitHub account, an account at my public library, an account at Costco.
@@ -5018,7 +4719,7 @@ The first command will create an archival backup of <strong>linus</strong>' home
 <pre><code>deluser --backup --remove-home linus
 delgroup developers
 </code></pre>
-<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
+<h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
 <p>Knowing how to manage user accounts and manage passwords are key sysadmin skills.
 They are needed to provide collaborative environments and to keep our systems secure through <strong>authentication</strong> and <strong>authorization</strong>.
 While the methods to manage these things vary by operating system, the basic concepts are the same across OSes and services.</p>
@@ -5064,7 +4765,7 @@ a share directory for those accounts for collaboration.</p>
 <li><strong>APT Logs</strong>: Review <code>apt</code> activity by checking <code>/var/log/apt/history.log</code>.</li>
 <li><strong>Manual Reading</strong>: For deeper understanding, consult the <code>man apt</code> manual page.</li>
 </ol>
-<h2 id="getting-started-7"><a class="header" href="#getting-started-7">Getting Started</a></h2>
+<h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
 <p>Many modern Linux distributions offer some kind of package manager to install, manage, and remove software.
 These package management systems interact with curated and audited central repositories of software that are collected into <strong>packages</strong>.
 They also provide a set of tools to learn about the software that exists in these repositories.</p>
@@ -5203,7 +4904,7 @@ In other words, your script would be:</p>
 
 sudo apt update &amp;&amp; sudo apt upgrade &amp;&amp; sudo apt autoremove &amp;&amp; sudo apt clean
 </code></pre>
-<h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
+<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
 <p>There are a variety of ways to install software on a Linux or Ubuntu system.
 The common way to do it on Ubuntu is to use the <code>apt</code> command, which was covered in this section.</p>
 <p>We'll come back to this command often because we'll soon install and setup a complete LAMP (<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
@@ -5222,7 +4923,7 @@ Until then, I encourage you to read through the manual page for <code>apt</code>
 <li>Create and configure custom <code>systemd</code> service and timer files for more tailored system automation.</li>
 <li>Use <code>systemd</code> commands to troubleshoot system issues, including identifying failed services and examining resource usage with <code>systemd-cgtop</code>.</li>
 </ol>
-<h2 id="getting-started-8"><a class="header" href="#getting-started-8">Getting Started</a></h2>
+<h2 id="getting-started-7"><a class="header" href="#getting-started-7">Getting Started</a></h2>
 <p>When computers boot up, obviously some software manages that process.
 On Linux and other Unix or Unix-like systems, this is usually handled via an <strong>init</strong> system.
 For example, macOS uses <a href="https://en.wikipedia.org/wiki/Launchd">launchd</a> and many Linux distributions, including Ubuntu, use <a href="https://en.wikipedia.org/wiki/Systemd">systemd</a>.</p>
@@ -5432,7 +5133,7 @@ systemctl suspend
 </ul>
 <pre><code>systemd-analyze
 </code></pre>
-<h2 id="conclusion-15"><a class="header" href="#conclusion-15">Conclusion</a></h2>
+<h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
 <p>This is a basic introduction to <strong>systemd</strong>, which is composed of a suite of software to help manage booting a system,
 managing services, and monitoring logs.</p>
 <p>We'll put what we've learned into practice when we set up our LAMP servers.</p>
@@ -5459,7 +5160,7 @@ of disaster.</p>
 <li>How to convert between binary and decimal for IP addressing, as well as the importance of subnet masks and broadcast addresses.</li>
 <li>The process of calculating available hosts in a subnet, including examples for both /24 and /16 subnet masks.</li>
 </ol>
-<h2 id="getting-started-9"><a class="header" href="#getting-started-9">Getting Started</a></h2>
+<h2 id="getting-started-8"><a class="header" href="#getting-started-8">Getting Started</a></h2>
 <p>An important function of a system administrator is to set up, configure, and monitor a network.
 This may involve planning, configuring, and connecting the devices on a local area network,
 to planning and implementing a large network that interfaces with an outside network,
@@ -5887,7 +5588,7 @@ Therefore, the number of hosts is:</p>
 </ul>
 <h3 id="ipv6-subnetting"><a class="header" href="#ipv6-subnetting">IPv6 subnetting</a></h3>
 <p>We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
-<h2 id="conclusion-16"><a class="header" href="#conclusion-16">Conclusion</a></h2>
+<h2 id="conclusion-15"><a class="header" href="#conclusion-15">Conclusion</a></h2>
 <p>As a systems administrator, it's important to have a basic understanding of how networking works,
 and the basic models used to describe the internet and its applications.
 System administrators have to know how to create subnets and defend against various network-based attacks.</p>
@@ -5917,7 +5618,7 @@ System administrators have to know how to create subnets and defend against vari
 <li>The different types of DNS records and their purposes.</li>
 <li>How to use common tools like <code>dig</code>, <code>host</code>, <code>nslookup</code>, and <code>whois</code> for DNS-related tasks.</li>
 </ul>
-<h2 id="getting-started-10"><a class="header" href="#getting-started-10">Getting Started</a></h2>
+<h2 id="getting-started-9"><a class="header" href="#getting-started-9">Getting Started</a></h2>
 <p>The DNS (<strong>domain name system</strong>) is referred to as the phone book of the internet.
 It's responsible for mapping IP addresses to memorable names.
 Thus, instead of having to remember:</p>
@@ -6230,7 +5931,7 @@ resolv.conf (5) - resolver configuration file
 cat /etc/resolv.conf
 resolvectl status
 </code></pre>
-<h2 id="conclusion-17"><a class="header" href="#conclusion-17">Conclusion</a></h2>
+<h2 id="conclusion-16"><a class="header" href="#conclusion-16">Conclusion</a></h2>
 <p>In the same way that phones have phone numbers to uniquely identify them, servers on the internet use IP addresses to enable communication.
 Since we're only human, we don't remember every phone number that we dial or every IP address that we visit.
 In order to make such things human friendly, we use names instead.</p>
@@ -6261,7 +5962,7 @@ For example, email servers may also have domain names and IP addresses to resolv
 <li>The limitations of <code>chroot</code> for security and how it serves as a foundational concept for containerization technologies like Docker.</li>
 <li>How to configure SSH to restrict specific user groups to a <code>chroot</code> environment for added security.</li>
 </ul>
-<h2 id="getting-started-11"><a class="header" href="#getting-started-11">Getting Started</a></h2>
+<h2 id="getting-started-10"><a class="header" href="#getting-started-10">Getting Started</a></h2>
 <p>Security challenges predominantly emanate from network interactions;
 however, safeguarding a system from potential internal threats is equally critical.
 This can be achieved by enforcing stringent file permissions and ensuring that users lack certain types of access, such as <code>sudo</code> privileges.
@@ -6431,7 +6132,7 @@ the paths of the dependencies found using <code>ldd</code>.</p>
 <p>If these checks don't resolve the issue, double-check permissions on the <code>chroot</code> directory to ensure root ownership:</p>
 <pre><code>sudo chown root:root /mustafar
 </code></pre>
-<h2 id="conclusion-18"><a class="header" href="#conclusion-18">Conclusion</a></h2>
+<h2 id="conclusion-17"><a class="header" href="#conclusion-17">Conclusion</a></h2>
 <p>Systems need to be secure from the inside and out.
 In order to secure from the inside, system users should be given access and permissions as needed.</p>
 <p>In this section, we covered how to create a <strong>chroot</strong> environment.
@@ -6648,7 +6349,7 @@ Each tool has specific use cases, but together they help administrators establis
 </ul>
 </li>
 </ol>
-<h2 id="getting-started-12"><a class="header" href="#getting-started-12">Getting Started</a></h2>
+<h2 id="getting-started-11"><a class="header" href="#getting-started-11">Getting Started</a></h2>
 <p>Most security challenges come from outside of a local network, and the attack vectors are fairly broad.
 To reduce the vulnerabilities of our systems, a systems administrator must be able to handle the following kinds of tasks:</p>
 <ul>
@@ -6909,7 +6610,7 @@ file2
 To restore with <code>rsync</code>, we just reverse the destination directory with the source directory:</p>
 <pre><code>rsync -av tmp2/ tmp1/
 </code></pre>
-<h2 id="conclusion-19"><a class="header" href="#conclusion-19">Conclusion</a></h2>
+<h2 id="conclusion-18"><a class="header" href="#conclusion-18">Conclusion</a></h2>
 <p>System security involves a multi-vectored approach that includes many tasks, from password management to log audits.
 In this section, we covered firewalls and backups, and have thus addressed new vectors to protect:
 firewall configuration and management and disaster recovery.</p>
@@ -6929,7 +6630,7 @@ Knowing how to set up a LAMP stack is a fun and valuable, basic skill to have as
 <li>Configure Apache to serve a basic web page, using both command line and graphical web browsers to view it.</li>
 <li>Understand where Apache stores key configuration and content files, and modify the default document root to create your own custom web content.</li>
 </ol>
-<h2 id="getting-started-13"><a class="header" href="#getting-started-13">Getting Started</a></h2>
+<h2 id="getting-started-12"><a class="header" href="#getting-started-12">Getting Started</a></h2>
 <p><a href="https://httpd.apache.org/">Apache</a> is an HTTP server, otherwise called web server software.
 An HTTP server makes files on a computer available to others who are able to establish a connection to the computer and view the files
 with a web browser.
@@ -7031,7 +6732,7 @@ Otherwise, you can re-type the content below in <code>nano</code>, and then save
 For example, if your <strong>external IP address</strong> is <strong>55.222.55.222</strong>, then you'd specify it like so:</p>
 <pre><code>http://55.222.55.222/index.html.original
 </code></pre>
-<h2 id="conclusion-20"><a class="header" href="#conclusion-20">Conclusion</a></h2>
+<h2 id="conclusion-19"><a class="header" href="#conclusion-19">Conclusion</a></h2>
 <p>In this section, we learned about the Apache2 HTTP server.
 We learned how to install it on Ubuntu, how to use systemd (<code>systemctl</code>) commands to check its default status,
 how to create a basic web page in <strong>/var/www/html</strong>,
@@ -7044,7 +6745,7 @@ how to view that web page using the <code>w3m</code> command line browser and wi
 <li>Provide an overview of how PHP interacts with a web server.</li>
 <li>Modify Apache settings to serve PHP files as the default content.</li>
 </ol>
-<h2 id="getting-started-14"><a class="header" href="#getting-started-14">Getting Started</a></h2>
+<h2 id="getting-started-13"><a class="header" href="#getting-started-13">Getting Started</a></h2>
 <p>Client-side programming languages, like JavaScript, are handled by the browser.
 Major browsers like Firefox, Chrome, Safari, Edge, etc. include <a href="https://en.wikipedia.org/wiki/JavaScript_engine">JavaScript engines</a> that use just-in-time compilers
 to execute the JavaScript code (Mozilla has a <a href="https://blog.mozilla.org/javascript/">nice description</a> of the process.)
@@ -7156,7 +6857,7 @@ In your browser, visit your external IP address site:</p>
 <p>Although your <code>index.html</code> file still exists in your document root, Apache2 now returns the <strong>index.php</strong> file instead.
 However, if for some reason the <code>index.php</code> was deleted, then Apache2 would revert to the <code>index.html</code> file
 since that's listed next in the <code>dir.conf</code> <code>DirectoryIndex</code> line.</p>
-<h2 id="conclusion-21"><a class="header" href="#conclusion-21">Conclusion</a></h2>
+<h2 id="conclusion-20"><a class="header" href="#conclusion-20">Conclusion</a></h2>
 <p>In this section, we installed PHP and configured it work with Apache2.
 We also created a simple PHP test page that reported our browser user agent information on our website.</p>
 <p>In the next section, we'll learn how to complete the LAMP stack by adding the MariaDB relational database to our setup.
@@ -7169,7 +6870,7 @@ By adding a relational database, we will be able to pull data from the database 
 <li>Write basic SQL commands to create tables, insert records, and run queries.</li>
 <li>Integrate MariaDB with PHP to build dynamic web pages.</li>
 </ol>
-<h2 id="getting-started-15"><a class="header" href="#getting-started-15">Getting Started</a></h2>
+<h2 id="getting-started-14"><a class="header" href="#getting-started-14">Getting Started</a></h2>
 <p>We started our LAMP stack when we installed Apache2, and then we added extra functionality when we installed and configured PHP to work with Apache2.
 In this section, our objective is to complete the LAMP stack and install and configure <a href="https://en.wikipedia.org/wiki/MariaDB">MariaDB</a>.</p>
 <p>MariaDB is a (so-far) compatible fork of the MySQL relational database.
@@ -7485,7 +7186,7 @@ If all is well with the second command, HTML should be outputted:</p>
 <pre><code>sudo php -f login.php
 sudo php -f distros.php
 </code></pre>
-<h2 id="conclusion-22"><a class="header" href="#conclusion-22">Conclusion</a></h2>
+<h2 id="conclusion-21"><a class="header" href="#conclusion-21">Conclusion</a></h2>
 <p>Congratulations! If you've reached this far, you have successfully created a LAMP stack.
 In the process, you have learned:</p>
 <ul>
@@ -7697,10 +7398,10 @@ We have not set up SSL certificates for secure connections, which would require 
 Note that <code>http</code> connections are less secure and
 if you want to eventually set up a live site, you could acquire a domain name for your server and configure SSL using tools like
 <a href="https://letsencrypt.org/">Let's Encrypt</a>.</p>
-<h2 id="conclusion-23"><a class="header" href="#conclusion-23">Conclusion</a></h2>
+<h2 id="conclusion-22"><a class="header" href="#conclusion-22">Conclusion</a></h2>
 <p>Congrats on setting up your WordPress library site.
 Feel free to take a moment to modify your site's design or to add content.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="conclusion-24"><a class="header" href="#conclusion-24">Conclusion</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="conclusion-23"><a class="header" href="#conclusion-23">Conclusion</a></h1>
 <p>I consider this book to be a live document.
 Perhaps, then, this is version 0.8, or
 something like that.
@@ -7773,6 +7474,7 @@ August 13, 2022</p>
             window.setTimeout(window.print, 100);
         });
         </script>
+
 
     </div>
     </body>
