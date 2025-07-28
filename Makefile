@@ -1,4 +1,13 @@
-.PHONY: create
+.PHONY: create build commit push
 
-create:
-				mdbook build .
+create: build commit push
+
+build:
+	mdbook build .
+
+commit:
+	git add .
+	git commit -m "Rebuild mdbook"
+
+push:
+	git push origin master
