@@ -24,7 +24,7 @@
     - [Managing Software](5c-managing-software.md)
     - [Using systemd](5d-using-systemd.md)
 - [Networking and Security](p6-networking-security.md)
-    - [Networking and TCP/IP](6a-networking-tcpip.md)
+    - [Networking](6a-networking.md)
     - [DNS and Domain Names](6b-dns-domain-names.md)
     - [Local Security](6c-local-security.md)
     - [Firewalls and Backups](6d-firewall-backups.md)
