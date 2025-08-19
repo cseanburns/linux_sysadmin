@@ -179,112 +179,34 @@
                 <div id="content" class="content">
                     <main>
                         <h2 id="using-git-and-github-for-documentation"><a class="header" href="#using-git-and-github-for-documentation">Using Git and GitHub for Documentation</a></h2>
-<p>Managing and documenting complex systems
-is a challenge.
-Effective documentation is a cornerstone
-of operational efficiency and reliability.
-This lecture explores
-how Git and GitHub,
-traditionally seen as tools
-for software developers,
-is equally valuable
-for systems administrators
-for documenting various
-processes and configurations.</p>
-<p>Documentation in systems administration
-encompasses a broad spectrum:
-from configuration files and scripts
-to server deployment guides and
-maintenance procedures.
-It serves as a crucial reference point for teams,
-ensuring consistency in system management
-and easing the onboarding process
-for new administrators.</p>
-<p>Our focus on Git and GitHub arises
-from their robustness and versatility.
-Git, a distributed version control system,
-excels in tracking changes and managing versions
-of any set of files,
-be it code or text documents.
-GitHub, building upon Git,
-provides a user-friendly interface
-and additional features like
-issue tracking and collaborative tools,
-making it a suitable platform
-for hosting and sharing documentation.</p>
-<p>In this lecture,
-we will delve into how these
-tools can be used effectively
-for maintaining and enhancing documentation
+<p>Managing and documenting complex systems is a challenge.
+Effective documentation is a cornerstone of operational efficiency and reliability.
+This lecture explores how Git, traditionally seen as tools for software developers,
+is equally valuable for systems administrators for
+documenting processes, scripts, and configurations.</p>
+<p>Documentation in systems administration encompasses a broad spectrum.
+It includes configuration files and scripts to
+server deployment guides and maintenance procedures.
+It can serve as a crucial reference point for teams,
+which can ensure consistency in system management and
+ease the onboarding process for new administrators.</p>
+<p>Our focus on Git arises is motivated because Git is robust, versatile, and widely used.
+Git is a distributed version control system, and
+it excels in tracking changes and managing versions of any set of files.
+This includes any text document.</p>
+<p>In this lecture, we learn how to use this tool to maintain and enhance documentation
 in a systems administration context.
-This will only be an intro to Git and GitHub, but
-key areas of discussion include:</p>
+This will only be an intro to Git, but key areas of discussion include:</p>
 <ul>
 <li>Utilizing Git for version control of configuration files and scripts.</li>
-<li>Leveraging GitHub for centralized documentation storage and access.</li>
 <li>Employing best practices for documenting system configurations.</li>
 </ul>
-<p>Using Git and GitHub will allow you
-to gain an understanding
-of the applications of Git and GitHub.
-This knowledge will help streamline
-your documentation processes and
-improve the overall efficiency
-and communication within your teams.</p>
-<h3 id="creating-a-github-account"><a class="header" href="#creating-a-github-account">Creating a GitHub Account</a></h3>
-<p>Creating a GitHub account
-is a straightforward process.
-Here's how you can set up
-your own GitHub account:</p>
-<ol>
-<li><strong>Visit the GitHub Website</strong>: Start by navigating to <a href="https://github.com">GitHub's
-website</a>.</li>
-<li><strong>Sign Up</strong>: Click on the “Sign Up” button usually located at the top right
-corner of the page.</li>
-<li><strong>Enter Your Details</strong>: You will be prompted to enter some basic
-information:
-<ul>
-<li><strong>Username</strong>: Choose a unique username that will be your identity on
-GitHub. It’s important to select a name that reflects your personal or
-professional identity as it will be visible publicly.</li>
-<li><strong>Email Address</strong>: Provide a valid email address. This will be used for
-account verification and communication.</li>
-<li><strong>Password</strong>: Create a strong password. It’s recommended to use a mix of
-letters, numbers, and symbols for better security.</li>
-</ul>
-</li>
-<li><strong>Verify Your Account</strong>: Complete the CAPTCHA verification to confirm that
-you’re not a robot.</li>
-<li><strong>Choose a Plan</strong>: GitHub offers various plans, including a free option that
-is quite robust for most individual users. Select the plan that best suits your
-needs.</li>
-<li><strong>Tailor Your Experience</strong> (Optional): GitHub may ask a series of questions
-to customize your experience, like your programming experience and intended use
-of GitHub. These can be skipped if preferred.</li>
-<li><strong>Verify Your Email Address</strong>: After completing the sign-up process, GitHub
-will send a verification email to the address you provided. Click on the
-verification link in that email to activate your account.</li>
-<li><strong>Start Exploring</strong>: Once your account is verified, you’re ready to explore
-GitHub. You can start by creating repositories, collaborating on projects, or
-exploring other users’ repositories.</li>
-</ol>
-<h4 id="tips-for-new-users"><a class="header" href="#tips-for-new-users">Tips for New Users</a></h4>
-<ul>
-<li><strong>Profile Information</strong>: After creating your account, consider adding more
-details to your profile, like a profile picture and bio, to make it more
-personable.</li>
-<li><strong>Security</strong>: Set up two-factor authentication for added security.</li>
-<li><strong>Learning Resources</strong>: GitHub has a wealth of tutorials and guides to help
-you get started. Utilize these to familiarize yourself with GitHub’s features
-and best practices.</li>
-</ul>
+<p>Learning Git will help streamline your documentation processes and
+improve the overall efficiency and communication within your teams.</p>
 <h3 id="understanding-file-naming-conventions"><a class="header" href="#understanding-file-naming-conventions">Understanding File Naming Conventions</a></h3>
-<p>File naming is a fundamental aspect
-of organizing and maintaining a
-clear and efficient documentation system,
-especially when using platforms like GitHub.
-Adhering to a consistent naming convention
-is crucial for several reasons:</p>
+<p>File naming is a fundamental aspect of organizing and maintaining a
+clear and efficient documentation system.
+Adhering to a consistent naming convention is crucial for several reasons:</p>
 <ol>
 <li><strong>Clarity and Accessibility</strong>: Well-named files are easier to identify and
 understand at a glance, saving time and reducing confusion.</li>
@@ -296,58 +218,30 @@ especially in a large repository.</li>
 <li><strong>Version Control</strong>: Clear naming helps in tracking changes and managing
 versions more effectively.</li>
 </ol>
-<p>When naming files for GitHub,
-it's best to follow these guidelines:</p>
+<p>When naming files, it's best to follow these guidelines:</p>
 <ul>
 <li>Use single words or combine words using camelCase, underscores (<code>_</code>), or
-hyphens (<code>-</code>). For example, <code>ServerSetupGuide.md</code> or <code>server-setup-guide.md</code>.</li>
-<li>Avoid spaces, as they can cause issues in URLs and command-line operations.</li>
-<li>Steer clear of special characters like <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc., as they
+hyphens (<code>-</code>). For example:
+- <code>ServerSetupGuide.md</code>,
+- <code>server_setup_guide.md</code>, or
+- <code>server-setup-guide.md</code>.</li>
+<li>Avoid spaces because they can cause issues in URLs and command-line operations.</li>
+<li>Steer clear of special characters like <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc. because they
 might have specific functions in certain environments or scripts.</li>
 </ul>
-<h4 id="the-importance-of-md-extension-for-markdown-files"><a class="header" href="#the-importance-of-md-extension-for-markdown-files">The Importance of <code>.md</code> Extension for Markdown Files</a></h4>
-<p>When it comes to Markdown files,
-adding the <code>.md</code> extension is vital for several reasons:</p>
-<ol>
-<li><strong>GitHub Rendering</strong>: GitHub automatically renders files with a <code>.md</code>
-extension as formatted Markdown. This means your documentation will be
-displayed with the intended formatting (like headers, lists, links, etc.)
-directly in the repository view.</li>
-<li><strong>Editor Support</strong>: Most code editors recognize <code>.md</code> files and provide
-appropriate syntax highlighting and formatting previews, making editing more
-efficient.</li>
-<li><strong>Consistency and Recognition</strong>: Using the <code>.md</code> extension helps users and
-systems alike to quickly identify the file type and its intended use.</li>
-</ol>
-<p>For instance,
-naming a file <code>InstallationGuide.md</code> ensures
-that GitHub will render it as a Markdown document,
-displaying all formatting correctly in the browser.
-This enhances readability and
-makes the documentation more user-friendly.</p>
-<p>In summary,
-adhering to clear file naming conventions
-and correctly using the <code>.md</code> extension
-for Markdown files are essential practices
-for effective documentation on GitHub.
-These practices facilitate better organization,
-compatibility, and usability of your documentation,
-contributing to an overall smoother experience
-for both maintainers and users.</p>
+<h4 id="use-markdown"><a class="header" href="#use-markdown">Use Markdown</a></h4>
+<p>Use Markdown for formatting your documentation.
+Markdown is a widely used markup format.
+Files written in Markdown can be easily converted to HTML, DOCX, PPTX, PDF, and more.
+Plus, if you use GitHub, files written in Markdown will automatically be
+rendered into HTML.</p>
 <h3 id="basic-markdown-tutorial"><a class="header" href="#basic-markdown-tutorial">Basic Markdown Tutorial</a></h3>
-<p>Markdown is a lightweight markup language
-designed to be easy to read and write.
-It's widely used for formatting files
-on platforms like GitHub, in forums, and
-for creating web content.
-Here's a quick guide to the
-most commonly used Markdown syntax:</p>
+<p>Here's a quick guide to the most commonly used Markdown syntax, but
+also see <a href="https://www.markdownguide.org/">Markdown Guide</a>.</p>
 <h4 id="headings"><a class="header" href="#headings">Headings</a></h4>
-<p>Headings are created using the <code>#</code>
-symbol before your text.
-The number of <code>#</code> symbols
-indicates the level of the heading:</p>
-<pre><code class="language-markdown"># Heading 1
+<p>Headings are created using the <code>#</code> symbol before your text.
+The number of <code>#</code> symbols indicates the level of the heading:</p>
+<pre><code># Heading 1
 ## Heading 2
 ### Heading 3
 #### Heading 4
@@ -366,7 +260,10 @@ underscores. For example, <code>*italic*</code> or <code>_italic_</code>.</li>
 <li>
 <p><strong>Unordered Lists</strong>: Use asterisks, plus signs, or hyphens to create bullet
 points.</p>
-<pre><code class="language-markdown">* Item 1
+</li>
+<li>
+<p>Nest lists using extra indentation.</p>
+<pre><code>* Item 1
 * Item 2
   * Subitem 2.1
   * Subitem 2.2
@@ -374,10 +271,18 @@ points.</p>
 </li>
 <li>
 <p><strong>Ordered Lists</strong>: Use numbers followed by periods for an ordered list.</p>
-<pre><code class="language-markdown">1. First item
+<pre><code>1. First item
 2. Second item
    1. Subitem 2.1
    2. Subitem 2.2
+</code></pre>
+</li>
+<li>
+<p>Ordered Lists: Alternate numbered and lettered lists:</p>
+<pre><code>1. First item
+2. Second item
+   a. Subitem 2.1
+   b. Subitem 2.2
 </code></pre>
 </li>
 </ul>
@@ -410,19 +315,17 @@ your code here
 ```</p>
 </li>
 </ul>
-<p>Replace <code>language</code> with the programming language for syntax highlighting (e.g., <code>python</code>, <code>javascript</code>).</p>
+<p>Replace <code>language</code> with the programming language for syntax highlighting
+(e.g., <code>python</code>, <code>javascript</code>) on some platforms.</p>
 <h4 id="blockquotes"><a class="header" href="#blockquotes">Blockquotes</a></h4>
-<p>To create a blockquote,
-use the <code>&gt;</code> symbol before your text.
-For nested blockquotes,
-use multiple <code>&gt;</code> symbols.</p>
+<p>To create a blockquote, use the <code>&gt;</code> symbol before your text.
+For nested blockquotes, use multiple <code>&gt;</code> symbols.</p>
 <pre><code class="language-markdown">&gt; This is a blockquote.
 &gt;&gt; This is a nested blockquote.
 </code></pre>
 <h4 id="horizontal-rules"><a class="header" href="#horizontal-rules">Horizontal Rules</a></h4>
-<p>Create a horizontal line or rule
-by using three or more asterisks,
-dashes, or underscores on a new line.</p>
+<p>Create a horizontal line or rule by using three or more asterisks, dashes, or
+underscores on a new line.</p>
 <pre><code class="language-markdown">---
 </code></pre>
 <h4 id="additional-tips"><a class="header" href="#additional-tips">Additional Tips</a></h4>
@@ -433,36 +336,17 @@ with two or more spaces before hitting Enter.</li>
 <li><strong>Escaping Markdown</strong>: To display a Markdown character, precede it with a
 backslash (<code>\</code>). For example, <code>\*not italic\*</code>.</li>
 </ul>
-<p>Markdown's simplicity and readability
-make it an excellent choice
-for documentation and note-taking.
-As you become more comfortable
-with these basics,
-you'll find it a versatile
-tool for your writing needs.</p>
+<p>Markdown's makes formatted text simple and readable.
+It's a great choice for for documentation and note-taking.
+As you become more comfortable with these basics,
+you'll find it a versatile tool for your writing needs.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In summary,
-Git and GitHub stand as
-powerful tools for documentation
-and version control,
-offering a platform for managing,
-tracking, and collaborating on projects.
-Adhering to clear file naming conventions
-enhances this system's efficiency,
-ensuring files are accessible and
-compatible across various environments.
-Furthermore, the use of Markdown within
-this framework simplifies the process
-of creating and maintaining readable
-and well-structured documentation.
-Together, these elements form
-an ecosystem that streamlines
-project management and
-fosters a collaborative and organized workspace,
-which is important for
-the successful execution of
-individual and team-based projects
-in information technology disciplines.</p>
+<p>In summary, Git is powerful tool for documentation and version control,
+offering a platform for managing, tracking, and collaborating on projects.</p>
+<p>Adhere to clear file naming conventions to enhance its efficiency.
+This ensures files are accessible and compatible across various environments.</p>
+<p>Furthermore, the use of Markdown within this framework simplifies the process
+of creating and maintaining readable and well-structured documentation.</p>
 
                     </main>
 
