@@ -3842,35 +3842,36 @@ Editors allow us to save our commands, create scripts, and in the future, edit c
 <li><code>tilde</code>: The Tilde Text Editor</li>
 <li><code>edit</code>: Microsoft text editor</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h2 id="using-git-and-github-for-documentation"><a class="header" href="#using-git-and-github-for-documentation">Using Git and GitHub for Documentation</a></h2>
-<p>Managing and documenting complex systems is a challenge.
-Effective documentation is a cornerstone of operational efficiency and reliability.
-This lecture explores how Git, traditionally seen as tools for software developers,
-is equally valuable for systems administrators for
-documenting processes, scripts, and configurations.</p>
-<p>Documentation in systems administration encompasses a broad spectrum.
-It includes configuration files and scripts to
-server deployment guides and maintenance procedures.
-It can serve as a crucial reference point for teams,
-which can ensure consistency in system management and
-ease the onboarding process for new administrators.</p>
-<p>Our focus on Git arises is motivated because Git is robust, versatile, and widely used.
-Git is a distributed version control system, and
-it excels in tracking changes and managing versions of any set of files.
-This includes any text document.</p>
-<p>In this lecture, we learn how to use this tool to maintain and enhance documentation
-in a systems administration context.
+<div style="break-before: page; page-break-before: always;"></div><h2 id="using-git-for-documentation"><a class="header" href="#using-git-for-documentation">Using Git for Documentation</a></h2>
+<p>Managing and documenting complex systems is a challenge, but
+it's essential to keep a record of how we change or alter our systems,
+how we configure them,
+and how we automate them.
+It's essential because we administer systems for ourselves and for others, and
+keeping records allows us to build off our prior work.
+Maintaining documentation is also an important part of identifying points of failure in our systems.
+For example, we might change some configuration files, and
+one of those changes might lead to an eventual system failure.
+Documenting our changes can help us track and identify the culprit file and the location in that file
+in such a scenario.</p>
+<p>Documentation in systems administration generally therefore covers several areas.
+It includes configuration files, automation scripts, server deployment guides, and maintenance procedures.
+It therefore serves as a crucial reference point for teams; i.e.,
+it ensures consistency in system management and eases the onboarding process for new administrators.</p>
+<p>We use Git because Git is robust, versatile, and widely used.
+Specifically, it's is a distributed version control system used to track changes and
+manage versions of text files.
+Although it is more commonly used for software developers, it's not limited that usage.</p>
+<p>In this section, we learn how to use Git to maintain and enhance documentation in a sysadmin context.
 This will only be an intro to Git, but key areas of discussion include:</p>
 <ul>
 <li>Utilizing Git for version control of configuration files and scripts.</li>
 <li>Employing best practices for documenting system configurations.</li>
 </ul>
-<p>Learning Git will help streamline your documentation processes and
-improve the overall efficiency and communication within your teams.</p>
 <h3 id="understanding-file-naming-conventions"><a class="header" href="#understanding-file-naming-conventions">Understanding File Naming Conventions</a></h3>
-<p>File naming is a fundamental aspect of organizing and maintaining a
-clear and efficient documentation system.
-Adhering to a consistent naming convention is crucial for several reasons:</p>
+<p>First, it's important to standardize around file naming, especially for newly created files.
+File naming is a fundamental aspect of organizing and maintaining a clear documentation system, and
+adhering to a consistent naming convention is crucial for several reasons:</p>
 <ol>
 <li><strong>Clarity and Accessibility</strong>: Well-named files are easier to identify and
 understand at a glance, saving time and reducing confusion.</li>
@@ -3878,27 +3879,33 @@ understand at a glance, saving time and reducing confusion.</li>
 in different operating systems. Avoiding spaces and special characters
 ensures broader compatibility.</li>
 <li><strong>Ease of Navigation</strong>: Consistent naming aids in navigating through files,
-especially in a large repository.</li>
+especially in a large directory or Git repository.</li>
 <li><strong>Version Control</strong>: Clear naming helps in tracking changes and managing
 versions more effectively.</li>
 </ol>
-<p>When naming files, it's best to follow these guidelines:</p>
+<p>When naming files, it's best to follow the guidelines below,
+where I use the <code>md</code> extension to identify these files as Markdown files.
+But regardless of file type, these guidelines are broadly applicable to all file naming:</p>
 <ul>
-<li>Use single words or combine words using camelCase, underscores (<code>_</code>), or
-hyphens (<code>-</code>). For example:
-- <code>ServerSetupGuide.md</code>,
-- <code>server_setup_guide.md</code>, or
-- <code>server-setup-guide.md</code>.</li>
-<li>Avoid spaces because they can cause issues in URLs and command-line operations.</li>
-<li>Steer clear of special characters like <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc. because they
-might have specific functions in certain environments or scripts.</li>
+<li>Use single words or combine words using camelCase, underscores (<code>_</code>), or hyphens (<code>-</code>). For example:
+<ul>
+<li><code>ServerSetupGuide.md</code>,</li>
+<li><code>server_setup_guide.md</code>, or</li>
+<li><code>server-setup-guide.md</code>.</li>
+</ul>
+</li>
+<li>Avoid spaces because they can cause issues in URLs and command-line operations. For example, do not name a file like this:
+<ul>
+<li>server setup guide.md</li>
+</ul>
+</li>
+<li>Steer clear of special characters in file names, such as <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc. These characters might have specific functions in certain environments or scripts, like the Bash shell.</li>
 </ul>
 <h4 id="use-markdown"><a class="header" href="#use-markdown">Use Markdown</a></h4>
-<p>Use Markdown for formatting your documentation.
-Markdown is a widely used markup format.
-Files written in Markdown can be easily converted to HTML, DOCX, PPTX, PDF, and more.
-Plus, if you use GitHub, files written in Markdown will automatically be
-rendered into HTML.</p>
+<p>When documenting your system or some process, use Markdown format your documentation.
+Markdown is a widely used markup format, and
+files written in Markdown can be easily converted to HTML, DOCX, PPTX, PDF, and more.
+Plus, if you use GitHub, files written in Markdown will automatically render into HTML.</p>
 <h3 id="basic-markdown-tutorial"><a class="header" href="#basic-markdown-tutorial">Basic Markdown Tutorial</a></h3>
 <p>Here's a quick guide to the most commonly used Markdown syntax, but
 also see <a href="https://www.markdownguide.org/">Markdown Guide</a>.</p>
@@ -3912,6 +3919,24 @@ The number of <code>#</code> symbols indicates the level of the heading:</p>
 ##### Heading 5
 ###### Heading 6
 </code></pre>
+<p>Use the Heading 1 only once in a document, and then other heading levels for sections and subsections.
+As an example:</p>
+<pre><code># Apache Web Server Documentation
+
+Some introductory text here.
+
+## Installing Apache
+
+Some text on installing Apache here.
+
+## Configuring Apache
+
+Some text on configuring Apache here.
+
+## Starting Apache
+
+Some text on starting Apache here.
+</code></pre>
 <h4 id="emphasis"><a class="header" href="#emphasis">Emphasis</a></h4>
 <ul>
 <li><strong>Bold</strong>: To make text bold, wrap it in double asterisks or double
@@ -3922,15 +3947,14 @@ underscores. For example, <code>*italic*</code> or <code>_italic_</code>.</li>
 <h4 id="lists"><a class="header" href="#lists">Lists</a></h4>
 <ul>
 <li>
-<p><strong>Unordered Lists</strong>: Use asterisks, plus signs, or hyphens to create bullet
-points.</p>
+<p><strong>Unordered Lists</strong>: Use asterisks, plus signs, or hyphens to create bullet points.</p>
 </li>
 <li>
 <p>Nest lists using extra indentation.</p>
-<pre><code>* Item 1
-* Item 2
-  * Subitem 2.1
-  * Subitem 2.2
+<pre><code>* Item
+* Item
+  * Subitem
+  * Subitem
 </code></pre>
 </li>
 <li>
@@ -3945,8 +3969,16 @@ points.</p>
 <p>Ordered Lists: Alternate numbered and lettered lists:</p>
 <pre><code>1. First item
 2. Second item
-   a. Subitem 2.1
-   b. Subitem 2.2
+   a. Subitem 2.a
+   b. Subitem 2.b
+</code></pre>
+</li>
+<li>
+<p>Ordered Lists: Alternate numbered and unordered lists:</p>
+<pre><code>1. First item
+2. Second item
+   - Subitem
+   - Subitem
 </code></pre>
 </li>
 </ul>
@@ -3955,25 +3987,24 @@ points.</p>
 <li><strong>Links</strong>: To create a link, wrap the link text in brackets <code>[ ]</code>, and then
 wrap the URL in parentheses <code>( )</code>.
 <ul>
-<li>For example, <code>[GitHub](https://github.com)</code>.</li>
+<li>For example, <code>[GitHub](https://github.com)</code></li>
 </ul>
 </li>
-<li><strong>Images</strong>: Similar to links, but start with an exclamation mark, followed by
-the alt text in brackets, and the URL in parentheses.
+<li><strong>Images</strong>: Use similarly to links, but start with an exclamation mark, followed by
+the alt text in brackets, and the URL in parentheses. The <code>URL</code> is simply the location to the file. It can be a location in your current directory or a location on the web.
 <ul>
-<li>For example, <code>![Alt text](image-url.jpg)</code>.</li>
+<li>For example, <code>![Alt text](image-url.jpg)</code></li>
+<li>For example, <code>![Alt text](http://example.com/images/image-url.jpg)</code></li>
 </ul>
 </li>
 </ul>
 <h4 id="code"><a class="header" href="#code">Code</a></h4>
 <ul>
 <li>
-<p><strong>Inline Code</strong>: For small bits of code, use backticks to wrap your code. For
-example, <code>`code`</code>.</p>
+<p><strong>Inline Code</strong>: For small bits of code, use backticks to wrap your code. For example, <code>`code`</code>.</p>
 </li>
 <li>
-<p><strong>Code Blocks</strong>: For larger sections of code, use three backticks or indent
-with four spaces:</p>
+<p><strong>Code Blocks</strong>: For larger sections of code, use three backticks or indent with four spaces.</p>
 <p>```language
 your code here
 ```</p>
@@ -3994,23 +4025,223 @@ underscores on a new line.</p>
 </code></pre>
 <h4 id="additional-tips"><a class="header" href="#additional-tips">Additional Tips</a></h4>
 <ul>
-<li><strong>Whitespace and Line Breaks</strong>: In Markdown, line breaks and spacing can be
-crucial. To create a new line without starting a new paragraph, end a line
-with two or more spaces before hitting Enter.</li>
+<li><strong>Whitespace and Line Breaks</strong>: To create a new line without starting a new paragraph by
+ending a line with two or more spaces before hitting Enter.</li>
 <li><strong>Escaping Markdown</strong>: To display a Markdown character, precede it with a
 backslash (<code>\</code>). For example, <code>\*not italic\*</code>.</li>
 </ul>
-<p>Markdown's makes formatted text simple and readable.
-It's a great choice for for documentation and note-taking.
+<p>Markdown's makes formatted text simple and readable, and
+is thus a great choice for for documentation and note-taking.
 As you become more comfortable with these basics,
 you'll find it a versatile tool for your writing needs.</p>
+<h2 id="using-git"><a class="header" href="#using-git">Using Git</a></h2>
+<h3 id="check-installed"><a class="header" href="#check-installed">Check Installed</a></h3>
+<p>To begin to use <code>git</code>, log in to your remote system, and make sure <code>git</code> installed with the <code>which</code> command:</p>
+<pre><code>which git
+</code></pre>
+<p>If the output produces a path to <code>git</code>, like <code>/usr/bin/git</code>, then it's installed.</p>
+<p>If it's not installed, then you can install it with the <code>apt</code> command:</p>
+<pre><code>sudo apt install git
+</code></pre>
+<h3 id="configuring-git"><a class="header" href="#configuring-git">Configuring Git</a></h3>
+<p><strong>Note:</strong> The following <code>git</code> tutorial is based on the <a href="https://git-scm.com/docs/gittutorial">Git Documentation</a>.</p>
+<p>First we want to configure <code>git</code> so that when we create or change files,
+it can track who made those changes.
+We do that with the <code>git config</code> command.
+We configure <code>git</code> by inputting our name:</p>
+<pre><code>git config --global user.name "Sean Burns"
+</code></pre>
+<p>And then we add our email address:</p>
+<pre><code>git config --global user.email sean@example.com
+</code></pre>
+<blockquote>
+<p>Use your personal email address and not your work or university email address.
+That way, it'll be easier to maintain your repository over the long run if you decide later to use a service like GitHub.</p>
+</blockquote>
+<h3 id="creating-and-initializing-a-project"><a class="header" href="#creating-and-initializing-a-project">Creating and Initializing a Project</a></h3>
+<p>We absolutely <strong>do not want Git to manage our home directory</strong>, but
+we do want it to manage a project directory in our home directory.
+Let's start off by creating a directory for our project.
+I'll call my directory <code>docs</code>, but you can use any name.
+Be sure to use a good name (no spaces, no special characters, etc.):</p>
+<pre><code>mkdir ~/docs
+</code></pre>
+<p>Then change to the <code>docs</code> directory:</p>
+<pre><code>cd ~/docs
+</code></pre>
+<p>Next we initialize the project directory, which places all content in this directory under revision control:</p>
+<pre><code>git init
+</code></pre>
+<p>If you run the <code>ls -a</code> command, you will see a new hidden directory called <code>.git</code>.
+In most cases, you don't do anything with this directory.
+It's mainly where <code>git</code> keeps tabs of changes in your project directory.</p>
+<h3 id="adding-content"><a class="header" href="#adding-content">Adding Content</a></h3>
+<p>Using your text editor of choice, create a new file.
+In the following example, I'll create and open a file called <code>lamp.md</code> using the <code>vim</code> text editor.
+Use whichever text editor you like.
+Be sure you're still in your project directory.</p>
+<pre><code>vim lamp.md
+</code></pre>
+<p>Add some content, and then save and exit.
+I'll add just a simple header line:</p>
+<pre><code># LAMP Documentation
+</code></pre>
+<p>We can use the <code>git status</code> command to view how <code>git</code> sees the changes:</p>
+<pre><code>git status
+</code></pre>
+<p>Read the output closely.
+The output names your branch, notes that changes have not been staged,
+instructs you how to stage them (<code>git add</code>), instructs you how to undo the changes
+(<code>git restore &lt;file&gt;</code>), and tells you which files have been modified.</p>
+<p>Now we can instruct <code>git</code> to stage the new content, which means that <code>git</code> takes a snapshot of the changes:</p>
+<pre><code>git add lamp.md
+</code></pre>
+<p>The <code>git add</code> command <strong>stages</strong> the new content.
+Run the <code>git status</code> command again, and it shows you which files have been staged and need to be committed.
+It also shows the command to undo the staged changes (<code>git restore --stage &lt;file&gt;</code>).</p>
+<p>We permanently track the content using the <code>git commit -m</code> command.
+The <code>-m</code> option allows us to enter a commit message, which is placed inside quotes.
+This message should be relatively brief, but it should describe the changes you made:</p>
+<pre><code>git commit -m "created lamp.md doc file and added header info"
+</code></pre>
+<p>Finally, running the <code>git status</code> command will show that there's nothing to commit, aka, all is done.</p>
+<h3 id="tracking-changes"><a class="header" href="#tracking-changes">Tracking Changes</a></h3>
+<p>Now that we've made a commit to our project, we can use the <code>git log</code> command to view our <code>git</code> history:</p>
+<pre><code>git log
+</code></pre>
+<p>We can see how this log changes when we edit our file.
+In the example below, I re-open the file and add a date to it:</p>
+<pre><code>vim lamp.md
+</code></pre>
+<p>Add date to file, then save and exit:</p>
+<pre><code># LAMP Documentation
+
+August 24, 2025
+</code></pre>
+<p>Re-stage the new content:</p>
+<pre><code>git add lamp.md
+</code></pre>
+<blockquote>
+<p>If you have made changes to multiple files, you can name all the files with <code>git add</code>,
+like so: <code>git add file1.md file2.md file3.md</code>, or you can make changes to all files at once:
+<code>git add .</code></p>
+</blockquote>
+<p>Before committing the content, you can see a <strong>diff</strong> of the changes:</p>
+<pre><code>git diff --cached
+</code></pre>
+<p>If satisfied, you can now commit the changes:</p>
+<pre><code>git commit -m "added date to file"
+</code></pre>
+<p>Now you can see the new commit message in the logs:</p>
+<pre><code>git log
+</code></pre>
+<p>You can see the difference between the changes in the file with the following command:</p>
+<pre><code>git log -p
+</code></pre>
+<p>And you can view a more detailed summary of commits:</p>
+<pre><code>git log --stat --summary
+</code></pre>
+<h3 id="undoing-committed-changes"><a class="header" href="#undoing-committed-changes">Undoing Committed Changes</a></h3>
+<p>As seen above, the following two commands are useful for undoing changes before files are committed.
+Specifically, the following command undoes a change after it's been modified (e.g., saved in a text editor):</p>
+<pre><code>git restore &lt;file&gt;
+</code></pre>
+<p>You can see how files were modified with <code>git diff</code>.
+In the following command, you can see how unstaged content has changed based on the prior commit:</p>
+<pre><code>git diff HEAD
+</code></pre>
+<p>And the following command undoes a change after it's been staged with <code>git add &lt;file&gt;</code>:</p>
+<pre><code>git restore --stage &lt;file&gt;
+</code></pre>
+<p>After staging a file, you can use the <code>git diff</code> command to see how content has changed in a file:</p>
+<pre><code>git diff --cached
+</code></pre>
+<p>If we need to undo a change after content has been committed with <code>git commit -m</code>,
+then we have to use the <code>git reset</code> command.
+This makes sense when you view the output of <code>git log</code>, which only shows changes that have been committed,
+and not changes to files that have simply been modified or staged.
+When content has been modified and committed, the changes have become part of the version history.
+Thus to undo a committed change, we have to undo the history that <code>git</code> tracks.
+In some cases, especially when collaborating with others, this can have serious implications,
+which is why we have a separate command for undoing commits.</p>
+<p>There are several ways to undo a commit with <code>git reset</code>.
+To undo the most recent commit, we can use the following command:</p>
+<pre><code>git reset --soft HEAD~1
+</code></pre>
+<p>Or to undo the two most recent commits, we change the number to 2:</p>
+<pre><code>git reset --soft HEAD~2
+</code></pre>
+<p>With the <code>--soft</code> option, all changes to files remain, but the commit history is cleared.</p>
+<p>We can use the following command to undo changes permanently:</p>
+<pre><code>git reset --hard &lt;commit_numer&gt;
+</code></pre>
+<p>The commit number can be found in the output of <code>git log</code>, and we only need the first eight digits:</p>
+<pre><code>git log
+</code></pre>
+<p>And the output is something like:</p>
+<pre><code>commit 048cd90e48036b82667e46d5b2ded21fa86c0e80 (HEAD -&gt; main)
+Author: Sean Burns &lt;email@example.com&gt;
+Date: Sun Aug 24 10:58:50 2025 --400
+
+    &lt;commit message&gt;
+
+commit 0062b4c187b8096857373f7880315e8e9aa8ce9c
+Author: Sean Burns &lt;email@example.com&gt;
+Date:   Sun Aug 24 10:54:34 2025 -0400
+
+    created lamp.md doc file and added header info
+</code></pre>
+<p>To revert back to the first commit:</p>
+<pre><code>git reset --hard 0062b4c1
+</code></pre>
+<p>Now, all changes to the file have been undone except for the changes made when the file was first created.
+We can see that with the following <code>git log</code> command:</p>
+<pre><code>git log
+</code></pre>
+<p>Output:</p>
+<pre><code>commit 0062b4c187b8096857373f7880315e8e9aa8ce9c
+Author: Sean Burns &lt;email@example.com&gt;
+Date:   Sun Aug 24 10:54:34 2025 -0400
+
+    created lamp.md doc file and added header info
+</code></pre>
+<p>Before we reset the version history, you can use <code>git diff</code> with those commit numbers.
+In the following, I compare a prior version with the most recent commit ("HEAD"):</p>
+<pre><code>git diff 048cd90e HEAD
+</code></pre>
+<h3 id="git-workflow"><a class="header" href="#git-workflow">Git Workflow</a></h3>
+<p>The benefit of <code>git</code> is in developing a workflow with it.
+Basically, for a single person, we follow these steps:</p>
+<p>For a new project:</p>
+<ol>
+<li><code>mkdir project_directory</code> : create a new project directory</li>
+<li><code>cd project_directory</code> : change to the new project directory</li>
+<li><code>git init</code> : initialize project directory</li>
+</ol>
+<p><code>git init</code> only needs to be run once.
+Afterwards, for working in that project directory:</p>
+<ol>
+<li>Edit a text file with your text editor of choice, and save and quit the editor when done.</li>
+<li><code>git add &lt;file&gt;</code></li>
+<li>`git commit -m "commit message"</li>
+</ol>
+<p>If necessary, use the undo commands when or if necessary:</p>
+<ol>
+<li><code>git restore &lt;file&gt;</code> : after editing</li>
+<li><code>git restore --stage &lt;file&gt; : undo after staging with </code>git add`</li>
+<li><code>git reset --soft HEAD~1</code> : undo the most recent commit, saving all changes to files</li>
+<li><code>git reset --hard &lt;commit_number&gt; : undo to the commit number (based on </code>git log`), undoing all file changes</li>
+</ol>
 <h2 id="conclusion-10"><a class="header" href="#conclusion-10">Conclusion</a></h2>
-<p>In summary, Git is powerful tool for documentation and version control,
-offering a platform for managing, tracking, and collaborating on projects.</p>
-<p>Adhere to clear file naming conventions to enhance its efficiency.
-This ensures files are accessible and compatible across various environments.</p>
-<p>Furthermore, the use of Markdown within this framework simplifies the process
-of creating and maintaining readable and well-structured documentation.</p>
+<p>In summary, Git is powerful tool for documentation and version control.
+For sysadmins, <code>git</code> is useful for managing configuration files, automation scripts,
+server deployment guides, maintenance procedures, and probably more.</p>
+<p>Remember to:</p>
+<ol>
+<li>Adhere to clear file naming conventions.</li>
+<li>Use Markdown formatting for structuring and documenting content in files.</li>
+</ol>
+<p>And most importantly, start documenting everything with a <code>git</code> based workflow.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bash-scripting"><a class="header" href="#bash-scripting">Bash Scripting</a></h1>
 <p>By the end of this section, you will:</p>
 <ol>
