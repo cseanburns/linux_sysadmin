@@ -4,44 +4,48 @@ After this section, you will be able to achieve the following outcomes:
 
 - **Understand the concept of Virtual Machines (VMs):** Learn what a VM is and how it operates on a host operating system.
 - **Set up a Google Cloud project using `gcloud`:** Create a Google Cloud project and enable billing for it.
-- **Create a Virtual Machine instance:** Configure and deploy a VM on Google Cloud using the Ubuntu 20.04 LTS operating system.
+- **Create a Virtual Machine instance:** Configure and deploy a VM on Google Cloud using the Ubuntu 22.04 LTS operating system.
 - **Install and initialize the `gcloud` CLI:** Set up the `gcloud` command interface on your local machine for managing cloud resources.
 - **Connect to the VM using SSH:** Establish a secure connection to your VM via the command line from your local machine.
 - **Update and manage the VM:** Perform essential updates on the VM and create snapshots for backup and recovery.
 
 ## Virtual Machines
 
-Our goal in this section  is to create a **virtual machine (VM)** *instance* running a distribution of the Linux operating system.
-A VM is basically a virtualized operating system that runs on a host operating system.
+Our goal in this section is to create a **virtual machine (VM)** *instance* running a distribution of the Linux operating system.
+A VM is a virtualized operating system that runs on a host operating system.
 That host operating system may also be Linux, but it could be Windows or macOS.
-In short, when we use virtual machines,
-it means instead of installing an operating system ,like Linux, macOS, Windows, etc, on a physical machine,
-we use virtual machine software to mimic the process.
-The virtual machine thus runs on top of our main OS.
-It's like an app, where the app is a fully functioning operating system.
+In short, using virtual machines means instead installing an operating system on bare metal,
+we use virtual machine software to mimic the process to install an additional OS as an *app* on an existing OS.
 
-In this book, we're going to use `gcloud` (via Google) to create and run our virtual machines.
+In this book, we're going to use Google Cloud to create and run our virtual machines.
 There are other options available that you can explore on your own.
 
 ## Google Cloud / gcloud
 
 ### Google Account
 
-To create our virtual machines using `gcloud`, we need a Google account.
+We need a Google account to create our virtual machines.
 I imagine you already have a Google account, but if not, then create one at [https://www.google.com][google].
+Be sure to use your personal Google account for this project.
 
 ### Google Cloud (gcloud) Project
 
-In the following, we will use `gcloud` to create a Google Cloud project.
-Once you've created that project, we can enable billing for that project, and then install the gcloud software on personal machines.
+The following process involves:
 
-To begin, you will need to visit the `gcloud` documentation that I've inserted throughout this page.
-Closely follow those instructions.
-I help explain the steps throughout this page.
-However, it is imperative that you **read through the instructions** closely.
+1. Sign into Google.
+2. Create a Google Cloud project.
+3. Enable billing for that project.
+4. Create a VM (or *virtual instance*) on Google Cloud.
+4. Install the `gcloud` CLI software on our personal machines.
+    - Alternatively, use the web interface (details below).
 
-First, follow **Step 1** at the top of the  **[Install the gcloud CLI][gcloud_install]** page to create a new project.
-Also, review the page on [creating and managing projects][gcloud_projects].
+> Although I include most of the instructions on this page to perform the above process,
+> it is imperative that you **read through Google's instructions** also.
+
+#### Create a Project
+
+First, follow **Step 1** at the top of the  [Install the gcloud CLI][gcloud_install] page to create a new project.
+Review the page on [creating and managing projects][gcloud_projects].
 
 When you create your project, you can name it anything, but try to name it something to do with this project.
 E.g., I might use the name **sysadmin-418**.
@@ -49,15 +53,16 @@ E.g., I might use the name **sysadmin-418**.
 
 Click on the **Create** button, and leave the organization field set to **No Organization**.
 
-### Google Billing
+#### Google Billing
 
 Second, set up a billing account for your gcloud project.
-This means there is a cost associated with this product, but the machines we'll build require few resources and the cost should be minimal.
+This means there is a cost associated with this product,
+but the machines we'll build require few resources and the cost should be minimal.
 In the past, I usually pay about $1 per month.
-**[Follow Step 2][gcloud_install]** to enable billing for the new project.
-See also the page on how to **[create, modify, or close your self-serve Cloud Billing account][google_billing]**
+[Follow Step 2][gcloud_install] to enable billing for the new project.
+See also the page on how to [create, modify, or close your self-serve Cloud Billing account][google_billing].
 
-### gcloud VM Instance
+#### gcloud VM Instance
 
 Next, log into [Google Cloud Console][gcloud_console].
 This should take you to the Dashboard page.
@@ -67,25 +72,25 @@ As a reminder, a VM is a virtualized operating system.
 We will use software to mimic the process of installing an operating system on Google's servers. 
 
 Google Cloud offers a number of Linux-based operating systems to create VMs.
-We're going to use the Ubuntu operating system and specifically the Ubuntu 20.04 LTS version.
+We're going to use the Ubuntu operating system and specifically the Ubuntu 22.04 LTS version.
 
 > What is Ubuntu?
 > Ubuntu is a Linux distribution.
 > A new version of Ubuntu is released every six months.
-> The 20.04 signifies that this is the April 2020 version.
+> The 22.04 signifies that this is the April 2020 version.
 > LTS signifies **Long Term Support**.
 > LTS versions are released every two years,
 > and Canonical LTD,
 > the owners of Ubuntu,
 > provide standard support for LTS versions for five years.
-> Thus, Ubuntu 20.04 is supported till April 2025.
+> Thus, Ubuntu 22.04 is supported till April 2025.
 >
 > LTS versions of Ubuntu are more stable.
 > Non-LTS versions of Ubuntu only receive nine months of standard support,
 > and generally use cutting edge technology,
 > which is not always desirable for server operating systems.
 > Each version of Ubuntu has a code name.
-> 20.04 has the code name **Focal Fossa**.
+> 22.04 has the code name **Focal Fossa**.
 > You can see a list of versions, code names, release dates,
 > and more on Ubuntu's [Releases][ubuntu_releases] page.
 
@@ -98,22 +103,25 @@ To do so, follow these steps:
     - E.g., for me, I used the project name **sysadmin-418**.
 - Next, click on **Create Instance**.
 - Change the name for your **instance**.
-    - E.g., I chose **fall-2024** (no spaces) 
+    - E.g., I chose **fall-2025** (no spaces) 
 - Under the **Machine Configuration** section, make sure **E2 (Low cost, day-to-day computing)** is selected.
 - Under the **Machine type** drop down box, select **e2-micro (0.25-2 vCPU (1 shared core), 1 GB memory)**
     - This is the lowest cost virtual machine and perfect for our needs.
 - Under **Boot disk**, click on the **Change** button.
 - In the window, select **Ubuntu** from the **Operating system** drop down box.
-- Select **Ubuntu 20.04 LTS x86/64**
+- Select **Ubuntu 22.04 LTS x86/64**
 - Leave **Boot disk type** be set to **Balanced persistent disk**
 - Disk size should be set to **10 GB**.
 - Click on the **Select** button.
 - Check the **Allow HTTP Traffic** button
 - Finally, click on the **Create** button to create your VM instance.
 
-### Install the latest gcloud CLI version 
+#### Install the latest gcloud CLI version 
 
-The instructions above will be the same for anyone, but the following instructions will differ depending on the operating system for your local machine.
+In this section, we install the `gcloud` CLI software to connect to our virtual machines on Google Cloud.
+Using the `gcloud` CLI is a more advanced way to connect to our VMs.
+If you prefer, you can connect to your VM using Google's web interface.
+Skip to the [Connect To Our VM](2a-using-gcloud-virtual-machines.html#connect-to-our-vm) section if you prefer the web interface.
 
 The next step is to install gcloud on your local machines.
 This will allow us to connect to remote server using our own terminal applications.
@@ -134,16 +142,17 @@ Follow these instructions closely for the operating system that you're using.
 > - locate the **Processor** or **Chip** information
 
 After you have downloaded the gcloud CLI for your particular OS and CPU architecture,
-you will need to open a command prompt/terminal on your machines to complete the instructions that describe how to install the gcloud CLI.
+you will need to open a command prompt/terminal on your machines to complete the instructions
+that describe how to install the gcloud CLI.
 macOS uses the Terminal app, which can be located using Spotlight.
-Windows users can use Powershell.
+Windows users can use the Command Prompt or Powershell.
 
-### Windows Users
+##### Windows Users
 
 Windows users will download a regular **.exe** file, and launch the installer in the regular Windows way.
 Please follow the rest of the instructions for Windows.
 
-### macOS Users
+##### macOS Users
 
 **macOS** users may need to complete some setup work before installing Google Cloud.
 First, open your Terminal.app and run the following code:
@@ -177,13 +186,11 @@ See also:
 
 [Setting up a Python development environment][python_dev]
 
-#### macOS gcloud Install
-
 macOS users will download a **.tar.gz** file and extract the **.tar.gz** using the ``tar`` command.
 The **.tar.gz** file may have been downloaded to your **Downloads** folder.
 First, in your Terminal.app, move that file to your home directory and extract it there.
 Once extracted, change to home directory with the ``cd`` command.
-For example, if you are running macOS and downloaded the X86_64 version of the gcloud CLI, then open your Terminal.app and run the following commands:
+For example, if you are running macOS and downloaded the x86_64 version of the gcloud CLI, then open your Terminal.app and run the following commands:
 
 ```
 mv ~/Downloads/google-cloud-cli-darwin-x86_64.tar.gz $HOME
@@ -194,7 +201,7 @@ cd google-cloud-sdk
 
 Modify the file names in the commands above, as appropriate, if you're using the M1 version of the gcloud CLI.
 
-### Initializing the gcloud CLI
+#### Initializing the gcloud CLI
 
 Regardless if you're using macOS or Windows, you will now initialize your Google Cloud installation the same way.
 First, scroll down the install page to the section titled [**Initializing the gcloud CLI**][g_init].
@@ -209,11 +216,13 @@ And continue to follow the instructions in the documentation.
 
 ## Connect to our VM
 
+### Using `gcloud` CLI
+
 After the new VM machine has been created, you connect to it via the command line.
 macOS users will connect to it via their Terminal.app.
-Windows users can connect to it via their command prompt or use [PuTTY][putty].
+Windows users can connect to it via their Command shell or Powershell.
 
-If you have used ``ssh`` before, note that we use a slightly different ``ssh`` command to connect to our VMs.
+If you have used `ssh` before, note that we use a slightly different `ssh` command to connect to our VMs.
 The syntax follows this pattern:
 
 ```
@@ -221,15 +230,18 @@ gcloud compute ssh --zone "zone-info" "name-info" --project "project-id"
 ```
 
 You need to replace the values in the double quotes in the above command
-with the values located in your Google Cloud console and
-in your VM instances section.
+with the values located in your Google Cloud console and in your VM instances section.
+You can select the **SSH** drop down box to copy the exact `gcloud` command to connect to your server.
 
-You can select the **SSH** drop down box to copy the exact ``gcloud`` command to connect to your server.
+### Using the Web Interface
+
+**ADD DETAILS HERE**
 
 ## Update our Ubuntu VM
 
-The above command will connect you to the remote Linux virtual machine server.
-The VM will include a recently updated version of Ubuntu 20.04, but it may not be completely updated.
+Once you have access to the command line on your remote Linux virtual instance,
+you will need to update your OS.
+The VM will include a recently updated version of Ubuntu 22.04, but it may not be completely updated.
 Thus the first thing we need to do is update our machines.
 Since this is an Ubuntu machine, use the following two commands to update your machines:
 
@@ -247,16 +259,16 @@ sudo reboot
 > You do not always have to reboot when updating your server.
 > It is only necessary when there has been a kernel update.
 > I'm assuming that when we update these machines for the first time after installation,
-> that there will have been a kernel update.
+> that there will have been a kernel update, though.
 
 If you reboot your server, you will automatically be disconnected from it.
-If you do not need to reboot your server, then type ``exit`` to logout and quit the connection to the remote server.
+If you do not need to reboot your server, then type `exit` to logout and quit the connection to the remote server.
 
 ```
 exit
 ```
 
-Typing ``exit`` at the prompt will always close our connection to our remote servers.
+Typing `exit` at the prompt will always close our connection to our remote servers.
 
 ## Snapshots
 
@@ -273,23 +285,23 @@ To get started:
 1. In the left hand navigation panel, click **Compute Engine** and then **Snapshots**.
 2. At the top of the page, click on **Create Snapshot**.
 3. Provide a name for your snapshot: e.g., **ubuntu-1**.
-4. Provide a description of your snapshot: e.g., **This is a new install of Ubuntu 20.04.**
+4. Provide a description of your snapshot: e.g., **This is a new install of Ubuntu 22.04.**
 5. Choose your **Source disk**.
 6. Choose a **Location** to store your snapshot.
     - To avoid extra charges, choose **Regional**.
     - From the drop down box, select the same location (zone-info) your VM has
 7. Click on **Create**
 
-**<p style="color:red">Please monitor your billing for this to avoid costs
-that you do not want to incur.</p>**
+**<p style="color:red">Please monitor your billing for this to avoid costs that you do not want to incur.</p>**
 
 ## Conclusion
 
 Congrats!
 You have successfully completed your first Linux server installation using `gcloud`.
 In this section, you learned about virtual machines (VMs) and created one using Google Cloud.
-Specifically, you created a Ubuntu 20.04 LTS Linux virtual machine.
-While this may seem like a lot of information, by the end of this book you will be able to effortlessly deploy and manage VMs for various tasks.
+Specifically, you created a Ubuntu 22.04 LTS Linux virtual machine.
+While this may seem like a lot of information,
+by the end of this book you will be able to effortlessly deploy and manage VMs for various tasks.
 Such tasks may include setting up websites and more.
 
 [gcloud_console]:https://console.cloud.google.com/
@@ -300,7 +312,6 @@ Such tasks may include setting up websites and more.
 [google_billing]:https://cloud.google.com/billing/docs/how-to/manage-billing-account
 [google]:https://www.google.com
 [homebrew]:https://brew.sh/
-[putty]:https://cloud.google.com/compute/docs/connect/standard-ssh#putty-app
 [pyenv]:https://github.com/pyenv/pyenv
 [python3]:https://www.python.org/
 [python_dev]:https://cloud.google.com/python/docs/setup
