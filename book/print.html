@@ -814,8 +814,8 @@ Ubuntu Server Linux operating system.</p>
 <p>Our goal in this section is to create a <strong>virtual machine (VM)</strong> <em>instance</em> running a distribution of the Linux operating system.
 A VM is a virtualized operating system that runs on a host operating system.
 That host operating system may also be Linux, but it could be Windows or macOS.
-In short, using virtual machines means instead installing an operating system on bare metal,
-we use virtual machine software to mimic the process to install an additional OS as an <em>app</em> on an existing OS.</p>
+In short, using virtual machines means instead of installing an operating system on bare metal,
+we use virtual machine software to mimic the process of installing an additional OS as an <em>app</em> (so to speak) on an existing OS.</p>
 <p>In this book, we're going to use Google Cloud to create and run our virtual machines.
 There are other options available that you can explore on your own.</p>
 <h2 id="google-cloud--gcloud"><a class="header" href="#google-cloud--gcloud">Google Cloud / gcloud</a></h2>
@@ -824,29 +824,30 @@ There are other options available that you can explore on your own.</p>
 I imagine you already have a Google account, but if not, then create one at <a href="https://www.google.com">https://www.google.com</a>.
 Be sure to use your personal Google account for this project.</p>
 <h3 id="google-cloud-gcloud-project"><a class="header" href="#google-cloud-gcloud-project">Google Cloud (gcloud) Project</a></h3>
-<p>The following process involves:</p>
+<p>After signing into Google:</p>
 <ol>
-<li>Sign into Google.</li>
 <li>Create a Google Cloud project.</li>
 <li>Enable billing for that project.</li>
 <li>Create a VM (or <em>virtual instance</em>) on Google Cloud.</li>
-<li>Install the <code>gcloud</code> CLI software on our personal machines.
+<li>Install the <code>gcloud</code> CLI software on our personal machines to connect to our remote VM;
 <ul>
-<li>Alternatively, use the web interface (details below).</li>
+<li>alternatively, use the web interface (details below) to connect to our remote VM.</li>
 </ul>
 </li>
 </ol>
 <blockquote>
-<p>Although I include most of the instructions on this page to perform the above process,
+<p>Although I include most of the instructions on this page to perform the above steps,
 it is imperative that you <strong>read through Google's instructions</strong> also.</p>
 </blockquote>
 <h4 id="create-a-project"><a class="header" href="#create-a-project">Create a Project</a></h4>
-<p>First, follow <strong>Step 1</strong> at the top of the  <a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a> page to create a new project.
+<p>After signing into your Google account,
+proceed to <strong>Step 1</strong> at the top of the  <a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a> page to create a new project.
 Review the page on <a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#gcloud">creating and managing projects</a>.</p>
 <p>When you create your project, you can name it anything, but try to name it something to do with this project.
 E.g., I might use the name <strong>sysadmin-418</strong>.
-<em>Avoid using spaces when naming your project.</em></p>
-<p>Click on the <strong>Create</strong> button, and leave the organization field set to <strong>No Organization</strong>.</p>
+<em>Avoid using spaces when naming your project.</em>
+Click on the <strong>Create</strong> button, and leave the organization field set to <strong>No Organization</strong>.
+Make your you've selected your project, and then click on <strong>Enable</strong> for <strong>Compute Engine API</strong>.</p>
 <h4 id="google-billing"><a class="header" href="#google-billing">Google Billing</a></h4>
 <p>Second, set up a billing account for your gcloud project.
 This means there is a cost associated with this product,
@@ -861,31 +862,27 @@ This should take you to the Dashboard page.</p>
 As a reminder, a VM is a virtualized operating system.
 We will use software to mimic the process of installing an operating system on Google's servers.</p>
 <p>Google Cloud offers a number of Linux-based operating systems to create VMs.
-We're going to use the Ubuntu operating system and specifically the Ubuntu 22.04 LTS version.</p>
+We're going to use the Ubuntu operating system and specifically the Ubuntu 22.04 LTS version.
+We are not going to install a graphical user interface on our Ubuntu servers.
+Rather, we will focus on using the command line to do most of our work.</p>
 <blockquote>
 <p>What is Ubuntu?
-Ubuntu is a Linux distribution.
+Ubuntu is a distribution of Linux.
 A new version of Ubuntu is released every six months.
-The 22.04 signifies that this is the April 2020 version.
-LTS signifies <strong>Long Term Support</strong>.
-LTS versions are released every two years,
-and Canonical LTD,
-the owners of Ubuntu,
-provide standard support for LTS versions for five years.
-Thus, Ubuntu 22.04 is supported till April 2025.</p>
-<p>LTS versions of Ubuntu are more stable.
-Non-LTS versions of Ubuntu only receive nine months of standard support,
-and generally use cutting edge technology,
-which is not always desirable for server operating systems.
+The 22.04 signifies that this is the April 2022 version.
+The LTS signifies <strong>Long Term Support</strong>.
+LTS versions are released every two years, and Canonical LTD, the owners of Ubuntu, provide five years standard support for LTS versions.
+Thus, Ubuntu 22.04 is supported through June 2027.</p>
+<p>LTS versions of Ubuntu are more stable than non-LTS versions of Ubuntu.
+The latter receive nine months of standard support and generally use cutting edge technology.
+Cutting edge technology is not always desirable for server operating systems, which often prioritize stability.
 Each version of Ubuntu has a code name.
-22.04 has the code name <strong>Focal Fossa</strong>.
-You can see a list of versions, code names, release dates,
-and more on Ubuntu's <a href="https://wiki.ubuntu.com/Releases">Releases</a> page.</p>
+Ubuntu 22.04 LTS has the code name <strong>Jammy Jellyfish</strong>.
+You can see a list of versions, code names, release dates, and more on Ubuntu's <a href="https://wiki.ubuntu.com/Releases">Releases</a> page.</p>
 </blockquote>
-<p>We will create our VM using the Google Cloud dashboard.
-To do so, follow these steps:</p>
+<p>You should be on the page where you create a new VM, but if not</p>
 <ul>
-<li>Click the three horizontal bars at the top left of the screen.</li>
+<li>If Click the three horizontal bars at the top left of the screen.</li>
 <li>Hover over the <strong>Compute Engine</strong> link, and then select <strong>VM Instances</strong>.</li>
 <li>In the window, select the project that you created earlier.
 <ul>
@@ -898,18 +895,33 @@ To do so, follow these steps:</p>
 <li>E.g., I chose <strong>fall-2025</strong> (no spaces)</li>
 </ul>
 </li>
-<li>Under the <strong>Machine Configuration</strong> section, make sure <strong>E2 (Low cost, day-to-day computing)</strong> is selected.</li>
+</ul>
+<p>If you are already on the Create VM page, then:</p>
+<ul>
+<li>Change the name for your <strong>instance</strong>.
+<ul>
+<li>E.g., I chose <strong>fall-2025</strong> (no spaces)</li>
+</ul>
+</li>
+<li>Use default <strong>Region</strong> and <strong>Zone</strong>.</li>
+<li>Make sure <strong>E2 (Low cost, day-to-day computing)</strong> is selected.</li>
 <li>Under the <strong>Machine type</strong> drop down box, select <strong>e2-micro (0.25-2 vCPU (1 shared core), 1 GB memory)</strong>
 <ul>
 <li>This is the lowest cost virtual machine and perfect for our needs.</li>
 </ul>
 </li>
-<li>Under <strong>Boot disk</strong>, click on the <strong>Change</strong> button.</li>
-<li>In the window, select <strong>Ubuntu</strong> from the <strong>Operating system</strong> drop down box.</li>
-<li>Select <strong>Ubuntu 22.04 LTS x86/64</strong></li>
+</ul>
+<p>Next, click on the <strong>OS and storage</strong> link in the left hand navigation section.</p>
+<ul>
+<li>Click on the <strong>Change</strong> button.</li>
+<li>Under <strong>Operating system</strong>, select <strong>Ubuntu</strong>.</li>
+<li>Under <strong>Version</strong>, select <strong>Ubuntu 22.04 LTS x86/64</strong></li>
 <li>Leave <strong>Boot disk type</strong> be set to <strong>Balanced persistent disk</strong></li>
 <li>Disk size should be set to <strong>10 GB</strong>.</li>
 <li>Click on the <strong>Select</strong> button.</li>
+</ul>
+<p>Next, click on the <strong>Networking</strong> link in the left hand navigation section.</p>
+<ul>
 <li>Check the <strong>Allow HTTP Traffic</strong> button</li>
 <li>Finally, click on the <strong>Create</strong> button to create your VM instance.</li>
 </ul>
@@ -918,8 +930,7 @@ To do so, follow these steps:</p>
 Using the <code>gcloud</code> CLI is a more advanced way to connect to our VMs.
 If you prefer, you can connect to your VM using Google's web interface.
 Skip to the <a href="2a-using-gcloud-virtual-machines.html#connect-to-our-vm">Connect To Our VM</a> section if you prefer the web interface.</p>
-<p>The next step is to install gcloud on your local machines.
-This will allow us to connect to remote server using our own terminal applications.
+<p>Using the <code>gcloud</code> CLI will allow us to connect to remote server using our own terminal applications.
 The <strong><a href="https://cloud.google.com/sdk/docs/install-sdk">Install the gcloud CLI</a></strong> page provides instructions for different operating systems.</p>
 <p>There are installation instructions for macOS, Windows, Chromebooks, and various Linux distributions.
 Follow these instructions closely for the operating system that you're using.</p>
@@ -995,27 +1006,29 @@ The syntax follows this pattern:</p>
 with the values located in your Google Cloud console and in your VM instances section.
 You can select the <strong>SSH</strong> drop down box to copy the exact <code>gcloud</code> command to connect to your server.</p>
 <h3 id="using-the-web-interface"><a class="header" href="#using-the-web-interface">Using the Web Interface</a></h3>
-<p><strong>ADD DETAILS HERE</strong></p>
+<p>If you did not install <code>gcloud</code> CLI, then you can connect through the Google Cloud Console website.
+To do so:</p>
+<ol>
+<li>Click on the drop down arrow next to the <code>SSH</code> button for your VM instance.</li>
+<li>Select, <strong>Open in browser window</strong>.</li>
+<li>Authorize it to allow <strong>SSH-in-browser to connect to VMs</strong>.</li>
+<li>A terminal in a browser window should appear.</li>
+</ol>
 <h2 id="update-our-ubuntu-vm"><a class="header" href="#update-our-ubuntu-vm">Update our Ubuntu VM</a></h2>
 <p>Once you have access to the command line on your remote Linux virtual instance,
 you will need to update your OS.
 The VM will include a recently updated version of Ubuntu 22.04, but it may not be completely updated.
 Thus the first thing we need to do is update our machines.
-Since this is an Ubuntu machine, use the following two commands to update your machines:</p>
+Since this is an Ubuntu machine, use the following two commands to update your machines.
+Type the first command in, wait for it to complete, and then type the second command.
+<strong>READ the OUTPUT</strong> closely.
+It will ask you to continue.
+Press <strong>Y</strong> to continue (lowercase <strong>y</strong> is fine).</p>
 <pre><code>sudo apt update
 sudo apt -y upgrade
 </code></pre>
-<p>Then reboot the server with the following command:</p>
-<pre><code>sudo reboot
-</code></pre>
-<blockquote>
-<p>You do not always have to reboot when updating your server.
-It is only necessary when there has been a kernel update.
-I'm assuming that when we update these machines for the first time after installation,
-that there will have been a kernel update, though.</p>
-</blockquote>
-<p>If you reboot your server, you will automatically be disconnected from it.
-If you do not need to reboot your server, then type <code>exit</code> to logout and quit the connection to the remote server.</p>
+<p>You are done!
+To exit the VM, type the <code>exit</code> command:</p>
 <pre><code>exit
 </code></pre>
 <p>Typing <code>exit</code> at the prompt will always close our connection to our remote servers.</p>
@@ -1044,7 +1057,7 @@ This will reduce costs until needed.</p>
 <p><strong><p style="color:red">Please monitor your billing for this to avoid costs that you do not want to incur.</p></strong></p>
 <h2 id="conclusion-1"><a class="header" href="#conclusion-1">Conclusion</a></h2>
 <p>Congrats!
-You have successfully completed your first Linux server installation using <code>gcloud</code>.
+You have successfully completed your first Linux server installation.
 In this section, you learned about virtual machines (VMs) and created one using Google Cloud.
 Specifically, you created a Ubuntu 22.04 LTS Linux virtual machine.
 While this may seem like a lot of information,
