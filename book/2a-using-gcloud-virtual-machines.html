@@ -194,6 +194,12 @@ A VM is a virtualized operating system that runs on a host operating system.
 That host operating system may also be Linux, but it could be Windows or macOS.
 In short, using virtual machines means instead of installing an operating system on bare metal,
 we use virtual machine software to mimic the process of installing an additional OS as an <em>app</em> (so to speak) on an existing OS.</p>
+<blockquote>
+<p>There are many ways to do virtualization.
+According to <a href="https://www.redhat.com/en/topics/virtualization/what-is-a-virtual-machine">Red Hat</a>, there is data virtualization, desktop virtualization,
+server virtualization, OS virtualization, (which is the technology we cover here),
+and network functions virtualization.</p>
+</blockquote>
 <p>In this book, we're going to use Google Cloud to create and run our virtual machines.
 There are other options available that you can explore on your own.</p>
 <h2 id="google-cloud--gcloud"><a class="header" href="#google-cloud--gcloud">Google Cloud / gcloud</a></h2>
@@ -223,9 +229,9 @@ proceed to <strong>Step 1</strong> at the top of the  <a href="https://cloud.goo
 Review the page on <a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects#gcloud">creating and managing projects</a>.</p>
 <p>When you create your project, you can name it anything, but try to name it something to do with this project.
 E.g., I might use the name <strong>sysadmin-418</strong>.
-<em>Avoid using spaces when naming your project.</em>
+<em>Avoid spaces in the names of your project.</em>
 Click on the <strong>Create</strong> button, and leave the organization field set to <strong>No Organization</strong>.
-Make your you've selected your project, and then click on <strong>Enable</strong> for <strong>Compute Engine API</strong>.</p>
+Make sure you've selected your project, and then click on <strong>Enable</strong> for <strong>Compute Engine API</strong>.</p>
 <h4 id="google-billing"><a class="header" href="#google-billing">Google Billing</a></h4>
 <p>Second, set up a billing account for your gcloud project.
 This means there is a cost associated with this product,
