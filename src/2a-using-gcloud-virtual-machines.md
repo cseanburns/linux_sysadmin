@@ -17,6 +17,11 @@ That host operating system may also be Linux, but it could be Windows or macOS.
 In short, using virtual machines means instead of installing an operating system on bare metal,
 we use virtual machine software to mimic the process of installing an additional OS as an *app* (so to speak) on an existing OS.
 
+> There are many ways to do virtualization.
+> According to [Red Hat][virt_redhat], there is data virtualization, desktop virtualization,
+> server virtualization, OS virtualization, (which is the technology we cover here),
+> and network functions virtualization.
+
 In this book, we're going to use Google Cloud to create and run our virtual machines.
 There are other options available that you can explore on your own.
 
@@ -49,9 +54,9 @@ Review the page on [creating and managing projects][gcloud_projects].
 
 When you create your project, you can name it anything, but try to name it something to do with this project.
 E.g., I might use the name **sysadmin-418**.
-*Avoid using spaces when naming your project.*
+*Avoid spaces in the names of your project.*
 Click on the **Create** button, and leave the organization field set to **No Organization**.
-Make your you've selected your project, and then click on **Enable** for **Compute Engine API**.
+Make sure you've selected your project, and then click on **Enable** for **Compute Engine API**.
 
 #### Google Billing
 
@@ -322,3 +327,4 @@ Such tasks may include setting up websites and more.
 [python3]:https://www.python.org/
 [python_dev]:https://cloud.google.com/python/docs/setup
 [ubuntu_releases]:https://wiki.ubuntu.com/Releases
+[virt_redhat]:https://www.redhat.com/en/topics/virtualization/what-is-a-virtual-machine
