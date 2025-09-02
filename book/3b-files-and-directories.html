@@ -225,14 +225,9 @@
 </li>
 </ol>
 <h2 id="basic-directory-and-file-commands"><a class="header" href="#basic-directory-and-file-commands">Basic Directory and File commands</a></h2>
-<p>In order to explore the above directories
-but also to create new ones and work with files,
-we need to know some basic terminal commands.
-A lot of these commands are part of the base system
-called <a href="https://en.wikipedia.org/wiki/List_of_GNU_Core_Utilities_commands">GNU Coreutils</a>,
-and in this demo,
-we will specifically cover some of the following
-GNU Coreutils:</p>
+<p>In order to explore the above directories but also to create new ones and work with files, we need to know some basic terminal commands.
+A lot of these commands are part of the base system called <a href="https://en.wikipedia.org/wiki/List_of_GNU_Core_Utilities_commands">GNU Coreutils</a>,
+and in this demo, we will specifically cover some of the following GNU Coreutils:</p>
 <ul>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#toc-Directory-listing-1">Directory Listing</a></li>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations">Basic Operations</a></li>
@@ -241,49 +236,35 @@ GNU Coreutils:</p>
 </ul>
 <h3 id="directory-listing"><a class="header" href="#directory-listing">Directory Listing</a></h3>
 <blockquote>
-<p>I have already demonstrated one command:
-the <code>cd</code> (change directory) command.
+<p>I have already demonstrated one command: the <code>cd</code> (change directory) command.
 This will be one of the most frequently used commands in your toolbox.</p>
 </blockquote>
-<p>In our current directory, or
-once we have changed to a new directory,
-we will want to learn its contents
+<p>In our current directory, or once we have changed to a new directory, we will want to learn its contents
 (what files and directories it contains).
-We have a few commands to choose from to list contents
-(e.g.,  you have already seen the <code>tree</code> command),
+We have a few commands to choose from to list contents (e.g.,  you have already seen the <code>tree</code> command),
 but the most common command is the <code>ls</code> (list) command.
 We use it by typing the following two letters in the terminal:</p>
 <pre><code>ls
 </code></pre>
-<p>Again, to confirm that we're in some specific directory,
-use the <code>pwd</code> command to <strong>print</strong> the <strong>working directory</strong>.</p>
+<p>Again, to confirm that we're in some specific directory, use the <code>pwd</code> command to <strong>print</strong> the <strong>working directory</strong>.</p>
 <p>Most commands can be combined with <strong>options</strong>.
-Options provide additional functionality to the base command, and
-in order to see what options are available for the <code>ls</code> command,
+Options provide additional functionality to the base command, and in order to see what options are available for the <code>ls</code> command,
 we can look at its <strong>man(ual) page</strong>:</p>
 <pre><code>man ls
 </code></pre>
-<p>From the <code>ls</code> <strong>man page</strong>,
-we learn that we can use the <code>-l</code> option to format
-the output of the <code>ls</code> command as a long-list,
-or a list that provides more information about
-the files and directories in the working directory.
-Later in the semester,
-I will talk more about what the other parts of output of this option mean.</p>
+<p>From the <code>ls</code> <strong>man page</strong>, we learn that we can use the <code>-l</code> option to format the output of the <code>ls</code> command as a long-list,
+or a list that provides more information about the files and directories in the working directory.
+Later, we will cover more about what the other parts of output of this option mean.</p>
 <pre><code>ls -l
 </code></pre>
 <p>We can use the <code>-a</code> option to list hidden files.
-In Linux, hidden files are hidden from the base <code>ls</code> command
-if the files begin with a period.
-We have a some of those files in our <strong>$HOME</strong> directories,
-and we can see them like so:</p>
+In Linux, hidden files that have names starting with a period.
+These files are not visible with the default <code>ls</code> command.
+We have a some of those files in our <code>$HOME</code> directories, and we can see them like so:</p>
 <pre><code>ls -a
 </code></pre>
 <p>We can also combine options.
-For example, to view all files,
-including hidden ones,
-in the long-list format,
-we can use:</p>
+For example, to view all files, including hidden ones, in the long-list format, we can use:</p>
 <pre><code>ls -al
 </code></pre>
 <h2 id="basic-file-operations"><a class="header" href="#basic-file-operations">Basic File Operations</a></h2>
@@ -294,46 +275,34 @@ we can use:</p>
 <li><code>rm</code>    : removing (or deleting) files and directories</li>
 <li><code>touch</code> : change file timestamps (or, create a new, empty file)</li>
 </ul>
-<p>These commands also have various options
-that can be viewed in their respective <strong>man pages</strong>.
-Again, command options provide additional functionality to the base command,
-and are mostly (but not always) prepended with a dash and a letter or number.
-To see examples, type the following commands,
-which will launch the manual pages for them.
-Press <code>q</code> to exit the manual pages,
-and use your up and down arrow keys to scroll through the manuals:</p>
+<p>These commands also have various options that can be viewed in their respective <strong>man pages</strong>.
+Again, command options provide additional functionality to the base command, and
+are mostly (but not always) prepended with a dash and a letter or number.
+To see examples, type the following commands, which will launch the manual pages for them.
+Press <code>q</code> to exit the manual pages, and use your up and down arrow keys to scroll through the manuals:</p>
 <pre><code>man cp
 man mv
 man rm
 man touch
 </code></pre>
 <p>The <code>touch</code> command's primary use is to change a file's timestamp;
-that is, the command updates a file's "access and modification times"
-(see <code>man touch</code>).
-For example, let's say we have a file called <strong>paper.txt</strong>
-in our home directory.
+that is, the command updates a file's "access and modification times" (see <code>man touch</code>).
+For example, let's say we have a file called <code>paper.txt</code> in our home directory.
 We can see the output here:</p>
 <pre><code>ls -l paper.txt
--rw-rw-r-- 1 sean sean 0 Jun 27 00:13 /home/sean/paper.txt
+-rw-rw-r-- 1 seanburns seanburns 0 Jun 27 00:13 /home/seanburns/paper.txt
 </code></pre>
 <p>This shows that the last modification time was 12:03AM on June 27.</p>
-<p>If I run the touch command on <strong>paper.txt</strong>,
-the timestamp will change:</p>
+<p>If I run the touch command on <code>paper.txt</code>, the timestamp will change:</p>
 <pre><code>touch paper.txt
--rw-rw-r-- 1 sean sean 0 Jun 27 00:15 /home/sean/paper.txt
+-rw-rw-r-- 1 seanburns seanburns 0 Jun 27 00:15 /home/seanburns/paper.txt
 </code></pre>
 <p>This shows an updated modification timestamp of 12:15AM.</p>
-<p>The side effect occurs when we name a file with the <code>touch</code> command,
-but the file does not exist,
-in which case the <code>touch</code> command will create an empty file
-with the name we use.
-Let's say that I do <strong>not</strong> have a file named <strong>file.txt</strong>
-in my home directory.
-If I run the <code>ls -l file.txt</code> command, I'll receive an error
-since the file does not exist.
-But if I then use the <code>touch file.txt</code> command,
-and then run <code>ls -l file.txt</code>.
-we'll see that the file now exists,
+<p>The side effect occurs when we name a file with the <code>touch</code> command, but the file does not exist,
+in which case the <code>touch</code> command will create an empty file with the name we use.</p>
+<p>Let's say that I do <strong>not</strong> have a file named <code>file.txt</code> in my home directory.
+If I run the <code>ls -l file.txt</code> command, I'll receive an error since the file does not exist.
+But if I then use the <code>touch file.txt</code> command, and then run <code>ls -l file.txt</code>, we'll see that the file now exists,
 that it has a byte size of zero:</p>
 <pre><code>ls -l file.txt
 ls: cannot access 'file.txt': No such file or directory
@@ -343,35 +312,26 @@ ls -l file.txt
 </code></pre>
 <p>Here are some ways to use the other three commands and their options:</p>
 <h3 id="copying-files-and-directories"><a class="header" href="#copying-files-and-directories">Copying Files and Directories</a></h3>
-<p>To copy an existing file (<strong>file1.txt</strong>)
-to a new file (<strong>file2.txt</strong>):</p>
+<p>To copy an existing file (<code>file1.txt</code>) to a new file (<code>file2.txt</code>):</p>
 <pre><code>cp file1.txt file2.txt
 </code></pre>
-<p>Use the <code>-i</code> option to copy that file in interactive mode;
-that is, to prompt you before overwriting an existing file.</p>
+<p>Use the <code>-i</code> option to copy that file in interactive mode; that is, to prompt you before overwriting an existing file.</p>
 <p>We also use the <code>cp</code> command to copy directories.</p>
 <h3 id="moving-files-and-directories"><a class="header" href="#moving-files-and-directories">Moving Files and Directories</a></h3>
-<p>The <code>mv</code> command will move an existing file to a different directory,
-and/or rename the file.
-For example, from within our home directory
-(therefore, using relative path names),
-to move a file named "file.docx"
-to a subdirectory named "Documents":</p>
+<p>The <code>mv</code> command will move an existing file to a different directory, and/or rename the file.
+For example, from within our home directory (therefore, using relative path names), to move a file named <code>file.docx</code>
+to a subdirectory named <code>Documents</code>:</p>
 <pre><code>mv file.docx Documents/
 </code></pre>
-<p>To rename a file only (keeping it in the same directory),
-the command looks like this:</p>
-<pre><code>mv file.docx newName.docx
+<p>To rename a file only (keeping it in the same directory), the command looks like this:</p>
+<pre><code>mv file.docx new_name.docx
 </code></pre>
-<p>To move the file to our Documents/ subdirectory and also rename it,
-then we'd do this:</p>
-<pre><code>mv file.docx Documents/newName.docx
+<p>To move the file to our <code>Documents/</code> subdirectory and also rename it, then we'd do this:</p>
+<pre><code>mv file.docx Documents/new_name.docx
 </code></pre>
-<p>The <code>man</code> page for the <code>mv</code> command also describes an <code>-i</code> option
-for interactive mode that helps prevent us from overwriting existing files.
-For example, if we have a file called <strong>paper.docx</strong> in our <strong>$HOME</strong> directory,
-and we have a file named <strong>paper.docx</strong> in our <strong>$HOME/Documents</strong> directory,
-and if these are actually two different papers (or files),
+<p>The <code>man</code> page for the <code>mv</code> command also describes an <code>-i</code> option for interactive mode that helps prevent us from overwriting existing files.
+For example, if we have a file called <code>paper.docx</code> in our <code>$HOME</code> directory, and
+we have a file named <code>paper.docx</code> in our <code>$HOME/Documents</code> directory, and if these are actually two different papers (or files),
 then moving the file to that directory will overwrite it without asking.
 The <code>-i</code> option will prompt us first:</p>
 <pre><code>mv -i paper.docx Documents/paper.docx
@@ -381,10 +341,8 @@ The <code>-i</code> option will prompt us first:</p>
 <pre><code>rm file.html
 </code></pre>
 <blockquote>
-<p>Unlike the trash bin in your graphical user environment,
-it's very hard to recover a deleted file using the <code>rm</code> command.
-That is, using <code>rm</code> does not mean the file or directory is <strong>trashed</strong>;
-rather, it means it was <strong>deleted</strong>.</p>
+<p>Unlike the trash bin in your graphical user environment, it's hard to recover a deleted file using the <code>rm</code> command.
+That is, using <code>rm</code> does not mean the file or directory is <strong>trashed</strong>; rather, it means it was <strong>deleted</strong>.</p>
 </blockquote>
 <h2 id="special-file-types"><a class="header" href="#special-file-types">Special File Types</a></h2>
 <p>For now, let's only cover two commands here:</p>
@@ -392,42 +350,33 @@ rather, it means it was <strong>deleted</strong>.</p>
 <li><code>mkdir</code> for creating a new directory</li>
 <li><code>rmdir</code> for deleting an empty directory</li>
 </ul>
-<p>Like the above commands,
-these commands also have their own set of options
-that can be viewed in their respective <strong>man pages</strong>:</p>
+<p>Like the above commands, these commands also have their own set of options that can be viewed in their respective <strong>man pages</strong>:</p>
 <pre><code>man mkdir
 man rmdir
 </code></pre>
 <h3 id="make-or-create-a-new-directory"><a class="header" href="#make-or-create-a-new-directory">Make or Create a New Directory</a></h3>
 <p>We use these commands like we do the ones above.
-If we are in our <strong>$HOME</strong> directory, and
-we want to create a new directory called <strong>bin</strong>, we do:</p>
+If we are in our <code>$HOME</code> directory, and we want to create a new directory called <code>bin</code>, we do:</p>
 <pre><code>mkdir bin 
 </code></pre>
 <blockquote>
-<p>The <strong>bin</strong> directory in our <strong>$HOME</strong> directory is a default location
-to store our personal applications, or applications (programs) that
-are only available to us.</p>
+<p>The <code>bin</code> directory in our <code>$HOME</code> directory is a default location to store our personal applications, or
+applications (programs) that are only available to us.</p>
 </blockquote>
 <p>And if we run <code>ls</code>, we should see that it was successful.</p>
 <h3 id="delete-a-directory"><a class="header" href="#delete-a-directory">Delete a Directory</a></h3>
-<p>The <code>rmdir</code> command is a bit weird
-because it only removes <strong>empty</strong> directories.
+<p>The <code>rmdir</code> command is a bit weird because it only removes <strong>empty</strong> directories.
 To remove the directory we just created, we use it like so:</p>
 <pre><code>rmdir bin 
 </code></pre>
-<p>However, if you want to remove a directory
-that contains files or other subdirectories,
-then you will have to use the <code>rm</code> command
-along with the <code>-r</code> (recursive) option:</p>
+<p>However, if you want to remove a directory that contains files or other subdirectories,
+then you will have to use the <code>rm</code> command along with the <code>-r</code> (recursive) option:</p>
 <pre><code>rm -r directory-with-content/
 </code></pre>
 <h2 id="printing-text"><a class="header" href="#printing-text">Printing Text</a></h2>
-<p>There a number of ways to print text to <strong>standard output</strong>,
-which is our screen by default in the terminal.
-We could also redirect standard output
-to a file, to a printer, or to a remote shell.
-We'll see examples like that later in the semester.
+<p>There a number of ways to print text to <strong>standard output</strong>, which is our screen by default in the terminal.
+We could also redirect standard output to a file, to a printer, or to a remote shell.
+We'll see examples like that later.
 Here let's cover two commands:</p>
 <ul>
 <li><code>echo</code> : to print a line of text to standard output</li>
@@ -436,10 +385,8 @@ Here let's cover two commands:</p>
 </ul>
 <blockquote>
 <p><strong>Standard output</strong> is by default the screen.
-When we <strong>print</strong> to standard output,
-then by default we print to the screen.
-However, standard output can be <strong>redirected</strong>
-to files, programs, or devices, like actual printers.</p>
+When we <strong>print</strong> to standard output, then by default we print to the screen.
+However, standard output can be <strong>redirected</strong> to files, programs, or devices, like actual printers.</p>
 </blockquote>
 <h3 id="print-to-screen"><a class="header" href="#print-to-screen">Print to Screen</a></h3>
 <p>To use <code>echo</code>:</p>
@@ -452,8 +399,7 @@ echo "$a"
 </code></pre>
 <h3 id="print-file-to-screen"><a class="header" href="#print-file-to-screen">Print File to Screen</a></h3>
 <p><code>cat</code> is listed elsewhere in the GNU Coreutils page.
-The primary use of the <code>cat</code> command is to join, combine, or concatenate files,
-but if used on a single file,
+The primary use of the <code>cat</code> command is to join, combine, or concatenate files, but if used on a single file,
 it has this nice side effect of printing the content of the file to the screen:</p>
 <pre><code>cat file.html
 </code></pre>
@@ -461,16 +407,13 @@ it has this nice side effect of printing the content of the file to the screen:<
 There are a few pagers to use, but the <code>less</code> command is a common one:</p>
 <pre><code>less file.html
 </code></pre>
-<p>Like with the <strong>man pages</strong>,
-use the up and down arrow keys to scroll through the output,
-and press <strong>q</strong> to quit the pager.</p>
+<p>Like with the <strong>man pages</strong>, use the up and down arrow keys to scroll through the output, and press <code>q</code> to quit the pager.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In this demo, we learned about the filesystem or directory structure of Linux,
 and we also learned some basic command to work with directories and files.
 You should practice using these commands as much as possible.
 The more you use them, the easier it'll get.
-Also, be sure to review the <strong>man pages</strong> for each of the commands,
-especially to see what options are available for each of them.</p>
+Also, be sure to review the <strong>man pages</strong> for each of the commands, especially to see what options are available for each of them.</p>
 <p>Basic commands covered in this demo include:</p>
 <ul>
 <li><code>cat</code>   : display contents of a file</li>

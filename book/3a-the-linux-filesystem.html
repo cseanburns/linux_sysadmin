@@ -185,79 +185,46 @@
 <li>the basic commands to navigate around and to work with directories and files</li>
 </ul>
 <blockquote>
-<p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous,
-but as users of primarily graphical user interfaces, you
-are more likely familiar with the term <strong>folders</strong>. I will
-more often use the term <strong>directories</strong> since that is the
-command line (text user interface) convention. I will use
-the term <strong>folders</strong> when referring to a graphical
-environment.</p>
+<p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous, but as users of primarily graphical user interfaces,
+you &gt; are more likely familiar with the term <strong>folders</strong>.
+I will more often use the term <strong>directories</strong> since that is the command line (text user interface) convention.
+I will use the term <strong>folders</strong> when referring to a graphical environment.</p>
 </blockquote>
-<p>Throughout this demonstration,
-I encourage you to connect to your remote server using the
-<code>gcloud compute ssh</code> command and
-follow along with the commands that I use.
-See
-<a href="05-using-gcloud-virtual-machines.html#connect-to-our-vm">Section 2.1</a>
-for details on connecting to the remote server.</p>
+<p>Throughout this demonstration, I encourage you to connect to your remote server using the <code>gcloud compute ssh</code> command or
+through the web shell and follow along with the commands that I use.
+See <a href="2a-using-gcloud-virtual-machines.html">Section 2.1</a> for details on connecting to the remote server.</p>
 <h2 id="visualizing-the-filesystem-as-a-tree"><a class="header" href="#visualizing-the-filesystem-as-a-tree">Visualizing the Filesystem as a Tree</a></h2>
-<p>We will need to work within the filesystem
-quite a lot in this course,
-but the term <strong>filesystem</strong> may refer to different concepts,
+<p>We will need to work within the filesystem quite, but the term <strong>filesystem</strong> may refer to different concepts,
 and it's important to clear that up before we start.</p>
-<p>In come cases, a <strong>filesystem</strong> refers to how data (files)
-are <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
+<p>In come cases, a <strong>filesystem</strong> refers to how data (files) are <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
 on a device like a hard drive, USB drive, etc.
-For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default,
-and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>.
-Linux and other Unix-like operating systems use a variety of filesystems, but
-presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
-The former is the default filesystem on distributions
-like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
-the latter is the default on the
-<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
-<a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of
-filesystems under this concept.</p>
-<p>A <strong>filesystem</strong> might also be used to refer
-to the <strong>directory structure</strong> or
-<a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html">directory tree</a> of a system.
-In graphical user interface parlance,
-this is simply how the folders are your disk are organized.
-This concept of a filesystem is related to the prior concept
-of a filesystem, but
-it's used here to refer to the location of
-files and directories on a system.
-For example, on Windows,
-the filesystem is identified by a letter,
-like the <strong>C:</strong> drive,
-regardless if the disk has a
-NTFS filesystem or a FAT filesystem.
-Additional drives
-(e.g., extra hard drives, USB drives, DVD drives, etc.),
-will be assigned their own letters
-(<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
-<a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html">macOS adheres to a tree like filesystem</a>
-like Linux, UNIX, and other Unix-like operating systems, and
+For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default, and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>.
+Linux and other Unix-like operating systems use a variety of filesystems, but presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
+The former is the default filesystem on distributions like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
+the latter is the default on the <a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
+<a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of filesystems under this concept.</p>
+<p>A <strong>filesystem</strong> might also be used to refer to the <strong>directory structure</strong> or <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html">directory tree</a> of a system.
+In graphical user interface parlance, this is simply how the folders are your disk are organized.
+This concept of a filesystem is related to the prior concept of a filesystem, but
+it's used here to refer to the location of files and directories on a system.
+For example, on Windows, the filesystem is identified by a letter, like the <strong>C:</strong> drive,
+regardless if the disk has a NTFS filesystem or a FAT filesystem.
+Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.), will be assigned their own letters (<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
+<a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html">macOS adheres to a tree like filesystem</a> like Linux, UNIX, and other Unix-like operating systems, and
 <a href="https://www.opengroup.org/openbrand/register/">this is because macOS is a registered UNIX® OS</a>.</p>
-<p>In Linux and Unix-like OSes,
-we have a top-level <strong>root</strong> directory
-identified by a single forward slash  <strong>/</strong>,
+<p>In Unix-like OSes, like Linux, we have a top-level <strong>root</strong> directory identified by a single forward slash  <strong>/</strong>,
 and then subdirectories under that root directory.
-Additional drives
-(e.g., extra hard drives, USB drives, DVD drives, etc.)
-are <strong>mounted</strong> under that root hierarchy and
-not separately like on Windows.
-<a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux.com</a> provides a nice overview
-of the most common directory structure
-that Linux distributions use along with an
-explanation for the major bottom level directories.
-In this section, we will learn
-about this type of filesystem.</p>
-<p>On Linux, we can visualize the
-filesystem with the <code>tree</code> command.
-The <code>tree</code> command, like many Linux commands,
-can be run on its own or with options,
-like in the second example below:</p>
+Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are <strong>mounted</strong> under that root hierarchy and
+not as separate drives like on Windows.
+Run the command <code>man 7 file-hierarchy</code> to review the directory structure that Linux distributions use along
+with an explanation for the major bottom level directories.
+In this section, we will learn about this type of filesystem.</p>
+<blockquote>
+<p>The <code>man</code> command (short for 'manual') provides access to Linux's main system documentation.
+You can use the Page Up/Down keys to review documentation, and press <code>q</code> to exit.</p>
+</blockquote>
+<p>On Linux, we can visualize the filesystem with the <code>tree</code> command.
+The <code>tree</code> command, like many Linux commands, can be run on its own or with options, like in the second example below:</p>
 <ul>
 <li><code>tree</code> : list contents of directories in a tree-like format
 <ul>
@@ -266,14 +233,16 @@ like in the second example below:</p>
 </ul>
 </li>
 </ul>
+<blockquote>
+<p>The <code>tree</code> command may not be installed by default.
+It can be installed with the command: <code>sudo apt install tree</code></p>
+</blockquote>
 <h3 id="the-root-directory-and-its-base-level-directories"><a class="header" href="#the-root-directory-and-its-base-level-directories">The root Directory and its Base Level Directories</a></h3>
-<p>As explained on the Linux.com page,
-here are the major sub directories under <strong>/</strong> (root)
-and a short description of their main purpose:</p>
+<p>As explained in the documentation, some of the major sub directories under <strong>/</strong> (root) are:</p>
 <ul>
 <li><code>/bin</code> : binary files needed to use the system</li>
 <li><code>/boot</code>  : files needed to boot the system</li>
-<li><code>/dev</code> : device files -- all hardware has a file</li>
+<li><code>/dev</code> : device files (all hardware has a file)</li>
 <li><code>/etc</code> : system configuration files</li>
 <li><code>/home</code> : user directories</li>
 <li><code>/lib</code> : libraries/programs needed for other programs</li>
@@ -290,178 +259,108 @@ and a short description of their main purpose:</p>
 <li><code>/usr</code> : user binaries, etc that might be installed by users</li>
 <li><code>/var</code> : variable files, used often for system logs</li>
 </ul>
-<p>Although there are 18 directories listed above
-that <strong>branch</strong> off from the root directory,
-we will use some more often than others.
-For example, the <strong>/etc</strong> directory
-contains system configuration files,
-and we will use the contents of this directory,
-along with the <strong>/var</strong> directory,
-quite a bit when we set up our web servers,
-relational database servers,
-and more later in the semester.
-The <strong>/home</strong> directory is where our default
-home directories are stored,
-and if you manage a multi-user system,
-then this will be an important directory to manage.</p>
+<p>Although there are 18 directories listed above that <strong>branch</strong> off from the root directory, we will use some more often than others.
+For example, the <code>/etc</code> directory contains system configuration files, and we will use the contents of this directory,
+along with the <code>/var</code> directory, quite a bit when we set up our web servers, relational database servers, and more later.
+The <code>/home</code> directory is where our default home directories are stored.
+If you manage a multi-user system, then this will be an important directory to manage.</p>
 <p>Source: <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux Filesystem Explained</a></p>
 <h2 id="relative-and-absolute-paths"><a class="header" href="#relative-and-absolute-paths">Relative and Absolute Paths</a></h2>
-<p>macOS users have the Finder app
-to navigate their filesystem,
-to move files to different folders,
-to copy files, to trash them, etc.
+<p>macOS users have the Finder app to navigate their filesystem, to move files to different folders, to copy files, to trash them, etc.
 Window users have File Explorer for these functions.
-Linux users have similar graphical software options,
-but all of these functions can be
-completed on the Linux command line,
+Linux users have similar graphical software options, but all of these functions can be completed on the Linux command line,
 and generally more efficiently.
 To get started, we need to learn two things first:</p>
 <ol>
-<li>how to specify the locations of files and directories in
-the filesystem</li>
+<li>how to specify the locations of files and directories in the filesystem</li>
 <li>the commands needed to work with the filesystem</li>
 </ol>
-<p>To help specify the locations of files and directories,
-there are two key concepts to know:</p>
+<p>To help specify the locations of files and directories, there are two key concepts to know:</p>
 <ul>
 <li>absolute paths</li>
 <li>relative paths</li>
 </ul>
-<p>Above we learned about the <strong>/</strong> root directory
-and its subdirectories.
-All sorts of commands,
-especially those that deal with files and directories
-(like copying, moving, deleting),
-require us to specify on the command line
-the locations of the files and directories.
-It's common to specify the location in two different ways,
-by specifying their <strong>absolute</strong> path (or location)
-on the filesystem,
+<p>Above we learned about the <code>/</code> root directory and its subdirectories.
+All sorts of commands, especially those that deal with files and directories (like copying, moving, deleting),
+require us to specify on the command line the locations of the files and directories.
+It's common to specify the location in two different ways, by specifying their <strong>absolute</strong> path (or location) on the filesystem,
 or the <strong>relative</strong> path (or location).</p>
 <p>To demonstrate, we might want to move around the filesystem.
-When we first log in to our remote system,
-our default location will be our home directory,
-sometimes referred to as <strong>$HOME</strong>.
+When we first log in to our remote system, our default location will be our home directory, sometimes referred to as <code>$HOME</code>.
 The path (location) to that directory will be.</p>
 <pre><code>/home/USER
 </code></pre>
 <p>Where <strong>USER</strong> is your username.
-Therefore, since my username is <strong>sean</strong>,
-my home directory is located at:</p>
-<pre><code>/home/sean
+Therefore, since my username is <strong>seanburns</strong>, my home directory is located at:</p>
+<pre><code>/home/seanburns
 </code></pre>
-<p>which we can see specified with the <code>pwd</code>
-(print working directory) command:</p>
+<p>which we can see specified with the <code>pwd</code> (print working directory) command:</p>
 <pre><code>pwd
-/home/sean
+/home/seanburns
 </code></pre>
 <blockquote>
-<p>When I write <strong>$HOME</strong>,
-I am referring to a default, <strong>environmental</strong> variable
-that points to our home directory.
-It's <strong>variable</strong> because,
-depending on which account we're logged in as,
-<strong>$HOME</strong> will point to a different location.
-For me, then, that will be <code>/home/sean</code>,
-if I'm logged in as <strong>sean</strong>.
+<p>When I write <code>$HOME</code>, I am referring to a default, <strong>environmental</strong> variable that points to our home directory.
+It's <strong>variable</strong> because, depending on which account we're logged in as, <strong>$HOME</strong> will point to a different location.
+For me, then, that will be <code>/home/seanburns</code>, if I'm logged in as <code>seanburns</code>.
 For you it'll point to your home directory.</p>
 </blockquote>
-<p>In my home directory,
-I have a subdirectory called <strong>public_html</strong>.
+<p>In my home directory, I have a subdirectory called <code>public_html</code>.
 The path to that is:</p>
-<pre><code>/home/sean/public_html
+<pre><code>/home/seanburns/public_html
 </code></pre>
-<p>In a program like Finder (macOS) or
-File Explorer (Windows),
-if I want to change my location to that
-subdirectory (or folder),
+<p>In a program like Finder (macOS) or File Explorer (Windows), if I want to change my location to that subdirectory (or folder),
 then I'd double click on its folder icon.
-On the command line, however, I have to
-write out the command
-and the path to the subdirectory.
-Therefore, <strong>starting in my home directory</strong>,
-I use the following command to switch to the
-public_html subdirectory:</p>
+On the command line, however, I have to write out the command and the path to the subdirectory.
+Therefore, <strong>starting in my home directory</strong>, I use the following command to switch to the public_html subdirectory:</p>
 <pre><code>cd public_html
 </code></pre>
 <blockquote>
-<p>Note that files and directories in Linux are case
-sensitive. This means that a directory named
-<strong>public_html</strong> can co-exist alongside a directory named
-<strong>Public_html</strong>. Or a file named <strong>paper.txt</strong> can
-co-exist alongside a file named <strong>Paper.txt</strong>. So be sure
-to use the proper case when spelling out files,
-directories, and even commands.</p>
+<p>Note that files and directories in Linux are case sensitive.
+This means that a directory named <code>public_html</code> can co-exist alongside a directory named <code>Public_html</code>.
+Or a file named <code>paper.txt</code> can co-exist alongside a file named <code>Paper.txt</code>.
+So be sure to use the proper case when spelling out files, directories, and even commands.</p>
 </blockquote>
-<p>The above is an example of using a relative path, and
-that command would only be successful if I were
-first in my <strong>$HOME</strong> directory.
-That's because I specified the location of <strong>public_html</strong>
-relative to my default (<strong>$HOME</strong>) location.</p>
-<p>I could have also specified the absolute location,
-but this would be the wordier way.
-Since the <strong>public_html</strong> directory
-is in my $HOME directory,
-and my $HOME directory is a subdirectory
-in the <strong>/home</strong> directory,
-then to specify the absolute path in the above command,
-I'd write:</p>
+<p>The above is an example of using a relative path, and that command would only be successful if I were first in my <code>$HOME</code> directory.
+That's because I specified the location of <code>public_html</code> relative to my default (<code>$HOME</code>) location.</p>
+<p>I could have also specified the absolute location, but this would be the wordier way.
+Since the <code>public_html</code> directory is in my <code>$HOME</code> directory, and my <code>$HOME</code> directory is a subdirectory in the <code>/home</code> directory,
+then to specify the absolute path in the above command, I'd write:</p>
 <pre><code>cd /home/sean/public_html
 </code></pre>
-<p>Again, the relative path specified above
-would only work if
-I was in my home directory, because
-<code>cd public_html</code> is relative to the
-location of <code>/home/sean</code>.
-That is, the subdirectory <strong>public_html</strong>
-is in <strong>/home/sean</strong>.
-But specifying the absolute path would work no matter where
-I was located in the filesystem.
-For example, if I was working on a file
-in the <code>/etc/apache2</code> directory,
-then using the absolute path
-(<code>cd /home/sean/public_html</code>) would work.
-But the relative path (<code>cd public_html</code>)
-command would not since
-there is no subdirectory called <strong>public_html</strong>
-in the <code>/etc/apache2</code> directory.</p>
-<p>Finally, you can use the <code>ls</code> command to
-list the contents of a directory, i.e.,
-the files and subdirectories in a directory:</p>
+<p>Again, the relative path specified above would only work if I was in my home directory,
+because <code>cd public_html</code> is relative to the location of <code>/home/seanburns</code>.
+That is, the subdirectory <code>public_html</code> is in <code>/home/seanburns</code>.
+But specifying the absolute path would work no matter where I was located in the filesystem.
+For example, if I was working on a file in the <code>/etc/apache2`` directory, then using the absolute path (</code>cd /home/seanburns/public_html<code>) would work. But the relative path (</code>cd public_html<code>) command would not since there is no subdirectory called </code>public_html<code>* in the </code>/etc/apache2` directory.</p>
+<p>Finally, you can use the <code>ls</code> command to list the contents of a directory, i.e., the files and subdirectories in a directory:</p>
 <pre><code>ls
 </code></pre>
 <p>We will cover this more next.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>Understanding relative and absolute paths is
-one of the more difficult concepts for
-new commandline users to learn,
+<p>Understanding relative and absolute paths is one of the more difficult concepts for new commandline users to learn,
 but after time, it'll feel natural.
-So just keep practicing, and
-I'll go over this throughout the semester.</p>
+So just keep practicing, and I'll go over this throughout the semester.</p>
 <p>In this section, you learned the following commands:</p>
 <ul>
 <li><code>tree</code> to list directory contents in a tree-like format</li>
 <li><code>cd</code> to <strong>change directory</strong></li>
 <li><code>pwd</code> to <strong>print working directory</strong></li>
 </ul>
-<p>You learned different ways to refer to the home
-directory:</p>
+<p>You learned different ways to refer to the home directory:</p>
 <ul>
 <li><strong>/home/USER</strong></li>
 <li><strong>$HOME</strong></li>
 <li><strong>~</strong></li>
 </ul>
 <p>You learned about relative and absolute paths.
-An absolute path starts with the root directory <strong>/</strong>.
-Here's an absolute path to a file named
-<strong>paper.txt</strong> in my home directory:</p>
+An absolute path starts with the root directory <code>/</code>.
+Here's an absolute path to a file named <code>paper.txt</code> in my home directory:</p>
 <ul>
-<li>absolute path: <strong>/home/sean/paper.txt</strong></li>
+<li>absolute path: <code>/home/seanburns/paper.txt</code></li>
 </ul>
-<p>If I were already in my home directory,
-then the relative path would simply be:</p>
+<p>If I were already in my home directory, then the relative path would simply be:</p>
 <ul>
-<li>relative path: <strong>paper.txt</strong></li>
+<li>relative path: <code>paper.txt</code></li>
 </ul>
 <h2 id="additional-readings"><a class="header" href="#additional-readings">Additional Readings</a></h2>
 <p>Read through these two pages for more info on the file system and directories:</p>

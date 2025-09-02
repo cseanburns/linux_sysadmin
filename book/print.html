@@ -1035,79 +1035,46 @@ Let's get started!</p>
 <li>the basic commands to navigate around and to work with directories and files</li>
 </ul>
 <blockquote>
-<p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous,
-but as users of primarily graphical user interfaces, you
-are more likely familiar with the term <strong>folders</strong>. I will
-more often use the term <strong>directories</strong> since that is the
-command line (text user interface) convention. I will use
-the term <strong>folders</strong> when referring to a graphical
-environment.</p>
+<p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous, but as users of primarily graphical user interfaces,
+you &gt; are more likely familiar with the term <strong>folders</strong>.
+I will more often use the term <strong>directories</strong> since that is the command line (text user interface) convention.
+I will use the term <strong>folders</strong> when referring to a graphical environment.</p>
 </blockquote>
-<p>Throughout this demonstration,
-I encourage you to connect to your remote server using the
-<code>gcloud compute ssh</code> command and
-follow along with the commands that I use.
-See
-<a href="05-using-gcloud-virtual-machines.html#connect-to-our-vm">Section 2.1</a>
-for details on connecting to the remote server.</p>
+<p>Throughout this demonstration, I encourage you to connect to your remote server using the <code>gcloud compute ssh</code> command or
+through the web shell and follow along with the commands that I use.
+See <a href="2a-using-gcloud-virtual-machines.html">Section 2.1</a> for details on connecting to the remote server.</p>
 <h2 id="visualizing-the-filesystem-as-a-tree"><a class="header" href="#visualizing-the-filesystem-as-a-tree">Visualizing the Filesystem as a Tree</a></h2>
-<p>We will need to work within the filesystem
-quite a lot in this course,
-but the term <strong>filesystem</strong> may refer to different concepts,
+<p>We will need to work within the filesystem quite, but the term <strong>filesystem</strong> may refer to different concepts,
 and it's important to clear that up before we start.</p>
-<p>In come cases, a <strong>filesystem</strong> refers to how data (files)
-are <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
+<p>In come cases, a <strong>filesystem</strong> refers to how data (files) are <a href="https://en.wikipedia.org/wiki/File_system">stored and retrieved</a>
 on a device like a hard drive, USB drive, etc.
-For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default,
-and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>.
-Linux and other Unix-like operating systems use a variety of filesystems, but
-presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
-The former is the default filesystem on distributions
-like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
-the latter is the default on the
-<a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
-<a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of
-filesystems under this concept.</p>
-<p>A <strong>filesystem</strong> might also be used to refer
-to the <strong>directory structure</strong> or
-<a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html">directory tree</a> of a system.
-In graphical user interface parlance,
-this is simply how the folders are your disk are organized.
-This concept of a filesystem is related to the prior concept
-of a filesystem, but
-it's used here to refer to the location of
-files and directories on a system.
-For example, on Windows,
-the filesystem is identified by a letter,
-like the <strong>C:</strong> drive,
-regardless if the disk has a
-NTFS filesystem or a FAT filesystem.
-Additional drives
-(e.g., extra hard drives, USB drives, DVD drives, etc.),
-will be assigned their own letters
-(<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
-<a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html">macOS adheres to a tree like filesystem</a>
-like Linux, UNIX, and other Unix-like operating systems, and
+For example, macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-available-in-disk-utility-dsku19ed921c/mac">Apple File System (APFS)</a> by default, and Windows uses the <a href="https://docs.microsoft.com/en-us/troubleshoot/windows-client/backup-and-storage/fat-hpfs-and-ntfs-file-systems">New Technology File System (NTFS)</a>.
+Linux and other Unix-like operating systems use a variety of filesystems, but presently, the two major ones are <strong>ext4</strong> and <strong>btrfs</strong>.
+The former is the default filesystem on distributions like <a href="https://www.debian.org/">Debian</a> and <a href="https://ubuntu.com">Ubuntu</a>;
+the latter is the default on the <a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
+<a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of filesystems under this concept.</p>
+<p>A <strong>filesystem</strong> might also be used to refer to the <strong>directory structure</strong> or <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html">directory tree</a> of a system.
+In graphical user interface parlance, this is simply how the folders are your disk are organized.
+This concept of a filesystem is related to the prior concept of a filesystem, but
+it's used here to refer to the location of files and directories on a system.
+For example, on Windows, the filesystem is identified by a letter, like the <strong>C:</strong> drive,
+regardless if the disk has a NTFS filesystem or a FAT filesystem.
+Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.), will be assigned their own letters (<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
+<a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html">macOS adheres to a tree like filesystem</a> like Linux, UNIX, and other Unix-like operating systems, and
 <a href="https://www.opengroup.org/openbrand/register/">this is because macOS is a registered UNIX® OS</a>.</p>
-<p>In Linux and Unix-like OSes,
-we have a top-level <strong>root</strong> directory
-identified by a single forward slash  <strong>/</strong>,
+<p>In Unix-like OSes, like Linux, we have a top-level <strong>root</strong> directory identified by a single forward slash  <strong>/</strong>,
 and then subdirectories under that root directory.
-Additional drives
-(e.g., extra hard drives, USB drives, DVD drives, etc.)
-are <strong>mounted</strong> under that root hierarchy and
-not separately like on Windows.
-<a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux.com</a> provides a nice overview
-of the most common directory structure
-that Linux distributions use along with an
-explanation for the major bottom level directories.
-In this section, we will learn
-about this type of filesystem.</p>
-<p>On Linux, we can visualize the
-filesystem with the <code>tree</code> command.
-The <code>tree</code> command, like many Linux commands,
-can be run on its own or with options,
-like in the second example below:</p>
+Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are <strong>mounted</strong> under that root hierarchy and
+not as separate drives like on Windows.
+Run the command <code>man 7 file-hierarchy</code> to review the directory structure that Linux distributions use along
+with an explanation for the major bottom level directories.
+In this section, we will learn about this type of filesystem.</p>
+<blockquote>
+<p>The <code>man</code> command (short for 'manual') provides access to Linux's main system documentation.
+You can use the Page Up/Down keys to review documentation, and press <code>q</code> to exit.</p>
+</blockquote>
+<p>On Linux, we can visualize the filesystem with the <code>tree</code> command.
+The <code>tree</code> command, like many Linux commands, can be run on its own or with options, like in the second example below:</p>
 <ul>
 <li><code>tree</code> : list contents of directories in a tree-like format
 <ul>
@@ -1116,14 +1083,16 @@ like in the second example below:</p>
 </ul>
 </li>
 </ul>
+<blockquote>
+<p>The <code>tree</code> command may not be installed by default.
+It can be installed with the command: <code>sudo apt install tree</code></p>
+</blockquote>
 <h3 id="the-root-directory-and-its-base-level-directories"><a class="header" href="#the-root-directory-and-its-base-level-directories">The root Directory and its Base Level Directories</a></h3>
-<p>As explained on the Linux.com page,
-here are the major sub directories under <strong>/</strong> (root)
-and a short description of their main purpose:</p>
+<p>As explained in the documentation, some of the major sub directories under <strong>/</strong> (root) are:</p>
 <ul>
 <li><code>/bin</code> : binary files needed to use the system</li>
 <li><code>/boot</code>  : files needed to boot the system</li>
-<li><code>/dev</code> : device files -- all hardware has a file</li>
+<li><code>/dev</code> : device files (all hardware has a file)</li>
 <li><code>/etc</code> : system configuration files</li>
 <li><code>/home</code> : user directories</li>
 <li><code>/lib</code> : libraries/programs needed for other programs</li>
@@ -1140,178 +1109,108 @@ and a short description of their main purpose:</p>
 <li><code>/usr</code> : user binaries, etc that might be installed by users</li>
 <li><code>/var</code> : variable files, used often for system logs</li>
 </ul>
-<p>Although there are 18 directories listed above
-that <strong>branch</strong> off from the root directory,
-we will use some more often than others.
-For example, the <strong>/etc</strong> directory
-contains system configuration files,
-and we will use the contents of this directory,
-along with the <strong>/var</strong> directory,
-quite a bit when we set up our web servers,
-relational database servers,
-and more later in the semester.
-The <strong>/home</strong> directory is where our default
-home directories are stored,
-and if you manage a multi-user system,
-then this will be an important directory to manage.</p>
+<p>Although there are 18 directories listed above that <strong>branch</strong> off from the root directory, we will use some more often than others.
+For example, the <code>/etc</code> directory contains system configuration files, and we will use the contents of this directory,
+along with the <code>/var</code> directory, quite a bit when we set up our web servers, relational database servers, and more later.
+The <code>/home</code> directory is where our default home directories are stored.
+If you manage a multi-user system, then this will be an important directory to manage.</p>
 <p>Source: <a href="https://www.linux.com/tutorials/linux-filesystem-explained/">Linux Filesystem Explained</a></p>
 <h2 id="relative-and-absolute-paths"><a class="header" href="#relative-and-absolute-paths">Relative and Absolute Paths</a></h2>
-<p>macOS users have the Finder app
-to navigate their filesystem,
-to move files to different folders,
-to copy files, to trash them, etc.
+<p>macOS users have the Finder app to navigate their filesystem, to move files to different folders, to copy files, to trash them, etc.
 Window users have File Explorer for these functions.
-Linux users have similar graphical software options,
-but all of these functions can be
-completed on the Linux command line,
+Linux users have similar graphical software options, but all of these functions can be completed on the Linux command line,
 and generally more efficiently.
 To get started, we need to learn two things first:</p>
 <ol>
-<li>how to specify the locations of files and directories in
-the filesystem</li>
+<li>how to specify the locations of files and directories in the filesystem</li>
 <li>the commands needed to work with the filesystem</li>
 </ol>
-<p>To help specify the locations of files and directories,
-there are two key concepts to know:</p>
+<p>To help specify the locations of files and directories, there are two key concepts to know:</p>
 <ul>
 <li>absolute paths</li>
 <li>relative paths</li>
 </ul>
-<p>Above we learned about the <strong>/</strong> root directory
-and its subdirectories.
-All sorts of commands,
-especially those that deal with files and directories
-(like copying, moving, deleting),
-require us to specify on the command line
-the locations of the files and directories.
-It's common to specify the location in two different ways,
-by specifying their <strong>absolute</strong> path (or location)
-on the filesystem,
+<p>Above we learned about the <code>/</code> root directory and its subdirectories.
+All sorts of commands, especially those that deal with files and directories (like copying, moving, deleting),
+require us to specify on the command line the locations of the files and directories.
+It's common to specify the location in two different ways, by specifying their <strong>absolute</strong> path (or location) on the filesystem,
 or the <strong>relative</strong> path (or location).</p>
 <p>To demonstrate, we might want to move around the filesystem.
-When we first log in to our remote system,
-our default location will be our home directory,
-sometimes referred to as <strong>$HOME</strong>.
+When we first log in to our remote system, our default location will be our home directory, sometimes referred to as <code>$HOME</code>.
 The path (location) to that directory will be.</p>
 <pre><code>/home/USER
 </code></pre>
 <p>Where <strong>USER</strong> is your username.
-Therefore, since my username is <strong>sean</strong>,
-my home directory is located at:</p>
-<pre><code>/home/sean
+Therefore, since my username is <strong>seanburns</strong>, my home directory is located at:</p>
+<pre><code>/home/seanburns
 </code></pre>
-<p>which we can see specified with the <code>pwd</code>
-(print working directory) command:</p>
+<p>which we can see specified with the <code>pwd</code> (print working directory) command:</p>
 <pre><code>pwd
-/home/sean
+/home/seanburns
 </code></pre>
 <blockquote>
-<p>When I write <strong>$HOME</strong>,
-I am referring to a default, <strong>environmental</strong> variable
-that points to our home directory.
-It's <strong>variable</strong> because,
-depending on which account we're logged in as,
-<strong>$HOME</strong> will point to a different location.
-For me, then, that will be <code>/home/sean</code>,
-if I'm logged in as <strong>sean</strong>.
+<p>When I write <code>$HOME</code>, I am referring to a default, <strong>environmental</strong> variable that points to our home directory.
+It's <strong>variable</strong> because, depending on which account we're logged in as, <strong>$HOME</strong> will point to a different location.
+For me, then, that will be <code>/home/seanburns</code>, if I'm logged in as <code>seanburns</code>.
 For you it'll point to your home directory.</p>
 </blockquote>
-<p>In my home directory,
-I have a subdirectory called <strong>public_html</strong>.
+<p>In my home directory, I have a subdirectory called <code>public_html</code>.
 The path to that is:</p>
-<pre><code>/home/sean/public_html
+<pre><code>/home/seanburns/public_html
 </code></pre>
-<p>In a program like Finder (macOS) or
-File Explorer (Windows),
-if I want to change my location to that
-subdirectory (or folder),
+<p>In a program like Finder (macOS) or File Explorer (Windows), if I want to change my location to that subdirectory (or folder),
 then I'd double click on its folder icon.
-On the command line, however, I have to
-write out the command
-and the path to the subdirectory.
-Therefore, <strong>starting in my home directory</strong>,
-I use the following command to switch to the
-public_html subdirectory:</p>
+On the command line, however, I have to write out the command and the path to the subdirectory.
+Therefore, <strong>starting in my home directory</strong>, I use the following command to switch to the public_html subdirectory:</p>
 <pre><code>cd public_html
 </code></pre>
 <blockquote>
-<p>Note that files and directories in Linux are case
-sensitive. This means that a directory named
-<strong>public_html</strong> can co-exist alongside a directory named
-<strong>Public_html</strong>. Or a file named <strong>paper.txt</strong> can
-co-exist alongside a file named <strong>Paper.txt</strong>. So be sure
-to use the proper case when spelling out files,
-directories, and even commands.</p>
+<p>Note that files and directories in Linux are case sensitive.
+This means that a directory named <code>public_html</code> can co-exist alongside a directory named <code>Public_html</code>.
+Or a file named <code>paper.txt</code> can co-exist alongside a file named <code>Paper.txt</code>.
+So be sure to use the proper case when spelling out files, directories, and even commands.</p>
 </blockquote>
-<p>The above is an example of using a relative path, and
-that command would only be successful if I were
-first in my <strong>$HOME</strong> directory.
-That's because I specified the location of <strong>public_html</strong>
-relative to my default (<strong>$HOME</strong>) location.</p>
-<p>I could have also specified the absolute location,
-but this would be the wordier way.
-Since the <strong>public_html</strong> directory
-is in my $HOME directory,
-and my $HOME directory is a subdirectory
-in the <strong>/home</strong> directory,
-then to specify the absolute path in the above command,
-I'd write:</p>
+<p>The above is an example of using a relative path, and that command would only be successful if I were first in my <code>$HOME</code> directory.
+That's because I specified the location of <code>public_html</code> relative to my default (<code>$HOME</code>) location.</p>
+<p>I could have also specified the absolute location, but this would be the wordier way.
+Since the <code>public_html</code> directory is in my <code>$HOME</code> directory, and my <code>$HOME</code> directory is a subdirectory in the <code>/home</code> directory,
+then to specify the absolute path in the above command, I'd write:</p>
 <pre><code>cd /home/sean/public_html
 </code></pre>
-<p>Again, the relative path specified above
-would only work if
-I was in my home directory, because
-<code>cd public_html</code> is relative to the
-location of <code>/home/sean</code>.
-That is, the subdirectory <strong>public_html</strong>
-is in <strong>/home/sean</strong>.
-But specifying the absolute path would work no matter where
-I was located in the filesystem.
-For example, if I was working on a file
-in the <code>/etc/apache2</code> directory,
-then using the absolute path
-(<code>cd /home/sean/public_html</code>) would work.
-But the relative path (<code>cd public_html</code>)
-command would not since
-there is no subdirectory called <strong>public_html</strong>
-in the <code>/etc/apache2</code> directory.</p>
-<p>Finally, you can use the <code>ls</code> command to
-list the contents of a directory, i.e.,
-the files and subdirectories in a directory:</p>
+<p>Again, the relative path specified above would only work if I was in my home directory,
+because <code>cd public_html</code> is relative to the location of <code>/home/seanburns</code>.
+That is, the subdirectory <code>public_html</code> is in <code>/home/seanburns</code>.
+But specifying the absolute path would work no matter where I was located in the filesystem.
+For example, if I was working on a file in the <code>/etc/apache2`` directory, then using the absolute path (</code>cd /home/seanburns/public_html<code>) would work. But the relative path (</code>cd public_html<code>) command would not since there is no subdirectory called </code>public_html<code>* in the </code>/etc/apache2` directory.</p>
+<p>Finally, you can use the <code>ls</code> command to list the contents of a directory, i.e., the files and subdirectories in a directory:</p>
 <pre><code>ls
 </code></pre>
 <p>We will cover this more next.</p>
 <h2 id="conclusion-2"><a class="header" href="#conclusion-2">Conclusion</a></h2>
-<p>Understanding relative and absolute paths is
-one of the more difficult concepts for
-new commandline users to learn,
+<p>Understanding relative and absolute paths is one of the more difficult concepts for new commandline users to learn,
 but after time, it'll feel natural.
-So just keep practicing, and
-I'll go over this throughout the semester.</p>
+So just keep practicing, and I'll go over this throughout the semester.</p>
 <p>In this section, you learned the following commands:</p>
 <ul>
 <li><code>tree</code> to list directory contents in a tree-like format</li>
 <li><code>cd</code> to <strong>change directory</strong></li>
 <li><code>pwd</code> to <strong>print working directory</strong></li>
 </ul>
-<p>You learned different ways to refer to the home
-directory:</p>
+<p>You learned different ways to refer to the home directory:</p>
 <ul>
 <li><strong>/home/USER</strong></li>
 <li><strong>$HOME</strong></li>
 <li><strong>~</strong></li>
 </ul>
 <p>You learned about relative and absolute paths.
-An absolute path starts with the root directory <strong>/</strong>.
-Here's an absolute path to a file named
-<strong>paper.txt</strong> in my home directory:</p>
+An absolute path starts with the root directory <code>/</code>.
+Here's an absolute path to a file named <code>paper.txt</code> in my home directory:</p>
 <ul>
-<li>absolute path: <strong>/home/sean/paper.txt</strong></li>
+<li>absolute path: <code>/home/seanburns/paper.txt</code></li>
 </ul>
-<p>If I were already in my home directory,
-then the relative path would simply be:</p>
+<p>If I were already in my home directory, then the relative path would simply be:</p>
 <ul>
-<li>relative path: <strong>paper.txt</strong></li>
+<li>relative path: <code>paper.txt</code></li>
 </ul>
 <h2 id="additional-readings"><a class="header" href="#additional-readings">Additional Readings</a></h2>
 <p>Read through these two pages for more info on the file system and directories:</p>
@@ -1366,14 +1265,9 @@ then the relative path would simply be:</p>
 </li>
 </ol>
 <h2 id="basic-directory-and-file-commands"><a class="header" href="#basic-directory-and-file-commands">Basic Directory and File commands</a></h2>
-<p>In order to explore the above directories
-but also to create new ones and work with files,
-we need to know some basic terminal commands.
-A lot of these commands are part of the base system
-called <a href="https://en.wikipedia.org/wiki/List_of_GNU_Core_Utilities_commands">GNU Coreutils</a>,
-and in this demo,
-we will specifically cover some of the following
-GNU Coreutils:</p>
+<p>In order to explore the above directories but also to create new ones and work with files, we need to know some basic terminal commands.
+A lot of these commands are part of the base system called <a href="https://en.wikipedia.org/wiki/List_of_GNU_Core_Utilities_commands">GNU Coreutils</a>,
+and in this demo, we will specifically cover some of the following GNU Coreutils:</p>
 <ul>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#toc-Directory-listing-1">Directory Listing</a></li>
 <li><a href="https://www.gnu.org/software/coreutils/manual/coreutils.html#Basic-operations">Basic Operations</a></li>
@@ -1382,49 +1276,35 @@ GNU Coreutils:</p>
 </ul>
 <h3 id="directory-listing"><a class="header" href="#directory-listing">Directory Listing</a></h3>
 <blockquote>
-<p>I have already demonstrated one command:
-the <code>cd</code> (change directory) command.
+<p>I have already demonstrated one command: the <code>cd</code> (change directory) command.
 This will be one of the most frequently used commands in your toolbox.</p>
 </blockquote>
-<p>In our current directory, or
-once we have changed to a new directory,
-we will want to learn its contents
+<p>In our current directory, or once we have changed to a new directory, we will want to learn its contents
 (what files and directories it contains).
-We have a few commands to choose from to list contents
-(e.g.,  you have already seen the <code>tree</code> command),
+We have a few commands to choose from to list contents (e.g.,  you have already seen the <code>tree</code> command),
 but the most common command is the <code>ls</code> (list) command.
 We use it by typing the following two letters in the terminal:</p>
 <pre><code>ls
 </code></pre>
-<p>Again, to confirm that we're in some specific directory,
-use the <code>pwd</code> command to <strong>print</strong> the <strong>working directory</strong>.</p>
+<p>Again, to confirm that we're in some specific directory, use the <code>pwd</code> command to <strong>print</strong> the <strong>working directory</strong>.</p>
 <p>Most commands can be combined with <strong>options</strong>.
-Options provide additional functionality to the base command, and
-in order to see what options are available for the <code>ls</code> command,
+Options provide additional functionality to the base command, and in order to see what options are available for the <code>ls</code> command,
 we can look at its <strong>man(ual) page</strong>:</p>
 <pre><code>man ls
 </code></pre>
-<p>From the <code>ls</code> <strong>man page</strong>,
-we learn that we can use the <code>-l</code> option to format
-the output of the <code>ls</code> command as a long-list,
-or a list that provides more information about
-the files and directories in the working directory.
-Later in the semester,
-I will talk more about what the other parts of output of this option mean.</p>
+<p>From the <code>ls</code> <strong>man page</strong>, we learn that we can use the <code>-l</code> option to format the output of the <code>ls</code> command as a long-list,
+or a list that provides more information about the files and directories in the working directory.
+Later, we will cover more about what the other parts of output of this option mean.</p>
 <pre><code>ls -l
 </code></pre>
 <p>We can use the <code>-a</code> option to list hidden files.
-In Linux, hidden files are hidden from the base <code>ls</code> command
-if the files begin with a period.
-We have a some of those files in our <strong>$HOME</strong> directories,
-and we can see them like so:</p>
+In Linux, hidden files that have names starting with a period.
+These files are not visible with the default <code>ls</code> command.
+We have a some of those files in our <code>$HOME</code> directories, and we can see them like so:</p>
 <pre><code>ls -a
 </code></pre>
 <p>We can also combine options.
-For example, to view all files,
-including hidden ones,
-in the long-list format,
-we can use:</p>
+For example, to view all files, including hidden ones, in the long-list format, we can use:</p>
 <pre><code>ls -al
 </code></pre>
 <h2 id="basic-file-operations"><a class="header" href="#basic-file-operations">Basic File Operations</a></h2>
@@ -1435,46 +1315,34 @@ we can use:</p>
 <li><code>rm</code>    : removing (or deleting) files and directories</li>
 <li><code>touch</code> : change file timestamps (or, create a new, empty file)</li>
 </ul>
-<p>These commands also have various options
-that can be viewed in their respective <strong>man pages</strong>.
-Again, command options provide additional functionality to the base command,
-and are mostly (but not always) prepended with a dash and a letter or number.
-To see examples, type the following commands,
-which will launch the manual pages for them.
-Press <code>q</code> to exit the manual pages,
-and use your up and down arrow keys to scroll through the manuals:</p>
+<p>These commands also have various options that can be viewed in their respective <strong>man pages</strong>.
+Again, command options provide additional functionality to the base command, and
+are mostly (but not always) prepended with a dash and a letter or number.
+To see examples, type the following commands, which will launch the manual pages for them.
+Press <code>q</code> to exit the manual pages, and use your up and down arrow keys to scroll through the manuals:</p>
 <pre><code>man cp
 man mv
 man rm
 man touch
 </code></pre>
 <p>The <code>touch</code> command's primary use is to change a file's timestamp;
-that is, the command updates a file's "access and modification times"
-(see <code>man touch</code>).
-For example, let's say we have a file called <strong>paper.txt</strong>
-in our home directory.
+that is, the command updates a file's "access and modification times" (see <code>man touch</code>).
+For example, let's say we have a file called <code>paper.txt</code> in our home directory.
 We can see the output here:</p>
 <pre><code>ls -l paper.txt
--rw-rw-r-- 1 sean sean 0 Jun 27 00:13 /home/sean/paper.txt
+-rw-rw-r-- 1 seanburns seanburns 0 Jun 27 00:13 /home/seanburns/paper.txt
 </code></pre>
 <p>This shows that the last modification time was 12:03AM on June 27.</p>
-<p>If I run the touch command on <strong>paper.txt</strong>,
-the timestamp will change:</p>
+<p>If I run the touch command on <code>paper.txt</code>, the timestamp will change:</p>
 <pre><code>touch paper.txt
--rw-rw-r-- 1 sean sean 0 Jun 27 00:15 /home/sean/paper.txt
+-rw-rw-r-- 1 seanburns seanburns 0 Jun 27 00:15 /home/seanburns/paper.txt
 </code></pre>
 <p>This shows an updated modification timestamp of 12:15AM.</p>
-<p>The side effect occurs when we name a file with the <code>touch</code> command,
-but the file does not exist,
-in which case the <code>touch</code> command will create an empty file
-with the name we use.
-Let's say that I do <strong>not</strong> have a file named <strong>file.txt</strong>
-in my home directory.
-If I run the <code>ls -l file.txt</code> command, I'll receive an error
-since the file does not exist.
-But if I then use the <code>touch file.txt</code> command,
-and then run <code>ls -l file.txt</code>.
-we'll see that the file now exists,
+<p>The side effect occurs when we name a file with the <code>touch</code> command, but the file does not exist,
+in which case the <code>touch</code> command will create an empty file with the name we use.</p>
+<p>Let's say that I do <strong>not</strong> have a file named <code>file.txt</code> in my home directory.
+If I run the <code>ls -l file.txt</code> command, I'll receive an error since the file does not exist.
+But if I then use the <code>touch file.txt</code> command, and then run <code>ls -l file.txt</code>, we'll see that the file now exists,
 that it has a byte size of zero:</p>
 <pre><code>ls -l file.txt
 ls: cannot access 'file.txt': No such file or directory
@@ -1484,35 +1352,26 @@ ls -l file.txt
 </code></pre>
 <p>Here are some ways to use the other three commands and their options:</p>
 <h3 id="copying-files-and-directories"><a class="header" href="#copying-files-and-directories">Copying Files and Directories</a></h3>
-<p>To copy an existing file (<strong>file1.txt</strong>)
-to a new file (<strong>file2.txt</strong>):</p>
+<p>To copy an existing file (<code>file1.txt</code>) to a new file (<code>file2.txt</code>):</p>
 <pre><code>cp file1.txt file2.txt
 </code></pre>
-<p>Use the <code>-i</code> option to copy that file in interactive mode;
-that is, to prompt you before overwriting an existing file.</p>
+<p>Use the <code>-i</code> option to copy that file in interactive mode; that is, to prompt you before overwriting an existing file.</p>
 <p>We also use the <code>cp</code> command to copy directories.</p>
 <h3 id="moving-files-and-directories"><a class="header" href="#moving-files-and-directories">Moving Files and Directories</a></h3>
-<p>The <code>mv</code> command will move an existing file to a different directory,
-and/or rename the file.
-For example, from within our home directory
-(therefore, using relative path names),
-to move a file named "file.docx"
-to a subdirectory named "Documents":</p>
+<p>The <code>mv</code> command will move an existing file to a different directory, and/or rename the file.
+For example, from within our home directory (therefore, using relative path names), to move a file named <code>file.docx</code>
+to a subdirectory named <code>Documents</code>:</p>
 <pre><code>mv file.docx Documents/
 </code></pre>
-<p>To rename a file only (keeping it in the same directory),
-the command looks like this:</p>
-<pre><code>mv file.docx newName.docx
+<p>To rename a file only (keeping it in the same directory), the command looks like this:</p>
+<pre><code>mv file.docx new_name.docx
 </code></pre>
-<p>To move the file to our Documents/ subdirectory and also rename it,
-then we'd do this:</p>
-<pre><code>mv file.docx Documents/newName.docx
+<p>To move the file to our <code>Documents/</code> subdirectory and also rename it, then we'd do this:</p>
+<pre><code>mv file.docx Documents/new_name.docx
 </code></pre>
-<p>The <code>man</code> page for the <code>mv</code> command also describes an <code>-i</code> option
-for interactive mode that helps prevent us from overwriting existing files.
-For example, if we have a file called <strong>paper.docx</strong> in our <strong>$HOME</strong> directory,
-and we have a file named <strong>paper.docx</strong> in our <strong>$HOME/Documents</strong> directory,
-and if these are actually two different papers (or files),
+<p>The <code>man</code> page for the <code>mv</code> command also describes an <code>-i</code> option for interactive mode that helps prevent us from overwriting existing files.
+For example, if we have a file called <code>paper.docx</code> in our <code>$HOME</code> directory, and
+we have a file named <code>paper.docx</code> in our <code>$HOME/Documents</code> directory, and if these are actually two different papers (or files),
 then moving the file to that directory will overwrite it without asking.
 The <code>-i</code> option will prompt us first:</p>
 <pre><code>mv -i paper.docx Documents/paper.docx
@@ -1522,10 +1381,8 @@ The <code>-i</code> option will prompt us first:</p>
 <pre><code>rm file.html
 </code></pre>
 <blockquote>
-<p>Unlike the trash bin in your graphical user environment,
-it's very hard to recover a deleted file using the <code>rm</code> command.
-That is, using <code>rm</code> does not mean the file or directory is <strong>trashed</strong>;
-rather, it means it was <strong>deleted</strong>.</p>
+<p>Unlike the trash bin in your graphical user environment, it's hard to recover a deleted file using the <code>rm</code> command.
+That is, using <code>rm</code> does not mean the file or directory is <strong>trashed</strong>; rather, it means it was <strong>deleted</strong>.</p>
 </blockquote>
 <h2 id="special-file-types"><a class="header" href="#special-file-types">Special File Types</a></h2>
 <p>For now, let's only cover two commands here:</p>
@@ -1533,42 +1390,33 @@ rather, it means it was <strong>deleted</strong>.</p>
 <li><code>mkdir</code> for creating a new directory</li>
 <li><code>rmdir</code> for deleting an empty directory</li>
 </ul>
-<p>Like the above commands,
-these commands also have their own set of options
-that can be viewed in their respective <strong>man pages</strong>:</p>
+<p>Like the above commands, these commands also have their own set of options that can be viewed in their respective <strong>man pages</strong>:</p>
 <pre><code>man mkdir
 man rmdir
 </code></pre>
 <h3 id="make-or-create-a-new-directory"><a class="header" href="#make-or-create-a-new-directory">Make or Create a New Directory</a></h3>
 <p>We use these commands like we do the ones above.
-If we are in our <strong>$HOME</strong> directory, and
-we want to create a new directory called <strong>bin</strong>, we do:</p>
+If we are in our <code>$HOME</code> directory, and we want to create a new directory called <code>bin</code>, we do:</p>
 <pre><code>mkdir bin 
 </code></pre>
 <blockquote>
-<p>The <strong>bin</strong> directory in our <strong>$HOME</strong> directory is a default location
-to store our personal applications, or applications (programs) that
-are only available to us.</p>
+<p>The <code>bin</code> directory in our <code>$HOME</code> directory is a default location to store our personal applications, or
+applications (programs) that are only available to us.</p>
 </blockquote>
 <p>And if we run <code>ls</code>, we should see that it was successful.</p>
 <h3 id="delete-a-directory"><a class="header" href="#delete-a-directory">Delete a Directory</a></h3>
-<p>The <code>rmdir</code> command is a bit weird
-because it only removes <strong>empty</strong> directories.
+<p>The <code>rmdir</code> command is a bit weird because it only removes <strong>empty</strong> directories.
 To remove the directory we just created, we use it like so:</p>
 <pre><code>rmdir bin 
 </code></pre>
-<p>However, if you want to remove a directory
-that contains files or other subdirectories,
-then you will have to use the <code>rm</code> command
-along with the <code>-r</code> (recursive) option:</p>
+<p>However, if you want to remove a directory that contains files or other subdirectories,
+then you will have to use the <code>rm</code> command along with the <code>-r</code> (recursive) option:</p>
 <pre><code>rm -r directory-with-content/
 </code></pre>
 <h2 id="printing-text"><a class="header" href="#printing-text">Printing Text</a></h2>
-<p>There a number of ways to print text to <strong>standard output</strong>,
-which is our screen by default in the terminal.
-We could also redirect standard output
-to a file, to a printer, or to a remote shell.
-We'll see examples like that later in the semester.
+<p>There a number of ways to print text to <strong>standard output</strong>, which is our screen by default in the terminal.
+We could also redirect standard output to a file, to a printer, or to a remote shell.
+We'll see examples like that later.
 Here let's cover two commands:</p>
 <ul>
 <li><code>echo</code> : to print a line of text to standard output</li>
@@ -1577,10 +1425,8 @@ Here let's cover two commands:</p>
 </ul>
 <blockquote>
 <p><strong>Standard output</strong> is by default the screen.
-When we <strong>print</strong> to standard output,
-then by default we print to the screen.
-However, standard output can be <strong>redirected</strong>
-to files, programs, or devices, like actual printers.</p>
+When we <strong>print</strong> to standard output, then by default we print to the screen.
+However, standard output can be <strong>redirected</strong> to files, programs, or devices, like actual printers.</p>
 </blockquote>
 <h3 id="print-to-screen"><a class="header" href="#print-to-screen">Print to Screen</a></h3>
 <p>To use <code>echo</code>:</p>
@@ -1593,8 +1439,7 @@ echo "$a"
 </code></pre>
 <h3 id="print-file-to-screen"><a class="header" href="#print-file-to-screen">Print File to Screen</a></h3>
 <p><code>cat</code> is listed elsewhere in the GNU Coreutils page.
-The primary use of the <code>cat</code> command is to join, combine, or concatenate files,
-but if used on a single file,
+The primary use of the <code>cat</code> command is to join, combine, or concatenate files, but if used on a single file,
 it has this nice side effect of printing the content of the file to the screen:</p>
 <pre><code>cat file.html
 </code></pre>
@@ -1602,16 +1447,13 @@ it has this nice side effect of printing the content of the file to the screen:<
 There are a few pagers to use, but the <code>less</code> command is a common one:</p>
 <pre><code>less file.html
 </code></pre>
-<p>Like with the <strong>man pages</strong>,
-use the up and down arrow keys to scroll through the output,
-and press <strong>q</strong> to quit the pager.</p>
+<p>Like with the <strong>man pages</strong>, use the up and down arrow keys to scroll through the output, and press <code>q</code> to quit the pager.</p>
 <h2 id="conclusion-3"><a class="header" href="#conclusion-3">Conclusion</a></h2>
 <p>In this demo, we learned about the filesystem or directory structure of Linux,
 and we also learned some basic command to work with directories and files.
 You should practice using these commands as much as possible.
 The more you use them, the easier it'll get.
-Also, be sure to review the <strong>man pages</strong> for each of the commands,
-especially to see what options are available for each of them.</p>
+Also, be sure to review the <strong>man pages</strong> for each of the commands, especially to see what options are available for each of them.</p>
 <p>Basic commands covered in this demo include:</p>
 <ul>
 <li><code>cat</code>   : display contents of a file</li>
@@ -1700,8 +1542,9 @@ we work with file and directory permissions.</p>
 <tr><td>File name</td><td>paper.txt</td></tr>
 </tbody></table>
 </div>
-<p>The Owner and Group names of the <strong>paper.txt</strong> file are both <strong>seanburns</strong> because there is a user account named <strong>seanburns</strong> on the system
-and a group account named <strong>seanburns</strong> on the system, and that file exists in the user <strong>seanburns</strong>'s home directory.
+<p>The Owner and Group names of the <code>paper.txt</code> file are both <code>seanburns</code> because
+there is a user account named <code>seanburns</code> on the system and
+a group account named <code>seanburns</code> on the system, and that file exists in the user <code>seanburns</code>'s home directory.
 You can see which groups you belong to on your system with the <code>groups</code>.</p>
 <p>The <strong>File permissions</strong> show:</p>
 <pre><code>-rw-rw-r--
@@ -1729,24 +1572,24 @@ Any webpage you view on the internet at least has Other/World mode set to read.<
 In our <code>/bin</code> directory, we can see a listing of executable programs on the system.
 For example, take a look at the <code>scp</code> (secure copy) program as follows:</p>
 <pre><code>ls -l /bin/scp
--rwxr-xr-x 1 root   root    117040 Jan  2  2024  zip*
+-rwxr-xr-x 1 root   root    133720 Apr  11 /bin/scp*
 </code></pre>
 <div class="table-wrapper"><table><thead><tr><th>Attributes</th><th><code>ls -l</code> output</th></tr></thead><tbody>
 <tr><td>File permissions</td><td><code>-rwxr-xr-x</code></td></tr>
 <tr><td>Number of links</td><td>1</td></tr>
 <tr><td>Owner name</td><td>root</td></tr>
 <tr><td>Group name</td><td>root</td></tr>
-<tr><td>Byte size</td><td>117040</td></tr>
-<tr><td>Last modification date</td><td>Jan  2 2024</td></tr>
-<tr><td>File name</td><td>scp</td></tr>
+<tr><td>Byte size</td><td>133720</td></tr>
+<tr><td>Last modification date</td><td>Apr 11 2025</td></tr>
+<tr><td>File name</td><td>/bin/scp</td></tr>
 </tbody></table>
 </div>
 <p>Since <code>scp</code> is a computer program used to securely copy files between different machines, it needs to be e<strong>x</strong>ecutable.
 That is, users on the system need to be able to run it.
-But notice that the owner and group names of the file point to the user <strong>root</strong>.
-We have already learned that there is a <strong>root</strong> directory in our filesystem.
+But notice that the owner and group names of the file point to the user <code>root</code>.
+We have already learned that there is a <code>root</code> directory in our filesystem.
 This is the top level directory in our filesystem and is referenced by the forward slash: <code>/</code>.
-But there is also a <strong>root</strong> user account.
+But there is also a <code>root</code> user account.
 This is the system's <strong>superuser</strong>.
 The <strong>superuser</strong> can run or access anything on the system, and this user also owns most of the system files.</p>
 <p>Back to permissions. We read the output of the <code>ls -l /bin/scp</code> command as such:</p>
@@ -1761,16 +1604,16 @@ When I run the following command in my home directory, it will show the permissi
 <pre><code>ls -ld
 </code></pre>
 <p>And the output is:</p>
-<pre><code>drwxr-xr-x 51 seanburns seanburns 4096 Sep  7 23:35 .
+<pre><code>drwxr-x--- 4 seanburns seanburns 4096 Sep  2 19:07 .
 </code></pre>
 <p>This shows that:</p>
 <div class="table-wrapper"><table><thead><tr><th>Attributes</th><th><code>ls -ld</code> output</th></tr></thead><tbody>
-<tr><td>File permissions</td><td><code>drwxr-xr-x</code></td></tr>
-<tr><td>Number of links</td><td>1</td></tr>
+<tr><td>File permissions</td><td><code>drwxr-x---</code></td></tr>
+<tr><td>Number of links</td><td>4</td></tr>
 <tr><td>Owner name</td><td>seanburns</td></tr>
 <tr><td>Group name</td><td>seanburns</td></tr>
 <tr><td>Byte size</td><td>4096</td></tr>
-<tr><td>Last modification date</td><td>Sep  7</td></tr>
+<tr><td>Last modification date</td><td>Sep  2</td></tr>
 <tr><td>File name</td><td>.</td></tr>
 </tbody></table>
 </div>
@@ -1778,12 +1621,11 @@ When I run the following command in my home directory, it will show the permissi
 <ul>
 <li>Instead of an initial dash, this <em>file</em> has an initial <strong>d</strong> that identifies this as a directory.
 Directories in Linux are simply special types of files.</li>
-<li>User <strong>seanburns</strong> has read, write, and execute (<code>rwx</code>) permissions.</li>
-<li>Group <strong>seanburns</strong> and <strong>Other/World</strong> have execute (<code>r-x</code>) read and execute permissions.</li>
-<li><strong>.</strong> signifies the current directory, which happens to be my home directory, since I ran that command at the <code>/home/seanburns</code> path.</li>
+<li>User <code>seanburns</code> has read, write, and execute (<code>rwx</code>) permissions.</li>
+<li>Group <code>seanburns</code> have execute (<code>r-x</code>) read and execute permissions.</li>
+<li><code>Other/World</code> have no permisisons on this directory.</li>
+<li><code>.</code> signifies the current directory, which happens to be my home directory, since I ran that command at the <code>/home/seanburns</code> path.</li>
 </ul>
-<p>If this were a multiuser system, then other people with accounts on the system would be able to read the contents of my home directory.
-However, they wouldn't be able to modify, create, or delete any files or directories in that directory.</p>
 <p>Why does the directory have an e<strong>x</strong>ecutable bit set since it's not a program?
 The executable bit is required on directories to access them.
 That is, if we want to <code>cd</code> into a directory, then the executable bit needs to be set on the directory.</p>
@@ -1795,10 +1637,8 @@ There will be times when we will want to change the defaults.
 For example, if I were to create accounts for other people for this system, I might want to disallow them access to my home directory.
 There are several commands available to do that, and here I'll introduce you to the two most common ones.</p>
 <ol>
-<li>The <code>chmod</code> command is used to change file and directory permissions: the
-<code>-rwxrwxrwx</code> part of a file.</li>
-<li>The <code>chown</code> command is used to change a file's and directory's owner and
-group.</li>
+<li>The <code>chmod</code> command is used to change file and directory permissions: the <code>-rwxrwxrwx</code> part of a file.</li>
+<li>The <code>chown</code> command is used to change a file's and directory's owner and group.</li>
 </ol>
 <h4 id="chmod"><a class="header" href="#chmod"><code>chmod</code></a></h4>
 <p>Each one of those bits (the <code>r</code>, the <code>w</code>, and the <code>x</code>) are assigned the following <a href="https://docs.oracle.com/cd/E19504-01/802-5750/6i9g464pv/index.html">octal</a> values:</p>
@@ -1821,8 +1661,8 @@ The second set describes the permissions for the group.
 The third set describes the permissions for the Other/World.</p>
 <p>We use the <code>chmod</code> command and the octal values to change a file or directory's permissions.
 For each set, we add up the octal values.
-For example, to make a file read (4), write (2), and executable (1) for the owner only, and zero out the permissions for the group and Other/World,
-we use the <code>chmod</code> command like so:</p>
+For example, to make a file read (4), write (2), and executable (1) for the owner only, and
+zero out the permissions for the group and Other/World, we use the <code>chmod</code> command like so:</p>
 <pre><code>chmod 700 paper.txt
 </code></pre>
 <p>We use 7 because <code>4+2+1=7</code>, and we use two zeroes in the second two places since we're removing permissions for group and Other/World.</p>
@@ -1839,19 +1679,20 @@ Here we enable <code>rw-</code> for the owner, and <code>r--</code> for the grou
 <p>In order to change the ownership of a file, we use the <code>chown</code> command followed by the name of the owner.</p>
 <p>I can generally only change the user owner of a file if I have admin access on a system.
 In such a case, I would have to use the <code>sudo</code> command, which gives me superuser privileges.
-To change the owner only, say from the user <strong>sean</strong> to the user <strong>root</strong>:</p>
+To change the owner only, say from the user <code>seanburns</code> to the user <code>root</code>:</p>
 <pre><code>sudo chown root paper.txt
 </code></pre>
-<p>In the following example, I make the <code>root</code> user the group owner of my <strong>paper.txt</strong> file.
-Note that I include a colon before the name <strong>root</strong>.
-This signifies the group membership.</p>
+<p>In the following example, I make the <code>root</code> user the group owner of my <code>paper.txt</code> file.
+Note that I include a colon before the name <code>root</code>.
+This signifies changing group membership only.</p>
 <pre><code>sudo chown :root paper.txt
 </code></pre>
 <blockquote>
 <p>Look at the output as you go using the <code>ls -l</code> command.</p>
 </blockquote>
 <p>To change both user owner and group owner, we simply specify both names and separate those names by a colon.
-Thus, since <strong>paper.txt</strong> now has <strong>root</strong> as the user owner and <strong>root</strong> as the group owner, I revert ownership back to me for both user and group:</p>
+Thus, since <code>paper.txt</code> now has <code>root</code> as the user owner and <code>root</code> as the group owner,
+I revert ownership back to me for both user and group:</p>
 <pre><code>sudo chown sean:sean paper.txt
 </code></pre>
 <h2 id="conclusion-4"><a class="header" href="#conclusion-4">Conclusion</a></h2>
