@@ -25,7 +25,7 @@ In this section, we will cover:
 
 ## Identifying Permissions and Ownership
 
-In the last section, we saw that the output of the ``ls -l`` command included a lot extra information besides a listing of file names.
+In the last section, we saw that the output of the `ls -l` command included a lot extra information besides a listing of file names.
 The output also listed the owners and permissions for each file and directory.
 
 Each user account on a Linux system has a user name and has at least one group membership.
@@ -47,7 +47,7 @@ And there are three permission *modes* that restrict or expand access to each fi
 > I am emphasizing the **rwx** in the above list of modes because we will need to remember what these letters stand for when
 > we work with file and directory permissions.
 
-Consider the output of ``ls -l`` in my home directory that contains a file called **paper.txt**:
+Consider the output of `ls -l` in my home directory that contains a file called **paper.txt**:
 
 ```
 -rw-rw-r-- 1 seanburns seanburns 0 Sep  7 14:41 paper.txt
@@ -55,9 +55,9 @@ Consider the output of ``ls -l`` in my home directory that contains a file calle
 
 According to the above output, we can parse the following information about the file:
 
-| Attributes             | ``ls -l`` output   |
+| Attributes             | `ls -l` output     |
 | ------------           | ------------------ |
-| File permissions       | ``-rw-rw-r--``     |
+| File permissions       | `-rw-rw-r--`       |
 | Number of links        | 1                  |
 | Owner name             | seanburns          |
 | Group name             | seanburns          |
@@ -65,8 +65,9 @@ According to the above output, we can parse the following information about the 
 | Last modification date | Sep  7 14:41       |
 | File name              | paper.txt          |
 
-The Owner and Group names of the **paper.txt** file are both **seanburns** because there is a user account named **seanburns** on the system
-and a group account named **seanburns** on the system, and that file exists in the user **seanburns**'s home directory.
+The Owner and Group names of the `paper.txt` file are both `seanburns` because
+there is a user account named `seanburns` on the system and
+a group account named `seanburns` on the system, and that file exists in the user `seanburns`'s home directory.
 You can see which groups you belong to on your system with the `groups`.
 
 The **File permissions** show:
@@ -95,42 +96,42 @@ The **Other/World** ownership allows people to view (read) the file but not writ
 Any webpage you view on the internet at least has Other/World mode set to read.
 
 Let's take a look at another file.
-In our ``/bin`` directory, we can see a listing of executable programs on the system.
+In our `/bin` directory, we can see a listing of executable programs on the system.
 For example, take a look at the `scp` (secure copy) program as follows:
 
 ```
 ls -l /bin/scp
--rwxr-xr-x 1 root   root    117040 Jan  2  2024  zip*
+-rwxr-xr-x 1 root   root    133720 Apr  11 /bin/scp*
 ```
 
-| Attributes             | ``ls -l`` output   |
+| Attributes             | `ls -l` output     |
 | ------------           | ------------------ |
-| File permissions       | ``-rwxr-xr-x``     |
+| File permissions       | `-rwxr-xr-x`       |
 | Number of links        | 1                  |
 | Owner name             | root               |
 | Group name             | root               |
-| Byte size              | 117040             |
-| Last modification date | Jan  2 2024        |
-| File name              | scp                |
+| Byte size              | 133720             |
+| Last modification date | Apr 11 2025        |
+| File name              | /bin/scp           |
 
 Since `scp` is a computer program used to securely copy files between different machines, it needs to be e**x**ecutable.
 That is, users on the system need to be able to run it.
-But notice that the owner and group names of the file point to the user **root**.
-We have already learned that there is a **root** directory in our filesystem.
-This is the top level directory in our filesystem and is referenced by the forward slash: ``/``.
-But there is also a **root** user account.
+But notice that the owner and group names of the file point to the user `root`.
+We have already learned that there is a `root` directory in our filesystem.
+This is the top level directory in our filesystem and is referenced by the forward slash: `/`.
+But there is also a `root` user account.
 This is the system's **superuser**.
 The **superuser** can run or access anything on the system, and this user also owns most of the system files.
 
 Back to permissions. We read the output of the `ls -l /bin/scp` command as such:
 
 - User **root** is the Owner and has **r**ead, **w**rite, and e**x**ecute (``rwx``) permissions on the file.
-- Group **root** is the Group owner and has **r**ead and e**x**ecute permissions but not **w**rite permissions (``r-x``)
-- The **Other/World** has **r**ead and e**x**ecute permissions but not **w**rite (``r-x``).
+- Group **root** is the Group owner and has **r**ead and e**x**ecute permissions but not **w**rite permissions (`r-x`)
+- The **Other/World** has **r**ead and e**x**ecute permissions but not **w**rite (`r-x`).
   This permissions allows other users (like you and me) to use the `scp` program.
 
 Finally, let's take a look at the permissions for a directory itself.
-When I run the following command in my home directory, it will show the permissions for my ``/home/seanburns`` directory:
+When I run the following command in my home directory, it will show the permissions for my `/home/seanburns` directory:
 
 ```
 ls -ld
@@ -139,31 +140,29 @@ ls -ld
 And the output is:
 
 ```
-drwxr-xr-x 51 seanburns seanburns 4096 Sep  7 23:35 .
+drwxr-x--- 4 seanburns seanburns 4096 Sep  2 19:07 .
 ```
 
 This shows that:
 
-| Attributes             | ``ls -ld`` output  |
+| Attributes             | `ls -ld` output    |
 | ------------           | ------------------ |
-| File permissions       | ``drwxr-xr-x``     |
-| Number of links        | 1                  |
+| File permissions       | `drwxr-x---`       |
+| Number of links        | 4                  |
 | Owner name             | seanburns          |
 | Group name             | seanburns          |
 | Byte size              | 4096               |
-| Last modification date | Sep  7             |
+| Last modification date | Sep  2             |
 | File name              | .                  |
 
 This is a little different from the previous examples, but let's parse it:
 
 - Instead of an initial dash, this *file* has an initial **d** that identifies this as a directory.
   Directories in Linux are simply special types of files.
-- User **seanburns** has read, write, and execute (``rwx``) permissions.
-- Group **seanburns** and **Other/World** have execute (``r-x``) read and execute permissions.
-- **.** signifies the current directory, which happens to be my home directory, since I ran that command at the ``/home/seanburns`` path.
-
-If this were a multiuser system, then other people with accounts on the system would be able to read the contents of my home directory.
-However, they wouldn't be able to modify, create, or delete any files or directories in that directory.
+- User `seanburns` has read, write, and execute (`rwx`) permissions.
+- Group `seanburns` have execute (`r-x`) read and execute permissions.
+- `Other/World` have no permisisons on this directory.
+- `.` signifies the current directory, which happens to be my home directory, since I ran that command at the `/home/seanburns` path.
 
 Why does the directory have an e**x**ecutable bit set since it's not a program?
 The executable bit is required on directories to access them.
@@ -179,14 +178,12 @@ There will be times when we will want to change the defaults.
 For example, if I were to create accounts for other people for this system, I might want to disallow them access to my home directory.
 There are several commands available to do that, and here I'll introduce you to the two most common ones.
 
-1. The ``chmod`` command is used to change file and directory permissions: the
-   ``-rwxrwxrwx`` part of a file.
-2. The ``chown`` command is used to change a file's and directory's owner and
-   group.
+1. The `chmod` command is used to change file and directory permissions: the `-rwxrwxrwx` part of a file.
+2. The `chown` command is used to change a file's and directory's owner and group.
 
 #### `chmod`
 
-Each one of those bits (the ``r``, the ``w``, and the ``x``) are assigned the following [octal][changing_file_permissions] values:
+Each one of those bits (the `r`, the `w`, and the `x`) are assigned the following [octal][changing_file_permissions] values:
 
 | permission   | description    | octal value   |
 | ------------ | --             | ------------- |
@@ -195,7 +192,7 @@ Each one of those bits (the ``r``, the ``w``, and the ``x``) are assigned the fo
 | x            | execute        | 1             |
 | -            | no permissions | 0             |
 
-There are octal values for the three set of permissions represented by ``-rwxrwxrwx``.
+There are octal values for the three set of permissions represented by `-rwxrwxrwx`.
 If I bracket the sets (for demonstration purposes only), they look like this:
 
 | Owner | Group | Other/World |
@@ -207,16 +204,16 @@ The first set describes the permissions for the owner.
 The second set describes the permissions for the group.
 The third set describes the permissions for the Other/World. 
 
-We use the ``chmod`` command and the octal values to change a file or directory's permissions.
+We use the `chmod` command and the octal values to change a file or directory's permissions.
 For each set, we add up the octal values.
-For example, to make a file read (4), write (2), and executable (1) for the owner only, and zero out the permissions for the group and Other/World,
-we use the ``chmod`` command like so:
+For example, to make a file read (4), write (2), and executable (1) for the owner only, and
+zero out the permissions for the group and Other/World, we use the `chmod` command like so:
 
 ```
 chmod 700 paper.txt
 ```
 
-We use 7 because ``4+2+1=7``, and we use two zeroes in the second two places since we're removing permissions for group and Other/World.
+We use 7 because `4+2+1=7`, and we use two zeroes in the second two places since we're removing permissions for group and Other/World.
 
 If we want to make the file read, write, and executable by the owner, the group, and the world, then we repeat this for each set:
 
@@ -225,31 +222,31 @@ chmod 777 paper.txt
 ```
 
 More commonly, we might want to restrict ownership.
-Here we enable ``rw-`` for the owner, and ``r--`` for the group and the Other/World:
+Here we enable `rw-` for the owner, and `r--` for the group and the Other/World:
 
 ```
 chmod 644 paper.txt
 ```
 
-Because ``4+2=6`` for owner, and ``4`` is read only for group and Other/World, respectively.
+Because `4+2=6` for owner, and `4` is read only for group and Other/World, respectively.
 
 ### Changing File Ownership
 
 #### `chown`
 
-In order to change the ownership of a file, we use the ``chown`` command followed by the name of the owner.
+In order to change the ownership of a file, we use the `chown` command followed by the name of the owner.
 
 I can generally only change the user owner of a file if I have admin access on a system.
-In such a case, I would have to use the ``sudo`` command, which gives me superuser privileges.
-To change the owner only, say from the user **sean** to the user **root**:
+In such a case, I would have to use the `sudo` command, which gives me superuser privileges.
+To change the owner only, say from the user `seanburns` to the user `root`:
 
 ```
 sudo chown root paper.txt
 ```
 
-In the following example, I make the `root` user the group owner of my **paper.txt** file.
-Note that I include a colon before the name **root**.
-This signifies the group membership.
+In the following example, I make the `root` user the group owner of my `paper.txt` file.
+Note that I include a colon before the name `root`.
+This signifies changing group membership only.
 
 ```
 sudo chown :root paper.txt
@@ -258,7 +255,8 @@ sudo chown :root paper.txt
 > Look at the output as you go using the `ls -l` command.
 
 To change both user owner and group owner, we simply specify both names and separate those names by a colon.
-Thus, since **paper.txt** now has **root** as the user owner and **root** as the group owner, I revert ownership back to me for both user and group:
+Thus, since `paper.txt` now has `root` as the user owner and `root` as the group owner,
+I revert ownership back to me for both user and group:
 
 ```
 sudo chown sean:sean paper.txt
@@ -273,15 +271,15 @@ In this section, we learned:
 
 The commands we used to change these include:
 
-- ``chmod`` : for changing file permissions (or file mode bits)
-- ``chown`` : for changing file ownership
+- `chmod` : for changing file permissions (or file mode bits)
+- `chown` : for changing file ownership
 
 We also used the following commands:
 
-- ``ls``         : list directory contents
-    - ``ls -ld`` : long list directories themselves, not their contents
-- ``groups``     : print the groups a user is in
-- ``sudo``       : execute a command as another user
+- `ls`         : list directory contents
+    - `ls -ld` : long list directories themselves, not their contents
+- `groups`     : print the groups a user is in
+- `sudo`       : execute a command as another user
 
 [changing_file_permissions]:https://docs.oracle.com/cd/E19504-01/802-5750/6i9g464pv/index.html
 [system_groups]:https://wiki.debian.org/SystemGroups
