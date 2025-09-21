@@ -179,24 +179,22 @@
                 <div id="content" class="content">
                     <main>
                         <h2 id="using-git-for-documentation"><a class="header" href="#using-git-for-documentation">Using Git for Documentation</a></h2>
-<p>Managing and documenting complex systems is a challenge, but
+<p>It's a challenge to manage and document complex systems, but
 it's essential to keep a record of how we change or alter our systems,
-how we configure them,
-and how we automate them.
+how we configure them, and how we automate them.
 It's essential because we administer systems for ourselves and for others, and
-keeping records allows us to build off our prior work.
-Maintaining documentation is also an important part of identifying points of failure in our systems.
+keeping records allows us to build off our or others prior work.</p>
+<p>Maintaining documentation is also an important part of identifying points of failure in our systems.
 For example, we might change some configuration files, and
-one of those changes might lead to an eventual system failure.
-Documenting our changes can help us track and identify the culprit file and the location in that file
-in such a scenario.</p>
-<p>Documentation in systems administration generally therefore covers several areas.
-It includes configuration files, automation scripts, server deployment guides, and maintenance procedures.
-It therefore serves as a crucial reference point for teams; i.e.,
+one of those changes might lead to an <a href="https://en.wikipedia.org/wiki/2024_CrowdStrike-related_IT_outages">eventual system failure</a>.
+In such a scenario,
+documenting our changes can help us track and identify the culprit file and the location in that file.</p>
+<p>Documentation in systems administration generally includes documenting
+configuration files, automation scripts, server deployment guides, and maintenance procedures.
+This work serves as a crucial reference point for teams; i.e.,
 it ensures consistency in system management and eases the onboarding process for new administrators.</p>
-<p>We use Git because Git is robust, versatile, and widely used.
-Specifically, it's is a distributed version control system used to track changes and
-manage versions of text files.
+<p>Git is a distributed version control system used to track changes and manage versions of text files.
+We use Git because it is robust, versatile, and widely used.
 Although it is more commonly used for software developers, it's not limited that usage.</p>
 <p>In this section, we learn how to use Git to maintain and enhance documentation in a sysadmin context.
 This will only be an intro to Git, but key areas of discussion include:</p>
@@ -207,21 +205,19 @@ This will only be an intro to Git, but key areas of discussion include:</p>
 <h3 id="understanding-file-naming-conventions"><a class="header" href="#understanding-file-naming-conventions">Understanding File Naming Conventions</a></h3>
 <p>First, it's important to standardize around file naming, especially for newly created files.
 File naming is a fundamental aspect of organizing and maintaining a clear documentation system, and
-adhering to a consistent naming convention is crucial for several reasons:</p>
+adhering to a consistent naming convention is important for several reasons:</p>
 <ol>
 <li><strong>Clarity and Accessibility</strong>: Well-named files are easier to identify and
-understand at a glance, saving time and reducing confusion.</li>
+understand at a glance. This saves time and reduces confusion.</li>
 <li><strong>System Compatibility</strong>: Certain characters in file names can cause issues
-in different operating systems. Avoiding spaces and special characters
-ensures broader compatibility.</li>
-<li><strong>Ease of Navigation</strong>: Consistent naming aids in navigating through files,
-especially in a large directory or Git repository.</li>
-<li><strong>Version Control</strong>: Clear naming helps in tracking changes and managing
-versions more effectively.</li>
+in different operating systems. Avoid spaces and special characters to ensure broader compatibility.</li>
+<li><strong>Ease of Navigation</strong>: Consistent naming aids in navigating through files.
+This is especially in a large directory or Git repository.</li>
+<li><strong>Version Control</strong>: Clear naming policies helps in tracking changes and managing versions more effectively.</li>
 </ol>
-<p>When naming files, it's best to follow the guidelines below,
-where I use the <code>md</code> extension to identify these files as Markdown files.
-But regardless of file type, these guidelines are broadly applicable to all file naming:</p>
+<p>When naming files, it's best to follow the guidelines below.
+I use the <code>md</code> extension to identify these files as Markdown files, but
+regardless of file type, these guidelines are broadly applicable to all file names:</p>
 <ul>
 <li>Use single words or combine words using camelCase, underscores (<code>_</code>), or hyphens (<code>-</code>). For example:
 <ul>
@@ -230,24 +226,27 @@ But regardless of file type, these guidelines are broadly applicable to all file
 <li><code>server-setup-guide.md</code>.</li>
 </ul>
 </li>
-<li>Avoid spaces because they can cause issues in URLs and command-line operations. For example, do not name a file like this:
+<li>Avoid spaces because they can cause issues in URLs and command-line operations.
+For example, do not name a file like this:
 <ul>
 <li>server setup guide.md</li>
 </ul>
 </li>
-<li>Steer clear of special characters in file names, such as <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc. These characters might have specific functions in certain environments or scripts, like the Bash shell.</li>
+<li>Avoid special characters in file names, such as <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc.
+These characters often have specific functions in certain environments or scripts, like the <code>bash</code> shell.</li>
 </ul>
 <h4 id="use-markdown"><a class="header" href="#use-markdown">Use Markdown</a></h4>
-<p>When documenting your system or some process, use Markdown format your documentation.
-Markdown is a widely used markup format, and
-files written in Markdown can be easily converted to HTML, DOCX, PPTX, PDF, and more.
+<p>We will use Markdown syntax in our documentation work.
+Markdown is a widely used markup language to format text, and
+files written in Markdown can be converted to HTML, DOCX, PPTX, PDF, and more.
 Plus, if you use GitHub, files written in Markdown will automatically render into HTML.</p>
 <h3 id="basic-markdown-tutorial"><a class="header" href="#basic-markdown-tutorial">Basic Markdown Tutorial</a></h3>
 <p>Here's a quick guide to the most commonly used Markdown syntax, but
-also see <a href="https://www.markdownguide.org/">Markdown Guide</a>.</p>
+see the <a href="https://www.markdownguide.org/">Markdown Guide</a> for full details.</p>
 <h4 id="headings"><a class="header" href="#headings">Headings</a></h4>
 <p>Headings are created using the <code>#</code> symbol before your text.
-The number of <code>#</code> symbols indicates the level of the heading:</p>
+The number of <code>#</code> symbols indicates the level of the heading.
+Use headings to broadly structure your documents.</p>
 <pre><code># Heading 1
 ## Heading 2
 ### Heading 3
@@ -275,10 +274,10 @@ Some text on starting Apache here.
 </code></pre>
 <h4 id="emphasis"><a class="header" href="#emphasis">Emphasis</a></h4>
 <ul>
-<li><strong>Bold</strong>: To make text bold, wrap it in double asterisks or double
-underscores. For example, <code>**bold**</code> or <code>__bold__</code>.</li>
-<li><em>Italic</em>: To italicize text, wrap it in single asterisks or single
-underscores. For example, <code>*italic*</code> or <code>_italic_</code>.</li>
+<li><strong>Bold</strong>: To make text bold, wrap text in double asterisks or double underscores.
+For example, <code>**bold**</code> or <code>__bold__</code>.</li>
+<li><em>Italic</em>: To italicize text, wrap it in single asterisks or single underscores.
+For example, <code>*italic*</code> or <code>_italic_</code>.</li>
 </ul>
 <h4 id="lists"><a class="header" href="#lists">Lists</a></h4>
 <ul>
@@ -320,27 +319,46 @@ underscores. For example, <code>*italic*</code> or <code>_italic_</code>.</li>
 </ul>
 <h4 id="links-and-images"><a class="header" href="#links-and-images">Links and Images</a></h4>
 <ul>
-<li><strong>Links</strong>: To create a link, wrap the link text in brackets <code>[ ]</code>, and then
-wrap the URL in parentheses <code>( )</code>.
+<li><strong>Links</strong>: To create a link, wrap the link text in brackets <code>[ ]</code>, and then wrap the URL in parentheses <code>( )</code>.
 <ul>
-<li>For example, <code>[GitHub](https://github.com)</code></li>
+<li>For example, to link to GitHub.com: <code>[GitHub](https://github.com)</code></li>
 </ul>
 </li>
 <li><strong>Images</strong>: Use similarly to links, but start with an exclamation mark, followed by
-the alt text in brackets, and the URL in parentheses. The <code>URL</code> is simply the location to the file. It can be a location in your current directory or a location on the web.
+the alt text in brackets, and the URL in parentheses.
+The <code>URL</code> is simply the location to the file.
+It can be a location in your current directory or a location on the web.
+If you're linking to an image file in your directory, use the <strong>relative path</strong> to the file
+(relative from the repository's base directory).
+If you're linking to an image on the web, use the full web address, beginning with <strong>https</strong>.</li>
+<li>Examples:
+<ul>
+<li>Linking to an image file in the current directory:
 <ul>
 <li>For example, <code>![Alt text](image-url.jpg)</code></li>
+</ul>
+</li>
+<li>Linking to an image file in a directory named <code>images</code> in the current directory's:
+<ul>
+<li>For example, <code>![Alt text](images/image-url.jpg)</code></li>
+</ul>
+</li>
+<li>Linking to an image file on the web:
+<ul>
 <li>For example, <code>![Alt text](http://example.com/images/image-url.jpg)</code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 <h4 id="code"><a class="header" href="#code">Code</a></h4>
 <ul>
 <li>
-<p><strong>Inline Code</strong>: For small bits of code, use backticks to wrap your code. For example, <code>`code`</code>.</p>
+<p><strong>Inline Code</strong>: Use this small snippets of code in your main text;
+use backticks to wrap your code: <code>`code`</code>.</p>
 </li>
 <li>
-<p><strong>Code Blocks</strong>: For larger sections of code, use three backticks or indent with four spaces.</p>
+<p><strong>Code Blocks</strong>: For larger sections of code, use three backticks or indent with four spaces on separate lines.</p>
 <p>```language
 your code here
 ```</p>
@@ -366,8 +384,7 @@ ending a line with two or more spaces before hitting Enter.</li>
 <li><strong>Escaping Markdown</strong>: To display a Markdown character, precede it with a
 backslash (<code>\</code>). For example, <code>\*not italic\*</code>.</li>
 </ul>
-<p>Markdown's makes formatted text simple and readable, and
-is thus a great choice for for documentation and note-taking.
+<p>Markdown's makes formatted text simple and readable, and is thus a great choice for for documentation and note-taking.
 As you become more comfortable with these basics,
 you'll find it a versatile tool for your writing needs.</p>
 <h2 id="using-git"><a class="header" href="#using-git">Using Git</a></h2>
@@ -381,8 +398,7 @@ you'll find it a versatile tool for your writing needs.</p>
 </code></pre>
 <h3 id="configuring-git"><a class="header" href="#configuring-git">Configuring Git</a></h3>
 <p><strong>Note:</strong> The following <code>git</code> tutorial is based on the <a href="https://git-scm.com/docs/gittutorial">Git Documentation</a>.</p>
-<p>First we want to configure <code>git</code> so that when we create or change files,
-it can track who made those changes.
+<p>First we want to configure <code>git</code> so that when we create or change files, it can track who made those changes.
 We do that with the <code>git config</code> command.
 We configure <code>git</code> by inputting our name:</p>
 <pre><code>git config --global user.name "Sean Burns"

@@ -3312,23 +3312,10 @@ practices.</li>
 <h2 id="getting-started-3"><a class="header" href="#getting-started-3">Getting Started</a></h2>
 <p>Working on the command line means writing a lot of commands.
 There will be times when we want to save some of the commands that we write in order to re-use them later.
-Or, we might want to develop the commands into a script (i.e., a program) because we might want to automate a process.
+Or, we might want to develop the commands into a script (i.e., a program) because we want to automate a process.
 The shell is great for writing one off commands, so-called <strong>one-liners</strong>, but
 it's not a great place to write multi-line or very long commands.
 Therefore it can be helpful to write and save our commands in a text editor.</p>
-<p>In this lesson, we'll learn about several text editors: <code>ed</code>, <code>vim</code>, <code>nano</code>, <code>micro</code>, and <code>tilde</code>.
-We cover <code>ed</code> primarily for its historical importance, but it's a perfectly fine editor that I use all the time.
-<code>vim</code> is a more powerful and quite flexible editor that is widely used today, but it has a high learning curve.
-Even after using it for nearly 25 years, I'm still learning things about it.
-We could have a whole course on <code>vim</code>, but given the little time we have together,
-I will encourage you to use <code>nano</code>, <code>micro</code>, <code>tilde</code>, or <code>edit</code>.</p>
-<p>I want you to know something about <code>ed</code> and <code>vim</code> because these are historically important editors.
-I use <code>ed</code> almost often, and <code>vim</code> is my everyday editor.
-I'm even writing this in <code>vim</code>!
-Vim is hugely popular, under active development.
-If you want to use Vim, I'd encourage you to do so.
-Once you've acquired skill with it, working with text is a joyful experience.
-But I don't teach it because would take too much time and practice to learn it.</p>
 <p>Another thing to keep in mind is that the shell that we are working with is called <code>bash</code>, and
 <code>bash</code> is a full-fledged programming language.
 That means that when we write a simple command, like <code>cd public_html</code>, we are programming.
@@ -3341,16 +3328,20 @@ For example, later in the semester we will install the <a href="https://httpd.ap
 we will need to edit Apache's configuration files in the process.
 We could do this using some of the tools that we've already covered, like <code>sed</code> and <code>awk</code>, but
 it'll make our lives much easier to use a text editor.</p>
-<p>In any case, in order to save our commands or edit text files,  a text editor is very helpful.
-Programmers use text editors to write programs, but programmers often work in graphical user environments, so
-they often use GUI text editors or <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s.
+<p>In any case, in order to save our commands or edit text files, a text editor is very helpful.
+Programmers use text editors to write programs, but programmers often work in graphical user environments,
+so they often use GUI text editors or <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s.
 As systems administrators, it would be unusual to have a graphical user interface installed on a server.
-The servers that we manage will contain limited or specific software that serves the server's main purpose.
-Additional software on a server that is not relevant to the main function of a server only takes up extra disk space,
-consumes valuable computing resources, and poses an additional security footprint.</p>
-<p>As stated, although <code>ed</code> and <code>vim</code> are difficult to learn, they are very powerful editors.
-I believe they are both worth learning; however, for the purposes of this course, it's more important that you are aware of them.
-If you wish to learn more, there are lots of additional tutorials on the web on how to use these fine, esteemed text editors.</p>
+The servers that we manage contain limited or specific software that serves the server's main purpose.
+Additional software on a server that is not relevant to its main function only takes up extra disk space,
+consumes valuable computing resources, and poses an additional <a href="https://en.wikipedia.org/wiki/Attack_surface">security footprint</a>.</p>
+<p>In this lesson, we'll learn about several text editors: <code>ed</code>, <code>vim</code>, <code>nano</code>, <code>micro</code>, <code>tilde</code>, and <code>edit</code>.
+We cover <code>ed</code> primarily for its historical importance, and its descendant, <code>vim</code>,
+which is a powerful editor that is widely used today, but these editors have high learning curves.
+<code>emacs</code> is another common text editor that can be used on the command line, but it also has a learning curve, and
+I am not covering it here.
+For simplicity, I will encourage you to use <code>nano</code>, <code>micro</code>, <code>tilde</code>, or <code>edit</code>, but
+if you continue to use the command line, you should learn more advanced editors like <code>vim</code> or <code>emacs</code>.</p>
 <h2 id="ed"><a class="header" href="#ed"><code>ed</code></a></h2>
 <p><code>ed</code> is a line editor that is installed by default on many Linux distributions.
 Ken Thompson created <code>ed</code> in the late 1960s to write the original Unix operating system.
@@ -3359,8 +3350,9 @@ instead for <a href="https://en.wikipedia.org/wiki/Teleprinter">teletypewriters 
 The lack of a visual display, like a monitor, is the reason that <code>ed</code> was written as a line editor.
 If you visit that second link, you will see the terminal interface from those earlier days.
 It is the same basic interface you are using now when you use your terminal applications, which
-are virtualised versions of those old teletypewriters.
-I think this is a testament of the power of the terminal: that advanced computer users still use the same basic technology today.</p>
+are virtualized versions of those old teletypewriters.
+I think this is a testament of the power of the terminal:
+that advanced computer users still use the same basic technology today.</p>
 <p>In practice, when we use a line editor like <code>ed</code>, the main process of entering text is like any other editor.
 The big difference is when we need to manipulate text.
 In a graphical text editor, if we want to delete a word or edit some text,
@@ -3376,7 +3368,7 @@ There is no menu to select from at the top of the <em>window</em>.
 In fact, when we used <code>ed</code> to open an existing file, the text in the file isn't even printed on the screen.
 If a user wants to delete a word, or print (to screen) some text,
 the user has to command the line editor to print the relevant line.
-The do this by specifying the line's address and issuing a command to delete the word on that line, or print the line.
+We do this by specifying the line's address and issuing a command to delete the word on that line, or print the line.
 Line editors also work on ranges of line, including all the lines in the file, just like <code>sed</code> does.</p>
 <p>Many of the commands that <code>ed</code> uses are also used by <code>sed</code>, since <code>sed</code> is based on <code>ed</code>.
 The following table compares commands between these two programs:</p>
@@ -3405,7 +3397,7 @@ For example, here are some commands that mostly make sense in <code>ed</code> as
 </tbody></table>
 </div>
 <p>There are other differences, but these are sufficient for our purposes.</p>
-<p>Let's see how to use <code>ed</code> to open a file, and print the content with and without line numbers.</p>
+<p>Let's see how to use <code>ed</code> to open a file, and print the content without (<code>1,$p</code>) and with (<code>1,$n</code>) line numbers.</p>
 <pre><code>ed operating-systems.csv
 183
 1,$p
@@ -3427,8 +3419,8 @@ Android, Apache, 2008
 7	Windows NT, Proprietary, 1993
 8	Android, Apache, 2008
 </code></pre>
-<p>Using <code>ed</code>, another way to remove the header line of the <strong>operating-systems.csv</strong> file is to specify the line number (<code>1</code>) and
-then the delete command (<code>d</code>), just like in <code>sed</code>.
+<p>Using <code>ed</code>, we can remove the header line of the <strong>operating-systems.csv</strong> file by specifying the line number (<code>1</code>),
+and issuing the delete command (<code>d</code>), just like in <code>sed</code>.
 This becomes a permanent change if I save the file with the <code>w</code> (write) command:</p>
 <pre><code>1d
 1,$p
@@ -3441,7 +3433,7 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
 <p>To refer to line <strong>ranges</strong>, I add a comma between <strong>addresses</strong>.
-Therefore, to delete lines 1, 2, and 3, and then quit without saving:</p>
+Therefore, to delete lines 1, 2, and 3, and then quit <strong>without saving</strong>:</p>
 <pre><code>1,3d
 ,p
 iOS, Proprietary, 2007
@@ -3451,13 +3443,21 @@ Android, Apache, 2008
 Q
 </code></pre>
 <p>Note that with <code>sed</code>, in order to make a change <strong>in-place</strong>, we need to use the <code>-i</code> option.
-But with <code>ed</code>, we save changes with the <code>w</code> command.</p>
+But with <code>ed</code>, we save changes with the <code>w</code> (write) command.</p>
+<pre><code>ed operating-systems.csv
+183
+1,3d
+,p
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+w
+</code></pre>
 <p>I can use <code>ed</code> to <strong>find and replace</strong> strings.
 The syntax is the same as it is in <code>sed</code>.
 I'll start with a fresh version of the file:</p>
-<pre><code>ed operating-systems.csv
-183
-1,$s/Linux/GNU\/Linux/
+<pre><code>1,$s/Linux/GNU\/Linux/
 </code></pre>
 <p>If we want to add new rows to the file, we can append <code>a</code> or insert <code>i</code> text after or at specific lines.
 To append text after line 3, use <code>a</code>.
@@ -3466,7 +3466,8 @@ We enter a period on a newline to leave input mode and return to command mode:</
 FreeDOS, GPL, 1998
 .
 </code></pre>
-<p>Because we enter input mode when using the <code>a</code>, <code>i</code>, or <code>c</code> commands, we enter a period <code>.</code> on a line by itself to revert to command mode.</p>
+<p>Because we enter input mode when using the <code>a</code>, <code>i</code>, or <code>c</code> commands,
+we enter a period <code>.</code> on a line by itself to revert to command mode.</p>
 <p>To insert at line 2, use <code>i</code>:</p>
 <pre><code>2i
 CP/M, Proprietary, 1974
@@ -3481,7 +3482,8 @@ I start a new <code>ed</code> session to reload the file to start fresh:</p>
 <p>Of course, <code>ed</code> can be used to write and not simply edit files.
 Let's start fresh.
 In the following session,
-I'll start <code>ed</code>, enter append mode <code>a</code>, write a short letter, exit append mode <code>.</code>, name the file <code>f</code>, write <code>w</code> (save) the file, and quit <code>q</code>:</p>
+I'll start <code>ed</code>, enter append mode <code>a</code>, write a short letter, exit append mode <code>.</code>,
+name the file <code>f</code>, write <code>w</code> (save) the file, and quit <code>q</code>:</p>
 <pre><code>ed
 a
 Dear Students,
@@ -3497,16 +3499,17 @@ f letter.txt
 w
 q
 </code></pre>
-<p>It's good to know something about <code>ed</code> for historical reasons.
-But the line editing technology developed for it is still in use today, and is a basic part of the <code>vim</code> text editor.</p>
+<p>It's good to know something about <code>ed</code> for historical reasons and
+because the line editing technology developed for it is still in use today,
+as seen with commands like <code>grep</code> and <code>sed</code>.
+It is also a basic part of the design of the <code>vim</code> text editor.</p>
 <h2 id="vim"><a class="header" href="#vim"><code>vim</code></a></h2>
-<p>The <code>vim</code> text editor is an <strong>improved</strong> version of the <code>vi</code> text editor and is in fact called <strong>Vi IMproved</strong>.
-The original <code>vi</code> text editor is usually available via the <code>nvi</code> editor these days.
-<code>nvi</code> is a rewrite of the original.
-<code>vim</code> is a visual editor.
-It is multi-modal like <code>ed</code> and is a direct descendant through <a href="https://en.wikipedia.org/wiki/Vi">vi</a>.
+<p>The <code>vim</code> text editor is a descendant of <code>ed</code>.
+Generally, we started with <code>ed</code>, which influenced the creation of <a href="https://en.wikipedia.org/wiki/Vi">vi</a>, which led eventually to <code>vim</code>,
+aka, <strong>Vi IMproved</strong>.
+The original <code>vi</code> text editor was recreated and is available as the <code>nvi</code> editor.
 Due to this genealogy, <code>vim</code> uses many of the same commands as <code>ed</code> does when <code>vim</code> is in command mode.
-Like <code>ed</code>, we can start <code>vim</code> at the Bash prompt with or without a file name.
+Like <code>ed</code>, we can start <code>vim</code> at the <code>bash</code> prompt with or without a file name.
 Here I open the <strong>letter.txt</strong> file with <code>vim</code>.
 The default mode is <strong>command mode</strong>:</p>
 <pre><code>vim letter.txt
@@ -3525,19 +3528,20 @@ There isn't any difference on an empty file, but on a file that has text,
 Once in <strong>insert</strong> mode, you can type text as you normally would and use the arrow keys to navigate around the file.</p>
 <p>To return to <strong>command mode</strong> in <code>vim</code>, you press the <strong>Esc</strong> key.
 And then you can enter commands like you would with <code>ed</code>, using the same syntax.</p>
-<p>Unlike <code>ed</code>, when in <strong>command mode</strong>, the commands we type are not placed wherever the cursor is, but at the bottom of the screen.
+<p>Unlike <code>ed</code>, when in <strong>command mode</strong>, the commands we type are not placed wherever the cursor is,
+but at the bottom of the screen.
 Let's first turn on line numbers to know which address is which, and then we'll replace <strong>ed</strong> with <strong>Ed</strong>.
 Note that I precede these commands with a colon:</p>
 <pre><code>:set number
 :5s/ed/Ed/
 </code></pre>
-<p>One of the more powerful things about both <code>ed</code> and <code>vim</code> is that I can call Bash shell commands from the editors.
-Let's say that I wanted to add the date to my letter file.
+<p>One of the more powerful things about both <code>ed</code> and <code>vim</code> is that I can call <code>bash</code> shell commands from the editors.
+Let's say that I want to add the date to my letter file.
 To do that, Linux has a command called <code>date</code> that will return today's date and time.
-To call the <code>date</code> command within Vim and insert the output into the file:
+To call the <code>date</code> command within <code>vim</code> and insert the output into the file:
 I press <strong>Esc</strong> to enter <strong>command mode</strong> (if I'm not already in it),
-enter a colon, type <code>r</code> for the read into buffer command,
-then enter the shell escape command, which is an exclamation point <code>!</code>, and then the Bash shell <code>date</code> command:</p>
+enter a colon, type <code>r</code> for the <em>read into buffer</em> command,
+then enter the shell escape command, which is an exclamation point <code>!</code>, and then the <code>bash</code> shell <code>date</code> command:</p>
 <pre><code>:r !date
 Dear Students,
 
@@ -3562,35 +3566,35 @@ as well as use tools like Ed, the standard editor.
 Sincerely,
 Dr. Burns
 </code></pre>
-<p>You can use the arrow keys and Page Up/Page Down keys to navigate in <code>vim</code> and <code>vi</code>,
-But by far the most excellent thing about this editor is to be able to use the <strong>j,k,l,h</strong> keys to navigate around a file:</p>
+<p>You can use the arrow keys and Page Up/Page Down keys to navigate in <code>vim</code>,
+but by far the most excellent thing about this editor is to be able to use the <strong>j,k,l,h</strong> keys to navigate around a file:</p>
 <ul>
 <li><code>j</code> moves down line by line</li>
 <li><code>k</code> moves up line by line</li>
 <li><code>l</code> moves right letter by letter</li>
 <li><code>h</code> moves left letter by letter</li>
 </ul>
-<p>Like the other commands, you can precede this with addresses. To move 2 lines down, you type <code>2j</code>, and so forth.
-<code>vi</code> and <code>vim</code> have had a powerful impact on software development that programmers have built these keystrokes
+<p>Like the other commands, you can precede this with addresses.
+To move 2 lines down, you type <code>2j</code>, and so forth.
+<code>vim</code> has had such a powerful impact on software development that programmers have built these keystrokes
 into applications like Gmail, Facebook, and more.</p>
 <p>To save the file and exit <code>vim</code>, return to <strong>command mode</strong> by pressing the <code>Esc</code> key, and then write and quit:</p>
 <pre><code>:wq
 </code></pre>
 <p>The above barely scratches the surface.
-There are whole books on these editors as well as websites, videos, etc that explore them, and especially <code>vim</code> in more detail.
-But now that you have some familiarity with them, you might find this funny: <a href="https://www.gnu.org/fun/jokes/ed-msg.en.html">Ed, man! !man ed</a>.</p>
+There are whole books on these editors as well as websites, videos, etc that explore them in more detail.</p>
 <h2 id="nano"><a class="header" href="#nano"><code>nano</code></a></h2>
-<p>The <code>nano</code> text editor is the user-friendliest of these text editors but still requires some adjustment as a new commandline user.
-The friendliest thing about <code>nano</code> is that it is modeless.
+<p>The <code>nano</code> text editor is the user-friendliest of these text editors.
+The friendliest thing about <code>nano</code> is that it is <a href="https://en.wikipedia.org/wiki/Mode_(user_interface)">modeless</a>.
 You're already accustomed to using modeless editors in GUI apps.
-It simply means that you can add and manipulate text without changing to insert or command mode.
-It is also friendly because it uses control keys to perform its operations.
-The tricky part is that the control keys are assigned to different keystroke combinations.
+Modeless simply means that you can add and manipulate text without changing to insert or command mode.
+It is also familiar because it uses control keys to perform its operations.
+The tricky part is that the control keys are assigned to different keystroke combinations than what many might be used to.
 For example, instead of Ctrl-c or Cmd-c to copy,
 in <code>nano</code> you press the <code>M-6</code> key (press <code>Alt</code>, <code>Cmd</code>, or <code>Esc</code> key and <code>6</code>) to copy.
 Then to paste, you press <code>Ctrl-u</code> instead of the more common <code>Ctrl-v</code>.
 Fortunately, <code>nano</code> lists the shortcuts at the bottom of the screen.</p>
-<p>The shortcuts listed need some explanation, though.
+<p>The shortcuts listed need some explanation.
 The carat mark is shorthand for the keyboard's <strong>Control (Ctrl)</strong> key.
 Therefore to <strong>Save As</strong> a file, we <strong>write</strong> out the file by pressing <code>Ctrl-o</code>.
 The <strong>M-</strong> key is also important, and depending on your keyboard configuration,
@@ -3609,28 +3613,30 @@ Some quick tips:</p>
 </ol>
 <h2 id="micro-and-tilde"><a class="header" href="#micro-and-tilde"><code>micro</code> and <code>tilde</code></a></h2>
 <p><code>nano</code> is usually installed by default on many Linux distributions, which is why I cover it here.
-However, if you want to use a more modern terminal editor, then I suggest <code>micro</code> or <code>tilde</code>.</p>
-<p>To install the first two, I'll run the following command:</p>
+However, if you want to use a more modern modeless editor, then I suggest <code>micro</code>, <code>tilde</code>, or <code>edit</code>.</p>
+<p>The following <code>apt</code> command installs both <code>micro</code> and <code>tilde</code> at the same time.</p>
 <pre><code>sudo apt install micro tilde
 </code></pre>
-<p>Then we launch them with or without file names.
-To launch <code>micro</code>:</p>
+<p>We can launch them with or without file names.
+To launch <code>micro</code> without a file name as an argument:</p>
 <pre><code>micro
 </code></pre>
 <p>To launch <code>tilde</code>:</p>
 <pre><code>tilde
 </code></pre>
-<p>The <a href="https://micro-editor.github.io/">micro</a> text editor uses standard key combinations like <strong>Ctrl-S</strong> to save, <strong>Ctrl-O</strong> to open, <strong>Ctrl-Q</strong> to quit.
+<p>The <a href="https://micro-editor.github.io/">micro</a> text editor uses standard key combinations like
+<strong>Ctrl-S</strong> to save, <strong>Ctrl-O</strong> to open, <strong>Ctrl-Q</strong> to quit.
 The <a href="https://os.ghalkes.nl/tilde/">tilde</a> text editor also uses the standard key combinations, but it also has a menu bar.
 To access the menu bar, you press the <strong>Alt</strong> key plus the first letter of the menu bar option.
 For example, <strong>Alt-f</strong> opens the <strong>File Menu</strong>, etc.</p>
 <h2 id="edit"><a class="header" href="#edit"><code>edit</code></a></h2>
-<p>The <a href="https://github.com/microsoft/edit">edit</a> text editor is a very new, open source editor from Microsoft.
-It is built for use on Windows but can be installed on Linux.
-To install, visit the program's [GitHub releases][ms_edit_releases] link and copy the URL for the file named:
+<p>The <a href="https://github.com/microsoft/edit">edit</a> text editor is a new, open source editor from Microsoft that's
+inspired by the original MS-DOS editor from the early 1990s.
+Although it is built for use on Windows, it can be installed on Linux.
+To install, visit the program's <a href="https://github.com/microsoft/edit/releases/tag/v1.2.0">GitHub releases</a> link and copy the URL for the file named:
 <strong>edit-[version]-x86-64-linux-gnu.tar.zst</strong>, where <strong>[version]</strong> equals the most recent version.
-Then we'll use <code>wget</code> to download the source file to our servers.
-For example, to download the most recent version, which at the time of writing this is <code>1.2.0</code>:</p>
+We can use <code>wget</code> to download the source file to our servers.
+For example, to download the most recent version, which at the time of writing this is version <code>1.2.0</code>:</p>
 <pre><code>wget https://github.com/microsoft/edit/releases/download/v1.2.0/edit-1.2.0-x86_64-linux-gnu.tar.zst
 </code></pre>
 <p>The file is compressed.
@@ -3641,11 +3647,14 @@ To decompress it, we use the following <code>tar</code> command:</p>
 Move this file to an executable <code>$PATH</code>, such as <code>/usr/local/bin</code>:</p>
 <pre><code>sudo mv edit /usr/local/bin
 </code></pre>
-<p>Once moved, you can <code>edit</code> like you use the other editors.
-Note that the GitHub page for <code>edit</code> provides instructions for installing this editor on Windows,
+<p>Once moved, you can use <code>edit</code> to work with files like you would with <code>micro</code> or <code>tilde</code>.</p>
+<pre><code>edit [file_name]
+</code></pre>
+<p>Note that the GitHub page for <code>edit</code> provides instructions for installing this editor on Windows,
 in case you're interested in doing so.</p>
 <h2 id="conclusion-9"><a class="header" href="#conclusion-9">Conclusion</a></h2>
-<p>In prior lessons, we learned how to use the <code>bash</code> command prompt and how to view, manipulate, and edit files from that shell.
+<p>In prior lessons, we learned how to use the <code>bash</code> command prompt and how to view, manipulate, and
+edit files from that shell.
 In this lesson, we learned how to use several command line text editors.
 Editors allow us to save our commands, create scripts, and in the future, edit configuration files.</p>
 <p>The commands we used in this lesson include:</p>
@@ -3658,24 +3667,22 @@ Editors allow us to save our commands, create scripts, and in the future, edit c
 <li><code>edit</code>: Microsoft text editor</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h2 id="using-git-for-documentation"><a class="header" href="#using-git-for-documentation">Using Git for Documentation</a></h2>
-<p>Managing and documenting complex systems is a challenge, but
+<p>It's a challenge to manage and document complex systems, but
 it's essential to keep a record of how we change or alter our systems,
-how we configure them,
-and how we automate them.
+how we configure them, and how we automate them.
 It's essential because we administer systems for ourselves and for others, and
-keeping records allows us to build off our prior work.
-Maintaining documentation is also an important part of identifying points of failure in our systems.
+keeping records allows us to build off our or others prior work.</p>
+<p>Maintaining documentation is also an important part of identifying points of failure in our systems.
 For example, we might change some configuration files, and
-one of those changes might lead to an eventual system failure.
-Documenting our changes can help us track and identify the culprit file and the location in that file
-in such a scenario.</p>
-<p>Documentation in systems administration generally therefore covers several areas.
-It includes configuration files, automation scripts, server deployment guides, and maintenance procedures.
-It therefore serves as a crucial reference point for teams; i.e.,
+one of those changes might lead to an <a href="https://en.wikipedia.org/wiki/2024_CrowdStrike-related_IT_outages">eventual system failure</a>.
+In such a scenario,
+documenting our changes can help us track and identify the culprit file and the location in that file.</p>
+<p>Documentation in systems administration generally includes documenting
+configuration files, automation scripts, server deployment guides, and maintenance procedures.
+This work serves as a crucial reference point for teams; i.e.,
 it ensures consistency in system management and eases the onboarding process for new administrators.</p>
-<p>We use Git because Git is robust, versatile, and widely used.
-Specifically, it's is a distributed version control system used to track changes and
-manage versions of text files.
+<p>Git is a distributed version control system used to track changes and manage versions of text files.
+We use Git because it is robust, versatile, and widely used.
 Although it is more commonly used for software developers, it's not limited that usage.</p>
 <p>In this section, we learn how to use Git to maintain and enhance documentation in a sysadmin context.
 This will only be an intro to Git, but key areas of discussion include:</p>
@@ -3686,21 +3693,19 @@ This will only be an intro to Git, but key areas of discussion include:</p>
 <h3 id="understanding-file-naming-conventions"><a class="header" href="#understanding-file-naming-conventions">Understanding File Naming Conventions</a></h3>
 <p>First, it's important to standardize around file naming, especially for newly created files.
 File naming is a fundamental aspect of organizing and maintaining a clear documentation system, and
-adhering to a consistent naming convention is crucial for several reasons:</p>
+adhering to a consistent naming convention is important for several reasons:</p>
 <ol>
 <li><strong>Clarity and Accessibility</strong>: Well-named files are easier to identify and
-understand at a glance, saving time and reducing confusion.</li>
+understand at a glance. This saves time and reduces confusion.</li>
 <li><strong>System Compatibility</strong>: Certain characters in file names can cause issues
-in different operating systems. Avoiding spaces and special characters
-ensures broader compatibility.</li>
-<li><strong>Ease of Navigation</strong>: Consistent naming aids in navigating through files,
-especially in a large directory or Git repository.</li>
-<li><strong>Version Control</strong>: Clear naming helps in tracking changes and managing
-versions more effectively.</li>
+in different operating systems. Avoid spaces and special characters to ensure broader compatibility.</li>
+<li><strong>Ease of Navigation</strong>: Consistent naming aids in navigating through files.
+This is especially in a large directory or Git repository.</li>
+<li><strong>Version Control</strong>: Clear naming policies helps in tracking changes and managing versions more effectively.</li>
 </ol>
-<p>When naming files, it's best to follow the guidelines below,
-where I use the <code>md</code> extension to identify these files as Markdown files.
-But regardless of file type, these guidelines are broadly applicable to all file naming:</p>
+<p>When naming files, it's best to follow the guidelines below.
+I use the <code>md</code> extension to identify these files as Markdown files, but
+regardless of file type, these guidelines are broadly applicable to all file names:</p>
 <ul>
 <li>Use single words or combine words using camelCase, underscores (<code>_</code>), or hyphens (<code>-</code>). For example:
 <ul>
@@ -3709,24 +3714,27 @@ But regardless of file type, these guidelines are broadly applicable to all file
 <li><code>server-setup-guide.md</code>.</li>
 </ul>
 </li>
-<li>Avoid spaces because they can cause issues in URLs and command-line operations. For example, do not name a file like this:
+<li>Avoid spaces because they can cause issues in URLs and command-line operations.
+For example, do not name a file like this:
 <ul>
 <li>server setup guide.md</li>
 </ul>
 </li>
-<li>Steer clear of special characters in file names, such as <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc. These characters might have specific functions in certain environments or scripts, like the Bash shell.</li>
+<li>Avoid special characters in file names, such as <code>!</code>, <code>$</code>, <code>#</code>, <code>%</code>, etc.
+These characters often have specific functions in certain environments or scripts, like the <code>bash</code> shell.</li>
 </ul>
 <h4 id="use-markdown"><a class="header" href="#use-markdown">Use Markdown</a></h4>
-<p>When documenting your system or some process, use Markdown format your documentation.
-Markdown is a widely used markup format, and
-files written in Markdown can be easily converted to HTML, DOCX, PPTX, PDF, and more.
+<p>We will use Markdown syntax in our documentation work.
+Markdown is a widely used markup language to format text, and
+files written in Markdown can be converted to HTML, DOCX, PPTX, PDF, and more.
 Plus, if you use GitHub, files written in Markdown will automatically render into HTML.</p>
 <h3 id="basic-markdown-tutorial"><a class="header" href="#basic-markdown-tutorial">Basic Markdown Tutorial</a></h3>
 <p>Here's a quick guide to the most commonly used Markdown syntax, but
-also see <a href="https://www.markdownguide.org/">Markdown Guide</a>.</p>
+see the <a href="https://www.markdownguide.org/">Markdown Guide</a> for full details.</p>
 <h4 id="headings"><a class="header" href="#headings">Headings</a></h4>
 <p>Headings are created using the <code>#</code> symbol before your text.
-The number of <code>#</code> symbols indicates the level of the heading:</p>
+The number of <code>#</code> symbols indicates the level of the heading.
+Use headings to broadly structure your documents.</p>
 <pre><code># Heading 1
 ## Heading 2
 ### Heading 3
@@ -3754,10 +3762,10 @@ Some text on starting Apache here.
 </code></pre>
 <h4 id="emphasis"><a class="header" href="#emphasis">Emphasis</a></h4>
 <ul>
-<li><strong>Bold</strong>: To make text bold, wrap it in double asterisks or double
-underscores. For example, <code>**bold**</code> or <code>__bold__</code>.</li>
-<li><em>Italic</em>: To italicize text, wrap it in single asterisks or single
-underscores. For example, <code>*italic*</code> or <code>_italic_</code>.</li>
+<li><strong>Bold</strong>: To make text bold, wrap text in double asterisks or double underscores.
+For example, <code>**bold**</code> or <code>__bold__</code>.</li>
+<li><em>Italic</em>: To italicize text, wrap it in single asterisks or single underscores.
+For example, <code>*italic*</code> or <code>_italic_</code>.</li>
 </ul>
 <h4 id="lists"><a class="header" href="#lists">Lists</a></h4>
 <ul>
@@ -3799,27 +3807,46 @@ underscores. For example, <code>*italic*</code> or <code>_italic_</code>.</li>
 </ul>
 <h4 id="links-and-images"><a class="header" href="#links-and-images">Links and Images</a></h4>
 <ul>
-<li><strong>Links</strong>: To create a link, wrap the link text in brackets <code>[ ]</code>, and then
-wrap the URL in parentheses <code>( )</code>.
+<li><strong>Links</strong>: To create a link, wrap the link text in brackets <code>[ ]</code>, and then wrap the URL in parentheses <code>( )</code>.
 <ul>
-<li>For example, <code>[GitHub](https://github.com)</code></li>
+<li>For example, to link to GitHub.com: <code>[GitHub](https://github.com)</code></li>
 </ul>
 </li>
 <li><strong>Images</strong>: Use similarly to links, but start with an exclamation mark, followed by
-the alt text in brackets, and the URL in parentheses. The <code>URL</code> is simply the location to the file. It can be a location in your current directory or a location on the web.
+the alt text in brackets, and the URL in parentheses.
+The <code>URL</code> is simply the location to the file.
+It can be a location in your current directory or a location on the web.
+If you're linking to an image file in your directory, use the <strong>relative path</strong> to the file
+(relative from the repository's base directory).
+If you're linking to an image on the web, use the full web address, beginning with <strong>https</strong>.</li>
+<li>Examples:
+<ul>
+<li>Linking to an image file in the current directory:
 <ul>
 <li>For example, <code>![Alt text](image-url.jpg)</code></li>
+</ul>
+</li>
+<li>Linking to an image file in a directory named <code>images</code> in the current directory's:
+<ul>
+<li>For example, <code>![Alt text](images/image-url.jpg)</code></li>
+</ul>
+</li>
+<li>Linking to an image file on the web:
+<ul>
 <li>For example, <code>![Alt text](http://example.com/images/image-url.jpg)</code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 <h4 id="code"><a class="header" href="#code">Code</a></h4>
 <ul>
 <li>
-<p><strong>Inline Code</strong>: For small bits of code, use backticks to wrap your code. For example, <code>`code`</code>.</p>
+<p><strong>Inline Code</strong>: Use this small snippets of code in your main text;
+use backticks to wrap your code: <code>`code`</code>.</p>
 </li>
 <li>
-<p><strong>Code Blocks</strong>: For larger sections of code, use three backticks or indent with four spaces.</p>
+<p><strong>Code Blocks</strong>: For larger sections of code, use three backticks or indent with four spaces on separate lines.</p>
 <p>```language
 your code here
 ```</p>
@@ -3845,8 +3872,7 @@ ending a line with two or more spaces before hitting Enter.</li>
 <li><strong>Escaping Markdown</strong>: To display a Markdown character, precede it with a
 backslash (<code>\</code>). For example, <code>\*not italic\*</code>.</li>
 </ul>
-<p>Markdown's makes formatted text simple and readable, and
-is thus a great choice for for documentation and note-taking.
+<p>Markdown's makes formatted text simple and readable, and is thus a great choice for for documentation and note-taking.
 As you become more comfortable with these basics,
 you'll find it a versatile tool for your writing needs.</p>
 <h2 id="using-git"><a class="header" href="#using-git">Using Git</a></h2>
@@ -3860,8 +3886,7 @@ you'll find it a versatile tool for your writing needs.</p>
 </code></pre>
 <h3 id="configuring-git"><a class="header" href="#configuring-git">Configuring Git</a></h3>
 <p><strong>Note:</strong> The following <code>git</code> tutorial is based on the <a href="https://git-scm.com/docs/gittutorial">Git Documentation</a>.</p>
-<p>First we want to configure <code>git</code> so that when we create or change files,
-it can track who made those changes.
+<p>First we want to configure <code>git</code> so that when we create or change files, it can track who made those changes.
 We do that with the <code>git config</code> command.
 We configure <code>git</code> by inputting our name:</p>
 <pre><code>git config --global user.name "Sean Burns"
