@@ -410,6 +410,14 @@ We configure <code>git</code> by inputting our name:</p>
 <p>Use your personal email address and not your work or university email address.
 That way, it'll be easier to maintain your repository over the long run if you decide later to use a service like GitHub.</p>
 </blockquote>
+<p>We instruct <code>git</code> to use <code>main</code> as the name of our main branch:</p>
+<pre><code>git config --global init.defaultBranch main
+</code></pre>
+<p>Finally, we can instruct <code>git</code> to use a specific editor when writing commit messages:</p>
+<pre><code>git config --global core.editor micro
+</code></pre>
+<p>The above configurations will serve our purposes, but if interested,
+more <code>git config</code> options are listed in the <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration">documentation</a>.</p>
 <h3 id="creating-and-initializing-a-project"><a class="header" href="#creating-and-initializing-a-project">Creating and Initializing a Project</a></h3>
 <p>We absolutely <strong>do not want Git to manage our home directory</strong>, but
 we do want it to manage a project directory in our home directory.
@@ -493,21 +501,39 @@ like so: <code>git add file1.md file2.md file3.md</code>, or you can make change
 <p>And you can view a more detailed summary of commits:</p>
 <pre><code>git log --stat --summary
 </code></pre>
-<h3 id="undoing-committed-changes"><a class="header" href="#undoing-committed-changes">Undoing Committed Changes</a></h3>
-<p>As seen above, the following two commands are useful for undoing changes before files are committed.
-Specifically, the following command undoes a change after it's been modified (e.g., saved in a text editor):</p>
+<h3 id="undoing-committed-changes-pre-commit"><a class="header" href="#undoing-committed-changes-pre-commit">Undoing Committed Changes: Pre-Commit</a></h3>
+<p>Sometimes we realize that we do not want to commit a change even after we've saved the file(s).
+The following two commands are useful for undoing changes <strong>after files have been staged</strong> but <strong>before files are committed</strong>.</p>
+<p>First, let's add a new line to our file:</p>
+<pre><code># LAMP Documentation
+
+August 24, 2025
+
+There are my notes.
+</code></pre>
+<p>Then stage the file:</p>
+<pre><code>git add lamp.md
+</code></pre>
+<p>If we run <code>git status &lt;file&gt;</code>, we'll see that the file has been staged but not committed.
+The following command unstages the file:</p>
+<pre><code>git restore --staged &lt;file&gt;
+</code></pre>
+<p>Once the file has been unstaged, we can use the following command to restore the file to its last commit version:</p>
 <pre><code>git restore &lt;file&gt;
 </code></pre>
-<p>You can see how files were modified with <code>git diff</code>.
-In the following command, you can see how unstaged content has changed based on the prior commit:</p>
+<p>We saw how files were modified with <code>git diff</code> command.
+In the following command, we can see how unstaged content has changed based on the prior commit:</p>
 <pre><code>git diff HEAD
-</code></pre>
-<p>And the following command undoes a change after it's been staged with <code>git add &lt;file&gt;</code>:</p>
-<pre><code>git restore --stage &lt;file&gt;
 </code></pre>
 <p>After staging a file, you can use the <code>git diff</code> command to see how content has changed in a file:</p>
 <pre><code>git diff --cached
 </code></pre>
+<h4 id="summary"><a class="header" href="#summary">Summary</a></h4>
+<ul>
+<li><code>git restore --staged &lt;file&gt;</code> : uncommits a file(s)</li>
+<li><code>git restore &lt;file&gt;</code> : restores file to last committed version</li>
+</ul>
+<h3 id="undoing-committed-changes-post-commit"><a class="header" href="#undoing-committed-changes-post-commit">Undoing Committed Changes: Post-Commit</a></h3>
 <p>If we need to undo a change after content has been committed with <code>git commit -m</code>,
 then we have to use the <code>git reset</code> command.
 This makes sense when you view the output of <code>git log</code>, which only shows changes that have been committed,
@@ -517,10 +543,11 @@ Thus to undo a committed change, we have to undo the history that <code>git</cod
 In some cases, especially when collaborating with others, this can have serious implications,
 which is why we have a separate command for undoing commits.</p>
 <p>There are several ways to undo a commit with <code>git reset</code>.
-To undo the most recent commit, we can use the following command:</p>
+To undo the most recent commit, we can use the following command,
+which puts the file back into staged version.</p>
 <pre><code>git reset --soft HEAD~1
 </code></pre>
-<p>Or to undo the two most recent commits, we change the number to 2:</p>
+<p>Likewise, to undo the two most recent commits, we change the number to 2:</p>
 <pre><code>git reset --soft HEAD~2
 </code></pre>
 <p>With the <code>--soft</code> option, all changes to files remain, but the commit history is cleared.</p>
@@ -561,6 +588,7 @@ Date:   Sun Aug 24 10:54:34 2025 -0400
 In the following, I compare a prior version with the most recent commit ("HEAD"):</p>
 <pre><code>git diff 048cd90e HEAD
 </code></pre>
+<p>Be careful about using <code>git reset</code> because you could lose important changes.</p>
 <h3 id="git-workflow"><a class="header" href="#git-workflow">Git Workflow</a></h3>
 <p>The benefit of <code>git</code> is in developing a workflow with it.
 Basically, for a single person, we follow these steps:</p>
