@@ -38,7 +38,7 @@ adhering to a consistent naming convention is important for several reasons:
 2. **System Compatibility**: Certain characters in file names can cause issues
    in different operating systems. Avoid spaces and special characters to ensure broader compatibility.
 3. **Ease of Navigation**: Consistent naming aids in navigating through files.
-   This is especially in a large directory or Git repository.
+   This is especially important in a large directory or Git repository.
 4. **Version Control**: Clear naming policies helps in tracking changes and managing versions more effectively.
 
 When naming files, it's best to follow the guidelines below.
@@ -175,7 +175,7 @@ Some text on starting Apache here.
   use backticks to wrap your code: `` `code` ``.
 - **Code Blocks**: For larger sections of code, use three backticks or indent with four spaces on separate lines.
 
-  \```
+  \```  
   your code here  
   \```
 
@@ -558,7 +558,7 @@ Afterwards, for working in that project directory:
 
 1. Edit a text file with your text editor of choice, and save and quit the editor when done.
 2. `git add <file>`
-3. `git commit -m "commit message"
+3. `git commit -m "commit message"`
 
 If necessary, use the undo commands when or if necessary:
 
