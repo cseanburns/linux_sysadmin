@@ -1,25 +1,24 @@
 ## Using Git for Documentation
 
-Managing and documenting complex systems is a challenge, but
+It's a challenge to manage and document complex systems, but
 it's essential to keep a record of how we change or alter our systems,
-how we configure them,
-and how we automate them.
+how we configure them, and how we automate them.
 It's essential because we administer systems for ourselves and for others, and
-keeping records allows us to build off our prior work.
+keeping records allows us to build off our or others prior work.
+
 Maintaining documentation is also an important part of identifying points of failure in our systems.
 For example, we might change some configuration files, and
-one of those changes might lead to an eventual system failure.
-Documenting our changes can help us track and identify the culprit file and the location in that file
-in such a scenario.
+one of those changes might lead to an [eventual system failure][crowdstrike].
+In such a scenario,
+documenting our changes can help us track and identify the culprit file and the location in that file.
 
-Documentation in systems administration generally therefore covers several areas.
-It includes configuration files, automation scripts, server deployment guides, and maintenance procedures.
-It therefore serves as a crucial reference point for teams; i.e.,
+Documentation in systems administration generally includes documenting
+configuration files, automation scripts, server deployment guides, and maintenance procedures.
+This work serves as a crucial reference point for teams; i.e.,
 it ensures consistency in system management and eases the onboarding process for new administrators.
 
-We use Git because Git is robust, versatile, and widely used.
-Specifically, it's is a distributed version control system used to track changes and
-manage versions of text files.
+Git is a distributed version control system used to track changes and manage versions of text files.
+We use Git because it is robust, versatile, and widely used.
 Although it is more commonly used for software developers, it's not limited that usage.
 
 In this section, we learn how to use Git to maintain and enhance documentation in a sysadmin context.
@@ -32,46 +31,47 @@ This will only be an intro to Git, but key areas of discussion include:
 
 First, it's important to standardize around file naming, especially for newly created files.
 File naming is a fundamental aspect of organizing and maintaining a clear documentation system, and
-adhering to a consistent naming convention is crucial for several reasons:
+adhering to a consistent naming convention is important for several reasons:
 
 1. **Clarity and Accessibility**: Well-named files are easier to identify and
-   understand at a glance, saving time and reducing confusion.
+   understand at a glance. This saves time and reduces confusion.
 2. **System Compatibility**: Certain characters in file names can cause issues
-   in different operating systems. Avoiding spaces and special characters
-   ensures broader compatibility.
-3. **Ease of Navigation**: Consistent naming aids in navigating through files,
-   especially in a large directory or Git repository.
-4. **Version Control**: Clear naming helps in tracking changes and managing
-   versions more effectively.
+   in different operating systems. Avoid spaces and special characters to ensure broader compatibility.
+3. **Ease of Navigation**: Consistent naming aids in navigating through files.
+   This is especially in a large directory or Git repository.
+4. **Version Control**: Clear naming policies helps in tracking changes and managing versions more effectively.
 
-When naming files, it's best to follow the guidelines below,
-where I use the `md` extension to identify these files as Markdown files.
-But regardless of file type, these guidelines are broadly applicable to all file naming:
+When naming files, it's best to follow the guidelines below.
+I use the `md` extension to identify these files as Markdown files, but
+regardless of file type, these guidelines are broadly applicable to all file names:
 
 - Use single words or combine words using camelCase, underscores (`_`), or hyphens (`-`). For example:
     - `ServerSetupGuide.md`,
     - `server_setup_guide.md`, or
     - `server-setup-guide.md`.
-- Avoid spaces because they can cause issues in URLs and command-line operations. For example, do not name a file like this:
+- Avoid spaces because they can cause issues in URLs and command-line operations.
+  For example, do not name a file like this:
     - server setup guide.md
-- Steer clear of special characters in file names, such as `!`, `$`, `#`, `%`, etc. These characters might have specific functions in certain environments or scripts, like the Bash shell.
+- Avoid special characters in file names, such as `!`, `$`, `#`, `%`, etc.
+  These characters often have specific functions in certain environments or scripts, like the `bash` shell.
 
 #### Use Markdown
 
-When documenting your system or some process, use Markdown format your documentation.
-Markdown is a widely used markup format, and
-files written in Markdown can be easily converted to HTML, DOCX, PPTX, PDF, and more.
+We will use Markdown syntax in our documentation work.
+Markdown is a widely used markup language to format text, and
+files written in Markdown can be converted to HTML, DOCX, PPTX, PDF, and more.
 Plus, if you use GitHub, files written in Markdown will automatically render into HTML.
 
 ### Basic Markdown Tutorial
 
 Here's a quick guide to the most commonly used Markdown syntax, but
-also see [Markdown Guide][markdown_guide].
+see the [Markdown Guide][markdown_guide] for full details.
 
 #### Headings
 
 Headings are created using the `#` symbol before your text.
-The number of `#` symbols indicates the level of the heading:
+The number of `#` symbols indicates the level of the heading.
+Use headings to broadly structure your documents.
 
 ```
 # Heading 1
@@ -105,10 +105,10 @@ Some text on starting Apache here.
 
 #### Emphasis
 
-- **Bold**: To make text bold, wrap it in double asterisks or double
-  underscores. For example, `**bold**` or `__bold__`.
-- *Italic*: To italicize text, wrap it in single asterisks or single
-  underscores. For example, `*italic*` or `_italic_`.
+- **Bold**: To make text bold, wrap text in double asterisks or double underscores.
+  For example, `**bold**` or `__bold__`.
+- *Italic*: To italicize text, wrap it in single asterisks or single underscores.
+  For example, `*italic*` or `_italic_`.
 
 #### Lists
 
@@ -152,18 +152,28 @@ Some text on starting Apache here.
 
 #### Links and Images
 
-- **Links**: To create a link, wrap the link text in brackets `[ ]`, and then
-  wrap the URL in parentheses `( )`. 
-    - For example, `[GitHub](https://github.com)`
+- **Links**: To create a link, wrap the link text in brackets `[ ]`, and then wrap the URL in parentheses `( )`. 
+    - For example, to link to GitHub.com: `[GitHub](https://github.com)`
 - **Images**: Use similarly to links, but start with an exclamation mark, followed by
-  the alt text in brackets, and the URL in parentheses. The `URL` is simply the location to the file. It can be a location in your current directory or a location on the web.
-    - For example, `![Alt text](image-url.jpg)`
-    - For example, `![Alt text](http://example.com/images/image-url.jpg)`
+  the alt text in brackets, and the URL in parentheses.
+  The `URL` is simply the location to the file.
+  It can be a location in your current directory or a location on the web.
+  If you're linking to an image file in your directory, use the **relative path** to the file
+  (relative from the repository's base directory).
+  If you're linking to an image on the web, use the full web address, beginning with **https**.
+- Examples:
+    - Linking to an image file in the current directory:
+        - For example, `![Alt text](image-url.jpg)`
+    - Linking to an image file in a directory named `images` in the current directory's:
+        - For example, `![Alt text](images/image-url.jpg)`
+    - Linking to an image file on the web:
+        - For example, `![Alt text](http://example.com/images/image-url.jpg)`
 
 #### Code
 
-- **Inline Code**: For small bits of code, use backticks to wrap your code. For example, `` `code` ``.
-- **Code Blocks**: For larger sections of code, use three backticks or indent with four spaces.
+- **Inline Code**: Use this small snippets of code in your main text;
+  use backticks to wrap your code: `` `code` ``.
+- **Code Blocks**: For larger sections of code, use three backticks or indent with four spaces on separate lines.
 
   \```language
   your code here
@@ -198,8 +208,7 @@ underscores on a new line.
 - **Escaping Markdown**: To display a Markdown character, precede it with a
   backslash (`\`). For example, `\*not italic\*`.
 
-Markdown's makes formatted text simple and readable, and
-is thus a great choice for for documentation and note-taking.
+Markdown's makes formatted text simple and readable, and is thus a great choice for for documentation and note-taking.
 As you become more comfortable with these basics,
 you'll find it a versatile tool for your writing needs.
 
@@ -225,8 +234,7 @@ sudo apt install git
 
 **Note:** The following `git` tutorial is based on the [Git Documentation][git_docs].
 
-First we want to configure `git` so that when we create or change files,
-it can track who made those changes.
+First we want to configure `git` so that when we create or change files, it can track who made those changes.
 We do that with the `git config` command.
 We configure `git` by inputting our name:
 
@@ -533,3 +541,4 @@ And most importantly, start documenting everything with a `git` based workflow.
 
 [markdown_guide]:https://www.markdownguide.org/
 [git_docs]:https://git-scm.com/docs/gittutorial
+[crowdstrike]:https://en.wikipedia.org/wiki/2024_CrowdStrike-related_IT_outages
