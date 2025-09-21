@@ -175,12 +175,9 @@ Some text on starting Apache here.
   use backticks to wrap your code: `` `code` ``.
 - **Code Blocks**: For larger sections of code, use three backticks or indent with four spaces on separate lines.
 
-  \```language
-  your code here
   \```
-
-Replace `language` with the programming language for syntax highlighting
-(e.g., `python`, `javascript`) on some platforms.
+  your code here  
+  \```
 
 #### Blockquotes
 
