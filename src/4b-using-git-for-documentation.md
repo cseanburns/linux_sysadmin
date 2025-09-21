@@ -251,6 +251,21 @@ git config --global user.email sean@example.com
 > Use your personal email address and not your work or university email address.
 > That way, it'll be easier to maintain your repository over the long run if you decide later to use a service like GitHub. 
 
+We instruct `git` to use `main` as the name of our main branch:
+
+```
+git config --global init.defaultBranch main
+```
+
+Finally, we can instruct `git` to use a specific editor when writing commit messages:
+
+```
+git config --global core.editor micro
+```
+
+The above configurations will serve our purposes, but if interested,
+more `git config` options are listed in the [documentation][git_config_options].
+
 ### Creating and Initializing a Project
 
 We absolutely **do not want Git to manage our home directory**, but
@@ -391,26 +406,45 @@ And you can view a more detailed summary of commits:
 git log --stat --summary
 ```
 
-### Undoing Committed Changes
+### Undoing Committed Changes: Pre-Commit
 
-As seen above, the following two commands are useful for undoing changes before files are committed.
-Specifically, the following command undoes a change after it's been modified (e.g., saved in a text editor):
+Sometimes we realize that we do not want to commit a change even after we've saved the file(s).
+The following two commands are useful for undoing changes **after files have been staged** but **before files are committed**.
+
+First, let's add a new line to our file:
+
+```
+# LAMP Documentation
+
+August 24, 2025
+
+There are my notes.
+```
+
+Then stage the file:
+
+```
+git add lamp.md
+```
+
+If we run `git status <file>`, we'll see that the file has been staged but not committed.
+The following command unstages the file:
+
+```
+git restore --staged <file>
+```
+
+Once the file has been unstaged, we can use the following command to restore the file to its last commit version:
 
 ```
 git restore <file>
 ```
 
-You can see how files were modified with `git diff`.
-In the following command, you can see how unstaged content has changed based on the prior commit:
+We saw how files were modified with `git diff` command.
+In the following command, we can see how unstaged content has changed based on the prior commit:
 
 ```
 git diff HEAD
-```
-
-And the following command undoes a change after it's been staged with `git add <file>`:
-
-```
-git restore --stage <file>
 ```
 
 After staging a file, you can use the `git diff` command to see how content has changed in a file:
@@ -418,6 +452,13 @@ After staging a file, you can use the `git diff` command to see how content has 
 ```
 git diff --cached
 ```
+
+#### Summary
+
+- `git restore --staged <file>` : uncommits a file(s)
+- `git restore <file>` : restores file to last committed version
+
+### Undoing Committed Changes: Post-Commit
 
 If we need to undo a change after content has been committed with `git commit -m`,
 then we have to use the `git reset` command.
@@ -429,13 +470,14 @@ In some cases, especially when collaborating with others, this can have serious 
 which is why we have a separate command for undoing commits.
 
 There are several ways to undo a commit with `git reset`.
-To undo the most recent commit, we can use the following command:
+To undo the most recent commit, we can use the following command,
+which puts the file back into staged version.
 
 ```
 git reset --soft HEAD~1
 ```
 
-Or to undo the two most recent commits, we change the number to 2:
+Likewise, to undo the two most recent commits, we change the number to 2:
 
 ```
 git reset --soft HEAD~2
@@ -501,6 +543,8 @@ In the following, I compare a prior version with the most recent commit ("HEAD")
 git diff 048cd90e HEAD
 ```
 
+Be careful about using `git reset` because you could lose important changes.
+
 ### Git Workflow
 
 The benefit of `git` is in developing a workflow with it.
@@ -542,3 +586,4 @@ And most importantly, start documenting everything with a `git` based workflow.
 [markdown_guide]:https://www.markdownguide.org/
 [git_docs]:https://git-scm.com/docs/gittutorial
 [crowdstrike]:https://en.wikipedia.org/wiki/2024_CrowdStrike-related_IT_outages
+[git_config_options]:https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration
