@@ -158,7 +158,7 @@ cd test && pwd || echo "no such directory"
 
 ## Shebang or Hashbang
 
-When we start to write scripts, the first thing we add is a [shebang][shebang] at line one.
+When we start to write scripts, the first thing we add is a [shebang][shebang] or hashbang at line one.
 The {she,hash}bang tells the shell what program needs to run.
 We can do declare it a couple of ways.
 First, we can use the path to `env`, which runs the program in a modified environment that is named after `env`.
@@ -191,14 +191,14 @@ This will help ensure your scripts remain clean and readable.
 ## Looping
 
 Looping is a common way to repeat an instruction until some specified condition is met.
-There are several looping methods Bash that include: : `for`, `while`, `until`, and `select`.
+There are several looping methods in Bash that include: : `for`, `while`, `until`, and `select`.
 The `for` loop is often the most useful.
 In the following toy looping example, we instruct `bash` to assign the letter **i** to the sequence **1,2,3,4,5**.
 Each time it assigns **i** to those numbers, it `echo`s them to standard output:
 
 ```
 for i in {1..5} ; do
-  echo "${i}"
+  echo "i = ${i}"
 done
 ```
 
@@ -212,7 +212,7 @@ Using the above `for` loop, we can create a rudimentary timer by calling the `sl
 
 ```
 for i in {5..1} ; do
-  echo "${i}" && sleep 1
+  echo "T minus ${i}" && sleep 1
 done ; echo "BLAST OFF!"
 ```
 
@@ -234,9 +234,8 @@ for i in "${seasons[@]}" ; do
 done
 ```
 
-> Note that I added the {she,hash}bang in the above example. I do this to make
-> it clear that this is the kind of for loop that I would want to write in a
-> text editor.
+> Note that I added the {she,hash}bang in the above example.
+> I do this to make it clear that this is the kind of `for` loop that I would want to write in a text editor.
 
 ## Testing
 
@@ -299,11 +298,14 @@ fi
 
 Now you can run the file by typing at the command prompt: `amihome.sh`.
 
-**IMPORTANT**: Running the above commands in a script won't result in changing your directory outside the script to your home directory.
-This is because of what Bash calls `subshells`. Subshells are a forked processes.
-So the script will do things in those other directories, but once the script exits, you will remain in the directory where you ran the script.
+**IMPORTANT**: Running the above commands in a script won't result in changing your directory
+outside the script to your home directory.
+This is because of what Bash calls `subshells`.
+Subshells are a forked processes.
+So the script will do things in those other directories, but once the script exits,
+you will remain in the directory where you ran the script.
 If you want to execute a script in the current shell so that changes like `cd` persist after the script runs,
-you can use the `source` or `.` command to run the script.
+you can use the `source` command to run the script.
 For example:
 
 ```
@@ -323,7 +325,7 @@ fi
 ```
 
 Here's a script that prints info depending on which day of the week it is.
-Let's save it to in a text file and call it `schedule.sh`:
+Let's save it in a text file and call it `schedule.sh`:
 
 ```
 #!/usr/bin/env bash
