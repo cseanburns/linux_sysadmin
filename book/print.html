@@ -4229,7 +4229,7 @@ mkdir test
 cd test &amp;&amp; pwd || echo "no such directory"
 </code></pre>
 <h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
-<p>When we start to write scripts, the first thing we add is a <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> at line one.
+<p>When we start to write scripts, the first thing we add is a <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> or hashbang at line one.
 The {she,hash}bang tells the shell what program needs to run.
 We can do declare it a couple of ways.
 First, we can use the path to <code>env</code>, which runs the program in a modified environment that is named after <code>env</code>.
@@ -4256,12 +4256,12 @@ Consider checking out style guides early on, like the <a href="https://google.gi
 This will help ensure your scripts remain clean and readable.</p>
 <h2 id="looping"><a class="header" href="#looping">Looping</a></h2>
 <p>Looping is a common way to repeat an instruction until some specified condition is met.
-There are several looping methods Bash that include: : <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
+There are several looping methods in Bash that include: : <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
 The <code>for</code> loop is often the most useful.
 In the following toy looping example, we instruct <code>bash</code> to assign the letter <strong>i</strong> to the sequence <strong>1,2,3,4,5</strong>.
 Each time it assigns <strong>i</strong> to those numbers, it <code>echo</code>s them to standard output:</p>
 <pre><code>for i in {1..5} ; do
-  echo "${i}"
+  echo "i = ${i}"
 done
 </code></pre>
 <blockquote>
@@ -4272,7 +4272,7 @@ While the latter is possible, using <code>${i}</code> ensures proper variable ex
 For example, <code>${}</code> ensures that <code>i</code> is correctly interpreted as a variable and not part of a larger string.</p>
 <p>Using the above <code>for</code> loop, we can create a rudimentary timer by calling the <code>sleep</code> command to pause after each count:</p>
 <pre><code>for i in {5..1} ; do
-  echo "${i}" &amp;&amp; sleep 1
+  echo "T minus ${i}" &amp;&amp; sleep 1
 done ; echo "BLAST OFF!"
 </code></pre>
 <blockquote>
@@ -4291,9 +4291,8 @@ for i in "${seasons[@]}" ; do
 done
 </code></pre>
 <blockquote>
-<p>Note that I added the {she,hash}bang in the above example. I do this to make
-it clear that this is the kind of for loop that I would want to write in a
-text editor.</p>
+<p>Note that I added the {she,hash}bang in the above example.
+I do this to make it clear that this is the kind of <code>for</code> loop that I would want to write in a text editor.</p>
 </blockquote>
 <h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
 <p>Sometimes we will want to test certain conditions.
@@ -4343,11 +4342,14 @@ else
 fi
 </code></pre>
 <p>Now you can run the file by typing at the command prompt: <code>amihome.sh</code>.</p>
-<p><strong>IMPORTANT</strong>: Running the above commands in a script won't result in changing your directory outside the script to your home directory.
-This is because of what Bash calls <code>subshells</code>. Subshells are a forked processes.
-So the script will do things in those other directories, but once the script exits, you will remain in the directory where you ran the script.
+<p><strong>IMPORTANT</strong>: Running the above commands in a script won't result in changing your directory
+outside the script to your home directory.
+This is because of what Bash calls <code>subshells</code>.
+Subshells are a forked processes.
+So the script will do things in those other directories, but once the script exits,
+you will remain in the directory where you ran the script.
 If you want to execute a script in the current shell so that changes like <code>cd</code> persist after the script runs,
-you can use the <code>source</code> or <code>.</code> command to run the script.
+you can use the <code>source</code> command to run the script.
 For example:</p>
 <pre><code>source script.sh
 </code></pre>
@@ -4361,7 +4363,7 @@ If so, it'll back up the file with the <code>cp</code> and echo back its success
 fi
 </code></pre>
 <p>Here's a script that prints info depending on which day of the week it is.
-Let's save it to in a text file and call it <code>schedule.sh</code>:</p>
+Let's save it in a text file and call it <code>schedule.sh</code>:</p>
 <pre><code>#!/usr/bin/env bash
 
 day1="Tue"
