@@ -4424,23 +4424,12 @@ In this section, we learn how to:</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="expanding-storage"><a class="header" href="#expanding-storage">Expanding Storage</a></h1>
 <p>By the end of this section, you will be able to:</p>
 <ol>
-<li><strong>Understand Virtual Machine Storage Expansion</strong>: Gain practical knowledge
-on how to add additional storage to a virtual machine (VM) by creating and
-attaching a persistent disk.</li>
-<li><strong>Disk Formatting and Mounting</strong>: Learn the process of formatting a non-boot
-disk with the <strong>ext4</strong> filesystem and mounting it to a VM for expanded
-storage capacity.</li>
-<li><strong>Filesystem Configuration</strong>: Develop skills in configuring a VM's
-filesystem for automatic mounting using the <code>/etc/fstab</code> file to ensure
-persistence across reboots.</li>
-<li><strong>Efficient Resource Management</strong>: Understand how to delete unnecessary
-disks and manage cloud storage costs, ensuring efficient use of resources.</li>
-<li><strong>Command Line Proficiency</strong>: Improve proficiency with essential command
-line tools such as <code>mkfs.ext4</code>, <code>mount</code>, <code>umount</code>, <code>chmod</code>, and editing
-configuration files with <code>nano</code>.</li>
-<li><strong>Storage Pricing Awareness</strong>: Gain insight into the cost considerations of
-adding additional storage in cloud environments, with practical examples of
-pricing.</li>
+<li><strong>Understand Virtual Machine Storage Expansion</strong>: Gain practical knowledge on how to add additional storage to a virtual machine (VM) by creating and attaching a persistent disk.</li>
+<li><strong>Disk Formatting and Mounting</strong>: Learn the process of formatting a non-boot disk with the <strong>ext4</strong> filesystem and mounting it to a VM for expanded storage capacity.</li>
+<li><strong>Filesystem Configuration</strong>: Develop skills in configuring a VM's filesystem for automatic mounting using the <code>/etc/fstab</code> file to ensure persistence across reboots.</li>
+<li><strong>Efficient Resource Management</strong>: Understand how to delete unnecessary disks and manage cloud storage costs, ensuring efficient use of resources.</li>
+<li><strong>Command Line Proficiency</strong>: Improve proficiency with essential command line tools such as <code>mkfs.ext4</code>, <code>mount</code>, <code>umount</code>, <code>mkdir</code>, and editing configuration files with a text editor.</li>
+<li><strong>Storage Pricing Awareness</strong>: Gain insight into the cost considerations of adding additional storage in cloud environments, with practical examples of pricing.</li>
 </ol>
 <h2 id="getting-started-5"><a class="header" href="#getting-started-5">Getting Started</a></h2>
 <p>I'm sure all or most of you have needed extra disk storage at some point (USB drives, optical disks, floppies???).
@@ -4456,65 +4445,52 @@ So at the end of this section, I will show you how to delete the extra disk to a
 <p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
 The boot disk contains the
 software required to boot the system.
-All of our computers
-(desktops, laptops, tablets, phones, etc.),
-regardless of which operating system they run,
-have some kind of boot system.</p>
+All of our computers (desktops, laptops, tablets, phones, etc.),regardless of which operating system they run, have some kind of boot system.</p>
 </blockquote>
 <h2 id="creating-a-disk"><a class="header" href="#creating-a-disk">Creating a Disk</a></h2>
 <p>In the Google Cloud console, first make sure you are working in your course project.
-Then navigate to <strong>Compute Engine</strong>, and visit the <strong>Disks</strong> page in the <strong>Storage</strong> section.</p>
+Then navigate to <strong>Compute Engine</strong>, and visit the <strong>Disks</strong> page in the <strong>Storage</strong> section.
+If asked, click on <strong>Enable</strong> for Compute Engine API, which may take a minute or so to enable.</p>
 <p>Once there, follow these steps:</p>
 <ol>
+<li>Note down the <strong>Zone</strong> for the current disk, which is your boot disk (e.g., mine is <strong>us-central1-c</strong>).</li>
 <li>Click on <strong>CREATE DISK</strong>.</li>
 <li>Under <strong>Name</strong>, add a preferred name.
 <ul>
 <li>For example, you can name it <strong>backup1</strong>.</li>
 </ul>
 </li>
-<li>Under <strong>Description</strong>, add text to describe your disk.
+<li>Under <strong>Location</strong>, choose <strong>Single zone</strong>.
 <ul>
-<li>For example, you can write <strong>Backup</strong>.</li>
+<li>This is about data safety, which we are not concerned about for a course project. If we were, then we would select other options here.</li>
 </ul>
 </li>
-<li>Under <strong>Location</strong>, leave or choose <strong>Single zone</strong>.
+<li>Select the same <strong>Zone</strong> (and thus <strong>Region</strong>) as your VM instance.
 <ul>
-<li>We are not concerned about data safety. If we were, then we would select other options here.</li>
+<li>This is important because with our current configuration, we can't use disks in different regions and zones.</li>
 </ul>
 </li>
-<li>Select the same <strong>Region</strong> and <strong>Zone</strong> as your VM instance.</li>
 <li>Under <strong>Source</strong>, select <strong>Blank disk</strong>.</li>
 <li>Under <strong>Disk settings</strong>, select <strong>Balanced persistent disk</strong>.</li>
 <li>Under <strong>Size</strong>, change this to 10GB.
 <ul>
-<li>You can actually choose larger sizes, but be aware that <a href="https://cloud.google.com/compute/all-pricing#disk">disk
-pricing</a> is $0.10 per GB.</li>
+<li>You can actually choose larger sizes, but be aware that <a href="https://cloud.google.com/compute/all-pricing#disk">disk pricing</a> is $0.10 per GB.</li>
 <li>At that cost, 100 GB = $10 / month.</li>
 </ul>
 </li>
-<li>Click on <strong>Enable snapshot schedule</strong>.</li>
-<li>Under <strong>Encryption</strong>, make sure <strong>Google-managed encryption key</strong> is
-selected.</li>
-<li>Click <strong>Create</strong> to create your disk.</li>
+<li>Under <strong>Data Protection</strong>, click on <strong>Enable snapshot schedule</strong>.</li>
+<li>Under <strong>Encryption</strong>, make sure <strong>Google-managed encryption key</strong> is selected.</li>
+<li>Click <strong>Create</strong> to create your disk, and then wait while the disk is created.</li>
 </ol>
 <h2 id="adding-the-disk-to-our-vm"><a class="header" href="#adding-the-disk-to-our-vm">Adding the Disk to our VM</a></h2>
 <p>Now that we have created our disk, we need to <strong>mount</strong> it onto our filesystem so that it's available to our VM.
 Conceptually, this process is like inserting a new USB drive into our computer.</p>
 <p>To add the new disk to our VM, follow these steps:</p>
 <ol>
-<li>Visit the <strong>VM instances</strong> page.</li>
-<li>Click on the check box next to your virtual machine.
-<ul>
-<li>That will convert the <strong>Name</strong> of your VM into a hyperlink if it's not already hyperlinked.</li>
-</ul>
-</li>
-<li>Click on the <strong>Name</strong> of your VM.
-<ul>
-<li>That will take you to the <strong>VM instance details</strong> page.</li>
-</ul>
-</li>
+<li>Return and select <strong>Compute Engine</strong> from the sidebar and then visit the <strong>VM instances page</strong>.</li>
+<li>Click on the <strong>Name</strong> of your VM. This takes you to the <strong>VM instance details</strong> page.</li>
 <li>Click on the <strong>Edit</strong> button at the top of the details page.</li>
-<li>Under the <strong>Additional disks</strong> section, click on <strong>+ ATTACH EXISTING DISK</strong>.</li>
+<li>Scroll down to the <strong>Additional disks</strong> section, and click on <strong>+ ATTACH EXISTING DISK</strong>.</li>
 <li>A panel will open on the right side of your browser.</li>
 <li>Click on the drop down box and select the disk, by name, you created.</li>
 <li>Leave the defaults as-is.</li>
@@ -4534,17 +4510,22 @@ This is recommended for Google Cloud, and it is also a stable and common one for
 I replicate those instructions below, but I highly encourage you to read through the instructions on Google Cloud and here:</p>
 <ol>
 <li>Use the <code>gcloud compute ssh</code> command that you have previously used to connect to your VM.</li>
-<li>When you have connected to your VM, run the <code>lsblk</code>
-command.
+<li>When you have connected to your VM, run the <code>lsblk</code> command.
 <ul>
-<li>Ignore the <strong>loop</strong> devices. (Or <code>grep</code> invert them: <code>lsblk | grep -v "^loop"</code>).</li>
-<li>Instead, you should see <strong>sda</strong> and <strong>sdb</strong> under the <strong>NAME</strong> column
-outputted by the <code>lsblk</code> command.</li>
-<li><strong>sda</strong> represents your main disk.
+<li>You will see devices named <strong>loop0</strong>, etc.</li>
+<li>For our purposes, these are devices are not interesting and can be safely ignored.</li>
+<li>You can ignore them with either of the following commands:
 <ul>
-<li><strong>sda1, sda14, sda15</strong> represent the partitions of the <strong>sda</strong> disk (the <strong>sdaN</strong> may be different for you).</li>
-<li>Notice the <strong>MOUNTPOINT</strong> for <strong>sda1</strong> is <code>/</code>. This means that <strong>sda1</strong> is mounted at the root level of the filesystem.</li>
-<li>Since it's mounted, this means it's in use.</li>
+<li><code>lsblk -e 7</code> : This command removes all device numbers that have the number <strong>7</strong>.</li>
+<li><code>lsblk | grep -v "^loop"</code> : This command uses <code>grep</code> to return devices without the name <strong>loop</strong> at the beginning of the line.</li>
+</ul>
+</li>
+<li>For our purposes, we are interested in the drives named: <strong>sda</strong> and <strong>sdb</strong>.</li>
+<li><strong>sda</strong> is the name of the main disk, which is also the boot disk.
+<ul>
+<li>This disk should have three partitions: <strong>sda1, sda14, sda15</strong>.</li>
+<li>The <strong>MOUNTPOINT</strong> for <strong>sda1</strong> is <code>/</code>. This means that <strong>sda1</strong> is mounted at the root level of the filesystem.</li>
+<li>Since it's mounted, this means it's in use. In fact, our filesystem (directory structure and files) are located in this partition.</li>
 </ul>
 </li>
 <li><strong>sdb</strong> represents the attached disk we just added.
@@ -4557,24 +4538,25 @@ outputted by the <code>lsblk</code> command.</li>
 </li>
 </ol>
 <p>To format our disk for the <strong>ext4</strong> filesystem, we will use the <code>mkfs.ext4</code> (see <code>man mkfs.ext4</code> for details).
-The instructions tell us to run the following command (please read the Google Cloud instructions closely;
-<strong>it's important to understand these commands as much as possible and not just copy and paste them</strong>):</p>
+The Google Cloud instructions tell us to run the command below.
+(<strong>It's important to understand these commands as much as possible and not just copy and paste them</strong>):</p>
 <pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/DEVICE_NAME
 </code></pre>
 <p>But replace <strong>DEVICE_NAME</strong> with the name of our device.
 My device's name is <strong>sdb</strong>, which we saw with the output of the <code>lsblk</code> command; therefore, the specific command I run is:</p>
 <pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
 </code></pre>
+<p>Again, please read <code>man mkfs.ext4</code> for details, but in short, the command and options above mean that we're creating a clean ext4 filesystem,
+we're using all the disk space, we're fully wiping and initializing the filesystem structures and doing so up front, which is safer and slower), and
+we clearing any unused space, which is good for SSDs.</p>
 <h3 id="mounting-our-disk"><a class="header" href="#mounting-our-disk">Mounting Our Disk</a></h3>
 <p>Now that our disk has been formatted in <strong>ext4</strong>, I can mount it.</p>
 <blockquote>
-<p>Note: to <strong>mount</strong> a disk simply means to make the disk's filesystem
-available so that we can use it for accessing, storing, etc files on the
-disk. Whenever we insert a USB drive, a DVD drive, etc into our computers,
-the OS you use should mount that disk automatically so that you can access
-and use that disk. Conversely, when we remove those drives, the OS
-<strong>unmounts</strong> them. In Linux, the commands for these are <code>mount</code> and
-<code>umount</code>. Note that the <code>umount</code> command is not <strong>unmount</strong>.</p>
+<p>Note: to <strong>mount</strong> a disk simply means to make the disk's filesystem available so that we can use it for accessing, storing, etc files on the disk.
+Whenever we insert a USB drive, a DVD drive, etc into our computers, the OS you use should mount that disk automatically so that you can access and use that disk.
+Conversely, when we remove those drives, the OS <strong>unmounts</strong> them.
+For our virtual machines, we have to manually mount the storage disk with the <code>mount</code> and unmount it with the <code>umount</code> command.
+Note that the <code>umount</code> command is not <strong>unmount</strong>.</p>
 </blockquote>
 <p>You will recall that we have <a href="03-filesystem-file-management.html">discussed filesystems earlier</a> and
 that the term is a bit confusing since it refers to both the directory hierarchy and also the formatting type (e.g., ext4).
@@ -4601,13 +4583,13 @@ The <code>lsblk</code> command should show that <strong>sdb</strong> is mounted 
 <pre><code>cd /mnt/disks/disk-1
 </code></pre>
 <h3 id="automounting-our-disk"><a class="header" href="#automounting-our-disk">Automounting Our Disk</a></h3>
-<p>Our disk is mounted, but if the computer (VM) gets rebooted, we would have to re-<code>mount</code> the additional drive manually.
-In order to avoid this and automount the drive upon reboot, we need to edit the file <code>/etc/fstab</code>.</p>
+<p>Our disk is mounted, but if the computer (VM) gets rebooted, we would have to manually re-mount the additional drive.
+To avoid this and automount the drive upon reboot, we edit the <code>/etc/fstab</code> file.</p>
 <blockquote>
 <p>Note that the file is named <strong>fstab</strong> and that it's located in the <strong>/etc</strong> directory.
 Therefore the full path is <code>/etc/fstab</code></p>
 </blockquote>
-<p>The <strong>fstab</strong> file is basically a configuration file that provides information to the OS about the filesystems the system can mount.
+<p>The <strong>fstab</strong> file is a configuration file that provides information to the OS about the filesystems the OS can mount and where.
 The standard information <strong>fstab</strong> contains includes the name (or label) of the device being mounted,
 the mountpoint (e.g., <code>/mnt/disks/disk-1</code>), the filesystem type (e.g., <strong>ext4</strong>), and various other mount options.
 See <code>man fstab</code> for more details.
@@ -4625,10 +4607,10 @@ Since my device is <code>/dev/sdb</code>, I'll use that:</p>
 <p>The output should look something like this <strong>BUT NOTE that your UUID value will be DIFFERENT</strong>:</p>
 <pre><code>/dev/sdb: UUID="3bc141e2-9e1d-428c-b923-0f9vi99a1123" TYPE="ext4"
 </code></pre>
-<p>We need to add that value to <code>/etc/fstab</code> plus the standard information that file requires.
+<p>We need to add UUID to <code>/etc/fstab</code> plus other information.
 The Google Cloud documentation explicitly guides us here.
 We can add that directly to our <code>fstab</code> file by redirecting the output of the <code>blkid</code> command to that file.
-<strong>NOTE: you have to use two angle brackets in the following command, or else you will erase the contents of that file!!!</strong></p>
+<strong>NOTE and BEWARE: You have to use TWO ANGLE BRACKETS in the following command, or else you will ERASE the contents of that file!!!</strong></p>
 <pre><code>sudo su
 blkid /dev/sdb &gt;&gt; /etc/fstab
 exit
@@ -4656,41 +4638,34 @@ Then run the <code>lsblk</code> command to see if the new drive is recognized an
 <h3 id="delete-the-disk"><a class="header" href="#delete-the-disk">Delete the Disk</a></h3>
 <p>You are welcome to keep the disk attached to the VM.
 But if you do not want to incur any charges for it, which would be about $1 / month at 10 GB, then we can delete it.</p>
-<p>To delete the disk, first delete the line that we added in <code>/etc/fstab</code>, unmount it, and then delete the disk in the gcloud console.</p>
+<p>To delete the disk, first delete the line that we added in <code>/etc/fstab</code>, unmount it, and then delete the disk in the Google Cloud console.</p>
 <p>To unmount the disk, we use the <code>umount</code> command:</p>
 <pre><code>sudo umount /mnt/disks/disk-1
 </code></pre>
 <p>Check if it's unmounted:</p>
 <pre><code>lsblk
 </code></pre>
-<p>Then we need to delete the disk in gcloud.</p>
+<p>Then we need to delete the disk in the Google Cloud console.</p>
 <ol>
 <li>Go to the <strong>VM instances</strong> page.</li>
-<li>Click on the check box next to the VM.</li>
-<li>Click on the name, which should be a hyperlinked.</li>
+<li>Click on the VM instance's name, which should be a hyperlinked.</li>
 <li>This goes to the <strong>VM instances detail</strong> page.</li>
 <li>Click on the <strong>Edit</strong> button at the top of the page.</li>
 <li>Scroll down to the <strong>Additional disks</strong> section.</li>
-<li>Click the edit (looks like a pencil) button.</li>
-<li>In the right-hand pane that opens up, select <strong>Delete disk</strong> under the
-<strong>Deletion rule</strong> section.</li>
-<li>Scroll back to the <strong>Additional disks</strong> section.</li>
-<li>Click on the <code>X</code> to detach the disk.</li>
+<li>Click the <strong>X</strong> to delete the additional disk.</li>
 <li>Click on <strong>Save</strong>.</li>
-<li>Go the <strong>Disk</strong> section in the left-hand navigation pane.</li>
+<li>Return to <strong>Compute Engine</strong> and then the <strong>Disk</strong> section in the left-hand navigation pane.</li>
 <li>Check the disk to delete, and then Delete it.
 <ul>
 <li>Make sure you delete the backup disk and not the main OS disk!</li>
 </ul>
 </li>
-<li>Click on the <strong>Snapshots</strong> section in the left-hand navigation pane (<strong>Compute Engine</strong>, <strong>Storage</strong>, and then <strong>Snapshots</strong>).</li>
-<li>If a snapshot has been taken, check the disk snapshot to delete, and then Delete it.</li>
 </ol>
 <h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
 <p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
 We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
 Finally, we learned how to then edit <code>/etc/fstab</code> to automount the drive.</p>
-<p>In addition to using the gcloud console, the commands we used in this section include:</p>
+<p>In addition to using the Google Cloud console, the commands we used in this section include:</p>
 <ol>
 <li><code>ssh</code>  : to connect to the remote VM</li>
 <li><code>sudo</code> : to run commands as the administrator</li>
@@ -4705,15 +4680,17 @@ Finally, we learned how to then edit <code>/etc/fstab</code> to automount the dr
 </ol>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-users-and-groups"><a class="header" href="#managing-users-and-groups">Managing Users and Groups</a></h1>
 <ol>
-<li><strong>Understanding User and Group Management</strong>: Learn how to create, modify, and delete user accounts and groups on a Linux system using essential tools like <code>useradd</code>, <code>userdel</code>, <code>groupadd</code>, and <code>groupdel</code>.</li>
-<li><strong>Working with System Files</strong>: Gain familiarity with critical system files like <strong>/etc/passwd</strong>, <strong>/etc/shadow</strong>, and <strong>/etc/group</strong>, and understand how user, password, and group information is stored and managed.</li>
-<li><strong>Customizing User Account Settings</strong>: Modify default settings for new user accounts by editing configuration files such as <strong>/etc/skel</strong> and <strong>/etc/adduser.conf</strong>, allowing for customization of new user environments.</li>
-<li><strong>Password and Account Security</strong>: Develop skills in securing user accounts by setting password expiration policies and managing password lifetimes through the <strong>/etc/shadow</strong> file and commands like <code>passwd</code> and <code>chage</code>.</li>
+<li><strong>Understanding User and Group Management</strong>: Learn how to create, modify, and delete user accounts and groups
+on a Linux system using essential tools like <code>useradd</code>, <code>userdel</code>, <code>groupadd</code>, and <code>groupdel</code>.</li>
+<li><strong>Working with System Files</strong>: Gain familiarity with critical system files like <code>/etc/passwd</code>, <code>/etc/shadow</code>, and
+<code>/etc/group</code>, and understand how user, password, and group information is stored and managed.</li>
+<li><strong>Customizing User Account Settings</strong>: Modify default settings for new user accounts by editing configuration files
+such as <code>/etc/skel</code> and <code>/etc/adduser.conf</code> to allow for customization of new user environments.</li>
+<li><strong>Password and Account Security</strong>: Develop skills in securing user accounts by setting password expiration policies and managing password lifetimes through the <code>/etc/shadow</code> file and commands like <code>passwd</code> and <code>chage</code>.</li>
 <li><strong>Group-Based Permissions and Shared Resources</strong>: Learn to create and manage groups, assign users to groups, and configure shared directories with appropriate permissions to facilitate collaborative work among users.</li>
 <li><strong>File Permissions and Directory Management</strong>: Understand how to change ownership and permissions of directories using tools like <code>chmod</code> and <code>chgrp</code> to control access based on user and group roles.</li>
-<li><strong>Practical User Management Tools</strong>: Apply hands-on experience using
-utilities such as <code>gpasswd</code>, <code>su</code>, <code>sudo</code>, and <code>nano</code> to manage users and
-groups, edit system files, and adjust account settings on a Linux system.</li>
+<li><strong>Practical User Management Tools</strong>: Apply hands-on experience using utilities such as <code>gpasswd</code>, <code>su</code>, <code>sudo</code>, and
+<code>nano</code> to manage users and groups, edit system files, and adjust account settings on a Linux system.</li>
 </ol>
 <h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
 <p>If you're like me, you have user accounts everywhere.
@@ -4754,18 +4731,26 @@ Much of what I know about the commands in this book, I learned from their <code>
 </ul>
 <p>The <code>man</code> pages are categorized by sections, which are explained in the <code>man man</code> page.
 Each section is denoted by a number.
-The first section, denoted by the number 1, contain <code>man</code> pages on executable programs or shell commands.
-The fifth section, denoted by the number 5, contain <code>man</code> pages on file formats and conventions.
+The first section, denoted by the number 1, contains <code>man</code> pages on executable programs or shell commands.
+The fifth section, denoted by the number 5, contains <code>man</code> pages on file formats and conventions.
 There are nine total sections.
-In the case where a command and a system file each have the same name, then we need to specify the section number when invoking <code>man</code> for those pages.
+In the case where a command and a system file each have the same name,
+then we need to specify the section number when invoking <code>man</code> for those pages.
 For example, use <code>man 1 crontab</code> to read the <code>man</code> page for the <code>crontab</code> executable, which is located at <code>/usr/bin/crontab</code>.
-Use <code>man 5 crontab</code> to read the <code>man</code> page for the <strong>crontab</strong> file, which is locate at <code>/etc/crontab</code>.</p>
+Use <code>man 5 crontab</code> to read the <code>man</code> page for the <strong>crontab</strong> file, which is locate at <code>/etc/crontab</code>.
+At the bottom of many <code>man</code> pages,
+there is a <strong>See Also</strong> section that helps to identify alternate manual pages for these commands.
+We can also use the <code>apropos</code> command to identify <code>man</code> pages written across multiple sections.
+For example, the <code>apropos crontab</code> command will show the following results:</p>
+<pre><code>crontab (1)          - maintain crontab files for individual users (Vixie Cron)
+crontab (5)          - tables for driving cron
+</code></pre>
 <p>You can make the <code>man</code> pages easier to read by installing an additional program called <code>bat</code>.
 The <code>bat</code> program is a drop-in replacement for the <code>cat</code> command but comes with syntax highlighting and more.
 To install <code>bat</code>, do:</p>
 <pre><code>sudo apt install bat
 </code></pre>
-<p>Then use <code>nano</code> to open your <code>$HOME/.bashrc</code> file:</p>
+<p>Then use <code>nano</code> (or your favorite text editor) to open your <code>$HOME/.bashrc</code> file:</p>
 <pre><code>nano $HOME/.bashrc
 </code></pre>
 <p>And add the following line at the end, which will add some color to the <code>man</code> pages:</p>
@@ -4774,6 +4759,7 @@ To install <code>bat</code>, do:</p>
 <p>Once you've closed and saved your <code>$HOME/.bashrc</code> file, you need to source it:</p>
 <pre><code>source $HOME/.bashrc
 </code></pre>
+<p>Now <code>man</code> pages will look better.</p>
 <p>Additionally, since <code>bat</code> is a drop-in replacement for the <code>cat</code> command, you can also use it to view or concatenate files.
 The full command is <code>batcat [FILE]</code>, where <strong>[FILE]</strong> is the name of the file or files to view.</p>
 <h2 id="the-passwd-file"><a class="header" href="#the-passwd-file">The passwd file</a></h2>
@@ -4781,24 +4767,25 @@ The full command is <code>batcat [FILE]</code>, where <strong>[FILE]</strong> is
 On a Linux system, user account information is stored in the file <code>/etc/passwd</code>.
 You should take a moment to read about this file in its <code>man</code> page.
 However, if you run <code>man passwd</code>, you will by default get the <code>man</code> page on the <code>/usr/bin/passwd</code> command.
-We want to read about the <strong>passwd</strong> file located at <code>/etc/passwd</code>:</p>
+We want to read about the <strong>passwd</strong> file located at <code>/etc/passwd</code>,
+which is in section 5, the section about file formats and conventions:</p>
 <pre><code>man 5 passwd
 </code></pre>
 <p>Let's take a look at a single line of the file.
-Below I show the output for a fictional user account:</p>
-<pre><code>grep "peter" /etc/passwd
+Below I show the output of my user account:</p>
+<pre><code>grep "sean" /etc/passwd
 </code></pre>
 <p>And the output:</p>
-<pre><code>peter:x:1000:1000:peter,,,:/home/peter:/bin/bash
+<pre><code>sean:x:1000:1000:sean,,,:/home/sean:/bin/bash
 </code></pre>
-<p>Per the <code>man 5 passwd</code> page, we know that the line starting with <strong>peter</strong> is a colon separated line.
+<p>Per the <code>man 5 passwd</code> page, we know that the line starting with <strong>sean</strong> is a colon separated line.
 That means that the line is composed of multiple fields each separated by a colon (which is perfect for <code>awk</code> to parse).</p>
 <p><code>man 5 passwd</code> tells us what each field indicates.
-The first field is the login name, which in this case is <strong>peter</strong>.
+The first field is the login name, which in this case is <strong>sean</strong>.
 The second field, marked <strong>x</strong>, marks the password field.
 This file does not contain the password, though.
-The passwords, which are <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">hashed and salted</a>, for users are stored in the <strong>/etc/shadow</strong> file.
-This file can only be read by the root user (or using the <code>sudo</code> command).</p>
+The passwords, which are <a href="https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/">hashed and salted</a>, for users are stored in the <code>/etc/shadow</code> file.
+Th <code>/etc/shadow</code> file can only be read by the root user (or using the <code>sudo</code> command).</p>
 <blockquote>
 <p>Hashing a file or a string of text is a process of running a hashing algorithm on the file or text.
 If the file or string is copied exactly, byte for byte, then hashing the copy will return the same value.
@@ -4811,19 +4798,19 @@ This means that even if two users on a system use the same password, salting the
 <p>The third column indicates the user's numerical ID, and the fourth column indicates the users' group ID.
 The fifth column repeats the login name, but could also serve as a comment field.
 Comments are added using certain commands (discussed later).
-The fifth field identifies the user's home directory, which is <strong>/home/peter</strong>.
+The fifth field identifies the user's home directory, which is <strong>/home/sean</strong>.
 The sixth field identifies the user's default shell, which is <code>/bin/bash</code>.</p>
 <p>The <strong>user name or comment</strong> field merely repeats the login name here, but it can hold specific types of information.
 We can add comments using the <code>chfn</code> command.
 Comments include the user's full name, their home and work phone numbers, their office or room number, and so forth.
-To add a full name to user <strong>peter</strong>'s account, we use the <strong>-f</strong> option:</p>
-<pre><code>sudo chfn -f "peter Burns" peter 
+To add a full name to user <strong>sean</strong>'s account, we use the <strong>-f</strong> option:</p>
+<pre><code>sudo chfn -f "Sean Burns" sean 
 </code></pre>
 <p>The <strong>/etc/passwd</strong> file is a standard Linux file, but data in the file will change depending on the Linux distribution.
-For example, the user and group IDs above start at 1000 because <strong>peter</strong> is the first human account on the system.
-This is a common starting numerical ID nowadays, but it could be different on other Linux or Unix-like distributions.
+For example, the user and group IDs above start at 1000 because <strong>sean</strong> is the first human account on the system.
+This is a common starting numerical ID, but it could be different on other Linux or Unix-like distributions.
 The home directory could be different on other systems, too;
-for example, the default could be located at <strong>/usr/home/peter</strong>.
+for example, the default could be located at <strong>/usr/home/sean</strong>.
 Also, other shells exist besides <code>bash</code>, like <a href="https://www.zsh.org/">zsh</a>, which is now the default shell on macOS;
 so other systems may default to different shell environments.</p>
 <h2 id="the-shadow-file"><a class="header" href="#the-shadow-file">The shadow file</a></h2>
@@ -4844,18 +4831,23 @@ You need to be root to examine the shadow file or use <code>sudo</code>:</p>
 <li>a reserved field</li>
 </ul>
 <p>The <strong>/etc/shadow</strong> file should not be edited directly.
-To set, for example, a warning that a user's password will expire, we could use the <code>passwd</code> command (see <code>man passwd</code> for options),
-or the <code>chage</code> command.
-The following command would make it so the user <strong>peter</strong> is warned that their password will expire in 14 days:</p>
-<pre><code>passwd -w 14 peter 
+If we want to set a warning that a user's password will expire,
+we could use the <code>passwd</code> command (see <code>man passwd</code> for options), or the <code>chage</code> command.
+The following command would make it so the user <strong>sean</strong> is warned that their password will expire in 14 days:</p>
+<pre><code>passwd -w 14 sean 
 </code></pre>
+<p>Running this or the <code>chage</code> command will update the <code>/etc/shadow</code> file, but
+it may also communicate the change to other parts of the system, depending on what's installed.
+So again, do not directly edit the <code>/etc/shadow</code> file.</p>
 <h2 id="the-group-file"><a class="header" href="#the-group-file">The group file</a></h2>
 <p>The <strong>/etc/group</strong> file holds group information about the entire system (see <code>man 5 group</code>).
-By default the file can be viewed by anyone on a system, but there is also a <code>groups</code> command that will return the groups for a user.
-See: <code>man groups</code>
-Running the <code>groups</code> command by itself will return your own memberships.</p>
+By default the file can be viewed by anyone on a system, but
+there is also a <code>groups</code> command that will return the groups for a user (see: <code>man groups</code>).
+Running the <code>groups</code> command by itself will return a list of group memberships your account belongs to.
+One of those groups will be a group with the same name as your username.</p>
 <h2 id="management-tools"><a class="header" href="#management-tools">Management Tools</a></h2>
-<p>There are different ways to create new users and groups, and the following list includes most of the utilities to help with this.
+<p>There are different ways to create new users and groups, and
+the following list includes most of the utilities to help with this.
 Note that, based on the names of the utilities, some of them are repetitive.</p>
 <ul>
 <li>useradd (8) - create a new user or update default new user information</li>
@@ -4880,21 +4872,22 @@ Therefore, to view the man page for the <code>userdel</code> command:</p>
 <p>Let's modify some default user account settings for new users, and then we'll create a new user account.</p>
 <p>Before we proceed, let's review some important configurations that establish some default settings:</p>
 <ul>
-<li><strong>/etc/skel</strong></li>
-<li><strong>/etc/adduser.conf</strong></li>
+<li><code>/etc/skel</code></li>
+<li><code>/etc/adduser.conf</code></li>
 </ul>
-<p>The <strong>/etc/skel</strong> directory defines the home directory for new users.
+<p>The <code>/etc/skel</code> directory defines the home directory for new users.
 Whatever files or directories exist in this directory at the time a new user account is created
 will result in those files and directories being created in the new user's home directory.
-We can view what those are using the following command:</p>
+In other words, the contents of this directory serve as a template for new user directories.
+We can view the contents using the following command:</p>
 <pre><code>ls -a /etc/skel/
 </code></pre>
-<p>The <strong>/etc/adduser.conf</strong> file defines the default parameters for new users.
+<p>The <code>/etc/adduser.conf</code> file defines the default parameters for new users.
 It's in this file where the default starting user and group IDs are set,
-where the default home directory is located (e.g., in <strong>/home/</strong>),
+where the default home directory is located (e.g., in <code>/home/</code>),
 where the default shell is defined (e.g., <code>/bin/bash</code>),
-where the default permissions are set for new home user directories (e.g., <strong>0755</strong>) and more.</p>
-<p>Let's change some defaults for <strong>/etc/skel</strong>.
+where the default permissions are set for new home user directories (e.g., <code>0755</code>) and more.</p>
+<p>Let's change some defaults for <code>/etc/skel</code>.
 We need to use <code>sudo [command]</code> since this directory and its contents are owned by the <code>root</code> user.
 First, we'll edit the default <strong>.bashrc</strong> file:</p>
 <pre><code>sudo nano /etc/skel/.bashrc
@@ -4951,65 +4944,75 @@ The <code>passwd</code> command can set some of these parameters, but the <code>
 </code></pre>
 <p>As a sysadmin, you will want to regularly review and audit the <code>/etc/passwd</code> and the <code>/etc/shadow</code> files to ensure only
 authorized users have access to the system.</p>
-<p>Before proceeding, repeat the above process for a user named <strong>peter</strong>, or use a different username and adjust as necessary as you proceed.</p>
+<p>Before proceeding, repeat the above process for a user named <strong>sean</strong>, or use a different username and adjust as necessary as you proceed.</p>
 <h2 id="authorization"><a class="header" href="#authorization">Authorization</a></h2>
 <p>Let's say we've created our users and now we want to give them access to some additional resources.
 For example, we can set up a shared directory on the system that multiple users can access and use.
 To do that, we will begin to work with groups and file/directory permissions.</p>
 <h3 id="add-users-to-a-new-group"><a class="header" href="#add-users-to-a-new-group">Add users to a new group</a></h3>
 <p>Because of the default configuration defined in <strong>/etc/adduser.conf</strong>, the <strong>linus</strong> user only belongs to a group of the same name.
-Let's create a new group that both <strong>linus</strong> and <strong>peter</strong> belong to.
+Let's create a new group that both <strong>linus</strong> and <strong>sean</strong> belong to.
 We'll call this <strong>developers</strong>.
-Then we'll add both <strong>peter</strong> and <strong>linus</strong> to that group.
+Then we'll add both <strong>sean</strong> and <strong>linus</strong> to that group.
 For that, we'll use the <code>gpasswd -a</code> command and option.
-We'll also make the user <strong>peter</strong> the group administrator using the <code>-A</code> option (see <code>man gpasswd</code> for more details).</p>
+We'll also make the user <strong>sean</strong> the group administrator using the <code>-A</code> option (see <code>man gpasswd</code> for more details).</p>
 <pre><code>sudo groupadd developers
-sudo gpasswd -a peter developers
+sudo gpasswd -a sean developers
 sudo gpasswd -a linus developers
-sudo gpasswd -A peter developers
+sudo gpasswd -A sean developers
 grep "developers" /etc/group
 </code></pre>
 <blockquote>
-<p>Note: if a user is logged in when you add them to a group, they need to logout and log back in before the group membership goes into effect.</p>
+<p>Note: if a user is logged in when you add them to a group,
+they need to logout and log back in before the group membership goes into effect.
+Also, unlike some command options, we can't stack the following the <code>-aA</code> options with <code>gpasswd</code>.
+I.e., they have to be run separately.</p>
 </blockquote>
 <h3 id="create-a-shared-directory"><a class="header" href="#create-a-shared-directory">Create a shared directory</a></h3>
 <p>One of the benefits of group membership is that members can work in a shared directory.</p>
-<p>Let's make the <strong>/srv/developers</strong> a shared directory.
-The <strong>/srv</strong> directory already exists, so we only need to create the <strong>developers</strong> subdirectory:</p>
+<p>Let's make the <code>/srv/developers</code> a shared directory.
+The <code>/srv</code> directory already exists, so we only need to create the <code>developers</code> subdirectory:</p>
 <pre><code>sudo mkdir /srv/developers
 </code></pre>
-<p>Now we change ownership of the directory so that it's group owned by the <strong>developers</strong> group that we created:</p>
+<p>Now we change ownership of the directory so that it's group owned by the <code>developers</code> group that we created:</p>
 <pre><code>sudo chgrp developers /srv/developers
 </code></pre>
-<p>The directory ownership should now reflect that it's owned by the <strong>developers</strong> group:</p>
+<p>The directory ownership should now reflect that it's owned by the <code>developers</code> group:</p>
 <pre><code>ls -ld /srv/developers
 </code></pre>
-<p>The default permissions are currently set to <strong>0755</strong>.
+<p>The default permissions are currently set to <code>0755</code>.
 To allow group members to read and write to the above directory, we need to use the <code>chmod</code> command in a way we haven't yet.
-Specifically, we add a leading <strong>2</strong> that sets the group identity.
-The <strong>770</strong> indicates that the user and group owners of the directory (but not <strong>others</strong>) have read, write, and execute permissions for the directory:</p>
+Specifically, we add a leading <code>2</code> that sets the group identity.
+The <code>770</code> indicates that the user and group owners of the directory (but not <strong>others</strong>)
+have read, write, and execute permissions for the directory:</p>
 <pre><code>sudo chmod 2770 /srv/developers
 </code></pre>
-<p>This first digit, the <strong>2</strong> above, is the <strong>setgid (set group ID)</strong> bit.
-Setting this ensures that any files or subdirectories created within <code>/srv/developers</code> inherit the group ownership of the parent directory.
-In this case, that's the <strong>developers</strong> group.
+<p>This first digit, the <code>2</code> above, is the <code>setgid</code> (set group ID) bit.
+Setting this ensures that any files or subdirectories created within <code>/srv/developers</code>
+inherit the group ownership of the parent directory.
+In this case, that's the <code>developers</code> group.
 This is useful for group collaboration.
-By setting this, either <strong>linus</strong> or <strong>peter</strong> can add, modify, and delete files in the <strong>/srv/developers</strong> directory.</p>
+By setting this, either <code>linus</code> or <code>sean</code> can add, modify, and delete files in the <code>/srv/developers</code> directory.</p>
 <h3 id="user-account-and-group-deletion"><a class="header" href="#user-account-and-group-deletion">User account and group deletion</a></h3>
 <p>You can keep the additional user and group on your system, but know that you can also remove them.
-The <code>deluser</code> and <code>delgroup</code> commands offer great options and may be preferable to the others utilities (see <code>man deluser</code> or <code>man delgroup</code>).</p>
+The <code>deluser</code> and <code>delgroup</code> commands offer great options and may be preferable to the others utilities
+(see <code>man deluser</code> or <code>man delgroup</code>).</p>
 <p>If we want to delete the new user's account and the new group, these are the commands to use.
-The first command will create an archival backup of <strong>linus</strong>' home directory and also remove the home directory and any files in it.</p>
+The first command will create an archival backup of <strong>linus</strong>' home directory and remove the home directory and any files in it.</p>
 <pre><code>deluser --backup --remove-home linus
-delgroup developers
+</code></pre>
+<p>The following command will delete the developers group:</p>
+<pre><code>delgroup developers
 </code></pre>
 <h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
 <p>Knowing how to manage user accounts and manage passwords are key sysadmin skills.
-They are needed to provide collaborative environments and to keep our systems secure through <strong>authentication</strong> and <strong>authorization</strong>.
+They are needed to provide collaborative environments and
+to keep our systems secure through <strong>authentication</strong> and <strong>authorization</strong>.
 While the methods to manage these things vary by operating system, the basic concepts are the same across OSes and services.</p>
 <p>Although the basic concepts hold true across systems, things get a bit more complex for enterprise systems.
 On enterprise systems running Windows, <a href="https://en.wikipedia.org/wiki/Active_Directory">Active Directory (AD)</a> is used for both <strong>authentication</strong> and <strong>authorization</strong>.
-On enterprise systems running Linux, the <a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">Lightweight Directory Access Protocol (LDAP)</a> system is used to store and manage user credentials.
+On enterprise systems running Linux,
+the <a href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol">Lightweight Directory Access Protocol (LDAP)</a> system is used to store and manage user credentials.
 <strong>LDAP</strong> can be integrated with <strong>AD</strong> to enable Linux systems to use <strong>AD</strong> for centralized user management.
 Other technologies exist that facilitate user and resource management.
 They include:</p>
@@ -5018,11 +5021,13 @@ They include:</p>
 <li><a href="https://en.wikipedia.org/wiki/Pluggable_authentication_module">PAM (Pluggable Authentication Module</a></li>
 <li><a href="https://en.wikipedia.org/wiki/System_Security_Services_Daemon">SSSD (System Security Services Daemon)</a></li>
 </ul>
-<p>In this section, we learned about important user management files like <code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>, <code>/etc/skel</code>, and <code>/etc/adduser.conf</code>.
-We continued to use <code>nano</code> to edit new configuration files, specifically <code>/etc/skel</code> and <code>/etc/adduser.conf</code>.
+<p>In this section, we learned about important user management files like
+<code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/group</code>, <code>/etc/skel</code>, and <code>/etc/adduser.conf</code>.
+We continued to use <code>nano</code> (or your preferred editor) to edit new configuration files,
+specifically <code>/etc/skel</code> and <code>/etc/adduser.conf</code>.
 We dove deeper into exploring how the <code>man</code> pages work.
-We also learned how to create new Linux user accounts, modify those accounts password parameters, assign those accounts to groups, and create
-a share directory for those accounts for collaboration.</p>
+We also learned how to create new Linux user accounts, modify those accounts password parameters,
+assign those accounts to groups, and create a share directory for those accounts for collaboration.</p>
 <p>We covered the following new commands:</p>
 <ul>
 <li><code>adduser</code>: add a user or group to the system</li>
@@ -5039,63 +5044,79 @@ a share directory for those accounts for collaboration.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="managing-software"><a class="header" href="#managing-software">Managing Software</a></h1>
 <p>By the end of this section, you should understand:</p>
 <ol>
-<li><strong>Package Management</strong>: Modern Linux distributions use package managers like <code>apt</code> for software management, similar to app stores on mobile devices.</li>
-<li><strong>APT Basics</strong>: Essential commands include <code>apt update</code> to refresh the package list, <code>apt upgrade</code> to install available updates, and <code>apt install</code> to add new packages.</li>
-<li><strong>Installing Software</strong>: Besides <code>apt</code>, software can also be installed from source, as <code>.deb</code> packages with <code>dpkg</code>, or as <code>snap</code> packages for broader compatibility.</li>
-<li><strong>Maintaining Your System</strong>: Use <code>apt autoremove</code> to clean up unused dependencies, and <code>apt clean</code> or <code>apt autoclean</code> to clear out cached packages to free up disk space.</li>
-<li><strong>Package Information</strong>: Use <code>apt show</code> for package details, <code>apt policy</code> for version information, and <code>apt search</code> to find packages by name or keyword.</li>
+<li><strong>Package Management</strong>: Modern Linux distributions use package managers like <code>apt</code> for software management,
+similar to app stores on mobile devices.</li>
+<li><strong>APT Basics</strong>: Essential commands include <code>apt update</code> to refresh the package list,
+<code>apt upgrade</code> to install available updates, and <code>apt install</code> to add new packages.</li>
+<li><strong>Installing Software</strong>: Besides <code>apt</code>, software can also be installed from source,
+as <code>.deb</code> packages with <code>dpkg</code>, or as <code>snap</code>, <code>flatpak</code>, or <code>appimage</code> packages for broader compatibility.</li>
+<li><strong>Maintaining Your System</strong>: Use <code>apt autoremove</code> to clean up unused dependencies, and <code>apt clean</code> or
+<code>apt autoclean</code> to clear out cached packages to free up disk space.</li>
+<li><strong>Package Information</strong>: Use <code>apt show</code> for package details, <code>apt policy</code> for version information, and
+<code>apt search</code> to find packages by name or keyword.</li>
 <li><strong>Removal Options</strong>: <code>apt remove</code> uninstalls packages, while <code>apt purge</code> also removes configuration files.</li>
-<li><strong>Script Automation</strong>: Common update and cleanup tasks can be automated with a bash script, run with <code>sudo</code> for ease of use.</li>
+<li><strong>Script Automation</strong>: Common update and cleanup tasks can be automated with a bash script and
+run with <code>sudo</code> for ease of use.</li>
 <li><strong>APT Logs</strong>: Review <code>apt</code> activity by checking <code>/var/log/apt/history.log</code>.</li>
 <li><strong>Manual Reading</strong>: For deeper understanding, consult the <code>man apt</code> manual page.</li>
 </ol>
 <h2 id="getting-started-7"><a class="header" href="#getting-started-7">Getting Started</a></h2>
 <p>Many modern Linux distributions offer some kind of package manager to install, manage, and remove software.
-These package management systems interact with curated and audited central repositories of software that are collected into <strong>packages</strong>.
+These package management systems interact with curated and audited central repositories of software
+that are collected into <strong>packages</strong>.
 They also provide a set of tools to learn about the software that exists in these repositories.</p>
 <blockquote>
 <p>If <strong>package management</strong> seems like an odd concept to you, it's just a way to manage software installation.
 It's very similar to the way that Apple and Google distribute software via the App Store and Google Play.</p>
 </blockquote>
+<h3 id="apt"><a class="header" href="#apt">APT</a></h3>
 <p>On Debian based systems, which includes Ubuntu, we use <code>apt</code>, <code>apt-get</code>, and <code>apt-cache</code> to manage most software installations.
 For most cases, you will simply want to use the <code>apt</code> command.
 It is meant to combine the functionality commonly used with <code>apt-get</code> and <code>apt-cache</code>.</p>
+<h3 id="dpkg"><a class="header" href="#dpkg">DPKG</a></h3>
 <p>We can also install software from source code or from pre-built binaries.
-On Debian and Ubuntu, for example, we might want to install (if we trust it) pre-build binaries distributed on the internet as <strong>.deb</strong> files.
-These are comparable to <strong>.dmg</strong> files for macOS and to <strong>.exe</strong> files for Windows.
-When installing <strong>.deb</strong> files, though, we generally use the <code>dpkg</code> command, although it's possible to use <code>apt</code> to install these files, too.</p>
+On Debian and Ubuntu, we can install (if we trust it) pre-built binaries distributed on the internet as <strong>.deb</strong> files.
+These are comparable to <code>.dmg</code> files for macOS and to <strong>.exe</strong> files for Windows.
+When installing <code>.deb</code> files, we generally use the <code>dpkg</code> command,
+although it's possible to use <code>apt</code> to install these files, too.</p>
+<h3 id="source-code"><a class="header" href="#source-code">Source Code</a></h3>
 <p>Installing software from source code often involves compiling the software.
 It's usually not difficult to install software this way.
-However, it can become complicated to manage software that's installed from source code simply because it means managing dependencies.
+However, it can become complicated to manage software that's installed from source code
+simply because it means managing dependencies.
 This means we would need to manually track new patches or versions of the software.</p>
-<p>Another way to install software is to use the <code>snap</code> command.
-This is a newer way of packaging programs that involves packaging all of a program and all of its dependencies into a single <a href="https://www.ibm.com/cloud/learn/containers">container</a>.
-The main point of <a href="https://ubuntu.com/core/services/guide/snaps-intro">snap</a> seems to be aimed at IoT, embedded devices, and desktop/laptop systems.
-It's perfectly usable and preferable on the desktop because the general aim is end users and not system administrators.
-See the <a href="https://snapcraft.io/">snap store</a> for examples.</p>
-<blockquote>
-<p>You might also want to know that some programming languages provide their own mechanisms to install packages.
+<h3 id="snap-flatpak-and-appimage"><a class="header" href="#snap-flatpak-and-appimage">Snap, Flatpak, and AppImage</a></h3>
+<p>Another way to install software is to use <code>snap</code> or <code>flatpak</code> systems or <code>appimage</code> files.
+These are newer ways of packaging programs that involves packaging a program and all of its dependencies
+as self-contained packages.
+The main audience seems to be aimed at IoT, embedded devices, and desktop/laptop systems.
+If you see <strong>loop</strong> devices in the output of the <code>lsblk</code> command, this is the result of the <code>snap</code> system.
+See the <a href="https://snapcraft.io/">Snap</a>, <a href="https://flatpak.org/">Flatpak</a>, and <a href="https://appimage.org/">AppImage</a> sites for example applications.</p>
+<h3 id="language-package-managers"><a class="header" href="#language-package-managers">Language Package Managers</a></h3>
+<p>In addition to the above, some programming languages provide their own mechanisms to install packages.
 In many cases, these packages may be installed with the <code>apt</code> command,
-but the packages that <code>apt</code> will install tend to be older (but more stable) than the packages that a programming language will install.
+but the packages that <code>apt</code> will install tend to be older (but more stable)
+than the packages that a programming language will install.
 For example, Python has the <code>pip</code> or <code>pip3</code> command to install and remove Python libraries.
-The R programming language has the <code>install.packages()</code>, <code>remove.packages()</code>, and the <code>update.packages()</code> commands to install R libraries.</p>
-</blockquote>
+The R programming language has the <code>install.packages()</code>, <code>remove.packages()</code>, and
+the <code>update.packages()</code> commands to install R libraries.</p>
 <p>Despite all these ways to install, manage, remove, and update software,
 we will focus on using the <code>apt</code> command, which is pretty straightforward.</p>
-<h2 id="apt"><a class="header" href="#apt">APT</a></h2>
+<h2 id="using-apt"><a class="header" href="#using-apt">Using APT</a></h2>
 <p>Let's look at the basic <code>apt</code> commands.</p>
 <h3 id="apt-update"><a class="header" href="#apt-update"><code>apt update</code></a></h3>
-<p>Before installing any software, we need to update the index of packages that are available for the system.</p>
+<p>Before installing any software, we need to update the index of packages that are available for the system.
+We do so with:</p>
 <pre><code>sudo apt update
 </code></pre>
 <h3 id="apt-upgrade"><a class="header" href="#apt-upgrade"><code>apt upgrade</code></a></h3>
-<p>The above command will also state if there is software on the system that is ready for an upgrade.
+<p>When we update the package index, we will be informed if we need to upgrade any packages.
 If any upgrades are available, we run the following command:</p>
 <pre><code>sudo apt upgrade
 </code></pre>
 <h3 id="apt-search"><a class="header" href="#apt-search"><code>apt search</code></a></h3>
 <p>We may know a package's name when we're ready to install it, but we also may not.
-To search for a package, we use the following syntax:</p>
+To search for a package, we use the following syntax, replacing <code>[package name]</code> with search terms:</p>
 <pre><code>apt search [package-name]
 </code></pre>
 <blockquote>
@@ -5106,14 +5127,15 @@ Rather, if a package name has more than one word, each word will be separated by
 <pre><code>apt search ncurses game
 </code></pre>
 <blockquote>
-<p>I added <strong>ncurses</strong> to my search query because the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library is often used to create console-based applications.</p>
+<p>I added <strong>ncurses</strong> to my search query because the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library
+is often used to create console-based applications.</p>
 </blockquote>
 <h3 id="apt-show"><a class="header" href="#apt-show"><code>apt show</code></a></h3>
-<p>The above command returned a list that includes a game called <strong>ninvaders</strong>, which is a console-based Space Invaders like game.
+<p>The above command returns a list that includes a game called <strong>ninvaders</strong>, which is a console-based Space Invaders like game.
 To get additional information about this package, we use the <code>apt show [package-name]</code> command:</p>
 <pre><code>apt show ninvaders
 </code></pre>
-<p>For example, if we want to see what a package needs or depends on, then we can use the following command:</p>
+<p>If we want to see what a package needs or depends on, then we can use the following command:</p>
 <pre><code>apt-cache depends ninvaders
 </code></pre>
 <h3 id="apt-policy"><a class="header" href="#apt-policy"><code>apt policy</code></a></h3>
@@ -5126,14 +5148,18 @@ To get additional information about this package, we use the <code>apt show [pac
 </code></pre>
 <h3 id="apt-remove-or-apt-purge"><a class="header" href="#apt-remove-or-apt-purge"><code>apt remove</code> or <code>apt purge</code></a></h3>
 <p>To remove an installed package, we can use either the <code>apt remove</code> or the <code>apt purge</code> commands.
-Sometimes when a program is installed, configuration files get installed with it in the <strong>/etc</strong> directory.
-The <code>apt purge</code> command will remove those configuration files but the <code>apt remove</code> command will not.
+Sometimes when a program is installed, configuration files get installed with it in the <code>/etc</code> directory.
+The <code>apt purge</code> command removes those configuration files but the <code>apt remove</code> command does not.
 Both commands are offered because sometimes it is useful to keep those configuration files.</p>
 <pre><code>sudo apt remove ninvaders
 </code></pre>
 <p>Or:</p>
 <pre><code>sudo apt purge ninvaders
 </code></pre>
+<blockquote>
+<p>Other fun terminal based games include: <code>tint</code> (a tetris clone), <code>ttysolitaire</code>, and <code>bsdgames</code>,
+the latter installs multiple console based games such as <code>backgammon, </code>go-fish<code>, </code>hangman<code>, and more. All of these will be installed in </code>/usr/games`.</p>
+</blockquote>
 <h3 id="apt-autoremove"><a class="header" href="#apt-autoremove"><code>apt autoremove</code></a></h3>
 <p>All big software requires other software to run.
 This other software are called <a href="https://queue.acm.org/detail.cfm?id=3344149">dependencies</a>.
@@ -5160,8 +5186,10 @@ I will only use <code>apt autoclean</code> if I want to keep an package to older
 <pre><code>sudo apt autoclean
 </code></pre>
 <h3 id="apt-history"><a class="header" href="#apt-history">apt history</a></h3>
-<p>Unfortunately, the <code>apt</code> command does not provide a way to get a history of how it's been used on a system, but a log of its activity is kept.
-We can review that log with the following command:</p>
+<p>Unfortunately, the <code>apt</code> command does not provide a way to get a history of how it's been used on a system.
+This will change in the future when <code>apt</code> gets a <code>apt history-list</code> command and an <code>apt history-info</code> command
+(Source: <a href="https://www.phoronix.com/news/Debian-APT-History-Command">Phoronix</a>).
+In the meantime, the <code>apt</code> system keeps a log of its activity, and we can review that log file with the following command:</p>
 <pre><code>less /var/log/apt/history.log
 </code></pre>
 <h2 id="daily-usage"><a class="header" href="#daily-usage">Daily Usage</a></h2>
@@ -5172,59 +5200,61 @@ sudo apt upgrade
 sudo apt autoremove
 sudo apt clean
 </code></pre>
-<p>You can add these to a script that we could call <code>update.sh</code> and put it in <code>/usr/local/bin</code>:</p>
+<p>You can add these commands to a script that we could call <code>update.sh</code> and put it in <code>/usr/local/bin</code>:</p>
 <pre><code>#!/usr/bin/env bash
 
 apt update &amp;&amp; apt upgrade &amp;&amp; apt autoremove &amp;&amp; apt clean
 </code></pre>
-<p>And then run it like so after making it executable: <code>sudo chmod 700 /usr/local/bin/update.sh</code>:</p>
-<pre><code>sudo update.sh
+<p>And then we make the file executable:</p>
+<pre><code>sudo chmod 700 /usr/local/bin/update.sh`:
 </code></pre>
-<p><strong>NOTE:</strong> Running the script with the <code>sudo</code> command is more convenient, cleaner, and sufficient.
-However, if you add non-administrative commands to the script later, then you would add <code>sudo</code> to each of the <code>apt</code> commands
-to prevent running the whole script with elevated permissions.
-In other words, your script would be:</p>
-<pre><code>#!/usr/bin/env bash
-
-sudo apt update &amp;&amp; sudo apt upgrade &amp;&amp; sudo apt autoremove &amp;&amp; sudo apt clean
+<p>And execute/run it with the following command:</p>
+<pre><code>sudo update.sh
 </code></pre>
 <h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
 <p>There are a variety of ways to install software on a Linux or Ubuntu system.
 The common way to do it on Ubuntu is to use the <code>apt</code> command, which was covered in this section.</p>
-<p>We'll come back to this command often because we'll soon install and setup a complete LAMP (<strong>L</strong>inux, <strong>A</strong>apache, <strong>M</strong>ariaDB, and <strong>P</strong>HP) server.
+<p>We'll come back to this command often because we'll soon install and setup a complete LAMP
+(Linux, Apache, MariaDB, and PHP) server.
 Until then, I encourage you to read through the manual page for <code>apt</code>:</p>
 <pre><code>man apt
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-systemd"><a class="header" href="#using-systemd">Using systemd</a></h1>
 <p>By the end of the section, you will know how to:</p>
 <ol>
-<li>Use <code>systemctl</code> to manage services on a Linux system, including starting, stopping, enabling, and checking the status of services.</li>
+<li>Use <code>systemctl</code> to manage services on a Linux system,
+including starting, stopping, enabling, and checking the status of services.</li>
 <li>Understand the purpose of <code>systemd</code> as an init system and its role in booting, service management, and log handling.</li>
-<li>Check the status and logs of specific services with <code>journalctl</code> and use filters to narrow down log results by service, PID, or specific conditions.</li>
+<li>Check the status and logs of specific services with <code>journalctl</code> and
+use filters to narrow down log results by service, PID, or specific conditions.</li>
 <li>Set up and manage <code>systemd</code> timers to automate tasks, such as scheduling scripts to run at specific times.</li>
-<li>Explore and utilize additional <code>systemd</code> commands, such as checking enabled services, suspending or rebooting the system, and examining boot times with <code>systemd-analyze</code>.</li>
+<li>Explore and utilize additional <code>systemd</code> commands,
+such as checking enabled services, suspending or rebooting the system, and examining boot times with <code>systemd-analyze</code>.</li>
 <li>View and interpret system logs, search through them efficiently, and follow logs in real-time.</li>
 <li>Create and configure custom <code>systemd</code> service and timer files for more tailored system automation.</li>
-<li>Use <code>systemd</code> commands to troubleshoot system issues, including identifying failed services and examining resource usage with <code>systemd-cgtop</code>.</li>
+<li>Use <code>systemd</code> commands to troubleshoot system issues,
+including identifying failed services and examining resource usage with <code>systemd-cgtop</code>.</li>
 </ol>
 <h2 id="getting-started-8"><a class="header" href="#getting-started-8">Getting Started</a></h2>
 <p>When computers boot up, obviously some software manages that process.
 On Linux and other Unix or Unix-like systems, this is usually handled via an <strong>init</strong> system.
 For example, macOS uses <a href="https://en.wikipedia.org/wiki/Launchd">launchd</a> and many Linux distributions, including Ubuntu, use <a href="https://en.wikipedia.org/wiki/Systemd">systemd</a>.</p>
-<p><strong>systemd</strong> does more than handle the startup process, it also manages various services and connects the Linux kernel to various applications.
-In this section, we'll cover how to use <strong>systemd</strong> to manage services, and to review log files.</p>
+<p><strong>systemd</strong> does more than handle the startup process,
+it also manages various services and connects the Linux kernel to various applications.
+In this section, we'll cover how to use <strong>systemd</strong> to manage services and to review log files.</p>
 <h2 id="manage-services"><a class="header" href="#manage-services">Manage Services</a></h2>
 <p>When we install complicated software, like a web server (e.g., Apache2, Nginx), a SSH server (e.g., OpenSSH),
 or a database server (e.g., mariaDB or MySQL), then it's helpful to have commands that manage that service:
 the web service, the SSH service, the database service, etc.</p>
-<p>For example, the <code>ssh</code> service is installed by default on our gcloud servers, and we can check its status with the following <code>systemctl</code> command:</p>
+<p>For example, the <code>ssh</code> service is installed by default on our gcloud servers, and
+we can check its status with the following <code>systemctl</code> command:</p>
 <pre><code>systemctl status ssh
 </code></pre>
 <p>The output tells us a few things.
-The line beginning with <strong>Loaded</strong> tells us that the SSH service is configured.
-At the end of that line, it also tells us that it is <strong>enabled</strong>.
-<strong>Enabled</strong> means that the service automatically starts when the system gets rebooted or starts up.</p>
-<p>The line beginning with <strong>Active</strong> tells us that the service is <strong>active (running)</strong> and for how long.
+The line beginning with <code>Loaded</code> tells us that the SSH service is configured.
+At the end of that line, it also tells us that it is <code>enabled</code>.
+<code>Enabled</code> means that the service automatically starts when the system gets rebooted or starts up.</p>
+<p>The line beginning with <code>Active</code> tells us that the service is <code>active (running)</code> and for how long.
 We also can see the process ID (PID) for the service as well as how much memory it's using.</p>
 <p>At the bottom of the output, we can see the recent log files.
 We can view more of those log files using the <code>journalctl</code> command.
@@ -5241,7 +5271,7 @@ Replace <em>N</em> with the PID number attached to your ssh service:</p>
 <p>Later we'll install the <a href="https://httpd.apache.org/">Apache web server</a>, and we will use <code>systemctl</code> to manage some aspects of this service.</p>
 <p>In particular, we will use the following commands to:</p>
 <ol>
-<li>check the state of the Apache service,</li>
+<li>Check the state of the Apache service,</li>
 <li>enable the Apache service to auto start on reboot,</li>
 <li>start the service,</li>
 <li>reload the service after editing its configuration files, and</li>
@@ -5263,7 +5293,7 @@ As an example:</p>
 </code></pre>
 <p>You can peruse other services in <code>/lib/systemd/system</code>.</p>
 <h2 id="examine-logs"><a class="header" href="#examine-logs">Examine Logs</a></h2>
-<p>As mentioned, the <code>journalctl</code> command is part of the <strong>systemd</strong> software suite, and it is used to monitor system logs.</p>
+<p>As mentioned, the <code>journalctl</code> command is part of the <code>systemd</code> software suite, and it is used to monitor system logs.</p>
 <p>It's important to monitor system logs.
 Log files help identify problems in the system or with various services.
 For example, by monitoring the log entries for <strong>ssh</strong>, I can see all the attempts to break into the server.
@@ -5271,7 +5301,7 @@ Or if the Apache2 web server malfunctions for some reason, which might be becaus
 the logs will indicated how to identify the problem.</p>
 <p>If we type <code>journalctl</code> at the command prompt, we are be presented with the logs for the entire system.
 These logs can be paged through by pressing the space bar, the page up/page down keys, or the up/down arrow keys.
-They can also be searched by pressing the forward slash <strong>/</strong> and then entering a search keyword.
+They can also be searched by pressing the forward slash <code>/</code> and then entering a search keyword.
 To exit out of the pager, press <strong>q</strong> to quit.</p>
 <pre><code>journalctl
 </code></pre>
@@ -5280,7 +5310,8 @@ See the following man pages for details:</p>
 <pre><code>man systemd.journal-fields
 man journalctl
 </code></pre>
-<p>There are many fields and options we can use, but as an example, we see that there is an option to view the more recent entries first:</p>
+<p>There are many fields and options we can use, but as an example,
+we see that there is an option to view the more recent entries first:</p>
 <pre><code>journalctl -r
 </code></pre>
 <p>Or we view log entries in reverse order, for users on the system, and since the last boot with the following options:</p>
@@ -5297,43 +5328,56 @@ man journalctl
 </code></pre>
 <h2 id="timers-automation"><a class="header" href="#timers-automation">Timers (Automation)</a></h2>
 <p>Linux and Unix operating systems have long provided a way to automate processes.
-In the past, and still available on most systems, is the <code>cron</code> service, which I do not cover here.
-<code>systemd</code> also provides a way to automate jobs using timers.</p>
-<p>In our <code>bash</code> exercises, we created a script to examine the <strong>auth.log</strong> file for invalid IP addresses.
-Whenever we want to check to see what IP addresses are trying to login into our system, we have to run that command.</p>
+Historically, the <code>cron</code> service has been used to automate jobs, but I do not cover it here.
+Instead, we examine how to use <code>systemd</code> as a way to automate jobs using <strong>timers</strong>.</p>
+<p>The <code>/var/log/auth.log</code> file logs all authentication attempts to the system.
+We can create a script to look at the file and extract the invalid attempts to login to the system.</p>
 <p>What if we could have that script run at specific times?
 For example, what if we wanted to run that script every morning at 8AM and then log the output to a file for us to read?
 We can do that with systemd timers.</p>
-<p>First, let's modify our <code>auth.sh</code> script.
-In the example below, I've adjusted the location of the auth.log file, created two additional variables to record
-the start and end dates of the auth.log file, and then modified the end <code>echo</code> statement to add some additional information and
-save the output in a file called <strong>brute.log</strong> in our <strong>/srv/developers</strong> directory.
-The <code>${end_date}</code> and <code>${start_date}</code> variables were created after closely studying the <strong>/var/log/auth.log</strong> file.</p>
+<p>First, let's create a very simple <code>auth.sh</code> script to do this job.
+In the example below, I've set the location of the <code>auth.log</code> file and the output file,
+added a check to be sure the file exists and/or can be read,
+created two additional variables to record the start and end dates of the auth.log file, and
+used <code>grep</code> again to look for invalid IP addresses in the log file,
+wrote an <code>echo</code> statement to add some additional information, and
+save the output in a file called <code>brute.log</code> in our <code>$HOME</code> directory.
+The <code>${end_date}</code> and <code>${start_date}</code> variables were created after closely studying the <code>/var/log/auth.log</code> file.
+This is a very basic file, and programming languages like <code>awk</code>, <code>perl</code>, or <code>python</code> might be better suited for this job,
+but for <code>bash</code> sake:</p>
 <pre><code>#!/usr/bin/env bash
 
-#!/usr/bin/env bash
+LOG_FILE="${1:-/var/log/auth.log}"
+OUT_FILE="${HOME}/brute.log"
 
-LOG_FILE="/var/log/auth.log"
+if [[ ! -r "${LOG_FILE}" ]] ; then
+    echo "Error: cannot read '${LOG_FILE}' (permission or file missing)." &gt;&amp;2
+    echo "Try running with sudo or pass a readable log path." &gt;&amp;2
+    exit 2
+fi
 
 END_DATE=$(grep -Eo "^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}" "${LOG_FILE}" | tail -n1)
 START_DATE=$(grep -Eo "^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}" "${LOG_FILE}" | head -n1)
 
-TOTAL_INVALID="$(grep -c "Invalid user" ${LOG_FILE})"
-INVALID_IPS="$(grep "Invalid user" "${LOG_FILE}" | grep -Eo "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+" | sort | uniq | wc -l)"
+TOTAL_INVALID="$(grep -c "Invalid user" "${LOG_FILE}")"
+INVALID_IPS="$(grep "Invalid user" "${LOG_FILE}" | \
+    grep -Eo "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+" | \
+    sort | uniq | wc -l)"
 
 echo "
 Log entry created on $(date +%c).
 From ${START_DATE} to ${END_DATE}, there were ${TOTAL_INVALID} attempts to login to the system.
 These came from ${INVALID_IPS} unique IPs.
-" &gt;&gt; "$HOME/brute.log"
+" &gt;&gt; "${OUT_FILE}"
+
 </code></pre>
-<p>Next, we need to create two additional files.
+<p>Next, to automate the execution of this script, we need to create two additional files.
 First we create a <strong>service</strong> file.
 This file defines the <strong>service</strong> that we want to execute.
-Navigate to the service directory:</p>
+Navigate to the systemd's service directory:</p>
 <pre><code>cd /etc/systemd/system
 </code></pre>
-<p>And use <code>sudo nano</code> to create a file called <strong>brute.service</strong>:</p>
+<p>And use <code>sudo nano</code> to create a file called <code>brute.service</code>:</p>
 <pre><code>sudo nano brute.service
 </code></pre>
 <p>In the above file, we add the following information under two sections, a Unit section and a Service section.
