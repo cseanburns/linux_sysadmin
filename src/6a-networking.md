@@ -1,4 +1,4 @@
-# Networking and TCP/IP
+# Networking
 
 By the end of this section, you should know:
 
@@ -32,11 +32,13 @@ In order to prepare for this type of work,
 we need at least a basic understanding of how the internet works and how local devices interact with the internet.
 In this section, we will focus mostly on internet addressing, but we will also devote some space to TCP and UDP, two protocols for transmitting data.
 
-Connecting two or more devices together nowadays involves the TCP/IP or the UDP/IP protocols, otherwise part of the [Internet protocol suite][wikiIPS].
+Connecting two or more devices together nowadays involves the TCP/IP or the UDP/IP protocols,
+otherwise part of the [Internet protocol suite][wikiIPS].
 This suite is an expression of the more generalized [OSI communication model][osi].
 
 The internet protocol suite is framed as a series of layers beginning with a lower layer, called the **link layer**,
-that interfaces with internet capable hardware, to the highest layer, called the **application layer**.
+that interfaces with internet capable hardware, to the highest layer, called the **application layer**,
+e.g., the web (`http`).
 
 The **link layer** describes the local area network.
 Devices connected locally, e.g., via Ethernet cables or local wifi, comprise the link layer.
@@ -46,25 +48,25 @@ Data going into or out of a local network must be negotiated between these two l
 The **internet layer** makes the internet possible since it provides functionality to transmit data among multiple networks possible.
 The internet is, in fact, a network of networks.
 The primary characteristic of the internet layer is the **IP address**, which currently comes in two versions:
-IPv4 (32 bit) and IPv6 (128 bit).
+IPv4 (a 32 bit number) and IPv6 (a 128 bit number).
 IP addresses are used to locate hosts on a network.
 
 The **transport layer** makes the exchange of data on the internet possible.
-There are two dominant protocols attached to this layer: [UDP][udp] and [TCP][tcp].
-Very generally, [UDP][udpCloudFlare] is used when the integrity of data is less important than the its ability to reach its destination.
+There are multiple protocols for the transport layer, but the two main ones are [UDP][udp] and [TCP][tcp].
+Very generally, the [UDP][udpCloudFlare] places priority on data reaching its destination over the integrity of data.
 For example, streaming video, Voice-over-IP (VOIP), and online gaming are often transported via UDP
 because the loss of some pixels or some audio is acceptable for end users.
 [TCP][tcpCloudFlare] is used when the integrity of the data is important.
 If the data cannot be transmitted without error, then the data won't reach its final destination until the error is corrected.
+As an example, purchases, bank exchanges, etc use TCP since financial transactions must be exact.
 
 The **application layer** provides the ability to use the internet in particular ways.
 For example, the [HTTP][http] protocol enables the **web**.
 The **web** is thus an **application** of the internet.
-The **SMTP**, **IMAP**, and **POP** protocols provide the basis for email exchange.
-**DNS** is a system that maps IP addresses to domain names.
-In this book, we use **SSH**, also part of the application layer, to connect to remote computers.
+Likewise, the **SMTP**, **IMAP**, and **POP** protocols provide the basis for email exchange,
+**DNS** maps IP addresses to domain names, and we use **SSH** to connect to our virtual machines.
 
-> By **application**, they simply mean that these protocols provide the functionality for applications.
+> By **application**, we simply mean that these protocols provide the functionality for applications.
 > They are not themselves considered user applications, like a web browser.
 
 ## The Internet Protocol Suite
@@ -101,10 +103,10 @@ The MAC addresses are reported on the **link/ether** line.
 
 On my virtual server, the `ip link` command produces two **numbered** sections of output.
 The first section refers to the `lo` or loopback device.
-This is a special device that allows the computer to communicate with itself.
-It always has a MAC address of 00:00:00:00:00:00.
-The next section on the machine refers to the ethernet card, and
-represents the system's wired connection to the internet.
+This is a special device that allows the computer to communicate with itself, and
+it always has a MAC address of 00:00:00:00:00:00.
+The next section on the machine refers to the ethernet card (e.g., `ens4`), and
+this represents the hardware for system's wired connection to the internet.
 The MAC address is reported on the indented line below.
 See `man systemd.net-naming-scheme` for more details.
 
@@ -114,11 +116,11 @@ We can get the IP information with the following command:
 ip a
 ```
 
-For the same numbered devices, the output reports the MAC addresses plus the IP addresses.
-Here I note that the `lo` device has the IP address of 127.0.0.1.
+The `ip a` command reports both the MAC and IP addresses for the same devices.
+Here it reports that the `lo` device has the IP address of 127.0.0.1.
 It always has this IP.
-On my Google Cloud machine, I get an IP address like `10.128.0.2/32`.
-This is a private IP address.
+On my Google Cloud machine, I get an IP address like `10.128.0.2/32` for the `ens4` device.
+This is a **private IP address**, which means it can only be used to locate the machine on the subnet.
 
 The following two commands help identify parts of the local network (or subnet) and the routing table.
 
@@ -128,10 +130,10 @@ ip route
 ```
 
 The `ip neigh` command produces the ARP cache.
-This represents what your machine sees on the local network.
+This represents the other machines yours sees on the local network.
 At the very least, it'll report the IP address for the router your machine uses.
-The `ip route` command is used to define how data is routed on the network but
-can also define the routing table.
+
+The `ip route` command is used to define how data is routed on the network but can also define the routing table.
 Both of these commands are more commonly used on Linux-based routers.
 
 These details enable the following scenario:
@@ -145,13 +147,11 @@ Those network addresses are private IP addresses and will fall within a specific
 
 #### IP (Internet Protocol)
 
-The Internet Protocol, or *IP*, address is used to uniquely identify a host on a network and
-place that host at a specific location (its IP **address**).
-If that network is subnetted (i.e., routed),
-then a host's IP address will have a subnet or private IP address.
+The Internet Protocol is used to uniquely identify a host on a network and place that host at a specific location (its IP **address**).
+If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address.
 This private IP address will not be directly exposed to the Internet.
 
-Remember this: there are public IP addresses and these are distinct from private IP addresses.
+Remember this: public IP addresses are distinct from private IP addresses.
 Public IP addresses are accessible on the internet.
 Private IP addresses are not, but they are accessible on subnets or local area networks.
 
@@ -159,21 +159,20 @@ Private IP address ranges are **reserved** address ranges.
 This means no public internet device will have an IP address within these ranges.
 The private address ranges include:
 
-| Start Address | End Address     |
-|---------------|-----------------|
-| 10.0.0.0      | 10.255.255.255  |
-| 172.16.0.0    | 172.31.255.255  |
-| 192.168.0.0   | 192.168.255.255 |
+| Start Address | End Address     | Network Size |
+|---------------|-----------------|--------------|
+| 10.0.0.0      | 10.255.255.255  | Large        |
+| 172.16.0.0    | 172.31.255.255  | Medium       |
+| 192.168.0.0   | 192.168.255.255 | Small        |
 
-If you have a router at home, and
-look at the IP address for any of your devices connected to that router,
+If you have a router at home, and examine the IP address for any of your devices connected to that router,
 like your phone or computer, you will see that it will have an address within one of the ranges above.
-For example, it might have an IP address beginning with **192.168.X.X**.
-This is a common IP address range for a home router.
+For example, it might have an IP address like **192.168.0.4**.
+This is a common IP address number assigned by a home router.
 
 The difference between these ranges largely rests on the number of hosts they can accommodate.
-The **10.X.X.X** private range can assign many more IP addresses (more hosts) on its network 
-than the **192.168.X.X** range can.
+The **10.X.X.X** private range can assign more IP addresses (more hosts) on its network 
+than the **172.X.X.X** range can, and the latter more than the **192.168.X.X** range.
 This is why you'll see the **10.0.0.0** IP range on bigger networks, like a university's network.
 We'll talk more about subnetwork sizes, shortly.
 
@@ -191,34 +190,32 @@ searched Google for *what's my IP address*,
 we will see that we share the same public IP address, which will be something like **128.163.8.25**.
 We know that is a public IP address because it does not fall within the ranges listed above.
 
-Without any additional information,
+By entailment and without any additional information,
 we know that all traffic coming from our computers and going out to the internet looks like it's coming
 from the same IP address (**128.163.8.25**).
 And in reverse, all traffic coming from outside our network first goes to **128.163.8.25**
 before it's routed to our respective computers via the router.
 
-Let's say I switch my network connection to the campus's wifi network.
+Let's say I switch my computer's network connection to the campus's wifi network.
 When I check with `ip a`, I find that the computer now has a private IP address of **10.47.34.150/16**.
 You can see the pattern is different with this IP address than it was when it was connected via wire.
 The reason it has a different pattern is because the laptop is now on an different subnet.
-This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc).
+This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices
+(i.e., laptops, phones, etc).
 When I searched Google for my IP address from this laptop,
-it reports **128.163.238.148**, indicating that UK owns a range of public IP address spaces.
+it reports **128.163.238.148**.
+Since this is a different public IP address from above, it indicates that the university owns a range of public IP address spaces.
 
-Here's kind of visual diagram of what this network looks like:
+Here's a visual diagram of what this network looks like:
 
 <figure>
 <img src="images/18-network.png"
 alt="Network diagram"
 title="Network diagram">
 <figcaption>
-Fig. 1. This figure contains a network switch,
-which is used to route traffic within a subnet.
-The switch relies solely on MAC addresses and not
-IP addresses to determine the location of
-devices on its subnet.
-The router acts as the interface between
-the private network and the public network and
+Fig. 1. This figure contains a network switch, which is used to route traffic within a subnet.
+The switch relies solely on MAC addresses and not IP addresses to determine the location of devices on its subnet.
+The router acts as the interface between the private network and the public network and
 is managing two subnets: a wired and a wireless one.
 </figcaption>
 </figure>
@@ -229,21 +226,22 @@ The `ip` command can do more than provide us information about our network.
 We can also use it to turn a connection to the network on or off (and more).
 The commands below show how we disable and then enable a connection on a machine.
 Note that **ens4** is the name of my network card/device.
-Yours might have a different name.
+We probably have the same device names, but note that it might be different.
 
 ```
 sudo ip link set ens4 down
 sudo ip link set ens4 up
 ```
 
-> Don't run those commands on your Google Cloud servers otherwise your connection > will be dropped and
+> Don't run those commands on your Google Cloud servers otherwise your connection will be dropped and
 > you'll have to reboot the system from the web console.
 
 ### Transport Layer
 
 The internet (IP) layer does not transmit content, like web pages or video streams.
 This is the work of the transport layer.
-As discussed previously, the two most common transport layer protocols are **TCP** and **UDP**.
+As discussed previously, the two most common transport layer protocols are **TCP** and **UDP**,
+but [there are more][TLP_wiki].
 
 #### TCP, Transmission Control Protocol
 
@@ -315,8 +313,7 @@ Other common ports include:
 - 587: SMTP Secure
 - 993: IMAP Secure
 
-There's a complete list of the 370 default ports/protocols on your Linux systems.
-It's located in the following file:
+A list of the default ports/protocols on your Linux systems is contained in the following file:
 
 ```
 less /etc/services
@@ -444,16 +441,16 @@ Since there is nothing remaining, the rest of the bits equal 0.
 ### Subnetting Examples
 
 Subnetting involves dividing a network into two or more subnets.
-When we subnet, we first identify the number of hosts, aka, the size, we will require on the subnet.
+When we subnet, we first identify the number of hosts (i.e., the size of the subnet) we will require on the subnet.
 For starters, let's assume that we need a subnet that can assign at most 254 IP addresses
 to the devices attached to it via the router.
 
 In order to do this, we need two additional IP addresses:
 the **subnet mask** and the **network address/ID**.
-The **network address identifies the network** and
-the **subnet mask marks the boundary between the network and the hosts**.
-Knowing or determining the **subnet mask** allows us to determine how many hosts can exist on a network.
-Both the **network address** and the **subnet mask** can be written as IP addresses, but
+The **network address** identifies the network and
+the **subnet mask** marks the boundary between the network and the hosts.
+Knowing or determining the subnet mask allows us to determine how many hosts can exist on a network.
+Both the network address and the subnet mask can be written as IP addresses, but
 these IP addresses cannot be assigned to computers on a network.
 
 When we have determined these IPs, we will know the **broadcast address**.
@@ -465,7 +462,7 @@ that is, let's identify and describe a network that we are already connected to 
 for which we already know a device's private IP address.
 We'll work with example private IP addresses that exist on separate subnets.
 
-#### Example IP Address 1: 192.168.1.6
+#### Example IP Address 1: 192.168.1.6/24
 
 Using the private IP address 192.168.1.6,
 let's derive the network mask and the network address (or ID) from this IP address.
@@ -496,7 +493,7 @@ For Example 1, we thus have the following subnet information:
 | End Range    | 192.168.1.254 |
 | Broadcast    | 192.168.1.255 |
 
-#### Example IP Address 2: 10.160.38.75
+#### Example IP Address 2: 10.160.38.75/24
 
 For example 2, let's start off with a private IP address of 10.160.38.75 and a mask of /24:
 
@@ -616,3 +613,4 @@ In the next section, we extend upon this and discuss the domain name system (DNS
 [portnumbers]:https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 [cidr]:https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
 [ipv6subnetting]:https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study
+[TLP_wiki]:https://en.wikipedia.org/wiki/Category:Transport_layer_protocols
