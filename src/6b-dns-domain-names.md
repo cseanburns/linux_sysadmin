@@ -37,12 +37,15 @@ To help you get started, watch these two YouTube videos and read the text on rec
 The structure of the domain name system is like the structure of the UNIX/Linux file hierarchy;
 that is, it is like an inverted tree.
 
-The fully qualified domain name (FQDN) includes a period at the end of the top-level domain to indicate the root of the DNS hierarchy.
-Although modern browsers often omit this trailing period, it remains essential for the proper identification of domain names within DNS systems.
+Specifically, the fully qualified domain name (FQDN) starts a period at the end of
+the top-level domain to indicate the root of the DNS hierarchy,
+like the `/` in the Unix/Linux file system.
+Although modern browsers often omit this trailing period,
+it remains part of the identification of domain names within DNS systems.
 
-Thus, for Google's main page, the FQDN is: **www.google.com.**
+Thus, for Google's main page, the FQDN is: `www.google.com.`
 
-And the parts include:
+And the parts include, which narrow as they are added:
 
 ```
 .           root domain
@@ -57,8 +60,10 @@ how DNS servers are responsible for their part of the network.
 ### Root Domain
 
 The root domain is managed by root name servers.
-These servers are listed on the [IANA][rootiana] (Internet Assigned Numbers Authority) website, but are managed by multiple operators.
-The root servers manage the root domain, alternatively referred to as the zone, or the **.** at the end of the ``.com.``, ``.edu.``, etc.
+These servers are listed on the [IANA][rootiana] (Internet Assigned Numbers Authority) website, but
+are managed by multiple operators.
+The root servers manage the root domain, alternatively referred to as the zone, or
+the `.` at the end of the `.com.`, `.edu.`, etc.
 
 #### Alternative DNS Root Systems
 
@@ -71,7 +76,7 @@ Read about a few of them here:
 
 As an example, Russia is building its own alternate internet based on a separate DNS root system.
 When completed, this will create a large, second internet that would be inaccessible to the rest of the world
-without reconfiguring multiple devices, servers, DNS resolvers, etc.
+without reconfiguring network devices, servers, DNS resolvers, etc.
 You can read about in this [IEEE Spectrum article][ieeerussia].
 
 ### Top Level Domain (TLD)
@@ -93,44 +98,55 @@ There are also [country coded TLDs (ccTLDs)][cctld] such as:
 * .uk (United Kingdom)
 * .us (United States)
 
-We can get a total count of current domain names using the command below, which outputs 1,445 (as of October 2024):
+And they can be combined; e.g., `.com.mx`.
+
+We can get a total count of current domain names using the command below,
+which outputs 1,445 (as of October 2024):
 
 ```
 curl -s https://data.iana.org/TLD/tlds-alpha-by-domain.txt | sed '1d' | wc -l
 ```
 
-> The `curl` command is an alternate to the `wget` command.
-> They share basic functionality but also have their own use cases.
+> The [curl][curl] command is a powerful alternative to the `wget` command.
+> The two applications share basic functionality but also have their own use cases.
 > `curl` by default does not save a retrieved file.
 > Add the `-o` option to save a file: `curl -o [URLs]`.
-> Or, visit the `iana.org` link in the code block above to peruse the list of TLDs.
+
+Visit the `iana.org` link in the code block above to peruse the list of TLDs.
 
 ### Second Level Domain Names
 
 In the Google example of `www.google.com`, the second level domain is `google`.
-The second level domain along with the TLD together, along with any further subdomains, forms the [fully qualified domain name (FQDN)][fqdn].
+The second level domain, the TLD together, and any further subdomains form the
+[fully qualified domain name (FQDN)][fqdn].
 Other examples of second level domains include:
 
 - **redhat** in **redhat.com**
 - **debian** in **debian.org**.
 - **wikipedia** in **wikipedia.org**
 - **uky** in **uky.edu**
-  
+
 ### Third Level Domain Names / Subdomains
 
-When you've purchased (leased) a top and second level domain like `ubuntu.com`, you can choose whether to add third level domains.
-For example: `www` is a third level domain or subdomain.
-If you owned `example.org`, you could dedicate a separate server (or a cluster of machines) to `www.example.org` that
-resolves to a different location, or `www.example.org` could resolve to the second-level domain `example.org`.
+When you've purchased (leased) a top and second level domain like `ubuntu.com`,
+you can choose whether to add third level domains.
+For example, `www` is a third level domain or subdomain.
+If you owned `example.org`,
+you could dedicate a separate server (or a cluster of machines) to `www.example.org` that
+resolves to a different location, or
+`www.example.org` could resolve to the second-level domain `example.org`.
 That is:
 
-* The server located at `www.debian.org` can point to the server located at `debian.org`.
+* The server located at `www.debian.org` can point to the server located at `debian.org`, or
+* The server located at `www.debian.org` can point to a completely different server (website).
 
-`www.debian.org` could be configured to point to a different server than `debian.org`,
+That is, `www.debian.org` could be configured to point to a different server than `debian.org` does,
 meaning that each domain could host separate websites or services.
 This would be like how `maps.google.com` points to a different site than `mail.google.com`.
 Yet both `maps` and `mail` are subdomains of `google.com`.
-However, it's a convention that third-level domains marked by `www` point to the top level domains.
+However, it has been a convention since the beginning of the web
+that third-level domains marked by `www` point to their top level domains.
+However, this is not true for other subdomains.
 
 For example:
 
@@ -140,13 +156,15 @@ For example:
     * `maps.google.com`, or
     * `mail.google.com`
 
-This is because `drive.google.com`, `maps.google.com`, and `mail.google.com` provide different but specific services.
+Because these subdomains provide different but specific services.
 
 ## DNS Paths 
 
-A recursive DNS server, which is usually managed by an ISP, is the first DNS server to be queried in the DNS system.
+A recursive DNS server, which is usually managed by an ISP,
+is the first DNS server to be queried in the DNS system.
 This is the **resolver server** in the first video above.
-This server queries itself (recursive) to check if the domain to IP mapping has been cached (remembered/stored) in its system.
+This server queries itself (recursive) to check if the domain to IP mapping has been cached
+(remembered/stored) in its system.
 
 If it hasn't been cached, then the DNS query is *forwarded* to a root server.
 There are thirteen root servers.
@@ -160,16 +178,17 @@ a.root-servers.net. b.root-servers.net. c.root-servers.net. d.root-servers.net. 
 > I'm using brace expansion in Bash to simply list the root servers.
 
 When a DNS query is forwarded to a root server,
-the root server identifies the next server to query, depending on the top level domain (.com, .net, .edu, .gov, etc.).
-If the site ends in `.com` or `.net`, then the next server might be something like: `a.gtld-servers.net.`
-Or if the top level domain ends in `.edu`, then: `a.edu-servers.net.` might be queried.
-If the top level domain ends in `.gov`, then: `a.gov-servers.net.`.
+the root server identifies the next server to query,
+depending on the top level domain (.com, .net, .edu, .gov, etc.).
+If the site ends in `.net`, then the next server might be something like: `a.gtld-servers.net.`
+Or if the top level domain ends in `.edu`, then the `a.edu-servers.net.` server might be queried.
+Or if the top level domain ends in `.gov`, then it could be `a.gov-servers.net.`.
 And so forth.
 
 Those top level domains will know where to send the query next.
 In many cases, the next path is to send the query to a custom domain server.
 For example, Google's custom name servers are: **ns1.google.com** to **ns4.google.com**.
-UK's custom name servers are: **sndc1.net.uky.edu** and **sndc2.net.uky.edu**.
+UKY's custom name servers are: **sndc1.net.uky.edu** and **sndc2.net.uky.edu**.
 Finally, those custom name servers will know the IP address that maps to the domain.
 
 We can use the `dig` command to query the non-cached DNS paths.
@@ -177,8 +196,10 @@ Let's say we want to follow the DNS path for `google.com`.
 We can start by querying any [root server][rootiana].
 In the output, we want to pay attention to the QUERY field, the ANSWER field, and the Authority Section.
 We continue to use the `dig` command until the ANSWER field returns a number greater than 0.
-The following commands query one of the root servers, which points us to one of the authoritative servers for **.com** sites,
-which points us to Google's custom nameserver, which finally provides an answer, in fact six answers, or six IP address that all map to **google.com**.
+The following commands query one of the root servers,
+which points us to one of the authoritative servers for **.com** sites,
+which points us to Google's custom nameserver, which finally provides an answer,
+in fact six answers, or six IP address that all map to **google.com**.
 
 Step by step.
 First we query the root server and specify that we're interested in the DNS path for `google.com`:
@@ -187,7 +208,7 @@ First we query the root server and specify that we're interested in the DNS path
 dig @e.root-servers.net google.com
 ```
 
-The output shows that `ANSWER: 0` so we keep digging.
+The output shows that `ANSWER: 0` (or no answer) so we keep digging.
 The `ADDITIONAL SECTION` points us to the next servers in the DNS path.
 We can pick one and query that:
 
@@ -204,10 +225,11 @@ dig @ns1.google.com google.com
 ```
 
 Here we see `ANSWER: 6`, which is greater than zero.
-We now know the DNS path.
+Now we know the DNS path.
 
 The output for the final `dig` command lists six servers.
-Google and other major organizations often use multiple servers for load balancing, redundancy, and better geographic distribution of requests.
+Google and other major organizations often use multiple servers for load balancing,
+redundancy, and better geographic distribution of requests.
 These servers are indicated by the **A records** in the DNS output.
 
 Many large organizations, especially ISPs, function as **autonomous systems (AS)**.
@@ -216,7 +238,8 @@ they work to present a common routing policy to the internet.
 Remember that the internet is an internet of internets!
 
 We can get more information about Google as an autonomous system by locating its **AS number** or **ASN**.
-We do this by using the `whois` command on one of the IP addresses listed in the final `ANSWER SECTION` from the last output:
+We do this by using the `whois` command on one of the IP addresses listed
+in the final `ANSWER SECTION` from the last output:
 
 ```
 whois 142.250.31.113
@@ -226,12 +249,13 @@ The output should include `OriginAS: AS15169`.
 This is Google's ASN.
 Autonomous systems need to communicate with other autonomous systems.
 This is managed by the **Border Gateway Protocol (BGP)**.
-This is a core routing protocol that manages how packets are routed across the internet between autonomous systems.
+This is a core routing protocol that manages how packets are routed
+across the internet between autonomous systems.
 BGP's role is to determine the **best path** for data to travel from one AS to another.
 BGP therefore functions as the "postal service of the internet."
 For a humorous (but real) take on BGP, see [The Internet's Most Broken Protocol][bgp_broken].
 
-Alternatively, we can query UK's:
+Alternatively, we can query UKY's:
 
 ```
 dig @j.root-servers.net. uky.edu
@@ -249,8 +273,10 @@ There are a lot of [ways to use the dig command][dig_commands], and you can test
 
 ### DNS Record Types
 
-The **A record** in the `dig` output from the above examples shows the mapping between the hostname and the IPv4 address.
-There are other types of internet records, and we can use the `dig` command to get information about additional these record types.
+The **A record** in the `dig` output from the above examples shows
+the mapping between the hostname and the IPv4 address.
+There are other types of internet records, and
+we can use the `dig` command to get information about these additional record types.
 Some of the more useful records include:
 
 * IN:       Internet Record
@@ -276,14 +302,15 @@ dig uky.edu ANY
 
 It's important to be able to troubleshoot DNS issues.
 To do that, we have a few utilities available.
-Here are examples and you should read the ``man`` pages for each one:
+Read the ``man`` pages for each one:
 
 #### `host` Command
 
 The `host` command is used to perform DNS lookups and returns information about a domain name or IP address.
 Specifically, the `host` command resolves hostnames to IP Address; or IP addresses to hostnames.
 
-The following command **queries** the domain name `uky.edu` and returns the IP address associated with that domain name:
+The following command **queries** the domain name `uky.edu` and
+returns the IP address associated with that domain name:
 
 ```
 host uky.edu
@@ -300,13 +327,13 @@ host -t MX netflix.com
 host -t MX wikipedia.org
 ```
 
-For example, `host -t MX uky.edu` tells us that UK uses Microsoft Outlook for `uky.edu` email addresses and
-`host -t MX g.uky.edu` tells us that UK uses the Google suite for `g.uky.edu` email addresses.
+For example, `host -t MX uky.edu` tells us that UKY uses Outlook for `uky.edu` email addresses, and
+`host -t MX g.uky.edu` tells us that UKY uses the Google for `g.uky.edu` email addresses.
 
 #### `dig` Command
 
-As discussed above,
-the `dig` command (Domain Information Groper) is used to retrieve DNS records, providing detailed information about how DNS resolution occurs.
+As discussed above, the `dig` command (Domain Information Groper) is used to retrieve DNS records,
+and provides detailed information about how DNS resolution occurs.
 
 We can use `dig` to query `uky.edu` (I've removed extraneous output):
 
@@ -332,7 +359,7 @@ dig www.uky.edu CNAME
 
 #### `nslookup` Command
 
-The `nslookup` command queries Internet name servers interactively to find DNS-related information about a domain.
+The `nslookup` command queries internet name servers interactively to find DNS-related information about a domain.
 
 ```
 nslookup
@@ -361,8 +388,22 @@ Explanation:
 - **NAME** (`uky.edu`) and **Address** (`128.163.35.46`): The domain name and
   the corresponding IP address. 
 
+#### `resolvectl`
+
 Because of the role that `systemd` has here,
 we can use the `resolvectl status` command to determine which external DNS servers are used behind the scenes.
+
+First, we get the network card we're using for internet connection:
+
+```
+ip a
+```
+
+Now we can identify the current DNS server:
+
+```
+resolvectl status ens4
+```
 
 #### `whois` Command
 
@@ -414,7 +455,8 @@ resolvectl status
 
 ## Conclusion
 
-In the same way that phones have phone numbers to uniquely identify them, servers on the internet use IP addresses to enable communication.
+In the same way that phones have phone numbers to uniquely identify them,
+servers on the internet use IP addresses to enable communication.
 Since we're only human, we don't remember every phone number that we dial or every IP address that we visit.
 In order to make such things human friendly, we use names instead.
 
@@ -422,7 +464,8 @@ Nameservers and DNS records act as the phone book and phone book entries of the 
 Note that I refer to the **internet** and not the **web** here.
 The web is strictly defined or limited to the HTTP/HTTPS protocol, and 
 there are protocols at the [OSI application layer][application_layer].
-For example, email servers may also have domain names and IP addresses to resolve and use protocols like POP, IMAP, and SMTP.
+For example, email servers may also have domain names and
+IP addresses to resolve and use protocols like POP, IMAP, and SMTP.
 
 In this section, we covered the basics of DNS that include:
 
@@ -442,6 +485,7 @@ For web-based DNS tools, see [ViewDNS.info][viewdns].
 [application_layer]:https://en.wikipedia.org/wiki/Application_layer
 [bgp_broken]:https://www.youtube.com/watch?v=cOE2miIh1_o
 [cctld]:https://en.wikipedia.org/wiki/Country_code_top-level_domain
+[curl]:https://curl.se/
 [dig_commands]:https://www.geeksforgeeks.org/dig-command-in-linux-with-examples/
 [dnsrecords]:https://www.youtube.com/watch?v=cwT82ibOM2Q
 [fqdn]:https://en.wikipedia.org/wiki/Fully_qualified_domain_name
