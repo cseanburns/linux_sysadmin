@@ -6766,7 +6766,8 @@ together they help administrators establish a secure and controlled environment.
 </ol>
 <h2 id="getting-started-12"><a class="header" href="#getting-started-12">Getting Started</a></h2>
 <p>Most security challenges come from outside of a local network, and the attack vectors are fairly broad.
-To reduce the vulnerabilities of our systems, a systems administrator must be able to handle the following kinds of tasks:</p>
+To reduce our system's vulnerabilities,
+a systems administrator must be able to handle the following kinds of tasks:</p>
 <ul>
 <li>firewall configuration and management</li>
 <li>access control management</li>
@@ -6785,16 +6786,20 @@ To reduce the vulnerabilities of our systems, a systems administrator must be ab
 <li>endpoint security integration</li>
 </ul>
 <p>We have covered some of the tasks above.
-For example, we learned how to create user accounts and password policies, and both of these are a form of access control management.
+For example, we learned how to create user accounts and password policies, and
+both of these are a form of access control management.
 We learned about sub-networking, which is a form of network segmentation.
 We learned about the DNS system, which is a fundamental aspect of DNS security.
-We developed <code>bash</code> scripts to examine log files, which is helpful to understand logging and auditing.
+We touched on <code>bash</code> scripts, which can be created to automate log file evaluation,
+which is helpful to understand logging and auditing.
 We learned how to install software and keep our systems updated, which is a form of patch management.
 Although we can only cover so much and there is a lot more to learn,
 in this section we'll begin to learn firewall configuration and management.
-We will also learn how to create systematic backups of our instances, which is an important part of disaster recovery planning.</p>
+We will also learn how to create systematic backups of our instances,
+which is an important part of disaster recovery planning.</p>
 <h2 id="firewalls"><a class="header" href="#firewalls">Firewalls</a></h2>
-<p>A firewall program allows or denies connections for incoming (aka, <strong>ingress</strong>) or outgoing (aka, <strong>egress</strong>) traffic.
+<p>A firewall program allows or denies connections for incoming (aka, <strong>ingress</strong>) or
+outgoing (aka, <strong>egress</strong>) traffic.
 Traffic can be controlled through the:</p>
 <ul>
 <li>link layer: a network interface such as an ethernet or wireless card,</li>
@@ -6812,10 +6817,12 @@ For example, they can be used to:</p>
 <blockquote>
 <p>As a side note, bare metal servers may have multiple ethernet network interface cards (NICs).
 Each NIC would, of course, have its own MAC address, and therefore would be assigned different IP addresses.
-Thus, at the link layer, incoming connections can be completely blocked on one card and outgoing connections can be completely blocked on the other.</p>
+Thus, at the link layer, incoming connections can be completely blocked on one card and
+outgoing connections can be completely blocked on the other.</p>
 </blockquote>
 <p>To manage these connections, firewalls apply <strong>rules</strong>.
-A rule may block all incoming connections, but then allow SSH traffic through port 22, either via TCP or UDP, and
+A rule may block all incoming connections, but
+then allow SSH traffic through port 22, either via TCP or UDP, and
 then further restrict SSH connections to a specific IP range.
 And/or, another rule may block all incoming, unencrypted HTTP connections through port 80,
 but allow all incoming, encrypted HTTPS connections through port 443.</p>
@@ -6827,20 +6834,23 @@ This will prepare us for setting up new rules when we configure our <strong>LAMP
 These four technologies together create a web server.
 Technically, only Linux (or some other OS) and Apache (or some other web server software) are needed to serve a website.
 At a basic level, all a web server does is open up an operating system's filesystem to the world.
-But PHP and MySQL provide additional functionality, like the ability for a website to interact with a relational database.
+But PHP and MySQL provide additional functionality, like the ability for a website to create an interaction between a user's input and with data in a relational database.
 The <strong>M</strong> in LAMP may also refer to MariaDB, which is a fully open source clone of MySQL.
-Other relational databases are usable, too, such as <a href="https://www.postgresql.org/">PostgreSQL</a> or <a href="https://www.sqlite.org/">SQLite</a>.
+Other relational databases are usable, such as <a href="https://www.postgresql.org/">PostgreSQL</a> or <a href="https://www.sqlite.org/">SQLite</a>.
 We'll use MariaDB later in this course.</p>
 </blockquote>
-<p>First review how our Google Cloud instances are <a href="https://cloud.google.com/vpc/docs/firewalls#more_rules_default_vpc">pre-populated with default firewall rules</a> at the network level.
-Follow that with a review of the firewall <a href="https://cloud.google.com/vpc/docs/firewalls">documentation</a>, which provides an overview of the rules we'll use.</p>
+<p>First review how our Google Cloud instances are
+<a href="https://cloud.google.com/vpc/docs/firewalls#more_rules_default_vpc">pre-populated with default firewall rules</a> at the network level.
+Follow that with a review of the firewall <a href="https://cloud.google.com/vpc/docs/firewalls">documentation</a>,
+which provides an overview of the rules we'll use.</p>
 <h4 id="block-the-ping-application"><a class="header" href="#block-the-ping-application">Block the <code>ping</code> application</a></h4>
 <p>We'll begin by implementing a basic firewall rule where we block incoming <a href="https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol">ICMP traffic</a>.
 ICMP traffic is used by several applications, such as <code>ping</code> and <code>traceroute</code>.
-The <code>ping</code> command is a simple tool that can test whether a server at an IP address or domain is running.
-It's useful for error reporting and network diagnostics.
+The <code>ping</code> command is a simple tool used to test whether a server at an IP address or domain is running.
+It's therefore useful for error reporting and network diagnostics.
 The <code>traceroute</code> command is used to display the path between two internet devices.
-While both are useful, we may want to block that traffic to prevent others from gaining information about our servers.
+While both have their uses,
+we may want to block that traffic to prevent others from gaining information about our servers.
 To do so:</p>
 <ol>
 <li>In the Google Cloud Console, click on <strong>VPC network</strong> and select <strong>Firewall</strong>.</li>
@@ -6859,7 +6869,7 @@ To do so:</p>
 </ol>
 <p>On the <strong>VM instances</strong> page, you can find the external IP address for your virtual machine.
 For example, let's say mine is 33.333.333.100.
-From my laptop, if I try to ping that IP address, I should not get a response.</p>
+After blocking ICMP traffice, if I try to ping that IP address, I should not get a response.</p>
 <p>Once you have tested this rule, feel free to keep or delete it.
 To delete it, select the check box next to the rule, and then click the <strong>Delete</strong> button.</p>
 <blockquote>
@@ -6871,9 +6881,10 @@ specific domains (FQDN-based firewalls) and to block geographical regions.</p>
 then you would want to become familiar with Linux-based firewall applications.</p>
 <p>On Ubuntu, the main firewall application is <a href="https://help.ubuntu.com/community/UFW">ufw</a>.
 On RedHat-based distributions, the main firewall application is <a href="https://docs.fedoraproject.org/en-US/quick-docs/firewalld/">firewalld</a>.
-Both of these firewall applications are user-friendly front-ends of the <a href="https://www.netfilter.org/">iptables</a> firewall application,
-which is built into the Linux kernel.
-Although we are using an Ubuntu distribution as our virtual machines, Ubuntu's <code>ufw</code> firewall is disabled by default.
+Both of these firewall applications are user-friendly front-ends of the
+<a href="https://www.netfilter.org/">iptables</a> firewall application, which is built into the Linux kernel.
+Although we are using an Ubuntu distribution as our virtual machines,
+Ubuntu's <code>ufw</code> firewall is disabled by default.
 This is likely because it may be overkill to use both Google Cloud's firewall and Ubuntu's <code>ufw</code>.</p>
 <blockquote>
 <p>FreeBSD and OpenBSD, two non-Linux but Unix-like operating systems, offer <code>pf</code>:
@@ -6910,7 +6921,8 @@ However, it is still powerful enough to secure a system effectively.</p>
 </ul>
 <p><code>ufw</code> can also control the firewall based on a list of profiles and predefined rules.
 These profiles and predefined rules are contained in the <code>/etc/ufw/applications.d</code> directory.
-For example, there are three protocols for the <code>apache2</code> web server: <strong>Apache</strong>, <strong>Apache Secure</strong>, and <strong>Apache Full</strong>.
+For example, there are three protocols for the <code>apache2</code> web server:
+<strong>Apache</strong>, <strong>Apache Secure</strong>, and <strong>Apache Full</strong>.
 These are defined in <code>/etc/ufw/applications.d/apache2-utils.ufw.profile</code> file:</p>
 <pre><code>[Apache]
 title=Web Server
@@ -6931,25 +6943,33 @@ ports=80,443/tcp
 <pre><code>sudo ufw allow 'Apache Full'
 </code></pre>
 <p>To see other examples, read: <a href="https://ubuntu.com/server/docs/firewalls">ufw documentation</a>.
-If you are using a RedHat distribution of Linux, then checkout <a href="https://www.redhat.com/en/blog/beginners-guide-firewalld">A Beginner's Guide to firewalld in Linux</a>.</p>
+If you are using a RedHat distribution of Linux,
+then checkout <a href="https://www.redhat.com/en/blog/beginners-guide-firewalld">A Beginner's Guide to firewalld in Linux</a>.</p>
 <h2 id="backups"><a class="header" href="#backups">Backups</a></h2>
 <p>Catastrophes (natural, physical, criminal, or out of negligence) happen.
 As a systems administrator, you may be required to have backup strategies to mitigate data loss.</p>
 <p>How you backup depends on the machine.
-If I am managing bare metal, and I want to backup a physical disk to another physical disk, then that requires a specific tool.
-However, if I am managing virtual machines, like our Google Cloud instance, then that requires a different tool.
+If I am managing bare metal, and I want to backup a physical disk to another physical disk,
+then that requires a specific tool, like <code>rsync</code>.
+However, if I am managing virtual machines, like our Google Cloud instance,
+then that requires a different tool.
 Therefore, in this section, I will briefly cover both scenarios.</p>
 <h3 id="google-cloud-snapshots"><a class="header" href="#google-cloud-snapshots">Google Cloud Snapshots</a></h3>
-<p>Since our instance on Google Cloud is a virtual machine, we can use the Google Cloud console to create <strong>snapshots</strong> of our instance.
+<p>Since our instance on Google Cloud is a virtual machine,
+we can use the Google Cloud console to create <strong>snapshots</strong> of our instance.
 A <strong>snapshot</strong> is a copy of a virtual machine at the time the snapshot was taken.
 What's great about taking a snapshot is that the result is basically a file of a complete operating system.
-Since it's a file, it can itself be used in other projects or used to restore a machine to the time the snapshot was taken.</p>
+Since it's a file, it can itself be used in other projects or
+used to restore a machine to the time the snapshot was taken.</p>
 <p>Snapshots may also be used to document or reproduce work.
 For example, if I worked with programmers, as a systems administrator,
 I might help a programmer share snapshots of a virtual machine with other programmers.
-Those other programmers could then restore the snapshot in their own instances, and see and run the original work in the environment it was created in.</p>
-<p>Taking snapshots in Google Cloud is very straightforward, but since it does take up extra storage, it will accrue extra costs.
-Since we want avoid that for now, please see the following documentation for how to take a snapshot in Google Cloud:</p>
+Those other programmers could then restore the snapshot in their own instances, and
+see and run the original work in the environment it was created in.</p>
+<p>Taking snapshots in Google Cloud is very straightforward, but
+since it does take up extra storage, it will accrue extra costs.
+Since we want avoid that for now,
+please see the following documentation for how to take a snapshot in Google Cloud:</p>
 <p><a href="https://cloud.google.com/compute/docs/disks/create-snapshots">Create and manage disk snapshots</a></p>
 <ol>
 <li>Click on <strong>Compute Engine</strong>.</li>
@@ -6961,33 +6981,34 @@ Since we want avoid that for now, please see the following documentation for how
 <li>Click on <strong>Create</strong>.</li>
 </ol>
 <h3 id="rsync"><a class="header" href="#rsync"><code>rsync</code></a></h3>
-<p>If we were managing bare metal machines, then we might use a program like <code>rsync</code> to backup physical disk drives.
-<code>rsync</code> is a powerful program.
-It can copy disks, directories, and files.
+<p>If we were managing bare metal machines,
+then we might use a program like <code>rsync</code> to backup physical disk drives.
+<code>rsync</code> is a powerful program tha can copy disks, directories, and files.
 It can copy files from one location, and send the copies, encrypted, to a remote server.</p>
-<p>For example, let's say I mount an external hard drive to my filesystem at <strong>/mnt/backup</strong>.
-To copy my home directory, I'd use:</p>
+<p>For example, let's say I mount an external hard drive to my filesystem at <code>/mnt/backup</code>.
+To copy my home directory to <code>/mnt/backup</code>, I'd use:</p>
 <pre><code>rsync -av /home/me/ /mnt/backup/
 </code></pre>
-<p>where <strong>/home/me/</strong> is the <strong>source directory</strong>, and <strong>/mnt/backup/</strong> is the <strong>destination directory</strong>.</p>
+<p>where <code>/home/me/</code> is the <strong>source directory</strong>, and <code>/mnt/backup/</code> is the <strong>destination directory</strong>.</p>
 <p>Syntax matters here.
-If I include the trailing slash on the source directory, then <code>rsync</code> will copy everything in <strong>/home/me/</strong> to <strong>/mnt/backup/</strong>.
+If I include the trailing slash on the source directory, then
+<code>rsync</code> copies everything in <code>/home/me/</code> to <code>/mnt/backup/</code>.
 However, if I leave the trailing slash off, like so:</p>
 <pre><code>rsync -av /home/me /mnt/backup/
 </code></pre>
-<p>then the result will be that the directory <strong>me/</strong> will be copied to <strong>/mnt/backup/me/</strong>.</p>
+<p>then the result will be that the directory <code>me/</code> will be copied to <code>/mnt/backup/me/</code>.</p>
 <p>Let's see this in action.
 Say I have two directories.
-In the <strong>tmp1/</strong> directory, there are two files: <strong>file1</strong> and <strong>file2</strong>.
-The <strong>tmp2/</strong> directory is empty.
-To copy <strong>file1</strong> and <strong>file2</strong> to <strong>tmp2</strong>, then:</p>
+In the <code>tmp1/</code> directory, there are two files: <code>file1</code> and <code>file2</code>.
+The <code>tmp2/</code> directory is empty.
+To copy <code>file1</code> and <code>file2</code> to <code>tmp2</code>, then:</p>
 <pre><code>ls tmp1/
 file1 file2
 rsync -av tmp1/ tmp2/
 ls tmp2
 file1 file2
 </code></pre>
-<p>However, if I leave that trailing slash off the source directory, then the <strong>tmp1/</strong> will get copied to <strong>tmp2/</strong>:</p>
+<p>However, if I leave that trailing slash off the source directory, then the <code>tmp1/</code> will get copied to <code>tmp2/</code>:</p>
 <pre><code>ls tmp1
 file1 file2
 rsync -av tmp1 tmp2/
@@ -6996,7 +7017,8 @@ tmp1/
 ls tmp2/tmp1/
 file1 file2
 </code></pre>
-<p><code>rsync</code> can also send a source directory to a directory on a remote server, and the directory and files being copied will be encrypted on the way.
+<p><code>rsync</code> can also send a source directory to a directory on a remote server, and
+the directory and files being copied will be encrypted on the way.
 To do this, we use <code>ssh</code> style syntax:</p>
 <pre><code>rsync -av tmp1/ USER@REMOTE:~/tmp2/
 </code></pre>
@@ -7005,9 +7027,9 @@ To do this, we use <code>ssh</code> style syntax:</p>
 </code></pre>
 <h3 id="delete-option"><a class="header" href="#delete-option">Delete Option</a></h3>
 <p><code>rsync</code> has a <code>--delete</code> option.
-Adding this option means that <code>rsync</code> will synchronize the source directory with the destination directory.
-This means that if I had already created a backup of <strong>tmp1</strong> to <strong>tmp2</strong>, and then delete <strong>file1</strong> in <strong>tmp1</strong> later,
-then run <code>rsync</code> with the delete option, then <code>rsync</code> will also delete <strong>file1</strong> from <strong>tmp2/</strong>.
+Adding this option means that <code>rsync</code> synchronizes the source directory with the destination directory.
+This means that if I had already created a backup of <code>tmp1</code> to <code>tmp2</code>, and then delete <code>file1</code> in <code>tmp1</code> later,
+then run <code>rsync</code> with the delete option, then <code>rsync</code> will also delete <code>file1</code> from <code>tmp2/</code>.
 This is how that looks:</p>
 <pre><code>ls tmp1/
 file1 file2
@@ -7026,14 +7048,18 @@ To restore with <code>rsync</code>, we just reverse the destination directory wi
 <pre><code>rsync -av tmp2/ tmp1/
 </code></pre>
 <h2 id="conclusion-19"><a class="header" href="#conclusion-19">Conclusion</a></h2>
-<p>System security involves a multi-vectored approach that includes many tasks, from password management to log audits.
+<p>System security involves a multi-vectored approach that includes many tasks,
+from password management to log audits.
 In this section, we covered firewalls and backups, and have thus addressed new vectors to protect:
 firewall configuration and management and disaster recovery.</p>
 <p>Since we're running an Ubuntu server on Google Cloud,
-we have Google Cloud options for creating firewall rules at the network level and for backing up disks as snapshots.
-We also have Ubuntu options for creating firewall rules at the OS level using <code>ufw</code> and for backing up disks using commands like <code>rsync</code>.
+we have Google Cloud options for creating firewall rules at the network level and
+for backing up disks as snapshots.
+We also have Ubuntu options for creating firewall rules at the OS level using <code>ufw</code> and
+for backing up disks using commands like <code>rsync</code>.
 How we go about either depends entirely on our needs or on our organization's needs.
-But knowing these options exist and the different reasons why we have these options, provides quite a bit of utility.</p>
+But knowing these options exist and the different reasons why we have these options,
+provides quite a bit of utility.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="creating-a-lamp-server"><a class="header" href="#creating-a-lamp-server">Creating a LAMP Server</a></h1>
 <p>In this section, we learn how to set up a LAMP (Linux, Apache, MariaDB, PHP) stack.
 This stack enables us to create a web server that provides extra functionality via PHP and MariaDB.
