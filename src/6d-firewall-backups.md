@@ -105,10 +105,8 @@ This will prepare us for setting up new rules when we configure our **LAMP** ser
 > Other relational databases are usable, such as [PostgreSQL][postgresql] or [SQLite][sqlite].
 > We'll use MariaDB later in this course.
 
-First review how our Google Cloud instances are
-[pre-populated with default firewall rules][prepopDefault] at the network level.
-Follow that with a review of the firewall [documentation][vpcFirewallOverview],
-which provides an overview of the rules we'll use.
+First review how our Google Cloud instances are [pre-populated with default firewall rules][prepopDefault] at the network level.
+Follow that with a review of the firewall [documentation][vpcFirewallOverview], which provides an overview of the rules we'll use.
 
 #### Block the `ping` application
 
@@ -119,28 +117,38 @@ It's therefore useful for error reporting and network diagnostics.
 The `traceroute` command is used to display the path between two internet devices.
 While both have their uses,
 we may want to block that traffic to prevent others from gaining information about our servers.
-To do so:
+
+> To see how this works, let's test `ping` first on your machines.
+> First, identify the public/external IP address of your Google Cloud virtual machine.
+> Let's say it's `34.345.345.222`.
+> Open your macOS `Terminal.app` or Windows Command or Powershell.
+> Then run the command: `ping 34.345.345.222` (of course, use your VM's external IP).
+> You should get a response.
+> To end the `ping` session, press `ctrl-c`.
+
+Now let's block ICMP traffic:
 
 1. In the Google Cloud Console, click on **VPC network** and select **Firewall**.
-2. The default VPC firewall rules are listed that allow for HTTP, ICMP, RDP, and SSH traffic.
-3. Priority settings are set for each rule. Lower numbers mean the rules have a higher priority.
-4. The predefined rules allow for incoming ICMP traffic set at a priority level of 65534.
-5. We could delete that, but we should leave these rules in place and create a higher priority rule that will supersede that.
-6. Click on **Create Firewall Rule**.
-7. For name, enter **new-deny-icmp**.
-8. Keep priority at 1000.
-9. Under **Direction of traffic**, keep as **Ingress**.
-10. Under **Action on match**, select **Deny**.
-11. In the **Source IPv4** ranges, enter **0.0.0.0/0** for all network traffic.
-12. Under **Protocols and ports**, select **Other**, and type in **icmp**.
-13. Click the **Create** button to create the rule.
+1. The default VPC firewall rules are listed that allow for HTTP, ICMP, RDP, and SSH traffic.
+1. Priority settings are set for each rule. Lower numbers mean the rules have a higher priority.
+1. The predefined rules allow for incoming ICMP traffic set at a priority level of 65534.
+1. We could delete that, but we should leave these rules in place and create a higher priority rule that will supersede that.
+1. Click on **Create Firewall Rule**.
+1. For name, enter **new-deny-icmp**.
+1. Keep priority at 1000.
+1. Under **Direction of traffic**, keep as **Ingress**.
+1. Under **Action on match**, select **Deny**.
+1. Under **Targets**, select "Specified service account**.
+1. In the **Source IPv4** ranges, enter **0.0.0.0/0** for all network traffic.
+1. Under **Protocols and ports**, select **Other**, and type in **icmp** (use lowercase).
+1. Click the **Create** button to create the rule.
 
-On the **VM instances** page, you can find the external IP address for your virtual machine.
-For example, let's say mine is 33.333.333.100.
-After blocking ICMP traffice, if I try to ping that IP address, I should not get a response.
+> Once the rule has been created, re-run the `ping` command.
+> You should not see any responses this time.
 
 Once you have tested this rule, feel free to keep or delete it.
 To delete it, select the check box next to the rule, and then click the **Delete** button.
+Once the rule is deleted, you can re-run the `ping` command to test if your server is responding again.
 
 > Note: Google's Firewall rules, at extra cost, now offer the ability to block
 > specific domains (FQDN-based firewalls) and to block geographical regions.
@@ -250,12 +258,18 @@ please see the following documentation for how to take a snapshot in Google Clou
 [Create and manage disk snapshots][gcloudDiskSnapshots]
 
 1. Click on **Compute Engine**.
-2. Click on **Snapshots**.
-3. Click on **Create Snapshot**.
-4. Enter a name for your snapshot.
-5. Select the **Source disk**.
-6. Select **Snapshot** under the **Type** section.
-7. Click on **Create**.
+1. Click on **Snapshots**.
+1. Click on **Create Snapshot**.
+1. Enter a name for your snapshot.
+1. Select the **Source disk**.
+1. Select **Snapshot** under the **Type** section.
+1. Select **Regional** under **Location**.
+    - If we were concerned about a robust backup solution, we would choose **Multi-regional**.
+1. We don't need to add a label, but this would be prudent if we were managing multiple VMs.
+1. Click on **Create**, if necessary:
+    - Creating and storing snaphosts will incur additional charges.
+    - If it's important to you to create a snapshot to store your progress before we start our projects, go ahead.
+    - Otherwise, download any content that you want to keep.
 
 ### `rsync`
 
