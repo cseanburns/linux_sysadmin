@@ -6839,10 +6839,8 @@ The <strong>M</strong> in LAMP may also refer to MariaDB, which is a fully open 
 Other relational databases are usable, such as <a href="https://www.postgresql.org/">PostgreSQL</a> or <a href="https://www.sqlite.org/">SQLite</a>.
 We'll use MariaDB later in this course.</p>
 </blockquote>
-<p>First review how our Google Cloud instances are
-<a href="https://cloud.google.com/vpc/docs/firewalls#more_rules_default_vpc">pre-populated with default firewall rules</a> at the network level.
-Follow that with a review of the firewall <a href="https://cloud.google.com/vpc/docs/firewalls">documentation</a>,
-which provides an overview of the rules we'll use.</p>
+<p>First review how our Google Cloud instances are <a href="https://cloud.google.com/vpc/docs/firewalls#more_rules_default_vpc">pre-populated with default firewall rules</a> at the network level.
+Follow that with a review of the firewall <a href="https://cloud.google.com/vpc/docs/firewalls">documentation</a>, which provides an overview of the rules we'll use.</p>
 <h4 id="block-the-ping-application"><a class="header" href="#block-the-ping-application">Block the <code>ping</code> application</a></h4>
 <p>We'll begin by implementing a basic firewall rule where we block incoming <a href="https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol">ICMP traffic</a>.
 ICMP traffic is used by several applications, such as <code>ping</code> and <code>traceroute</code>.
@@ -6850,8 +6848,17 @@ The <code>ping</code> command is a simple tool used to test whether a server at 
 It's therefore useful for error reporting and network diagnostics.
 The <code>traceroute</code> command is used to display the path between two internet devices.
 While both have their uses,
-we may want to block that traffic to prevent others from gaining information about our servers.
-To do so:</p>
+we may want to block that traffic to prevent others from gaining information about our servers.</p>
+<blockquote>
+<p>To see how this works, let's test <code>ping</code> first on your machines.
+First, identify the public/external IP address of your Google Cloud virtual machine.
+Let's say it's <code>34.345.345.222</code>.
+Open your macOS <code>Terminal.app</code> or Windows Command or Powershell.
+Then run the command: <code>ping 34.345.345.222</code> (of course, use your VM's external IP).
+You should get a response.
+To end the <code>ping</code> session, press <code>ctrl-c</code>.</p>
+</blockquote>
+<p>Now let's block ICMP traffic:</p>
 <ol>
 <li>In the Google Cloud Console, click on <strong>VPC network</strong> and select <strong>Firewall</strong>.</li>
 <li>The default VPC firewall rules are listed that allow for HTTP, ICMP, RDP, and SSH traffic.</li>
@@ -6863,15 +6870,18 @@ To do so:</p>
 <li>Keep priority at 1000.</li>
 <li>Under <strong>Direction of traffic</strong>, keep as <strong>Ingress</strong>.</li>
 <li>Under <strong>Action on match</strong>, select <strong>Deny</strong>.</li>
+<li>Under <strong>Targets</strong>, select "Specified service account**.</li>
 <li>In the <strong>Source IPv4</strong> ranges, enter <strong>0.0.0.0/0</strong> for all network traffic.</li>
-<li>Under <strong>Protocols and ports</strong>, select <strong>Other</strong>, and type in <strong>icmp</strong>.</li>
+<li>Under <strong>Protocols and ports</strong>, select <strong>Other</strong>, and type in <strong>icmp</strong> (use lowercase).</li>
 <li>Click the <strong>Create</strong> button to create the rule.</li>
 </ol>
-<p>On the <strong>VM instances</strong> page, you can find the external IP address for your virtual machine.
-For example, let's say mine is 33.333.333.100.
-After blocking ICMP traffice, if I try to ping that IP address, I should not get a response.</p>
+<blockquote>
+<p>Once the rule has been created, re-run the <code>ping</code> command.
+You should not see any responses this time.</p>
+</blockquote>
 <p>Once you have tested this rule, feel free to keep or delete it.
-To delete it, select the check box next to the rule, and then click the <strong>Delete</strong> button.</p>
+To delete it, select the check box next to the rule, and then click the <strong>Delete</strong> button.
+Once the rule is deleted, you can re-run the <code>ping</code> command to test if your server is responding again.</p>
 <blockquote>
 <p>Note: Google's Firewall rules, at extra cost, now offer the ability to block
 specific domains (FQDN-based firewalls) and to block geographical regions.</p>
@@ -6978,7 +6988,19 @@ please see the following documentation for how to take a snapshot in Google Clou
 <li>Enter a name for your snapshot.</li>
 <li>Select the <strong>Source disk</strong>.</li>
 <li>Select <strong>Snapshot</strong> under the <strong>Type</strong> section.</li>
-<li>Click on <strong>Create</strong>.</li>
+<li>Select <strong>Regional</strong> under <strong>Location</strong>.
+<ul>
+<li>If we were concerned about a robust backup solution, we would choose <strong>Multi-regional</strong>.</li>
+</ul>
+</li>
+<li>We don't need to add a label, but this would be prudent if we were managing multiple VMs.</li>
+<li>Click on <strong>Create</strong>, if necessary:
+<ul>
+<li>Creating and storing snaphosts will incur additional charges.</li>
+<li>If it's important to you to create a snapshot to store your progress before we start our projects, go ahead.</li>
+<li>Otherwise, download any content that you want to keep.</li>
+</ul>
+</li>
 </ol>
 <h3 id="rsync"><a class="header" href="#rsync"><code>rsync</code></a></h3>
 <p>If we were managing bare metal machines,
