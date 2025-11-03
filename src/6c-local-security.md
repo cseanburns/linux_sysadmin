@@ -152,7 +152,7 @@ In this tutorial, we are going to create a ``chroot``.
     ```
     cd /mustafar/lib/x86_64-linux-gnu/
     sudo cp /lib/x86_64-linux-gnu/libtinfo.so.6 .
-    sudo cp /lib/x86_64-linux-gnu/libc.so.6
+    sudo cp /lib/x86_64-linux-gnu/libc.so.6 .
     cd /mustafar/lib64/
     sudo cp /lib64/ld-linux-x86-64.so.2 .
     ```
