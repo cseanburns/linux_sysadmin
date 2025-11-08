@@ -187,11 +187,11 @@
 </ol>
 <h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p><a href="https://httpd.apache.org/">Apache</a> is an HTTP server, otherwise called web server software.
-An HTTP server makes files on a computer available to others who are able to establish a connection to the computer and view the files
-with a web browser.
+An HTTP server makes files on a computer available to others who are able to establish a connection to the computer and
+view the files with a web browser.
 Other HTTP server software exists and another major product is <a href="https://nginx.org/en/">nginx</a>.</p>
 <p>It's important to understand the basics of an HTTP server.
-Please read Apache's <a href="https://httpd.apache.org/docs/2.4/getting-started.html">Getting Started</a> page before proceeding, as it covers important basics of HTTP servers.
+Please read Apache's <a href="https://httpd.apache.org/docs/2.4/getting-started.html">Getting Started</a> page before proceeding, as it covers important aspects of HTTP servers.
 Each of the main sections on that page describe the important elements that make up and serve a website, including:</p>
 <ul>
 <li>clients, servers, and URLs</li>
@@ -207,7 +207,7 @@ sudo apt -y upgrade
 </code></pre>
 <p>Once the machine is updated, we can install Apache2 using <code>apt</code>.
 First we'll use <code>apt search</code> to identify the specific package name.
-I already know that a lot of results will be returned, so let's <strong>pipe</strong> the <code>apt search</code> command through <code>head</code> to look at the initial results:</p>
+I already know that a lot of results will be returned, so let's <strong>pipe</strong> <code>|</code> the <code>apt search</code> command through <code>head</code> to look at the initial results:</p>
 <pre><code>sudo apt search apache2 | head
 </code></pre>
 <p>On Ubuntu, the Apache package is named <code>apache2</code>.
@@ -220,19 +220,19 @@ On other distributions, it may be named differently, such as <code>httpd</code> 
 <h2 id="basic-checks"><a class="header" href="#basic-checks">Basic checks</a></h2>
 <p>Let's check if the server is up and running, configure some basic things, and then create a basic web site.
 To start, we use <code>systemctl</code> to ensure <code>apache2</code> is enabled (starts automatically on reboot) and active (currently running):</p>
-<pre><code>systemctl list-unit-files apache2.service
-systemctl status apache2
+<pre><code>systemctl status apache2
 </code></pre>
-<p>The output shows that <code>apache2</code> is enabled, which means that it will start running automatically if the computer gets rebooted.
-The output of the second command shows that <code>apache2</code> is enabled and that it is also active (running).</p>
-<h2 id="creating-your-first-web-page"><a class="header" href="#creating-your-first-web-page">Creating Your First Web Page</a></h2>
+<p>The output shows that <code>apache2</code> is enabled, which means that it will start running automatically if the computer gets rebooted, and
+that it is currently running (active).</p>
 <p>Since <code>apache2</code> is up and running, let's look at the default web page.
-The <strong>default web page</strong> is the landing page of your server, and it is stored in the <strong>document root</strong> (<code>/var/www/html</code>) as a file named <code>index.html</code>.</p>
+The <strong>default web page</strong> is the landing page of your server, and it is stored in the <strong>document root</strong>.
+By default on Ubuntu, the path to the <strong>document root</strong> is located at <code>/var/www/html</code>, and
+the default file being served is titled <code>index.html</code>.</p>
 <p>There are two ways we can look at the default web page.
 We can use a command line web browser or your regular graphical browser..
-There are a number command line browsers available, such as <code>elinks</code>, <code>links2</code>, <code>lynx</code>, and <code>w3m</code> (which I prefer).</p>
+There are a number command line browsers available, such as <code>elinks</code>, <code>links2</code>, <code>lynx</code>, and <code>w3m</code>.</p>
 <p>To check with <code>w3m</code>, we have to install it first:</p>
-<pre><code>sudo apt install w3m
+<pre><code>sudo apt install w3m 
 </code></pre>
 <p>Once it's installed, we can visit our default site using the loopback IP address (aka, <code>localhost</code>).
 From the command line on our server, we can run either of these two commands:</p>
@@ -258,7 +258,8 @@ You can copy that external IP address or simply click on it to open it in a new 
 Then you should see the graphical version of the <strong>Apache2 Ubuntu Default Page</strong>.</p>
 <p>Please take a moment to read through the text on the default page.
 It provides information about where Ubuntu stores configuration files and document roots, which is where website files go.</p>
-<p>Let's create our first web page.
+<h2 id="creating-your-first-web-page"><a class="header" href="#creating-your-first-web-page">Creating Your First Web Page</a></h2>
+<p>Now let's create our first web page.
 The default page described above provides the location of the document root at <code>/var/www/html</code>.
 When we navigate to that location, we'll see that there is an <code>index.html</code> file located in that directory.
 This is the <strong>Apache2 Ubuntu Default Page</strong> that we described above.
