@@ -9,12 +9,12 @@ By the end of this section, you will be able to:
 ## Getting Started
 
 [Apache][apache] is an HTTP server, otherwise called web server software.
-An HTTP server makes files on a computer available to others who are able to establish a connection to the computer and view the files
-with a web browser.
+An HTTP server makes files on a computer available to others who are able to establish a connection to the computer and
+view the files with a web browser.
 Other HTTP server software exists and another major product is [nginx][nginx].
 
 It's important to understand the basics of an HTTP server.
-Please read Apache's [Getting Started][gettingStarted] page before proceeding, as it covers important basics of HTTP servers.
+Please read Apache's [Getting Started][gettingStarted] page before proceeding, as it covers important aspects of HTTP servers.
 Each of the main sections on that page describe the important elements that make up and serve a website, including:
 
 - clients, servers, and URLs
@@ -32,9 +32,9 @@ sudo apt update
 sudo apt -y upgrade
 ```
 
-Once the machine is updated, we can install Apache2 using ``apt``.
-First we'll use ``apt search`` to identify the specific package name.
-I already know that a lot of results will be returned, so let's **pipe** the ``apt search`` command through ``head`` to look at the initial results:
+Once the machine is updated, we can install Apache2 using `apt`.
+First we'll use `apt search` to identify the specific package name.
+I already know that a lot of results will be returned, so let's **pipe** `|` the `apt search` command through `head` to look at the initial results:
 
 ```
 sudo apt search apache2 | head
@@ -59,26 +59,25 @@ Let's check if the server is up and running, configure some basic things, and th
 To start, we use `systemctl` to ensure `apache2` is enabled (starts automatically on reboot) and active (currently running):
 
 ```
-systemctl list-unit-files apache2.service
 systemctl status apache2
 ```
 
-The output shows that `apache2` is enabled, which means that it will start running automatically if the computer gets rebooted.
-The output of the second command shows that `apache2` is enabled and that it is also active (running).
-
-## Creating Your First Web Page
+The output shows that `apache2` is enabled, which means that it will start running automatically if the computer gets rebooted, and
+that it is currently running (active).
 
 Since `apache2` is up and running, let's look at the default web page.
-The **default web page** is the landing page of your server, and it is stored in the **document root** (`/var/www/html`) as a file named `index.html`.
+The **default web page** is the landing page of your server, and it is stored in the **document root**.
+By default on Ubuntu, the path to the **document root** is located at `/var/www/html`, and
+the default file being served is titled `index.html`.
 
 There are two ways we can look at the default web page.
 We can use a command line web browser or your regular graphical browser..
-There are a number command line browsers available, such as `elinks`, `links2`, `lynx`, and `w3m` (which I prefer).
+There are a number command line browsers available, such as `elinks`, `links2`, `lynx`, and `w3m`.
 
 To check with `w3m`, we have to install it first:
 
 ```
-sudo apt install w3m
+sudo apt install w3m 
 ```
 
 Once it's installed, we can visit our default site using the loopback IP address (aka, `localhost`).
@@ -120,7 +119,9 @@ Then you should see the graphical version of the **Apache2 Ubuntu Default Page**
 Please take a moment to read through the text on the default page.
 It provides information about where Ubuntu stores configuration files and document roots, which is where website files go.
 
-Let's create our first web page.
+## Creating Your First Web Page
+
+Now let's create our first web page.
 The default page described above provides the location of the document root at `/var/www/html`.
 When we navigate to that location, we'll see that there is an `index.html` file located in that directory.
 This is the **Apache2 Ubuntu Default Page** that we described above.
