@@ -53,9 +53,8 @@ Since this server is exposed to the internet, be sure to use a complex password.
 
 ```
 Enter the current password for root (enter for none):
-Set root password: Y
-New Password: [YOUR-PASSWORD-HERE]
-Re-enter new password: [YOUR-PASSWORD-HERE]
+Switch to unix_socket_ authentication: n
+Change the root password: n
 Remove anonymous users: Y
 Disallow root login remotely: Y
 Remove test database and access to it: Y
@@ -99,8 +98,9 @@ MariaDB [(none)]> show databases;
 | information_schema |
 | mysql              |
 | performance_schema |
+| sys                |
 +--------------------+
-3 rows in set (0.002 sec)
+4 rows in set (0.001 sec)
 ```
 
 > Note: If we are logging into the root database account as the root Linux user, we don't need to enter our password.
@@ -398,6 +398,13 @@ If all is well with the second command, HTML should be outputted:
 ```
 sudo php -f login.php
 sudo php -f distros.php
+```
+
+You can also view the distros.php in your web browser.
+If successful, you should see the table from the MariaDB distributions database.
+
+```
+http://your_external_IP/distros.php
 ```
 
 ## Conclusion

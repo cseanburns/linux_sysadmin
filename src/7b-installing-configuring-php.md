@@ -78,6 +78,7 @@ alt="PHP install page"
 title="PHP install page">
 <figcaption>
 Fig. 1. A screenshot of the title of the PHP install page.
+Your image should show a newer version number than 7.4.3 (e.g., 8.1.2 as of November 2025).
 </figcaption>
 </figure>
 
