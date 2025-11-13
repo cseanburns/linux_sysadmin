@@ -24,7 +24,7 @@ MariaDB has [good documentation][mariadb_docs] and getting started pages.
 ## Install and Set Up MariaDB
 
 In this section, we'll learn how to install, setup, secure, and configure the MariaDB relational database.
-The goal it to make it work with the Apache2 web server and the PHP programming language.
+The goal is to make it work with the Apache2 web server and the PHP programming language.
 
 First, let's install MariaDB Community Server, and then log into the MariaDB shell under the **MariaDB root** account.
 
@@ -234,7 +234,7 @@ MariaDB [(linuxdb)]> select * from distributions;
 MariaDB [(linuxdb)]> delete from distributions where name='Debian';
 MariaDB [(linuxdb)]> insert into distributions
     -> (name, packagemanager, developer, founded) values
-    -> ('Debian', 'APT', 'The Debian Project', '1993-09-15'),
+    -> ('SUSE', 'RPM', 'SUSE', '2000-10-31'),
     -> ('CentOS', 'YUM', 'The CentOS Project', '2004-05-14');
 MariaDB [(linuxdb)]> select * from distributions;
 MariaDB [(linuxdb)]> select name, packagemanager
