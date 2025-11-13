@@ -215,9 +215,8 @@ When you run the above script, you'll get a series of prompts to respond to like
 Press <strong>enter</strong> for the first prompt, press <strong>Y</strong> for the prompts marked <strong>Y</strong>, and input your own password.
 Since this server is exposed to the internet, be sure to use a complex password.</p>
 <pre><code>Enter the current password for root (enter for none):
-Set root password: Y
-New Password: [YOUR-PASSWORD-HERE]
-Re-enter new password: [YOUR-PASSWORD-HERE]
+Switch to unix_socket_ authentication: n
+Change the root password: n
 Remove anonymous users: Y
 Disallow root login remotely: Y
 Remove test database and access to it: Y
@@ -257,8 +256,9 @@ MariaDB [(none)]&gt; show databases;
 | information_schema |
 | mysql              |
 | performance_schema |
+| sys                |
 +--------------------+
-3 rows in set (0.002 sec)
+4 rows in set (0.001 sec)
 </code></pre>
 <blockquote>
 <p>Note: If we are logging into the root database account as the root Linux user, we don't need to enter our password.</p>
@@ -501,6 +501,10 @@ Nothing will output if all is well with the first command.
 If all is well with the second command, HTML should be outputted:</p>
 <pre><code>sudo php -f login.php
 sudo php -f distros.php
+</code></pre>
+<p>You can also view the distros.php in your web browser.
+If successful, you should see the table from the MariaDB distributions database.</p>
+<pre><code>http://your_external_IP/distros.php
 </code></pre>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>Congratulations! If you've reached this far, you have successfully created a LAMP stack.
