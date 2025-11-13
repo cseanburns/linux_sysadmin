@@ -7347,7 +7347,7 @@ See: <a href="https://mariadb.com/kb/en/introduction-to-relational-databases/">I
 MariaDB has <a href="https://mariadb.org/documentation/">good documentation</a> and getting started pages.</p>
 <h2 id="install-and-set-up-mariadb"><a class="header" href="#install-and-set-up-mariadb">Install and Set Up MariaDB</a></h2>
 <p>In this section, we'll learn how to install, setup, secure, and configure the MariaDB relational database.
-The goal it to make it work with the Apache2 web server and the PHP programming language.</p>
+The goal is to make it work with the Apache2 web server and the PHP programming language.</p>
 <p>First, let's install MariaDB Community Server, and then log into the MariaDB shell under the <strong>MariaDB root</strong> account.</p>
 <pre><code>sudo apt install mariadb-server mariadb-client
 </code></pre>
@@ -7513,7 +7513,7 @@ MariaDB [(linuxdb)]&gt; select * from distributions;
 MariaDB [(linuxdb)]&gt; delete from distributions where name='Debian';
 MariaDB [(linuxdb)]&gt; insert into distributions
     -&gt; (name, packagemanager, developer, founded) values
-    -&gt; ('Debian', 'APT', 'The Debian Project', '1993-09-15'),
+    -&gt; ('SUSE', 'RPM', 'SUSE', '2000-10-31'),
     -&gt; ('CentOS', 'YUM', 'The CentOS Project', '2004-05-14');
 MariaDB [(linuxdb)]&gt; select * from distributions;
 MariaDB [(linuxdb)]&gt; select name, packagemanager
