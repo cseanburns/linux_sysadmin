@@ -34,6 +34,3 @@
     - [Installing and Configuring MariaDB](7c-installing-configuring-mariadb.md)
     - [Installing WordPress](7d-install-wordpress.md)
 - [Conclusion](p8-conclusion.md)
-
-- [Project Setup](p2-project-setup.md)
-    - [Using gcloud for Virtual Machines](2a-using-gcloud-virtual-machines.md)
