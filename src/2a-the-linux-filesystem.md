@@ -6,13 +6,18 @@ In this section, we will cover the:
 - the basic commands to navigate around and to work with directories and files
 
 > The terms **directories** and **folders** are synonymous, but as users of primarily graphical user interfaces,
-> you > are more likely familiar with the term **folders**.
+> you are more likely familiar with the term **folders**.
 > I will more often use the term **directories** since that is the command line (text user interface) convention.
 > I will use the term **folders** when referring to a graphical environment.
 
-Throughout this demonstration, I encourage you to connect to your remote server using the `gcloud compute ssh` command or
-through the web shell and follow along with the commands that I use.
-See [Section 2.1](2a-using-gcloud-virtual-machines.html) for details on connecting to the remote server.
+## Learn the Commandline
+
+Learning to use the Linux commandline requires practice.
+To practice the lessons in this book, I encourage you to open two applications:
+1) a browser window containing one of these pages and 2) a terminal window with your SSH connection to the server.
+Split your screen without overlapping the windows.
+For example, keep your browser window open on the left and your terminal connection open on the right.
+Then follow along with the demos.
 
 ## Visualizing the Filesystem as a Tree
 
@@ -28,7 +33,7 @@ the latter is the default on the [Fedora][fedora] and [openSUSE][opensuse] distr
 [Opensource.com][ext4] has a nice overview of filesystems under this concept.
 
 A **filesystem** might also be used to refer to the **directory structure** or [directory tree][directorytree] of a system.
-In graphical user interface parlance, this is simply how the folders are your disk are organized.
+In graphical user interface parlance, this is simply how the folders on your disk are organized.
 This concept of a filesystem is related to the prior concept of a filesystem, but
 it's used here to refer to the location of files and directories on a system.
 For example, on Windows, the filesystem is identified by a letter, like the **C:** drive,
@@ -37,7 +42,7 @@ Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.), will 
 [macOS adheres to a tree like filesystem][macosdirtree] like Linux, UNIX, and other Unix-like operating systems, and
 [this is because macOS is a registered UNIX&#174; OS][macosunix].
 
-In Unix-like OSes, like Linux, we have a top-level **root** directory identified by a single forward slash  **/**,
+In the Unix family of OSes, like Linux, we have a top-level **root** directory identified by a single forward slash  **/**,
 and then subdirectories under that root directory.
 Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are **mounted** under that root hierarchy and
 not as separate drives like on Windows.
@@ -54,9 +59,6 @@ The `tree` command, like many Linux commands, can be run on its own or with opti
 - `tree` : list contents of directories in a tree-like format
     - `tree -dfL 1` : directories only, full path, one level
     - `tree -dfL 1 /` : list directories only at root **/** level
-
-> The `tree` command may not be installed by default.
-> It can be installed with the command: `sudo apt install tree`
 
 ### The root Directory and its Base Level Directories
 
@@ -120,64 +122,68 @@ The path (location) to that directory will be.
 ```
 
 Where **USER** is your username.
-Therefore, since my username is **seanburns**, my home directory is located at:
+Therefore, since my username is **sean**, my home directory is located at:
 
 ```
-/home/seanburns
+/home/sean
 ```
 
 which we can see specified with the `pwd` (print working directory) command:
 
 ```
 pwd
-/home/seanburns
+/home/sean
 ```
 
 > When I write `$HOME`, I am referring to a default, **environmental** variable that points to our home directory.
 > It's **variable** because, depending on which account we're logged in as, **$HOME** will point to a different location.
-> For me, then, that will be `/home/seanburns`, if I'm logged in as `seanburns`.
+> For me, then, that will be `/home/sean`, if I'm logged in as `sean`.
 > For you it'll point to your home directory.
 
-In my home directory, I have a subdirectory called `public_html`.
+In my home directory, I have a subdirectory called `docs`.
 The path to that is:
 
 ```
-/home/seanburns/public_html
+/home/sean/docs
 ```
 
 In a program like Finder (macOS) or File Explorer (Windows), if I want to change my location to that subdirectory (or folder),
 then I'd double click on its folder icon.
 On the command line, however, I have to write out the command and the path to the subdirectory.
-Therefore, **starting in my home directory**, I use the following command to switch to the public_html subdirectory:
+Therefore, **starting in my home directory**, I use the following command to switch to the docs subdirectory:
 
 ```
-cd public_html
+cd docs
 ```
+
+where `cd` is the name of the command and `docs` is the name (or **argument**) of the location we instruct the `cd` command to use.
+Most commands on Linux are structured this way: `COMMAND [ARGUMENT]`.
 
 > Note that files and directories in Linux are case sensitive.
-> This means that a directory named `public_html` can co-exist alongside a directory named `Public_html`.
+> This means that a directory named `docs` can co-exist alongside a directory named `Docs`.
 > Or a file named `paper.txt` can co-exist alongside a file named `Paper.txt`.
 > So be sure to use the proper case when spelling out files, directories, and even commands.
 
-The above is an example of using a relative path, and that command would only be successful if I were first in my `$HOME` directory.
-That's because I specified the location of `public_html` relative to my default (`$HOME`) location.
+The above is an example of using a relative path, because `docs` is relative to where I am in the file system or diretory tree: `/home/sean/`,
+That is, the above example would only be successful if I were first in my `$HOME` directory.
 
 I could have also specified the absolute location, but this would be the wordier way.
-Since the `public_html` directory is in my `$HOME` directory, and my `$HOME` directory is a subdirectory in the `/home` directory,
+Since the `docs` directory is in my `$HOME` directory, and my `$HOME` directory is a subdirectory in the `/home` directory,
 then to specify the absolute path in the above command, I'd write:
 
 ```
-cd /home/sean/public_html
+cd /home/sean/docs
 ```
 
 Again, the relative path specified above would only work if I was in my home directory,
-because `cd public_html` is relative to the location of `/home/seanburns`.
-That is, the subdirectory `public_html` is in `/home/seanburns`.
+because `cd docs` is relative to the location of `/home/sean`.
+That is, the subdirectory `docs` is in `/home/sean`.
 But specifying the absolute path would work no matter where I was located in the filesystem.
-For example, if I was working on a file in the `/etc/apache2`` directory,
-then using the absolute path (`cd /home/seanburns/public_html`) would work.
-But the relative path (`cd public_html`) command would not since there is no subdirectory called
-`public_html`* in the `/etc/apache2` directory.
+For example, if I was working on a file in the `/etc/apache2` directory,
+then using the absolute path (`cd /home/sean/docs`) would be necessary to switch immediately to that directory.
+But the relative path (`cd docs`) command would not since there is no subdirectory called
+`docs`* in the `/etc/apache2` directory.
+In short, using absolute or relative paths depends in part on where we are in the directory tree and where we want to go next.
 
 Finally, you can use the `ls` command to list the contents of a directory, i.e., the files and subdirectories in a directory:
 
@@ -209,7 +215,7 @@ You learned about relative and absolute paths.
 An absolute path starts with the root directory `/`.
 Here's an absolute path to a file named `paper.txt` in my home directory:
 
-- absolute path: `/home/seanburns/paper.txt`
+- absolute path: `/home/sean/paper.txt`
 
 If I were already in my home directory, then the relative path would simply be:
 

@@ -55,9 +55,13 @@ We use it by typing the following two letters in the terminal:
 ls
 ```
 
-Again, to confirm that we're in some specific directory, use the `pwd` command to **print** the **working directory**.
+And to confirm that we're in some specific directory, use the `pwd` command to **print** the **working directory**.
 
-Most commands can be combined with **options**.
+```
+pwd
+```
+
+Most commands can be combined with **options** and **arguments**.
 Options provide additional functionality to the base command, and in order to see what options are available for the `ls` command,
 we can look at its **man(ual) page**:
 
@@ -89,14 +93,31 @@ For example, to view all files, including hidden ones, in the long-list format, 
 ls -al
 ```
 
+Options usually are indicated with a preceeding dash and are sometimes followed by an argument.
+The syntax is usually:
+
+```
+COMMAND [OPTIONS] [ARGUMENTS]
+```
+
+For example, we can use the `ls` command to list the contents of directories elsewhere in the system.
+In the following, `ls` is the COMMAND, `-l` is the single OPTION we're using, and `/etc` is the ARGUMENT:
+
+```
+ls -l /etc
+```
+
+Options are literally optional.
+Arguments are sometimes necessary.
+
 ## Basic File Operations
 
 Some basic file operation commands include:
 
+- `touch` : change file timestamps (or, create a new, empty file)
 - `cp`    : copying files and directories
 - `mv`    : moving (or renaming) files and directories
 - `rm`    : removing (or deleting) files and directories
-- `touch` : change file timestamps (or, create a new, empty file)
 
 These commands also have various options that can be viewed in their respective **man pages**.
 Again, command options provide additional functionality to the base command, and
@@ -105,11 +126,19 @@ To see examples, type the following commands, which will launch the manual pages
 Press `q` to exit the manual pages, and use your up and down arrow keys to scroll through the manuals:
 
 ```
+man touch
 man cp
 man mv
 man rm
-man touch
 ```
+
+> **Important**: When creating files, not only should you be mindful of case sensitivity (e.g., `paper.txt` versus `Paper.txt`),
+> you should also be mindful of special symbols and empty spaces.
+> To make your life easier, keep all file and directory names lower case: `paper.txt`, `index.html`, `research_paper_1.txt`, `docs/`, `code/`;
+> use only letters or numbers and **do not use** empty spaces:
+> e.g., this is a bad file name: `my paper.txt`; and a bad directory name: `/home/USER/my homework/`;
+> and use underscores or dashes to separate words in titles:
+> e.g., this is good: `my_paper.txt`, `my-paper.txt`, and `/home/USER/my_homework/`.
 
 The `touch` command's primary use is to change a file's timestamp;
 that is, the command updates a file's "access and modification times" (see `man touch`).
@@ -118,7 +147,7 @@ We can see the output here:
 
 ```
 ls -l paper.txt
--rw-rw-r-- 1 seanburns seanburns 0 Jun 27 00:13 /home/seanburns/paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:13 /home/sean/paper.txt
 ```
 
 This shows that the last modification time was 12:03AM on June 27.
@@ -127,7 +156,7 @@ If I run the touch command on `paper.txt`, the timestamp will change:
 
 ```
 touch paper.txt
--rw-rw-r-- 1 seanburns seanburns 0 Jun 27 00:15 /home/seanburns/paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:15 /home/sean/paper.txt
 ```
 
 This shows an updated modification timestamp of 12:15AM.
