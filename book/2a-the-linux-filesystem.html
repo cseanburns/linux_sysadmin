@@ -186,13 +186,19 @@
 </ul>
 <blockquote>
 <p>The terms <strong>directories</strong> and <strong>folders</strong> are synonymous, but as users of primarily graphical user interfaces,
-you &gt; are more likely familiar with the term <strong>folders</strong>.
+you are more likely familiar with the term <strong>folders</strong>.
 I will more often use the term <strong>directories</strong> since that is the command line (text user interface) convention.
 I will use the term <strong>folders</strong> when referring to a graphical environment.</p>
 </blockquote>
-<p>Throughout this demonstration, I encourage you to connect to your remote server using the <code>gcloud compute ssh</code> command or
-through the web shell and follow along with the commands that I use.
-See <a href="2a-using-gcloud-virtual-machines.html">Section 2.1</a> for details on connecting to the remote server.</p>
+<h2 id="learn-the-commandline"><a class="header" href="#learn-the-commandline">Learn the Commandline</a></h2>
+<p>Learning to use the Linux commandline requires practice.
+To practice the lessons in this book, I encourage you to open two applications:</p>
+<ol>
+<li>a browser window containing one of these pages and 2) a terminal window with your SSH connection to the server.
+Split your screen without overlapping the windows.
+For example, keep your browser window open on the left and your terminal connection open on the right.
+Then follow along with the demos.</li>
+</ol>
 <h2 id="visualizing-the-filesystem-as-a-tree"><a class="header" href="#visualizing-the-filesystem-as-a-tree">Visualizing the Filesystem as a Tree</a></h2>
 <p>We will need to work within the filesystem quite, but the term <strong>filesystem</strong> may refer to different concepts,
 and it's important to clear that up before we start.</p>
@@ -204,7 +210,7 @@ The former is the default filesystem on distributions like <a href="https://www.
 the latter is the default on the <a href="https://getfedora.org/">Fedora</a> and <a href="https://www.opensuse.org/">openSUSE</a> distributions.
 <a href="https://opensource.com/article/18/4/ext4-filesystem">Opensource.com</a> has a nice overview of filesystems under this concept.</p>
 <p>A <strong>filesystem</strong> might also be used to refer to the <strong>directory structure</strong> or <a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch01.html">directory tree</a> of a system.
-In graphical user interface parlance, this is simply how the folders are your disk are organized.
+In graphical user interface parlance, this is simply how the folders on your disk are organized.
 This concept of a filesystem is related to the prior concept of a filesystem, but
 it's used here to refer to the location of files and directories on a system.
 For example, on Windows, the filesystem is identified by a letter, like the <strong>C:</strong> drive,
@@ -212,7 +218,7 @@ regardless if the disk has a NTFS filesystem or a FAT filesystem.
 Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.), will be assigned their own letters (<strong>A:</strong>, <strong>B:</strong>, <strong>D:</strong>, etc.).
 <a href="https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html">macOS adheres to a tree like filesystem</a> like Linux, UNIX, and other Unix-like operating systems, and
 <a href="https://www.opengroup.org/openbrand/register/">this is because macOS is a registered UNIX® OS</a>.</p>
-<p>In Unix-like OSes, like Linux, we have a top-level <strong>root</strong> directory identified by a single forward slash  <strong>/</strong>,
+<p>In the Unix family of OSes, like Linux, we have a top-level <strong>root</strong> directory identified by a single forward slash  <strong>/</strong>,
 and then subdirectories under that root directory.
 Additional drives (e.g., extra hard drives, USB drives, DVD drives, etc.) are <strong>mounted</strong> under that root hierarchy and
 not as separate drives like on Windows.
@@ -233,10 +239,6 @@ The <code>tree</code> command, like many Linux commands, can be run on its own o
 </ul>
 </li>
 </ul>
-<blockquote>
-<p>The <code>tree</code> command may not be installed by default.
-It can be installed with the command: <code>sudo apt install tree</code></p>
-</blockquote>
 <h3 id="the-root-directory-and-its-base-level-directories"><a class="header" href="#the-root-directory-and-its-base-level-directories">The root Directory and its Base Level Directories</a></h3>
 <p>As explained in the documentation, some of the major sub directories under <strong>/</strong> (root) are:</p>
 <ul>
@@ -291,47 +293,53 @@ The path (location) to that directory will be.</p>
 <pre><code>/home/USER
 </code></pre>
 <p>Where <strong>USER</strong> is your username.
-Therefore, since my username is <strong>seanburns</strong>, my home directory is located at:</p>
-<pre><code>/home/seanburns
+Therefore, since my username is <strong>sean</strong>, my home directory is located at:</p>
+<pre><code>/home/sean
 </code></pre>
 <p>which we can see specified with the <code>pwd</code> (print working directory) command:</p>
 <pre><code>pwd
-/home/seanburns
+/home/sean
 </code></pre>
 <blockquote>
 <p>When I write <code>$HOME</code>, I am referring to a default, <strong>environmental</strong> variable that points to our home directory.
 It's <strong>variable</strong> because, depending on which account we're logged in as, <strong>$HOME</strong> will point to a different location.
-For me, then, that will be <code>/home/seanburns</code>, if I'm logged in as <code>seanburns</code>.
+For me, then, that will be <code>/home/sean</code>, if I'm logged in as <code>sean</code>.
 For you it'll point to your home directory.</p>
 </blockquote>
-<p>In my home directory, I have a subdirectory called <code>public_html</code>.
+<p>In my home directory, I have a subdirectory called <code>docs</code>.
 The path to that is:</p>
-<pre><code>/home/seanburns/public_html
+<pre><code>/home/sean/docs
 </code></pre>
 <p>In a program like Finder (macOS) or File Explorer (Windows), if I want to change my location to that subdirectory (or folder),
 then I'd double click on its folder icon.
 On the command line, however, I have to write out the command and the path to the subdirectory.
-Therefore, <strong>starting in my home directory</strong>, I use the following command to switch to the public_html subdirectory:</p>
-<pre><code>cd public_html
+Therefore, <strong>starting in my home directory</strong>, I use the following command to switch to the docs subdirectory:</p>
+<pre><code>cd docs
 </code></pre>
+<p>where <code>cd</code> is the name of the command and <code>docs</code> is the name (or <strong>argument</strong>) of the location we instruct the <code>cd</code> command to use.
+Most commands on Linux are structured this way: <code>COMMAND [ARGUMENT]</code>.</p>
 <blockquote>
 <p>Note that files and directories in Linux are case sensitive.
-This means that a directory named <code>public_html</code> can co-exist alongside a directory named <code>Public_html</code>.
+This means that a directory named <code>docs</code> can co-exist alongside a directory named <code>Docs</code>.
 Or a file named <code>paper.txt</code> can co-exist alongside a file named <code>Paper.txt</code>.
 So be sure to use the proper case when spelling out files, directories, and even commands.</p>
 </blockquote>
-<p>The above is an example of using a relative path, and that command would only be successful if I were first in my <code>$HOME</code> directory.
-That's because I specified the location of <code>public_html</code> relative to my default (<code>$HOME</code>) location.</p>
+<p>The above is an example of using a relative path, because <code>docs</code> is relative to where I am in the file system or diretory tree: <code>/home/sean/</code>,
+That is, the above example would only be successful if I were first in my <code>$HOME</code> directory.</p>
 <p>I could have also specified the absolute location, but this would be the wordier way.
-Since the <code>public_html</code> directory is in my <code>$HOME</code> directory, and my <code>$HOME</code> directory is a subdirectory in the <code>/home</code> directory,
+Since the <code>docs</code> directory is in my <code>$HOME</code> directory, and my <code>$HOME</code> directory is a subdirectory in the <code>/home</code> directory,
 then to specify the absolute path in the above command, I'd write:</p>
-<pre><code>cd /home/sean/public_html
+<pre><code>cd /home/sean/docs
 </code></pre>
 <p>Again, the relative path specified above would only work if I was in my home directory,
-because <code>cd public_html</code> is relative to the location of <code>/home/seanburns</code>.
-That is, the subdirectory <code>public_html</code> is in <code>/home/seanburns</code>.
+because <code>cd docs</code> is relative to the location of <code>/home/sean</code>.
+That is, the subdirectory <code>docs</code> is in <code>/home/sean</code>.
 But specifying the absolute path would work no matter where I was located in the filesystem.
-For example, if I was working on a file in the <code>/etc/apache2`` directory, then using the absolute path (</code>cd /home/seanburns/public_html<code>) would work. But the relative path (</code>cd public_html<code>) command would not since there is no subdirectory called </code>public_html<code>* in the </code>/etc/apache2` directory.</p>
+For example, if I was working on a file in the <code>/etc/apache2</code> directory,
+then using the absolute path (<code>cd /home/sean/docs</code>) would be necessary to switch immediately to that directory.
+But the relative path (<code>cd docs</code>) command would not since there is no subdirectory called
+<code>docs</code>* in the <code>/etc/apache2</code> directory.
+In short, using absolute or relative paths depends in part on where we are in the directory tree and where we want to go next.</p>
 <p>Finally, you can use the <code>ls</code> command to list the contents of a directory, i.e., the files and subdirectories in a directory:</p>
 <pre><code>ls
 </code></pre>
@@ -356,7 +364,7 @@ So just keep practicing, and I'll go over this throughout the semester.</p>
 An absolute path starts with the root directory <code>/</code>.
 Here's an absolute path to a file named <code>paper.txt</code> in my home directory:</p>
 <ul>
-<li>absolute path: <code>/home/seanburns/paper.txt</code></li>
+<li>absolute path: <code>/home/sean/paper.txt</code></li>
 </ul>
 <p>If I were already in my home directory, then the relative path would simply be:</p>
 <ul>

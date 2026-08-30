@@ -246,8 +246,10 @@ but the most common command is the <code>ls</code> (list) command.
 We use it by typing the following two letters in the terminal:</p>
 <pre><code>ls
 </code></pre>
-<p>Again, to confirm that we're in some specific directory, use the <code>pwd</code> command to <strong>print</strong> the <strong>working directory</strong>.</p>
-<p>Most commands can be combined with <strong>options</strong>.
+<p>And to confirm that we're in some specific directory, use the <code>pwd</code> command to <strong>print</strong> the <strong>working directory</strong>.</p>
+<pre><code>pwd
+</code></pre>
+<p>Most commands can be combined with <strong>options</strong> and <strong>arguments</strong>.
 Options provide additional functionality to the base command, and in order to see what options are available for the <code>ls</code> command,
 we can look at its <strong>man(ual) page</strong>:</p>
 <pre><code>man ls
@@ -267,35 +269,54 @@ We have a some of those files in our <code>$HOME</code> directories, and we can 
 For example, to view all files, including hidden ones, in the long-list format, we can use:</p>
 <pre><code>ls -al
 </code></pre>
+<p>Options usually are indicated with a preceeding dash and are sometimes followed by an argument.
+The syntax is usually:</p>
+<pre><code>COMMAND [OPTIONS] [ARGUMENTS]
+</code></pre>
+<p>For example, we can use the <code>ls</code> command to list the contents of directories elsewhere in the system.
+In the following, <code>ls</code> is the COMMAND, <code>-l</code> is the single OPTION we're using, and <code>/etc</code> is the ARGUMENT:</p>
+<pre><code>ls -l /etc
+</code></pre>
+<p>Options are literally optional.
+Arguments are sometimes necessary.</p>
 <h2 id="basic-file-operations"><a class="header" href="#basic-file-operations">Basic File Operations</a></h2>
 <p>Some basic file operation commands include:</p>
 <ul>
+<li><code>touch</code> : change file timestamps (or, create a new, empty file)</li>
 <li><code>cp</code>    : copying files and directories</li>
 <li><code>mv</code>    : moving (or renaming) files and directories</li>
 <li><code>rm</code>    : removing (or deleting) files and directories</li>
-<li><code>touch</code> : change file timestamps (or, create a new, empty file)</li>
 </ul>
 <p>These commands also have various options that can be viewed in their respective <strong>man pages</strong>.
 Again, command options provide additional functionality to the base command, and
 are mostly (but not always) prepended with a dash and a letter or number.
 To see examples, type the following commands, which will launch the manual pages for them.
 Press <code>q</code> to exit the manual pages, and use your up and down arrow keys to scroll through the manuals:</p>
-<pre><code>man cp
+<pre><code>man touch
+man cp
 man mv
 man rm
-man touch
 </code></pre>
+<blockquote>
+<p><strong>Important</strong>: When creating files, not only should you be mindful of case sensitivity (e.g., <code>paper.txt</code> versus <code>Paper.txt</code>),
+you should also be mindful of special symbols and empty spaces.
+To make your life easier, keep all file and directory names lower case: <code>paper.txt</code>, <code>index.html</code>, <code>research_paper_1.txt</code>, <code>docs/</code>, <code>code/</code>;
+use only letters or numbers and <strong>do not use</strong> empty spaces:
+e.g., this is a bad file name: <code>my paper.txt</code>; and a bad directory name: <code>/home/USER/my homework/</code>;
+and use underscores or dashes to separate words in titles:
+e.g., this is good: <code>my_paper.txt</code>, <code>my-paper.txt</code>, and <code>/home/USER/my_homework/</code>.</p>
+</blockquote>
 <p>The <code>touch</code> command's primary use is to change a file's timestamp;
 that is, the command updates a file's "access and modification times" (see <code>man touch</code>).
 For example, let's say we have a file called <code>paper.txt</code> in our home directory.
 We can see the output here:</p>
 <pre><code>ls -l paper.txt
--rw-rw-r-- 1 seanburns seanburns 0 Jun 27 00:13 /home/seanburns/paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:13 /home/sean/paper.txt
 </code></pre>
 <p>This shows that the last modification time was 12:03AM on June 27.</p>
 <p>If I run the touch command on <code>paper.txt</code>, the timestamp will change:</p>
 <pre><code>touch paper.txt
--rw-rw-r-- 1 seanburns seanburns 0 Jun 27 00:15 /home/seanburns/paper.txt
+-rw-rw-r-- 1 sean sean 0 Jun 27 00:15 /home/sean/paper.txt
 </code></pre>
 <p>This shows an updated modification timestamp of 12:15AM.</p>
 <p>The side effect occurs when we name a file with the <code>touch</code> command, but the file does not exist,
