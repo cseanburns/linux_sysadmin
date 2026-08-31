@@ -14,10 +14,13 @@ In this section, we will cover the:
 
 Learning to use the Linux commandline requires practice.
 To practice the lessons in this book, I encourage you to open two applications:
-1) a browser window containing one of these pages and 2) a terminal window with your SSH connection to the server.
-Split your screen without overlapping the windows.
+
+1. a browser window containing one of these pages and,
+2. a terminal window with your SSH connection to the server.
+
+Then split your screen without overlapping the windows.
 For example, keep your browser window open on the left and your terminal connection open on the right.
-Then follow along with the demos.
+This will make it easier to follow along with the demos.
 
 ## Visualizing the Filesystem as a Tree
 
