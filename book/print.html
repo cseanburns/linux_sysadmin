@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5ad6c4de.js";
+            window.path_to_searchindex_js = "searchindex-2c618a4a.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-7beec560.js"></script>
@@ -1680,6 +1680,9 @@ For example, here are some commands that mostly make sense in <code>ed</code> as
 </table>
 </div>
 <p>There are other differences, but these are sufficient for our purposes.</p>
+<p>To practice along, download the file to your home directory using the following command:</p>
+<pre><code>wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/master/data/operating-systems.csv
+</code></pre>
 <p>Let’s see how to use <code>ed</code> to open a file, and print the content without (<code>1,$p</code>) and with (<code>1,$n</code>) line numbers.</p>
 <pre><code>ed operating-systems.csv
 183
@@ -1908,6 +1911,15 @@ You can also use the mouse with the <code>edit</code> text editor.</p>
 <p>For those interested in how these keyboard combinations came to become standard, see <a href="https://en.wikipedia.org/wiki/IBM_Common_User_Access">IBM Commun User Access</a>.</p>
 </blockquote>
 <p>Note that the GitHub page for <code>edit</code> provides instructions for installing this editor on Windows, in case you’re interested in doing so.</p>
+<h2 id="execute"><a class="header" href="#execute">Execute</a></h2>
+<p>If you add a few lines of Bash commands to a new file, remember to make the file executable and move it to your <code>~/bin</code> directory.
+The following assigns the file <code>rwxrw----</code> permissions and then moves the file to the <code>~/bin</code> directory:</p>
+<pre><code>chmod 760 ~/newfile
+mv ~/newfile ~bin/
+</code></pre>
+<h2 id="markdown"><a class="header" href="#markdown">Markdown</a></h2>
+<p>Although writing plain text files is perfectly fine, you can level up your technical skills by learning <a href="https://www.markdownguide.org/">Markdown</a>.
+We’ll cover Markdown later in this work.</p>
 <h2 id="conclusion-4"><a class="header" href="#conclusion-4">Conclusion</a></h2>
 <p>In prior lessons, we learned how to use the <code>bash</code> command prompt and how to view, manipulate, and edit files from that shell.
 In this lesson, we learned how to use several command line text editors.
