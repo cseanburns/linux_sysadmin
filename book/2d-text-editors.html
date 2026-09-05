@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-60534bd2.js";
+            window.path_to_searchindex_js = "searchindex-5ad6c4de.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-7beec560.js"></script>
@@ -180,83 +180,57 @@
                         <h1 id="text-editors"><a class="header" href="#text-editors">Text editors</a></h1>
 <p>In this section, we will cover and:</p>
 <ol>
-<li><strong>Understand the role of text editors</strong>: Recognize the importance of text
-editors in the command-line environment for saving commands, writing
-scripts, and editing configuration files.</li>
-<li><strong>Differentiate between text editors</strong>: Identify key differences between
-line editors like <code>ed</code> and visual editors like <code>vim</code>, <code>nano</code>, <code>micro</code>, and
-<code>tilde</code>.</li>
-<li><strong>Operate a line editor</strong>: Use basic commands in <code>ed</code>, such as addressing
-lines, manipulating text, and editing files.</li>
-<li><strong>Explore the functionality of <code>vim</code></strong>: Understand the basic modal operation
-of <code>vim</code>, including command mode, insert mode, and how to integrate shell
-commands within the editor.</li>
-<li><strong>Utilize beginner-friendly editors</strong>: Comfortably use <code>nano</code>, <code>micro</code>,
-<code>tilde</code>, and <code>edit</code> for straightforward text editing tasks, taking advantage of their
-user-friendly key bindings and interfaces.</li>
-<li><strong>Appreciate historical context</strong>: Recognize the historical significance of
-<code>ed</code> and <code>vim</code> and how their development has influenced modern computing
-practices.</li>
+<li><strong>Understand the role of text editors</strong>: Recognize the importance of text editors in the command-line environment for saving commands, writing scripts, and editing configuration files.</li>
+<li><strong>Differentiate between text editors</strong>: Identify key differences between line editors like <code>ed</code> and visual editors like <code>vim</code>, <code>nano</code>, and <code>tilde</code>.</li>
+<li><strong>Operate a line editor</strong>: Use basic commands in <code>ed</code>, such as addressing lines, manipulating text, and editing files.</li>
+<li><strong>Explore the functionality of <code>vim</code></strong>: Understand the basic modal operation of <code>vim</code>, including command mode, insert mode, and how to integrate shell commands within the editor.</li>
+<li><strong>Utilize beginner-friendly editors</strong>: Comfortably use <code>nano</code>, <code>tilde</code>, and <code>edit</code> for straightforward text editing tasks, taking advantage of their user-friendly key bindings and interfaces.</li>
+<li><strong>Appreciate historical context</strong>: Recognize the historical significance of <code>ed</code> and <code>vim</code> and how their development has influenced modern computing practices.</li>
 </ol>
 <h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>Working on the command line means writing a lot of commands.
 There will be times when we want to save some of the commands that we write in order to re-use them later.
 Or, we might want to develop the commands into a script (i.e., a program) because we want to automate a process.
-The shell is great for writing one off commands, so-called <strong>one-liners</strong>, but
-it’s not a great place to write multi-line or very long commands.
+The shell is great for writing one off commands, so-called <strong>one-liners</strong>, but it’s not a great place to write multi-line or very long commands.
 Therefore it can be helpful to write and save our commands in a text editor.</p>
-<p>Another thing to keep in mind is that the shell that we are working with is called <code>bash</code>, and
-<code>bash</code> is a full-fledged programming language.
+<p>Another thing to keep in mind is that the shell that we are working with is called <code>bash</code>, and <code>bash</code> is a full-fledged programming language.
 That means that when we write a simple command, like <code>cd public_html</code>, we are programming.
 It makes sense that the more programming that we do, the better we’ll get at it.
 This requires  more sophisticated environments to help manage our programs than the command line prompt can provide.
 Text editors fulfill that role.</p>
 <p>As we learn more about how to do systems administration with Linux, we will need to edit configuration files, too.
 Most configuration files exist in the <code>/etc</code> directory.
-For example, later in the semester we will install the <a href="https://httpd.apache.org/">Apache Web Server</a>, and
-we will need to edit Apache’s configuration files in the process.
-We could do this using some of the tools that we’ve already covered, like <code>sed</code> and <code>awk</code>, but
-it’ll make our lives much easier to use a text editor.</p>
+For example, later in the semester we will install the <a href="https://httpd.apache.org/">Apache Web Server</a>, and we will need to edit Apache’s configuration files in the process.
+We could do this using some of the tools that we’ve already covered, like <code>sed</code> and <code>awk</code>, but it’ll make our lives much easier to use a text editor.</p>
 <p>In any case, in order to save our commands or edit text files, a text editor is very helpful.
-Programmers use text editors to write programs, but programmers often work in graphical user environments,
-so they often use GUI text editors or <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s.
+Programmers use text editors to write programs, but programmers often work in graphical user environments, so they often use GUI text editors or <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s.
 As systems administrators, it would be unusual to have a graphical user interface installed on a server.
 The servers that we manage contain limited or specific software that serves the server’s main purpose.
 Additional software on a server that is not relevant to its main function only takes up extra disk space,
 consumes valuable computing resources, and poses an additional <a href="https://en.wikipedia.org/wiki/Attack_surface">security footprint</a>.</p>
-<p>In this lesson, we’ll learn about several text editors: <code>ed</code>, <code>vim</code>, <code>nano</code>, <code>micro</code>, <code>tilde</code>, and <code>edit</code>.
-We cover <code>ed</code> primarily for its historical importance, and its descendant, <code>vim</code>,
-which is a powerful editor that is widely used today, but these editors have high learning curves.
-<code>emacs</code> is another common text editor that can be used on the command line, but it also has a learning curve, and
-I am not covering it here.
-For simplicity, I will encourage you to use <code>nano</code>, <code>micro</code>, <code>tilde</code>, or <code>edit</code>, but
-if you continue to use the command line, you should learn more advanced editors like <code>vim</code> or <code>emacs</code>.</p>
+<p>In this lesson, we’ll learn about several text editors: <code>ed</code>, <code>vim</code>, <code>nano</code>, <code>tilde</code>, and <code>edit</code>.
+We cover <code>ed</code> primarily for its historical importance, and its descendant, <code>vim</code>, which is a powerful editor that is widely used today, but these editors have high learning curves.
+<code>emacs</code> is another common text editor that can be used on the command line, but it also has a learning curve, and I am not covering it here.
+For simplicity, I will encourage you to use <code>nano</code>, <code>tilde</code>, or <code>edit</code>, but if you continue to use the command line, you should learn more advanced editors like <code>vim</code> or <code>emacs</code>.</p>
 <h2 id="ed"><a class="header" href="#ed"><code>ed</code></a></h2>
 <p><code>ed</code> is a line editor that is installed by default on many Linux distributions.
 Ken Thompson created <code>ed</code> in the late 1960s to write the original Unix operating system.
-It was used without computer monitors because those were still uncommon, and
-instead for <a href="https://en.wikipedia.org/wiki/Teleprinter">teletypewriters (TTYs)</a> and <a href="https://www.youtube.com/watch?v=S81GyMKH7zw">printers</a>.
+It was used without computer monitors because those were still uncommon, and instead for <a href="https://en.wikipedia.org/wiki/Teleprinter">teletypewriters (TTYs)</a> and <a href="https://www.youtube.com/watch?v=S81GyMKH7zw">printers</a>.
 The lack of a visual display, like a monitor, is the reason that <code>ed</code> was written as a line editor.
 If you visit that second link, you will see the terminal interface from those earlier days.
-It is the same basic interface you are using now when you use your terminal applications, which
-are virtualized versions of those old teletypewriters.
-I think this is a testament of the power of the terminal:
-that advanced computer users still use the same basic technology today.</p>
+It is the same basic interface you are using now when you use your terminal applications, which are virtualized versions of those old teletypewriters.
+I think this is a testament of the power of the terminal: that advanced computer users still use the same basic technology today.</p>
 <p>In practice, when we use a line editor like <code>ed</code>, the main process of entering text is like any other editor.
 The big difference is when we need to manipulate text.
-In a graphical text editor, if we want to delete a word or edit some text,
-we might backspace over the text or highlight a word and delete it.
-In a line editor, we manipulate text by referring to lines or across multiple lines and
-then run commands on the text in those line(s).
-This is process we followed when we covered <code>grep</code>, <code>sed</code>, and <code>awk</code>, and especially <code>sed</code>, and
-it should not surprise you that <a href="https://www.oreilly.com/library/view/sed-awk/1565922255/ch02s01.html">these are related to ed</a>.</p>
+In a graphical text editor, if we want to delete a word or edit some text, we might backspace over the text or highlight a word and delete it.
+In a line editor, we manipulate text by referring to lines or across multiple lines and then run commands on the text in those line(s).
+This is process we followed when we covered <code>grep</code>, <code>sed</code>, and <code>awk</code>, and especially <code>sed</code>, and it should not surprise you that <a href="https://www.oreilly.com/library/view/sed-awk/1565922255/ch02s01.html">these are related to ed</a>.</p>
 <p>To operationalize this, like in <code>sed</code>, each line has an <strong>address</strong>.
 The address for line 7 is <strong>7</strong>, and so forth.
 Line editors like <code>ed</code> are command driven.
 There is no menu to select from at the top of the <em>window</em>.
 In fact, when we used <code>ed</code> to open an existing file, the text in the file isn’t even printed on the screen.
-If a user wants to delete a word, or print (to screen) some text,
-the user has to command the line editor to print the relevant line.
+If a user wants to delete a word, or print (to screen) some text, the user has to command the line editor to print the relevant line.
 We do this by specifying the line’s address and issuing a command to delete the word on that line, or print the line.
 Line editors also work on ranges of line, including all the lines in the file, just like <code>sed</code> does.</p>
 <p>Many of the commands that <code>ed</code> uses are also used by <code>sed</code>, since <code>sed</code> is based on <code>ed</code>.
@@ -320,8 +294,7 @@ Android, Apache, 2008
 7	Windows NT, Proprietary, 1993
 8	Android, Apache, 2008
 </code></pre>
-<p>Using <code>ed</code>, we can remove the header line of the <strong>operating-systems.csv</strong> file by specifying the line number (<code>1</code>),
-and issuing the delete command (<code>d</code>), just like in <code>sed</code>.
+<p>Using <code>ed</code>, we can remove the header line of the <strong>operating-systems.csv</strong> file by specifying the line number (<code>1</code>), and issuing the delete command (<code>d</code>), just like in <code>sed</code>.
 This becomes a permanent change if I save the file with the <code>w</code> (write) command:</p>
 <pre><code>1d
 1,$p
@@ -367,8 +340,7 @@ We enter a period on a newline to leave input mode and return to command mode:</
 FreeDOS, GPL, 1998
 .
 </code></pre>
-<p>Because we enter input mode when using the <code>a</code>, <code>i</code>, or <code>c</code> commands,
-we enter a period <code>.</code> on a line by itself to revert to command mode.</p>
+<p>Because we enter input mode when using the <code>a</code>, <code>i</code>, or <code>c</code> commands, we enter a period <code>.</code> on a line by itself to revert to command mode.</p>
 <p>To insert at line 2, use <code>i</code>:</p>
 <pre><code>2i
 CP/M, Proprietary, 1974
@@ -382,8 +354,7 @@ I start a new <code>ed</code> session to reload the file to start fresh:</p>
 </code></pre>
 <p>Of course, <code>ed</code> can be used to write and not simply edit files.
 Let’s start fresh.
-In the following session,
-I’ll start <code>ed</code>, enter append mode <code>a</code>, write a short letter, exit append mode <code>.</code>,
+In the following session, I’ll start <code>ed</code>, enter append mode <code>a</code>, write a short letter, exit append mode <code>.</code>,
 name the file <code>f</code>, write <code>w</code> (save) the file, and quit <code>q</code>:</p>
 <pre><code>ed
 a
@@ -400,14 +371,11 @@ f letter.txt
 w
 q
 </code></pre>
-<p>It’s good to know something about <code>ed</code> for historical reasons and
-because the line editing technology developed for it is still in use today,
-as seen with commands like <code>grep</code> and <code>sed</code>.
+<p>It’s good to know something about <code>ed</code> for historical reasons and because the line editing technology developed for it is still in use today, as seen with commands like <code>grep</code> and <code>sed</code>.
 It is also a basic part of the design of the <code>vim</code> text editor.</p>
 <h2 id="vim"><a class="header" href="#vim"><code>vim</code></a></h2>
 <p>The <code>vim</code> text editor is a descendant of <code>ed</code>.
-Generally, we started with <code>ed</code>, which influenced the creation of <a href="https://en.wikipedia.org/wiki/Vi">vi</a>, which led eventually to <code>vim</code>,
-aka, <strong>Vi IMproved</strong>.
+Generally, we started with <code>ed</code>, which influenced the creation of <a href="https://en.wikipedia.org/wiki/Vi">vi</a>, which led eventually to <code>vim</code>, aka, <strong>Vi IMproved</strong>.
 The original <code>vi</code> text editor was recreated and is available as the <code>nvi</code> editor.
 Due to this genealogy, <code>vim</code> uses many of the same commands as <code>ed</code> does when <code>vim</code> is in command mode.
 Like <code>ed</code>, we can start <code>vim</code> at the <code>bash</code> prompt with or without a file name.
@@ -417,20 +385,17 @@ The default mode is <strong>command mode</strong>:</p>
 Dear Students,
 
 I hope you find this really interesting.
-Feel free to practice and play on the command line,
-as well as use tools like ed, the standard editor.
+Feel free to practice and play on the command line, as well as use tools like ed, the standard editor.
 
 Sincerely,
 Dr. Burns
 </code></pre>
 <p>To enter <strong>insert mode</strong>, I can type <code>i</code> or <code>a</code> for <strong>insert</strong> or <strong>append</strong> mode.
-There isn’t any difference on an empty file, but on a file that has text,
-<code>i</code> will start <strong>insert</strong> mode before the cursor position, and <code>a</code> will <strong>insert</strong> mode after the cursor position.
+There isn’t any difference on an empty file, but on a file that has text, <code>i</code> will start <strong>insert</strong> mode before the cursor position, and <code>a</code> will <strong>insert</strong> mode after the cursor position.
 Once in <strong>insert</strong> mode, you can type text as you normally would and use the arrow keys to navigate around the file.</p>
 <p>To return to <strong>command mode</strong> in <code>vim</code>, you press the <strong>Esc</strong> key.
 And then you can enter commands like you would with <code>ed</code>, using the same syntax.</p>
-<p>Unlike <code>ed</code>, when in <strong>command mode</strong>, the commands we type are not placed wherever the cursor is,
-but at the bottom of the screen.
+<p>Unlike <code>ed</code>, when in <strong>command mode</strong>, the commands we type are not placed wherever the cursor is, but at the bottom of the screen.
 Let’s first turn on line numbers to know which address is which, and then we’ll replace <strong>ed</strong> with <strong>Ed</strong>.
 Note that I precede these commands with a colon:</p>
 <pre><code>:set number
@@ -440,8 +405,7 @@ Note that I precede these commands with a colon:</p>
 Let’s say that I want to add the date to my letter file.
 To do that, Linux has a command called <code>date</code> that will return today’s date and time.
 To call the <code>date</code> command within <code>vim</code> and insert the output into the file:
-I press <strong>Esc</strong> to enter <strong>command mode</strong> (if I’m not already in it),
-enter a colon, type <code>r</code> for the <em>read into buffer</em> command,
+I press <strong>Esc</strong> to enter <strong>command mode</strong> (if I’m not already in it), enter a colon, type <code>r</code> for the <em>read into buffer</em> command,
 then enter the shell escape command, which is an exclamation point <code>!</code>, and then the <code>bash</code> shell <code>date</code> command:</p>
 <pre><code>:r !date
 Dear Students,
@@ -461,8 +425,7 @@ Thu Jun 30 02:44:30 PM EDT 2022
 Dear Students,
 
 I hope you find this really interesting.
-Feel free to practice and play on the command line,
-as well as use tools like Ed, the standard editor.
+Feel free to practice and play on the command line, as well as use tools like Ed, the standard editor.
 
 Sincerely,
 Dr. Burns
@@ -477,8 +440,7 @@ but by far the most excellent thing about this editor is to be able to use the <
 </ul>
 <p>Like the other commands, you can precede this with addresses.
 To move 2 lines down, you type <code>2j</code>, and so forth.
-<code>vim</code> has had such a powerful impact on software development that programmers have built these keystrokes
-into applications like Gmail, Facebook, and more.</p>
+<code>vim</code> has had such a powerful impact on software development that programmers have built these keystrokes into applications like Gmail, Facebook, and more.</p>
 <p>To save the file and exit <code>vim</code>, return to <strong>command mode</strong> by pressing the <code>Esc</code> key, and then write and quit:</p>
 <pre><code>:wq
 </code></pre>
@@ -491,15 +453,13 @@ You’re already accustomed to using modeless editors in GUI apps.
 Modeless simply means that you can add and manipulate text without changing to insert or command mode.
 It is also familiar because it uses control keys to perform its operations.
 The tricky part is that the control keys are assigned to different keystroke combinations than what many might be used to.
-For example, instead of Ctrl-c or Cmd-c to copy,
-in <code>nano</code> you press the <code>M-6</code> key (press <code>Alt</code>, <code>Cmd</code>, or <code>Esc</code> key and <code>6</code>) to copy.
+For example, instead of Ctrl-c or Cmd-c to copy, in <code>nano</code> you press the <code>M-6</code> key (press <code>Alt</code>, <code>Cmd</code>, or <code>Esc</code> key and <code>6</code>) to copy.
 Then to paste, you press <code>Ctrl-u</code> instead of the more common <code>Ctrl-v</code>.
 Fortunately, <code>nano</code> lists the shortcuts at the bottom of the screen.</p>
 <p>The shortcuts listed need some explanation.
 The carat mark is shorthand for the keyboard’s <strong>Control (Ctrl)</strong> key.
 Therefore to <strong>Save As</strong> a file, we <strong>write</strong> out the file by pressing <code>Ctrl-o</code>.
-The <strong>M-</strong> key is also important, and depending on your keyboard configuration,
-it may correspond to your <code>Alt</code>, <code>Cmd</code>, or <code>Esc</code> keys.
+The <strong>M-</strong> key is also important, and depending on your keyboard configuration, it may correspond to your <code>Alt</code>, <code>Cmd</code>, or <code>Esc</code> keys.
 To search for text, you press <code>^W</code>, If your goal is to copy, then press <strong>M-6</strong> to copy a line.
 Move to where you want to paste the text, and press <strong>Ctrl-u</strong> to paste.</p>
 <p>For the purposes of this class, that’s all you really need to know about <code>nano</code>.
@@ -512,50 +472,36 @@ Some quick tips:</p>
 <li>Quit and save by pressing <code>Ctrl-x</code>.</li>
 <li>Be sure to follow the prompts at the bottom of the screen.</li>
 </ol>
-<h2 id="micro-and-tilde"><a class="header" href="#micro-and-tilde"><code>micro</code> and <code>tilde</code></a></h2>
+<h2 id="tilde"><a class="header" href="#tilde"><code>tilde</code></a></h2>
 <p><code>nano</code> is usually installed by default on many Linux distributions, which is why I cover it here.
-However, if you want to use a more modern modeless editor, then I suggest <code>micro</code>, <code>tilde</code>, or <code>edit</code>.</p>
-<p>The following <code>apt</code> command installs both <code>micro</code> and <code>tilde</code> at the same time.</p>
-<pre><code>sudo apt install micro tilde
-</code></pre>
+However, if you want to use a more modern modeless editor, then I suggest <code>tilde</code> or <code>edit</code>, both of which I’ve installed on the Linux server.</p>
 <p>We can launch them with or without file names.
-To launch <code>micro</code> without a file name as an argument:</p>
-<pre><code>micro
-</code></pre>
-<p>To launch <code>tilde</code>:</p>
+To launch <code>tilde</code>:</p>
 <pre><code>tilde
 </code></pre>
-<p>The <a href="https://micro-editor.github.io/">micro</a> text editor uses standard key combinations like
-<strong>Ctrl-S</strong> to save, <strong>Ctrl-O</strong> to open, <strong>Ctrl-Q</strong> to quit.
-The <a href="https://os.ghalkes.nl/tilde/">tilde</a> text editor also uses the standard key combinations, but it also has a menu bar.
+<p>Or you can launch it with a file name as an argument:</p>
+<pre><code>tilde [file_name]
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> <code>[file_name]</code> is just a placeholder for the name of a file you supply.
+E.g., if you want to open a file named <code>paper.txt</code>, then use <code>tilde paper.txt</code></p>
+</blockquote>
+<p>The <a href="https://os.ghalkes.nl/tilde/">tilde</a> text editor also uses the standard key combinations, but it also has a menu bar.
 To access the menu bar, you press the <strong>Alt</strong> key plus the first letter of the menu bar option.
 For example, <strong>Alt-f</strong> opens the <strong>File Menu</strong>, etc.</p>
 <h2 id="edit"><a class="header" href="#edit"><code>edit</code></a></h2>
-<p>The <a href="https://github.com/microsoft/edit">edit</a> text editor is a new, open source editor from Microsoft that’s
-inspired by the original MS-DOS editor from the early 1990s.
-Although it is built for use on Windows, it can be installed on Linux.
-To install, visit the program’s <a href="https://github.com/microsoft/edit/releases/tag/v1.2.0">GitHub releases</a> link and copy the URL for the file named:
-<strong>edit-[version]-x86-64-linux-gnu.tar.zst</strong>, where <strong>[version]</strong> equals the most recent version.
-We can use <code>wget</code> to download the source file to our servers.
-For example, to download the most recent version, which at the time of writing this is version <code>1.2.0</code>:</p>
-<pre><code>wget https://github.com/microsoft/edit/releases/download/v1.2.0/edit-1.2.0-x86_64-linux-gnu.tar.zst
-</code></pre>
-<p>The file is compressed.
-To decompress it, we use the following <code>tar</code> command:</p>
-<pre><code>tar --use-compress-program=unzstd -xvf edit-1.2.0-x86_64-linux-gnu.tar.zst
-</code></pre>
-<p>This will output a file called <code>edit</code>.
-Move this file to an executable <code>$PATH</code>, such as <code>/usr/local/bin</code>:</p>
-<pre><code>sudo mv edit /usr/local/bin
-</code></pre>
-<p>Once moved, you can use <code>edit</code> to work with files like you would with <code>micro</code> or <code>tilde</code>.</p>
+<p>The <a href="https://github.com/microsoft/edit">edit</a> text editor is an open source editor from Microsoft that’s inspired by the original MS-DOS editor from the early 1990s.</p>
 <pre><code>edit [file_name]
 </code></pre>
-<p>Note that the GitHub page for <code>edit</code> provides instructions for installing this editor on Windows,
-in case you’re interested in doing so.</p>
+<p>The <code>edit</code> editor uses standard keyboard combinations for opening (<code>ctrl-o</code>) and saving (<code>ctrl-s</code>) files;
+cutting (<code>ctrl-x</code>), pasting (<code>ctrl-v</code>), copying (<code>ctrl-c</code>) text; for undoing prior edits (<code>ctrl-z</code>); and for quitting (<code>ctrl-q</code>) the program.
+You can also use the mouse with the <code>edit</code> text editor.</p>
+<blockquote>
+<p>For those interested in how these keyboard combinations came to become standard, see <a href="https://en.wikipedia.org/wiki/IBM_Common_User_Access">IBM Commun User Access</a>.</p>
+</blockquote>
+<p>Note that the GitHub page for <code>edit</code> provides instructions for installing this editor on Windows, in case you’re interested in doing so.</p>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In prior lessons, we learned how to use the <code>bash</code> command prompt and how to view, manipulate, and
-edit files from that shell.
+<p>In prior lessons, we learned how to use the <code>bash</code> command prompt and how to view, manipulate, and edit files from that shell.
 In this lesson, we learned how to use several command line text editors.
 Editors allow us to save our commands, create scripts, and in the future, edit configuration files.</p>
 <p>The commands we used in this lesson include:</p>
@@ -563,7 +509,6 @@ Editors allow us to save our commands, create scripts, and in the future, edit c
 <li><code>ed</code> : line-oriented text editor</li>
 <li><code>vim</code> : Vi IMproved, a programmer’s text editor</li>
 <li><code>nano</code> : Nano’s ANOther editor, inspired by Pico</li>
-<li><code>micro</code>: A modern and intuitive terminal-based text editor</li>
 <li><code>tilde</code>: The Tilde Text Editor</li>
 <li><code>edit</code>: Microsoft text editor</li>
 </ul>
