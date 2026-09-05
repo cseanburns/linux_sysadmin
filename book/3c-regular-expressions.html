@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Text Processing: Part 1 - Linux Systems Administration</title>
+        <title>Regular Expressions - Linux Systems Administration</title>
 
 
         <!-- Custom HTML head -->
@@ -35,10 +35,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-cff4b8a5.js";
+            window.path_to_searchindex_js = "searchindex-60534bd2.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-8999866d.js"></script>
+        <script src="toc-7beec560.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -177,270 +177,382 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="text-processing-part-1"><a class="header" href="#text-processing-part-1">Text Processing: Part 1</a></h1>
-<p>In this section, we will cover</p>
+                        <h1 id="regular-expressions-with-grep"><a class="header" href="#regular-expressions-with-grep">Regular Expressions with <code>grep</code></a></h1>
+<p>By the end of this section, you will:</p>
 <ol>
-<li><strong>Text processing tools are fundamental</strong>: Learning to process and
-manipulate text is a crucial skill for systems administrators, programmers,
-and data analysts. Linux provides a variety of tools to examine, manipulate,
-and analyze text.</li>
-<li><strong>Plain text is foundational</strong>: Programs and data are often stored in plain
-text, making it essential to know how to handle text files effectively.</li>
-<li><strong>Essential text processing commands</strong>: Commands such as <code>cat</code>, <code>cut</code>,
-<code>head</code>, <code>tail</code>, <code>sort</code>, <code>uniq</code>, and <code>wc</code> allow users to view, manipulate,
-and analyze text files, even large datasets, with ease.</li>
-<li><strong>Power of pipes and redirection</strong>: Using pipes (<code>|</code>) and redirection (<code>&gt;</code>,
-<code>&gt;&gt;</code>), you can chain commands together to create more complex workflows for
-processing text files.</li>
-<li><strong>CSV data manipulation</strong>: This lecture shows how to work with CSV
-(comma-separated value) files, demonstrating how to view, sort, and filter
-data with tools like <code>cut</code> and <code>uniq</code>.</li>
-<li><strong>Practical applications for systems administration</strong>: The lecture
-emphasizes that text processing skills are directly applicable to managing
-user accounts, security, system configuration, and more in a systems
-administration context.</li>
+<li><strong>Understand the purpose of <code>grep</code></strong>: Recognize the versatility of <code>grep</code>
+for searching through text and its use in filtering output, searching for
+patterns in files, and extracting relevant data.</li>
+<li><strong>Perform basic searches using <code>grep</code></strong>: Search for multiword strings and
+whole words while understanding how to handle case sensitivity and word
+boundaries.</li>
+<li><strong>Utilize regular expressions</strong>: Apply regular expressions with <code>grep</code> to
+search for more complex text patterns, using features like bracket
+expressions, character classes, and anchoring.</li>
+<li><strong>Leverage repetition and OR operators</strong>: Use repetition operators (e.g.,
+<code>*</code>, <code>+</code>) and Boolean OR searches to find repetitive patterns or multiple
+possible matches in your text.</li>
+<li><strong>Compare outputs with process substitution</strong>: Understand how to compare the
+output of multiple <code>grep</code> commands using process substitution techniques
+with the <code>diff</code> command.</li>
+<li><strong>Understand broader applications</strong>: Gain a foundational understanding of
+regular expressions that apply across multiple programming languages and
+tools beyond just <code>grep</code>.</li>
 </ol>
 <h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
-<p>One of the more important sets of tools that Linux (as well Unix-like)
-operating systems provide are tools that
-<a href="https://tldp.org/LDP/abs/html/textproc.html">aid processing and manipulating text</a>.
-The ability to process and manipulate text, programmatically,
-is a basic and essential part of many programming languages,
-(e.g., Python, JavaScript, etc),
-and learning how to process and manipulate text is
-an important skill for a variety of jobs including
-statistics, data analytics, data science, programming, web programming,
-systems administration, and so forth.
-In other words,
-this functionality of Linux (and Unix-like) operating systems
-essentially means that to learn Linux and the tools that it provides
-is akin to learning how to program.</p>
-<blockquote>
-<p>Plain text files are the basic building blocks of programs and data.
-Programs are written in plain text editors (Vim, NeoVim, VS Code, etc), and
-data is often stored as plain text.
-Linux offers many tools to examine, manipulate, process, analyze,
-and visualize data in plain text files.</p>
-</blockquote>
-<p>In this section, we will learn some of the basic
-tools to examine plain text (i.e., data).
-We will do some programming later in this class, but for us,
-the main objective with learning to program
-aligns with our work as systems administrators.
-That means our text processing and programming goals will serve our interests
-in managing users, security, networking, system configuration, and so forth
-as Linux system administrators.</p>
-<p>In the meantime, the goal of this section is to acquaint ourselves with
-some of the tools that can be used to process text.
-In this section, we will only cover a handful of text processing
-programs or utilities,
-but here is a fairly comprehensive list,
-and we’ll examine some additional ones from this list
-later in the semester:</p>
-<ul>
-<li><code>cat</code>      : concatenate files and print on the standard output</li>
-<li><code>cut</code>      : remove sections from each line of files</li>
-<li><code>diff</code>     : compare files line by line</li>
-<li><code>echo</code>     : display a line of text</li>
-<li><code>expand</code>   : convert tabs to spaces</li>
-<li><code>find</code>     : search for files in a directory hierarchy</li>
-<li><code>fmt</code>      : simple optimal text formatter</li>
-<li><code>fold</code>     : wrap each input line to fit in specified width</li>
-<li><code>grep</code>     : print lines that match patterns</li>
-<li><code>head</code>     : output the first part of files</li>
-<li><code>join</code>     : join lines of two files on a common field</li>
-<li><code>look</code>     : display lines beginning with a given string</li>
-<li><code>nl</code>       : number lines of files</li>
-<li><code>paste</code>    : merge lines of files</li>
-<li><code>printf</code>   : format and print data</li>
-<li><code>shuf</code>     : generate random permutations</li>
-<li><code>sort</code>     : sort lines of text files</li>
-<li><code>tail</code>     : output the last part of files</li>
-<li><code>tr</code>       : translate or delete characters</li>
-<li><code>unexpand</code> : convert spaces to tabs</li>
-<li><code>uniq</code>     : report or omit repeat lines</li>
-<li><code>wc</code>       : print newline, word, and byte counts for each file</li>
-</ul>
-<p>We will also discuss two types of operators, the pipe and the redirect.
-The latter has a version that will write over the contents of a file,
-and a version that will append contents to the end of a file:</p>
-<ul>
-<li><code>|</code> : redirect standard output from command1 to standard input for command2</li>
-<li><code>&gt;</code> : redirect to standard output to a file, overwriting</li>
-<li><code>&gt;&gt;</code> : redirect to standard output to a file, appending</li>
-</ul>
-<p>Today I want to cover a few of the above commands for processing data in a file;
-specifically:</p>
-<ul>
-<li><code>cat</code>  : concatenate files and print on the standard output</li>
-<li><code>cut</code>  : remove sections from each line of files</li>
-<li><code>head</code> : output the first part of files</li>
-<li><code>sort</code> : sort lines of text files</li>
-<li><code>tail</code> : output the last part of files</li>
-<li><code>uniq</code> : report or omit repeat lines</li>
-<li><code>wc</code>   : print newline, word, and byte counts for each file</li>
-</ul>
-<p>Let’s look at a toy, sample file that contains structured data as a CSV (comma separated value) file.
-You can download the file to your <code>gcloud</code> virtual machine using the following command:</p>
-<pre><code>wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/master/data/operating-systems.csv
+<p>The <code>grep</code> command is a powerful tool used in the Linux command line for searching through text.
+It scans files or input for lines that match a specified pattern, which can be a simple word or a more complex <strong>regular expression</strong>.
+<code>grep</code> is often used to filter output, search for specific data in logs, or find occurrences of certain text patterns within files.
+Its versatility makes it an essential tool for efficiently locating information in large sets of data or documents.</p>
+<p>In this section, we learn how to use <code>grep</code> to search files.
+We will use simple search strings with <code>grep</code> to search for regular words.
+But we will use <strong>regular expressions</strong> to search for more complex patterns.</p>
+<h3 id="download-data-file"><a class="header" href="#download-data-file">Download Data File</a></h3>
+<p>To follow along in this tutorial, download the following file to your home directory on your Google Cloud VM:</p>
+<pre><code>wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/refs/heads/master/data/cities.md
 </code></pre>
-<p>The file contains a list of operating systems (column one), their software license (column two), and the year the OSes were released (column three).
-We can use the <code>cat</code> command to view the entire contents of this small file:</p>
+<h2 id="multiword-strings"><a class="header" href="#multiword-strings">Multiword strings</a></h2>
+<p>It’s good habit to include search strings within quotes, but this is especially important if we would search for multiword strings.
+In these cases, we must enclose them in quotes.</p>
 <p><strong>Command:</strong></p>
-<pre><code>cat operating-systems.csv
+<pre><code>cat cities.md
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>Chrome OS, Proprietary, 2009
-FreeBSD, BSD, 1993
-Linux, GPL, 1991
-iOS, Proprietary, 2007
-macOS, Proprietary, 2001
-Windows NT, Proprietary, 1993
-Android, Apache, 2008
+<pre><code>| City              | 2020 Census | Founded |
+|-------------------|-------------|---------|
+| New York City, NY | 8804190     | 1624    |
+| Los Angeles, CA   | 3898747     | 1781    |
+| Chicago, IL       | 2746388     | 1780    |
+| Houston, TX       | 2304580     | 1837    |
+| Phoenix, AZ       | 1624569     | 1881    |
+| Philadelphia, PA  | 1576251     | 1701    |
+| San Antonio, TX   | 1451853     | 1718    |
+| San Diego, CA     | 1381611     | 1769    |
+| Dallas, TX        | 1288457     | 1856    |
+| San Jose, CA      | 983489      | 1777    |
 </code></pre>
-<p>It’s a small file, but we might want the line and word count of the file.
-To acquire that, we can use the <code>wc</code> (word count) command.
-By itself, the <code>wc</code> command will print  the number of lines, words, and bytes of a file.
-The following output states that the file contains seven lines, 23 words, and 165 bytes:</p>
 <p><strong>Command:</strong></p>
-<pre><code>wc operating-systems.csv
+<pre><code>grep "San Antonio" cities.md
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>  7  23 165 operating-systems.csv
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
 </code></pre>
-<p>We can use the <code>head</code> command to output the first ten lines of a file.
-Since our file is only seven lines long,
-we can use the <code>-n</code> option  to change the default number of lines.
-In the following example, I print the first three lines of the file:</p>
+<h2 id="whole-words-case-sensitive-by-default"><a class="header" href="#whole-words-case-sensitive-by-default">Whole words, case sensitive by default</a></h2>
+<p>As a reminder, <code>grep</code> commands are case-sensitive by default.
+Thus, note that the contents of <strong>cities.md</strong> are all in lowercase.
+If I run the above command without the city named capitalized, then <code>grep</code> will return nothing:</p>
 <p><strong>Command:</strong></p>
-<pre><code>head -n3 operating-systems.csv
+<pre><code>grep "san antonio" cities.md
+</code></pre>
+<p>To tell grep to ignore case, I need to use the <code>-i</code> option.
+We also want to make sure that we enclose our entire search string withing double quotes.</p>
+<p>This is a reminder for you to run <code>man grep</code> and to read through the documentation and see what the various options exit for this command.</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i "san antonio" cities.md
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>Chrome OS, Proprietary, 2009
-FreeBSD, BSD, 1993
-Linux, GPL, 1991
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
 </code></pre>
-<p>Using the <code>cut</code> command, we can select data from file.
-In the first example, I want to select column two (or field two), which contains the license information.
-Since this is a CSV file, the fields (aka, columns) are separated by commas.
-Therefore I use <code>-d</code> option to instruct the <code>cut</code> command to use commas as the separating character.
-The <code>-f</code> option tells the <code>cut</code> command to select field two.
-Note that a CSV file may use other characters as the separator character, like the Tab character or a colon.
-In such cases, it may still be called a CSV file but you might also see <code>.dat</code> files for data files or other variations.</p>
+<h3 id="whole-words-by-the-edges"><a class="header" href="#whole-words-by-the-edges">Whole words by the edges</a></h3>
+<p>To search whole words, we can use special characters to match strings at the start and/or the end of words.
+For example, note the output if I search for cities in California in my file by searching for the string <strong>ca</strong>.
+Since this string appears in Chi<strong>ca</strong>go, then that city matches my grep search:</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d"," -f2 operating-systems.csv
+<pre><code>grep -i "ca" cities.md
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code> Proprietary
- BSD
- GPL
- Proprietary
- Proprietary
- Proprietary
- Apache
+<pre><code>| Los Angeles, CA | 3898747 | 1781 |
+| Chicago, IL     | 2746388 | 1780 |
+| San Diego, CA   | 1381611 | 1769 |
+| San Jose, CA    | 983489  | 1777 |
 </code></pre>
-<p>From there it’s trivial to select a different column.
-In the next example, I select column three to get the release year:</p>
+<p>To limit results to only <strong>CA</strong>, we can enclose our search in special characters that tell <code>grep</code> to limit by whole words only:</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d"," -f3 operating-systems.csv
+<pre><code>grep -i "\bca\b" cities.md
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code> 2009
- 1993
- 1991
- 2007
- 2001
- 1993
- 2008
-</code></pre>
-<p>A genius aspect of the Linux (and Unix) commandline is the ability to <strong>pipe</strong> and <strong>redirect</strong> output from one program to another program.
-Output can be further directed to a file.
-By stringing together multiple programs in this way, we can create small programs that do much more than the simple programs that compose them.</p>
-<p>For example, in the following example, I use the pipe operators to send the output of the <code>cut</code> command to the <code>sort</code> command.
-This sorts the data in alphabetical or numerical order, depending on the character type (lexical or numerical).
-I then pipe that output to the <code>uniq</code> command, which removes duplicate rows.
-Finally, I redirect that final output to a new file titled <strong>os-years.csv</strong>.
-Since the year <strong>1993</strong> appears twice in the original file, it only appears once in the output because the <code>uniq</code> command removed the duplicate:</p>
-<p><strong>Command:</strong></p>
-<pre><code>cut -d"," -f3 operating-systems.csv | sort | uniq &gt; os-years.csv
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>cat os-years.csv
- 1991
- 1993
- 2001
- 2007
- 2008
- 2009
-</code></pre>
-<p>Data files like this often have a header line at the top row that names the data columns.
-It’s useful to know how to work with such files, so let’s add a header row to the top of the file.
-In this example, I’ll use the <code>sed</code> command, which we will learn more about in the next lesson.
-For now, we use <code>sed</code> with the option <code>-i</code> to edit the file, then <code>1i</code> instructs <code>sed</code> to <strong>insert</strong> text at <strong>line 1</strong>.
-<code>\OS, License, Year</code> is the text that we want inserted at line 1.
-We wrap the argument within single quotes:</p>
-<p><strong>Command:</strong></p>
-<pre><code>sed -i '1i \OS, License, Year' operating-systems.csv
-cat operating-systems.csv
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>OS, License, Year
-Chrome OS, Proprietary, 2009
-FreeBSD, BSD, 1993
-Linux, GPL, 1991
-iOS, Proprietary, 2007
-macOS, Proprietary, 2001
-Windows NT, Proprietary, 1993
-Android, Apache, 2008
-</code></pre>
-<p>I added the header row just to demonstrate how to remove it when processing files with header rows.
-Say we want the license field data, but we need to remove that first line.
-In this case, we can use the tail command:</p>
-<p><strong>Command:</strong></p>
-<pre><code>tail -n +2 operating-systems.csv | cut -d"," -f2 | sort | uniq &gt; license-data.csv
-cat license-data.csv
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code> Apache
- BSD
- GPL
- Proprietary
+<pre><code>| Los Angeles, CA | 3898747 | 1781 |
+| San Diego, CA   | 1381611 | 1769 |
+| San Jose, CA    | 983489  | 1777 |
 </code></pre>
 <blockquote>
-<p>The <code>tail</code> command generally outputs the last lines of a file, but the <code>-n +2</code> option is special.
-It makes the <code>tail</code> command output a file starting at the second line.
-We could specify a different number in order to start output at a different line.
-See <code>man tail</code> for more information.</p>
+<p><strong>Note:</strong> in some cases you might need an extra backslash: <code>grep -i "\\bca\\b" cities.md</code>.</p>
 </blockquote>
+<p>We can reverse that output and look for strings within other words.
+Here is an example of searching for the string <strong>ca</strong> within words:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -i "\Bca\B" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| Chicago, IL | 2746388 | 1780 |
+</code></pre>
+<h2 id="bracket-expressions-and-character-classes"><a class="header" href="#bracket-expressions-and-character-classes">Bracket Expressions and Character Classes</a></h2>
+<p>In conjunction with the <code>grep</code> command, we can also use regular expressions to search for more general patterns in text files.
+For example, we can use <strong>bracket expressions</strong> and <strong>character classes</strong> to search for patterns in the text.
+Here again using <code>man grep</code> is very important because it includes instructions on how to use these regular expressions.</p>
+<h3 id="bracket-expressions"><a class="header" href="#bracket-expressions">Bracket expressions</a></h3>
+<p>From <code>man grep</code> on <strong>bracket expressions</strong>:</p>
+<blockquote>
+<p>A bracket expression is a list of characters enclosed by [ and ]. It matches
+any single character in that list. If the first character of the list is the
+caret ^ then it matches any character not in the list. For example, the
+regular expression [0123456789] matches any single digit.</p>
+</blockquote>
+<p>The regular expression [^0123456789] matches the inverse.</p>
+<blockquote>
+<p>Within a bracket expression, a range expression consists of two characters
+separated by a hyphen. It matches any single character that sorts between the
+two characters.</p>
+</blockquote>
+<p>To see how this works, let’s search the <strong>cities.md</strong> file for letters matching <strong>A, B, or C</strong>.
+Specifically, in the following command I use a hyphen to match any characters <strong>in</strong> the range A, B, C.
+The output does not include the cities <strong>Houston</strong> or <strong>Dallas</strong> since neither of those lines contain capital <strong>A, B, or C</strong> characters:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "[A-C]" cities.md 
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| City              | 2020 Census | Founded |
+| New York City, NY | 8804190     | 1624    |
+| Los Angeles, CA   | 3898747     | 1781    |
+| Chicago, IL       | 2746388     | 1780    |
+| Phoenix, AZ       | 1624569     | 1881    |
+| Philadelphia, PA  | 1576251     | 1701    |
+| San Antonio, TX   | 1451853     | 1718    |
+| San Diego, CA     | 1381611     | 1769    |
+| San Jose, CA      | 983489      | 1777    |
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> Use <code>grep -i "[A-C]" cities.md</code> for a case insensitive search.</p>
+</blockquote>
+<h3 id="bracket-expressions-inverse-searches"><a class="header" href="#bracket-expressions-inverse-searches">Bracket expressions, inverse searches</a></h3>
+<p>When placed after the first bracket, the carat key acts as a Boolean NOT.
+The following command matches any characters <strong>not in</strong> the range A,B,C:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "[^A-C]" cities.md
+</code></pre>
+<p>The output matches all lines since there are no instances of <strong>A, B, and C</strong> in all lines:</p>
+<p><strong>Output:</strong></p>
+<pre><code>| City              | 2020 Census | Founded |
+|-------------------|-------------|---------|
+| New York City, NY | 8804190     | 1624    |
+| Los Angeles, CA   | 3898747     | 1781    |
+| Chicago, IL       | 2746388     | 1780    |
+| Houston, TX       | 2304580     | 1837    |
+| Phoenix, AZ       | 1624569     | 1881    |
+| Philadelphia, PA  | 1576251     | 1701    |
+| San Antonio, TX   | 1451853     | 1718    |
+| San Diego, CA     | 1381611     | 1769    |
+| Dallas, TX        | 1288457     | 1856    |
+| San Jose, CA      | 983489      | 1777    |
+</code></pre>
+<h4 id="process-substitution"><a class="header" href="#process-substitution">Process substitution</a></h4>
+<p>Process substitution allows you to use the output of a command as if it were a file.
+This is particularly useful when you want to compare the outputs of two commands directly, without having to save them to temporary files.</p>
+<p>For example, we can confirm that output from one command does not include Houston or Dallas in a second command by comparing the outputs.
+Specifically, we compare the outputs of two or more commands using <strong>process substitution</strong>.
+This works because the <strong>process substitution</strong> creates temporary files from the outputs.</p>
+<p><strong>Command:</strong></p>
+<pre><code>diff &lt;(grep "[A-C]" cities.md) &lt;(grep "[^A-C]" cities.md)
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>1a2
+&gt; |-----------------|-------------|------|
+4a6
+&gt; | Houston, TX     | 2304580     | 1837 |
+8a11
+&gt; Dallas, TX        | 1288457     | 1856
+</code></pre>
+<hr>
+<h5 id="how-it-works"><a class="header" href="#how-it-works">How It Works</a></h5>
+<ul>
+<li><code>&lt;(command)</code> creates a temporary file (or file-like stream) that holds the output of command.</li>
+<li><code>diff</code> can then read from these streams as if they were regular files, comparing their contents without needing you to manually save and load files.
+The output of the <code>diff</code> command is nicely explained in this <a href="https://unix.stackexchange.com/a/216131">Stack Overflow</a> answer.</li>
+</ul>
+<p>Without process substitution, you would need to save the outputs of both grep commands to temporary files and then compare them:</p>
+<pre><code>grep "[A-C]" cities.md &gt; output1.txt
+grep "[^A-C]" cities.md &gt; output2.txt
+diff output1.txt output2.txt
+</code></pre>
+<p>This alternative works but is more cumbersome, as it requires managing temporary files.
+Process substitution simplifies the process by handling this behind the scenes.</p>
+<hr>
+<p>Try this command for an alternate output:</p>
+<pre><code>diff -y &lt;(grep "[A-C]" cities.md) &lt;(grep "[^A-C]" cities.md)
+</code></pre>
+<p>Our ranges may be alphabetical or numerical.
+The following command matches any numbers <strong>in</strong> the range 1,2,3:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "[1-3]" cities.md
+</code></pre>
+<p>Since all single digits appear in the file, the above command returns all lines.
+To invert the search, we can use the following grep command.
+This will match all non-integers:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "[^0-9]" cities.md
+</code></pre>
+<h3 id="bracket-expressions-carat-preceding-the-bracket"><a class="header" href="#bracket-expressions-carat-preceding-the-bracket">Bracket expressions, carat preceding the bracket</a></h3>
+<p>We saw in a previous section that the carat <code>^</code> key indicates the start of line.
+However, we learned above that it can be used to return the inverse of a string in special circumstances.
+To use the carat to signify the start of a line, the carat key must precede the opening bracket.
+For example, the following command matches any lines that start with the upper case letters within the range of <strong>N,O,P</strong>:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "^| [N-P]" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>New York City, NY | 8804190 | 1624
+Phoenix, AZ       | 1624569 | 1881
+Philadelphia, PA  | 1576251 | 1701
+</code></pre>
+<p>And we can reverse that with the following command, which returns all lines that <strong>do not</strong> start with <strong>N,O, or P</strong>:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "^| [^N-P]" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| City            | 2020 Census | Founded |
+| Los Angeles, CA | 3898747     | 1781    |
+| Chicago, IL     | 2746388     | 1780    |
+| Houston, TX     | 2304580     | 1837    |
+| San Antonio, TX | 1451853     | 1718    |
+| San Diego, CA   | 1381611     | 1769    |
+| Dallas, TX      | 1288457     | 1856    |
+| San Jose, CA    | 983489      | 1777    |
+</code></pre>
+<h3 id="character-classes"><a class="header" href="#character-classes">Character classes</a></h3>
+<p>Character classes are special types of predefined bracket expressions.
+They make it easy to search for general patterns.
+From <code>man grep</code> on <strong>character classes</strong>:</p>
+<blockquote>
+<p>Finally, certain named classes of characters are predefined within bracket
+expressions, as follows. Their names are self explanatory, and they are
+[:alnum:], [:alpha:], [:blank:], [:cntrl:], [:digit:], [:graph:], [:lower:],
+[:print:], [:punct:], [:space:], [:upper:], and [:xdigit:]. For example,
+[[:alnum:]] means the character class of numbers and letters …</p>
+</blockquote>
+<p>Below I use the <code>awk</code> command to select the fourth column (or field) using the pipe as the field delimiter.
+I pipe the output to <code>grep</code> to select lines containing a vertical bar and four digit numbers <code>[[:digit:]]{4}</code> from the results of the <code>awk</code> command:</p>
+<p><strong>Command:</strong></p>
+<pre><code>awk -F"|" '{ print $4 }' cities.md | grep -Eo "[[:digit:]]{4}"
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>1624
+1781
+1780
+1837
+1881
+1701
+1718
+1769
+1856
+1777
+</code></pre>
+<blockquote>
+<p>I first tested that the <code>awk</code> command selects the appropriate field by running it by itself: <code>awk -F"|" '{ print $4 }' cities.md</code>.</p>
+</blockquote>
+<h2 id="anchoring"><a class="header" href="#anchoring">Anchoring</a></h2>
+<p>As seen above, outside of bracket expressions and character classes, we use the caret <code>^</code> to mark the beginning of a line.
+We can also use the <code>$</code> to match the end of a line.
+Using either (or both) is called <strong>anchoring</strong>.
+Anchoring works in many places.
+For example, to search all lines that start with capital <strong>D through L</strong></p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "^| [D-L]" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| Los Angeles, CA | 3898747 | 1781 |
+| Houston, TX     | 2304580 | 1837 |
+| Dallas, TX      | 1288457 | 1856 |
+</code></pre>
+<p>To show how to anchor the end of a line, let’s look at the <strong>operating-systems.csv</strong> file.</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "1993$" operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>FreeBSD, BSD, 1993
+Windows NT, Proprietary, 1993
+</code></pre>
+<p>We can use both anchors in our <code>grep</code> commands.
+The following searches for any lines starting with capital letters that range from C through F.
+Then any lines ending with the numbers starting from 3 through 6.
+The single dot stands for any character, and the asterisk stands for “the preceding character will zero or more times” (<code>man grep</code>).</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep "^[C-F].*[3-6]$" operating-systems.csv
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>CP/M, Proprietary, 1974
+FreeBSD, BSD, 1993
+</code></pre>
+<h2 id="repetition"><a class="header" href="#repetition">Repetition</a></h2>
+<p>If we want to use regular expressions to identify repetitive patterns, then we can use repetition operators.
+As we saw above, the most useful one is the <code>*</code> asterisk.
+But there are other options:</p>
+<p>In come cases, we need to add the -E option
+to extend <code>grep</code>’s regular expression functionality:</p>
+<p>Here, the preceding item <strong>S</strong> is matched one or more times:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "S+" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
+| San Diego, CA   | 1381611 | 1769 |
+| San Jose, CA    | 983489  | 1777 |
+</code></pre>
+<p>In the next search, the preceding item <strong>l</strong> is matched exactly 2 times:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "l{2}" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| Dallas, TX | 1288457 | 1856 |
+</code></pre>
+<p>Finally, in this example, the preceding item <strong>7</strong> is matched at least two times or at most three times:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "7{2,3}" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Jose, CA | 983489 | 1777 |
+</code></pre>
+<h2 id="or-searches"><a class="header" href="#or-searches">OR searches</a></h2>
+<p>We can use the vertical bar <code>|</code> to do a Boolean OR search.
+In a Boolean OR statement, the statement is True if either one part is true, the other part is true, or both are true.
+In a search statement, this means that at least one part of the search is true.</p>
+<p>The following will return lines for each city because they both appear in the file:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "San Antonio|Dallas" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
+| Dallas, TX      | 1288457 | 1856 |
+</code></pre>
+<p>The following will match San Antonio even though Lexington does not appear in the file:</p>
+<p><strong>Command:</strong></p>
+<pre><code>grep -E "San Antonio|Lexington" cities.md
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>| San Antonio, TX | 1451853 | 1718 |
+</code></pre>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
-<p>In this lesson, we learned how to process and make sense of data held in a text file.
-We used some commands that let us select, sort, de-duplicate, redirect, and view data in different ways.
-Our data file was a small one, but these are powerful and useful command and operators that would make sense of large data file.</p>
-<p>The commands we used in this lesson include:</p>
+<p>We covered a lot in this section on <code>grep</code> and regular expressions.</p>
+<p>We specifically covered:</p>
 <ul>
-<li><code>cat</code>  : concatenate files and print on the standard output</li>
-<li><code>cut</code>  : remove sections from each line of files</li>
-<li><code>head</code> : output the first part of files</li>
-<li><code>sort</code> : sort lines of text files</li>
-<li><code>tail</code> : output the last part of files</li>
-<li><code>uniq</code> : report or omit repeat lines</li>
-<li><code>wc</code>   : print newline, word, and byte counts for each file</li>
+<li>multiword strings</li>
+<li>whole word searches and case sensitivity</li>
+<li>bracket expressions and character classes</li>
+<li>anchoring</li>
+<li>repetition</li>
+<li>Boolean OR searches</li>
 </ul>
-<p>We also used two types of operators, the pipe and the redirect:</p>
-<ul>
-<li><code>|</code> : redirect standard output command1 to standard input of command2</li>
-<li><code>&gt;</code> : redirect to standard output to a file, overwriting</li>
-</ul>
+<p>Even though we focused on <code>grep</code>, many these regular expressions work across many programming languages.</p>
+<p>See <a href="https://www.regular-expressions.info/">Regular-Expression.info</a> for more in-depth lessons on regular expressions.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="2c-file-perms-owns.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="3b-text-processing-part-2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="2e-text-processing-part-2.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="3d-bash-scripting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -450,11 +562,11 @@ Our data file was a small one, but these are powerful and useful command and ope
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="2c-file-perms-owns.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="3b-text-processing-part-2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="2e-text-processing-part-2.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="3d-bash-scripting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
