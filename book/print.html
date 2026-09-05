@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2c618a4a.js";
+            window.path_to_searchindex_js = "searchindex-48313f7e.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-7beec560.js"></script>
@@ -1609,7 +1609,7 @@ Text editors fulfill that role.</p>
 <p>As we learn more about how to do systems administration with Linux, we will need to edit configuration files, too.
 Most configuration files exist in the <code>/etc</code> directory.
 For example, later in the semester we will install the <a href="https://httpd.apache.org/">Apache Web Server</a>, and we will need to edit Apache’s configuration files in the process.
-We could do this using some of the tools that we’ve already covered, like <code>sed</code> and <code>awk</code>, but it’ll make our lives much easier to use a text editor.</p>
+We could do this using some of the tools that we’ll cover later, like <code>sed</code> and <code>awk</code>, but it’ll make our lives much easier to use a text editor.</p>
 <p>In any case, in order to save our commands or edit text files, a text editor is very helpful.
 Programmers use text editors to write programs, but programmers often work in graphical user environments, so they often use GUI text editors or <a href="https://en.wikipedia.org/wiki/Integrated_development_environment">IDE</a>s.
 As systems administrators, it would be unusual to have a graphical user interface installed on a server.
@@ -1631,9 +1631,8 @@ I think this is a testament of the power of the terminal: that advanced computer
 <p>In practice, when we use a line editor like <code>ed</code>, the main process of entering text is like any other editor.
 The big difference is when we need to manipulate text.
 In a graphical text editor, if we want to delete a word or edit some text, we might backspace over the text or highlight a word and delete it.
-In a line editor, we manipulate text by referring to lines or across multiple lines and then run commands on the text in those line(s).
-This is process we followed when we covered <code>grep</code>, <code>sed</code>, and <code>awk</code>, and especially <code>sed</code>, and it should not surprise you that <a href="https://www.oreilly.com/library/view/sed-awk/1565922255/ch02s01.html">these are related to ed</a>.</p>
-<p>To operationalize this, like in <code>sed</code>, each line has an <strong>address</strong>.
+In a line editor, we manipulate text by referring to lines or across multiple lines and then run commands on the text in those line(s).</p>
+<p>To operationalize this, each line has an <strong>address</strong>.
 The address for line 7 is <strong>7</strong>, and so forth.
 Line editors like <code>ed</code> are command driven.
 There is no menu to select from at the top of the <em>window</em>.
@@ -1642,7 +1641,7 @@ If a user wants to delete a word, or print (to screen) some text, the user has t
 We do this by specifying the line’s address and issuing a command to delete the word on that line, or print the line.
 Line editors also work on ranges of line, including all the lines in the file, just like <code>sed</code> does.</p>
 <p>Many of the commands that <code>ed</code> uses are also used by <code>sed</code>, since <code>sed</code> is based on <code>ed</code>.
-The following table compares commands between these two programs:</p>
+We’ll cover <code>sed</code> in the next chapter, but the following table compares commands between these two programs:</p>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -1727,8 +1726,7 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 Q
 </code></pre>
-<p>Note that with <code>sed</code>, in order to make a change <strong>in-place</strong>, we need to use the <code>-i</code> option.
-But with <code>ed</code>, we save changes with the <code>w</code> (write) command.</p>
+<p>In <code>ed</code>, we save changes with the <code>w</code> (write) command.</p>
 <pre><code>ed operating-systems.csv
 183
 1,3d
@@ -1757,7 +1755,7 @@ FreeDOS, GPL, 1998
 CP/M, Proprietary, 1974
 .
 </code></pre>
-<p>Like <code>sed</code>, we can also <strong>find and replace</strong> using regular expressions instead of line numbers.
+<p>We can also <strong>find and replace</strong> using regular expressions instead of line numbers.
 I start a new <code>ed</code> session to reload the file to start fresh:</p>
 <pre><code>ed operating-systems.csv
 183
@@ -1782,7 +1780,7 @@ f letter.txt
 w
 q
 </code></pre>
-<p>It’s good to know something about <code>ed</code> for historical reasons and because the line editing technology developed for it is still in use today, as seen with commands like <code>grep</code> and <code>sed</code>.
+<p>It’s good to know something about <code>ed</code> for historical reasons and because the line editing technology developed for it is still in use today, as we will see with commands like <code>grep</code> and <code>sed</code>.
 It is also a basic part of the design of the <code>vim</code> text editor.</p>
 <h2 id="vim"><a class="header" href="#vim"><code>vim</code></a></h2>
 <p>The <code>vim</code> text editor is a descendant of <code>ed</code>.
