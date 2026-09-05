@@ -95,6 +95,12 @@ For example, here are some commands that mostly make sense in `ed` as a text edi
 
 There are other differences, but these are sufficient for our purposes.
 
+To practice along, download the file to your home directory using the following command:
+
+```
+wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/master/data/operating-systems.csv
+```
+
 Let's see how to use `ed` to open a file, and print the content without (`1,$p`) and with (`1,$n`) line numbers.
 
 ```
@@ -389,6 +395,21 @@ You can also use the mouse with the `edit` text editor.
 
 Note that the GitHub page for `edit` provides instructions for installing this editor on Windows, in case you're interested in doing so.
 
+## Execute
+
+If you add a few lines of Bash commands to a new file, remember to make the file executable and move it to your `~/bin` directory.
+The following assigns the file `rwxrw----` permissions and then moves the file to the `~/bin` directory:
+
+```
+chmod 760 ~/newfile
+mv ~/newfile ~bin/
+```
+
+## Markdown
+
+Although writing plain text files is perfectly fine, you can level up your technical skills by learning [Markdown][markdown].
+We'll cover Markdown later in this work.
+
 ## Conclusion
 
 In prior lessons, we learned how to use the `bash` command prompt and how to view, manipulate, and edit files from that shell.
@@ -404,13 +425,14 @@ The commands we used in this lesson include:
 - `edit`: Microsoft text editor
 
 [apache]:https://httpd.apache.org/
-[security]:https://en.wikipedia.org/wiki/Attack_surface
-[ide]:https://en.wikipedia.org/wiki/Integrated_development_environment
 [ibm_cua]:https://en.wikipedia.org/wiki/IBM_Common_User_Access
+[ide]:https://en.wikipedia.org/wiki/Integrated_development_environment
+[markdown]:https://www.markdownguide.org/
 [mode_ui]:https://en.wikipedia.org/wiki/Mode_(user_interface)
 [ms_edit]:https://github.com/microsoft/edit
 [oreillyEd]:https://www.oreilly.com/library/view/sed-awk/1565922255/ch02s01.html
 [printers]:https://www.youtube.com/watch?v=S81GyMKH7zw
+[security]:https://en.wikipedia.org/wiki/Attack_surface
 [tilde]:https://os.ghalkes.nl/tilde/
 [ttys]:https://en.wikipedia.org/wiki/Teleprinter
 [vi]:https://en.wikipedia.org/wiki/Vi
