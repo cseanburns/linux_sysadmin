@@ -50,58 +50,72 @@ And there are three permission *modes* that restrict or expand access to each fi
 Consider the output of `ls -l` in my home directory that contains a file called **paper.txt**:
 
 ```
--rw-rw-r-- 1 seanburns seanburns 0 Sep  7 14:41 paper.txt
+-rw-rw---- 1 sean sean 0 Sep  9 00:45 paper.txt
 ```
 
 According to the above output, we can parse the following information about the file:
 
 | Attributes             | `ls -l` output     |
 | ------------           | ------------------ |
-| File permissions       | `-rw-rw-r--`       |
+| File permissions       | `-rw-rw----`       |
 | Number of links        | 1                  |
-| Owner name             | seanburns          |
-| Group name             | seanburns          |
+| Owner name             | sean          |
+| Group name             | sean          |
 | Byte size              | 0                  |
-| Last modification date | Sep  7 14:41       |
+| Last modification date | Sep  9 00:45       |
 | File name              | paper.txt          |
 
-The Owner and Group names of the `paper.txt` file are both `seanburns` because
-there is a user account named `seanburns` on the system and
-a group account named `seanburns` on the system, and that file exists in the user `seanburns`'s home directory.
-You can see which groups you belong to on your system with the `groups`.
+The Owner and Group names of the `paper.txt` file are both `sean` because there is a user account named `sean` on the system and a group account named `sean` on the system, and
+that file exists in the user `sean`'s home directory.
+You can see which [groups][system_groups] you belong to on your system with the `groups`.
+
+```
+groups
+```
+
+Or another user (if you're not me):
+
+```
+groups sean
+```
 
 The **File permissions** show:
 
 ```
--rw-rw-r--
+-rw-rw----
 ```
 
-Ignore the first dash for now.
-The remaining permissions can be broken down into three parts:
+Ignoring the first dash for now, the remaining permissions can be broken down into three parts:
 
-- rw- (read and write only permissions for the Owner)
-- rw- (read and write only permissions for the Group)
-- r-- (read-only permissions for the other, or World)
+- rw- (read and write only permissions for the Owner but no execute permissions)
+- rw- (read and write only permissions for the Group but no execute permissions)
+- --- (no read, write, or execute permissions for the other, or World)
 
 We read the output as such:
 
-- User **seanburns** is the Owner and has **r**ead and **w**rite permissions on the file but not e**x**ecute permissions (``rw-``).
-- Group **seanburns** is the Group owner and has **r**ead and **w**rite permissions on the file but not e**x**ecute permissions (``rw-``).
-- The **Other/World** can **r**ead the file but cannot **w**rite to the file nor e**x**ecute the file (`r--`).
+- User **sean** is the Owner and has **r**ead and **w**rite permissions on the file but not e**x**ecute permissions (``rw-``).
+- Group **sean** is the Group owner and has **r**ead and **w**rite permissions on the file but not e**x**ecute permissions (``rw-``).
+- The **Other/World** cannot **r**ead, **w**rite, or e**x**ecute the file (`---`).
+
+We can alternatively write that as:
+
+| owner | group | other |
+|-------|-------|-------|
+| rw-   | rw-   | ---   |
 
 > The word **write** is a classical computing term that means, essentially, to edit and save edits of a file.
 > Today we use the term **save** instead of **write**, but remember that they are basically equivalent terms.
 
-The **Other/World** ownership allows people to view (read) the file but not write (save) to it nor execute (run) it.
+The **Other/World** ownership allows people to either view (read), write (save, or execute the file, if it's a program or script), depending on the permissions.
 Any webpage you view on the internet at least has Other/World mode set to read.
 
 Let's take a look at another file.
-In our `/bin` directory, we can see a listing of executable programs on the system.
-For example, take a look at the `scp` (secure copy) program as follows:
+In our `/usr/bin` directory, we can see a listing of executable programs on the system.
+For example, take a look at the `cat` (concatenate) program as follows:
 
 ```
-ls -l /bin/scp
--rwxr-xr-x 1 root   root    133720 Apr  11 /bin/scp*
+ls -l /usr/bin/cat
+-rwxr-xr-x 1 root   root    39384 Aug  25 15:09 /usr/bin/cat
 ```
 
 | Attributes             | `ls -l` output     |
@@ -110,11 +124,17 @@ ls -l /bin/scp
 | Number of links        | 1                  |
 | Owner name             | root               |
 | Group name             | root               |
-| Byte size              | 133720             |
-| Last modification date | Apr 11 2025        |
+| Byte size              | 39384              |
+| Last modification date | Aug 25 2026        |
 | File name              | /bin/scp           |
 
-Since `scp` is a computer program used to securely copy files between different machines, it needs to be e**x**ecutable.
+And the permissions are:
+
+| owner | group | other |
+|-------|-------|-------|
+| rwx   | r-x   | r-x   |
+
+Since `cat` is a computer program, it needs to be e**x**ecutable.
 That is, users on the system need to be able to run it.
 But notice that the owner and group names of the file point to the user `root`.
 We have already learned that there is a `root` directory in our filesystem.
@@ -123,7 +143,7 @@ But there is also a `root` user account.
 This is the system's **superuser**.
 The **superuser** can run or access anything on the system, and this user also owns most of the system files.
 
-Back to permissions. We read the output of the `ls -l /bin/scp` command as such:
+Back to permissions. We read the output of the `ls -l /usr/bin/cat` command as such:
 
 - User **root** is the Owner and has **r**ead, **w**rite, and e**x**ecute (``rwx``) permissions on the file.
 - Group **root** is the Group owner and has **r**ead and e**x**ecute permissions but not **w**rite permissions (`r-x`)
@@ -131,7 +151,7 @@ Back to permissions. We read the output of the `ls -l /bin/scp` command as such:
   This permissions allows other users (like you and me) to use the `scp` program.
 
 Finally, let's take a look at the permissions for a directory itself.
-When I run the following command in my home directory, it will show the permissions for my `/home/seanburns` directory:
+When I run the following command in my home directory, it will show the permissions for my `/home/sean` directory:
 
 ```
 ls -ld
@@ -140,7 +160,7 @@ ls -ld
 And the output is:
 
 ```
-drwxr-x--- 4 seanburns seanburns 4096 Sep  2 19:07 .
+drwxr-x--- 4 sean sean 4096 Sep  5 00:45 .
 ```
 
 This shows that:
@@ -149,24 +169,26 @@ This shows that:
 | ------------           | ------------------ |
 | File permissions       | `drwxr-x---`       |
 | Number of links        | 4                  |
-| Owner name             | seanburns          |
-| Group name             | seanburns          |
+| Owner name             | sean          |
+| Group name             | sean          |
 | Byte size              | 4096               |
-| Last modification date | Sep  2             |
+| Last modification date | Sep  5             |
 | File name              | .                  |
 
 This is a little different from the previous examples, but let's parse it:
 
 - Instead of an initial dash, this *file* has an initial **d** that identifies this as a directory.
   Directories in Linux are simply special types of files.
-- User `seanburns` has read, write, and execute (`rwx`) permissions.
-- Group `seanburns` have execute (`r-x`) read and execute permissions.
+- User `sean` has read, write, and execute (`rwx`) permissions.
+- Group `sean` has read and execute (`r-x`) permissions.
 - `Other/World` have no permisisons on this directory.
-- `.` signifies the current directory, which happens to be my home directory, since I ran that command at the `/home/seanburns` path.
+- `.` signifies the current directory. In this case, this happens to be the **relative path** to my home directory from my home directory, since I ran that command from my home directory (`/home/sean`).
 
 Why does the directory have an e**x**ecutable bit set since it's not a program?
 The executable bit is required on directories to access them.
 That is, if we want to `cd` into a directory, then the executable bit needs to be set on the directory.
+
+If a directory has the following permissions, then it can't be accessed with the `cd` command: `rw-rw-rw-`
 
 ## Changing File Permissions and Ownership 
 
@@ -178,8 +200,8 @@ There will be times when we will want to change the defaults.
 For example, if I were to create accounts for other people for this system, I might want to disallow them access to my home directory.
 There are several commands available to do that, and here I'll introduce you to the two most common ones.
 
-1. The `chmod` command is used to change file and directory permissions: the `-rwxrwxrwx` part of a file.
-2. The `chown` command is used to change a file's and directory's owner and group.
+1. The `chmod` command is used to change file and directory permissions: the `-rwxrwxrwx` part of a file's listing.
+2. The `chown` command is used to change a file's and directory's owner and group: the `sean sean` or `root root` part of a file's listing.
 
 #### `chmod`
 
@@ -234,11 +256,11 @@ Because `4+2=6` for owner, and `4` is read only for group and Other/World, respe
 
 #### `chown`
 
-In order to change the ownership of a file, we use the `chown` command followed by the name of the owner.
+In order to change the ownership of a file, we use the `chown` command followed by the name of the owner and/or the group owner.
 
-I can generally only change the user owner of a file if I have admin access on a system.
-In such a case, I would have to use the `sudo` command, which gives me superuser privileges.
-To change the owner only, say from the user `seanburns` to the user `root`:
+I can generally only change the user owner of some else's file if I have admin access on a system.
+In such a case, I would have to use the `sudo` command, which gives me superuser privileges, or login as the `root` user.
+To change the owner only, say from the user `sean` to the user `root`:
 
 ```
 sudo chown root paper.txt
@@ -262,6 +284,92 @@ I revert ownership back to me for both user and group:
 sudo chown sean:sean paper.txt
 ```
 
+## Execute Permissions
+
+Sometimes we want to write scripts to automate some process.
+For example, let's say that when I login to the remote server, I want to run the following commands:
+
+```
+echo "Greetings $USER. I hope you are doing well today."
+
+echo "Today is $(date)."
+
+echo "Currently, the following people are logged into the system:" ; who
+
+echo "You belong to the following groups:" ; groups
+```
+
+I could type those commands out, which would be quickly cumbersome, or I can add them to a file, and make the file executable.
+
+Let's say I add them to a file named `greeting`.
+To make the file act like a program, I make it executable for the user:
+
+```
+chmod 700 greeting
+```
+
+Then to run it, I can type:
+
+```
+./greeting
+```
+
+### Execute PATHS
+
+In the above `greeting` command, I had to type a `./` before the file name to run it.
+This is because the Bash shell only runs commands that are in specific paths.
+To see the default paths, run the following command:
+
+```
+echo $PATH
+```
+
+The output should be:
+
+```
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+```
+
+This is a colon separated list of fields, which means that Bash looks in the following locations for programs:
+
+- /usr/local/sbin
+- /usr/local/bin
+- /usr/sbin
+- /usr/bin
+- /sbin
+- /bin
+- /usr/games
+- /usr/local/games
+- /snap/bin
+
+If we want to have our own personal `~/bin` directory for private executables, we can simply create that directory:
+
+```
+mkdir bin
+```
+
+After logging out and logging back in, we can run programs from within that directory without using `./`.
+First we can test that our path has been updated after logging back in:
+
+```
+echo $PATH
+/home/sean/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+```
+
+Note that `/home/sean/bin` has been added to the list.
+
+Then we can move the `greeting` file to our `~/bin` directory:
+
+```
+mv ~/greeting bin/
+```
+
+And run the command:
+
+```
+greeting
+```
+
 ## Conclusion
 
 In this section, we learned:
@@ -279,7 +387,6 @@ We also used the following commands:
 - `ls`         : list directory contents
     - `ls -ld` : long list directories themselves, not their contents
 - `groups`     : print the groups a user is in
-- `sudo`       : execute a command as another user
 
 [changing_file_permissions]:https://docs.oracle.com/cd/E19504-01/802-5750/6i9g464pv/index.html
 [system_groups]:https://wiki.debian.org/SystemGroups
