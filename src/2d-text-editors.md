@@ -26,7 +26,7 @@ Text editors fulfill that role.
 As we learn more about how to do systems administration with Linux, we will need to edit configuration files, too.
 Most configuration files exist in the `/etc` directory.
 For example, later in the semester we will install the [Apache Web Server][apache], and we will need to edit Apache's configuration files in the process.
-We could do this using some of the tools that we've already covered, like `sed` and `awk`, but it'll make our lives much easier to use a text editor.
+We could do this using some of the tools that we'll cover later, like `sed` and `awk`, but it'll make our lives much easier to use a text editor.
 
 In any case, in order to save our commands or edit text files, a text editor is very helpful.
 Programmers use text editors to write programs, but programmers often work in graphical user environments, so they often use GUI text editors or [IDE][ide]s. 
@@ -54,9 +54,8 @@ In practice, when we use a line editor like `ed`, the main process of entering t
 The big difference is when we need to manipulate text.
 In a graphical text editor, if we want to delete a word or edit some text, we might backspace over the text or highlight a word and delete it.
 In a line editor, we manipulate text by referring to lines or across multiple lines and then run commands on the text in those line(s).
-This is process we followed when we covered `grep`, `sed`, and `awk`, and especially `sed`, and it should not surprise you that [these are related to ed][oreillyEd].
 
-To operationalize this, like in `sed`, each line has an **address**.
+To operationalize this, each line has an **address**.
 The address for line 7 is **7**, and so forth.
 Line editors like `ed` are command driven. 
 There is no menu to select from at the top of the *window*.
@@ -66,7 +65,7 @@ We do this by specifying the line's address and issuing a command to delete the 
 Line editors also work on ranges of line, including all the lines in the file, just like `sed` does.
 
 Many of the commands that `ed` uses are also used by `sed`, since `sed` is based on `ed`.
-The following table compares commands between these two programs:
+We'll cover `sed` in the next chapter, but the following table compares commands between these two programs:
 
 | Command         | `sed`   | `ed`   |
 | ---------       | ------- | ------ |
@@ -154,8 +153,7 @@ Android, Apache, 2008
 Q
 ```
 
-Note that with `sed`, in order to make a change **in-place**, we need to use the `-i` option.
-But with `ed`, we save changes with the `w` (write) command.
+In `ed`, we save changes with the `w` (write) command.
 
 ```
 ed operating-systems.csv
@@ -197,7 +195,7 @@ CP/M, Proprietary, 1974
 .
 ```
 
-Like `sed`, we can also **find and replace** using regular expressions instead of line numbers.
+We can also **find and replace** using regular expressions instead of line numbers.
 I start a new `ed` session to reload the file to start fresh:
 
 ```
@@ -228,7 +226,7 @@ w
 q
 ```
 
-It's good to know something about `ed` for historical reasons and because the line editing technology developed for it is still in use today, as seen with commands like `grep` and `sed`.
+It's good to know something about `ed` for historical reasons and because the line editing technology developed for it is still in use today, as we will see with commands like `grep` and `sed`.
 It is also a basic part of the design of the `vim` text editor.
 
 ## `vim`
@@ -430,7 +428,6 @@ The commands we used in this lesson include:
 [markdown]:https://www.markdownguide.org/
 [mode_ui]:https://en.wikipedia.org/wiki/Mode_(user_interface)
 [ms_edit]:https://github.com/microsoft/edit
-[oreillyEd]:https://www.oreilly.com/library/view/sed-awk/1565922255/ch02s01.html
 [printers]:https://www.youtube.com/watch?v=S81GyMKH7zw
 [security]:https://en.wikipedia.org/wiki/Attack_surface
 [tilde]:https://os.ghalkes.nl/tilde/
