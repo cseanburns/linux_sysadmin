@@ -126,7 +126,7 @@ ls -l /usr/bin/cat
 | Group name             | root               |
 | Byte size              | 39384              |
 | Last modification date | Aug 25 2026        |
-| File name              | /bin/scp           |
+| File name              | /usr/bin/cat       |
 
 And the permissions are:
 
