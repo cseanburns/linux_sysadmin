@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-48313f7e.js";
+            window.path_to_searchindex_js = "searchindex-53c254a9.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-7beec560.js"></script>
@@ -180,63 +180,28 @@
                         <h1 id="text-processing-part-1"><a class="header" href="#text-processing-part-1">Text Processing: Part 1</a></h1>
 <p>In this section, we will cover</p>
 <ol>
-<li><strong>Text processing tools are fundamental</strong>: Learning to process and
-manipulate text is a crucial skill for systems administrators, programmers,
-and data analysts. Linux provides a variety of tools to examine, manipulate,
-and analyze text.</li>
-<li><strong>Plain text is foundational</strong>: Programs and data are often stored in plain
-text, making it essential to know how to handle text files effectively.</li>
-<li><strong>Essential text processing commands</strong>: Commands such as <code>cat</code>, <code>cut</code>,
-<code>head</code>, <code>tail</code>, <code>sort</code>, <code>uniq</code>, and <code>wc</code> allow users to view, manipulate,
-and analyze text files, even large datasets, with ease.</li>
-<li><strong>Power of pipes and redirection</strong>: Using pipes (<code>|</code>) and redirection (<code>&gt;</code>,
-<code>&gt;&gt;</code>), you can chain commands together to create more complex workflows for
-processing text files.</li>
-<li><strong>CSV data manipulation</strong>: This lecture shows how to work with CSV
-(comma-separated value) files, demonstrating how to view, sort, and filter
-data with tools like <code>cut</code> and <code>uniq</code>.</li>
-<li><strong>Practical applications for systems administration</strong>: The lecture
-emphasizes that text processing skills are directly applicable to managing
-user accounts, security, system configuration, and more in a systems
-administration context.</li>
+<li><strong>Text processing tools are fundamental</strong>: Learning to process and manipulate text is a crucial skill for systems administrators, programmers, and data analysts.
+Linux provides a variety of tools to examine, manipulate, and analyze text.</li>
+<li><strong>Plain text is foundational</strong>: Programs and data are often stored in plain text, and it is essential to know how to handle text files effectively.</li>
+<li><strong>Essential text processing commands</strong>: Commands such as <code>cat</code>, <code>cut</code>, <code>head</code>, <code>paste</code>, <code>tail</code>, <code>sort</code>, <code>uniq</code>, and <code>wc</code> allow users to view, manipulate, and analyze text files, even large datasets, with ease.</li>
+<li><strong>Power of pipes and redirection</strong>: Using pipes (<code>|</code>) and redirection (<code>&gt;</code>, <code>&gt;&gt;</code>), you can chain commands together to create more complex workflows for processing text files.</li>
+<li><strong>CSV data manipulation</strong>: This section shows how to work with CSV (comma-separated value) files, demonstrating how to view, sort, and filter data with tools like <code>cut</code> and <code>uniq</code>.</li>
 </ol>
 <h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
-<p>One of the more important sets of tools that Linux (as well Unix-like)
-operating systems provide are tools that
-<a href="https://tldp.org/LDP/abs/html/textproc.html">aid processing and manipulating text</a>.
-The ability to process and manipulate text, programmatically,
-is a basic and essential part of many programming languages,
-(e.g., Python, JavaScript, etc),
-and learning how to process and manipulate text is
-an important skill for a variety of jobs including
-statistics, data analytics, data science, programming, web programming,
-systems administration, and so forth.
-In other words,
-this functionality of Linux (and Unix-like) operating systems
-essentially means that to learn Linux and the tools that it provides
-is akin to learning how to program.</p>
+<p>One of the more important sets of tools that Linux (as well Unix-like) operating systems provide are tools that <a href="https://tldp.org/LDP/abs/html/textproc.html">aid processing and manipulating text</a>.
+The ability to process and manipulate text is a basic and essential part of many programming languages, (e.g., Python, JavaScript, etc), and
+learning how to process and manipulate text is an important skill for a variety of jobs including statistics, data analytics, data science, programming, web programming, systems administration, and so forth.
+In other words, this functionality of Linux (and Unix-like) operating systems essentially means that to learn Linux and the tools that it provides is akin to learning how to program.</p>
 <blockquote>
 <p>Plain text files are the basic building blocks of programs and data.
-Programs are written in plain text editors (Vim, NeoVim, VS Code, etc), and
-data is often stored as plain text.
-Linux offers many tools to examine, manipulate, process, analyze,
-and visualize data in plain text files.</p>
+Programs are written in plain text editors (Vim, VS Code, etc), and data is often stored as plain text.
+Linux offers many tools to examine, manipulate, process, analyze, and visualize data in plain text files.</p>
 </blockquote>
-<p>In this section, we will learn some of the basic
-tools to examine plain text (i.e., data).
-We will do some programming later in this class, but for us,
-the main objective with learning to program
-aligns with our work as systems administrators.
-That means our text processing and programming goals will serve our interests
-in managing users, security, networking, system configuration, and so forth
-as Linux system administrators.</p>
-<p>In the meantime, the goal of this section is to acquaint ourselves with
-some of the tools that can be used to process text.
-In this section, we will only cover a handful of text processing
-programs or utilities,
-but here is a fairly comprehensive list,
-and we’ll examine some additional ones from this list
-later in the semester:</p>
+<p>In this section, we will learn some of the basic tools to examine plain text (i.e., data).
+We will do some programming later in this class, but for us, the main objective with learning to program aligns with our work as systems administrators.
+That means our text processing and programming goals will serve our interests in managing users, security, networking, system configuration, and so forth as Linux system administrators.</p>
+<p>In the meantime, the goal of this section is to acquaint ourselves with some of the tools that can be used to process text.
+In this section, we will only cover a handful of text processing programs or utilities, but here is a fairly comprehensive list, and we’ll examine some additional ones from this list later in the semester:</p>
 <ul>
 <li><code>cat</code>      : concatenate files and print on the standard output</li>
 <li><code>cut</code>      : remove sections from each line of files</li>
@@ -262,8 +227,7 @@ later in the semester:</p>
 <li><code>wc</code>       : print newline, word, and byte counts for each file</li>
 </ul>
 <p>We will also discuss two types of operators, the pipe and the redirect.
-The latter has a version that will write over the contents of a file,
-and a version that will append contents to the end of a file:</p>
+The latter has a version that will write over the contents of a file, and a version that will append contents to the end of a file:</p>
 <ul>
 <li><code>|</code> : redirect standard output from command1 to standard input for command2</li>
 <li><code>&gt;</code> : redirect to standard output to a file, overwriting</li>
@@ -275,6 +239,7 @@ specifically:</p>
 <li><code>cat</code>  : concatenate files and print on the standard output</li>
 <li><code>cut</code>  : remove sections from each line of files</li>
 <li><code>head</code> : output the first part of files</li>
+<li><code>paste</code> : merge lines of files</li>
 <li><code>sort</code> : sort lines of text files</li>
 <li><code>tail</code> : output the last part of files</li>
 <li><code>uniq</code> : report or omit repeat lines</li>
@@ -290,7 +255,8 @@ We can use the <code>cat</code> command to view the entire contents of this smal
 <pre><code>cat operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>Chrome OS, Proprietary, 2009
+<pre><code>OS, License, Year
+Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
 iOS, Proprietary, 2007
@@ -306,19 +272,18 @@ The following output states that the file contains seven lines, 23 words, and 16
 <pre><code>wc operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>  7  23 165 operating-systems.csv
+<pre><code>  8  26 183 operating-systems.csv
 </code></pre>
 <p>We can use the <code>head</code> command to output the first ten lines of a file.
-Since our file is only seven lines long,
-we can use the <code>-n</code> option  to change the default number of lines.
+Since our file is only seven lines long, we can use the <code>-n</code> option  to change the default number of lines.
 In the following example, I print the first three lines of the file:</p>
 <p><strong>Command:</strong></p>
 <pre><code>head -n3 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>Chrome OS, Proprietary, 2009
+<pre><code>OS, License, Year
+Chrome OS, Proprietary, 2009
 FreeBSD, BSD, 1993
-Linux, GPL, 1991
 </code></pre>
 <p>Using the <code>cut</code> command, we can select data from file.
 In the first example, I want to select column two (or field two), which contains the license information.
@@ -331,7 +296,8 @@ In such cases, it may still be called a CSV file but you might also see <code>.d
 <pre><code>cut -d"," -f2 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code> Proprietary
+<pre><code> License
+ Proprietary
  BSD
  GPL
  Proprietary
@@ -345,7 +311,8 @@ In the next example, I select column three to get the release year:</p>
 <pre><code>cut -d"," -f3 operating-systems.csv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code> 2009
+<pre><code> Year
+ 2009
  1993
  1991
  2007
@@ -356,13 +323,16 @@ In the next example, I select column three to get the release year:</p>
 <p>A genius aspect of the Linux (and Unix) commandline is the ability to <strong>pipe</strong> and <strong>redirect</strong> output from one program to another program.
 Output can be further directed to a file.
 By stringing together multiple programs in this way, we can create small programs that do much more than the simple programs that compose them.</p>
-<p>For example, in the following example, I use the pipe operators to send the output of the <code>cut</code> command to the <code>sort</code> command.
+<p>In the following example, I use pipe operators to send the output of the <code>tail</code> command
+(which extracts the seven lines from the bottom of the file to just before the header,
+thereby removing the header line) to the <code>cut</code> command, and
+the output of the <code>cut</code> command to the <code>sort</code> command.
 This sorts the data in alphabetical or numerical order, depending on the character type (lexical or numerical).
 I then pipe that output to the <code>uniq</code> command, which removes duplicate rows.
 Finally, I redirect that final output to a new file titled <strong>os-years.csv</strong>.
 Since the year <strong>1993</strong> appears twice in the original file, it only appears once in the output because the <code>uniq</code> command removed the duplicate:</p>
 <p><strong>Command:</strong></p>
-<pre><code>cut -d"," -f3 operating-systems.csv | sort | uniq &gt; os-years.csv
+<pre><code>tail -n7 operating-systems.csv | cut -d"," -f3 | sort | uniq &gt; os-years.csv
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>cat os-years.csv
@@ -373,35 +343,26 @@ Since the year <strong>1993</strong> appears twice in the original file, it only
  2008
  2009
 </code></pre>
-<p>Data files like this often have a header line at the top row that names the data columns.
-It’s useful to know how to work with such files, so let’s add a header row to the top of the file.
-In this example, I’ll use the <code>sed</code> command, which we will learn more about in the next lesson.
-For now, we use <code>sed</code> with the option <code>-i</code> to edit the file, then <code>1i</code> instructs <code>sed</code> to <strong>insert</strong> text at <strong>line 1</strong>.
-<code>\OS, License, Year</code> is the text that we want inserted at line 1.
-We wrap the argument within single quotes:</p>
+<p>The <code>man</code> page for <code>tail</code> offers a better way to remove header lines.
+According to <code>man tail</code>, the <code>-n +NUM</code> option lets us skip starting lines.
+From the <code>man</code> page:</p>
+<blockquote>
+<p>use -n +NUM to skip NUM-1 liines at the start</p>
+</blockquote>
+<p>To apply this function, in the following command, we remove the first line using <code>-n +2</code> option, where:</p>
+<ul>
+<li><code>NUM = 2</code> ; and therefore</li>
+<li><code>NUM - 1 = 2 - 1 = 1</code></li>
+</ul>
+<p>I can also add the <code>-c</code> option to the <code>uniq</code> command to give us a frequency count of duplicated lines.
+In the following command, we apply this to the second field, which is the license data:</p>
 <p><strong>Command:</strong></p>
-<pre><code>sed -i '1i \OS, License, Year' operating-systems.csv
-cat operating-systems.csv
-</code></pre>
-<p><strong>Output:</strong></p>
-<pre><code>OS, License, Year
-Chrome OS, Proprietary, 2009
-FreeBSD, BSD, 1993
-Linux, GPL, 1991
-iOS, Proprietary, 2007
-macOS, Proprietary, 2001
-Windows NT, Proprietary, 1993
-Android, Apache, 2008
-</code></pre>
-<p>I added the header row just to demonstrate how to remove it when processing files with header rows.
-Say we want the license field data, but we need to remove that first line.
-In this case, we can use the tail command:</p>
-<p><strong>Command:</strong></p>
-<pre><code>tail -n +2 operating-systems.csv | cut -d"," -f2 | sort | uniq &gt; license-data.csv
+<pre><code>tail -n +2 operating-systems.csv | cut -d"," -f2 | sort | uniq -c &gt; license-data.csv
 cat license-data.csv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code> Apache
+<pre><code>
+ Apache
  BSD
  GPL
  Proprietary
@@ -412,6 +373,47 @@ It makes the <code>tail</code> command output a file starting at the second line
 We could specify a different number in order to start output at a different line.
 See <code>man tail</code> for more information.</p>
 </blockquote>
+<p>Next, let’s say I have the following file called <code>companies.txt</code>.</p>
+<pre><code>Companies
+Google
+FreeBSD Foundatino
+Linux Foundation
+Apple
+Apple
+Microsoft
+Google
+</code></pre>
+<p>Using the <code>paste</code> command, I can merge the two files together:</p>
+<pre><code>paste operating-systems.csv companies
+</code></pre>
+<p>And get the following output:</p>
+<pre><code>OS, License, Year       Company
+Chrome OS, Proprietary, 2009    Google
+FreeBSD, BSD, 1993      FreeBSD Foundation
+Linux, GPL, 1991        Linux Foundation
+iOS, Proprietary, 2007  Apple
+macOS, Proprietary, 2001        Apple
+Windows NT, Proprietary, 1993   Microsoft
+Android, Apache, 2008   Google
+</code></pre>
+<p>Now we have added data to our file.
+We would still need to edit the file to add commas after the Year field.
+We could automate that using other utilities, like <code>sed</code>.
+More on that next.</p>
+<h2 id="redirection"><a class="header" href="#redirection">Redirection</a></h2>
+<p>In the above commands, we used the single <code>&gt;</code> redirection operator to redirect output from the commands to text files.
+We can also use the double <code>&gt;&gt;</code> redirection operator.
+The difference is that the single redirection operator will <strong>overwrite</strong> data to a file.
+Therefore, if the file we’re sending output to contains data (or content), that data will be replaced with the new data.</p>
+<p>The <code>&gt;&gt;</code> redirection operator does not overwrite data.
+Instead, it <strong>appends</strong> (adds to) data to the end of a file.</p>
+<h2 id="pipe"><a class="header" href="#pipe">Pipe</a></h2>
+<p>Also in the above commands, we used the pipe <code>|</code> operator.
+Remember, the pipe operator sends the output of one command to be processed by a new command to the right of the pipe operator.
+In the next example, I run the <code>ls</code> command, pipe the output to the <code>grep</code> command in order to search for a name of a file or directory.
+In this case, I’m looking for a file or directory named <em>Mail</em>:</p>
+<pre><code>ls | grep "Mail"
+</code></pre>
 <h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
 <p>In this lesson, we learned how to process and make sense of data held in a text file.
 We used some commands that let us select, sort, de-duplicate, redirect, and view data in different ways.
@@ -421,6 +423,7 @@ Our data file was a small one, but these are powerful and useful command and ope
 <li><code>cat</code>  : concatenate files and print on the standard output</li>
 <li><code>cut</code>  : remove sections from each line of files</li>
 <li><code>head</code> : output the first part of files</li>
+<li><code>paste</code> : merge lines of files</li>
 <li><code>sort</code> : sort lines of text files</li>
 <li><code>tail</code> : output the last part of files</li>
 <li><code>uniq</code> : report or omit repeat lines</li>
