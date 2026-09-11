@@ -1,7 +1,7 @@
 # Linux Systems Administration
 
 Author: C. Sean Burns  
-Date: 2024-08-23  
+Date: 2026-09-11  
 Email: [sean.burns@uky.edu](sean.burns@uky.edu)  
 Website: [cseanburns.net](https://cseanburns.net)  
 GitHub: [@cseanburns](https://github.com/cseanburns)  
@@ -20,12 +20,6 @@ The book and course's goals are to provide students with the skills to use Linux
 And finally, this book/course ends on walking students through the process of building a [LAMP stack][lampWikipedia].
 
 ## How to Use this Book
-
-### Text and Video
-
-All sections of this book will be accompanied by a video demonstrating the practices described in those sections.
-Your are **highly encouraged** to **read through the text first** and **then watch the video**.
-Revisit the text to help cement the ideas in place and to work through tasks.
 
 ### Markup
 
