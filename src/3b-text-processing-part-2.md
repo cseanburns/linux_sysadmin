@@ -2,37 +2,22 @@
 
 In this section, we will cover:
 
-1. **Expanding the toolbox**: This section introduces more powerful text
-   processing utilities: `grep`, `sed`, and `awk`, which are essential for
-   advanced pattern matching, filtering, and text manipulation on the Linux
+1. **Expanding the toolbox**: This section introduces more powerful text processing utilities: `grep`, `sed`, and `awk`, which are essential for advanced pattern matching, filtering, and text manipulation on the Linux
    command line.
-2. **`grep` for pattern matching**: The `grep` command allows you to search for
-   patterns in files and output matching lines. You can perform
-   case-insensitive searches, invert matches, count occurrences, and use
-   regular expressions to refine your searches.
-3. **`sed` for stream editing**: `sed` is a non-interactive text editor
-   designed for filtering and transforming text. You can delete, replace, and
-   manipulate specific lines in a file, making it a powerful tool for batch
-   text processing tasks.
-4. **`awk` for structured data**: `awk` is a complete scripting language for
-   pattern scanning and processing columns of structured data. It can handle
-   arithmetic, generate reports, and perform logical comparisons, making it
-   ideal for working with CSVs and other structured text files.
-5. **Efficiency with one-liners**: The combination of `grep`, `sed`, and `awk`
-   allows for creating powerful one-liner commands to process large amounts of
-   text quickly, reducing the need for more complex scripts.
-6. **Regular expressions are key**: Regular expressions (**regex**) play a
-   significant role in refining searches and manipulations in both `grep` and
-   `sed`. Understanding basic regex patterns, such as `^` for line start and
-   `$` for line end, is crucial for effective text processing.
-7. **Integration with other tools**: Like the tools introduced in Part 1,
-   `grep`, `sed`, and `awk` integrate well with pipes and redirection, allowing
-   you to chain them with other commands for flexible and efficient text
-   workflows.
+2. **`grep` for pattern matching**: The `grep` command allows you to search for patterns in files and output matching lines.
+You can perform case-insensitive searches, invert matches, count occurrences, and use regular expressions to refine your searches.
+3. **`sed` for stream editing**: `sed` is a non-interactive text editor designed for filtering and transforming text.
+You can delete, replace, and manipulate specific lines in a file, making it a powerful tool for batch text processing tasks.
+4. **`awk` for structured data**: `awk` is a complete scripting language for pattern scanning and processing columns of structured data.
+It can handle arithmetic, generate reports, and perform logical comparisons, making it ideal for working with CSVs and other structured text files.
+5. **Efficiency with one-liners**: The combination of `grep`, `sed`, and `awk` allows for creating powerful one-liner commands to process large amounts of text quickly, reducing the need for more complex scripts.
+6. **Regular expressions are key**: Regular expressions (**regex**) play a significant role in refining searches and manipulations in both `grep` and `sed`.
+Understanding basic regex patterns, such as `^` for line start and `$` for line end, is crucial for effective text processing.
+7. **Integration with other tools**: Like the tools introduced in Part 1, `grep`, `sed`, and `awk` integrate well with pipes and redirection, allowing you to chain them with other commands for flexible and efficient text workflows.
 
 ## Getting Started
 
-In the last section, we covered the `cat`, `cut`, `head`, `sort`, `tail`, `uniq`, and `wc` utilities.
+In the last section, we covered the `cat`, `cut`, `head`, `paste`, `sort`, `tail`, `uniq`, and `wc` utilities.
 
 We also learned about the `|` pipe operator.
 The pipe operator is used to redirect **standard output** from one command to a second command.
@@ -43,11 +28,11 @@ An example is:
 sort file.txt | uniq
 ``` 
 
-This sorts the lines in a file named **file.txt** and then prints to standard output only the unique lines
+This sorts the lines in a file named **file.txt** and then prints to standard output only the unique lines.
 Note that files must be sorted before piped to `uniq`.
 
 We learned about the `>` and `>>` redirect operators.
-They work like the pipe operator, but instead of directing output to a new command, they direct output to a file for saving.
+They work like the pipe operator, but instead of directing output to a new command, they direct output to the screen or a file for saving.
 As a reminder, the single redirect `>` overwrites a file or creates a file if it does not exist.
 The double redirect `>>` appends to a file or creates a file if it does not exist.
 It's safer to use the double redirect, but if you are processing large amounts of data, it could also mean creating large files really quickly.
@@ -76,10 +61,9 @@ So when we use it to search a file for a **string** of text, it will return the 
 This **line by line** idea is part of the history of Unix-like operating systems.
 It's super important to remember that most utilities and programs that we use on the commandline are line oriented.
 
-> "A string is any series of characters that are interpreted literally by a
-> script. For example, 'hello world' and 'LKJH019283' are both examples of
-> strings." -- [Computer Hope][computerhope]. More generally, it's the literal
-> characters that we type. It's data.
+> "A string is any series of characters that are interpreted literally by a script.
+> For example, 'hello world' and 'LKJH019283' are both examples of strings." -- [Computer Hope][computerhope].
+> More generally, it's the literal characters that we type.
 
 Let's consider the file **operating-systems.csv**, as seen below:
 
@@ -92,6 +76,8 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
+
+### Basic Usage
 
 If we want to search for the string **Chrome**, we can use `grep`.
 Notice that even though the string **Chrome** only appears once, and in one part of a line, `grep` returns the entire line.
@@ -107,6 +93,8 @@ grep "Chrome" operating-systems.csv
 ```
 Chrome OS, Proprietary, 2009
 ```
+
+### Ignore Case
 
 Be aware that, by default, `grep` is case-sensitive, which means a search for the string **chrome**, with a lower case **c**, would return no results.
 Fortunately, `grep` has an `-i` option, which means to ignore the case of the search string.
@@ -135,6 +123,8 @@ grep -i "chrome" operating-systems.csv
 Chrome OS, Proprietary, 2009
 ```
 
+### Invert Matching
+
 We can also search for lines that **do not** match our string  using the `-v` option.
 We can combine that with the `-i` option to ignore the string's case.
 Therefore, in the following example, all lines that do not contain the string **chrome** are returned:
@@ -155,6 +145,8 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
+
+### Regular Expressions
 
 I used the `tail` command in the prior section to show how we might use `tail` to remove the header (1st line) line in a file.
 However, it's an odd use of the `tail` command, which normally just prints the last lines of a file.
@@ -206,8 +198,7 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
 
-Alternatively, since we know that the string **Year** comes at the end of the first line,
-we can use `grep` to invert a search for that.
+Alternatively, since we know that the string **Year** comes at the end of the first line, we can use `grep` to invert a search for that.
 Here the dollar sign key `$` is a **regex** indicating the end of a line.
 Like the above, this `grep` command returns all lines that do not match the string **year** at the end of a line, ignoring case:
 
@@ -229,43 +220,11 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
 
-The `man grep` page lists other options, but a couple of other good ones include:
-
-Get a count of the matching lines with the `-c` option:
-
-**Command:**
-
-```
-grep -ic "proprietary" operating-systems.csv
-```
-
-**Output**:
-
-```
-4
-```
-
-Print only the match and not the whole line with the `-o` option:
-
-**Command:**
-
-```
-grep -io "proprietary" operating-systems.csv
-```
-
-**Output:**
-
-```
-Proprietary
-Proprietary
-Proprietary
-Proprietary
-```
+### Boolean Search
 
 We can simulate a Boolean OR search, and print lines matching one or both strings using the `-E` option.
 We separate the strings with a vertical bar `|`.
-This is similar to a Boolean OR search since there's at least one match in the following string,
-there is at least one result.
+This is similar to a Boolean OR search since there's at least one match in the following string, there is at least one result.
 
 Here is an example where only one string returns a true value:
 
@@ -295,6 +254,8 @@ grep -Ei "bsd|gpl" operating-systems.csv
 FreeBSD, BSD, 1993
 Linux, GPL, 1991
 ```
+
+### Whole Word Search
 
 By default, `grep` will return results where the string appears within a larger word, like **OS** in **macOS**.
 
@@ -328,6 +289,16 @@ grep -i "\<os\>" operating-systems.csv
 OS, License, Year
 Chrome OS, Proprietary, 2009
 ```
+
+Alternatively, `grep` has a `-w` opton for whole word matching:
+
+```
+grep -iw "os" operating-systems.csv
+```
+
+But the pattern `\<string\>` is used in other contexts, so it's good to know.
+
+### Search with Context
 
 Sometimes we want the context for a result.
 That is, we might want to print lines that surround our matches.
@@ -382,23 +353,59 @@ Linux, GPL, 1991
 
 `grep` is very powerful, and there are more options listed in its `man` page.
 
-> Note that I enclose my search strings in double quotes. For example: `grep
-> "search string" filename.txt` It's not always required to enclose a search
-> string in double quotes, but it's good practice because if your string
-> contains more than one word or empty spaces, the search will fail.
+> Note that I enclose my search strings in double quotes.
+> For example: `grep "search string" filename.txt`.
+> It's not always required to enclose a search string in double quotes, but it's good practice because if your string contains more than one word or empty spaces, the search will fail.
+
+### Other Options
+
+The `man grep` page lists other options, but a couple of other good ones include:
+
+Get a count of the matching lines with the `-c` option:
+
+**Command:**
+
+```
+grep -ic "proprietary" operating-systems.csv
+```
+
+**Output**:
+
+```
+4
+```
+
+Print only the match and not the whole line with the `-o` option:
+
+**Command:**
+
+```
+grep -io "proprietary" operating-systems.csv
+```
+
+**Output:**
+
+```
+Proprietary
+Proprietary
+Proprietary
+Proprietary
+```
+
+
 
 ## Sed
 
 `sed` is a type of non-interactive text editor that filters and transforms text (`man sed`).
 By default `sed` works on **standard output**, and edits can be redirected (`>` or `>>`) to new files or made **in-place** using the `-i` option.
 
-Like the other utilities and programs we've covered, including `grep`, `sed` works line by line.
-But unlike `grep`, `sed` provides a way to **address** specific lines or ranges of lines,
-and then run filters or transformations on those lines.
+Like the other utilities and programs we've covered, `sed` works line by line.
+Unlike `grep`, `sed` provides a way to **address** specific lines or ranges of lines, and then run filters or transformations on those lines.
 Once lines in a text file have been identified or addressed, `sed` offers commands to filter or transform the text at those specific lines.
 
-This concept of the line address is important, but not all text files are explicitly line numbered.
-Below I use the `nl` command to number lines in our file, even though the contents of the file do not actually display line numbers:
+This concept of the **line address** is important.
+We can use other utilities to identify addresses (i.e., line numbers).
+For example, I use the `nl` command to number lines in our file.
 
 **Command:**
 
@@ -419,8 +426,8 @@ nl operating-systems.csv
      8	Android, Apache, 2008
 ```
 
-After we've identified the lines in a file that we want to edit, `sed` offers commands to filter, transform, or edit the text at the line addresses.
-Some of these commands include:
+After we've identified the lines in a file we want to edit, `sed` offers commands to filter, transform, or edit the text at the line addresses.
+Like it's ancester `ed`, with which it shares similar commands, these commands include:
 
 - `a` : appending text
 - `c` : replace text
@@ -462,8 +469,7 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
 
-In the last section, we used the `tail` command to remove the header line of our file.
-Above, we used `grep` to accomplish this task.
+In the last section, we used the `tail` command to remove the header line of our file, and earlier, we used `grep` to accomplish this task.
 It's much easier to use `sed` to remove the header line of the **operating-systems.csv**.
 We simply specify the line number (`1`) and then use the delete command (`d`).
 Thus, we delete line 1 with the command below.
@@ -490,6 +496,8 @@ Android, Apache, 2008
 > Note that I use single apostrophes for the `sed` command.
 > This is required.
 
+The above command did not edit the file.
+It simply edited out the first line in the screen output.
 If I wanted to make that a permanent deletion, then I would use the `-i` option, which means that I would edit the file **in-place** (see `man sed`):
 
 **Command:**
@@ -498,8 +506,11 @@ If I wanted to make that a permanent deletion, then I would use the `-i` option,
 sed -i '1d' operating-systems.csv
 ```
 
-To refer to line **ranges**, I add a comma between **addresses**.
-Therefore, to edit lines 1, 2, and 3:
+### Line Ranges
+
+I use a comma between **addresses** to refer to line **ranges**.
+Therefore, to edit address lines 1, 2, and 3, I use `1,3` to signify lines (or addresses) one through three.
+Below, I use the `d` command to delete these lines.
 
 **Command:**
 
@@ -517,6 +528,37 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
 
+### Search
+
+Here's an example using `sed` to search for a pattern.
+In this example, I'm interested in searching for all operating systems that were released on or after 2000:
+
+**Command:**
+
+```
+sed -n '/20/p' operating-systems.csv
+```
+
+**Output:**
+
+```
+Chrome OS, Proprietary, 2009
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Android, Apache, 2008
+```
+
+The above would be equivalent to:
+
+```
+grep "20" operating-systems.csv
+```
+
+> Note: all search strings depend on the data we are searching.
+> If the data file were more complicated than ours, and included other columsn of numbers, then we would have to use a more specific search string.
+
+### Find and Replace
+
 I can use `sed` to **find and replace** strings.
 The syntax for this is:
 
@@ -527,7 +569,22 @@ sed 's/regexp/replacement/' filename.txt
 The **regexp** part of the above command is where I place regular expressions.
 Simple strings like words work here, too, since they are treated as regular expressions themselves.
 
-In the next example, I use `sed` to search for the string "Linux", and replace it with the string "GNU/Linux":
+Here I replace all the 1s with 0s:
+
+```
+sed 's/1/0/' operating-systems.csv
+```
+
+That however only replaces the first instance of the string on a line.
+To replace all instancs on a line, add the `g` (or global) command:
+
+```
+sed 's/1/0/g' operating-systems.csv
+```
+
+In the next example, I use `sed` to search for the string "Linux", and replace it with the string "GNU/Linux".
+I use the back slash `\` character to **escape** the forward slash `/`.
+Otherwise, `sed` would be confused:
 
 **Command:**
 
@@ -548,15 +605,55 @@ Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
 
-> Because the string **GNU/Linux** contains a forward slash, and because
-> `sed` uses the forward slash as a separator, note that I **escaped** the
-> forward slash with a back slash. This escape tells `sed` to interpret the
-> forward slash in **GNU/Linux** literally and not as a special `sed`
-> character.
+> I.e., because the string **GNU/Linux** contains a forward slash, and because `sed` uses the forward slash as a separator, I **escaped** the forward slash with a back slash.
+> This escape tells `sed` to interpret the forward slash in **GNU/Linux** literally and not as a special `sed` character.
+
+### Alternate Addressing
+
+Instead of using line numbers to specify addresses in a text file, we can use regular expressions as addresses, which may be simple words.
+In the following example, I use the regular expression `1991$` instead of specifying line 4.
+The regular expression `1991$`  means **lines ending with the string 1991**.
+Then I use the `s` command to start a find and replace.
+`sed` finds the string **Linux** and then replaces that with the string **GNU/Linux**.
+I use the back slash to escape the forward slash in GNU/Linux: 
+
+**Command:**
+
+```
+sed '/1991$/s/Linux/GNU\/Linux/' operating-systems.csv
+```
+
+**Output:**
+
+```
+OS, License, Year
+Chrome OS, Proprietary, 2009
+FreeBSD, BSD, 1993
+GNU/Linux, GPL, 1991
+iOS, Proprietary, 2007
+macOS, Proprietary, 2001
+Windows NT, Proprietary, 1993
+Android, Apache, 2008
+```
+
+I can also use regular expressions for ranges.
+The following command searches for the string `Linux` from lines three through five, inclusive:
+
+```
+sed -n '3,5{/Linux/p}' operating-systems.csv
+```
+
+The following command returns the same output, but instead of using line numbers for ranges, it uses regular expressions:
+
+```
+sed -n '/BSD/,/iOS/ { /Linux/p }' operating-systems.csv
+```
+
+### Adding and Inserting Lines 
 
 If we want to add new rows to the file, we can append `a` or insert `i` text after or at specific lines:
 
-To append text **after line 3**, use `a`:
+To append lines of text **after line 3**, use `a`:
 
 **Command:**
 
@@ -601,63 +698,12 @@ Android, Apache, 2008
 ```
 
 Note that the FreeDOS line doesn't appear in the last output.
-This is because I didn't use the `-i` option nor 
-did I redirect output to a new file.
+This is because I didn't use the `-i` option nor did I redirect output to a new file.
 If we want to edit the file **in-place**, that is, save the edits, then the commands would look like so:
 
 ```
 sed -i '3a FreeDOS, GPL, 1998' operating-systems.csv
 sed -i '3i CP\/M, Proprietary, 1974' operating-systems.csv
-```
-
-Instead of using line numbers to specify addresses in a text file, we can use regular expressions as addresses, which may be simple words.
-In the following example, I use the regular expression `1991$` instead of specifying line 4.
-The regular expression `1991$`  means **lines ending with the string 1991**.
-Then I use the `s` command to start a find and replace.
-`sed` finds the string **Linux** and then replaces that with the string **GNU/Linux**.
-I use the back slash to escape the forward slash in GNU/Linux: 
-
-**Command:**
-
-```
-sed '/1991$/s/Linux/GNU\/Linux/' operating-systems.csv
-```
-
-**Output:**
-
-```
-OS, License, Year
-Chrome OS, Proprietary, 2009
-FreeBSD, BSD, 1993
-GNU/Linux, GPL, 1991
-iOS, Proprietary, 2007
-macOS, Proprietary, 2001
-Windows NT, Proprietary, 1993
-Android, Apache, 2008
-```
-
-Here's an example using `sed` to simply search for a pattern.
-In this example, I'm interested in searching for all operating systems that were released on or after 2000:
-
-**Command:**
-
-```
-sed -n '/20/p' operating-systems.csv
-```
-
-**Output:**
-
-```
-Chrome OS, Proprietary, 2009
-iOS, Proprietary, 2007
-macOS, Proprietary, 2001
-Android, Apache, 2008
-```
-
-The above would be equivalent to:
-
-```
-grep "20" operating-systems.csv
 ```
 
 `sed` is much more powerful than what I've demonstrated here, and if you're interested in learning more, there are lots of tutorials on the web.
@@ -671,24 +717,23 @@ Here are a few good ones:
 
 ## Awk
 
-`awk` is a complete scripting language designed for "pattern scanning and processing" text.
+`awk` is a complete scripting language designed for "pattern scanning and processing" text (see `man awk`).
 It generally performs some **action** when it detects some **pattern** and is particularly suited for **columns of structured data**.
-See `man awk`for documentation..
 
-`awk` works on columns  regardless if the contents include structured data  (like a CSV file) or not (like a letter or essay).
+`awk` works on columns regardless if the contents include structured data (like a CSV file) or not (like a letter or essay).
 If the data is structured, then that means the data will be formatted in some way.
 In the last few sections, we have looked at a CSV file.
-This is structured data because the data points  in this file are separated by commas.
+This is structured data because the data fields in this file are separated by commas.
 
 For `awk` to work with columns in a file, it needs some way to refer to those columns.
 In the examples below, we'll see that columns in a text file are referred to by a dollar sign and then the number of the column `$n`.
-So, `$1` indicates column one,  `$2` indicates column two, and so on.
-If we use `$0`, then we refer to the entire file.
-In our example text file, `$1` indicates the OS Name column, `$2` indicates the License column, `$3` indicates the release Year column,
-and `$0` indicates all columns.
+Thus, `$1` indicates column one, `$2` indicates column two, and so on.
+If we use `$0`, then we refer to the entire file, or all columns.
+
+In our example text file, `$1` indicates the OS Name column, `$2` indicates the License column, `$3` indicates the Year column, and `$0` indicates all columns.
 
 The syntax for `awk` is a little different than what we've seen so far.
-Basically, `awk` uses the following syntax, where **pattern** is optional.
+`awk` uses the following syntax, where **pattern** is optional.
 
 ```
 awk pattern { action statements }
@@ -697,6 +742,7 @@ awk pattern { action statements }
 Let's see some examples.
 
 To print the first column of our file, we do not need the **pattern** part of the command but only need to state an action statement within curly braces.
+This is because we are just implementing an action.
 In the command below, the action statement is `'{ print $1 }'`.
 
 **Command:**
@@ -722,8 +768,7 @@ By default, `awk` considers the first empty space as the field delimiter.
 That's why in the command above only the term **Windows** and **Chrome** appear in the results even though it should be **Windows NT** and **Chrome OS**.
 It's also why we see commas in the output.
 To fix this, we tell `awk` to use a comma as the field separator, instead of the default empty space.
-To specify that we want `awk` to treat the comma as a field delimiter,
-we use the `-F` option, and we surround the comma with single quotes:
+To specify that we want `awk` to treat the comma as a field delimiter, we use the `-F` option, and we surround the comma with single quotes:
 
 **Command:**
 
@@ -746,27 +791,7 @@ Android
 
 By specifying the comma as the field separator, our results are more accurate, and the commas no longer appear either.
 
-Like `grep` and `sed`, `awk` can do search.
-In this next example, I print the column containing the string **Linux**.
-Here I am using the **pattern** part of the command: `'/Linux/'`.
-
-**Command:**
-
-```
-awk -F',' '/Linux/ { print $1 }' operating-systems.csv
-```
-
-**Output:**
-
-```
-Linux
-```
-
-Note how `awk` does not return the whole line but only the match.
-
-With `awk`, we can retrieve more than one column, and we can use `awk` to generate reports.
-This was part of the original motivation to create this language.
-
+With `awk`, we can retrieve more than one column.
 In the next example, I select columns two and one in that order, which is something the `cut` command cannot do.
 I also add a space between the columns using the double quotes to surround an empty space.
 Then I modified the field delimiter to include both a comma and a space to get the output that I want:
@@ -811,7 +836,78 @@ Windows NT was released in 1993.
 Android was released in 2008.
 ```
 
-Since `awk` is a full-fledged programming language, it understands data structures, which means it can do math or work on strings of text.
+We can also use `awk` to make the output more report like:
+
+```
+awk -F',' 'NR == 1 { print $0; print "------------------" } NR > 1 {print $1 " was released in" $3 "." }' operating-systems.csv
+```
+
+**Output:**
+
+```
+OS, License, Year
+------------------
+Chrome OS was released in 2009.
+FreeBSD was released in 1993.
+Linux was released in 1991.
+iOS was released in 2007.
+macOS was released in 2001.
+Windows NT was released in 1993.
+Android was released in 2008.
+```
+
+Or even better, using `BEGIN` and `END` statements:
+
+```
+awk -F',' '
+BEGIN {
+	print "=== OPERATING SYSTEM RELEASE DATES ==="
+}
+NR > 1 {
+	print $1 " was released in" $3 "."
+}
+END {
+	print "=== END OF REPORT ==="
+}' operating-systems.csv
+```
+
+**Output:**
+
+```
+=== OPERATING SYSTEM RELEASE DATES ===
+Chrome OS was released in 2009.
+FreeBSD was released in 1993.
+Linux was released in 1991.
+iOS was released in 2007.
+macOS was released in 2001.
+Windows NT was released in 1993.
+Android was released in 2008.
+=== END OF REPORT ===
+```
+
+### Patterns
+
+Like `grep` and `sed`, `awk` can do search.
+In this next example, I print the column containing the string **Linux**.
+Here I am using the **pattern** part of the command: `'/Linux/'`.
+
+**Command:**
+
+```
+awk -F',' '/Linux/ { print $1 }' operating-systems.csv
+```
+
+**Output:**
+
+```
+Linux
+```
+
+Note how `awk` does not return the whole line but only the match.
+
+### Math and Logic with Awk
+
+Since `awk` is a full-fledged programming language, it understands data structures, which means it can do math or apply logic to strings of text.
 Let's illustrate this by doing some math or logic on column 3.
 
 Here I print all of column three:
@@ -928,6 +1024,37 @@ awk -F',' 'sum += $3 { print sum }' operating-systems.csv
 11994
 14002
 ```
+
+But to make this more useful, we can print just the final sum, instead of a rolling sum:
+
+```
+awk -F',' 'sum +=3 { last = $0 } END { print sum }' operating-systems.csv
+```
+
+In that example, we declare a variable called `last`, which is constantly reset for each row, thus printing only the last line.
+
+**Output:**
+
+```
+14002
+```
+
+And even more useful, we can print the average by dividing the numer of rows minus the header row:
+
+```
+awk -F',' 'sum += $3 { last = $0 }
+END {
+    print "The average release date for these operating systems is: " sum / (NR - 1)
+    }' operating-systems.csv
+```
+
+**Output:**
+
+```
+The average release date for these operating systems is: 2000.29
+```
+
+### String Operations
 
 Here are a few basic string operations.
 First, print column one in upper case:
@@ -1049,8 +1176,7 @@ Android, Apache, 2008
 ```
 
 I can take advantage of regular expressions.
-If I needed to analyze a large file and wasn't sure that some fields would be upper or lower case,
-then I could use regular expressions to consider both possibilities.
+If I needed to analyze a large file and wasn't sure that some fields would be upper or lower case, I could use regular expressions to consider both possibilities.
 That is, by adding **[pP]** and **[aA]**, `awk` will check for both the words **Proprietary** and **proprietary**, and **Apache** and **apache**.
 
 **Command:**
@@ -1083,16 +1209,17 @@ If you're interested in learning more, then check out some of these tutorials:
 ## Conclusion
 
 The Linux command line offers a lot of utilities to examine data.
-Prior to this lesson, we covered a few of them that helped us get parts of a file and
-then pipe those parts through other commands or redirect output to files.
+Prior to this lesson, we covered a few of them that helped us get parts of a file and then pipe those parts through other commands or redirect output to files.
 We can use pipes and redirects with `grep`, `sed`, and `awk`.
-If needed, we may be able to avoid using the basic utilities like
-`cut`, `wc`, etc if want to learn more powerful programs like `grep`, `sed`, and `awk`.
+If needed, we may be able to avoid using the basic utilities like `cut`, `wc`, etc if want to learn more powerful programs like `grep`, `sed`, and `awk`.
 
 It's fun to learn and practice these.
 Despite this, you do not have to become a `sed` or an `awk` programmer.
 Like the utilities that we've discussed in prior lectures, the power of programs like these is that they are easy to use as **one-liners**.
 If you want to get started, the resources listed above can guide you.
+
+However, these commands, regardless of which ones you use, **require** you to understand the data.
+Before using them, study the data files with commands like `less`, `head`, `tail`, or `cat`.
 
 [awk10]:https://blog.robertelder.org/intro-to-awk-command/
 [awkArs]:https://arstechnica.com/gadgets/2021/08/linux-bsd-command-line-101-using-awk-sed-and-grep-in-the-terminal/
