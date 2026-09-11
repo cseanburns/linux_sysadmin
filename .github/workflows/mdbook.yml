@@ -1,4 +1,4 @@
-# Sample workflow for building and deploying a mdBook site to GitHub Pages
+# Build and deploy the book to GitHub Pages.
 #
 # To get started with mdBook see: https://rust-lang.github.io/mdBook/index.html
 #
@@ -12,11 +12,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# The build only needs read access; deployment permissions are scoped below.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
@@ -29,26 +27,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      MDBOOK_VERSION: 0.4.36
+      # Keep this pinned to the version used for local builds.
+      MDBOOK_VERSION: "0.5.4"
+    defaults:
+      run:
+        shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Install mdBook
         run: |
-          curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf -y | sh
-          rustup update
-          cargo install --version ${MDBOOK_VERSION} mdbook
+          mkdir -p "${RUNNER_TEMP}/mdbook-bin"
+          curl --proto '=https' --tlsv1.2 --fail --silent --show-error --location --retry 3 \
+            "https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
+            --output "${RUNNER_TEMP}/mdbook.tar.gz"
+          tar --extract --gzip --file "${RUNNER_TEMP}/mdbook.tar.gz" \
+            --directory "${RUNNER_TEMP}/mdbook-bin" mdbook
+          echo "${RUNNER_TEMP}/mdbook-bin" >> "$GITHUB_PATH"
+          "${RUNNER_TEMP}/mdbook-bin/mdbook" --version
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
       - name: Build with mdBook
+        env:
+          # Include the repository subpath (or / for a root/custom-domain site).
+          MDBOOK_OUTPUT__HTML__SITE_URL: "${{ steps.pages.outputs.base_path }}/"
         run: mdbook build
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./book
 
   # Deployment job
   deploy:
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -57,4 +72,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
