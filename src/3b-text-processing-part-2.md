@@ -97,7 +97,7 @@ Chrome OS, Proprietary, 2009
 ### Ignore Case
 
 Be aware that, by default, `grep` is case-sensitive, which means a search for the string **chrome**, with a lower case **c**, would return no results.
-Fortunately, `grep` has an `-i` option, which means to ignore the case of the search string.
+Fortunately, `grep` has an `-i` option, which means to ignore the case in the search string and data.
 In the following examples, `grep` returns nothing in the first search since we do not capitalize the string **chrome**.
 However, adding the `-i` option results in success:
 
@@ -126,7 +126,7 @@ Chrome OS, Proprietary, 2009
 ### Invert Matching
 
 We can also search for lines that **do not** match our string  using the `-v` option.
-We can combine that with the `-i` option to ignore the string's case.
+We can combine that with the `-i` option to ignore case.
 Therefore, in the following example, all lines that do not contain the string **chrome** are returned:
 
 **Command:**
@@ -302,7 +302,7 @@ But the pattern `\<string\>` is used in other contexts, so it's good to know.
 
 Sometimes we want the context for a result.
 That is, we might want to print lines that surround our matches.
-For example, print the matching line plus the two lines after the matching line using the `-A NUM` option:
+For example, to print the matching line plus the two lines after the matching line using the `-A NUM` option:
 
 **Command:**
 
@@ -510,7 +510,7 @@ sed -i '1d' operating-systems.csv
 
 I use a comma between **addresses** to refer to line **ranges**.
 Therefore, to edit address lines 1, 2, and 3, I use `1,3` to signify lines (or addresses) one through three.
-Below, I use the `d` command to delete these lines.
+Below, I use the `d` command to delete these lines (but not permanantly because I'm not using the `-i` option).
 
 **Command:**
 
@@ -743,7 +743,7 @@ Let's see some examples.
 
 To print the first column of our file, we do not need the **pattern** part of the command but only need to state an action statement within curly braces.
 This is because we are just implementing an action.
-In the command below, the action statement is `'{ print $1 }'`.
+In the command below, the action statement is `'{ print $1 }'` (that is, print the first column).
 
 **Command:**
 
@@ -764,7 +764,7 @@ Windows
 Android,
 ```
 
-By default, `awk` considers the first empty space as the field delimiter.
+By default, `awk` considers the empty spaces as field delimiters.
 That's why in the command above only the term **Windows** and **Chrome** appear in the results even though it should be **Windows NT** and **Chrome OS**.
 It's also why we see commas in the output.
 To fix this, we tell `awk` to use a comma as the field separator, instead of the default empty space.
@@ -1194,6 +1194,12 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 ```
+
+> `[aA]` is called a **character class* regex.
+> It matches strings with either lower case or upper case.
+> You can find more examples of how `awk` uses regular expressions by reading `man awk` and searching for the regular expressions section.
+> Also, see `man 7 regex` or `man grep` (the Linux version of `awk` uses the same regex as the Linux version of `grep`).
+> In the man page for `grep`, look for the section **Character Classes and Bracket Expressions**.
 
 `awk` is full-fledged programming language.
 It provides conditionals, control structures, variables, etc., and so I've only scratched the surface.
