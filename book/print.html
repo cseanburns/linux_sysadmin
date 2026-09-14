@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0b8ea35f.js";
+            window.path_to_searchindex_js = "searchindex-2803636c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-562ea873.js"></script>
@@ -2479,7 +2479,7 @@ Notice that even though the string <strong>Chrome</strong> only appears once, an
 </code></pre>
 <h3 id="ignore-case"><a class="header" href="#ignore-case">Ignore Case</a></h3>
 <p>Be aware that, by default, <code>grep</code> is case-sensitive, which means a search for the string <strong>chrome</strong>, with a lower case <strong>c</strong>, would return no results.
-Fortunately, <code>grep</code> has an <code>-i</code> option, which means to ignore the case of the search string.
+Fortunately, <code>grep</code> has an <code>-i</code> option, which means to ignore the case in the search string and data.
 In the following examples, <code>grep</code> returns nothing in the first search since we do not capitalize the string <strong>chrome</strong>.
 However, adding the <code>-i</code> option results in success:</p>
 <p><strong>Command:</strong></p>
@@ -2495,7 +2495,7 @@ However, adding the <code>-i</code> option results in success:</p>
 </code></pre>
 <h3 id="invert-matching"><a class="header" href="#invert-matching">Invert Matching</a></h3>
 <p>We can also search for lines that <strong>do not</strong> match our string  using the <code>-v</code> option.
-We can combine that with the <code>-i</code> option to ignore the string’s case.
+We can combine that with the <code>-i</code> option to ignore case.
 Therefore, in the following example, all lines that do not contain the string <strong>chrome</strong> are returned:</p>
 <p><strong>Command:</strong></p>
 <pre><code>grep -vi "chrome" operating-systems.csv
@@ -2605,7 +2605,7 @@ Chrome OS, Proprietary, 2009
 <h3 id="search-with-context"><a class="header" href="#search-with-context">Search with Context</a></h3>
 <p>Sometimes we want the context for a result.
 That is, we might want to print lines that surround our matches.
-For example, print the matching line plus the two lines after the matching line using the <code>-A NUM</code> option:</p>
+For example, to print the matching line plus the two lines after the matching line using the <code>-A NUM</code> option:</p>
 <p><strong>Command:</strong></p>
 <pre><code>grep -i "chrome" -A 2 operating-systems.csv
 </code></pre>
@@ -2746,7 +2746,7 @@ If I wanted to make that a permanent deletion, then I would use the <code>-i</co
 <h3 id="line-ranges"><a class="header" href="#line-ranges">Line Ranges</a></h3>
 <p>I use a comma between <strong>addresses</strong> to refer to line <strong>ranges</strong>.
 Therefore, to edit address lines 1, 2, and 3, I use <code>1,3</code> to signify lines (or addresses) one through three.
-Below, I use the <code>d</code> command to delete these lines.</p>
+Below, I use the <code>d</code> command to delete these lines (but not permanantly because I’m not using the <code>-i</code> option).</p>
 <p><strong>Command:</strong></p>
 <pre><code>sed '1,3d' operating-systems.csv
 </code></pre>
@@ -2903,7 +2903,7 @@ If we use <code>$0</code>, then we refer to the entire file, or all columns.</p>
 <p>Let’s see some examples.</p>
 <p>To print the first column of our file, we do not need the <strong>pattern</strong> part of the command but only need to state an action statement within curly braces.
 This is because we are just implementing an action.
-In the command below, the action statement is <code>'{ print $1 }'</code>.</p>
+In the command below, the action statement is <code>'{ print $1 }'</code> (that is, print the first column).</p>
 <p><strong>Command:</strong></p>
 <pre><code>awk '{ print $1 }' operating-systems.csv
 </code></pre>
@@ -2917,7 +2917,7 @@ macOS,
 Windows
 Android,
 </code></pre>
-<p>By default, <code>awk</code> considers the first empty space as the field delimiter.
+<p>By default, <code>awk</code> considers the empty spaces as field delimiters.
 That’s why in the command above only the term <strong>Windows</strong> and <strong>Chrome</strong> appear in the results even though it should be <strong>Windows NT</strong> and <strong>Chrome OS</strong>.
 It’s also why we see commas in the output.
 To fix this, we tell <code>awk</code> to use a comma as the field separator, instead of the default empty space.
@@ -3192,6 +3192,13 @@ macOS, Proprietary, 2001
 Windows NT, Proprietary, 1993
 Android, Apache, 2008
 </code></pre>
+<blockquote>
+<p><code>[aA]</code> is called a *<em>character class</em> regex.
+It matches strings with either lower case or upper case.
+You can find more examples of how <code>awk</code> uses regular expressions by reading <code>man awk</code> and searching for the regular expressions section.
+Also, see <code>man 7 regex</code> or <code>man grep</code> (the Linux version of <code>awk</code> uses the same regex as the Linux version of <code>grep</code>).
+In the man page for <code>grep</code>, look for the section <strong>Character Classes and Bracket Expressions</strong>.</p>
+</blockquote>
 <p><code>awk</code> is full-fledged programming language.
 It provides conditionals, control structures, variables, etc., and so I’ve only scratched the surface.
 If you’re interested in learning more, then check out some of these tutorials:</p>
