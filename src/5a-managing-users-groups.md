@@ -16,7 +16,7 @@ such as `/etc/skel` and `/etc/adduser.conf` to allow for customization of new us
 
 If you're like me, you have user accounts everywhere.
 I have accounts on my phone and my laptop.
-I have a Google account, a GitHub account, an account at my public library, an account at Costco.
+I have a Google account, a GitHub account, and an account at my public library.
 I have a university account that let's me use the same login across multiple university systems, including email and our learning management systems.
 I have a lot of user accounts, like you probably do.
 
@@ -74,37 +74,6 @@ For example, the `apropos crontab` command will show the following results:
 crontab (1)          - maintain crontab files for individual users (Vixie Cron)
 crontab (5)          - tables for driving cron
 ```
-
-You can make the `man` pages easier to read by installing an additional program called `bat`.
-The `bat` program is a drop-in replacement for the `cat` command but comes with syntax highlighting and more.
-To install `bat`, do:
-
-```
-sudo apt install bat
-```
-
-Then use `nano` (or your favorite text editor) to open your `$HOME/.bashrc` file:
-
-```
-nano $HOME/.bashrc
-```
-
-And add the following line at the end, which will add some color to the `man` pages:
-
-```
-export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
-```
-
-Once you've closed and saved your `$HOME/.bashrc` file, you need to source it:
-
-```
-source $HOME/.bashrc
-```
-
-Now `man` pages will look better.
-
-Additionally, since `bat` is a drop-in replacement for the `cat` command, you can also use it to view or concatenate files.
-The full command is `batcat [FILE]`, where **[FILE]** is the name of the file or files to view.
 
 ## The passwd file
 
