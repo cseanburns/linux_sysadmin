@@ -20,6 +20,9 @@ it is licensed under the [GPL-3.0](https://github.com/cseanburns/linux_sysadmin?
 
 ## To Do
 
+- Merge `3c-regular-expressions.md` with `3b-text-processing-part-2.md`
+- Remove `sed` and `awk` content from `3b-text-processing-part-2.md` and create new section, perhaps titled `3c-sed-awk.md`
+
 - some readings to add:
     - https://blog.apnic.net/2024/05/17/a-transport-protocols-view-of-starlink/
     - https://www.nationalww2museum.org/war/articles/grace-hopper-woman-computer
