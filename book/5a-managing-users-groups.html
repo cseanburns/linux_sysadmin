@@ -35,10 +35,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2803636c.js";
+            window.path_to_searchindex_js = "searchindex-8783052a.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-562ea873.js"></script>
+        <script src="toc-5298ecb6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -194,7 +194,7 @@ such as <code>/etc/skel</code> and <code>/etc/adduser.conf</code> to allow for c
 <h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>If you’re like me, you have user accounts everywhere.
 I have accounts on my phone and my laptop.
-I have a Google account, a GitHub account, an account at my public library, an account at Costco.
+I have a Google account, a GitHub account, and an account at my public library.
 I have a university account that let’s me use the same login across multiple university systems, including email and our learning management systems.
 I have a lot of user accounts, like you probably do.</p>
 <p>For many of those accounts, I have access to some things and not to others.
@@ -244,23 +244,6 @@ For example, the <code>apropos crontab</code> command will show the following re
 <pre><code>crontab (1)          - maintain crontab files for individual users (Vixie Cron)
 crontab (5)          - tables for driving cron
 </code></pre>
-<p>You can make the <code>man</code> pages easier to read by installing an additional program called <code>bat</code>.
-The <code>bat</code> program is a drop-in replacement for the <code>cat</code> command but comes with syntax highlighting and more.
-To install <code>bat</code>, do:</p>
-<pre><code>sudo apt install bat
-</code></pre>
-<p>Then use <code>nano</code> (or your favorite text editor) to open your <code>$HOME/.bashrc</code> file:</p>
-<pre><code>nano $HOME/.bashrc
-</code></pre>
-<p>And add the following line at the end, which will add some color to the <code>man</code> pages:</p>
-<pre><code>export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
-</code></pre>
-<p>Once you’ve closed and saved your <code>$HOME/.bashrc</code> file, you need to source it:</p>
-<pre><code>source $HOME/.bashrc
-</code></pre>
-<p>Now <code>man</code> pages will look better.</p>
-<p>Additionally, since <code>bat</code> is a drop-in replacement for the <code>cat</code> command, you can also use it to view or concatenate files.
-The full command is <code>batcat [FILE]</code>, where <strong>[FILE]</strong> is the name of the file or files to view.</p>
 <h2 id="the-passwd-file"><a class="header" href="#the-passwd-file">The passwd file</a></h2>
 <p>On every system there will be some place where information about users is stored.
 On a Linux system, user account information is stored in the file <code>/etc/passwd</code>.
@@ -545,11 +528,11 @@ assign those accounts to groups, and create a share directory for those accounts
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="5a-expanding-storage.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="p5-managing-the-system.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="5c-managing-software.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="5b-expanding-storage.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -559,11 +542,11 @@ assign those accounts to groups, and create a share directory for those accounts
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="5a-expanding-storage.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="p5-managing-the-system.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="5c-managing-software.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="5b-expanding-storage.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>
