@@ -383,7 +383,7 @@ The following command first filters out for the city and year columns and
 then matches the number `17` (altogether) exactly one time:
 
 ```
-cut -d"|" -f2,4 cities.md | grep "(17){1}"
+cut -d"|" -f2,4 cities.md | grep -E "(17){1}"
 ```
 
 **Output:**
