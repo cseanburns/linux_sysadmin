@@ -2,35 +2,19 @@
 
 By the end of this section, you will:
 
-1. **Understand the purpose of `grep`**: Recognize the versatility of `grep`
-   for searching through text and its use in filtering output, searching for
-   patterns in files, and extracting relevant data.
-2. **Perform basic searches using `grep`**: Search for multiword strings and
-   whole words while understanding how to handle case sensitivity and word
-   boundaries.
-3. **Utilize regular expressions**: Apply regular expressions with `grep` to
-   search for more complex text patterns, using features like bracket
-   expressions, character classes, and anchoring.
-4. **Leverage repetition and OR operators**: Use repetition operators (e.g.,
-   `*`, `+`) and Boolean OR searches to find repetitive patterns or multiple
-   possible matches in your text.
-5. **Compare outputs with process substitution**: Understand how to compare the
-   output of multiple `grep` commands using process substitution techniques
-   with the `diff` command.
-6. **Understand broader applications**: Gain a foundational understanding of
-   regular expressions that apply across multiple programming languages and
-   tools beyond just `grep`.
+1. **Understand the purpose of `grep`**: Recognize the versatility of `grep` for searching through text and its use in filtering output, searching for patterns in files, and extracting relevant data.
+2. **Perform basic searches using `grep`**: Search for multiword strings and whole words while understanding how to handle case sensitivity and word boundaries.
+3. **Utilize regular expressions**: Apply regular expressions with `grep` to search for more complex text patterns, using features like bracket expressions, character classes, and anchoring.
+4. **Leverage repetition and OR operators**: Use repetition operators (e.g., `*`, `+`) and Boolean OR searches to find repetitive patterns or multiple possible matches in your text.
 
 ## Getting Started
 
-The `grep` command is a powerful tool used in the Linux command line for searching through text.
-It scans files or input for lines that match a specified pattern, which can be a simple word or a more complex **regular expression**.
+We have already covered `grep` and other utilities for processing and examining patterns in text.
+`grep` and other utilities can scan files or input for lines that match a specified pattern, which can be a simple word or a more complex **regular expression**.
 `grep` is often used to filter output, search for specific data in logs, or find occurrences of certain text patterns within files.
 Its versatility makes it an essential tool for efficiently locating information in large sets of data or documents.
 
-In this section, we learn how to use `grep` to search files.
-We will use simple search strings with `grep` to search for regular words.
-But we will use **regular expressions** to search for more complex patterns.
+In this section, we learn how to use more advanced regular expressions with `grep` to search files.
 
 ### Download Data File
 
@@ -42,7 +26,7 @@ wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/refs/heads/mast
 
 ## Multiword strings
 
-It's good habit to include search strings within quotes, but this is especially important if we would search for multiword strings.
+It's good habit to include search strings within quotes, but this is especially important if we search for multiword strings.
 In these cases, we must enclose them in quotes.
 
 **Command:**
@@ -80,40 +64,11 @@ grep "San Antonio" cities.md
 | San Antonio, TX | 1451853 | 1718 |
 ```
 
-## Whole words, case sensitive by default
-
-As a reminder, `grep` commands are case-sensitive by default.
-Thus, note that the contents of **cities.md** are all in lowercase.
-If I run the above command without the city named capitalized, then `grep` will return nothing:
-
-**Command:**
-
-```
-grep "san antonio" cities.md
-```
-
-To tell grep to ignore case, I need to use the `-i` option.
-We also want to make sure that we enclose our entire search string withing double quotes.
-
-This is a reminder for you to run `man grep` and to read through the documentation and see what the various options exit for this command.
-
-**Command:**
-
-```
-grep -i "san antonio" cities.md
-```
-
-**Output:**
-
-```
-| San Antonio, TX | 1451853 | 1718 |
-```
-
-### Whole words by the edges
+## Whole words by the edges
 
 To search whole words, we can use special characters to match strings at the start and/or the end of words.
 For example, note the output if I search for cities in California in my file by searching for the string **ca**.
-Since this string appears in Chi**ca**go, then that city matches my grep search:
+Since this string appears in Chi**ca**go, then that city matches (as a false positive) my `grep` search:
 
 **Command:**
 
@@ -130,7 +85,9 @@ grep -i "ca" cities.md
 | San Jose, CA    | 983489  | 1777 |
 ```
 
-To limit results to only **CA**, we can enclose our search in special characters that tell `grep` to limit by whole words only:
+To limit results to only **CA**, we can enclose our search in special characters that tell `grep` to limit by whole words only.
+In the last section, we surrounded whole words using the `\<string\>` syntax.
+We can also use `\bstring\b` syntax:
 
 **Command:**
 
@@ -146,10 +103,8 @@ grep -i "\bca\b" cities.md
 | San Jose, CA    | 983489  | 1777 |
 ```
 
-> **Note:** in some cases you might need an extra backslash: `grep -i "\\bca\\b" cities.md`.
-
 We can reverse that output and look for strings within other words.
-Here is an example of searching for the string **ca** within words:
+Here is an example of searching for the string **ca** within words using the capital B version of the above syntax:
 
 **Command:**
 
@@ -163,30 +118,37 @@ grep -i "\Bca\B" cities.md
 | Chicago, IL | 2746388 | 1780 |
 ```
 
-## Bracket Expressions and Character Classes
+## Bracket Expressions
 
 In conjunction with the `grep` command, we can also use regular expressions to search for more general patterns in text files.
-For example, we can use **bracket expressions** and **character classes** to search for patterns in the text.
+For example, we can use **bracket expressions** to search for patterns in the text.
 Here again using `man grep` is very important because it includes instructions on how to use these regular expressions.
-
-### Bracket expressions
 
 From `man grep` on **bracket expressions**:
 
-> A bracket expression is a list of characters enclosed by [ and ]. It matches
-> any single character in that list. If the first character of the list is the
-> caret ^ then it matches any character not in the list. For example, the
-> regular expression [0123456789] matches any single digit.
+> A bracket expression is a list of characters enclosed by [ and ].
+> It matches any single character in that list.
+> If the first character of the list is the caret ^ then it matches any character not in the list.
+> For example, the regular expression [0123456789] matches any single digit.
+ 
+And the regular expression [^0123456789] matches the non-number characters.
+ 
+Within a bracket expression, a range expression consists of two characters separated by a hyphen.
+It matches any single character that sorts between the two characters, inclusive of the two characters.
 
-The regular expression \[^0123456789] matches the inverse.
+For example:
 
-> Within a bracket expression, a range expression consists of two characters
-> separated by a hyphen. It matches any single character that sorts between the
-> two characters.
+- `[0-9]` is the same as `[0123456789]`
+- `[1-4]` is the same as `[1234]`
+- `[A-Z]` is the same as `[ABCDEFGHIJKLMNOPQRSTUVWXYZ]`
+- `[M-P]` is the same as `[MNOP]`
+- `[a-z]` is the same as `[abcdefghijklmnopqrstuvwxyz]`
+- `[x-z]` is the same as `[xyz]`
+- `[a-zA-Z]` is the same as both all the lower and upper case strings in the alphabet
 
 To see how this works, let's search the **cities.md** file for letters matching **A, B, or C**.
 Specifically, in the following command I use a hyphen to match any characters **in** the range A, B, C.
-The output does not include the cities **Houston** or **Dallas** since neither of those lines contain capital **A, B, or C** characters:
+The output does not include the cities **Houston** or **Dallas** (or lines containing only non-alphabet characters) since neither of those lines contain capital **A, B, or C** characters:
 
 **Command:**
 
@@ -208,9 +170,7 @@ grep "[A-C]" cities.md
 | San Jose, CA      | 983489      | 1777    |
 ```
 
-> **Note:** Use `grep -i "[A-C]" cities.md` for a case insensitive search.
-
-### Bracket expressions, inverse searches
+### Carat within Brackets
 
 When placed after the first bracket, the carat key acts as a Boolean NOT.
 The following command matches any characters **not in** the range A,B,C:
@@ -218,10 +178,10 @@ The following command matches any characters **not in** the range A,B,C:
 **Command:**
 
 ```
-grep "[^A-C]" cities.md
+grep "[^A-Z]" cities.md
 ```
 
-The output matches all lines since there are no instances of **A, B, and C** in all lines:
+The output matches lowercase letters, numbers, and non-alphanumeric characters, like the dashes.
 
 **Output:**
 
@@ -238,59 +198,6 @@ The output matches all lines since there are no instances of **A, B, and C** in 
 | San Diego, CA     | 1381611     | 1769    |
 | Dallas, TX        | 1288457     | 1856    |
 | San Jose, CA      | 983489      | 1777    |
-```
-
-#### Process substitution
-
-Process substitution allows you to use the output of a command as if it were a file.
-This is particularly useful when you want to compare the outputs of two commands directly, without having to save them to temporary files.
-
-For example, we can confirm that output from one command does not include Houston or Dallas in a second command by comparing the outputs.
-Specifically, we compare the outputs of two or more commands using **process substitution**.
-This works because the **process substitution** creates temporary files from the outputs.
-
-**Command:**
-
-```
-diff <(grep "[A-C]" cities.md) <(grep "[^A-C]" cities.md)
-```
-
-**Output:**
-
-```
-1a2
-> |-----------------|-------------|------|
-4a6
-> | Houston, TX     | 2304580     | 1837 |
-8a11
-> Dallas, TX        | 1288457     | 1856
-```
-
----
-
-##### How It Works
-
-- `<(command)` creates a temporary file (or file-like stream) that holds the output of command.
-- `diff` can then read from these streams as if they were regular files, comparing their contents without needing you to manually save and load files.
-  The output of the ``diff`` command is nicely explained in this [Stack Overflow][diffStack] answer.
-
-Without process substitution, you would need to save the outputs of both grep commands to temporary files and then compare them:
-
-```
-grep "[A-C]" cities.md > output1.txt
-grep "[^A-C]" cities.md > output2.txt
-diff output1.txt output2.txt
-```
-
-This alternative works but is more cumbersome, as it requires managing temporary files.
-Process substitution simplifies the process by handling this behind the scenes.
-
----
-
-Try this command for an alternate output:
-
-```
-diff -y <(grep "[A-C]" cities.md) <(grep "[^A-C]" cities.md)
 ```
 
 Our ranges may be alphabetical or numerical.
@@ -312,10 +219,11 @@ This will match all non-integers:
 grep "[^0-9]" cities.md
 ```
 
-### Bracket expressions, carat preceding the bracket
+### Carat Preceding the bracket
 
 We saw in a previous section that the carat `^` key indicates the start of line.
-However, we learned above that it can be used to return the inverse of a string in special circumstances.
+However, we learned above that it can be used to return the inverse of a string in special circumstances,
+which is when it is inside the brackets.
 To use the carat to signify the start of a line, the carat key must precede the opening bracket.
 For example, the following command matches any lines that start with the upper case letters within the range of **N,O,P**:
 
@@ -354,51 +262,13 @@ grep "^| [^N-P]" cities.md
 | San Jose, CA    | 983489      | 1777    |
 ```
 
-### Character classes
-
-Character classes are special types of predefined bracket expressions.
-They make it easy to search for general patterns.
-From ``man grep`` on **character classes**:
-
-> Finally, certain named classes of characters are predefined within bracket
-> expressions, as follows. Their names are self explanatory, and they are
-> [:alnum:], [:alpha:], [:blank:], [:cntrl:], [:digit:], [:graph:], [:lower:],
-> [:print:], [:punct:], [:space:], [:upper:], and [:xdigit:]. For example,
-> [[:alnum:]] means the character class of numbers and letters ... 
-
-Below I use the `awk` command to select the fourth column (or field) using the pipe as the field delimiter.
-I pipe the output to `grep` to select lines containing a vertical bar and four digit numbers `[[:digit:]]{4}` from the results of the `awk` command:
-
-**Command:**
-
-```
-awk -F"|" '{ print $4 }' cities.md | grep -Eo "[[:digit:]]{4}"
-```
-
-**Output:**
-
-```
-1624
-1781
-1780
-1837
-1881
-1701
-1718
-1769
-1856
-1777
-```
-
-> I first tested that the `awk` command selects the appropriate field by running it by itself: `awk -F"|" '{ print $4 }' cities.md`.
-
 ## Anchoring
 
-As seen above, outside of bracket expressions and character classes, we use the caret ``^`` to mark the beginning of a line.
-We can also use the ``$`` to match the end of a line.
+Outside of bracket expressions, we use the caret `^` to mark the beginning of a line.
+We can also use the `$` to match the end of a line.
 Using either (or both) is called **anchoring**.
 Anchoring works in many places.
-For example, to search all lines that start with capital **D through L**
+For example, to search all lines that **start** with a vertical bar, a space, and then a capital D through L.
 
 **Command:**
 
@@ -415,6 +285,7 @@ grep "^| [D-L]" cities.md
 ```
 
 To show how to anchor the end of a line, let's look at the **operating-systems.csv** file.
+The following dollar sign `$` signifies the end of line:
 
 **Command:**
 
@@ -429,32 +300,37 @@ FreeBSD, BSD, 1993
 Windows NT, Proprietary, 1993
 ```
 
-We can use both anchors in our ``grep`` commands.
-The following searches for any lines starting with capital letters that range from C through F.
-Then any lines ending with the numbers starting from 3 through 6.
+We can use both anchors in our `grep` commands.
+The following searches for any lines starting with capital letter F and that also ends with the number 3. 
 The single dot stands for any character, and the asterisk stands for "the preceding character will zero or more times" (`man grep`).
 
 **Command:**
 
 ```
-grep "^[C-F].*[3-6]$" operating-systems.csv
+grep "^F.*3$" operating-systems.csv
 ```
 
 **Output:**
 
 ```
-CP/M, Proprietary, 1974
 FreeBSD, BSD, 1993
 ```
 
 ## Repetition
 
-If we want to use regular expressions to identify repetitive patterns, then we can use repetition operators.
-As we saw above, the most useful one is the ``*`` asterisk.
-But there are other options:
+If we want to use regular expressions to identify repeating patterns, then we can use repetition operators.
+As we saw above, the most useful one is the `*` asterisk.
+We need to add the -E option to extend `grep`'s regular expression functionality for repetitions:
 
-In come cases, we need to add the -E option
-to extend `grep`'s regular expression functionality:
+In `man grep`, we can use the following **repetition operators**:
+
+- `?` the preceding item is optional and matched at most once
+- `*` the preceding item will be matched zero or more times
+- `+` the preceding item will be matched one or more times
+- `{n}` the preceding item is matched exactly `n` times
+- `{n,}` the preceding item is matched `n` or more times
+- `{,m}` the preceding item is matched at most `m` times
+- `{n,m}` the preceding item is matched at leat `n` times, but not more than `m` times
 
 Here, the preceding item **S** is matched one or more times:
 
@@ -472,7 +348,7 @@ grep -E "S+" cities.md
 | San Jose, CA    | 983489  | 1777 |
 ```
 
-In the next search, the preceding item **l** is matched exactly 2 times:
+In the next search, the preceding item **l** (that is, a lower case l) is matched exactly 2 times:
 
 **Command:**
 
@@ -500,57 +376,85 @@ grep -E "7{2,3}" cities.md
 | San Jose, CA | 983489 | 1777 |
 ```
 
-## OR searches
+## Grouping
 
-We can use the vertical bar `|` to do a Boolean OR search.
-In a Boolean OR statement, the statement is True if either one part is true, the other part is true, or both are true.
-In a search statement, this means that at least one part of the search is true.
-
-The following will return lines for each city because they both appear in the file:
-
-**Command:**
+Just like in match, we can use parenthesis to group objects.
+The following command first filters out for the city and year columns and
+then matches the number `17` (altogether) exactly one time:
 
 ```
-grep -E "San Antonio|Dallas" cities.md
+cut -d"|" -f2,4 cities.md | grep "(17){1}"
 ```
 
 **Output:**
 
 ```
-| San Antonio, TX | 1451853 | 1718 |
-| Dallas, TX      | 1288457 | 1856 |
+Los Angeles, CA   | 1781
+Chicago, IL       | 1780
+Philadelphia, PA  | 1701
+San Antonio, TX   | 1718
+San Diego, CA     | 1769
+San Jose, CA      | 1777
 ```
 
-The following will match San Antonio even though Lexington does not appear in the file:
+## Character classes
+
+Character classes are special types of predefined bracket expressions.
+They make it easy to search for general patterns.
+From `man grep` on **character classes**:
+
+> Finally, certain named classes of characters are predefined within bracket
+> expressions, as follows. Their names are self explanatory, and they are
+> [:alnum:], [:alpha:], [:blank:], [:cntrl:], [:digit:], [:graph:], [:lower:],
+> [:print:], [:punct:], [:space:], [:upper:], and [:xdigit:]. For example,
+> [[:alnum:]] means the character class of numbers and letters ... 
+
+Below I use the `awk` command to select the fourth column (or field) using the pipe as the field delimiter.
+I pipe the output to `grep` to select lines exactly four digit numbers `[[:digit:]]{4}` from the results of the `awk` command:
 
 **Command:**
 
 ```
-grep -E "San Antonio|Lexington" cities.md
+awk -F"|" '{ print $4 }' cities.md | grep -Eo "[[:digit:]]{4}"
+```
+
+Or the `cut` command:
+
+```
+cut -d"|" -f4 cities.md | grep -Eo "[[:digit:]]{4}"
 ```
 
 **Output:**
 
 ```
-| San Antonio, TX | 1451853 | 1718 |
+1624
+1781
+1780
+1837
+1881
+1701
+1718
+1769
+1856
+1777
 ```
+
+Of course, we can then numerically sort these using the `sort` command.
 
 ## Conclusion
 
-We covered a lot in this section on ``grep`` and regular expressions.
+We covered a lot in this section on `grep` and regular expressions.
 
 We specifically covered:
 
 - multiword strings
-- whole word searches and case sensitivity
+- whole word searches
 - bracket expressions and character classes
 - anchoring
 - repetition
-- Boolean OR searches
 
-Even though we focused on ``grep``, many these regular expressions work across many programming languages.
+Even though we focused on `grep`, many these regular expressions work across many programming languages.
 
 See [Regular-Expression.info][regexInfo] for more in-depth lessons on regular expressions.
 
-[diffStack]:https://unix.stackexchange.com/a/216131
 [regexInfo]:https://www.regular-expressions.info/
