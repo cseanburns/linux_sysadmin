@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-34d79a04.js";
+            window.path_to_searchindex_js = "searchindex-5747e81f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -427,7 +427,7 @@ We need to add the -E option to extend <code>grep</code>’s regular expression 
 <p>Just like in match, we can use parenthesis to group objects.
 The following command first filters out for the city and year columns and
 then matches the number <code>17</code> (altogether) exactly one time:</p>
-<pre><code>cut -d"|" -f2,4 cities.md | grep "(17){1}"
+<pre><code>cut -d"|" -f2,4 cities.md | grep -E "(17){1}"
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>Los Angeles, CA   | 1781
