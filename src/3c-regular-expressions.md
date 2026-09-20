@@ -18,10 +18,14 @@ In this section, we learn how to use more advanced regular expressions with `gre
 
 ### Download Data File
 
-To follow along in this tutorial, download the following file to your home directory on your Google Cloud VM:
+To follow along in this tutorial, download the following files to your home directory on your remote server.
+The command will download two files:
+
+- a `cities.md` file, which uses Markdown to format the table
+- a `cities.tsv` file, which is a tab delimited value (TSV) file
 
 ```
-wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/refs/heads/master/data/cities.md
+curl -OO https://raw.githubusercontent.com/cseanburns/linux_sysadmin/refs/heads/master/data/cities.{md,tsv}
 ```
 
 ## Multiword strings
@@ -64,7 +68,7 @@ grep "San Antonio" cities.md
 | San Antonio, TX | 1451853 | 1718 |
 ```
 
-## Whole words by the edges
+## Whole Words by the Edges
 
 To search whole words, we can use special characters to match strings at the start and/or the end of words.
 For example, note the output if I search for cities in California in my file by searching for the string **ca**.
@@ -131,7 +135,7 @@ From `man grep` on **bracket expressions**:
 > If the first character of the list is the caret ^ then it matches any character not in the list.
 > For example, the regular expression [0123456789] matches any single digit.
  
-And the regular expression [^0123456789] matches the non-number characters.
+And thus the regular expression [^0123456789] matches the non-number characters.
  
 Within a bracket expression, a range expression consists of two characters separated by a hyphen.
 It matches any single character that sorts between the two characters, inclusive of the two characters.
@@ -219,13 +223,13 @@ This will match all non-integers:
 grep "[^0-9]" cities.md
 ```
 
-### Carat Preceding the bracket
+### Carat Preceding the Bracket
 
 We saw in a previous section that the carat `^` key indicates the start of line.
 However, we learned above that it can be used to return the inverse of a string in special circumstances,
 which is when it is inside the brackets.
 To use the carat to signify the start of a line, the carat key must precede the opening bracket.
-For example, the following command matches any lines that start with the upper case letters within the range of **N,O,P**:
+For example, the following command matches any lines that starts with a vertical bar `|`, an empty space, and then the upper case letters within the range of **N,O,P**:
 
 **Command:**
 
@@ -267,61 +271,58 @@ grep "^| [^N-P]" cities.md
 Outside of bracket expressions, we use the caret `^` to mark the beginning of a line.
 We can also use the `$` to match the end of a line.
 Using either (or both) is called **anchoring**.
-Anchoring works in many places.
-For example, to search all lines that **start** with a vertical bar, a space, and then a capital D through L.
+To search all lines that **start** with a capital D through L, I run the following command.
+Note that I'm examaning the TSV (tab delimited) version of this file:
 
 **Command:**
 
 ```
-grep "^| [D-L]" cities.md
+grep "^[D-L]" cities.tsv
 ```
 
 **Output:**
 
 ```
-| Los Angeles, CA | 3898747 | 1781 |
-| Houston, TX     | 2304580 | 1837 |
-| Dallas, TX      | 1288457 | 1856 |
+Los Angeles, CA	3898747	1781
+Houston, TX	2304580	1837
+Dallas, TX	1288457	1856
 ```
 
-To show how to anchor the end of a line, let's look at the **operating-systems.csv** file.
-The following dollar sign `$` signifies the end of line:
+To show how to anchor the end of a line, we use the dollar sign `$` signifies the end of line.
+The following searches for lines ending with **1781**.
 
 **Command:**
 
 ```
-grep "1993$" operating-systems.csv
+grep "1781$" cities.tsv
 ```
 
 **Output:**
 
 ```
-FreeBSD, BSD, 1993
-Windows NT, Proprietary, 1993
+Los Angeles, CA	3898747	1781
 ```
 
 We can use both anchors in our `grep` commands.
-The following searches for any lines starting with capital letter F and that also ends with the number 3. 
+The following searches for any lines starting with capital letters E-M and that also end with the numbers 5-7. 
 The single dot stands for any character, and the asterisk stands for "the preceding character will zero or more times" (`man grep`).
+Therefore, the `grep` search includes any characters within the start and end.
 
 **Command:**
 
 ```
-grep "^F.*3$" operating-systems.csv
+grep "^[E-M].*[5-7]$" cities.tsv
 ```
 
 **Output:**
 
 ```
-FreeBSD, BSD, 1993
+Houston, TX	2304580	1837
 ```
 
 ## Repetition
 
 If we want to use regular expressions to identify repeating patterns, then we can use repetition operators.
-As we saw above, the most useful one is the `*` asterisk.
-We need to add the -E option to extend `grep`'s regular expression functionality for repetitions:
-
 In `man grep`, we can use the following **repetition operators**:
 
 - `?` the preceding item is optional and matched at most once
@@ -332,20 +333,22 @@ In `man grep`, we can use the following **repetition operators**:
 - `{,m}` the preceding item is matched at most `m` times
 - `{n,m}` the preceding item is matched at leat `n` times, but not more than `m` times
 
+When we use repetition operators, we need to use the `-E` option to enable `grep`'s extended regular expression syntax..
+
 Here, the preceding item **S** is matched one or more times:
 
 **Command:**
 
 ```
-grep -E "S+" cities.md
+grep -E "S+" cities.tsv
 ```
 
 **Output:**
 
 ```
-| San Antonio, TX | 1451853 | 1718 |
-| San Diego, CA   | 1381611 | 1769 |
-| San Jose, CA    | 983489  | 1777 |
+San Antonio, TX	1451853	1718
+San Diego, CA	1381611	1769
+San Jose, CA	983489	1777
 ```
 
 In the next search, the preceding item **l** (that is, a lower case l) is matched exactly 2 times:
@@ -353,13 +356,13 @@ In the next search, the preceding item **l** (that is, a lower case l) is matche
 **Command:**
 
 ```
-grep -E "l{2}" cities.md
+grep -E "l{2}" cities.tsv
 ```
 
 **Output:**
 
 ```
-| Dallas, TX | 1288457 | 1856 |
+Dallas, TX  1288457 1856
 ```
 
 Finally, in this example, the preceding item **7** is matched at least two times or at most three times:
@@ -367,34 +370,35 @@ Finally, in this example, the preceding item **7** is matched at least two times
 **Command:**
 
 ```
-grep -E "7{2,3}" cities.md
+grep -E "7{2,3}" cities.tsv
 ```
 
 **Output:**
 
 ```
-| San Jose, CA | 983489 | 1777 |
+San Jose, CA    983489  1777
 ```
 
 ## Grouping
 
 Just like in match, we can use parenthesis to group objects.
 The following command first filters out for the city and year columns and
-then matches the number `17` (altogether) exactly one time:
+then matches the number `17` (altogether) exactly one time.
+Note that I do not use the `cut -d` option here because `cut` defaults to tab deliminated values.
 
 ```
-cut -d"|" -f2,4 cities.md | grep -E "(17){1}"
+cut -f1,3 cities.tsv | grep -E "(17){1}"
 ```
 
 **Output:**
 
 ```
-Los Angeles, CA   | 1781
-Chicago, IL       | 1780
-Philadelphia, PA  | 1701
-San Antonio, TX   | 1718
-San Diego, CA     | 1769
-San Jose, CA      | 1777
+Los Angeles, CA	1781
+Chicago, IL	1780
+Philadelphia, PA	1701
+San Antonio, TX	1718
+San Diego, CA	1769
+San Jose, CA	1777
 ```
 
 ## Character classes
@@ -409,19 +413,20 @@ From `man grep` on **character classes**:
 > [:print:], [:punct:], [:space:], [:upper:], and [:xdigit:]. For example,
 > [[:alnum:]] means the character class of numbers and letters ... 
 
-Below I use the `awk` command to select the fourth column (or field) using the pipe as the field delimiter.
-I pipe the output to `grep` to select lines exactly four digit numbers `[[:digit:]]{4}` from the results of the `awk` command:
+Below I use the `awk` command to select the third column (or field) using the tab as the field delimiter
+(here the tab character is represented by `\t`), since `awk` defaults to empty spaces as the delimiter character (unlike `cut`).
+I pipe the output to `grep` to select lines with exactly that have the length of four digits `[[:digit:]]{4}` from the results of the `awk` command:
 
 **Command:**
 
 ```
-awk -F"|" '{ print $4 }' cities.md | grep -Eo "[[:digit:]]{4}"
+awk -F"\t" '{ print $3 }' cities.tsv | grep -Eo "[[:digit:]]{4}"
 ```
 
-Or the `cut` command:
+Or we can use the `cut` command:
 
 ```
-cut -d"|" -f4 cities.md | grep -Eo "[[:digit:]]{4}"
+cut -f3 cities.tsv | grep -Eo "[[:digit:]]{4}"
 ```
 
 **Output:**
@@ -456,5 +461,14 @@ We specifically covered:
 Even though we focused on `grep`, many these regular expressions work across many programming languages.
 
 See [Regular-Expression.info][regexInfo] for more in-depth lessons on regular expressions.
+
+## Appendix
+
+When to use `grep -E`:
+
+- Alternation
+- Strict quantifiers, like `+` or `?`
+- Repeition
+- Grouping 
 
 [regexInfo]:https://www.regular-expressions.info/
