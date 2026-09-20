@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5747e81f.js";
+            window.path_to_searchindex_js = "searchindex-7d753214.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -192,8 +192,13 @@
 Its versatility makes it an essential tool for efficiently locating information in large sets of data or documents.</p>
 <p>In this section, we learn how to use more advanced regular expressions with <code>grep</code> to search files.</p>
 <h3 id="download-data-file"><a class="header" href="#download-data-file">Download Data File</a></h3>
-<p>To follow along in this tutorial, download the following file to your home directory on your Google Cloud VM:</p>
-<pre><code>wget https://raw.githubusercontent.com/cseanburns/linux_sysadmin/refs/heads/master/data/cities.md
+<p>To follow along in this tutorial, download the following files to your home directory on your remote server.
+The command will download two files:</p>
+<ul>
+<li>a <code>cities.md</code> file, which uses Markdown to format the table</li>
+<li>a <code>cities.tsv</code> file, which is a tab delimited value (TSV) file</li>
+</ul>
+<pre><code>curl -OO https://raw.githubusercontent.com/cseanburns/linux_sysadmin/refs/heads/master/data/cities.{md,tsv}
 </code></pre>
 <h2 id="multiword-strings"><a class="header" href="#multiword-strings">Multiword strings</a></h2>
 <p>It’s good habit to include search strings within quotes, but this is especially important if we search for multiword strings.
@@ -221,7 +226,7 @@ In these cases, we must enclose them in quotes.</p>
 <p><strong>Output:</strong></p>
 <pre><code>| San Antonio, TX | 1451853 | 1718 |
 </code></pre>
-<h2 id="whole-words-by-the-edges"><a class="header" href="#whole-words-by-the-edges">Whole words by the edges</a></h2>
+<h2 id="whole-words-by-the-edges"><a class="header" href="#whole-words-by-the-edges">Whole Words by the Edges</a></h2>
 <p>To search whole words, we can use special characters to match strings at the start and/or the end of words.
 For example, note the output if I search for cities in California in my file by searching for the string <strong>ca</strong>.
 Since this string appears in Chi<strong>ca</strong>go, then that city matches (as a false positive) my <code>grep</code> search:</p>
@@ -264,7 +269,7 @@ It matches any single character in that list.
 If the first character of the list is the caret ^ then it matches any character not in the list.
 For example, the regular expression [0123456789] matches any single digit.</p>
 </blockquote>
-<p>And the regular expression [^0123456789] matches the non-number characters.</p>
+<p>And thus the regular expression [^0123456789] matches the non-number characters.</p>
 <p>Within a bracket expression, a range expression consists of two characters separated by a hyphen.
 It matches any single character that sorts between the two characters, inclusive of the two characters.</p>
 <p>For example:</p>
@@ -326,12 +331,12 @@ This will match all non-integers:</p>
 <p><strong>Command:</strong></p>
 <pre><code>grep "[^0-9]" cities.md
 </code></pre>
-<h3 id="carat-preceding-the-bracket"><a class="header" href="#carat-preceding-the-bracket">Carat Preceding the bracket</a></h3>
+<h3 id="carat-preceding-the-bracket"><a class="header" href="#carat-preceding-the-bracket">Carat Preceding the Bracket</a></h3>
 <p>We saw in a previous section that the carat <code>^</code> key indicates the start of line.
 However, we learned above that it can be used to return the inverse of a string in special circumstances,
 which is when it is inside the brackets.
 To use the carat to signify the start of a line, the carat key must precede the opening bracket.
-For example, the following command matches any lines that start with the upper case letters within the range of <strong>N,O,P</strong>:</p>
+For example, the following command matches any lines that starts with a vertical bar <code>|</code>, an empty space, and then the upper case letters within the range of <strong>N,O,P</strong>:</p>
 <p><strong>Command:</strong></p>
 <pre><code>grep "^| [N-P]" cities.md
 </code></pre>
@@ -358,39 +363,37 @@ Philadelphia, PA  | 1576251 | 1701
 <p>Outside of bracket expressions, we use the caret <code>^</code> to mark the beginning of a line.
 We can also use the <code>$</code> to match the end of a line.
 Using either (or both) is called <strong>anchoring</strong>.
-Anchoring works in many places.
-For example, to search all lines that <strong>start</strong> with a vertical bar, a space, and then a capital D through L.</p>
+To search all lines that <strong>start</strong> with a capital D through L, I run the following command.
+Note that I’m examaning the TSV (tab delimited) version of this file:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep "^| [D-L]" cities.md
+<pre><code>grep "^[D-L]" cities.tsv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>| Los Angeles, CA | 3898747 | 1781 |
-| Houston, TX     | 2304580 | 1837 |
-| Dallas, TX      | 1288457 | 1856 |
+<pre><code>Los Angeles, CA	3898747	1781
+Houston, TX	2304580	1837
+Dallas, TX	1288457	1856
 </code></pre>
-<p>To show how to anchor the end of a line, let’s look at the <strong>operating-systems.csv</strong> file.
-The following dollar sign <code>$</code> signifies the end of line:</p>
+<p>To show how to anchor the end of a line, we use the dollar sign <code>$</code> signifies the end of line.
+The following searches for lines ending with <strong>1781</strong>.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep "1993$" operating-systems.csv
+<pre><code>grep "1781$" cities.tsv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>FreeBSD, BSD, 1993
-Windows NT, Proprietary, 1993
+<pre><code>Los Angeles, CA	3898747	1781
 </code></pre>
 <p>We can use both anchors in our <code>grep</code> commands.
-The following searches for any lines starting with capital letter F and that also ends with the number 3.
-The single dot stands for any character, and the asterisk stands for “the preceding character will zero or more times” (<code>man grep</code>).</p>
+The following searches for any lines starting with capital letters E-M and that also end with the numbers 5-7.
+The single dot stands for any character, and the asterisk stands for “the preceding character will zero or more times” (<code>man grep</code>).
+Therefore, the <code>grep</code> search includes any characters within the start and end.</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep "^F.*3$" operating-systems.csv
+<pre><code>grep "^[E-M].*[5-7]$" cities.tsv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>FreeBSD, BSD, 1993
+<pre><code>Houston, TX	2304580	1837
 </code></pre>
 <h2 id="repetition"><a class="header" href="#repetition">Repetition</a></h2>
 <p>If we want to use regular expressions to identify repeating patterns, then we can use repetition operators.
-As we saw above, the most useful one is the <code>*</code> asterisk.
-We need to add the -E option to extend <code>grep</code>’s regular expression functionality for repetitions:</p>
-<p>In <code>man grep</code>, we can use the following <strong>repetition operators</strong>:</p>
+In <code>man grep</code>, we can use the following <strong>repetition operators</strong>:</p>
 <ul>
 <li><code>?</code> the preceding item is optional and matched at most once</li>
 <li><code>*</code> the preceding item will be matched zero or more times</li>
@@ -400,42 +403,44 @@ We need to add the -E option to extend <code>grep</code>’s regular expression 
 <li><code>{,m}</code> the preceding item is matched at most <code>m</code> times</li>
 <li><code>{n,m}</code> the preceding item is matched at leat <code>n</code> times, but not more than <code>m</code> times</li>
 </ul>
+<p>When we use repetition operators, we need to use the <code>-E</code> option to enable <code>grep</code>’s extended regular expression syntax..</p>
 <p>Here, the preceding item <strong>S</strong> is matched one or more times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E "S+" cities.md
+<pre><code>grep -E "S+" cities.tsv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>| San Antonio, TX | 1451853 | 1718 |
-| San Diego, CA   | 1381611 | 1769 |
-| San Jose, CA    | 983489  | 1777 |
+<pre><code>San Antonio, TX	1451853	1718
+San Diego, CA	1381611	1769
+San Jose, CA	983489	1777
 </code></pre>
 <p>In the next search, the preceding item <strong>l</strong> (that is, a lower case l) is matched exactly 2 times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E "l{2}" cities.md
+<pre><code>grep -E "l{2}" cities.tsv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>| Dallas, TX | 1288457 | 1856 |
+<pre><code>Dallas, TX  1288457 1856
 </code></pre>
 <p>Finally, in this example, the preceding item <strong>7</strong> is matched at least two times or at most three times:</p>
 <p><strong>Command:</strong></p>
-<pre><code>grep -E "7{2,3}" cities.md
+<pre><code>grep -E "7{2,3}" cities.tsv
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>| San Jose, CA | 983489 | 1777 |
+<pre><code>San Jose, CA    983489  1777
 </code></pre>
 <h2 id="grouping"><a class="header" href="#grouping">Grouping</a></h2>
 <p>Just like in match, we can use parenthesis to group objects.
 The following command first filters out for the city and year columns and
-then matches the number <code>17</code> (altogether) exactly one time:</p>
-<pre><code>cut -d"|" -f2,4 cities.md | grep -E "(17){1}"
+then matches the number <code>17</code> (altogether) exactly one time.
+Note that I do not use the <code>cut -d</code> option here because <code>cut</code> defaults to tab deliminated values.</p>
+<pre><code>cut -f1,3 cities.tsv | grep -E "(17){1}"
 </code></pre>
 <p><strong>Output:</strong></p>
-<pre><code>Los Angeles, CA   | 1781
-Chicago, IL       | 1780
-Philadelphia, PA  | 1701
-San Antonio, TX   | 1718
-San Diego, CA     | 1769
-San Jose, CA      | 1777
+<pre><code>Los Angeles, CA	1781
+Chicago, IL	1780
+Philadelphia, PA	1701
+San Antonio, TX	1718
+San Diego, CA	1769
+San Jose, CA	1777
 </code></pre>
 <h2 id="character-classes"><a class="header" href="#character-classes">Character classes</a></h2>
 <p>Character classes are special types of predefined bracket expressions.
@@ -448,13 +453,14 @@ expressions, as follows. Their names are self explanatory, and they are
 [:print:], [:punct:], [:space:], [:upper:], and [:xdigit:]. For example,
 [[:alnum:]] means the character class of numbers and letters …</p>
 </blockquote>
-<p>Below I use the <code>awk</code> command to select the fourth column (or field) using the pipe as the field delimiter.
-I pipe the output to <code>grep</code> to select lines exactly four digit numbers <code>[[:digit:]]{4}</code> from the results of the <code>awk</code> command:</p>
+<p>Below I use the <code>awk</code> command to select the third column (or field) using the tab as the field delimiter
+(here the tab character is represented by <code>\t</code>), since <code>awk</code> defaults to empty spaces as the delimiter character (unlike <code>cut</code>).
+I pipe the output to <code>grep</code> to select lines with exactly that have the length of four digits <code>[[:digit:]]{4}</code> from the results of the <code>awk</code> command:</p>
 <p><strong>Command:</strong></p>
-<pre><code>awk -F"|" '{ print $4 }' cities.md | grep -Eo "[[:digit:]]{4}"
+<pre><code>awk -F"\t" '{ print $3 }' cities.tsv | grep -Eo "[[:digit:]]{4}"
 </code></pre>
-<p>Or the <code>cut</code> command:</p>
-<pre><code>cut -d"|" -f4 cities.md | grep -Eo "[[:digit:]]{4}"
+<p>Or we can use the <code>cut</code> command:</p>
+<pre><code>cut -f3 cities.tsv | grep -Eo "[[:digit:]]{4}"
 </code></pre>
 <p><strong>Output:</strong></p>
 <pre><code>1624
@@ -481,6 +487,14 @@ I pipe the output to <code>grep</code> to select lines exactly four digit number
 </ul>
 <p>Even though we focused on <code>grep</code>, many these regular expressions work across many programming languages.</p>
 <p>See <a href="https://www.regular-expressions.info/">Regular-Expression.info</a> for more in-depth lessons on regular expressions.</p>
+<h2 id="appendix"><a class="header" href="#appendix">Appendix</a></h2>
+<p>When to use <code>grep -E</code>:</p>
+<ul>
+<li>Alternation</li>
+<li>Strict quantifiers, like <code>+</code> or <code>?</code></li>
+<li>Repeition</li>
+<li>Grouping</li>
+</ul>
 
                     </main>
 
