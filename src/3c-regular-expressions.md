@@ -5,7 +5,7 @@ By the end of this section, you will:
 1. **Understand the purpose of `grep`**: Recognize the versatility of `grep` for searching through text and its use in filtering output, searching for patterns in files, and extracting relevant data.
 2. **Perform basic searches using `grep`**: Search for multiword strings and whole words while understanding how to handle case sensitivity and word boundaries.
 3. **Utilize regular expressions**: Apply regular expressions with `grep` to search for more complex text patterns, using features like bracket expressions, character classes, and anchoring.
-4. **Leverage repetition and OR operators**: Use repetition operators (e.g., `*`, `+`) and Boolean OR searches to find repetitive patterns or multiple possible matches in your text.
+4. **Leverage repetition operators**: Use repetition operators (e.g., `*`, `+`) to find repetitive patterns or multiple possible matches in your text.
 
 ## Getting Started
 
@@ -381,7 +381,7 @@ San Jose, CA    983489  1777
 
 ## Grouping
 
-Just like in match, we can use parenthesis to group objects.
+Just like in math, we can use parenthesis to group objects.
 The following command first filters out for the city and year columns and
 then matches the number `17` (altogether) exactly one time.
 Note that I do not use the `cut -d` option here because `cut` defaults to tab deliminated values.
