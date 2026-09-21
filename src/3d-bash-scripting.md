@@ -50,7 +50,6 @@ This can make the script more portable across systems where Bash is installed in
 
 > As an alternate example, if we were writing a Python script, then we could declare it to be: `#!/usr/bin/env python3`.
 
-This is the more portable method, because POSIX compliance dictates that the `env` binary exists at `/usr/bin/`, regardless where in the path `bash` (or some other shell) exists.
 However, you may see the following forms, too:
 
 ```
@@ -63,8 +62,7 @@ Or:
 #!/bin/bash
 ```
 
-> On [POSIX][posix] compliant systems, the `env` program should always be located at `/usr/bin/env`.
-> However, even on POSIX compliant systems, `bash` may be located in different paths.
+> On [POSIX][posix] compliant systems, `bash` may be located in different paths.
 > On some Linux distributions, it's located at `/usr/bin/bash`.
 > On others, it may be located at `/bin/bash`.
 > On BSD OSes, like FreeBSD, `bash` might be installed at `/usr/local/bin/bash`.
@@ -75,7 +73,7 @@ Or:
 To help ensure that your scripts are clean and readable, even for small scripts, it's helpful to follow a consistent style.
 Just like when we write academic papers, where we might use APA, Chicago, MLA, or some other style guide, style guides exist for programming and scripting languages, too.
 Adhering to a style guide helps us to write clean, visually appealing scripts that are easier to maintain and understand.
-Consider checking out style guides early on, like the [Google Shell Style Guide][shellstyle].
+Consider checking out style guides early on, like the [Google Shell Style Guide][shellstyle_google].
 
 ## Variables
 
@@ -107,6 +105,7 @@ In the following, I use the `date +%A` command to assign the current day of the 
 The output at the time this variable is set will differ if it is set on a different day.
 
 ```
+date +%A
 today="$(date +%A)"
 echo "${today}"
 ```
@@ -197,11 +196,12 @@ for i in {1..5} ; do
 done
 ```
 
-> Note that I take advantage of brace expansion in the above for loop.
+> Note that I take advantage of brace expansion in the above `for` loop.
 
 You might notice in the `echo` statement above that I use `${i}` instead of `$i`.
 Braces explicitly delimit the variable name.
 For example, `${i}th` expands variable `i` followed by `th`, but `$ith` asks Bash to expand a variable `$ith`.
+Braces help to avoid this confusion.
 
 Using the above `for` loop, we can create a rudimentary timer by calling the `sleep` command to pause after each count.
 Once the `for` loop closes, the final `echo` statement runs:
@@ -221,7 +221,7 @@ where you might poll a resource at intervals, or in timed alerts.
 ### `while` Loops
 
 We can use a `while` loop instead of a `for` loop.
-Before entering a `while` loop, we initialize the counter with `count=5`.
+Before entering a `while` loop, we initialize a counter with `count=5` (the variable `count` could be named something else).
 The `while` statement then tests a **condition** before each iteration.
 As long as that condition is true, the loop continues.
 
@@ -262,6 +262,7 @@ In the following `for` loop, I loop through the **seasons** variable first intro
 #!/usr/bin/env bash
 
 seasons=(winter spring summer fall)
+
 for i in "${seasons[@]}" ; do
   echo "I hope you have a nice ${i}."
 done
@@ -300,7 +301,7 @@ else
 fi
 ```
 
-Reverse it to return the else statement:
+Reverse it to return the `else` statement:
 
 ```
 if [[ 3 -ge 5 ]] ; then
@@ -354,6 +355,8 @@ Consider our array example above.
 In the following, if the value of the array equals fall or spring, then the script will wish you an appropriate greeting:
 
 ```
+#!/usr/bin/env bash
+
 seasons=(winter spring summer fall)
 
 for i in "${seasons[@]}" ; do
@@ -377,9 +380,9 @@ function_name() {
 ```
 
 In the above `greetings` script, I can place the code within a function that I might call `student_greeting`, and add another function I will call `break_greeting`.
-Since I am re-using the array variable in both functions, I can move it outside the function.
+Since I am re-using the array variable in both functions, I can move it outside and before the functions.
 This makes it a global variable, since it is available to all the functions in the script.
-We still have the `$i` variable within the script.
+We still have the `$i` and `$j` variables within the functions.
 I can declare that to be a `local` variable to make it explicit.
 Then call the functions at the end of the script:
 
@@ -398,10 +401,10 @@ student_greeting() {
 }
 
 break_greeting() {
-	local i
-	for i in "${SEASONS[@]}" ; do
-		if [[ ${i} == "winter" || ${i} == "summer" ]] ; then
-			echo "I hope you have a nice ${i} break."
+	local j
+	for j in "${SEASONS[@]}" ; do
+		if [[ ${j} == "winter" || ${j} == "summer" ]] ; then
+			echo "I hope you have a nice ${j} break."
 		fi
 	done
 }
@@ -414,28 +417,16 @@ break_greeting
 
 By default, variables in Bash are global.
 Since `SEASONS`, in the example above, is a script-wide value that we are treating as fixed, I use an uppercase name (although it will work in lower case, too).
-The loop variable `i`, on the other hand, is explicitly declared `local` inside each function.
+The loop variables `i` and `j`, on the other hand, are explicitly declared `local` inside each function.
+This is not necessary, but it makes for better and safer code.
 If you are working within functions and want a variable to only be available within the function, you can declare it as local using `local var_name=value` or `local var_name`.
 
 ## Checking Scripts with ShellCheck
 
 Finally, you can check your shell scripts using the `shellcheck` shell script analysis tool.
 To use it, let's say I have saved the above script in a file named `greetings` in my `~/bin` directory.
-With the proper {she,hash}bang, the file looks like this:
 
-```
-#!/usr/bin/env bash
- 
-seasons=(winter spring summer fall)
-
-for i in "${seasons[@]}" ; do
-	if [[ ${i} == "spring" || ${i} == "fall" ]] ; then
-		echo "I hope you have a nice ${i} semester."
-	fi
-done
-```
-
-Then to check for errors, run the following command:
+To check for errors, run the following command:
 
 ```
 shellcheck ~/bin/greetings
