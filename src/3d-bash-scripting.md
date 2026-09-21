@@ -4,9 +4,9 @@ By the end of this section, you will:
 
 1. Understand Bash as both a command and scripting language: Recognize the dual functionality of Bash, allowing you to automate tasks and manage scripts efficiently within a Linux environment.
 1. Work with variables and arrays in Bash: Learn to declare and use variables, apply command substitution, and manage arrays for more complex scripting tasks.
-1. Apply conditional expressions for decision-making: Use conditional operators such as &&, ||, and if; then; else statements to control the flow of your scripts based on conditions and outcomes.
-1. Implement loops to automate repetitive tasks: Utilize looping structures, such as for, to automate actions that need to be repeated under certain conditions or across arrays.
-1. Write and execute Bash scripts with the correct structure: Include essential elements like the shebang (`#!/usr/bin/env bash`) at the start of your scripts, ensuring portability and clarity in execution.
+1. Apply conditional expressions for decision-making: Use conditionals such as `if; then; else` statements to control the flow of your scripts based on conditions and outcomes.
+1. Implement loops to automate repetitive tasks: Utilize looping structures, such as `for` loops, to automate actions that need to be repeated under certain conditions or across arrays.
+1. Write and execute Bash scripts with the correct structure: Include essential elements like the shebang (`#!/usr/bin/env bash`) at the start of your scripts, to ensure portability and clarity in execution.
 1. Test conditions in Bash scripts: Understand how to test for specific conditions in scripts, such as file existence or the comparison of variables, to build more reliable and functional scripts.
 1. Validate and improve Bash scripts: Learn how to use tools like `shellcheck` to check for errors in your Bash scripts and ensure adherence to best practices through style guides.
 
