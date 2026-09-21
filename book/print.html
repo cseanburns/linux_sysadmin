@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e2f58ff0.js";
+            window.path_to_searchindex_js = "searchindex-0cd641c1.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -3544,153 +3544,143 @@ I pipe the output to <code>grep</code> to select lines with exactly that have th
 <h1 id="bash-scripting"><a class="header" href="#bash-scripting">Bash Scripting</a></h1>
 <p>By the end of this section, you will:</p>
 <ol>
-<li>Understand Bash as both a command and scripting language: Recognize the dual
-functionality of Bash, allowing you to automate tasks and manage scripts
-efficiently within a Linux environment.</li>
-<li>Work with variables and arrays in Bash: Learn to declare and use variables,
-apply command substitution, and manage arrays for more complex scripting
-tasks.</li>
-<li>Apply conditional expressions for decision-making: Use conditional operators
-such as &amp;&amp;, ||, and if; then; else statements to control the flow of your
-scripts based on conditions and outcomes.</li>
-<li>Implement loops to automate repetitive tasks: Utilize looping structures,
-such as for, to automate actions that need to be repeated under certain
-conditions or across arrays.</li>
-<li>Write and execute Bash scripts with the correct structure: Include essential
-elements like the shebang (<code>#!/usr/bin/env bash</code>) at the start of your
-scripts, ensuring portability and clarity in execution.</li>
-<li>Test conditions in Bash scripts: Understand how to test for specific
-conditions in scripts, such as file existence or the comparison of
-variables, to build more reliable and functional scripts.</li>
-<li>Validate and improve Bash scripts: Learn how to use tools like <code>shellcheck</code> to
-check for errors in your Bash scripts and ensure adherence to best practices
-through style guides.</li>
+<li>Understand Bash as both a command and scripting language: Recognize the dual functionality of Bash, allowing you to automate tasks and manage scripts efficiently within a Linux environment.</li>
+<li>Work with variables and arrays in Bash: Learn to declare and use variables, apply command substitution, and manage arrays for more complex scripting tasks.</li>
+<li>Apply conditional expressions for decision-making: Use conditionals such as <code>if; then; else</code> statements to control the flow of your scripts based on conditions and outcomes.</li>
+<li>Implement loops to automate repetitive tasks: Utilize looping structures, such as <code>for</code> loops, to automate actions that need to be repeated under certain conditions or across arrays.</li>
+<li>Write and execute Bash scripts with the correct structure: Include essential elements like the shebang (<code>#!/usr/bin/env bash</code>) at the start of your scripts, to ensure portability and clarity in execution.</li>
+<li>Test conditions in Bash scripts: Understand how to test for specific conditions in scripts, such as file existence or the comparison of variables, to build more reliable and functional scripts.</li>
+<li>Validate and improve Bash scripts: Learn how to use tools like <code>shellcheck</code> to check for errors in your Bash scripts and ensure adherence to best practices through style guides.</li>
 </ol>
 <h2 id="getting-started-4"><a class="header" href="#getting-started-4">Getting Started</a></h2>
-<p>It’s time to get started on Bash scripting.
-So far, we’ve been working on the Linux commandline.
+<p>So far, we’ve been working on the Linux commandline.
 Specifically, we have been working in the <a href="https://en.wikipedia.org/wiki/Bash_(Unix_shell)">Bash</a> shell.
-Wikipedia refers to Bash as a <strong>command language</strong>.
-This means that Bash is used as a commandline language but also as a scripting language.
-The main purpose of Bash is to write small applications/scripts that analyze text (e.g., log files) and automate jobs.
-However, it can be used for a variety of other purposes.</p>
+Bash serves as both an interactive command language and a <a href="https://en.wikipedia.org/wiki/Scripting_language">scripting language</a>.
+The same language we’ve been using at the command line can therefore be used to write programs and automate Linux tasks.</p>
+<p>Unix-like operating systems, including Linux, offer many shells, each with different advantages.
+Besides <code>bash</code>, a few examples include:</p>
+<ul>
+<li><code>sh</code></li>
+<li><code>tcsh</code></li>
+<li><code>csh</code></li>
+<li><code>ksh</code></li>
+<li><code>zsh</code></li>
+</ul>
+<p>Other operating systems may include their own shells.
+Windows OS has PowerShell, which includes the older <code>cmd.exe</code> (Command Prompt) shell as well as the much more capable PowerShell.</p>
+<p>Shells serve two purposes.
+They provide a mechanism for interactively using the operating system from a command prompt, and
+they provide programming capabilities for automation, or job control.</p>
+<p>The following is a brief intro to the main parts of scripting in Bash.
+If you have ever programmed before, many of these concepts will not be new to you.</p>
+<h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
+<p>When we start to write scripts, the first thing we add is a <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> or hashbang at line one.
+The {she,hash}bang tells the shell what program needs to run.</p>
+<p>In the example below, the <code>#!/usr/bin/env bash</code> form uses <code>env</code> to locate <code>bash</code> using the current <code>PATH</code>.
+This can make the script more portable across systems where Bash is installed in different locations.</p>
+<pre><code>#!/usr/bin/env bash
+</code></pre>
+<blockquote>
+<p>As an alternate example, if we were writing a Python script, then we could declare it to be: <code>#!/usr/bin/env python3</code>.</p>
+</blockquote>
+<p>However, you may see the following forms, too:</p>
+<pre><code>#!/usr/bin/bash
+</code></pre>
+<p>Or:</p>
+<pre><code>#!/bin/bash
+</code></pre>
+<blockquote>
+<p>On <a href="https://posix.opengroup.org/">POSIX</a> compliant systems, <code>bash</code> may be located in different paths.
+On some Linux distributions, it’s located at <code>/usr/bin/bash</code>.
+On others, it may be located at <code>/bin/bash</code>.
+On BSD OSes, like FreeBSD, <code>bash</code> might be installed at <code>/usr/local/bin/bash</code>.
+Thus, by using the <code>#!/usr/bin/env bash</code> shebang, you help ensure that your <code>bash</code> program is portable across different OSes.</p>
+</blockquote>
+<h2 id="style"><a class="header" href="#style">Style</a></h2>
+<p>To help ensure that your scripts are clean and readable, even for small scripts, it’s helpful to follow a consistent style.
+Just like when we write academic papers, where we might use APA, Chicago, MLA, or some other style guide, style guides exist for programming and scripting languages, too.
+Adhering to a style guide helps us to write clean, visually appealing scripts that are easier to maintain and understand.
+Consider checking out style guides early on, like the <a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a>.</p>
 <h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
-<p>One of the most important abilities of any programming or scripting language is to be able to declare a variable.
+<p>One of the most important abilities of any programming or scripting language is to declare a variable.
 Variables enable us to attach some value to a name.
-That value may be temporary, and it’s used to pass information to other parts of a program.</p>
-<p>In Bash, we declare a variable with the name of the variable, an equal sign, and then the value of the variable within double quotes.
-Do not insert spaces between the variable and assignment.
-In the following code snippet, which can be entered on the commandline, I create a variable named <code>NAME</code> and assign it the value <code>Sean</code>.
-I create another variable named <code>BACKUP</code>  and assign it the value <code>/media</code>.
+Variables are often used to pass information to other parts of a program.</p>
+<p>In Bash, we declare variables first with the name of the variable, an equal sign, and then the value of the variable (the assignment) within double quotes.
+Unlike other programming languages, we do not insert spaces between the variable and assignment.
+In the following code snippet, which can be entered on the commandline, I create a variable named <code>name</code> and assign it the value <code>Sean</code>.
+I create another variable named <code>backup</code>  and assign it the value <code>/media</code>, representing a path on my filesystem.
 Then I use the <code>echo</code> and <code>cd</code> commands to test the variables:</p>
-<pre><code>NAME="Sean"
-BACKUP="/media"
-echo "My name is ${NAME}"
-echo "${BACKUP}"
-cd "${BACKUP}"
+<pre><code>name="Sean"
+backup="/media"
+echo "My name is ${name}"
+echo "${backup}"
+cd "${backup}"
 pwd
 cd
 </code></pre>
 <p>Variables may include values that may change given some context.
 For example, if we want a variable to refer to today’s day of week, we can use <a href="https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html">command substitution</a>.
 This “allows the output of a command to replace the command name” (see <code>man bash</code>).
-In the following, I use the <code>date +%A</code> command to assign the current day of the week to the variable named <strong>TODAY</strong>.
+In the following, I use the <code>date +%A</code> command to assign the current day of the week to the variable named <strong>today</strong>.
 The output at the time this variable is set will differ if it is set on a different day.</p>
-<pre><code>TODAY="$(date +%A)"
-echo "${TODAY}"
+<pre><code>date +%A
+today="$(date +%A)"
+echo "${today}"
 </code></pre>
-<blockquote>
-<p>By default, variables in Bash are global.
-If you are working within functions and want a variable to only be available within the function,
-you can declare it as local using <code>local var_name=value</code>.</p>
-</blockquote>
-<p>Curly braces are not strictly necessary when calling a Bash variable, but they offer benefits when we start to use things like <a href="https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html">array variables</a>.
+<p>Curly braces are not strictly necessary when calling a Bash variable, but it is good practice to use them for a variety of reasons (e.g., <a href="https://tldp.org/LDP/Bash-Beginners-Guide/html/sect_10_02.html">array variables</a> and <a href="https://opensource.com/article/17/6/bash-parameter-expansion">parameter expansion</a>).
 See:</p>
 <ul>
 <li><a href="https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/">How to use curly braces in Bash</a></li>
 <li><a href="https://www.linuxjournal.com/content/bash-brace-expansion">Brace Expansion</a></li>
 </ul>
-<p>For example, let’s look at basic <strong>brace expansion</strong>, which can be used to generate arbitrary strings:</p>
+<p>We also use curly braces in <strong>brace expansion</strong> to generate strings:</p>
 <pre><code>echo {1..5}
 echo {5..1}
 echo {a..l}
 echo {l..a}
 </code></pre>
 <p>Another example: using brace notation, we can generate multiple sub-directories at once.
-Start off in your home directory, and:</p>
+The following command creates a directory called <code>homework/</code> that contains two subdirectories: <code>drafts/</code> and <code>notes/</code>.
+From your home directory, do:</p>
 <pre><code>mkdir -p homework/{drafts,notes}
 cd homework
 ls
+drafts/ notes/
 </code></pre>
-<p>But more than that, they allow us to deal with arrays (or lists).
-Here I create a variable named <code>seasons</code>, which holds an <strong>array</strong>, or multiple values: <code>winter spring summer fall</code>.
-Bash lets me access parts of that array.
-In the following the <code>[@]</code> refers to the entire array and the <code>[n]</code> refers to subscript in the array.</p>
+<h3 id="lists--arrays"><a class="header" href="#lists--arrays">Lists / Arrays</a></h3>
+<p>I can assign a list or an array to a variable using <code>()</code> parentheses.
+To create a variable named <code>seasons</code>, that contains multiple values, such as <code>winter spring summer fall</code>, I declare my variable as follows:</p>
 <pre><code>seasons=(winter spring summer fall)
-echo "${seasons[@]}"
+</code></pre>
+<p>Bash lets me access parts of that array.
+In the following example, the <code>[@]</code> refers to the entire array and the <code>[n]</code> refers to a subscript in the array.
+Like other programming languages, the first subscript in an array begins with 0.</p>
+<pre><code>echo "${seasons[@]}"
+winter spring summer fall
+echo "${seasons[0]}"
+winter
 echo "${seasons[1]}"
+spring
 echo "${seasons[2]}"
-echo "${seasons[-1]}"
+summer
+</code></pre>
+<p>I can also access subscripts in an array from right to left, starting with <code>-1</code>:</p>
+<pre><code>echo "${seasons[-1]}"
+fall
+echo "${seasons[-2]}"
+summer
 </code></pre>
 <p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
-<h2 id="conditional-expressions"><a class="header" href="#conditional-expressions">Conditional Expressions</a></h2>
-<p>Whether working on the commandline, or writing scripts in a text editor, it’s sometimes useful to be able to write multiple commands on one line.
-There are several ways to do that.
-We can include a list of commands on one line in Bash where each command is separated by a semicolon.
-In the following example, the <code>cd</code> command will run and then the <code>ls -lt</code> command will run.</p>
-<pre><code>cd ; ls -lt
-</code></pre>
-<p>We can also use <a href="https://ss64.com/bash/syntax-execute.html">conditional expressions</a> and apply logic with <code>&amp;&amp;</code> (<strong>Logical AND</strong>) or <code>||</code> (<strong>Logical OR</strong>).</p>
-<p>Here, <code>command2</code> is executed if and only if <code>command1</code> is successful:</p>
-<pre><code>command1 &amp;&amp; command2
-</code></pre>
-<p>Here, <code>command2</code> is executed if and only if <code>command1</code> fails:</p>
-<pre><code>command1 || command2
-</code></pre>
-<p>In essence, <code>&amp;&amp;</code> and <code>||</code> are short-circuit operators.
-This means that if the first command in <code>command1 &amp;&amp; command2</code> fails, <code>command2</code> <strong>will not</strong> be executed.
-Conversely, if the first command in <code>command1 || command2</code> succeeds, <code>command2</code> <strong>will</strong> be executed.</p>
-<p>In the example below, lines starting with a <code>#</code> indicate a comment that is not evaluated by <code>bash</code>:</p>
-<pre><code># if documents/ does not exist, then the echo statement will not run
-cd documents &amp;&amp; echo "success" 
-# if documents/ does not exist, then the echo statement will run
-cd documents || echo "failed"
-</code></pre>
-<p>We can combine these operators:</p>
-<pre><code>cd test &amp;&amp; pwd || echo "no such directory"
-mkdir test
-cd test &amp;&amp; pwd || echo "no such directory"
-</code></pre>
-<h2 id="shebang-or-hashbang"><a class="header" href="#shebang-or-hashbang">Shebang or Hashbang</a></h2>
-<p>When we start to write scripts, the first thing we add is a <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> or hashbang at line one.
-The {she,hash}bang tells the shell what program needs to run.
-We can do declare it a couple of ways.
-First, we can use the path to <code>env</code>, which runs the program in a modified environment that is named after <code>env</code>.
-In the following {she,hash}bang, we declare that modified environment to be the <code>bash</code> shell:</p>
-<pre><code>#!/usr/bin/env bash
-</code></pre>
-<blockquote>
-<p>If we were writing a Python script, then we could declare it to be: <code>#!/usr/bin/env python3</code>.</p>
-</blockquote>
-<p>The above is more portable, but alternatively, you could put the direct path to Bash:</p>
-<pre><code>#!/usr/bin/bash
-</code></pre>
-<blockquote>
-<p>On <a href="https://posix.opengroup.org/">POSIX</a> compliant systems, the <code>env</code> program should always be located at <code>/usr/bin/env</code>.
-However, even on POSIX compliant systems, <code>bash</code> may be located in different paths.
-On some Linux distributions, it’s located at <code>/usr/bin/bash</code>.
-On others, it may be located at <code>/bin/bash</code>.
-On BSD OSes, like FreeBSD, <code>bash</code> might be installed at <code>/usr/local/bin/bash</code>.
-Thus, by using the <code>#!/usr/bin/env bash</code> shebang, you help ensure that your <code>bash</code> program is portable across different OSes.</p>
-</blockquote>
-<p>Even for small scripts, it’s helpful to follow a consistent style.
-A well-written script is easier to maintain and understand.
-Consider checking out style guides early on, like the <a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a>.
-This will help ensure your scripts remain clean and readable.</p>
+<h3 id="variable-naming"><a class="header" href="#variable-naming">Variable Naming</a></h3>
+<p>When naming variables, use lowercase or snake_case: <code>name</code> is more appropriate than <code>NAME</code>.
+By convention, variables created by your script generally use lowercase or <code>snake_case</code>.
+Uppercase names are commonly used for environmental variables and sometimes for values treated as constants.
+Using lowercase for ordinary variables also helps avoid accidentally conflicting with special shell or environmental variables such as <code>PATH</code>, <code>HOME</code>, <code>USER</code>, and <code>PWD</code>.</p>
 <h2 id="looping"><a class="header" href="#looping">Looping</a></h2>
 <p>Looping is a common way to repeat an instruction until some specified condition is met.
-There are several looping methods in Bash that include: : <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.
-The <code>for</code> loop is often the most useful.
+There are several looping methods in Bash that include: <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.</p>
+<h3 id="for-loops"><a class="header" href="#for-loops"><code>for</code> Loops</a></h3>
+<p>The <code>for</code> loop is often the most useful.
 In the following toy looping example, we instruct <code>bash</code> to assign the letter <strong>i</strong> to the sequence <strong>1,2,3,4,5</strong>.
 Each time it assigns <strong>i</strong> to those numbers, it <code>echo</code>s them to standard output:</p>
 <pre><code>for i in {1..5} ; do
@@ -3698,27 +3688,57 @@ Each time it assigns <strong>i</strong> to those numbers, it <code>echo</code>s 
 done
 </code></pre>
 <blockquote>
-<p>Note that I take advantage of brace expansion in the above for loop.</p>
+<p>Note that I take advantage of brace expansion in the above <code>for</code> loop.</p>
 </blockquote>
 <p>You might notice in the <code>echo</code> statement above that I use <code>${i}</code> instead of <code>$i</code>.
-While the latter is possible, using <code>${i}</code> ensures proper variable expansion, particularly when using loops within strings or complex expressions.
-For example, <code>${}</code> ensures that <code>i</code> is correctly interpreted as a variable and not part of a larger string.</p>
-<p>Using the above <code>for</code> loop, we can create a rudimentary timer by calling the <code>sleep</code> command to pause after each count:</p>
+Braces explicitly delimit the variable name.
+For example, <code>${i}th</code> expands variable <code>i</code> followed by <code>th</code>, but <code>$ith</code> asks Bash to expand a variable <code>$ith</code>.
+Braces help to avoid this confusion.</p>
+<p>Using the above <code>for</code> loop, we can create a rudimentary timer by calling the <code>sleep</code> command to pause after each count.
+Once the <code>for</code> loop closes, the final <code>echo</code> statement runs:</p>
 <pre><code>for i in {5..1} ; do
-  echo "T minus ${i}" &amp;&amp; sleep 1
+  echo "T minus ${i}"
+  sleep 1
 done ; echo "BLAST OFF!"
 </code></pre>
 <blockquote>
-<p>Note that I take advantage of brace expansion again, but this time
-reversing the ordering, as well as conditional execution.</p>
+<p>Note that I take advantage of brace expansion again, but this time reversing the ordering, as well as conditional execution.</p>
 </blockquote>
 <p>The <code>sleep</code> command is particularly useful in automation tasks where you want to pause execution between steps, such as monitoring scripts,
 where you might poll a resource at intervals, or in timed alerts.</p>
-<p>We can loop through the variable arrays, too.
+<h3 id="while-loops"><a class="header" href="#while-loops"><code>while</code> Loops</a></h3>
+<p>We can use a <code>while</code> loop instead of a <code>for</code> loop.
+Before entering a <code>while</code> loop, we initialize a counter with <code>count=5</code> (the variable <code>count</code> could be named something else).
+The <code>while</code> statement then tests a <strong>condition</strong> before each iteration.
+As long as that condition is true, the loop continues.</p>
+<pre><code>count=5
+
+while [[ $count -ge 1 ]] ; do
+    echo "$count"
+    ((count--))
+    sleep 1
+done ; echo "blast off"
+</code></pre>
+<h3 id="until-loops"><a class="header" href="#until-loops"><code>until</code> Loops</a></h3>
+<p><code>while</code> loops terminate when the condition becomes false.
+In the above example, the condition (initially <code>count=5</code>) becomes false when <code>$count</code> is no longer greater than or equal to one.</p>
+<p>The <code>until</code> loop works in the reverse order, and terminates when the condition becomes true.
+In this example, the condition becomes true when <code>$count</code> equals zero.</p>
+<pre><code>count=5
+
+until [[ $count -eq 0 ]] ; do
+    echo "$count"
+    ((count--))
+    sleep 1
+done ; echo "blast off"
+</code></pre>
+<h3 id="looping-arrays"><a class="header" href="#looping-arrays">Looping Arrays</a></h3>
+<p>We can loop through variable arrays (or lists).
 In the following <code>for</code> loop, I loop through the <strong>seasons</strong> variable first introduced above:</p>
 <pre><code>#!/usr/bin/env bash
 
 seasons=(winter spring summer fall)
+
 for i in "${seasons[@]}" ; do
   echo "I hope you have a nice ${i}."
 done
@@ -3741,7 +3761,8 @@ help if
 <blockquote>
 <p>Between <code>[</code> and <code>[[</code>, I generally prefer to use the <code>[[</code> syntax, as demonstrated below.
 It’s less error-prone and allows for more complex conditional checks.
-However, <code>[[</code> is specific to <code>bash</code> and thus slightly less portable than <code>[</code>.</p>
+However, <code>[[</code> is a <code>bash</code> specific conditional construct and is not standard POSIX <code>sh</code> syntax, like <code>[</code> is.
+Since we are writing Bash scripts, we generally prefer it for its versatility.</p>
 </blockquote>
 <p>We can test integers:</p>
 <pre><code>if [[ 5 -ge 3 ]] ; then
@@ -3750,48 +3771,23 @@ else
   echo "false"
 fi
 </code></pre>
-<p>Reverse it to return the else statement:</p>
+<p>Reverse it to return the <code>else</code> statement:</p>
 <pre><code>if [[ 3 -ge 5 ]] ; then
   echo "true"
 else
   echo "false"
 fi
 </code></pre>
-<p>We can test strings.
-Run the command <code>nano amihome.sh</code> and type the script below into the file.
-Save and exit.
-Change the file’s permissions: <code>chmod 766 amihome.sh</code>.
-Then move the file to <code>/usr/local/bin</code> with the following command:
-<code>sudo mv amihome.sh /usr/local/bin</code></p>
-<pre><code>#!/usr/bin/env bash
-
-if [[ "$HOME" = "$PWD" ]] ; then
- echo "You are home."
-else
- echo "You are not home, but I will take you there."
- cd "$HOME" || exit
- echo "You are now $PWD."
- pwd
-fi
-</code></pre>
-<p>Now you can run the file by typing at the command prompt: <code>amihome.sh</code>.</p>
-<p><strong>IMPORTANT</strong>: Running the above commands in a script won’t result in changing your directory
-outside the script to your home directory.
-This is because of what Bash calls <code>subshells</code>.
-Subshells are a forked processes.
-So the script will do things in those other directories, but once the script exits,
-you will remain in the directory where you ran the script.
-If you want to execute a script in the current shell so that changes like <code>cd</code> persist after the script runs,
-you can use the <code>source</code> command to run the script.
-For example:</p>
-<pre><code>source script.sh
-</code></pre>
 <p>We can test file conditions.
 Let’s first create a file called <strong>paper.txt</strong> and a file called <strong>paper.bak</strong>.
 We will add some trivial content to <strong>paper.txt</strong> but not to the <strong>paper.bak</strong>.
 The following <code>if</code> statement will test if <strong>paper.txt</strong>  has a more recent modification date.
 If so, it’ll back up the file with the <code>cp</code> and echo back its success:</p>
-<pre><code>if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
+<pre><code>touch "$HOME/paper.bak"
+sleep 1
+echo "My paper" &gt; "$HOME/paper.txt"
+
+if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
   cp "$HOME/paper.txt" "$HOME/paper.bak" &amp;&amp; echo "Paper is backed up."
 fi
 </code></pre>
@@ -3811,17 +3807,86 @@ else
   printf "\nThere is no class today."
 fi
 </code></pre>
-<p>Finally, you can check your shell scripts using the <code>shellcheck</code> shell script analysis tool.
-First you will need to install it:</p>
-<pre><code>sudo apt -y install shellcheck
+<blockquote>
+<p><code>printf</code> is an alternate way of displaying text on the screen to the <code>echo</code> command.</p>
+</blockquote>
+<h3 id="nested-conditions-combining-loops-and-tests"><a class="header" href="#nested-conditions-combining-loops-and-tests">Nested Conditions: Combining Loops and Tests</a></h3>
+<p>We can test strings and nest conditions within loops.
+Consider our array example above.
+In the following, if the value of the array equals fall or spring, then the script will wish you an appropriate greeting:</p>
+<pre><code>#!/usr/bin/env bash
+
+seasons=(winter spring summer fall)
+
+for i in "${seasons[@]}" ; do
+    if [[ ${i} == "spring" || ${i} == "fall" ]] ; then
+        echo "I hope you have a nice ${i} semester."
+    fi
+done
 </code></pre>
-<p>Then use it on shell script files you create.
-For example, let’s say I have a script in a file named <strong>backup.sh</strong>, I can use the <code>shellcheck</code> command to find any errors:</p>
-<pre><code>shellcheck backup.sh
+<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
+<p>Functions are blocks of code.
+We use functions to organize or re-use code in other programs or scripts.
+In <code>bash</code>, we define a function using the following syntax:</p>
+<pre><code>function_name() {
+    command 1
+    command 2
+}
+</code></pre>
+<p>In the above <code>greetings</code> script, I can place the code within a function that I might call <code>student_greeting</code>, and add another function I will call <code>break_greeting</code>.
+Since I am re-using the array variable in both functions, I can move it outside and before the functions.
+This makes it a global variable, since it is available to all the functions in the script.
+We still have the <code>$i</code> and <code>$j</code> variables within the functions.
+I can declare that to be a <code>local</code> variable to make it explicit.
+Then call the functions at the end of the script:</p>
+<pre><code>#!/usr/bin/env bash
+ 
+SEASONS=(winter spring summer fall)
+
+student_greeting() {
+	local i
+	for i in "${SEASONS[@]}" ; do
+		if [[ ${i} == "spring" || ${i} == "fall" ]] ; then
+			echo "I hope you have a nice ${i} semester."
+		fi
+	done
+}
+
+break_greeting() {
+	local j
+	for j in "${SEASONS[@]}" ; do
+		if [[ ${j} == "winter" || ${j} == "summer" ]] ; then
+			echo "I hope you have a nice ${j} break."
+		fi
+	done
+}
+
+student_greeting
+break_greeting
+</code></pre>
+<h3 id="global-versus-local-variables"><a class="header" href="#global-versus-local-variables">Global Versus Local Variables</a></h3>
+<p>By default, variables in Bash are global.
+Since <code>SEASONS</code>, in the example above, is a script-wide value that we are treating as fixed, I use an uppercase name (although it will work in lower case, too).
+The loop variables <code>i</code> and <code>j</code>, on the other hand, are explicitly declared <code>local</code> inside each function.
+This is not necessary, but it makes for better and safer code.
+If you are working within functions and want a variable to only be available within the function, you can declare it as local using <code>local var_name=value</code> or <code>local var_name</code>.</p>
+<h2 id="checking-scripts-with-shellcheck"><a class="header" href="#checking-scripts-with-shellcheck">Checking Scripts with ShellCheck</a></h2>
+<p>Finally, you can check your shell scripts using the <code>shellcheck</code> shell script analysis tool.
+To use it, let’s say I have saved the above script in a file named <code>greetings</code> in my <code>~/bin</code> directory.</p>
+<p>To check for errors, run the following command:</p>
+<pre><code>shellcheck ~/bin/greetings
 </code></pre>
 <p>If there are errors, <code>shellcheck</code> will tell you what they are and provide a link to documentation on the error.</p>
-<p>If you become seriously interested in <code>bash</code> scripting, then you should check out the various style guides that exist.
-For example, see the <a href="https://google.github.io/styleguide/shellguide.html">Shell Style Guide</a> that was authored by coders at Google.</p>
+<h2 id="case-and-select"><a class="header" href="#case-and-select"><code>case</code> and <code>select</code></a></h2>
+<p>This is only an introduction to <code>bash</code> scripting, and there is far more to learn.
+For example, <code>bash</code> also includes <code>case</code> and <code>select</code> statements.
+Both of these add interactive elements to our scripts.</p>
+<h2 id="conclusion-9"><a class="header" href="#conclusion-9">Conclusion</a></h2>
+<p>In this lecture, we’ve covered the basics of Bash scripting, including working with variables, loops, and conditionals.
+These tools form the foundation for automating tasks and creating powerful scripts.
+Continue practicing by writing small scripts for your own workflow, and explore the resources and style guides provided to deepen your understanding.</p>
+<p>If you become interested in <code>bash</code> scripting, then you should check out the various style guides that exist.
+For example, see the <a href="https://google.github.io/styleguide/shellguide.html">Shell Style Guide</a> that was authored by coders at Google and the additional resources listed below.</p>
 <h2 id="resources"><a class="header" href="#resources">Resources</a></h2>
 <p>I encourage you to explore some useful guides and cheat sheets on Bash scripting:</p>
 <ul>
@@ -3831,19 +3896,6 @@ For example, see the <a href="https://google.github.io/styleguide/shellguide.htm
 <li><a href="https://www.freecodecamp.org/news/shell-scripting-crash-course-how-to-write-bash-scripts-in-linux/">Shell Scripting for Beginners</a></li>
 <li><a href="https://fedoramagazine.org/bash-shell-scripting-for-beginners-part-1/">Bash Shell Scripting for Beginners</a></li>
 <li><a href="https://cs.lmu.edu/~ray/notes/bash/">Introduction to Bash</a></li>
-</ul>
-<h2 id="conclusion-9"><a class="header" href="#conclusion-9">Conclusion</a></h2>
-<p>In this lecture, we’ve covered the basics of Bash scripting, including working with variables, loops, and conditionals.
-These tools form the foundation for automating tasks and creating powerful scripts.
-Continue practicing by writing small scripts for your own workflow, and explore the resources and style guides provided to deepen your understanding.</p>
-<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
-<p>In this demo, we learned about:</p>
-<ul>
-<li>creating and referring to variables</li>
-<li>conditional expressions with <code>&amp;&amp;</code> and <code>||</code></li>
-<li>adding the <strong>shebang</strong> or <strong>hashbang</strong> at the beginning of a script</li>
-<li>looping with the <code>for</code> statement</li>
-<li>testing with the <code>if</code> statement</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="using-git-for-documentation-1"><a href="#using-git-for-documentation-1" class="header">Using Git for Documentation</a></h1>
@@ -4193,7 +4245,7 @@ In the following command, we can see how unstaged content has changed based on t
 <p>After staging a file, you can use the <code>git diff</code> command to see how content has changed in a file:</p>
 <pre><code>git diff --cached
 </code></pre>
-<h4 id="summary-1"><a class="header" href="#summary-1">Summary</a></h4>
+<h4 id="summary"><a class="header" href="#summary">Summary</a></h4>
 <ul>
 <li><code>git restore --staged &lt;file&gt;</code> : uncommits a file(s)</li>
 <li><code>git restore &lt;file&gt;</code> : restores file to last committed version</li>
