@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-1f0848f9.js";
+            window.path_to_searchindex_js = "searchindex-d4580ad6.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -3850,7 +3850,7 @@ In the following, if the value of the array equals fall or spring, then the scri
 seasons=(winter spring summer fall)
 
 for i in "${seasons[@]}" ; do
-    if [[ ${i} == "spring" || ${i} == "fall" ]] ; then
+    if [[ "${i}" == "spring" || "${i}" == "fall" ]] ; then
         echo "I hope you have a nice ${i} semester."
     fi
 done
@@ -3877,7 +3877,7 @@ SEASONS=(winter spring summer fall)
 student_greeting() {
 	local i
 	for i in "${SEASONS[@]}" ; do
-		if [[ ${i} == "spring" || ${i} == "fall" ]] ; then
+		if [[ "${i}" == "spring" || "${i}" == "fall" ]] ; then
 			echo "I hope you have a nice ${i} semester."
 		fi
 	done
@@ -3886,7 +3886,7 @@ student_greeting() {
 break_greeting() {
 	local j
 	for j in "${SEASONS[@]}" ; do
-		if [[ ${j} == "winter" || ${j} == "summer" ]] ; then
+		if [[ "${j}" == "winter" || "${j}" == "summer" ]] ; then
 			echo "I hope you have a nice ${j} break."
 		fi
 	done
@@ -3897,6 +3897,8 @@ break_greeting
 </code></pre>
 <h3 id="global-versus-local-variables"><a class="header" href="#global-versus-local-variables">Global Versus Local Variables</a></h3>
 <p>By default, variables in Bash are global.
+Global variables are variables accessible by all functions in a script; and
+local variables are variables accessible only within a function.
 Since <code>SEASONS</code>, in the example above, is a script-wide value that we are treating as fixed, I use an uppercase name (although it will work in lower case, too).
 The loop variables <code>i</code> and <code>j</code>, on the other hand, are explicitly declared <code>local</code> inside each function.
 This is not necessary, but it makes for better and safer code.
@@ -3908,6 +3910,11 @@ To use it, let’s say I have saved the above script in a file named <code>greet
 <pre><code>shellcheck ~/bin/greetings
 </code></pre>
 <p>If there are errors, <code>shellcheck</code> will tell you what they are and provide a link to documentation on the error.</p>
+<h2 id="execute-1"><a class="header" href="#execute-1">Execute</a></h2>
+<p>To make your script available for use at the command line, put the script file in your <code>PATH</code>,
+such as in <code>$HOME/bin</code>, and set it’s permissions to <code>x</code>:</p>
+<pre><code>chmod 766 ~/bin/greetings
+</code></pre>
 <h2 id="case-and-select"><a class="header" href="#case-and-select"><code>case</code> and <code>select</code></a></h2>
 <p>This is only an introduction to <code>bash</code> scripting, and there is far more to learn.
 For example, <code>bash</code> also includes <code>case</code> and <code>select</code> statements.
