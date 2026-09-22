@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0cd641c1.js";
+            window.path_to_searchindex_js = "searchindex-1f0848f9.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -3569,7 +3569,7 @@ Besides <code>bash</code>, a few examples include:</p>
 <p>Other operating systems may include their own shells.
 Windows OS has PowerShell, which includes the older <code>cmd.exe</code> (Command Prompt) shell as well as the much more capable PowerShell.</p>
 <p>Shells serve two purposes.
-They provide a mechanism for interactively using the operating system from a command prompt, and
+They provide a mechanism for interactively using the operating system from a command prompt, as we’ve been using it so far, and
 they provide programming capabilities for automation, or job control.</p>
 <p>The following is a brief intro to the main parts of scripting in Bash.
 If you have ever programmed before, many of these concepts will not be new to you.</p>
@@ -3601,18 +3601,33 @@ Thus, by using the <code>#!/usr/bin/env bash</code> shebang, you help ensure tha
 Just like when we write academic papers, where we might use APA, Chicago, MLA, or some other style guide, style guides exist for programming and scripting languages, too.
 Adhering to a style guide helps us to write clean, visually appealing scripts that are easier to maintain and understand.
 Consider checking out style guides early on, like the <a href="https://google.github.io/styleguide/shellguide.html">Google Shell Style Guide</a>.</p>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<p>Like other programming languages, we can add comments to our code.
+These might be notes we leave to remind us or others of the intent of a function or some other aspect of our program.
+In Bash, we use the pound sign <code>#</code> to indicate a comment.
+For example, the following function adds two integers, and the line beginning with a pound sign describes that:</p>
+<pre><code>#!/usr/bin/env bash
+
+# this function adds two integers
+add() {
+    local x="$1"
+    local y="$2"
+    result=$((x + y))
+    echo $result
+}
+</code></pre>
 <h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
 <p>One of the most important abilities of any programming or scripting language is to declare a variable.
 Variables enable us to attach some value to a name.
 Variables are often used to pass information to other parts of a program.</p>
 <p>In Bash, we declare variables first with the name of the variable, an equal sign, and then the value of the variable (the assignment) within double quotes.
 Unlike other programming languages, we do not insert spaces between the variable and assignment.
-In the following code snippet, which can be entered on the commandline, I create a variable named <code>name</code> and assign it the value <code>Sean</code>.
+In the following code snippet, which can be entered on the commandline, I create a variable named <code>first_name</code> and assign it the value <code>Sean</code>.
 I create another variable named <code>backup</code>  and assign it the value <code>/media</code>, representing a path on my filesystem.
 Then I use the <code>echo</code> and <code>cd</code> commands to test the variables:</p>
-<pre><code>name="Sean"
+<pre><code>first_name="Sean"
 backup="/media"
-echo "My name is ${name}"
+echo "My name is ${first_name}"
 echo "${backup}"
 cd "${backup}"
 pwd
@@ -3623,7 +3638,9 @@ For example, if we want a variable to refer to today’s day of week, we can use
 This “allows the output of a command to replace the command name” (see <code>man bash</code>).
 In the following, I use the <code>date +%A</code> command to assign the current day of the week to the variable named <strong>today</strong>.
 The output at the time this variable is set will differ if it is set on a different day.</p>
-<pre><code>date +%A
+<pre><code># run the command to test the output
+date +%A
+# assign the command to the variable named `today` using command substitution
 today="$(date +%A)"
 echo "${today}"
 </code></pre>
@@ -3639,21 +3656,25 @@ echo {5..1}
 echo {a..l}
 echo {l..a}
 </code></pre>
-<p>Another example: using brace notation, we can generate multiple sub-directories at once.
+<p>More on arrays below, but we can assign the values in a brace expansion to an array:</p>
+<pre><code>my_array=( {1..5} )
+echo "${my_array[1]}"
+</code></pre>
+<p>Using brace notation, we can generate multiple sub-directories at once.
 The following command creates a directory called <code>homework/</code> that contains two subdirectories: <code>drafts/</code> and <code>notes/</code>.
-From your home directory, do:</p>
-<pre><code>mkdir -p homework/{drafts,notes}
+In the following example, the <code>-p</code> option to <code>mkdir</code> creates the parent directory along with the subdirectories:</p>
+<pre><code>mkdir -p $HOME/homework/{drafts,notes}
 cd homework
 ls
 drafts/ notes/
 </code></pre>
 <h3 id="lists--arrays"><a class="header" href="#lists--arrays">Lists / Arrays</a></h3>
 <p>I can assign a list or an array to a variable using <code>()</code> parentheses.
-To create a variable named <code>seasons</code>, that contains multiple values, such as <code>winter spring summer fall</code>, I declare my variable as follows:</p>
+To create a variable named <code>seasons</code> that contains multiple values, such as <code>winter spring summer fall</code>, I declare my variable as follows:</p>
 <pre><code>seasons=(winter spring summer fall)
 </code></pre>
 <p>Bash lets me access parts of that array.
-In the following example, the <code>[@]</code> refers to the entire array and the <code>[n]</code> refers to a subscript in the array.
+In the following example, <code>[@]</code> refers to the entire array and <code>[n]</code> refers to a subscript in the array.
 Like other programming languages, the first subscript in an array begins with 0.</p>
 <pre><code>echo "${seasons[@]}"
 winter spring summer fall
@@ -3672,17 +3693,22 @@ summer
 </code></pre>
 <p>See <a href="https://devhints.io/bash#parameter-expansion">Parameter expansions</a> for more advanced techniques.</p>
 <h3 id="variable-naming"><a class="header" href="#variable-naming">Variable Naming</a></h3>
-<p>When naming variables, use lowercase or snake_case: <code>name</code> is more appropriate than <code>NAME</code>.
+<p>When naming variables, use lowercase or snake_case: e.g., <code>firstname</code> or <code>first_name</code> is more appropriate than <code>FIRSTNAME</code> or <code>FIRST_NAME</code>.
 By convention, variables created by your script generally use lowercase or <code>snake_case</code>.
 Uppercase names are commonly used for environmental variables and sometimes for values treated as constants.
 Using lowercase for ordinary variables also helps avoid accidentally conflicting with special shell or environmental variables such as <code>PATH</code>, <code>HOME</code>, <code>USER</code>, and <code>PWD</code>.</p>
+<blockquote>
+<p>Environmental variables are pre-set variables that store configuration data for your Bash session.
+If curious, you can examine these variables by echoing their values: <code>echo $HOME</code>, etc.
+To see all your environmental variables, run the <code>env</code> command.</p>
+</blockquote>
 <h2 id="looping"><a class="header" href="#looping">Looping</a></h2>
 <p>Looping is a common way to repeat an instruction until some specified condition is met.
 There are several looping methods in Bash that include: <code>for</code>, <code>while</code>, <code>until</code>, and <code>select</code>.</p>
 <h3 id="for-loops"><a class="header" href="#for-loops"><code>for</code> Loops</a></h3>
 <p>The <code>for</code> loop is often the most useful.
-In the following toy looping example, we instruct <code>bash</code> to assign the letter <strong>i</strong> to the sequence <strong>1,2,3,4,5</strong>.
-Each time it assigns <strong>i</strong> to those numbers, it <code>echo</code>s them to standard output:</p>
+In the following toy looping example, we instruct <code>bash</code> to assign the letter <code>i</code> to the sequence <code>1 2 3 4 5</code>.
+Each time it assigns <code>i</code> to those numbers, it <code>echo</code>s them to standard output:</p>
 <pre><code>for i in {1..5} ; do
   echo "i = ${i}"
 done
@@ -3705,7 +3731,8 @@ done ; echo "BLAST OFF!"
 <p>Note that I take advantage of brace expansion again, but this time reversing the ordering, as well as conditional execution.</p>
 </blockquote>
 <p>The <code>sleep</code> command is particularly useful in automation tasks where you want to pause execution between steps, such as monitoring scripts,
-where you might poll a resource at intervals, or in timed alerts.</p>
+where you might poll a resource at intervals, or in timed alerts.
+The command <code>sleep 1</code> pauses the shell for one second, the command <code>sleep 2</code> pauses the shell for two seconds, and so forth.</p>
 <h3 id="while-loops"><a class="header" href="#while-loops"><code>while</code> Loops</a></h3>
 <p>We can use a <code>while</code> loop instead of a <code>for</code> loop.
 Before entering a <code>while</code> loop, we initialize a counter with <code>count=5</code> (the variable <code>count</code> could be named something else).
@@ -3732,6 +3759,7 @@ until [[ $count -eq 0 ]] ; do
     sleep 1
 done ; echo "blast off"
 </code></pre>
+<p>Both <code>while</code> and <code>until</code> loops are useful when you need an indeterminate number of loops.</p>
 <h3 id="looping-arrays"><a class="header" href="#looping-arrays">Looping Arrays</a></h3>
 <p>We can loop through variable arrays (or lists).
 In the following <code>for</code> loop, I loop through the <strong>seasons</strong> variable first introduced above:</p>
@@ -3785,24 +3813,27 @@ The following <code>if</code> statement will test if <strong>paper.txt</strong> 
 If so, it’ll back up the file with the <code>cp</code> and echo back its success:</p>
 <pre><code>touch "$HOME/paper.bak"
 sleep 1
+# creating the paper.txt file after the paper.bak file, for this example, means paper.txt is newer than paper.bak
 echo "My paper" &gt; "$HOME/paper.txt"
 
 if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
   cp "$HOME/paper.txt" "$HOME/paper.bak" &amp;&amp; echo "Paper is backed up."
 fi
 </code></pre>
-<p>Here’s a script that prints info depending on which day of the week it is.
+<p>Here’s a script that tests whether today is either Tue or Thu.
+If it is either of those days, it prints that class is at 9:30am.
+If it’s neither Tue or Thu, then it prints that there is no class today.
 Let’s save it in a text file and call it <code>schedule.sh</code>:</p>
 <pre><code>#!/usr/bin/env bash
 
 day1="Tue"
 day2="Thu"
-day3="$(date +%a)"
+today="$(date +%a)"
 
-if [[ "$day3" = "$day1" ]] ; then
-  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day1"
-elif [[ "$day3" = "$day2" ]] ; then
-  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day2"
+if [[ "$today" = "$day1" ]] ; then
+  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "$today" "$day1"
+elif [[ "$today" = "$day2" ]] ; then
+  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "$today" "$day2"
 else
   printf "\nThere is no class today."
 fi
@@ -3837,8 +3868,8 @@ In <code>bash</code>, we define a function using the following syntax:</p>
 Since I am re-using the array variable in both functions, I can move it outside and before the functions.
 This makes it a global variable, since it is available to all the functions in the script.
 We still have the <code>$i</code> and <code>$j</code> variables within the functions.
-I can declare that to be a <code>local</code> variable to make it explicit.
-Then call the functions at the end of the script:</p>
+I can declare those to be <code>local</code> variables within their functions to make it explicit.
+Then we call the functions at the end of the script:</p>
 <pre><code>#!/usr/bin/env bash
  
 SEASONS=(winter spring summer fall)
@@ -3871,7 +3902,7 @@ The loop variables <code>i</code> and <code>j</code>, on the other hand, are exp
 This is not necessary, but it makes for better and safer code.
 If you are working within functions and want a variable to only be available within the function, you can declare it as local using <code>local var_name=value</code> or <code>local var_name</code>.</p>
 <h2 id="checking-scripts-with-shellcheck"><a class="header" href="#checking-scripts-with-shellcheck">Checking Scripts with ShellCheck</a></h2>
-<p>Finally, you can check your shell scripts using the <code>shellcheck</code> shell script analysis tool.
+<p>Finally, you can check your shell scripts using the <code>shellcheck</code> command.
 To use it, let’s say I have saved the above script in a file named <code>greetings</code> in my <code>~/bin</code> directory.</p>
 <p>To check for errors, run the following command:</p>
 <pre><code>shellcheck ~/bin/greetings
@@ -3880,7 +3911,12 @@ To use it, let’s say I have saved the above script in a file named <code>greet
 <h2 id="case-and-select"><a class="header" href="#case-and-select"><code>case</code> and <code>select</code></a></h2>
 <p>This is only an introduction to <code>bash</code> scripting, and there is far more to learn.
 For example, <code>bash</code> also includes <code>case</code> and <code>select</code> statements.
-Both of these add interactive elements to our scripts.</p>
+Both of these add interactive elements to our scripts and can make creating advanced programs fun.
+Read more about them at:</p>
+<ul>
+<li><a href="https://bash.cyberciti.biz/guide/The_case_statement">The case statement</a></li>
+<li><a href="https://bash.cyberciti.biz/guide/Select_loop">Select loop</a></li>
+</ul>
 <h2 id="conclusion-9"><a class="header" href="#conclusion-9">Conclusion</a></h2>
 <p>In this lecture, we’ve covered the basics of Bash scripting, including working with variables, loops, and conditionals.
 These tools form the foundation for automating tasks and creating powerful scripts.
