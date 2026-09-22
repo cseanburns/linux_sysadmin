@@ -30,7 +30,7 @@ Other operating systems may include their own shells.
 Windows OS has PowerShell, which includes the older `cmd.exe` (Command Prompt) shell as well as the much more capable PowerShell.
 
 Shells serve two purposes.
-They provide a mechanism for interactively using the operating system from a command prompt, and
+They provide a mechanism for interactively using the operating system from a command prompt, as we've been using it so far, and
 they provide programming capabilities for automation, or job control.
 
 The following is a brief intro to the main parts of scripting in Bash.
@@ -75,6 +75,25 @@ Just like when we write academic papers, where we might use APA, Chicago, MLA, o
 Adhering to a style guide helps us to write clean, visually appealing scripts that are easier to maintain and understand.
 Consider checking out style guides early on, like the [Google Shell Style Guide][shellstyle_google].
 
+## Comments
+
+Like other programming languages, we can add comments to our code.
+These might be notes we leave to remind us or others of the intent of a function or some other aspect of our program.
+In Bash, we use the pound sign `#` to indicate a comment.
+For example, the following function adds two integers, and the line beginning with a pound sign describes that:
+
+```
+#!/usr/bin/env bash
+
+# this function adds two integers
+add() {
+    local x="$1"
+    local y="$2"
+    result=$((x + y))
+    echo $result
+}
+```
+
 ## Variables
 
 One of the most important abilities of any programming or scripting language is to declare a variable.
@@ -83,20 +102,19 @@ Variables are often used to pass information to other parts of a program.
 
 In Bash, we declare variables first with the name of the variable, an equal sign, and then the value of the variable (the assignment) within double quotes.
 Unlike other programming languages, we do not insert spaces between the variable and assignment.
-In the following code snippet, which can be entered on the commandline, I create a variable named `name` and assign it the value `Sean`.
+In the following code snippet, which can be entered on the commandline, I create a variable named `first_name` and assign it the value `Sean`.
 I create another variable named `backup`  and assign it the value `/media`, representing a path on my filesystem.
 Then I use the `echo` and `cd` commands to test the variables:
 
 ```
-name="Sean"
+first_name="Sean"
 backup="/media"
-echo "My name is ${name}"
+echo "My name is ${first_name}"
 echo "${backup}"
 cd "${backup}"
 pwd
 cd
 ```
-
 
 Variables may include values that may change given some context.
 For example, if we want a variable to refer to today's day of week, we can use [command substitution][commandsub].
@@ -105,7 +123,9 @@ In the following, I use the `date +%A` command to assign the current day of the 
 The output at the time this variable is set will differ if it is set on a different day.
 
 ```
+# run the command to test the output
 date +%A
+# assign the command to the variable named `today` using command substitution
 today="$(date +%A)"
 echo "${today}"
 ```
@@ -126,12 +146,19 @@ echo {a..l}
 echo {l..a}
 ```
 
-Another example: using brace notation, we can generate multiple sub-directories at once.
-The following command creates a directory called `homework/` that contains two subdirectories: `drafts/` and `notes/`.
-From your home directory, do:
+More on arrays below, but we can assign the values in a brace expansion to an array:
 
 ```
-mkdir -p homework/{drafts,notes}
+my_array=( {1..5} )
+echo "${my_array[1]}"
+```
+
+Using brace notation, we can generate multiple sub-directories at once.
+The following command creates a directory called `homework/` that contains two subdirectories: `drafts/` and `notes/`.
+In the following example, the `-p` option to `mkdir` creates the parent directory along with the subdirectories:
+
+```
+mkdir -p $HOME/homework/{drafts,notes}
 cd homework
 ls
 drafts/ notes/
@@ -140,14 +167,14 @@ drafts/ notes/
 ### Lists / Arrays
 
 I can assign a list or an array to a variable using `()` parentheses.
-To create a variable named `seasons`, that contains multiple values, such as `winter spring summer fall`, I declare my variable as follows:
+To create a variable named `seasons` that contains multiple values, such as `winter spring summer fall`, I declare my variable as follows:
 
 ```
 seasons=(winter spring summer fall)
 ```
 
 Bash lets me access parts of that array.
-In the following example, the `[@]` refers to the entire array and the `[n]` refers to a subscript in the array.
+In the following example, `[@]` refers to the entire array and `[n]` refers to a subscript in the array.
 Like other programming languages, the first subscript in an array begins with 0.
 
 ```
@@ -174,10 +201,14 @@ See [Parameter expansions][parameterexp] for more advanced techniques.
 
 ### Variable Naming
 
-When naming variables, use lowercase or snake_case: `name` is more appropriate than `NAME`.
+When naming variables, use lowercase or snake_case: e.g., `firstname` or `first_name` is more appropriate than `FIRSTNAME` or `FIRST_NAME`.
 By convention, variables created by your script generally use lowercase or `snake_case`.
 Uppercase names are commonly used for environmental variables and sometimes for values treated as constants.
 Using lowercase for ordinary variables also helps avoid accidentally conflicting with special shell or environmental variables such as `PATH`, `HOME`, `USER`, and `PWD`.
+
+> Environmental variables are pre-set variables that store configuration data for your Bash session.
+> If curious, you can examine these variables by echoing their values: `echo $HOME`, etc.
+> To see all your environmental variables, run the `env` command.
 
 ## Looping
 
@@ -187,8 +218,8 @@ There are several looping methods in Bash that include: `for`, `while`, `until`,
 ### `for` Loops
 
 The `for` loop is often the most useful.
-In the following toy looping example, we instruct `bash` to assign the letter **i** to the sequence **1,2,3,4,5**.
-Each time it assigns **i** to those numbers, it `echo`s them to standard output:
+In the following toy looping example, we instruct `bash` to assign the letter `i` to the sequence `1 2 3 4 5`.
+Each time it assigns `i` to those numbers, it `echo`s them to standard output:
 
 ```
 for i in {1..5} ; do
@@ -217,6 +248,7 @@ done ; echo "BLAST OFF!"
 
 The `sleep` command is particularly useful in automation tasks where you want to pause execution between steps, such as monitoring scripts,
 where you might poll a resource at intervals, or in timed alerts.
+The command `sleep 1` pauses the shell for one second, the command `sleep 2` pauses the shell for two seconds, and so forth.
 
 ### `while` Loops
 
@@ -252,6 +284,8 @@ until [[ $count -eq 0 ]] ; do
     sleep 1
 done ; echo "blast off"
 ```
+
+Both `while` and `until` loops are useful when you need an indeterminate number of loops.
 
 ### Looping Arrays
 
@@ -320,6 +354,7 @@ If so, it'll back up the file with the `cp` and echo back its success:
 ```
 touch "$HOME/paper.bak"
 sleep 1
+# creating the paper.txt file after the paper.bak file, for this example, means paper.txt is newer than paper.bak
 echo "My paper" > "$HOME/paper.txt"
 
 if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
@@ -327,7 +362,9 @@ if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
 fi
 ```
 
-Here's a script that prints info depending on which day of the week it is.
+Here's a script that tests whether today is either Tue or Thu.
+If it is either of those days, it prints that class is at 9:30am.
+If it's neither Tue or Thu, then it prints that there is no class today.
 Let's save it in a text file and call it `schedule.sh`:
 
 ```
@@ -335,12 +372,12 @@ Let's save it in a text file and call it `schedule.sh`:
 
 day1="Tue"
 day2="Thu"
-day3="$(date +%a)"
+today="$(date +%a)"
 
-if [[ "$day3" = "$day1" ]] ; then
-  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day1"
-elif [[ "$day3" = "$day2" ]] ; then
-  printf "\nIf %s is %s, then class is at 9:30am.\n" "$day3" "$day2"
+if [[ "$today" = "$day1" ]] ; then
+  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "$today" "$day1"
+elif [[ "$today" = "$day2" ]] ; then
+  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "$today" "$day2"
 else
   printf "\nThere is no class today."
 fi
@@ -383,8 +420,8 @@ In the above `greetings` script, I can place the code within a function that I m
 Since I am re-using the array variable in both functions, I can move it outside and before the functions.
 This makes it a global variable, since it is available to all the functions in the script.
 We still have the `$i` and `$j` variables within the functions.
-I can declare that to be a `local` variable to make it explicit.
-Then call the functions at the end of the script:
+I can declare those to be `local` variables within their functions to make it explicit.
+Then we call the functions at the end of the script:
 
 ```
 #!/usr/bin/env bash
@@ -423,7 +460,7 @@ If you are working within functions and want a variable to only be available wit
 
 ## Checking Scripts with ShellCheck
 
-Finally, you can check your shell scripts using the `shellcheck` shell script analysis tool.
+Finally, you can check your shell scripts using the `shellcheck` command.
 To use it, let's say I have saved the above script in a file named `greetings` in my `~/bin` directory.
 
 To check for errors, run the following command:
@@ -438,7 +475,11 @@ If there are errors, `shellcheck` will tell you what they are and provide a link
 
 This is only an introduction to `bash` scripting, and there is far more to learn.
 For example, `bash` also includes `case` and `select` statements.
-Both of these add interactive elements to our scripts.
+Both of these add interactive elements to our scripts and can make creating advanced programs fun.
+Read more about them at:
+
+- [The case statement][case_cyberciti]
+- [Select loop][select_cyberciti]
 
 ## Conclusion
 
@@ -468,6 +509,7 @@ I encourage you to explore some useful guides and cheat sheets on Bash scripting
 [bashshellcheck]:https://www.shellcheck.net/
 [bash_wiki]:https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 [braceexp]:https://www.linuxjournal.com/content/bash-brace-expansion
+[case_cyberciti]:https://bash.cyberciti.biz/guide/The_case_statement
 [commandsub]:https://www.gnu.org/software/bash/manual/html_node/Command-Substitution.html
 [curlies]:https://www.howtogeek.com/725657/how-to-use-brace-expansion-in-linuxs-bash-shell/
 [introtobash]:https://cs.lmu.edu/~ray/notes/bash/
@@ -475,5 +517,6 @@ I encourage you to explore some useful guides and cheat sheets on Bash scripting
 [parameter_opensource]:https://opensource.com/article/17/6/bash-parameter-expansion
 [posix]:https://posix.opengroup.org/
 [script_wiki]:https://en.wikipedia.org/wiki/Scripting_language
+[select_cyberciti]:https://bash.cyberciti.biz/guide/Select_loop
 [shebang_wiki]:https://en.wikipedia.org/wiki/Shebang_(Unix)
 [shellstyle_google]:https://google.github.io/styleguide/shellguide.html
