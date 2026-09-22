@@ -397,7 +397,7 @@ In the following, if the value of the array equals fall or spring, then the scri
 seasons=(winter spring summer fall)
 
 for i in "${seasons[@]}" ; do
-    if [[ ${i} == "spring" || ${i} == "fall" ]] ; then
+    if [[ "${i}" == "spring" || "${i}" == "fall" ]] ; then
         echo "I hope you have a nice ${i} semester."
     fi
 done
@@ -431,7 +431,7 @@ SEASONS=(winter spring summer fall)
 student_greeting() {
 	local i
 	for i in "${SEASONS[@]}" ; do
-		if [[ ${i} == "spring" || ${i} == "fall" ]] ; then
+		if [[ "${i}" == "spring" || "${i}" == "fall" ]] ; then
 			echo "I hope you have a nice ${i} semester."
 		fi
 	done
@@ -440,7 +440,7 @@ student_greeting() {
 break_greeting() {
 	local j
 	for j in "${SEASONS[@]}" ; do
-		if [[ ${j} == "winter" || ${j} == "summer" ]] ; then
+		if [[ "${j}" == "winter" || "${j}" == "summer" ]] ; then
 			echo "I hope you have a nice ${j} break."
 		fi
 	done
@@ -453,6 +453,8 @@ break_greeting
 ### Global Versus Local Variables
 
 By default, variables in Bash are global.
+Global variables are variables accessible by all functions in a script; and
+local variables are variables accessible only within a function.
 Since `SEASONS`, in the example above, is a script-wide value that we are treating as fixed, I use an uppercase name (although it will work in lower case, too).
 The loop variables `i` and `j`, on the other hand, are explicitly declared `local` inside each function.
 This is not necessary, but it makes for better and safer code.
@@ -470,6 +472,15 @@ shellcheck ~/bin/greetings
 ```
 
 If there are errors, `shellcheck` will tell you what they are and provide a link to documentation on the error.
+
+## Execute
+
+To make your script available for use at the command line, put the script file in your `PATH`,
+such as in `$HOME/bin`, and set it's permissions to `x`:
+
+```
+chmod 766 ~/bin/greetings
+```
 
 ## `case` and `select`
 
