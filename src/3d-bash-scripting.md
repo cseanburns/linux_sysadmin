@@ -260,8 +260,8 @@ As long as that condition is true, the loop continues.
 ```
 count=5
 
-while [[ $count -ge 1 ]] ; do
-    echo "$count"
+while [[ "${count}" -ge 1 ]] ; do
+    echo "${count}"
     ((count--))
     sleep 1
 done ; echo "blast off"
@@ -278,8 +278,8 @@ In this example, the condition becomes true when `$count` equals zero.
 ```
 count=5
 
-until [[ $count -eq 0 ]] ; do
-    echo "$count"
+until [[ "${count}" -eq 0 ]] ; do
+    echo "${count}"
     ((count--))
     sleep 1
 done ; echo "blast off"
@@ -348,15 +348,22 @@ fi
 We can test file conditions.
 Let's first create a file called **paper.txt** and a file called **paper.bak**.
 We will add some trivial content to **paper.txt** but not to the **paper.bak**.
-The following `if` statement will test if **paper.txt**  has a more recent modification date.
-If so, it'll back up the file with the `cp` and echo back its success:
+The following `if` statement will test if **paper.txt** has a more recent modification date.
+If so, it'll back up the file with the `cp` and echo back its success.
+
+First, create the two files and add a bit of text to the text file:
 
 ```
 touch "$HOME/paper.bak"
 sleep 1
+
 # creating the paper.txt file after the paper.bak file, for this example, means paper.txt is newer than paper.bak
 echo "My paper" > "$HOME/paper.txt"
+```
 
+And then run the test and do the backup if it passes:
+
+```
 if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
   cp "$HOME/paper.txt" "$HOME/paper.bak" && echo "Paper is backed up."
 fi
@@ -374,10 +381,10 @@ day1="Tue"
 day2="Thu"
 today="$(date +%a)"
 
-if [[ "$today" = "$day1" ]] ; then
-  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "$today" "$day1"
-elif [[ "$today" = "$day2" ]] ; then
-  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "$today" "$day2"
+if [[ "${today}" = "${day1}" ]] ; then
+  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "${today}" "${day1}"
+elif [[ "${today}" = "${day2}" ]] ; then
+  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "${today}" "${day2}"
 else
   printf "\nThere is no class today."
 fi
