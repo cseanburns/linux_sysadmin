@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-6a3458e7.js";
+            window.path_to_searchindex_js = "searchindex-25306bc8.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -380,7 +380,7 @@ while [[ "${count}" -ge 1 ]] ; do
     echo "${count}"
     ((count--))
     sleep 1
-done ; echo "blast off"
+done ; echo "BLAST OFF!"
 </code></pre>
 <h3 id="until-loops"><a class="header" href="#until-loops"><code>until</code> Loops</a></h3>
 <p><code>while</code> loops terminate when the condition becomes false.
@@ -393,7 +393,7 @@ until [[ "${count}" -eq 0 ]] ; do
     echo "${count}"
     ((count--))
     sleep 1
-done ; echo "blast off"
+done ; echo "BLAST OFF!"
 </code></pre>
 <p>Both <code>while</code> and <code>until</code> loops are useful when you need an indeterminate number of loops.</p>
 <h3 id="looping-arrays"><a class="header" href="#looping-arrays">Looping Arrays</a></h3>
@@ -474,7 +474,7 @@ if [[ "${today}" = "${day1}" ]] ; then
 elif [[ "${today}" = "${day2}" ]] ; then
   printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "${today}" "${day2}"
 else
-  printf "\nThere is no class today."
+  printf "\nThere is no class today.\n"
 fi
 </code></pre>
 <blockquote>
