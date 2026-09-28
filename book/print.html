@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-d4580ad6.js";
+            window.path_to_searchindex_js = "searchindex-6a3458e7.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -3740,8 +3740,8 @@ The <code>while</code> statement then tests a <strong>condition</strong> before 
 As long as that condition is true, the loop continues.</p>
 <pre><code>count=5
 
-while [[ $count -ge 1 ]] ; do
-    echo "$count"
+while [[ "${count}" -ge 1 ]] ; do
+    echo "${count}"
     ((count--))
     sleep 1
 done ; echo "blast off"
@@ -3753,8 +3753,8 @@ In the above example, the condition (initially <code>count=5</code>) becomes fal
 In this example, the condition becomes true when <code>$count</code> equals zero.</p>
 <pre><code>count=5
 
-until [[ $count -eq 0 ]] ; do
-    echo "$count"
+until [[ "${count}" -eq 0 ]] ; do
+    echo "${count}"
     ((count--))
     sleep 1
 done ; echo "blast off"
@@ -3809,14 +3809,17 @@ fi
 <p>We can test file conditions.
 Let’s first create a file called <strong>paper.txt</strong> and a file called <strong>paper.bak</strong>.
 We will add some trivial content to <strong>paper.txt</strong> but not to the <strong>paper.bak</strong>.
-The following <code>if</code> statement will test if <strong>paper.txt</strong>  has a more recent modification date.
-If so, it’ll back up the file with the <code>cp</code> and echo back its success:</p>
+The following <code>if</code> statement will test if <strong>paper.txt</strong> has a more recent modification date.
+If so, it’ll back up the file with the <code>cp</code> and echo back its success.</p>
+<p>First, create the two files and add a bit of text to the text file:</p>
 <pre><code>touch "$HOME/paper.bak"
 sleep 1
+
 # creating the paper.txt file after the paper.bak file, for this example, means paper.txt is newer than paper.bak
 echo "My paper" &gt; "$HOME/paper.txt"
-
-if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
+</code></pre>
+<p>And then run the test and do the backup if it passes:</p>
+<pre><code>if [[ "$HOME/paper.txt" -nt "$HOME/paper.bak" ]] ; then
   cp "$HOME/paper.txt" "$HOME/paper.bak" &amp;&amp; echo "Paper is backed up."
 fi
 </code></pre>
@@ -3830,10 +3833,10 @@ day1="Tue"
 day2="Thu"
 today="$(date +%a)"
 
-if [[ "$today" = "$day1" ]] ; then
-  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "$today" "$day1"
-elif [[ "$today" = "$day2" ]] ; then
-  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "$today" "$day2"
+if [[ "${today}" = "${day1}" ]] ; then
+  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "${today}" "${day1}"
+elif [[ "${today}" = "${day2}" ]] ; then
+  printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "${today}" "${day2}"
 else
   printf "\nThere is no class today."
 fi
