@@ -264,7 +264,7 @@ while [[ "${count}" -ge 1 ]] ; do
     echo "${count}"
     ((count--))
     sleep 1
-done ; echo "blast off"
+done ; echo "BLAST OFF!"
 ```
 
 ### `until` Loops
@@ -282,7 +282,7 @@ until [[ "${count}" -eq 0 ]] ; do
     echo "${count}"
     ((count--))
     sleep 1
-done ; echo "blast off"
+done ; echo "BLAST OFF!"
 ```
 
 Both `while` and `until` loops are useful when you need an indeterminate number of loops.
@@ -386,7 +386,7 @@ if [[ "${today}" = "${day1}" ]] ; then
 elif [[ "${today}" = "${day2}" ]] ; then
   printf "\nIf %s is %s, then ICT 418: Linux Systems Administration is at 9:30am.\n" "${today}" "${day2}"
 else
-  printf "\nThere is no class today."
+  printf "\nThere is no class today.\n"
 fi
 ```
 
