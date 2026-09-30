@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-58c34faa.js";
+            window.path_to_searchindex_js = "searchindex-e6455de2.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -4392,8 +4392,171 @@ server deployment guides, maintenance procedures, and probably more.</p>
 <h1 id="linux-on-the-cloud-1"><a href="#linux-on-the-cloud-1" class="header">Linux on the Cloud</a></h1>
 <h2 id="linux-on-the-cloud"><a class="header" href="#linux-on-the-cloud">Linux on the Cloud</a></h2>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="create-a-virtual-machine-1"><a href="#create-a-virtual-machine-1" class="header">Create a Virtual Machine</a></h1>
-<h2 id="create-a-virtual-machine"><a class="header" href="#create-a-virtual-machine">Create a Virtual Machine</a></h2>
+<h1 id="create-a-virtual-machine"><a class="header" href="#create-a-virtual-machine">Create a Virtual Machine</a></h1>
+<p>The next step is to create and launch your own virtual machine.
+We can use several hosting solutions for this, but for our purposes, we will use <a href="https://www.digitalocean.com/">DigitalOcean</a>.</p>
+<p>Note that you will need a debit or credit card for this, and that this will incur a cost.
+The cost should be around $4.00 or less per month, but you will want to monitor your costs on the DigitalOcean website.</p>
+<h2 id="part-1-start-creating-your-droplet"><a class="header" href="#part-1-start-creating-your-droplet">Part 1: Start creating your Droplet</a></h2>
+<ol>
+<li>Visit the <a href="https://www.digitalocean.com/">DigitalOcean</a> website.</li>
+<li>Sign up or log in. You can create or log in with your Google account. Other account options are available, too.</li>
+</ol>
+<p>Once you are logged in, you can create what DigitalOcean calls a <strong>Droplet</strong>.
+This is their term for a virtual machine.
+On the main page, you will see a <strong>Quick Actions</strong> section.
+In this section, click on <strong>Create a Droplet</strong>.
+This will take you to the <strong>Create Droplet</strong> page where you will pick the options for your Droplet:</p>
+<ol>
+<li><strong>Choose a datacenter region</strong>
+<ul>
+<li>Select the default option or choose a location closer to you under the <strong>Additional datacenter regions</strong> dropdown menu.</li>
+</ul>
+</li>
+<li><strong>Choose an image</strong>
+<ul>
+<li>This is where you select your Linux distribution for your Droplet.</li>
+<li>Choose the default option, which should be <strong>Ubuntu (Recommended) 24.04 (LTS) x64</strong></li>
+</ul>
+</li>
+<li><strong>Choose a Droplet Plan</strong>
+<ul>
+<li>Select <strong>Regular Disk Type: SSD</strong></li>
+<li>Select <strong>$4.00/mo 1vCPU - 512 MB RAM - 10GB SSD - 500GB Transfer</strong></li>
+</ul>
+</li>
+</ol>
+<p>The next step is to create and add an SSH key.
+The steps depend on which operating system you are using.</p>
+<h2 id="part-2-create-an-ssh-key-on-your-computer"><a class="header" href="#part-2-create-an-ssh-key-on-your-computer">Part 2: Create an SSH key on your computer</a></h2>
+<h3 id="ssh-key-on-windows"><a class="header" href="#ssh-key-on-windows">SSH Key on Windows</a></h3>
+<h4 id="step-1-open-powershell"><a class="header" href="#step-1-open-powershell">Step 1: Open Powershell</a></h4>
+<ol>
+<li>Press the <strong>Windows Key</strong> on your keyboard.</li>
+<li>Type <code>powershell</code></li>
+<li>Click on <strong>Windows Powershell</strong> to open it.</li>
+</ol>
+<h4 id="step-2-run-the-generation-command"><a class="header" href="#step-2-run-the-generation-command">Step 2: Run the Generation Command</a></h4>
+<ol>
+<li>
+<p>Run the following command:</p>
+<pre><code>ssh-keygen -t ed25519 -C "ICT418 Droplet"
+</code></pre>
+<ul>
+<li><strong>NOTE:</strong> if you receive a terminal message that your SSH key already exists, <strong>do not overwrite it</strong>. Instead, skip to <strong>Step 5</strong> below.</li>
+</ul>
+</li>
+</ol>
+<h4 id="step-3-follow-the-prompts"><a class="header" href="#step-3-follow-the-prompts">Step 3: Follow the Prompts</a></h4>
+<ol>
+<li>
+<p><strong>Save Location:</strong> The terminal will prompt you to choose where to save the key:</p>
+<pre><code>Enter file in which to save the key (`C:\Users\YourName/.ssh/id_ed25519`):
+</code></pre>
+<ul>
+<li>Press <strong>Enter</strong> to accept the default location.</li>
+</ul>
+</li>
+<li>
+<p><strong>Passphrase:</strong> Just press <strong>Enter</strong> twice to leave this blank (i.e., do not create a passphrase). In other circumstances, protecting an SSH private key with a passphrase is recommended. But for now, we can leave this passwordless.</p>
+<pre><code>Enter passphrase (empty for no passphrase):
+</code></pre>
+</li>
+</ol>
+<h4 id="step-4-locate-your-keys"><a class="header" href="#step-4-locate-your-keys">Step 4: Locate Your Keys</a></h4>
+<p>Once completed, the terminal will display a “randomart” confirmation image.
+Your keys will be stored in your profile folder.</p>
+<ul>
+<li><strong>Default Directory:</strong> <code>C:\Users\YourName\.ssh\</code></li>
+<li><code>id_ed25519</code>: This is your <strong>private key</strong>. Keep this secret and secure on your machine.</li>
+<li><code>id_ed25519.pub</code>: This is your <strong>public key</strong>. You will upload this to your DigitalOcean Droplet.</li>
+</ul>
+<h4 id="step-5-copy-your-public-key"><a class="header" href="#step-5-copy-your-public-key">Step 5: Copy your Public Key</a></h4>
+<p>To copy your public key to your clipboard, use the following command in your terminal:</p>
+<pre><code>Get-Content ~/.ssh/id_ed25519.pub | Set-Clipboard
+</code></pre>
+<h3 id="ssh-key-on-macos"><a class="header" href="#ssh-key-on-macos">SSH Key on macOS</a></h3>
+<h4 id="step-1-open-a-terminal"><a class="header" href="#step-1-open-a-terminal">Step 1: Open a Terminal</a></h4>
+<ol>
+<li>Open the <strong>Terminal</strong> application. You can use Spotlight (<code>Command-Space</code>) to search for <code>terminal</code>.</li>
+<li>Click on <strong>Terminal</strong> to open.</li>
+</ol>
+<h4 id="step-2-run-the-generation-command-1"><a class="header" href="#step-2-run-the-generation-command-1">Step 2: Run the Generation Command</a></h4>
+<ol>
+<li>
+<p>Run the following command:</p>
+<pre><code>ssh-keygen -t ed25519 -C "ICT418 Droplet"
+</code></pre>
+<ul>
+<li><strong>NOTE:</strong> if you receive a terminal message that your SSH key already exists, <strong>do not overwrite it</strong>. Instead, skip to <strong>Step 5</strong> below.</li>
+</ul>
+</li>
+</ol>
+<h4 id="step-3-follow-the-prompts-1"><a class="header" href="#step-3-follow-the-prompts-1">Step 3: Follow the Prompts</a></h4>
+<ol>
+<li>
+<p><strong>Save Location:</strong> The terminal will prompt you to choose where to save the key:</p>
+<pre><code>Enter file in which to save the key (`~/.ssh/id_ed25519`)
+</code></pre>
+<ul>
+<li>Press <strong>Enter</strong> to accept the default location.</li>
+</ul>
+</li>
+<li>
+<p><strong>Passphrase:</strong> Just press <strong>Enter</strong> twice to leave this blank (i.e., do not create a passphrase). In other circumstances, protecting an SSH private key with a passphrase is recommended. But for now, we can leave this passwordless.</p>
+<pre><code>Enter passphrase (empty for no passphrase):
+</code></pre>
+</li>
+</ol>
+<h4 id="step-4-locate-your-keys-1"><a class="header" href="#step-4-locate-your-keys-1">Step 4: Locate Your Keys</a></h4>
+<p>Once completed, the terminal will display a “randomart” confirmation image.
+Your keys will be stored in your profile folder.</p>
+<ul>
+<li><strong>Default Directory:</strong> Accept as suggested (<code>~/.ssh/</code>)</li>
+<li><code>~/.ssh/id_ed25519</code>: This is your <strong>private key</strong>. Keep this secret and secure on your machine.</li>
+<li><code>~/.ssh/id_ed25519.pub</code>: This is your <strong>public key</strong>. You will upload this to your DigitalOcean Droplet.</li>
+</ul>
+<h4 id="step-5-copy-your-public-key-1"><a class="header" href="#step-5-copy-your-public-key-1">Step 5: Copy your Public Key</a></h4>
+<p>To copy your public key to your clipboard, use the following command in your terminal.</p>
+<pre><code>pbcopy &lt; ~/.ssh/id_ed25519.pub
+</code></pre>
+<h2 id="part-3-finish-creating-and-connect-to-your-droplet"><a class="header" href="#part-3-finish-creating-and-connect-to-your-droplet">Part 3: Finish creating and connect to your Droplet</a></h2>
+<ol>
+<li>Click on <strong>Add SSH Key</strong>.</li>
+<li>Paste your <strong>public key</strong> into the box labeled <strong>SSH Key content</strong></li>
+<li><strong>Give your SSH Key a name</strong>: enter “laptop” or similar to identify the machine the key was created on and that you will use to connect to your Droplet.</li>
+<li><strong>Give your Droplet a name</strong>: Feel free to leave this as the default or update it with something more personal, if you would like.</li>
+<li>Skip to <strong>Finalize</strong> section and select a <strong>project</strong> for your Droplet.</li>
+<li>Click on <strong>Create Droplet</strong> to have DigitalOcean create your new virtual machine (aka, Droplet).</li>
+</ol>
+<p>Once your Droplet has been created, then:</p>
+<ol start="7">
+<li>
+<p>Locate the Droplet’s public IP address on the DigitalOcean page.</p>
+</li>
+<li>
+<p>Open PowerShell or Terminal and enter:</p>
+<pre><code>ssh root@your_IP_address
+</code></pre>
+<p>You will see a message asking to confirm the authenticity of your host:</p>
+<pre><code>Are you sure you want to continue connecting (yes/no/[fingerprint])?
+</code></pre>
+<p>For this newly created Droplet, type:</p>
+<pre><code>yes
+</code></pre>
+</li>
+<li>
+<p>Once you are connected, your command prompt will change. You should now be logged in to your Droplet as the <code>root</code> user. Congratulations! You have created your own virtual machine and connected to it remotely! To see that you are logged in as the <code>root</code> user, type:</p>
+<pre><code>whoami
+</code></pre>
+<p>You should see:</p>
+<pre><code>root
+</code></pre>
+</li>
+</ol>
+<p>You are now working on a remote computer (a virtual machine / Droplet).</p>
+<pre><code>your computer / laptop → SSH → another computer (Droplet) → root shell
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="managing-the-system"><a class="header" href="#managing-the-system">Managing the System</a></h1>
 <p>Now that we have the basics of the command line interface down, it’s time to learn some systems administration.
