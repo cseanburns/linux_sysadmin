@@ -92,6 +92,9 @@ add() {
     result=$((x + y))
     echo $result
 }
+
+# call function
+add "$@"
 ```
 
 ## Variables
