@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-e6455de2.js";
+            window.path_to_searchindex_js = "searchindex-9e7e9b4b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-5298ecb6.js"></script>
@@ -4389,8 +4389,21 @@ server deployment guides, maintenance procedures, and probably more.</p>
 </ol>
 <p>And most importantly, start documenting everything with a <code>git</code> based workflow.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="linux-on-the-cloud-1"><a href="#linux-on-the-cloud-1" class="header">Linux on the Cloud</a></h1>
-<h2 id="linux-on-the-cloud"><a class="header" href="#linux-on-the-cloud">Linux on the Cloud</a></h2>
+<h1 id="linux-on-the-cloud"><a class="header" href="#linux-on-the-cloud">Linux on the Cloud</a></h1>
+<p>Up to this point, we have used the command line on a shared server.
+This meant that you had no control over the server itself.
+You could work with files, run commands, and explore the system, but most administrative tasks were restricted to the <code>root</code> user.</p>
+<p>Your path to independence begins now!</p>
+<p>In the following sections, you will create your own Linux virtual machine (VM) using a hosting service.
+In the lessons that follow, we will use DigitalOcean’s hosting service.
+DigitalOcean calls its VMs <strong>Droplets</strong>.
+Unlike our shared server, your Droplets (or VMs) will belong to you, and you will have full administrative access to it and full responsibility for it.
+You will learn how to create users, install and configure software, manage services, change system settings, and eventually install and operate your own web server.</p>
+<p>Creating a VM introduces an important part of Linux systems administration, which is working with a computer that is somewhere else (i.e., on the cloud).
+Like our shared server, the VM will not have a monitor, keyboard, or graphical user interface (i.e., a desktop) for you to use.
+Just like with our shared server, you will connect to it remotely from your own computer using <strong>SSH</strong> (Secure Shell) and administer the VM through the command line.</p>
+<p>In this section, our goal is to get the machine running and connected to it.
+Then we will begin to administer and configure it as we move through the rest of this book.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="create-a-virtual-machine"><a class="header" href="#create-a-virtual-machine">Create a Virtual Machine</a></h1>
 <p>The next step is to create and launch your own virtual machine.
@@ -4557,6 +4570,10 @@ Your keys will be stored in your profile folder.</p>
 <p>You are now working on a remote computer (a virtual machine / Droplet).</p>
 <pre><code>your computer / laptop → SSH → another computer (Droplet) → root shell
 </code></pre>
+<p><strong>NOTE!</strong> The <code>root</code> user can do most anything on the server.
+This includes deleting any files (including system files, applications, etc).
+Thus, be careful of the commands that you run as <code>root</code>.
+In the next section, we will learn how to create a regular user account but one that has administrative privileges to run commands as <code>root</code> when needed.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="managing-the-system"><a class="header" href="#managing-the-system">Managing the System</a></h1>
 <p>Now that we have the basics of the command line interface down, it’s time to learn some systems administration.
