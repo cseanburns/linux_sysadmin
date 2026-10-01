@@ -181,4 +181,9 @@ You are now working on a remote computer (a virtual machine / Droplet).
 your computer / laptop → SSH → another computer (Droplet) → root shell
 ```
 
+**NOTE!** The `root` user can do most anything on the server.
+This includes deleting any files (including system files, applications, etc).
+Thus, be careful of the commands that you run as `root`.
+In the next section, we will learn how to create a regular user account but one that has administrative privileges to run commands as `root` when needed.
+
 [digital_ocean]:https://www.digitalocean.com/
