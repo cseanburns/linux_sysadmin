@@ -17,7 +17,7 @@ such as `/etc/skel` and `/etc/adduser.conf` to allow for customization of new us
 If you're like me, you have user accounts everywhere.
 I have accounts on my phone and my laptop.
 I have a Google account, a GitHub account, and an account at my public library.
-I have a university account that let's me use the same login across multiple university systems, including email and our learning management systems.
+I have a university account that lets me use the same login across multiple university systems, including email and our learning management systems.
 I have a lot of user accounts, like you probably do.
 
 For many of those accounts, I have access to some things and not to others.
@@ -36,12 +36,12 @@ Once I am authenticated on my university system, it asks, "what can you do?"
 Then the system checks various permissions to allow certain actions and not others or access to certain resources and not others.
 
 These basic concepts are true across all operating systems and services.
-How these concepts are implemented vary, though.
+How these concepts are implemented varies, though.
 In this section, we will learn about the commands that we use to **authenticate** and **authorize** users on a Linux server.
 
 ## The `man` pages
 
-Before we begin, you need to know about the `man` pages.
+Before we begin, we need a proper introduction to the `man` pages.
 The `man` (short for *manual*) pages are internal documentation on just about every part of your system.
 You can read the manual for the commands on your system and for many of the special files on your system.
 For example, you can read the manual on the `ls` command with `man ls`.
@@ -61,10 +61,11 @@ Each section is denoted by a number.
 The first section, denoted by the number 1, contains `man` pages on executable programs or shell commands.
 The fifth section, denoted by the number 5, contains `man` pages on file formats and conventions.
 There are nine total sections.
-In the case where a command and a system file each have the same name,
-then we need to specify the section number when invoking `man` for those pages.
+In the case where a command and a system file each have the same name, then we need to specify the section number when invoking `man` for those pages.
 For example, use `man 1 crontab` to read the `man` page for the `crontab` executable, which is located at `/usr/bin/crontab`.
-Use `man 5 crontab` to read the `man` page for the **crontab** file, which is locate at `/etc/crontab`.
+Use `man 5 crontab` to read the `man` page for the **crontab** file, which is located at `/etc/crontab`.
+Or, use `man 7 regex` to learn how to use regular expressions, as opposed to `man 3 regex`, which is more about the C library that implements regular expressions.
+
 At the bottom of many `man` pages,
 there is a **See Also** section that helps to identify alternate manual pages for these commands.
 We can also use the `apropos` command to identify `man` pages written across multiple sections.
@@ -81,14 +82,13 @@ On every system there will be some place where information about users is stored
 On a Linux system, user account information is stored in the file `/etc/passwd`.
 You should take a moment to read about this file in its `man` page.
 However, if you run `man passwd`, you will by default get the `man` page on the `/usr/bin/passwd` command.
-We want to read about the **passwd** file located at `/etc/passwd`,
-which is in section 5, the section about file formats and conventions:
+We want to read about the **passwd** file located at `/etc/passwd`, which is in section 5, the section about file formats and conventions:
 
 ```
 man 5 passwd
 ```
 
-Let's take a look at a single line of the file.
+Let's take a look at a single line of the `/etc/passwd` file.
 Below I show the output of my user account:
 
 ```
@@ -106,10 +106,9 @@ That means that the line is composed of multiple fields each separated by a colo
 
 `man 5 passwd` tells us what each field indicates.
 The first field is the login name, which in this case is **sean**.
-The second field, marked **x**, marks the password field.
-This file does not contain the password, though.
-The passwords, which are [hashed and salted][hashedSalted], for users are stored in the `/etc/shadow` file.
-Th `/etc/shadow` file can only be read by the root user (or using the `sudo` command).
+The second field, marked **x**, functions as a placeholder for the password.
+This file does not contain the password, though; passwords, which are [hashed and salted][hashedSalted], are stored in the `/etc/shadow` file.
+The `/etc/shadow` file can only be read by the root user (or using the `sudo` command).
 
 > Hashing a file or a string of text is a process of running a hashing algorithm on the file or text.
 > If the file or string is copied exactly, byte for byte, then hashing the copy will return the same value.
@@ -119,14 +118,14 @@ Th `/etc/shadow` file can only be read by the root user (or using the `sudo` com
 > Each password will have a unique and mostly random salt added to it.
 > This means that even if two users on a system use the same password, salting their passwords will result in unique values.
 
-The third column indicates the user's numerical ID, and the fourth column indicates the users' group ID.
-The fifth column repeats the login name, but could also serve as a comment field.
+The third field indicates the user's numerical ID, and the fourth field indicates the user's primary group ID.
+The fifth field serves as a comment field.
 Comments are added using certain commands (discussed later).
-The fifth field identifies the user's home directory, which is **/home/sean**.
-The sixth field identifies the user's default shell, which is `/bin/bash`.
+The sixth field identifies the user's home directory, which is **/home/sean**.
+The seventh field identifies the user's default shell, which in this case is `/bin/bash`.
 
-The **user name or comment** field merely repeats the login name here, but it can hold specific types of information.
-We can add comments using the ``chfn`` command.
+In the above example, the **user name or comment** field merely repeats the login name here, but it can hold specific types of information.
+We can add comments using the `chfn` command.
 Comments include the user's full name, their home and work phone numbers, their office or room number, and so forth.
 To add a full name to user **sean**'s account, we use the **-f** option:
 
@@ -136,7 +135,7 @@ sudo chfn -f "Sean Burns" sean
 
 The **/etc/passwd** file is a standard Linux file, but data in the file will change depending on the Linux distribution.
 For example, the user and group IDs above start at 1000 because **sean** is the first human account on the system.
-This is a common starting numerical ID, but it could be different on other Linux or Unix-like distributions.
+This is a common starting numerical ID, but it could be different on other Linux or Unix-like distributions, or it could change across versions of the same distribution.
 The home directory could be different on other systems, too;
 for example, the default could be located at **/usr/home/sean**.
 Also, other shells exist besides ``bash``, like [zsh][zsh], which is now the default shell on macOS;
@@ -145,15 +144,14 @@ so other systems may default to different shell environments.
 ## The shadow file
 
 The **/etc/passwd** file does not contain any passwords but a simple **x** to mark the password field.
-Passwords on Linux are stored in **/etc/shadow** and are hashed with **sha512**, which is indicated by **$6$**.
-You need to be root to examine the shadow file or use ``sudo``:
+Passwords on Linux are stored in **/etc/shadow** and are salted and hashed (see `man 5 crypt`).
+You need to be root to examine the shadow file or use `sudo`:
 
-The fields are (see ``man 5 shadow``):
+The fields are (see `man 5 shadow`):
 
 * login name (username)
 * encrypted password
-* days since 1/1/1970 since password was last changed
-* days after which password must be changed
+* date of last password change (days since Jan 1, 1970)
 * minimum password age
 * maximum password age
 * password warning period
@@ -219,10 +217,9 @@ Before we proceed, let's review some important configurations that establish som
 - `/etc/skel`
 - `/etc/adduser.conf`
 
-The `/etc/skel` directory defines the home directory for new users.
+The `/etc/skel` directory functions as a template of the home directory for new users.
 Whatever files or directories exist in this directory at the time a new user account is created
 will result in those files and directories being created in the new user's home directory.
-In other words, the contents of this directory serve as a template for new user directories.
 We can view the contents using the following command:
 
 ```
@@ -236,11 +233,10 @@ where the default shell is defined (e.g., `/bin/bash`),
 where the default permissions are set for new home user directories (e.g., `0755`) and more.
 
 Let's change some defaults for `/etc/skel`.
-We need to use `sudo [command]` since this directory and its contents are owned by the `root` user.
-First, we'll edit the default **.bashrc** file:
+First, we'll edit the default **.bashrc** file.
 
 ```
-sudo nano /etc/skel/.bashrc
+nano /etc/skel/.bashrc
 ```
 
 We want to add the following lines at the end of the file.
@@ -299,7 +295,7 @@ See `man chage` for details, but:
 - `-m 7` sets the minimum password age to 7 days before the user can change their password.
 - `-M 90` sets the maximum age of the password to 90 days.
 - `-W 14` provides a 14 day warning to the user that the password will expire.
-- `-I 14` locks the account after 14 days of inactivity.
+- `-I 14` disables the account 14 days after its password has expired
 
 You can see these values by grepping the shadow file:
 
@@ -307,13 +303,16 @@ You can see these values by grepping the shadow file:
 sudo grep "linus" /etc/shadow
 ```
 
-To log in as the new user, use the ``su`` command and enter the password you used when creating the account:
+To log in as the new user, use the `su` command and enter the password you used when creating the account:
 
 ```
-su linus
+su - linus
 ```
 
-To exit the new user's account, use the ``exit`` command:
+The `-` tells `su` to start a login shell for the new user.
+This provides the user an environment similar to logging in directly as that user.
+
+To exit the new user's account, use the `exit` command:
 
 ```
 exit
@@ -347,9 +346,8 @@ sudo gpasswd -A sean developers
 grep "developers" /etc/group
 ```
 
-> Note: if a user is logged in when you add them to a group,
-> they need to logout and log back in before the group membership goes into effect.
-> Also, unlike some command options, we can't stack the following the `-aA` options with `gpasswd`.
+> Note: if a user is logged in when you add them to a group, they need to logout and log back in before the group membership goes into effect.
+> Also, unlike some command options, we can't stack options `-aA` with `gpasswd`.
 > I.e., they have to be run separately.
 
 ### Create a shared directory
@@ -386,17 +384,15 @@ sudo chmod 2770 /srv/developers
 ```
 
 This first digit, the `2` above, is the `setgid` (set group ID) bit.
-Setting this ensures that any files or subdirectories created within `/srv/developers`
-inherit the group ownership of the parent directory.
-In this case, that's the `developers` group.
-This is useful for group collaboration.
-By setting this, either `linus` or `sean` can add, modify, and delete files in the `/srv/developers` directory.
+Setting this ensures that any files or subdirectories created within `/srv/developers` inherit the group ownership of the parent directory.
+In this case, that's the `developers` group, and it's useful for group collaboration.
+For example, it allows `linus` and `sean` to create files and directories that share the `developers` group ownership.
+Whether group members can also modify one another's files depends on the permissions assigned to those files.
 
 ### User account and group deletion
 
 You can keep the additional user and group on your system, but know that you can also remove them.
-The `deluser` and `delgroup` commands offer great options and may be preferable to the others utilities
-(see `man deluser` or `man delgroup`).
+The `deluser` and `delgroup` commands offer great options and may be preferable to the other utilities (see `man deluser` or `man delgroup`).
 
 If we want to delete the new user's account and the new group, these are the commands to use.
 The first command will create an archival backup of **linus**' home directory and remove the home directory and any files in it.
@@ -411,18 +407,83 @@ The following command will delete the developers group:
 delgroup developers
 ```
 
+## Your Servers
+
+In the last section, you each created your own virtual machine on DigitalOcean.
+By default, DigitalOcean only has a `root` user account.
+Since the `root` user has super powers (delete or modify almost anything on the system), it's good practice to not stay logged in as this user.
+
+To correct for that, we should create a regular user account and add that user to the `sudo` group.
+On Ubuntu, the `sudo` configuration grants members of the `sudo` group permission to run administrative commands using `sudo`.
+This is not a universal rule among Linux distributions.
+For example, Fedora Linux uses the `wheel` group instead.
+
+On your new servers, while logged in as the `root` user, create a new regular user account.
+Here I create an account with the username `sean`, but use your own username (no spaces in the name or special characters):
+
+```
+adduser sean
+```
+
+Supply the password at the prompt, and enter it again when requested.
+Keep this password safe.
+Then proceed to supply any information you want at the following prompts (e.g., full name, etc.), or you may leave these fields blank.
+If you are happy with the answers you supplied, respond with a `Y` to the following prompt:
+
+```
+Is this information correct? [Y/n]
+```
+
+Once the account has been created, add this user to the `sudo` group, replacing `sean` with your username of choice:
+
+```
+adduser sean sudo
+```
+
+> The traditional command to add a user account to a group is `usermod -aG sudo sean`, but Ubuntu offers the above method.
+
+Now you can log in as the new user:
+
+```
+su - sean
+```
+
+And you can confirm that you're logged in as the new user and that you're located in your new home directory:
+
+```
+whoami
+pwd
+```
+
+Check your group membership with the `groups` command:
+
+```
+groups
+```
+
+Now you can work as the regular user (in my case `sean`), and run administrative commands using `sudo`:
+
+```
+sudo command ...
+```
+
+And to see that `sudo` makes you temporarily `root`:
+
+```
+sudo whoami
+```
+
 ## Conclusion
 
 Knowing how to manage user accounts and manage passwords are key sysadmin skills.
-They are needed to provide collaborative environments and
-to keep our systems secure through **authentication** and **authorization**.
+They are needed to provide collaborative environments and to keep our systems secure through **authentication** and **authorization**.
 While the methods to manage these things vary by operating system, the basic concepts are the same across OSes and services.
 
 Although the basic concepts hold true across systems, things get a bit more complex for enterprise systems. 
-On enterprise systems running Windows, [Active Directory (AD)][winad] is used for both **authentication** and **authorization**.
-On enterprise systems running Linux,
-the [Lightweight Directory Access Protocol (LDAP)][ldap] system is used to store and manage user credentials.
-**LDAP** can be integrated with **AD** to enable Linux systems to use **AD** for centralized user management. 
+In general, enterprise systems running Windows, [Active Directory (AD)][winad] is used for both **authentication** and **authorization**.
+And enterprise systems running Linux, the [Lightweight Directory Access Protocol (LDAP)][ldap] system is used to store and manage user credentials.
+However, modern Linux enterprise systems can authenticate against AD, LDAP, and more.
+For example, **LDAP** can be integrated with **AD** to enable Linux systems to use **AD** for centralized user management. 
 Other technologies exist that facilitate user and resource management.
 They include:
 
@@ -430,13 +491,10 @@ They include:
 - [PAM (Pluggable Authentication Module][pam]
 - [SSSD (System Security Services Daemon)][sssd]
 
-In this section, we learned about important user management files like
-`/etc/passwd`, `/etc/shadow`, `/etc/group`, `/etc/skel`, and `/etc/adduser.conf`.
-We continued to use `nano` (or your preferred editor) to edit new configuration files,
-specifically `/etc/skel` and `/etc/adduser.conf`.
+In this section, we learned about important user management files like `/etc/passwd`, `/etc/shadow`, `/etc/group`, `/etc/skel`, and `/etc/adduser.conf`.
+We continued to use `nano` (or your preferred editor) to edit new configuration files, specifically `/etc/skel` and `/etc/adduser.conf`.
 We dove deeper into exploring how the `man` pages work.
-We also learned how to create new Linux user accounts, modify those accounts password parameters,
-assign those accounts to groups, and create a share directory for those accounts for collaboration.
+We also learned how to create new Linux user accounts, modify those accounts password parameters, assign those accounts to groups, and create a shared directory for those accounts for collaboration.
 
 We covered the following new commands:
 
