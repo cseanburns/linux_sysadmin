@@ -249,8 +249,14 @@ sudo apt autoremove
 sudo apt clean
 ```
 
-Using your text editor of choice (e.g. `nano`), you can add these commands to a file, name the file `update`, and put the file in `/usr/local/bin`, which is in our `$PATH`.
-In your text editor, add the following:
+Using your text editor of choice (e.g. `nano`), you can add these commands to a file in `/usr/local/bin`, which is in our `$PATH`, and name the file `update`.
+In your text editor, open the file:
+
+```
+sudo nano /usr/local/bin/update
+```
+
+Add the following:
 
 ```
 #!/usr/bin/env bash
@@ -258,13 +264,13 @@ In your text editor, add the following:
 apt update && apt upgrade && apt autoremove && apt clean
 ```
 
-And then we make the file executable:
+Make the file executable:
 
 ```
 sudo chmod 700 /usr/local/bin/update
 ```
 
-And run it with the following command:
+Run it with the following command:
 
 ```
 sudo update
