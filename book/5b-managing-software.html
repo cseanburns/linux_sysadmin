@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-5e508fc5.js";
+            window.path_to_searchindex_js = "searchindex-782fef34.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-095b8c78.js"></script>
@@ -342,16 +342,19 @@ sudo apt upgrade
 sudo apt autoremove
 sudo apt clean
 </code></pre>
-<p>Using your text editor of choice (e.g. <code>nano</code>), you can add these commands to a file, name the file <code>update</code>, and put the file in <code>/usr/local/bin</code>, which is in our <code>$PATH</code>.
-In your text editor, add the following:</p>
+<p>Using your text editor of choice (e.g. <code>nano</code>), you can add these commands to a file in <code>/usr/local/bin</code>, which is in our <code>$PATH</code>, and name the file <code>update</code>.
+In your text editor, open the file:</p>
+<pre><code>sudo nano /usr/local/bin/update
+</code></pre>
+<p>Add the following:</p>
 <pre><code>#!/usr/bin/env bash
 
 apt update &amp;&amp; apt upgrade &amp;&amp; apt autoremove &amp;&amp; apt clean
 </code></pre>
-<p>And then we make the file executable:</p>
+<p>Make the file executable:</p>
 <pre><code>sudo chmod 700 /usr/local/bin/update
 </code></pre>
-<p>And run it with the following command:</p>
+<p>Run it with the following command:</p>
 <pre><code>sudo update
 </code></pre>
 <p>When we run <code>sudo update</code>, we run the script as the <code>root</code> user.
