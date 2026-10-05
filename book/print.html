@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8d05f8c1.js";
+            window.path_to_searchindex_js = "searchindex-5e508fc5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5298ecb6.js"></script>
+        <script src="toc-095b8c78.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -4962,6 +4962,194 @@ We also learned how to create new Linux user accounts, modify those accounts pas
 <li><code>su</code>: run a command with substitute user and group ID</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="managing-software"><a class="header" href="#managing-software">Managing Software</a></h1>
+<p>By the end of this section, you should understand:</p>
+<ol>
+<li><strong>Package Management</strong>: Modern Linux distributions use package managers like <code>apt</code> for software management, similar to app stores on mobile devices.</li>
+<li><strong>APT Basics</strong>: Essential commands include <code>apt update</code> to refresh the package list, <code>apt upgrade</code> to install available updates, and <code>apt install</code> to add new packages.</li>
+<li><strong>Installing Software</strong>: Besides <code>apt</code>, software can also be installed from source, as <code>.deb</code> packages with <code>dpkg</code>, or as <code>snap</code>, <code>flatpak</code>, or <code>appimage</code> packages for broader compatibility.</li>
+<li><strong>Maintaining Your System</strong>: Use <code>apt autoremove</code> to clean up unused dependencies, and <code>apt clean</code> or <code>apt autoclean</code> to clear out cached packages to free up disk space.</li>
+<li><strong>Package Information</strong>: Use <code>apt show</code> for package details, <code>apt policy</code> for version information, and <code>apt search</code> to find packages by name or keyword.</li>
+<li><strong>Removal Options</strong>: <code>apt remove</code> uninstalls packages, while <code>apt purge</code> also removes configuration files.</li>
+<li><strong>Script Automation</strong>: Common update and cleanup tasks can be automated with a bash script and run with <code>sudo</code> for ease of use.</li>
+<li><strong>APT Logs</strong>: Review <code>apt</code> activity by checking <code>/var/log/apt/history.log</code>.</li>
+<li><strong>Manual Reading</strong>: For deeper understanding, consult the <code>man apt</code> manual page.</li>
+</ol>
+<h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
+<p>Many modern Linux distributions offer some kind of package manager to install, manage, update, and remove software or the operating system.
+These package management systems interact with curated and audited central repositories of software that are collected into <strong>packages</strong>.
+For example, when we run <code>apt install</code> (as demonstrated below), the package management system, APT, normally does not search the entire internet for software.
+Rather, it consults a configured set of software repositories, downloads the appropriate package and its required dependencies, and keeps track of what has been installed.
+The package management system also provides a set of tools to learn about the software that exists in these repositories.</p>
+<blockquote>
+<p>If <strong>package management</strong> seems like an odd concept to you, it’s just a way to manage software installation.
+It’s very similar to the way that Apple and Google distribute software via the App Store and Google Play.</p>
+</blockquote>
+<h3 id="root-or-sudo"><a class="header" href="#root-or-sudo">Root or Sudo</a></h3>
+<p>Many of the commands below require administrative privileges to run.
+If you are logged in as the <code>root</code> user, then you can run all these commands as-is.
+However, if you are logged in under your regular user account, then you need to run these commands using <code>sudo</code>.</p>
+<h3 id="apt"><a class="header" href="#apt">APT</a></h3>
+<p>On Debian based systems, which includes Ubuntu, we use <code>apt</code>, <code>apt-get</code>, and <code>apt-cache</code> to manage most software installations.
+For most cases, you will simply want to use the <code>apt</code> command.
+It is meant to combine the functionality commonly used with <code>apt-get</code> and <code>apt-cache</code>.</p>
+<pre><code>apt install package-name
+</code></pre>
+<h3 id="dpkg"><a class="header" href="#dpkg">DPKG</a></h3>
+<p>We can also install software from source code or from pre-built binaries.
+On Debian and Ubuntu, we can install (if we trust it) software distributed on the internet as <code>.deb</code> files.
+When installing <code>.deb</code> files, we can use the <code>dpkg</code> command or the <code>apt</code> command (preferable).
+Only install <code>.deb</code> files if they are from very trusted sources.</p>
+<pre><code>dpkg -i ./package-name.deb
+</code></pre>
+<p>Or with <code>apt</code>:</p>
+<pre><code>apt install ./package-name.deb
+</code></pre>
+<h3 id="source-code"><a class="header" href="#source-code">Source Code</a></h3>
+<p>Installing software from source code often involves compiling the software, especially for programs written in the <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C programming language</a>.
+The benefit of this is that we can compile software to take advantage of our specific hardware and to turn on or off functionality as needed.</p>
+<p>It’s usually not difficult to install software this way, but it can become complicated to manage software that’s installed from source code simply because it means managing dependencies.
+That is, we would need to manually track new patches or versions of the software to keep it updated and secure.
+Like <code>.deb</code> files, we would only compile software that we trust completely.</p>
+<p>Example process for software written in C:</p>
+<pre><code>cd source_directory/
+./configure
+make
+make install
+</code></pre>
+<p>For software written in interpreted languages, like Bash or Python, we mainly need to install the software in our <code>$PATH</code>.
+However, such programs may still require dependencies (e.g., other software or libraries) to run.</p>
+<p>Other compiling languages, like Rust, Go, or JAVA, have their own methods for compiling them.</p>
+<h3 id="snap-flatpak-and-appimage"><a class="header" href="#snap-flatpak-and-appimage">Snap, Flatpak, and AppImage</a></h3>
+<p>Another way to install software is to use <code>snap</code> or <code>flatpak</code> systems or <code>appimage</code> files.
+These systems provide alternate ways to distribute applications across Linux distributions and reduce reliance on the distribution’s own package repositories and libraries (e.g., <code>apt</code>).
+The Snap system has substantial server and IoT (internet of things) use, and Flatpak and AppImage are both desktop oriented.
+Both Snaps and Flatpaks are distributed through their own package management systems, but AppImages are shared as single files.
+See the <a href="https://snapcraft.io/">Snap</a>, <a href="https://flatpak.org/">Flatpak</a>, and <a href="https://appimage.org/">AppImage</a> sites for examples.</p>
+<h3 id="language-package-managers"><a class="header" href="#language-package-managers">Language Package Managers</a></h3>
+<p>In addition to the above, some programming languages provide their own mechanisms to install packages.
+In many cases, these packages may be installed with <code>apt</code>, but packages installed via <code>apt</code> tend to be older (but more stable) than the packages that a programming language’s packaging system will install.
+For example, Python has the <code>pip3</code> command to install and remove Python libraries and the newer <code>uv</code> system.
+The <a href="https://cran.r-project.org/">R programming language</a> has the <code>install.packages()</code> command to install R libraries within the R environment.</p>
+<h2 id="using-apt"><a class="header" href="#using-apt">Using APT</a></h2>
+<p>Despite all these ways to manage software, we will focus on using the <code>apt</code> command, which is pretty straightforward.</p>
+<p>Let’s look at the basic <code>apt</code> commands.</p>
+<h3 id="apt-update"><a class="header" href="#apt-update"><code>apt update</code></a></h3>
+<p>Before installing any software, we should update the index of packages that are available for the system, otherwise we might install older versions of the packages, which might not contain necessary security patches.
+We do so with:</p>
+<pre><code>apt update
+</code></pre>
+<h3 id="apt-upgrade"><a class="header" href="#apt-upgrade"><code>apt upgrade</code></a></h3>
+<p>When we update the package index, we will be informed if we need to upgrade any packages.
+If any upgrades are available, we run the following command:</p>
+<pre><code>apt upgrade
+</code></pre>
+<h3 id="apt-search"><a class="header" href="#apt-search"><code>apt search</code></a></h3>
+<p>We may know a package’s name when we’re ready to install it, but we also may not.
+To search for a package, we use the following syntax:</p>
+<pre><code>apt search package-name
+</code></pre>
+<blockquote>
+<p>Package names will never have spaces between words.
+Rather, if a package name has more than one word, the words might be joined or separated by hyphens.</p>
+</blockquote>
+<p>In practice, say I’m curious if there are any console based games:</p>
+<pre><code>apt search ncurses game
+</code></pre>
+<blockquote>
+<p>I added <strong>ncurses</strong> to my search query because the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library is often used to create console-based applications.</p>
+</blockquote>
+<h3 id="apt-show"><a class="header" href="#apt-show"><code>apt show</code></a></h3>
+<p>The above command returns a list that includes a game called <strong>ninvaders</strong>, which is a console-based Space Invaders like game.
+To get additional information about this package, we use the <code>apt show [package-name]</code> command:</p>
+<pre><code>apt show ninvaders
+</code></pre>
+<p>If we want to see what a package needs or depends on, then we can use the following command:</p>
+<pre><code>apt-cache depends ninvaders
+</code></pre>
+<h3 id="apt-policy"><a class="header" href="#apt-policy"><code>apt policy</code></a></h3>
+<p>To get a list of various versions that are available to download, we can use the <code>apt policy</code> command:</p>
+<pre><code>apt policy ninvaders
+</code></pre>
+<h3 id="apt-install"><a class="header" href="#apt-install"><code>apt install</code></a></h3>
+<p>Once ready, it’s quite simple to install the package called <strong>ninvaders</strong>:</p>
+<pre><code>apt install ninvaders
+</code></pre>
+<h3 id="apt-remove-or-apt-purge"><a class="header" href="#apt-remove-or-apt-purge"><code>apt remove</code> or <code>apt purge</code></a></h3>
+<p>To remove an installed package, we can use either the <code>apt remove</code> or the <code>apt purge</code> commands.
+Sometimes when a program is installed, configuration files get installed with it in the <code>/etc</code> directory.
+The <code>apt purge</code> command removes those configuration files but the <code>apt remove</code> command does not.
+Both commands are offered because sometimes it is useful to keep those configuration files.</p>
+<pre><code>apt remove ninvaders
+</code></pre>
+<p>Or:</p>
+<pre><code>apt purge ninvaders
+</code></pre>
+<blockquote>
+<p>Other fun terminal based games include: <code>tint</code> (a tetris clone), <code>ttysolitaire</code>, and <code>bsdgames</code>, the latter installs multiple console based games such as <code>backgammon, </code>go-fish<code>, </code>hangman<code>, and more. All of these will be installed in </code>/usr/games`.</p>
+</blockquote>
+<h3 id="apt-autoremove"><a class="header" href="#apt-autoremove"><code>apt autoremove</code></a></h3>
+<p>All big software requires other software to run.
+These additional packages are called <a href="https://queue.acm.org/detail.cfm?id=3344149">dependencies</a>.
+The <code>apt show package-name</code> command will list a program’s dependencies, as well as the <code>apt-cache depends</code> command.
+However, when we remove software when using the <code>apt remove</code> or <code>apt purge</code> commands, the dependencies, even if no longer needed, are not necessarily removed.
+To remove them and restore disk space, we do:</p>
+<pre><code>apt autoremove
+</code></pre>
+<h3 id="apt-clean-or-apt-autoclean"><a class="header" href="#apt-clean-or-apt-autoclean"><code>apt clean</code> or <code>apt autoclean</code></a></h3>
+<p>When we install software using the <code>apt</code> command, the installed packages are stored locally.
+We don’t necessarily need those once the binaries have been installed.
+Or we may want to remove them especially if we’re removing the binaries.
+The <code>apt clean</code> and <code>apt autoclean</code> commands clear up that local cache of packages.
+We use either of these commands to free up disk space.</p>
+<p>Between the two, the <code>apt clean</code> command <strong>removes all package files</strong> that are stored in <code>/var/cache/apt/archives</code>.
+But the <code>apt autoclean</code> <strong>only removes package files that can no longer be downloaded</strong>.
+I generally use the <code>apt clean</code> command to free up more disk space.</p>
+<p>To use:</p>
+<pre><code>apt clean
+</code></pre>
+<p>Or:</p>
+<pre><code>apt autoclean
+</code></pre>
+<h3 id="apt-history"><a class="header" href="#apt-history">apt history</a></h3>
+<p>Unfortunately, the <code>apt</code> command does not provide a way to get a history of how it’s been used on a system.
+This will change in the future when <code>apt</code> gets a <code>apt history-list</code> command and an <code>apt history-info</code> command
+(Source: <a href="https://www.phoronix.com/news/Debian-APT-History-Command">Phoronix</a>).
+In the meantime, the <code>apt</code> system keeps a log of its activity, and we can review that log file with the following command:</p>
+<pre><code>less /var/log/apt/history.log
+</code></pre>
+<h2 id="daily-usage"><a class="header" href="#daily-usage">Daily Usage</a></h2>
+<p>This all may seem complicated, but it’s really not.
+For example, to keep my systems updated, I run the following four commands on a daily or near daily basis.
+If I am logged in as the regular user, I use <code>sudo</code>:</p>
+<pre><code>sudo apt update
+sudo apt upgrade
+sudo apt autoremove
+sudo apt clean
+</code></pre>
+<p>Using your text editor of choice (e.g. <code>nano</code>), you can add these commands to a file, name the file <code>update</code>, and put the file in <code>/usr/local/bin</code>, which is in our <code>$PATH</code>.
+In your text editor, add the following:</p>
+<pre><code>#!/usr/bin/env bash
+
+apt update &amp;&amp; apt upgrade &amp;&amp; apt autoremove &amp;&amp; apt clean
+</code></pre>
+<p>And then we make the file executable:</p>
+<pre><code>sudo chmod 700 /usr/local/bin/update
+</code></pre>
+<p>And run it with the following command:</p>
+<pre><code>sudo update
+</code></pre>
+<p>When we run <code>sudo update</code>, we run the script as the <code>root</code> user.
+This is preferable to adding <code>sudo</code> inside the script.</p>
+<h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
+<p>There are a variety of ways to install software on a Linux or Ubuntu system.
+The common way to do it on Ubuntu is to use the <code>apt</code> command, which was covered in this section.</p>
+<p>We’ll come back to this command often because we’ll soon install and setup a complete LAMP
+(Linux, Apache, MariaDB, and PHP) server.
+Until then, I encourage you to read through the manual page for <code>apt</code>:</p>
+<pre><code>man apt
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="expanding-storage"><a class="header" href="#expanding-storage">Expanding Storage</a></h1>
 <p>By the end of this section, you will be able to:</p>
 <ol>
@@ -4972,7 +5160,7 @@ We also learned how to create new Linux user accounts, modify those accounts pas
 <li><strong>Command Line Proficiency</strong>: Improve proficiency with essential command line tools such as <code>mkfs.ext4</code>, <code>mount</code>, <code>umount</code>, <code>mkdir</code>, and editing configuration files with a text editor.</li>
 <li><strong>Storage Pricing Awareness</strong>: Gain insight into the cost considerations of adding additional storage in cloud environments, with practical examples of pricing.</li>
 </ol>
-<h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
+<h2 id="getting-started-7"><a class="header" href="#getting-started-7">Getting Started</a></h2>
 <p>I’m sure all or most of you have needed extra disk storage at some point (USB drives, optical disks, floppies???).
 Such needs are no different for systems administrators, who often are responsible for managing, monitoring, or storing large amounts of data.</p>
 <p>The disk that we created for our VM is small (10 GB), and that’s fine for our needs, albeit quite small in many real world scenarios.
@@ -5202,7 +5390,7 @@ But if you do not want to incur any charges for it, which would be about $1 / mo
 </ul>
 </li>
 </ol>
-<h2 id="conclusion-12"><a class="header" href="#conclusion-12">Conclusion</a></h2>
+<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
 <p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
 We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
 Finally, we learned how to then edit <code>/etc/fstab</code> to automount the drive.</p>
@@ -5219,185 +5407,6 @@ Finally, we learned how to then edit <code>/etc/fstab</code> to automount the dr
 <li><code>cp</code> : to copy a file</li>
 <li><code>nano</code> : to use the text editor <code>nano</code> to edit <code>/etc/fstab</code></li>
 </ol>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="managing-software"><a class="header" href="#managing-software">Managing Software</a></h1>
-<p>By the end of this section, you should understand:</p>
-<ol>
-<li><strong>Package Management</strong>: Modern Linux distributions use package managers like <code>apt</code> for software management,
-similar to app stores on mobile devices.</li>
-<li><strong>APT Basics</strong>: Essential commands include <code>apt update</code> to refresh the package list,
-<code>apt upgrade</code> to install available updates, and <code>apt install</code> to add new packages.</li>
-<li><strong>Installing Software</strong>: Besides <code>apt</code>, software can also be installed from source,
-as <code>.deb</code> packages with <code>dpkg</code>, or as <code>snap</code>, <code>flatpak</code>, or <code>appimage</code> packages for broader compatibility.</li>
-<li><strong>Maintaining Your System</strong>: Use <code>apt autoremove</code> to clean up unused dependencies, and <code>apt clean</code> or
-<code>apt autoclean</code> to clear out cached packages to free up disk space.</li>
-<li><strong>Package Information</strong>: Use <code>apt show</code> for package details, <code>apt policy</code> for version information, and
-<code>apt search</code> to find packages by name or keyword.</li>
-<li><strong>Removal Options</strong>: <code>apt remove</code> uninstalls packages, while <code>apt purge</code> also removes configuration files.</li>
-<li><strong>Script Automation</strong>: Common update and cleanup tasks can be automated with a bash script and
-run with <code>sudo</code> for ease of use.</li>
-<li><strong>APT Logs</strong>: Review <code>apt</code> activity by checking <code>/var/log/apt/history.log</code>.</li>
-<li><strong>Manual Reading</strong>: For deeper understanding, consult the <code>man apt</code> manual page.</li>
-</ol>
-<h2 id="getting-started-7"><a class="header" href="#getting-started-7">Getting Started</a></h2>
-<p>Many modern Linux distributions offer some kind of package manager to install, manage, and remove software.
-These package management systems interact with curated and audited central repositories of software
-that are collected into <strong>packages</strong>.
-They also provide a set of tools to learn about the software that exists in these repositories.</p>
-<blockquote>
-<p>If <strong>package management</strong> seems like an odd concept to you, it’s just a way to manage software installation.
-It’s very similar to the way that Apple and Google distribute software via the App Store and Google Play.</p>
-</blockquote>
-<h3 id="apt"><a class="header" href="#apt">APT</a></h3>
-<p>On Debian based systems, which includes Ubuntu, we use <code>apt</code>, <code>apt-get</code>, and <code>apt-cache</code> to manage most software installations.
-For most cases, you will simply want to use the <code>apt</code> command.
-It is meant to combine the functionality commonly used with <code>apt-get</code> and <code>apt-cache</code>.</p>
-<h3 id="dpkg"><a class="header" href="#dpkg">DPKG</a></h3>
-<p>We can also install software from source code or from pre-built binaries.
-On Debian and Ubuntu, we can install (if we trust it) pre-built binaries distributed on the internet as <strong>.deb</strong> files.
-These are comparable to <code>.dmg</code> files for macOS and to <strong>.exe</strong> files for Windows.
-When installing <code>.deb</code> files, we generally use the <code>dpkg</code> command,
-although it’s possible to use <code>apt</code> to install these files, too.</p>
-<h3 id="source-code"><a class="header" href="#source-code">Source Code</a></h3>
-<p>Installing software from source code often involves compiling the software.
-It’s usually not difficult to install software this way.
-However, it can become complicated to manage software that’s installed from source code
-simply because it means managing dependencies.
-This means we would need to manually track new patches or versions of the software.</p>
-<h3 id="snap-flatpak-and-appimage"><a class="header" href="#snap-flatpak-and-appimage">Snap, Flatpak, and AppImage</a></h3>
-<p>Another way to install software is to use <code>snap</code> or <code>flatpak</code> systems or <code>appimage</code> files.
-These are newer ways of packaging programs that involves packaging a program and all of its dependencies
-as self-contained packages.
-The main audience seems to be aimed at IoT, embedded devices, and desktop/laptop systems.
-If you see <strong>loop</strong> devices in the output of the <code>lsblk</code> command, this is the result of the <code>snap</code> system.
-See the <a href="https://snapcraft.io/">Snap</a>, <a href="https://flatpak.org/">Flatpak</a>, and <a href="https://appimage.org/">AppImage</a> sites for example applications.</p>
-<h3 id="language-package-managers"><a class="header" href="#language-package-managers">Language Package Managers</a></h3>
-<p>In addition to the above, some programming languages provide their own mechanisms to install packages.
-In many cases, these packages may be installed with the <code>apt</code> command,
-but the packages that <code>apt</code> will install tend to be older (but more stable)
-than the packages that a programming language will install.
-For example, Python has the <code>pip</code> or <code>pip3</code> command to install and remove Python libraries.
-The R programming language has the <code>install.packages()</code>, <code>remove.packages()</code>, and
-the <code>update.packages()</code> commands to install R libraries.</p>
-<p>Despite all these ways to install, manage, remove, and update software,
-we will focus on using the <code>apt</code> command, which is pretty straightforward.</p>
-<h2 id="using-apt"><a class="header" href="#using-apt">Using APT</a></h2>
-<p>Let’s look at the basic <code>apt</code> commands.</p>
-<h3 id="apt-update"><a class="header" href="#apt-update"><code>apt update</code></a></h3>
-<p>Before installing any software, we need to update the index of packages that are available for the system.
-We do so with:</p>
-<pre><code>sudo apt update
-</code></pre>
-<h3 id="apt-upgrade"><a class="header" href="#apt-upgrade"><code>apt upgrade</code></a></h3>
-<p>When we update the package index, we will be informed if we need to upgrade any packages.
-If any upgrades are available, we run the following command:</p>
-<pre><code>sudo apt upgrade
-</code></pre>
-<h3 id="apt-search"><a class="header" href="#apt-search"><code>apt search</code></a></h3>
-<p>We may know a package’s name when we’re ready to install it, but we also may not.
-To search for a package, we use the following syntax, replacing <code>[package name]</code> with search terms:</p>
-<pre><code>apt search [package-name]
-</code></pre>
-<blockquote>
-<p>Package names will never have spaces between words.
-Rather, if a package name has more than one word, each word will be separated by a hyphen.</p>
-</blockquote>
-<p>In practice, say I’m curious if there are any console based games:</p>
-<pre><code>apt search ncurses game
-</code></pre>
-<blockquote>
-<p>I added <strong>ncurses</strong> to my search query because the <a href="https://en.wikipedia.org/wiki/Ncurses">ncurses</a> library
-is often used to create console-based applications.</p>
-</blockquote>
-<h3 id="apt-show"><a class="header" href="#apt-show"><code>apt show</code></a></h3>
-<p>The above command returns a list that includes a game called <strong>ninvaders</strong>, which is a console-based Space Invaders like game.
-To get additional information about this package, we use the <code>apt show [package-name]</code> command:</p>
-<pre><code>apt show ninvaders
-</code></pre>
-<p>If we want to see what a package needs or depends on, then we can use the following command:</p>
-<pre><code>apt-cache depends ninvaders
-</code></pre>
-<h3 id="apt-policy"><a class="header" href="#apt-policy"><code>apt policy</code></a></h3>
-<p>To get a list of various versions that are available to download, we can use the <code>apt policy</code> command:</p>
-<pre><code>apt policy ninvaders
-</code></pre>
-<h3 id="apt-install"><a class="header" href="#apt-install"><code>apt install</code></a></h3>
-<p>It’s quite simple to install the package called <strong>ninvaders</strong>:</p>
-<pre><code>sudo apt install ninvaders
-</code></pre>
-<h3 id="apt-remove-or-apt-purge"><a class="header" href="#apt-remove-or-apt-purge"><code>apt remove</code> or <code>apt purge</code></a></h3>
-<p>To remove an installed package, we can use either the <code>apt remove</code> or the <code>apt purge</code> commands.
-Sometimes when a program is installed, configuration files get installed with it in the <code>/etc</code> directory.
-The <code>apt purge</code> command removes those configuration files but the <code>apt remove</code> command does not.
-Both commands are offered because sometimes it is useful to keep those configuration files.</p>
-<pre><code>sudo apt remove ninvaders
-</code></pre>
-<p>Or:</p>
-<pre><code>sudo apt purge ninvaders
-</code></pre>
-<blockquote>
-<p>Other fun terminal based games include: <code>tint</code> (a tetris clone), <code>ttysolitaire</code>, and <code>bsdgames</code>,
-the latter installs multiple console based games such as <code>backgammon, </code>go-fish<code>, </code>hangman<code>, and more. All of these will be installed in </code>/usr/games`.</p>
-</blockquote>
-<h3 id="apt-autoremove"><a class="header" href="#apt-autoremove"><code>apt autoremove</code></a></h3>
-<p>All big software requires other software to run.
-This other software are called <a href="https://queue.acm.org/detail.cfm?id=3344149">dependencies</a>.
-The <code>apt show [package-name]</code> command will list a program’s dependencies, as well as the <code>apt-cache depends</code> command.
-However, when we remove software when using the <code>apt remove</code> or <code>apt purge</code> commands,
-the dependencies, even if no longer needed, are not necessarily removed.
-To remove them and restore disk space, we do:</p>
-<pre><code>sudo apt autoremove
-</code></pre>
-<h3 id="apt-clean-or-apt-autoclean"><a class="header" href="#apt-clean-or-apt-autoclean"><code>apt clean</code> or <code>apt autoclean</code></a></h3>
-<p>When we install software using the <code>apt</code> command, the installed packages are stored locally.
-We don’t necessarily need those once the binaries have been installed.
-Or we may want to remove them especially if we’re removing the binaries.
-The <code>apt clean</code> and <code>apt autoclean</code> commands clear up that local cache of packages.
-We use either of these commands to free up disk space.</p>
-<p>Between the two, the <code>apt clean</code> command <strong>removes all package files</strong> that are stored in <code>/var/cache/apt/archives</code>.
-But the <code>apt autoclean</code> <strong>only removes package files that can no longer be downloaded</strong>.
-I generally use the <code>apt clean</code> command to free up more disk space.
-I will only use <code>apt autoclean</code> if I want to keep an package to older software, but this is rare.</p>
-<p>To use:</p>
-<pre><code>sudo apt clean
-</code></pre>
-<p>Or:</p>
-<pre><code>sudo apt autoclean
-</code></pre>
-<h3 id="apt-history"><a class="header" href="#apt-history">apt history</a></h3>
-<p>Unfortunately, the <code>apt</code> command does not provide a way to get a history of how it’s been used on a system.
-This will change in the future when <code>apt</code> gets a <code>apt history-list</code> command and an <code>apt history-info</code> command
-(Source: <a href="https://www.phoronix.com/news/Debian-APT-History-Command">Phoronix</a>).
-In the meantime, the <code>apt</code> system keeps a log of its activity, and we can review that log file with the following command:</p>
-<pre><code>less /var/log/apt/history.log
-</code></pre>
-<h2 id="daily-usage"><a class="header" href="#daily-usage">Daily Usage</a></h2>
-<p>This all may seem complicated, but it’s really not.
-For example, to keep my systems updated, I run the following four commands on a daily or near daily basis:</p>
-<pre><code>sudo apt update
-sudo apt upgrade
-sudo apt autoremove
-sudo apt clean
-</code></pre>
-<p>You can add these commands to a script that we could call <code>update.sh</code> and put it in <code>/usr/local/bin</code>:</p>
-<pre><code>#!/usr/bin/env bash
-
-apt update &amp;&amp; apt upgrade &amp;&amp; apt autoremove &amp;&amp; apt clean
-</code></pre>
-<p>And then we make the file executable:</p>
-<pre><code>sudo chmod 700 /usr/local/bin/update.sh`:
-</code></pre>
-<p>And execute/run it with the following command:</p>
-<pre><code>sudo update.sh
-</code></pre>
-<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
-<p>There are a variety of ways to install software on a Linux or Ubuntu system.
-The common way to do it on Ubuntu is to use the <code>apt</code> command, which was covered in this section.</p>
-<p>We’ll come back to this command often because we’ll soon install and setup a complete LAMP
-(Linux, Apache, MariaDB, and PHP) server.
-Until then, I encourage you to read through the manual page for <code>apt</code>:</p>
-<pre><code>man apt
-</code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="using-systemd"><a class="header" href="#using-systemd">Using systemd</a></h1>
 <p>By the end of the section, you will know how to:</p>
