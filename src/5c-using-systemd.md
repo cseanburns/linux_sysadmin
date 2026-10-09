@@ -1,258 +1,1017 @@
 # Using systemd
 
-By the end of the section, you will know how to:
+By the end of this section, you will be able to:
 
-1. Use `systemctl` to manage services on a Linux system,
-including starting, stopping, enabling, and checking the status of services.
-2. Understand the purpose of `systemd` as an init system and its role in booting, service management, and log handling.
-3. Check the status and logs of specific services with `journalctl` and
-use filters to narrow down log results by service, PID, or specific conditions.
-4. Set up and manage `systemd` timers to automate tasks, such as scheduling scripts to run at specific times.
-5. Explore and utilize additional `systemd` commands,
-such as checking enabled services, suspending or rebooting the system, and examining boot times with `systemd-analyze`.
-6. View and interpret system logs, search through them efficiently, and follow logs in real-time.
-7. Create and configure custom `systemd` service and timer files for more tailored system automation.
-8. Use `systemd` commands to troubleshoot system issues,
-including identifying failed services and examining resource usage with `systemd-cgtop`.
+1. Explain the role of **systemd** as the init and service-management system on many Linux distributions.
+2. Explain what a **systemd unit** is and identify several common unit types.
+3. Use `systemctl` to inspect, start, stop, restart, reload, enable, and disable services.
+4. Distinguish between a service being **active** and being **enabled**.
+5. Use `journalctl` to examine and filter system logs.
+6. Use `systemctl` and `journalctl` together to troubleshoot services.
+7. Understand how **targets** and dependencies help systemd organize the boot process.
+8. Create a simple custom service and timer.
+9. Explain how systemd manages timers, mounts, and other system resources in addition to traditional services.
+10. Understand how `/etc/fstab` and native systemd mount units relate to one another.
 
 ## Getting Started
 
-When computers boot up, obviously some software manages that process.
-On Linux and other Unix or Unix-like systems, this is usually handled via an **init** system.
-For example, macOS uses [launchd][launchd] and many Linux distributions, including Ubuntu, use [systemd][systemd].
+When a Linux system boots, something has to start the operating system's userspace and then start the programs necessary for the computer to operate.
+Traditionally, Unix and Linux systems have used an **init system** for this purpose (mostly a collection of shell scripts).
+Many contemporary Linux distributions, including Ubuntu, Debian, Fedora, Red Hat Enterprise Linux, Arch Linux, and others, use [systemd][systemd].
+Other operating systems use different approaches.
+For example, macOS uses [launchd][launchd_wiki].
 
-**systemd** does more than handle the startup process,
-it also manages various services and connects the Linux kernel to various applications.
-In this section, we'll cover how to use **systemd** to manage services and to review log files.
+On a system using systemd, the first userspace process normally has process ID **1**, indicating its importance in the process hierarchy.
 
-## Manage Services
+We can check:
 
-When we install complicated software, like a web server (e.g., Apache2, Nginx), a SSH server (e.g., OpenSSH),
-or a database server (e.g., mariaDB or MySQL), then it's helpful to have commands that manage that service:
-the web service, the SSH service, the database service, etc.
+```
+ps -p 1 -o pid,comm,args
+```
 
-For example, the `ssh` service is installed by default on our gcloud servers, and
-we can check its status with the following `systemctl` command:
+You should see something similar to:
+
+```
+PID COMMAND         COMMAND
+  1 systemd         /sbin/init
+```
+
+We can also simply run:
+
+```
+ps -p 1 -o comm=
+```
+
+On our Droplets, the result should be:
+
+```
+systemd
+```
+
+This is important because systemd is not simply another program running on the server.
+It is responsible for coordinating much of what happens after the Linux kernel starts.
+
+## systemd Does More Than Start Services
+
+It is tempting to describe systemd as a program for starting and stopping services.
+It does that, but its responsibilities are broader.
+Among other things, systemd can manage:
+
+- services,
+- system startup and shutdown,
+- dependencies among system resources,
+- logging,
+- scheduled tasks,
+- mounted filesystems,
+- automounts,
+- sockets,
+- devices,
+- resource control,
+- and groups of services representing particular system states.
+
+This is why the name **systemd** appears in so many Linux commands and files.
+
+For example:
+
+```
+systemctl
+journalctl
+systemd-analyze
+systemd-cgtop
+systemd.service
+systemd.timer
+systemd.mount
+systemd.target
+```
+
+Instead of thinking of systemd simply as a service manager, it is more useful to begin with the concept of a **unit**.
+
+## Units
+
+A **unit** is a resource that systemd knows how to manage.
+Different kinds of resources use different kinds of units.
+Unit files normally have names ending in a suffix indicating their type.
+
+Some common examples include:
+
+| Unit type    | Purpose                                                 |
+| ---          | ---                                                     |
+| `.service`   | Runs and manages a service or process                   |
+| `.timer`     | Activates another unit according to a schedule          |
+| `.mount`     | Represents a mounted filesystem                         |
+| `.automount` | Mounts a filesystem when it is accessed                 |
+| `.socket`    | Represents a socket that can activate a service         |
+| `.path`      | Watches a filesystem path and can activate another unit |
+| `.target`    | Groups other units together                             |
+| `.device`    | Represents a device known to the kernel                 |
+
+For example, the SSH server may be represented by:
+
+```
+ssh.service
+```
+
+A scheduled task might use:
+
+```
+report.timer
+```
+
+and:
+
+```
+report.service
+```
+
+A filesystem mounted at:
+
+```
+/mnt/data
+```
+
+could appear to systemd as:
+
+```
+mnt-data.mount
+```
+
+This provides a more useful way to think about systemd:
+
+```
+                   systemd
+                      |
+        +-------------+-------------+
+        |             |             |
+     services       timers        mounts
+        |             |             |
+    ssh.service   report.timer  mnt-data.mount
+        |
+      ...
+```
+
+In short, systemd manages many kinds of system resources based on a common framework.
+
+### Exploring Units
+
+We interact with systemd using the following command:
+
+```
+systemctl
+```
+
+To list currently loaded units:
+
+```
+systemctl list-units
+```
+
+That produces a lot of information.
+We can restrict the output to services:
+
+```
+systemctl list-units --type=service
+```
+
+Or mount units:
+
+```
+systemctl list-units --type=mount
+```
+
+Or timers:
+
+```
+systemctl list-units --type=timer
+```
+
+You can also use:
+
+```
+systemctl list-timers
+```
+
+for a timer-specific view.
+
+There is an important distinction between:
+
+```
+systemctl list-units
+```
+
+and:
+
+```
+systemctl list-unit-files
+```
+
+The first primarily tells us about units systemd currently has loaded.
+The second tells us about unit files installed on the system.
+
+For example:
+
+```
+systemctl list-unit-files --type=service
+```
+
+normally produces a considerably different list than:
+
+```
+systemctl list-units --type=service
+```
+
+### Managing Services
+
+One of the most common uses of systemd is managing server software.
+
+Examples include SSH, web servers, and database servers:
+
+- OpenSSH
+- Apache
+- Nginx
+- MariaDB
+- PostgreSQL
+
+Our Droplet already runs an SSH server.
+
+We can examine it with:
 
 ```
 systemctl status ssh
 ```
 
-The output tells us a few things.
-The line beginning with `Loaded` tells us that the SSH service is configured.
-At the end of that line, it also tells us that it is `enabled`.
-`Enabled` means that the service automatically starts when the system gets rebooted or starts up.
-
-The line beginning with `Active` tells us that the service is `active (running)` and for how long.
-We also can see the process ID (PID) for the service as well as how much memory it's using.
-
-At the bottom of the output, we can see the recent log files.
-We can view more of those log files using the `journalctl` command.
-By default, running `journalctl` by itself will return all log files.
-We can specify that we're interested in log files only for the ssh service.
-We can specify using the PID number.
-Replace *N* with the PID number attached to your ssh service:
+On Ubuntu, the service is normally named:
 
 ```
-journalctl _PID=N
+ssh.service
 ```
 
-Or we can specify by service, or more specifically, its **unit** name:
+Systemd allows us to omit `.service` in many commands, so the following two generally mean the same thing:
 
 ```
-journalctl -u ssh
+systemctl status ssh
 ```
 
-### Use Cases
-
-Later we'll install the [Apache web server][apache2], and we will use `systemctl` to manage some aspects of this service.
-
-In particular, we will use the following commands to: 
-
-1. Check the state of the Apache service,
-2. enable the Apache service to auto start on reboot,
-3. start the service,
-4. reload the service after editing its configuration files, and
-5. stop the service.
-
-In practice, these work out to:
- 
 ```
-systemctl status apache2
-sudo systemctl enable apache2
-sudo systemctl start apache2
-sudo systemctl reload apache2
+systemctl status ssh.service
+```
+
+The output contains several useful pieces of information.
+For example, look for:
+
+```
+Loaded:
+Active:
+Main PID:
+```
+
+The `Active` line tells us whether the service is currently running.
+
+For example:
+
+```
+Active: active (running)
+```
+
+The status output may also include:
+
+- when the service started,
+- the main process ID,
+- tasks associated with the service,
+- memory use,
+- CPU use,
+- and recent journal (log) entries.
+
+### Starting and Stopping Services
+
+We can stop a service:
+
+```
+sudo systemctl stop ssh
+```
+
+**But do not do this while connected remotely unless you understand the consequences.**
+
+If we stop the SSH server, we may lose our connection to the Droplet.
+
+A safer service for practice later in the semester will be Apache.
+
+For Apache, we might use:
+
+```
 sudo systemctl stop apache2
 ```
 
-`systemctl` is a big piece of software, and there are other arguments the command will take.
-See ``man systemctl`` for details.
-
-**NOTE:** Not all services support `systemctl reload [SERVICE]`.
-You can check if a service is reloadable by checking its service file.
-As an example:
+and:
 
 ```
-grep "ExecReload" /lib/systemd/system/ssh.service
+sudo systemctl start apache2
 ```
 
-You can peruse other services in `/lib/systemd/system`.
+We can restart it:
 
-## Examine Logs
+```
+sudo systemctl restart apache2
+```
 
-As mentioned, the `journalctl` command is part of the `systemd` software suite, and it is used to monitor system logs.
+Or, if the service supports it, reload its configuration:
 
-It's important to monitor system logs.
-Log files help identify problems in the system or with various services.
-For example, by monitoring the log entries for **ssh**, I can see all the attempts to break into the server.
-Or if the Apache2 web server malfunctions for some reason, which might be because of a configuration error,
-the logs will indicated how to identify the problem.
+```
+sudo systemctl reload apache2
+```
 
-If we type `journalctl` at the command prompt, we are be presented with the logs for the entire system.
-These logs can be paged through by pressing the space bar, the page up/page down keys, or the up/down arrow keys.
-They can also be searched by pressing the forward slash `/` and then entering a search keyword.
-To exit out of the pager, press **q** to quit.
+These operations are not identical.
+
+- A **restart** stops and starts the service.
+- A **reload** asks a running service to reread its configuration without completely stopping.
+
+Note that not every service supports reloading.
+
+We can check the unit definition itself rather than searching for a file manually:
+
+```
+systemctl cat apache2.service
+```
+
+Later, when Apache is installed, look for an `ExecReload=` directive.
+
+I find `systemctl cat ...` as particularly useful because unit configuration do not necessarily live in one predictable file.
+
+### Active Is Not the Same as Enabled
+
+This distinction causes a lot of confusion.
+A service can be **active** without being **enabled** and vice versa.
+**Active** describes what is happening **right now**.
+**Enabled** describes whether the unit has been configured to be activated automatically through systemd's dependency structure, commonly during boot.
+
+We can ask whether a service is currently active:
+
+```
+systemctl is-active ssh
+```
+
+And whether it is enabled:
+
+```
+systemctl is-enabled ssh
+```
+
+Think of these as two separate questions:
+
+```
+Is it running now?             → active
+Should it normally start?      → enabled
+```
+
+For example:
+
+```
+sudo systemctl start apache2
+```
+
+starts Apache now but does not necessarily enable it for future boots.
+
+Likewise:
+
+```
+sudo systemctl enable apache2
+```
+
+configures it to start through the appropriate dependency relationships but does not necessarily start it immediately.
+
+A convenient command combines the two:
+
+```
+sudo systemctl enable --now apache2
+```
+
+Likewise, we can stop and disable it with:
+
+```
+sudo systemctl disable --now apache2
+```
+
+This `--now` option is useful because it makes explicit that:
+
+```
+enable ≠ start
+```
+
+and:
+
+```
+disable ≠ stop
+```
+
+### What Does Enabling Actually Do?
+
+The word **enable** can make systemd sound more mysterious than it is.
+In many cases, enabling a service creates symbolic links representing dependencies among units.
+We can inspect what would happen without actually changing anything:
+
+```
+systemctl enable --dry-run apache2
+```
+
+We can also examine the service:
+
+```
+systemctl cat apache2
+```
+
+Near the end of many service files we will find an `[Install]` section such as:
+
+```
+[Install]
+WantedBy=multi-user.target
+```
+
+This tells systemd where the unit should be linked when it is enabled.
+Thus enabling is largely about establishing relationships among units.
+
+## Unit Files
+
+System unit files can come from several locations.
+Common locations include:
+
+```
+/usr/lib/systemd/system/
+/etc/systemd/system/
+/run/systemd/system/
+```
+
+Depending on the distribution, `/lib/systemd/system/` may also appear or may be related to `/usr/lib/systemd/system/`.
+As a general rule:
+
+```
+/usr/lib/systemd/system/
+```
+
+contains unit files supplied by installed software packages, while:
+
+```
+/etc/systemd/system/
+```
+
+is the important location for administrator-created configuration and overrides.
+
+Rather than guessing where a unit file lives, use:
+
+```
+systemctl cat ssh.service
+```
+
+or:
+
+```
+systemctl show ssh.service
+```
+
+To see the path systemd loaded:
+
+```
+systemctl show -p FragmentPath ssh.service
+```
+
+For example:
+
+```
+systemctl show -p FragmentPath ssh
+```
+
+might return something like:
+
+```
+FragmentPath=/usr/lib/systemd/system/ssh.service
+```
+
+### Don't Usually Edit Vendor Unit Files Directly
+
+Suppose we want to modify the configuration of an installed service.
+It is generally better not to edit its package-supplied unit file directly.
+A package upgrade could replace our changes.
+Instead, systemd supports **drop-in configuration**.
+
+For example:
+
+```
+sudo systemctl edit ssh.service
+```
+
+This creates an administrator override beneath:
+
+```
+/etc/systemd/system/ssh.service.d/
+```
+
+We can then see the complete effective configuration using:
+
+```
+systemctl cat ssh.service
+```
+
+This pattern reflects a common Linux configuration principle:
+
+```
+vendor defaults
+       +
+local administrator overrides
+       =
+effective configuration
+```
+
+### Reloading systemd Configuration
+
+Suppose we create or modify a unit file.
+Systemd does not necessarily reread every configuration file immediately.
+After adding or modifying unit files, we commonly run:
+
+```
+sudo systemctl daemon-reload
+```
+
+This tells the system manager to reload unit configuration.
+Notice that:
+
+```
+daemon-reload
+```
+
+does **not** mean "restart all daemons."
+
+It means:
+
+> Reload systemd's own unit configuration.
+
+If we edit Apache's application configuration, for example, that is a different matter from editing:
+
+```
+apache2.service
+```
+
+The distinction is important.
+
+## Targets
+
+Older Unix and Linux init systems commonly used **runlevels** to represent different operating states.
+Systemd instead uses **targets**.
+A target primarily groups other units together and establishes dependencies.
+We can see the default target with:
+
+```
+systemctl get-default
+```
+
+On a server, we may see:
+
+```
+multi-user.target
+```
+
+On a graphical workstation, we may instead see:
+
+```
+graphical.target
+```
+
+Targets themselves can depend on other targets and services.
+
+For example:
+
+```
+graphical.target
+        |
+        +-- multi-user.target
+                |
+                +-- networking
+                +-- SSH
+                +-- various system services
+```
+
+This is an oversimplification, but it illustrates the idea.
+
+One issue with the prior runlevel method was that the boot process was sequential and thus slow:
+
+```
+A → B → C → D → E
+```
+
+Instead, systemd describes dependencies among many units and can start independent units in parallel.
+This makes for quicker boot times.
+We can examine dependencies:
+
+```
+systemctl list-dependencies multi-user.target
+```
+
+Try:
+
+```
+systemctl list-dependencies ssh.service
+```
+
+We can also look in the opposite direction:
+
+```
+systemctl list-dependencies --reverse ssh.service
+```
+
+## The Journal
+
+Systemd also includes a logging system called the **journal**.
+The service responsible for collecting journal data is:
+
+```
+systemd-journald
+```
+
+We examine journal data using:
 
 ```
 journalctl
 ```
 
-It's much more useful to specify the field and to declare an option when using `journalctl`, like above with `ssh`
-See the following man pages for details:
+This command displays journal entries available to the current user.
+Depending on permissions, an ordinary user may not be able to read every system log entry.
+Thus, using the following provides access to the system journal.
 
 ```
-man systemd.journal-fields
-man journalctl
+sudo journalctl
 ```
 
-There are many fields and options we can use, but as an example,
-we see that there is an option to view the more recent entries first:
+The output is normally presented using a pager.
+Useful pager controls include:
 
 ```
-journalctl -r
+Space        next page
+↑ / ↓        move
+/            search
+n            next search result
+q            quit
 ```
 
-Or we view log entries in reverse order, for users on the system, and since the last boot with the following options:
+### Filtering Journal Entries
+
+Dumping every available log entry is usually not very useful.
+The power of `journalctl` comes from filtering.
+
+#### Current Boot
+
+To display messages from the current boot:
 
 ```
-journalctl -r --user -b 0
+journalctl -b
 ```
 
-Or for the system:
+To show the previous boot:
 
 ```
-journalctl -r --system -b 0
+journalctl -b -1
 ```
 
-I can more specifically look at the logs files for a service by using the `-u` option with `journalctl`:
+List recorded boots:
+
+```
+journalctl --list-boots
+```
+
+This can be extremely useful when diagnosing a problem that occurred during a previous startup.
+
+#### A Specific Unit
+
+For SSH:
+
+```
+journalctl -u ssh
+```
+
+For Apache:
 
 ```
 journalctl -u apache2
 ```
 
-I can follow the logs in real-time (press **ctrl-c** to quit the real-time view):
+Current boot only:
+
+```
+journalctl -b -u ssh
+```
+
+#### Recent Entries
+
+Show the most recent messages first:
+
+```
+journalctl -r
+```
+
+Or just the last 20 entries:
+
+```
+journalctl -n 20
+```
+
+For a particular unit:
+
+```
+journalctl -u ssh -n 20
+```
+
+#### Follow Logs in Real Time
+
+Use:
 
 ```
 journalctl -f
 ```
 
-## Timers (Automation)
+This behaves somewhat like:
 
-Linux and Unix operating systems have long provided a way to automate processes.
-Historically, the `cron` service has been used to automate jobs, but I do not cover it here.
-Instead, we examine how to use `systemd` as a way to automate jobs using **timers**.
+```
+tail -f
+```
 
-The `/var/log/auth.log` file logs all authentication attempts to the system.
-We can create a script to look at the file and extract the invalid attempts to login to the system.
+New entries appear as they are written.
 
-What if we could have that script run at specific times?
-For example, what if we wanted to run that script every morning at 8AM and then log the output to a file for us to read?
-We can do that with systemd timers.
+Press **Ctrl-C** to stop following them.
 
-First, let's create a very simple `auth.sh` script to do this job.
-In the example below, I've set the location of the `auth.log` file and the output file,
-added a check to be sure the file exists and/or can be read,
-created two additional variables to record the start and end dates of the auth.log file, and
-used `grep` again to look for invalid IP addresses in the log file,
-wrote an `echo` statement to add some additional information, and
-save the output in a file called `brute.log` in our `$HOME` directory.
-The `${end_date}` and `${start_date}` variables were created after closely studying the `/var/log/auth.log` file.
-This is a very basic file, and programming languages like `awk`, `perl`, or `python` might be better suited for this job,
-but for `bash` sake:
+For one service:
+
+```
+journalctl -f -u ssh
+```
+
+#### Filter by Time
+
+We can ask for entries since a particular time:
+
+```
+journalctl --since today
+```
+
+Or:
+
+```
+journalctl --since "1 hour ago"
+```
+
+Or between two times:
+
+```
+journalctl --since "2026-10-06 14:00" --until "2026-10-06 15:00"
+```
+
+This becomes particularly useful when someone tells you:
+
+> The server stopped working around 2:30 PM.
+
+Rather than reading thousands of lines, examine that time period.
+
+#### Filter by Priority
+
+Journal messages have priorities.
+
+For example:
+
+```
+journalctl -p warning
+```
+
+shows messages at warning priority or more severe.
+
+For the current boot:
+
+```
+journalctl -b -p warning
+```
+
+This can be a useful first troubleshooting step.
+
+#### Service Status and Logs Work Together
+
+Suppose Apache is not working.
+A useful troubleshooting workflow might begin with:
+
+```
+systemctl status apache2
+```
+
+Then:
+
+```
+journalctl -u apache2 -b
+```
+
+Perhaps:
+
+```
+journalctl -u apache2 -b -n 50
+```
+
+This illustrates a general workflow:
+
+```
+Something is broken
+        ↓
+systemctl status
+        ↓
+inspect journal
+        ↓
+inspect configuration
+        ↓
+correct problem
+        ↓
+restart/reload
+        ↓
+check status again
+```
+
+Knowing commands is useful.
+Knowing **which question to ask next** is more important.
+
+#### Failed Units
+
+Systemd can show us units that have failed:
+
+```
+systemctl --failed
+```
+
+or:
+
+```
+systemctl --state=failed
+```
+
+If we correct the underlying problem, restart the unit:
+
+```
+sudo systemctl restart SERVICE
+```
+
+Sometimes we may also want to clear systemd's recorded failed state:
+
+```
+sudo systemctl reset-failed SERVICE
+```
+
+Again, `reset-failed` does not fix the problem.
+It merely clears the recorded failure after we have addressed the actual cause.
+
+## Timers
+
+Unix systems have traditionally used **cron** to schedule recurring tasks.
+Cron remains widely used and is not made obsolete merely because systemd provides another scheduling mechanism.
+But systemd provides **timer units** as an alternative.
+
+A timer normally activates another unit, usually a `.service` unit, at a particular time or interval.
+
+Conceptually:
+
+```
+report.timer
+      |
+      | activates
+      v
+report.service
+      |
+      | executes
+      v
+/usr/local/bin/report
+```
+
+This illustrates the systemd unit model nicely:
+
+> A timer does not need to contain the work itself.
+> It defines **when** another unit should be activated.
+
+### Creating a Simple Timer
+
+Let's make a small example that will also prepare us for the next section on storage.
+Suppose we want the server to record filesystem usage once per day.
+
+Create a script:
+
+```
+sudo nano /usr/local/bin/disk-report
+```
+
+Add:
 
 ```
 #!/usr/bin/env bash
 
-LOG_FILE="${1:-/var/log/auth.log}"
-OUT_FILE="${HOME}/brute.log"
-
-if [[ ! -r "${LOG_FILE}" ]] ; then
-    echo "Error: cannot read '${LOG_FILE}' (permission or file missing)." >&2
-    echo "Try running with sudo or pass a readable log path." >&2
-    exit 2
-fi
-
-END_DATE=$(grep -Eo "^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}" "${LOG_FILE}" | tail -n1)
-START_DATE=$(grep -Eo "^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}" "${LOG_FILE}" | head -n1)
-
-TOTAL_INVALID="$(grep -c "Invalid user" "${LOG_FILE}")"
-INVALID_IPS="$(grep "Invalid user" "${LOG_FILE}" | \
-    grep -Eo "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+" | \
-    sort | uniq | wc -l)"
-
-echo "
-Log entry created on $(date +%c).
-From ${START_DATE} to ${END_DATE}, there were ${TOTAL_INVALID} attempts to login to the system.
-These came from ${INVALID_IPS} unique IPs.
-" >> "${OUT_FILE}"
-
+{
+    echo "Disk report: $(date)"
+    df -hT
+    echo
+} >> /var/log/disk-report.log
 ```
 
-Next, to automate the execution of this script, we need to create two additional files.
-First we create a **service** file.
-This file defines the **service** that we want to execute.
-Navigate to the systemd's service directory:
+Save it and make it executable:
 
 ```
-cd /etc/systemd/system
+sudo chmod 755 /usr/local/bin/disk-report
 ```
 
-And use `sudo nano` to create a file called `brute.service`:
+Test it manually:
 
 ```
-sudo nano brute.service
+sudo /usr/local/bin/disk-report
 ```
 
-In the above file, we add the following information under two sections, a Unit section and a Service section.
-The Unit section includes a description of the service and a list of the service's requirements.
-The Service section declares the type of service, the location of the script to run, and the user to run the script under.
-Feel free to use this but be sure to change your User information:
+Then examine:
+
+```
+cat /var/log/disk-report.log
+```
+
+Before automating something, it is generally wise to make sure the underlying command works manually.
+
+### Creating the Service Unit
+
+Create:
+
+```
+sudo nano /etc/systemd/system/disk-report.service
+```
+
+Add:
 
 ```
 [Unit]
-Description="Summarize brute login attempts."
-Requires=brute.timer
+Description=Record filesystem usage
 
 [Service]
-Type=simple
-ExecStart=/usr/local/bin/auth.sh
-User=seanburns
+Type=oneshot
+ExecStart=/usr/local/bin/disk-report
 ```
 
-See `man 5 systemd.service` for more details.
+This is a **oneshot** service.
+Unlike a web server or SSH server, the script does not remain running.
 
-Next we need to create the **timer** file.
-Using `sudo nano`, run the following command in the same directory as above:
+It:
 
 ```
-sudo nano brute.timer
+starts
+  ↓
+performs one job
+  ↓
+exits
 ```
 
-In this file, add the following:
+That is exactly what `Type=oneshot` represents.
+
+Now tell systemd about the new unit:
+
+```
+sudo systemctl daemon-reload
+```
+
+We can test the service without waiting for a timer:
+
+```
+sudo systemctl start disk-report.service
+```
+
+Then:
+
+```
+systemctl status disk-report.service
+```
+
+Do not be surprised if the service is not shown as:
+
+```
+active (running)
+```
+
+It already completed its job and exited.
+
+Check its journal:
+
+```
+journalctl -u disk-report.service
+```
+
+And check the output:
+
+```
+cat /var/log/disk-report.log
+```
+
+### Creating the Timer Unit
+
+Now create:
+
+```
+sudo nano /etc/systemd/system/disk-report.timer
+```
+
+Add:
 
 ```
 [Unit]
-Description="Timer for the brute login service."
+Description=Run disk report each morning
 
 [Timer]
 OnCalendar=*-*-* 08:00:00
@@ -262,101 +1021,483 @@ Persistent=true
 WantedBy=timers.target
 ```
 
-See `man 5 systemd.timer` for more details.
+The important line is:
 
-Next we need to enable and start the timer.
-To do that, we run two separate `systemctl` commands:
+```
+OnCalendar=*-*-* 08:00:00
+```
+
+This means every day at 8:00 AM.
+We can ask systemd to interpret calendar expressions for us:
+
+```
+systemd-analyze calendar '*-*-* 08:00:00'
+```
+
+This is extremely useful when constructing a timer because it shows what systemd thinks the expression means and when it will next occur.
+
+We could also use convenient expressions such as:
+
+```
+systemd-analyze calendar daily
+```
+
+or:
+
+```
+systemd-analyze calendar weekly
+```
+
+### Persistent Timers
+
+Our timer also contains:
+
+```
+Persistent=true
+```
+
+Suppose the server is powered off at 8:00 AM.
+Without persistence, that occurrence would simply be missed.
+With `Persistent=true`, systemd records the timer's previous activation and can trigger an overdue calendar event after the system becomes available again.
+This is useful for tasks where:
+
+> sometime after 8:00 AM is better than not at all.
+
+### Enable and Start the Timer
+
+After creating the timer:
 
 ```
 sudo systemctl daemon-reload
 ```
 
-And then enable the timer:
+Then we can enable and start it in one command:
 
 ```
-sudo systemctl enable brute.timer
+sudo systemctl enable --now disk-report.timer
 ```
 
-Start the timer:
+Check it:
 
 ```
-sudo systemctl start brute.timer
+systemctl status disk-report.timer
 ```
 
-And finally, check the status of all timers:
+And list timers:
 
 ```
 systemctl list-timers
 ```
 
-Or check the status of our specific timer:
+The output includes useful information such as:
+
+- when the timer will next activate,
+- when it last activated,
+- and which service it triggers.
+
+Notice that we enable the **timer**, not the `disk-report.service`.
+
+The timer is what needs to remain scheduled.
+
+### Relative Timers
+
+Not every timer needs to use a calendar date.
+
+Systemd timers can also describe intervals relative to events.
+
+For example:
 
 ```
-systemctl status brute.timer
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=1h
 ```
 
-You can now check that your script ran after the next time your system's clock reaches 8AM.
+This could mean:
 
-## Useful Systemd Commands
+- first activate 10 minutes after boot,
+- then activate again one hour after the unit's previous activation.
 
-You can see more of what `systemctl` or `journalctl` can do by reading through their documentation:
-
-```
-man systemctl
-man journalctl
-```
-
-You can check if a service if enabled:
+This is conceptually different from:
 
 ```
-systemctl is-enabled apache2
+OnCalendar=hourly
 ```
 
-You can reboot, poweroff, or suspend a system (suspending a system mostly makes sense for laptops and not servers):
+One describes an interval relative to activity.
+The other describes a position on the calendar.
+
+### Timer Accuracy and Randomization
+
+Systemd timers are not necessarily designed to run at an exact microsecond.
+For many administrative tasks, exact timing does not matter.
+If thousands of servers are all configured to perform the same task at precisely midnight, having every one of them start simultaneously may be undesirable.
+Systemd therefore provides controls such as:
 
 ```
-systemctl reboot
-systemctl poweroff
-systemctl suspend
+AccuracySec=
 ```
 
-To show configuration file changes to the system:
+and:
 
 ```
-systemd-delta
+RandomizedDelaySec=
 ```
 
-To list real-time control group process, resource usage, and memory usage:
+These serve different purposes.
+
+- `AccuracySec=` provides an allowed accuracy window in which systemd can coalesce timer wakeups.
+- `RandomizedDelaySec=` intentionally adds a randomized delay.
+
+For example:
 
 ```
-systemd-cgtop
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=30min
 ```
 
-* to search failed processes/services:
+can distribute a task over a period rather than causing many systems to perform it simultaneously.
+
+For our small class servers, we normally do not need this, but it illustrates that timers were designed for managing real systems at scale.
+
+## Other Unit Types
+
+Services and timers are only two kinds of units.
+Let's look briefly at several others.
+
+### Socket Units
+
+A `.socket` unit can listen for incoming communication and activate a corresponding service when needed.
+
+Conceptually:
 
 ```
-systemctl --state failed
+request arrives
+      ↓
+example.socket
+      ↓
+activates
+      ↓
+example.service
 ```
 
-* to list services
+This is called **socket activation**.
+A service therefore does not necessarily need to be running continuously merely because something might eventually connect to it.
+
+List socket units:
 
 ```
-systemctl list-unit-files -t service
+systemctl list-units --type=socket
 ```
 
-* to examine boot time:
+### Path Units
+
+A `.path` unit can watch for filesystem events and activate another unit.
+For example, a task could run when:
+
+- a file appears,
+- a directory changes,
+- or a path is modified.
+
+List them:
+
+```
+systemctl list-units --type=path
+```
+
+### Device Units
+
+Systemd also represents kernel devices as units.
+
+Try:
+
+```
+systemctl list-units --type=device
+```
+
+These may look less familiar than services, but the principle is the same:
+
+> systemd represents resources as units so that dependencies can be expressed between them.
+
+## Boot Performance
+
+Systemd records timing information about the boot process.
+We can see the overall boot time with:
 
 ```
 systemd-analyze
 ```
 
+A more detailed report is:
+
+```
+systemd-analyze blame
+```
+
+This lists units according to how long their startup took.
+However, be careful interpreting this output.
+A unit taking ten seconds to initialize does not necessarily mean it delayed the entire boot by ten seconds because many units can start concurrently.
+For dependency-aware analysis, try:
+
+```
+systemd-analyze critical-chain
+```
+
+This attempts to show the time-critical chain of units involved in reaching the system's boot target.
+The distinction illustrates why simply sorting service startup times does not completely explain boot performance.
+
+## Resource Management
+
+Systemd also organizes processes using Linux **control groups**, or cgroups.
+We can see resource use grouped according to systemd's hierarchy using:
+
+```
+systemd-cgtop
+```
+
+This provides a changing display somewhat analogous to the `top` command but organized by control groups.
+
+Services started by systemd are therefore not merely processes that systemd happened to launch.
+Systemd can also track and manage them as groups of related processes.
+
+## Useful systemd Commands
+
+Here are some commands worth remembering.
+
+Inspect a unit:
+
+```
+systemctl status UNIT
+```
+
+Display its unit configuration:
+
+```
+systemctl cat UNIT
+```
+
+Display systemd properties:
+
+```
+systemctl show UNIT
+```
+
+Check whether it is running:
+
+```
+systemctl is-active UNIT
+```
+
+Check whether it is enabled:
+
+```
+systemctl is-enabled UNIT
+```
+
+Start it:
+
+```
+sudo systemctl start UNIT
+```
+
+Stop it:
+
+```
+sudo systemctl stop UNIT
+```
+
+Restart it:
+
+```
+sudo systemctl restart UNIT
+```
+
+Reload its application configuration if supported:
+
+```
+sudo systemctl reload UNIT
+```
+
+Enable it:
+
+```
+sudo systemctl enable UNIT
+```
+
+Enable and start it:
+
+```
+sudo systemctl enable --now UNIT
+```
+
+Disable and stop it:
+
+```
+sudo systemctl disable --now UNIT
+```
+
+Reload systemd's unit configuration:
+
+```
+sudo systemctl daemon-reload
+```
+
+List failed units:
+
+```
+systemctl --failed
+```
+
+Clear a recorded failure:
+
+```
+sudo systemctl reset-failed UNIT
+```
+
+List services:
+
+```
+systemctl list-units --type=service
+```
+
+List mount units:
+
+```
+systemctl list-units --type=mount
+```
+
+List timers:
+
+```
+systemctl list-timers
+```
+
+Examine unit dependencies:
+
+```
+systemctl list-dependencies UNIT
+```
+
+Examine logs for a unit:
+
+```
+journalctl -u UNIT
+```
+
+Examine its logs from the current boot:
+
+```
+journalctl -b -u UNIT
+```
+
+Follow its logs:
+
+```
+journalctl -f -u UNIT
+```
+
+Check boot time:
+
+```
+systemd-analyze
+```
+
+Examine the boot's critical path:
+
+```
+systemd-analyze critical-chain
+```
+
+## Reading the Documentation
+
+Systemd is a large software suite.
+Nobody should attempt to memorize all of its commands and configuration directives.
+Use the manual.
+Some particularly useful manual pages include:
+
+```
+man systemctl
+man journalctl
+man systemd.unit
+man systemd.service
+man systemd.timer
+man systemd.mount
+man systemd.target
+```
+
+Notice the manual section numbers when you encounter references such as:
+
+```
+systemd.service(5)
+```
+
+or:
+
+```
+systemctl(1)
+```
+
+These identify both the manual page and its section.
+
 ## Conclusion
 
-This is a basic introduction to **systemd**, which is composed of a suite of software to help manage booting a system,
-managing services, and monitoring logs.
+Systemd began as an **init system**, but describing it only as an init system understates its role on contemporary Linux systems.
+Its central abstraction is the **unit**.
+Units allow systemd to represent and establish relationships among resources such as:
 
-We'll put what we've learned into practice when we set up our LAMP servers.
+```
+services
+timers
+mounts
+automounts
+sockets
+paths
+devices
+targets
+```
 
-[launchd]:https://en.wikipedia.org/wiki/Launchd
-[systemd]:https://en.wikipedia.org/wiki/Systemd
-[apache2]:https://httpd.apache.org/
+To examine and manage units and, we used:
+
+```
+systemctl
+```
+
+To examine logs associated with the system and its services, we used.
+
+```
+journalctl
+```
+
+We also saw an important distinction:
+
+```
+active  = what is happening now
+enabled = activation configured through systemd dependencies
+```
+
+And we learned that:
+
+```
+start ≠ enable
+stop  ≠ disable
+```
+
+We created a timer that activated a oneshot service:
+
+```
+disk-report.timer
+        |
+        v
+disk-report.service
+        |
+        v
+/usr/local/bin/disk-report
+```
+
+In the next section, we will add additional storage to our virtual machine.
+When we ask DigitalOcean to automatically format and mount that storage, we will discover that DigitalOcean creates systemd configuration on our behalf.
+That will give us an opportunity to investigate a practical example of the concepts introduced here rather than treating the cloud interface as a black box.
+
+[systemd]:https://systemd.io/
+[launchd_wiki]:https://en.wikipedia.org/wiki/Launchd
