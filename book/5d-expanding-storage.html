@@ -1,0 +1,856 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Expanding Storage - Linux Systems Administration</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="Entry level book on Linux systems administration.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-fa86cc46.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-b63f2cd2.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Linux Systems Administration</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/cseanburns/linux_sysadmin" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="expanding-storage-and-backing-up-systems"><a class="header" href="#expanding-storage-and-backing-up-systems">Expanding Storage and Backing Up Systems</a></h1>
+<p>By the end of this section, you will be able to:</p>
+<ol>
+<li><strong>Explain how Linux incorporates additional storage</strong> into its filesystem hierarchy.</li>
+<li><strong>Identify block devices, filesystems, and mount points</strong> using commands such as <code>lsblk</code>, <code>df</code>, <code>findmnt</code>, and <code>blkid</code>.</li>
+<li><strong>Explain what DigitalOcean does when it automatically formats and mounts a volume</strong>.</li>
+<li><strong>Understand how storage can be mounted automatically</strong>, including the use of <code>systemd</code> mount units and the traditional <code>/etc/fstab</code> file.</li>
+<li><strong>Manually mount and unmount storage</strong> when needed.</li>
+<li><strong>Distinguish between DigitalOcean volumes, snapshots, and backups</strong>.</li>
+<li><strong>Understand some basic principles of backup and recovery</strong>.</li>
+</ol>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<p>At some point, nearly everyone has needed additional storage.
+You may have added an external USB drive to a desktop or laptop, inserted an SD card into another device, or perhaps even used optical disks or floppy disks(???).</p>
+<p>Servers may also need extra storage, too.
+Some of the reasons may include:</p>
+<ul>
+<li>users create more files,</li>
+<li>databases grow,</li>
+<li>logs accumulate,</li>
+<li>applications require additional space,</li>
+<li>backups need somewhere to go,</li>
+<li>or administrators may want to keep some data separate from the operating system.</li>
+</ul>
+<p>Our DigitalOcean Droplets already have 10GB of storage.
+We can see it with:</p>
+<pre><code>lsblk
+</code></pre>
+<p>On my Droplet, the primary storage device appears as something like:</p>
+<pre><code>vda
+└─vda1
+</code></pre>
+<p>The device <code>/dev/vda</code> represents the virtual disk provided with the Droplet.
+This device has partitions, and one of its partitions, <code>/dev/vda1</code>, contains the filesystem mounted at:</p>
+<pre><code>/
+</code></pre>
+<p>Recall that <code>/</code> is the top of the Linux filesystem hierarchy and is referred to as the root directory.</p>
+<p>Thus, although we interact with directories such as:</p>
+<pre><code>/etc
+/home
+/usr
+/var
+</code></pre>
+<p>those directories ultimately exist on some kind of storage device.
+This is an important distinction:</p>
+<blockquote>
+<p>A Linux <strong>filesystem hierarchy</strong> is not the same thing as a physical or virtual storage device.</p>
+</blockquote>
+<p>The directory tree is an abstraction that allows many storage devices to appear as parts of one unified hierarchy.
+We can add another storage device and attach it somewhere within that hierarchy.</p>
+<h2 id="digitalocean-volumes"><a class="header" href="#digitalocean-volumes">DigitalOcean Volumes</a></h2>
+<p>DigitalOcean calls its additional block storage devices <strong>Volumes</strong>.
+A Volume is storage that exists separately from the Droplet’s primary disk.
+If it helps, think of it as a second storage disk.</p>
+<p>DigitalOcean describes Volumes as network-attached block storage.
+A Volume can be attached to a Droplet, moved between Droplets in the same datacenter, resized, and independently snapshotted.
+This king of separation can be useful.</p>
+<p>For example, imagine that a server’s operating system is stored on one disk while a large collection of data is stored on another:</p>
+<pre><code>Droplet
+│
+├── Primary disk
+│      └── operating system
+│
+└── Volume
+       └── application data
+</code></pre>
+<p>If necessary, the Volume can later be detached from one Droplet and attached to another.
+This can keep all the data files we use separate from the OS files needed to run the system.</p>
+<h3 id="cost"><a class="header" href="#cost">Cost</a></h3>
+<p>Volumes are not free.
+As of this writing, DigitalOcean charges <strong>$0.10 per GiB per month</strong> for Volume storage, and charges continue for as long as the Volume exists, even if it is not attached to a Droplet.</p>
+<p>For our exercise, therefore, we will use a small Volume.</p>
+<h2 id="creating-a-volume"><a class="header" href="#creating-a-volume">Creating a Volume</a></h2>
+<p>Log into the DigitalOcean Control Panel.
+From your Droplet, locate the option to add or create a <strong>Volume</strong>.
+Create a small Volume.</p>
+<p>A few GB is sufficient for this exercise.</p>
+<p>Give the Volume a meaningful name.</p>
+<p>For example, I named mine:</p>
+<pre><code>enterprise_d_1
+</code></pre>
+<p>DigitalOcean provides two important choices when creating a Volume:</p>
+<ol>
+<li><strong>Automatically Format &amp; Mount</strong></li>
+<li><strong>Manually Format &amp; Mount</strong></li>
+</ol>
+<p>For this exercise, select:</p>
+<p><strong>Automatically Format &amp; Mount</strong></p>
+<p>Choose the <strong>Ext4</strong> filesystem.</p>
+<p>Ext4 is a mature, widely used general-purpose Linux filesystem and is DigitalOcean’s default recommendation for most workloads.
+DigitalOcean also supports XFS, which may be preferable for some large-file or write-heavy workloads.</p>
+<blockquote>
+<p>Different distributions default to different filesystems.
+Debian and Ubuntu default to ext4 while Red Hat defaults to XFS.
+See <a href="https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_file_systems/overview-of-available-file-systems_managing-file-systems">Overview of available file systems</a>.</p>
+</blockquote>
+<p>Attach the Volume to your Droplet.
+Once DigitalOcean finishes creating it, return to your SSH session.
+You will find that something interesting has happened.
+We clicked a few buttons in a web interface, but those buttons caused several changes to our Linux system.</p>
+<p>Let’s investigate them.</p>
+<h2 id="investigating-the-new-storage"><a class="header" href="#investigating-the-new-storage">Investigating the New Storage</a></h2>
+<p>To examine your new storage device, run:</p>
+<pre><code>lsblk
+</code></pre>
+<p>You should now see an additional block device.
+On my system, for example, the original disk is:</p>
+<pre><code>vda
+</code></pre>
+<p>and the new Volume appears as:</p>
+<pre><code>sda
+</code></pre>
+<p>Your exact output may differ.</p>
+<h3 id="what-are-vda-and-sda"><a class="header" href="#what-are-vda-and-sda">What Are <code>vda</code> and <code>sda</code>?</a></h3>
+<p>Linux represents devices using special files located under
+(generally, everything is a file on Unix-like operating systems, including devices):</p>
+<pre><code>/dev
+</code></pre>
+<p>Thus our devices may be represented in the filesystem as:</p>
+<pre><code>/dev/vda
+/dev/sda
+</code></pre>
+<p>The name does not come from the name we gave the Volume in DigitalOcean.
+The Droplet’s primary virtual disk is presented to Linux using a VirtIO block interface and therefore commonly receives a <code>vd</code> device name such as:</p>
+<pre><code>/dev/vda
+</code></pre>
+<p>DigitalOcean Volumes are presented differently and commonly appear with <a href="https://en.wikipedia.org/wiki/SCSI">SCSI-style</a> device names such as:</p>
+<pre><code>/dev/sda
+</code></pre>
+<p>The exact letters should not be treated as permanent identifiers.
+A device that appears as <code>/dev/sda</code> today could potentially receive another device name under different circumstances.</p>
+<p>DigitalOcean therefore supplies a more stable identifier under:</p>
+<pre><code>/dev/disk/by-uuid/
+</code></pre>
+<p>Run:</p>
+<pre><code>ls -l /dev/disk/by-uuid/
+</code></pre>
+<p>Look for an entry containing your Volume’s name.</p>
+<p>Mine should resemble:</p>
+<pre><code>scsi-0DO_Volume_enterprise_d_1
+</code></pre>
+<p>DigitalOcean recommends these <code>/dev/disk/by-uuid/</code> identifiers when a persistent reference to a Volume is required because names such as <code>/dev/sda</code> are not guaranteed to remain the same.</p>
+<p>This is a useful general systems administration principle:</p>
+<blockquote>
+<p>Human-readable names such as <code>/dev/sda</code> may describe how the kernel currently sees a device, but we should not necessarily assume that name is permanent.</p>
+</blockquote>
+<h3 id="where-did-the-volume-go"><a class="header" href="#where-did-the-volume-go">Where Did the Volume Go?</a></h3>
+<p>Run again and examine the <strong>MOUNTPOINTS</strong> column.</p>
+<pre><code>lsblk
+</code></pre>
+<p>You should see that DigitalOcean mounted the Volume somewhere under:</p>
+<pre><code>/mnt
+</code></pre>
+<p>For my <code>enterprise_d_1</code> Volume, this is:</p>
+<pre><code>/mnt/enterprise_d_1
+</code></pre>
+<p>Now try:</p>
+<pre><code>ls /mnt
+</code></pre>
+<p>and:</p>
+<pre><code>cd /mnt/enterprise_d_1
+</code></pre>
+<p>The new storage device has become part of the existing Linux directory hierarchy.</p>
+<p>Conceptually:</p>
+<pre><code>/
+├── etc
+├── home
+├── usr
+├── var
+└── mnt
+     └── enterprise_d_1
+              │
+              └── separate storage device
+</code></pre>
+<p>This is quite different from the traditional Windows use of separate drive letters such as:</p>
+<pre><code>C:
+D:
+E:
+</code></pre>
+<p>Linux instead <strong>mounts</strong> the filesystem provided by another device onto a directory in the <strong>existing</strong> hierarchy.
+The directory where this occurs is called the <strong>mount point</strong>.</p>
+<h2 id="examining-the-filesystem"><a class="header" href="#examining-the-filesystem">Examining the Filesystem</a></h2>
+<p>Run:</p>
+<pre><code>df -hT
+</code></pre>
+<p>The <code>df</code> command reports information about mounted filesystems.
+The options here mean:</p>
+<pre><code>-h    human-readable sizes
+-T    display filesystem type
+</code></pre>
+<p>Locate your new Volume.
+You should see that its filesystem type is:</p>
+<pre><code>ext4
+</code></pre>
+<p>and that it is mounted somewhere under:</p>
+<pre><code>/mnt
+</code></pre>
+<p>You can get even more targeted information using:</p>
+<pre><code>findmnt /mnt/enterprise_d_1
+</code></pre>
+<p><code>findmnt</code> is designed specifically for examining mounted filesystems.
+Also try:</p>
+<pre><code>sudo blkid
+</code></pre>
+<p>The <code>blkid</code> command reports identifying information about block devices, including filesystem types and UUIDs.</p>
+<p>At this point we can distinguish several concepts:</p>
+<pre><code>DigitalOcean Volume
+        ↓
+Linux block device
+        ↓
+ext4 filesystem
+        ↓
+mount
+        ↓
+/mnt/enterprise_d_1
+        ↓
+files and directories
+</code></pre>
+<p>These are related concepts, but they are not the same thing.</p>
+<h2 id="what-did-digitalocean-do-for-us"><a class="header" href="#what-did-digitalocean-do-for-us">What Did DigitalOcean Do for Us?</a></h2>
+<p>When we selected <strong>Automatically Format &amp; Mount</strong>, DigitalOcean performed several operations that a system administrator could otherwise perform manually.</p>
+<p>At a high level, it:</p>
+<ol>
+<li>attached a new block device,</li>
+<li>created an Ext4 filesystem on it,</li>
+<li>created a mount point under <code>/mnt</code>,</li>
+<li>mounted the filesystem,</li>
+<li>configured the system so that it mounts again after a reboot.</li>
+</ol>
+<p>DigitalOcean currently mounts automatically configured Volumes using options including
+(see <code>man mount</code> for details):</p>
+<pre><code>defaults,nofail,discard,noatime
+</code></pre>
+<p>In other words, the easy button in the Control Panel did not eliminate Linux storage administration.
+Rather, it <strong>automated</strong> Linux storage administration.</p>
+<p>This distinction is important.
+Much of modern systems administration involves working with interfaces that perform lower-level operations for us.
+A useful question when using such an interface is:</p>
+<blockquote>
+<p>What did this interface just do to the underlying system?</p>
+</blockquote>
+<h2 id="persistent-mounting"><a class="header" href="#persistent-mounting">Persistent Mounting</a></h2>
+<p>Historically, one of the most common ways to specify filesystems that should be mounted when a Unix or Linux system starts is:</p>
+<pre><code>/etc/fstab
+</code></pre>
+<p>Let’s examine ours:</p>
+<pre><code>cat /etc/fstab
+</code></pre>
+<p>Interestingly, you may discover that your automatically mounted DigitalOcean Volume is <strong>not listed there</strong>.
+Yet if you reboot the system and reconnect, the Volume still appears:</p>
+<pre><code>sudo reboot
+</code></pre>
+<p>And after the system starts:</p>
+<pre><code>lsblk
+</code></pre>
+<p>And the Volume is still mounted.
+How?</p>
+<h3 id="systemd-mount-units"><a class="header" href="#systemd-mount-units">systemd Mount Units</a></h3>
+<p>On supported Linux distributions, DigitalOcean’s automatic mounting process currently uses a <strong>systemd mount unit</strong> rather than adding the Volume directly to <code>/etc/fstab</code>.
+For example, my mount point:</p>
+<pre><code>/mnt/enterprise_d_1
+</code></pre>
+<p>corresponds to a unit named approximately:</p>
+<pre><code>mnt-enterprise_d_1.mount
+</code></pre>
+<p>We can investigate it with:</p>
+<pre><code>systemctl status mnt-enterprise_d_1.mount
+</code></pre>
+<p>and:</p>
+<pre><code>systemctl cat mnt-enterprise_d_1.mount
+</code></pre>
+<p>DigitalOcean places automatically generated mount units under:</p>
+<pre><code>/etc/systemd/system/
+</code></pre>
+<p>You can inspect them:</p>
+<pre><code>ls /etc/systemd/system/*.mount
+</code></pre>
+<p>DigitalOcean also uses a udev rule associated with automatic Volume configuration
+(see <code>man udev</code>):</p>
+<pre><code>/etc/udev/rules.d/99-digitalocean-automount.rules
+</code></pre>
+<p>Thus:</p>
+<pre><code>Volume
+   ↓
+systemd mount unit
+   ↓
+mount filesystem during startup
+   ↓
+/mnt/enterprise_d_1
+</code></pre>
+<p>This is one reason simply inspecting <code>/etc/fstab</code> no longer necessarily tells us everything that will be mounted when a modern Linux system starts.</p>
+<h3 id="etcfstab-is-still-relevant"><a class="header" href="#etcfstab-is-still-relevant"><code>/etc/fstab</code> Is Still Relevant</a></h3>
+<p>However, <code>/etc/fstab</code> has not disappeared.
+It remains a standard mechanism for defining persistent mounts.
+A traditional entry might resemble (see <code>man fstab</code>):</p>
+<pre><code>/dev/disk/by-id/scsi-0DO_Volume_example /mnt/example ext4 defaults,nofail,discard,noatime 0 2
+</code></pre>
+<p>Notice that DigitalOcean recommends the stable:</p>
+<pre><code>/dev/disk/by-id/
+</code></pre>
+<p>name rather than something like:</p>
+<pre><code>/dev/sda
+</code></pre>
+<p>When manually modifying <code>/etc/fstab</code>,
+you can check the file afterward with the following command before depending on it during the next boot.</p>
+<pre><code>findmnt --verify --verbose
+</code></pre>
+<p>A malformed <code>/etc/fstab</code> can create serious boot problems.
+(Trust me on this!)</p>
+<h2 id="the-manual-workflow"><a class="header" href="#the-manual-workflow">The Manual Workflow</a></h2>
+<p>We selected DigitalOcean’s automatic option because it provides a useful opportunity to investigate what the cloud provider did for us.
+It is nevertheless worth understanding what the equivalent manual workflow looks like.
+If we created a Volume using <strong>Manually Format &amp; Mount</strong>, we would first identify the new device:</p>
+<pre><code>lsblk
+</code></pre>
+<p>Then we would create a filesystem.
+For example, to create an <code>ext4</code> filesystem on the device (replacing <strong>DEVICE</strong> with the relevant one, such as <code>sda</code> or <code>vda</code>):</p>
+<pre><code>sudo mkfs.ext4 /dev/DEVICE
+</code></pre>
+<p><strong>Do not run <code>mkfs</code> against an existing device unless you intend to erase its contents.</strong></p>
+<p>The <code>mkfs</code> command creates a filesystem.
+Running it against the wrong device can destroy data.</p>
+<p>Next, we would create a mount point:</p>
+<pre><code>sudo mkdir -p /mnt/example
+</code></pre>
+<p>Then mount the filesystem:</p>
+<pre><code>sudo mount /dev/DEVICE /mnt/example
+</code></pre>
+<p>We could inspect the result with:</p>
+<pre><code>findmnt /mnt/example
+</code></pre>
+<p>or:</p>
+<pre><code>lsblk
+</code></pre>
+<p>At this point the filesystem would be available, but the mount would normally disappear after a reboot unless we also configured persistent mounting.
+One option would be <code>/etc/fstab</code>.
+Another possibility on a systemd-based system would be a native <code>.mount</code> unit.
+Thus the manual workflow is approximately:</p>
+<pre><code>attach device
+     ↓
+identify device
+     ↓
+create filesystem
+     ↓
+create mount point
+     ↓
+mount filesystem
+     ↓
+configure persistent mounting
+</code></pre>
+<p>DigitalOcean’s automatic workflow performed those steps for us.</p>
+<h2 id="unmounting-storage"><a class="header" href="#unmounting-storage">Unmounting Storage</a></h2>
+<p>Mounting makes a filesystem accessible through the directory hierarchy.
+<strong>Unmounting</strong> disconnects it from that hierarchy.
+The command is:</p>
+<pre><code>umount
+</code></pre>
+<p>Notice that the command is <strong>not</strong> spelled <code>unmount</code>.
+(For years I would type <code>unmount</code> on accident. Every single time!)</p>
+<p>Before unmounting a filesystem, make sure nothing is actively using it.
+For example, if you are currently in a directory on the mounted system, you should leave that directory.
+It is also worth checking with something such as:</p>
+<pre><code>sudo lsof +f -- /mnt/enterprise_d_1
+</code></pre>
+<p>Then:</p>
+<pre><code>sudo umount /mnt/enterprise_d_1
+</code></pre>
+<p>You can verify the result with:</p>
+<pre><code>lsblk
+</code></pre>
+<p>or:</p>
+<pre><code>findmnt
+</code></pre>
+<p>And you’ll find that the mountpoint is empty.</p>
+<p>Note that unmounting the filesystem does <strong>not</strong> delete the Volume.
+Likewise:</p>
+<pre><code>mount ≠ attach
+umount ≠ detach
+delete ≠ either of those
+</code></pre>
+<p>These are separate operations.</p>
+<h2 id="storage-is-not-a-backup"><a class="header" href="#storage-is-not-a-backup">Storage Is Not a Backup</a></h2>
+<p>Adding another Volume to a server provides additional storage.
+But it does <strong>not</strong>, by itself, provide a backup.</p>
+<p>Suppose we stored valuable data on:</p>
+<pre><code>/mnt/enterprise_d_1
+</code></pre>
+<p>If we accidentally deleted those files, corrupted them, or deleted the Volume itself, simply having placed them on a separate device would not necessarily save us.
+This introduces an important distinction:</p>
+<pre><code>additional storage ≠ backup
+</code></pre>
+<p>A backup exists so that we can recover data after something goes wrong.</p>
+<p>DigitalOcean provides several related technologies.</p>
+<h3 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h3>
+<p>A <strong>snapshot</strong> is an on-demand image of a Droplet or Volume at a particular point in time.
+Like other virtual machine / hosting providers, DigitalOcean supports:</p>
+<ul>
+<li><strong>Droplet snapshots</strong></li>
+<li><strong>Volume snapshots</strong></li>
+</ul>
+<p>These are separate because the Droplet’s primary disk and an attached Volume are separate storage resources.</p>
+<h4 id="droplet-snapshots"><a class="header" href="#droplet-snapshots">Droplet Snapshots</a></h4>
+<p>A Droplet snapshot captures the contents of the Droplet’s disk.
+This can be useful before making a potentially disruptive change.
+For example, before:</p>
+<ul>
+<li>performing a major operating system upgrade,</li>
+<li>significantly changing server configuration,</li>
+<li>experimenting with unfamiliar software,</li>
+<li>or making some other change that may be difficult to reverse,</li>
+</ul>
+<p>an administrator might create a snapshot.</p>
+<p>If something goes badly wrong, the snapshot can be used to create another Droplet or restore the existing system to that earlier state.</p>
+<p>DigitalOcean recommends shutting down a Droplet before taking a snapshot when application consistency is important.</p>
+<p>For example:</p>
+<pre><code>sudo shutdown -h now
+</code></pre>
+<p>A snapshot can be taken on the DigitalOcean website while the Droplet is running, but applications may have data in memory that has not yet been written to disk.
+Databases are a particularly important example.</p>
+<h4 id="volume-snapshots"><a class="header" href="#volume-snapshots">Volume Snapshots</a></h4>
+<p>Volumes can be snapshotted independently.</p>
+<p>From the DigitalOcean Control Panel:</p>
+<ol>
+<li>Locate the <strong>Volumes</strong> page.</li>
+<li>Locate the Volume.</li>
+<li>Open its <strong>More</strong> menu.</li>
+<li>Select <strong>Take Snapshot</strong>.</li>
+</ol>
+<p>A Volume snapshot captures the Volume’s data and can later be used to create another Volume.</p>
+<p>DigitalOcean describes Volume snapshots as <strong>crash-consistent</strong>: writes are frozen at a particular point and all data written to the storage layer at that time is captured.
+However, that does not guarantee that every application has flushed all of its in-memory data or left its files in an application-consistent state.
+For particularly important or actively changing data, we may therefore want to stop the application or otherwise quiesce it before taking a snapshot.</p>
+<h4 id="snapshot-costs"><a class="header" href="#snapshot-costs">Snapshot Costs</a></h4>
+<p>Snapshots also incur storage charges.
+At the time this lecture was written, DigitalOcean charges approximately:</p>
+<pre><code>$0.06 per GB per month
+</code></pre>
+<p>for Droplet snapshots and:</p>
+<pre><code>$0.06 per GiB per month
+</code></pre>
+<p>for Volume snapshots.</p>
+<p>Snapshots are retained and incur costs until we delete them.</p>
+<h2 id="automated-droplet-backups"><a class="header" href="#automated-droplet-backups">Automated Droplet Backups</a></h2>
+<p>DigitalOcean also provides an automated <strong>Backups</strong> service.
+Unlike a snapshot, which we create when we choose, backups can be created automatically on a schedule.
+DigitalOcean currently offers schedules ranging from weekly and daily backups to more frequent usage-based backup intervals.</p>
+<p>This gives us an important distinction:</p>
+<pre><code>snapshot
+   └── administrator decides when to capture it
+
+backup
+   └── automatically captured according to a schedule
+</code></pre>
+<p>But there is a particularly important limitation:</p>
+<blockquote>
+<p><strong>DigitalOcean Droplet backups do not include attached Volumes.</strong></p>
+</blockquote>
+<p>If important information exists on an attached Volume, that Volume must be protected separately, for example by creating Volume snapshots.</p>
+<p>Suppose our server looks like this:</p>
+<pre><code>Droplet
+│
+├── /dev/vda
+│      └── operating system
+│
+└── /dev/sda
+       └── /mnt/enterprise_d_1
+</code></pre>
+<p>Enabling Droplet backups protects:</p>
+<pre><code>/dev/vda
+</code></pre>
+<p>but it does <strong>not</strong> automatically protect:</p>
+<pre><code>/dev/sda
+</code></pre>
+<p>That distinction is easy to miss.</p>
+<h2 id="backup-strategies"><a class="header" href="#backup-strategies">Backup Strategies</a></h2>
+<p>Professional backup strategies can become quite sophisticated.
+For our case, however, there are several useful principles to remember.</p>
+<h3 id="1-decide-what-needs-protection"><a class="header" href="#1-decide-what-needs-protection">1. Decide What Needs Protection</a></h3>
+<p>Not every file is equally important.</p>
+<p>For example, operating-system packages may be easy to reinstall.
+However, a unique database containing years of organizational data may be impossible to recreate.
+The first question is therefore:</p>
+<blockquote>
+<p>What data could we not easily replace?</p>
+</blockquote>
+<h3 id="2-decide-how-quickly-it-must-be-recovered"><a class="header" href="#2-decide-how-quickly-it-must-be-recovered">2. Decide How Quickly It Must Be Recovered</a></h3>
+<p>A snapshot of an entire server may be useful when we want to restore the entire system.
+But suppose only one configuration file was accidentally deleted.
+Restoring an entire server might be excessive.
+Traditional tools can also be used to make file-level backups.
+These include:</p>
+<pre><code>rsync
+tar
+scp
+sftp
+</code></pre>
+<p>Tools such as <code>rsync</code> and SFTP can be used when only part of a Droplet needs to be backed up.
+The main point is that different backup methods solve different problems.</p>
+<h3 id="3-automation-matters"><a class="header" href="#3-automation-matters">3. Automation Matters</a></h3>
+<p>A backup strategy that depends entirely on someone remembering to manually create a backup every week is likely eventually to fail.
+Thus, scheduled backups reduce this problem.</p>
+<h3 id="4-a-backup-should-be-recoverable"><a class="header" href="#4-a-backup-should-be-recoverable">4. A Backup Should Be Recoverable</a></h3>
+<p>Creating a backup is only half the task.
+A backup has little value if we cannot restore from it.
+Administrators should therefore understand and periodically test their recovery process.
+The important question is not simply:</p>
+<blockquote>
+<p>Do we have backups?</p>
+</blockquote>
+<p>It is:</p>
+<blockquote>
+<p>Could we restore the system or data if we needed to?</p>
+</blockquote>
+<h2 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h2>
+<p>Imagine that we run a server whose application is stored on the Droplet’s primary disk but whose important data resides on a Volume.</p>
+<pre><code>Droplet
+│
+├── primary disk
+│      ├── Ubuntu
+│      ├── software
+│      └── configuration
+│
+└── Volume
+       └── organizational data
+</code></pre>
+<p>One possible protection strategy might be:</p>
+<pre><code>Primary disk
+    │
+    ├── scheduled Droplet backups
+    │
+    └── snapshot before major system changes
+
+Volume
+    │
+    ├── periodic Volume snapshots
+    │
+    └── perhaps file-level backups elsewhere
+</code></pre>
+<p>There is no single backup method that is appropriate for every system.
+The strategy depends on thinking through what is needed:
+Some considerations include:</p>
+<ul>
+<li>what data exists,</li>
+<li>how frequently it changes,</li>
+<li>how valuable it is,</li>
+<li>how quickly it needs to be restored,</li>
+<li>how much data loss is acceptable,</li>
+<li>and what the organization can afford.</li>
+</ul>
+<h2 id="cleaning-up"><a class="header" href="#cleaning-up">Cleaning Up</a></h2>
+<p>Our practice Volume costs money as long as it exists.
+When you no longer need it, you should remove it.
+First, make sure you do not need any data stored on it.
+Then unmount it if necessary:</p>
+<pre><code>sudo umount /mnt/enterprise_d_1
+</code></pre>
+<p>Verify that the Volume is not mounted:</p>
+<pre><code>lsblk
+</code></pre>
+<p>Then detach and delete the Volume through the DigitalOcean Control Panel.
+Remember that detaching and deleting are different:</p>
+<pre><code>unmount
+    ↓
+Linux stops using filesystem
+
+detach
+    ↓
+Volume is disconnected from Droplet
+
+delete
+    ↓
+Volume itself is destroyed
+</code></pre>
+<p>Because DigitalOcean bills Volumes while they exist, an unattached Volume can still incur charges.
+Likewise, snapshots remain stored—and billed—until you delete them.</p>
+<h2 id="conclusion"><a class="header" href="#conclusion">Conclusion</a></h2>
+<p>In this section, we expanded the storage available to a DigitalOcean Droplet by attaching a Volume.
+DigitalOcean made this process deceptively simple.
+We selected a few options in the Control Panel and received a ready-to-use directory under <code>/mnt</code>.
+Underneath that interface, however, several traditional Linux concepts are still at work:</p>
+<pre><code>block device
+      ↓
+filesystem
+      ↓
+mount
+      ↓
+mount point
+      ↓
+files
+</code></pre>
+<p>We used commands including:</p>
+<pre><code>lsblk       examine block devices
+df          examine filesystem capacity and usage
+findmnt     examine mounted filesystems
+blkid       examine block-device filesystem metadata
+mount       mount a filesystem
+umount      unmount a filesystem
+lsof        identify processes using files or filesystems
+systemctl   inspect systemd units
+</code></pre>
+<p>We also learned that DigitalOcean’s automatic Volume configuration may use a <strong>systemd mount unit</strong> rather than a traditional <code>/etc/fstab</code> entry.
+However, <code>/etc/fstab</code> remains an important Linux configuration mechanism and can still be used for manually configured persistent mounts.</p>
+<p>Finally, we distinguished among several related concepts:</p>
+<pre><code>Volume
+    additional block storage
+
+Snapshot
+    on-demand point-in-time disk image
+
+Backup
+    automatically scheduled recovery image
+</code></pre>
+<p>Most importantly:</p>
+<pre><code>storage ≠ backup
+</code></pre>
+<p>and:</p>
+<pre><code>Droplet backup ≠ Volume backup
+</code></pre>
+<p>An administrator needs to know not only where data is stored, but also how that data can be recovered when something goes wrong.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="5c-using-systemd.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="p6-networking-security.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="5c-using-systemd.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="p6-networking-security.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

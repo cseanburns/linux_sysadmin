@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-782fef34.js";
+            window.path_to_searchindex_js = "searchindex-fa86cc46.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-095b8c78.js"></script>
+        <script src="toc-b63f2cd2.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -5153,446 +5153,613 @@ Until then, I encourage you to read through the manual page for <code>apt</code>
 <pre><code>man apt
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="expanding-storage"><a class="header" href="#expanding-storage">Expanding Storage</a></h1>
+<h1 id="using-systemd"><a class="header" href="#using-systemd">Using systemd</a></h1>
 <p>By the end of this section, you will be able to:</p>
 <ol>
-<li><strong>Understand Virtual Machine Storage Expansion</strong>: Gain practical knowledge on how to add additional storage to a virtual machine (VM) by creating and attaching a persistent disk.</li>
-<li><strong>Disk Formatting and Mounting</strong>: Learn the process of formatting a non-boot disk with the <strong>ext4</strong> filesystem and mounting it to a VM for expanded storage capacity.</li>
-<li><strong>Filesystem Configuration</strong>: Develop skills in configuring a VM’s filesystem for automatic mounting using the <code>/etc/fstab</code> file to ensure persistence across reboots.</li>
-<li><strong>Efficient Resource Management</strong>: Understand how to delete unnecessary disks and manage cloud storage costs, ensuring efficient use of resources.</li>
-<li><strong>Command Line Proficiency</strong>: Improve proficiency with essential command line tools such as <code>mkfs.ext4</code>, <code>mount</code>, <code>umount</code>, <code>mkdir</code>, and editing configuration files with a text editor.</li>
-<li><strong>Storage Pricing Awareness</strong>: Gain insight into the cost considerations of adding additional storage in cloud environments, with practical examples of pricing.</li>
+<li>Explain the role of <strong>systemd</strong> as the init and service-management system on many Linux distributions.</li>
+<li>Explain what a <strong>systemd unit</strong> is and identify several common unit types.</li>
+<li>Use <code>systemctl</code> to inspect, start, stop, restart, reload, enable, and disable services.</li>
+<li>Distinguish between a service being <strong>active</strong> and being <strong>enabled</strong>.</li>
+<li>Use <code>journalctl</code> to examine and filter system logs.</li>
+<li>Use <code>systemctl</code> and <code>journalctl</code> together to troubleshoot services.</li>
+<li>Understand how <strong>targets</strong> and dependencies help systemd organize the boot process.</li>
+<li>Create a simple custom service and timer.</li>
+<li>Explain how systemd manages timers, mounts, and other system resources in addition to traditional services.</li>
+<li>Understand how <code>/etc/fstab</code> and native systemd mount units relate to one another.</li>
 </ol>
 <h2 id="getting-started-7"><a class="header" href="#getting-started-7">Getting Started</a></h2>
-<p>I’m sure all or most of you have needed extra disk storage at some point (USB drives, optical disks, floppies???).
-Such needs are no different for systems administrators, who often are responsible for managing, monitoring, or storing large amounts of data.</p>
-<p>The disk that we created for our VM is small (10 GB), and that’s fine for our needs, albeit quite small in many real world scenarios.
-To address this, we can add a persistent disk that is much larger.
-In this section, we will add a disk to our VM, mount it onto the VM’s filesystem, and format it.
-Extra storage does incur extra cost.
-So at the end of this section, I will show you how to delete the extra disk to avoid that if you want.</p>
-<p>We will essentially follow the Google Cloud tutorial to add a non-boot disk to our VM, but with some modification:</p>
-<p><a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk">Add a persistent disk to your VM</a></p>
-<blockquote>
-<p>Note: the main disk used by our VM is the <strong>boot disk</strong>.
-The boot disk contains the
-software required to boot the system.
-All of our computers (desktops, laptops, tablets, phones, etc.),regardless of which operating system they run, have some kind of boot system.</p>
-</blockquote>
-<h2 id="creating-a-disk"><a class="header" href="#creating-a-disk">Creating a Disk</a></h2>
-<p>In the Google Cloud console, first make sure you are working in your course project.
-Then navigate to <strong>Compute Engine</strong>, and visit the <strong>Disks</strong> page in the <strong>Storage</strong> section.
-If asked, click on <strong>Enable</strong> for Compute Engine API, which may take a minute or so to enable.</p>
-<p>Once there, follow these steps:</p>
-<ol>
-<li>Note down the <strong>Zone</strong> for the current disk, which is your boot disk (e.g., mine is <strong>us-central1-c</strong>).</li>
-<li>Click on <strong>CREATE DISK</strong>.</li>
-<li>Under <strong>Name</strong>, add a preferred name.
+<p>When a Linux system boots, something has to start the operating system’s userspace and then start the programs necessary for the computer to operate.
+Traditionally, Unix and Linux systems have used an <strong>init system</strong> for this purpose (mostly a collection of shell scripts).
+Many contemporary Linux distributions, including Ubuntu, Debian, Fedora, Red Hat Enterprise Linux, Arch Linux, and others, use <a href="https://systemd.io/">systemd</a>.
+Other operating systems use different approaches.
+For example, macOS uses <a href="https://en.wikipedia.org/wiki/Launchd">launchd</a>.</p>
+<p>On a system using systemd, the first userspace process normally has process ID <strong>1</strong>, indicating its importance in the process hierarchy.</p>
+<p>We can check:</p>
+<pre><code>ps -p 1 -o pid,comm,args
+</code></pre>
+<p>You should see something similar to:</p>
+<pre><code>PID COMMAND         COMMAND
+  1 systemd         /sbin/init
+</code></pre>
+<p>We can also simply run:</p>
+<pre><code>ps -p 1 -o comm=
+</code></pre>
+<p>On our Droplets, the result should be:</p>
+<pre><code>systemd
+</code></pre>
+<p>This is important because systemd is not simply another program running on the server.
+It is responsible for coordinating much of what happens after the Linux kernel starts.</p>
+<h2 id="systemd-does-more-than-start-services"><a class="header" href="#systemd-does-more-than-start-services">systemd Does More Than Start Services</a></h2>
+<p>It is tempting to describe systemd as a program for starting and stopping services.
+It does that, but its responsibilities are broader.
+Among other things, systemd can manage:</p>
 <ul>
-<li>For example, you can name it <strong>backup1</strong>.</li>
+<li>services,</li>
+<li>system startup and shutdown,</li>
+<li>dependencies among system resources,</li>
+<li>logging,</li>
+<li>scheduled tasks,</li>
+<li>mounted filesystems,</li>
+<li>automounts,</li>
+<li>sockets,</li>
+<li>devices,</li>
+<li>resource control,</li>
+<li>and groups of services representing particular system states.</li>
 </ul>
-</li>
-<li>Under <strong>Location</strong>, choose <strong>Single zone</strong>.
+<p>This is why the name <strong>systemd</strong> appears in so many Linux commands and files.</p>
+<p>For example:</p>
+<pre><code>systemctl
+journalctl
+systemd-analyze
+systemd-cgtop
+systemd.service
+systemd.timer
+systemd.mount
+systemd.target
+</code></pre>
+<p>Instead of thinking of systemd simply as a service manager, it is more useful to begin with the concept of a <strong>unit</strong>.</p>
+<h2 id="units"><a class="header" href="#units">Units</a></h2>
+<p>A <strong>unit</strong> is a resource that systemd knows how to manage.
+Different kinds of resources use different kinds of units.
+Unit files normally have names ending in a suffix indicating their type.</p>
+<p>Some common examples include:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Unit type</th><th>Purpose</th></tr>
+</thead>
+<tbody>
+<tr><td><code>.service</code></td><td>Runs and manages a service or process</td></tr>
+<tr><td><code>.timer</code></td><td>Activates another unit according to a schedule</td></tr>
+<tr><td><code>.mount</code></td><td>Represents a mounted filesystem</td></tr>
+<tr><td><code>.automount</code></td><td>Mounts a filesystem when it is accessed</td></tr>
+<tr><td><code>.socket</code></td><td>Represents a socket that can activate a service</td></tr>
+<tr><td><code>.path</code></td><td>Watches a filesystem path and can activate another unit</td></tr>
+<tr><td><code>.target</code></td><td>Groups other units together</td></tr>
+<tr><td><code>.device</code></td><td>Represents a device known to the kernel</td></tr>
+</tbody>
+</table>
+</div>
+<p>For example, the SSH server may be represented by:</p>
+<pre><code>ssh.service
+</code></pre>
+<p>A scheduled task might use:</p>
+<pre><code>report.timer
+</code></pre>
+<p>and:</p>
+<pre><code>report.service
+</code></pre>
+<p>A filesystem mounted at:</p>
+<pre><code>/mnt/data
+</code></pre>
+<p>could appear to systemd as:</p>
+<pre><code>mnt-data.mount
+</code></pre>
+<p>This provides a more useful way to think about systemd:</p>
+<pre><code>                   systemd
+                      |
+        +-------------+-------------+
+        |             |             |
+     services       timers        mounts
+        |             |             |
+    ssh.service   report.timer  mnt-data.mount
+        |
+      ...
+</code></pre>
+<p>In short, systemd manages many kinds of system resources based on a common framework.</p>
+<h3 id="exploring-units"><a class="header" href="#exploring-units">Exploring Units</a></h3>
+<p>We interact with systemd using the following command:</p>
+<pre><code>systemctl
+</code></pre>
+<p>To list currently loaded units:</p>
+<pre><code>systemctl list-units
+</code></pre>
+<p>That produces a lot of information.
+We can restrict the output to services:</p>
+<pre><code>systemctl list-units --type=service
+</code></pre>
+<p>Or mount units:</p>
+<pre><code>systemctl list-units --type=mount
+</code></pre>
+<p>Or timers:</p>
+<pre><code>systemctl list-units --type=timer
+</code></pre>
+<p>You can also use:</p>
+<pre><code>systemctl list-timers
+</code></pre>
+<p>for a timer-specific view.</p>
+<p>There is an important distinction between:</p>
+<pre><code>systemctl list-units
+</code></pre>
+<p>and:</p>
+<pre><code>systemctl list-unit-files
+</code></pre>
+<p>The first primarily tells us about units systemd currently has loaded.
+The second tells us about unit files installed on the system.</p>
+<p>For example:</p>
+<pre><code>systemctl list-unit-files --type=service
+</code></pre>
+<p>normally produces a considerably different list than:</p>
+<pre><code>systemctl list-units --type=service
+</code></pre>
+<h3 id="managing-services"><a class="header" href="#managing-services">Managing Services</a></h3>
+<p>One of the most common uses of systemd is managing server software.</p>
+<p>Examples include SSH, web servers, and database servers:</p>
 <ul>
-<li>This is about data safety, which we are not concerned about for a course project. If we were, then we would select other options here.</li>
+<li>OpenSSH</li>
+<li>Apache</li>
+<li>Nginx</li>
+<li>MariaDB</li>
+<li>PostgreSQL</li>
 </ul>
-</li>
-<li>Select the same <strong>Zone</strong> (and thus <strong>Region</strong>) as your VM instance.
-<ul>
-<li>This is important because with our current configuration, we can’t use disks in different regions and zones.</li>
-</ul>
-</li>
-<li>Under <strong>Source</strong>, select <strong>Blank disk</strong>.</li>
-<li>Under <strong>Disk settings</strong>, select <strong>Balanced persistent disk</strong>.</li>
-<li>Under <strong>Size</strong>, change this to 10GB.
-<ul>
-<li>You can actually choose larger sizes, but be aware that <a href="https://cloud.google.com/compute/all-pricing#disk">disk pricing</a> is $0.10 per GB.</li>
-<li>At that cost, 100 GB = $10 / month.</li>
-</ul>
-</li>
-<li>Under <strong>Data Protection</strong>, click on <strong>Enable snapshot schedule</strong>.</li>
-<li>Under <strong>Encryption</strong>, make sure <strong>Google-managed encryption key</strong> is selected.</li>
-<li>Click <strong>Create</strong> to create your disk, and then wait while the disk is created.</li>
-</ol>
-<h2 id="adding-the-disk-to-our-vm"><a class="header" href="#adding-the-disk-to-our-vm">Adding the Disk to our VM</a></h2>
-<p>Now that we have created our disk, we need to <strong>mount</strong> it onto our filesystem so that it’s available to our VM.
-Conceptually, this process is like inserting a new USB drive into our computer.</p>
-<p>To add the new disk to our VM, follow these steps:</p>
-<ol>
-<li>Return and select <strong>Compute Engine</strong> from the sidebar and then visit the <strong>VM instances page</strong>.</li>
-<li>Click on the <strong>Name</strong> of your VM. This takes you to the <strong>VM instance details</strong> page.</li>
-<li>Click on the <strong>Edit</strong> button at the top of the details page.</li>
-<li>Scroll down to the <strong>Additional disks</strong> section, and click on <strong>+ ATTACH EXISTING DISK</strong>.</li>
-<li>A panel will open on the right side of your browser.</li>
-<li>Click on the drop down box and select the disk, by name, you created.</li>
-<li>Leave the defaults as-is.</li>
-<li>Click on the <strong>SAVE</strong> button.</li>
-<li>Then click on the <strong>SAVE</strong> button on the details page.</li>
-</ol>
-<p>If you return to the <strong>Disks</strong> page in the <strong>Storage</strong> section, you will now see that the new disk is in use by our VM.</p>
-<h2 id="formatting-and-mounting-a-non-boot-disk"><a class="header" href="#formatting-and-mounting-a-non-boot-disk">Formatting and Mounting a Non-Boot Disk</a></h2>
-<h3 id="formatting-our-disk"><a class="header" href="#formatting-our-disk">Formatting Our Disk</a></h3>
-<p>In order for our VM to make use of the extra storage, the new drive must be formatted and mounted.
-Different operating systems use different filesystem formats.
-You may already know that macOS uses the <a href="https://support.apple.com/guide/disk-utility/file-system-formats-dsku19ed921c/mac">Apple File System (APFS)</a> by default and that Windows uses the <a href="https://docs.microsoft.com/en-us/windows-server/storage/file-server/ntfs-overview">New Technology File System (NTFS)</a>.
-Linux is no different, but uses different file systems than macOS and Windows.
-There are many formatting technologies that we can use in Linux, but we’ll use the <a href="https://ext4.wiki.kernel.org/index.php/Main_Page">ext4 (fourth extended filesystem)</a> format.
-This is recommended for Google Cloud, and it is also a stable and common one for Linux.</p>
-<p>In this section, we will closely follow the steps outlined under the <a href="https://cloud.google.com/compute/docs/disks/add-persistent-disk"><strong>Formatting and mounting a non-boot disk on a Linux VM</strong></a> section.
-I replicate those instructions below, but I highly encourage you to read through the instructions on Google Cloud and here:</p>
-<ol>
-<li>Use the <code>gcloud compute ssh</code> command that you have previously used to connect to your VM.</li>
-<li>When you have connected to your VM, run the <code>lsblk</code> command.
-<ul>
-<li>You will see devices named <strong>loop0</strong>, etc.</li>
-<li>For our purposes, these are devices are not interesting and can be safely ignored.</li>
-<li>You can ignore them with either of the following commands:
-<ul>
-<li><code>lsblk -e 7</code> : This command removes all device numbers that have the number <strong>7</strong>.</li>
-<li><code>lsblk | grep -v "^loop"</code> : This command uses <code>grep</code> to return devices without the name <strong>loop</strong> at the beginning of the line.</li>
-</ul>
-</li>
-<li>For our purposes, we are interested in the drives named: <strong>sda</strong> and <strong>sdb</strong>.</li>
-<li><strong>sda</strong> is the name of the main disk, which is also the boot disk.
-<ul>
-<li>This disk should have three partitions: <strong>sda1, sda14, sda15</strong>.</li>
-<li>The <strong>MOUNTPOINT</strong> for <strong>sda1</strong> is <code>/</code>. This means that <strong>sda1</strong> is mounted at the root level of the filesystem.</li>
-<li>Since it’s mounted, this means it’s in use. In fact, our filesystem (directory structure and files) are located in this partition.</li>
-</ul>
-</li>
-<li><strong>sdb</strong> represents the attached disk we just added.
-<ul>
-<li>After we format this drive, there will be an <strong>sdb1</strong>, which signifies the drive has been partitioned.</li>
-<li>After formatting, we will mount this partition on a different mountpoint.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<p>To format our disk for the <strong>ext4</strong> filesystem, we will use the <code>mkfs.ext4</code> (see <code>man mkfs.ext4</code> for details).
-The Google Cloud instructions tell us to run the command below.
-(<strong>It’s important to understand these commands as much as possible and not just copy and paste them</strong>):</p>
-<pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/DEVICE_NAME
-</code></pre>
-<p>But replace <strong>DEVICE_NAME</strong> with the name of our device.
-My device’s name is <strong>sdb</strong>, which we saw with the output of the <code>lsblk</code> command; therefore, the specific command I run is:</p>
-<pre><code>sudo mkfs.ext4 -m 0 -E lazy_itable_init=0,lazy_journal_init=0,discard /dev/sdb
-</code></pre>
-<p>Again, please read <code>man mkfs.ext4</code> for details, but in short, the command and options above mean that we’re creating a clean ext4 filesystem,
-we’re using all the disk space, we’re fully wiping and initializing the filesystem structures and doing so up front, which is safer and slower), and
-we clearing any unused space, which is good for SSDs.</p>
-<h3 id="mounting-our-disk"><a class="header" href="#mounting-our-disk">Mounting Our Disk</a></h3>
-<p>Now that our disk has been formatted in <strong>ext4</strong>, I can mount it.</p>
-<blockquote>
-<p>Note: to <strong>mount</strong> a disk simply means to make the disk’s filesystem available so that we can use it for accessing, storing, etc files on the disk.
-Whenever we insert a USB drive, a DVD drive, etc into our computers, the OS you use should mount that disk automatically so that you can access and use that disk.
-Conversely, when we remove those drives, the OS <strong>unmounts</strong> them.
-For our virtual machines, we have to manually mount the storage disk with the <code>mount</code> and unmount it with the <code>umount</code> command.
-Note that the <code>umount</code> command is not <strong>unmount</strong>.</p>
-</blockquote>
-<p>You will recall that we have <a href="03-filesystem-file-management.html">discussed filesystems earlier</a> and
-that the term is a bit confusing since it refers to both the directory hierarchy and also the formatting type (e.g., ext4).
-I discussed how Windows assigns drives letters (<code>A:</code>, <code>B:</code>, etc.) when attaching new drives, like a USB drive.
-Unlike Windows, I mentioned that in Linux and Unix (e.g., macOS), when we add an additional disk, its filesystem gets added onto our existing system.
-That is, it becomes part of the directory hierarchy and under the <code>/</code> top level part of the hierarchy.
-In practice, this means that we have to create the <strong>mountpoint</strong> for our new disk, and we do that first with the <code>mkdir</code> command.
-The Google Console documentation instructs us to use the following command:</p>
-<pre><code>sudo mkdir -p /mnt/disks/MOUNT_DIR
-</code></pre>
-<p>And to replace <strong>MOUNT_DIR</strong> with the directory we want to create.
-Since my added disk is named <strong>disk-1</strong>, I’ll call it that:</p>
-<pre><code>sudo mkdir -p /mnt/disks/disk-1
-</code></pre>
-<p>Now we can <code>mount</code> the disk to that directory. Per the instructions on Google Console, and given that my added drive has the device name <strong>sdb</strong>,
-I use the following command:</p>
-<pre><code>sudo mount -o discard,defaults /dev/sdb /mnt/disks/disk-1
-</code></pre>
-<p>We also need to change the modifications, and grant access for additional users:</p>
-<pre><code>sudo chmod 777 /mnt/disks/disk-1
-</code></pre>
-<p>We can test that it exists and is accessible with the <code>lsblk</code> and the <code>cd</code> commands.
-The <code>lsblk</code> command should show that <strong>sdb</strong> is mounted at <code>/mnt/disks/disk-1</code>, and we can <code>cd</code> (change directory) to it:</p>
-<pre><code>cd /mnt/disks/disk-1
-</code></pre>
-<h3 id="automounting-our-disk"><a class="header" href="#automounting-our-disk">Automounting Our Disk</a></h3>
-<p>Our disk is mounted, but if the computer (VM) gets rebooted, we would have to manually re-mount the additional drive.
-To avoid this and automount the drive upon reboot, we edit the <code>/etc/fstab</code> file.</p>
-<blockquote>
-<p>Note that the file is named <strong>fstab</strong> and that it’s located in the <strong>/etc</strong> directory.
-Therefore the full path is <code>/etc/fstab</code></p>
-</blockquote>
-<p>The <strong>fstab</strong> file is a configuration file that provides information to the OS about the filesystems the OS can mount and where.
-The standard information <strong>fstab</strong> contains includes the name (or label) of the device being mounted,
-the mountpoint (e.g., <code>/mnt/disks/disk-1</code>), the filesystem type (e.g., <strong>ext4</strong>), and various other mount options.
-See <code>man fstab</code> for more details.
-For devices to mount automatically upon boot, they have to be listed in this file.
-That means we need to edit this file.</p>
-<p>Again, here we’re following the Google Cloud instructions:</p>
-<p>Before we edit system configuration files, however, always create a backup.
-We’ll use the <code>cp</code> command to create a backup of the <strong>fstab</strong> file.</p>
-<pre><code>sudo cp /etc/fstab /etc/fstab.backup
-</code></pre>
-<p>Next we use the <code>blkid</code> command to get the UUID (universally unique identifier) number for our new device.
-Since my device is <code>/dev/sdb</code>, I’ll use that:</p>
-<pre><code>sudo blkid /dev/sdb
-</code></pre>
-<p>The output should look something like this <strong>BUT NOTE that your UUID value will be DIFFERENT</strong>:</p>
-<pre><code>/dev/sdb: UUID="3bc141e2-9e1d-428c-b923-0f9vi99a1123" TYPE="ext4"
-</code></pre>
-<p>We need to add UUID to <code>/etc/fstab</code> plus other information.
-The Google Cloud documentation explicitly guides us here.
-We can add that directly to our <code>fstab</code> file by redirecting the output of the <code>blkid</code> command to that file.
-<strong>NOTE and BEWARE: You have to use TWO ANGLE BRACKETS in the following command, or else you will ERASE the contents of that file!!!</strong></p>
-<pre><code>sudo su
-blkid /dev/sdb &gt;&gt; /etc/fstab
-exit
-</code></pre>
-<blockquote>
-<p>Alternatively, we can use <code>nano</code> to make the edit by copying and pasting the UUID at the end.</p>
-</blockquote>
-<p>And then edit the file with additional mount information at the bottom:</p>
-<pre><code>sudo nano /etc/fstab
-</code></pre>
-<p>And then add the information:</p>
-<pre><code>UUID=3bc141e2-9e1d-428c-b923-0f9vi99a1123 /mnt/disks/disk-1 ext4 discard,defaults,nofail 0 2
-</code></pre>
-<p>Save and exit <code>nano</code>.
-And that’s it!
-If you reboot your VM, or if your VM rebooted for some reason, the extra drive we added should automatically mount upon reboot.
-If it doesn’t, then it may mean that the drive failed, or that there was an error (i.e., typo) in the configuration.</p>
-<p>Let’s check if it’s automounted upon reboot:</p>
-<pre><code>sudo reboot now
-</code></pre>
-<p>Wait a minute, and log back in to check.
-Then run the <code>lsblk</code> command to see if the new drive is recognized and mounted at <code>/mnt/disks/disk-1</code>:</p>
-<pre><code>lsblk
-</code></pre>
-<h3 id="delete-the-disk"><a class="header" href="#delete-the-disk">Delete the Disk</a></h3>
-<p>You are welcome to keep the disk attached to the VM.
-But if you do not want to incur any charges for it, which would be about $1 / month at 10 GB, then we can delete it.</p>
-<p>To delete the disk, first delete the line that we added in <code>/etc/fstab</code>, unmount it, and then delete the disk in the Google Cloud console.</p>
-<p>To unmount the disk, we use the <code>umount</code> command:</p>
-<pre><code>sudo umount /mnt/disks/disk-1
-</code></pre>
-<p>Check if it’s unmounted:</p>
-<pre><code>lsblk
-</code></pre>
-<p>Then we need to delete the disk in the Google Cloud console.</p>
-<ol>
-<li>Go to the <strong>VM instances</strong> page.</li>
-<li>Click on the VM instance’s name, which should be a hyperlinked.</li>
-<li>This goes to the <strong>VM instances detail</strong> page.</li>
-<li>Click on the <strong>Edit</strong> button at the top of the page.</li>
-<li>Scroll down to the <strong>Additional disks</strong> section.</li>
-<li>Click the <strong>X</strong> to delete the additional disk.</li>
-<li>Click on <strong>Save</strong>.</li>
-<li>Return to <strong>Compute Engine</strong> and then the <strong>Disk</strong> section in the left-hand navigation pane.</li>
-<li>Check the disk to delete, and then Delete it.
-<ul>
-<li>Make sure you delete the backup disk and not the main OS disk!</li>
-</ul>
-</li>
-</ol>
-<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
-<p>In this section we learned how to expand the storage of our VM by creating a new virtual drive and adding it to our VM.
-We also learned how to format the drive in the <strong>ext4</strong> filesystem format, and mount the drive at <code>/mnt/disks/disk-1</code>.
-Finally, we learned how to then edit <code>/etc/fstab</code> to automount the drive.</p>
-<p>In addition to using the Google Cloud console, the commands we used in this section include:</p>
-<ol>
-<li><code>ssh</code>  : to connect to the remote VM</li>
-<li><code>sudo</code> : to run commands as the administrator</li>
-<li><code>mkfs.ext4</code> : to create an <strong>ext4</strong> filesystem on our new drive</li>
-<li><code>mkdir -p</code> : to create multiple directories under <code>/mnt</code></li>
-<li><code>mount</code> : to mount manually the new drive</li>
-<li><code>umount</code> : to unmount manually the new drive</li>
-<li><code>chmod</code> : to change the mountpoint’s file permission attributes</li>
-<li><code>cd</code> : to change directories</li>
-<li><code>cp</code> : to copy a file</li>
-<li><code>nano</code> : to use the text editor <code>nano</code> to edit <code>/etc/fstab</code></li>
-</ol>
-<div style="break-before: page; page-break-before: always;"></div>
-<h1 id="using-systemd"><a class="header" href="#using-systemd">Using systemd</a></h1>
-<p>By the end of the section, you will know how to:</p>
-<ol>
-<li>Use <code>systemctl</code> to manage services on a Linux system,
-including starting, stopping, enabling, and checking the status of services.</li>
-<li>Understand the purpose of <code>systemd</code> as an init system and its role in booting, service management, and log handling.</li>
-<li>Check the status and logs of specific services with <code>journalctl</code> and
-use filters to narrow down log results by service, PID, or specific conditions.</li>
-<li>Set up and manage <code>systemd</code> timers to automate tasks, such as scheduling scripts to run at specific times.</li>
-<li>Explore and utilize additional <code>systemd</code> commands,
-such as checking enabled services, suspending or rebooting the system, and examining boot times with <code>systemd-analyze</code>.</li>
-<li>View and interpret system logs, search through them efficiently, and follow logs in real-time.</li>
-<li>Create and configure custom <code>systemd</code> service and timer files for more tailored system automation.</li>
-<li>Use <code>systemd</code> commands to troubleshoot system issues,
-including identifying failed services and examining resource usage with <code>systemd-cgtop</code>.</li>
-</ol>
-<h2 id="getting-started-8"><a class="header" href="#getting-started-8">Getting Started</a></h2>
-<p>When computers boot up, obviously some software manages that process.
-On Linux and other Unix or Unix-like systems, this is usually handled via an <strong>init</strong> system.
-For example, macOS uses <a href="https://en.wikipedia.org/wiki/Launchd">launchd</a> and many Linux distributions, including Ubuntu, use <a href="https://en.wikipedia.org/wiki/Systemd">systemd</a>.</p>
-<p><strong>systemd</strong> does more than handle the startup process,
-it also manages various services and connects the Linux kernel to various applications.
-In this section, we’ll cover how to use <strong>systemd</strong> to manage services and to review log files.</p>
-<h2 id="manage-services"><a class="header" href="#manage-services">Manage Services</a></h2>
-<p>When we install complicated software, like a web server (e.g., Apache2, Nginx), a SSH server (e.g., OpenSSH),
-or a database server (e.g., mariaDB or MySQL), then it’s helpful to have commands that manage that service:
-the web service, the SSH service, the database service, etc.</p>
-<p>For example, the <code>ssh</code> service is installed by default on our gcloud servers, and
-we can check its status with the following <code>systemctl</code> command:</p>
+<p>Our Droplet already runs an SSH server.</p>
+<p>We can examine it with:</p>
 <pre><code>systemctl status ssh
 </code></pre>
-<p>The output tells us a few things.
-The line beginning with <code>Loaded</code> tells us that the SSH service is configured.
-At the end of that line, it also tells us that it is <code>enabled</code>.
-<code>Enabled</code> means that the service automatically starts when the system gets rebooted or starts up.</p>
-<p>The line beginning with <code>Active</code> tells us that the service is <code>active (running)</code> and for how long.
-We also can see the process ID (PID) for the service as well as how much memory it’s using.</p>
-<p>At the bottom of the output, we can see the recent log files.
-We can view more of those log files using the <code>journalctl</code> command.
-By default, running <code>journalctl</code> by itself will return all log files.
-We can specify that we’re interested in log files only for the ssh service.
-We can specify using the PID number.
-Replace <em>N</em> with the PID number attached to your ssh service:</p>
-<pre><code>journalctl _PID=N
+<p>On Ubuntu, the service is normally named:</p>
+<pre><code>ssh.service
 </code></pre>
-<p>Or we can specify by service, or more specifically, its <strong>unit</strong> name:</p>
-<pre><code>journalctl -u ssh
+<p>Systemd allows us to omit <code>.service</code> in many commands, so the following two generally mean the same thing:</p>
+<pre><code>systemctl status ssh
 </code></pre>
-<h3 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h3>
-<p>Later we’ll install the <a href="https://httpd.apache.org/">Apache web server</a>, and we will use <code>systemctl</code> to manage some aspects of this service.</p>
-<p>In particular, we will use the following commands to:</p>
-<ol>
-<li>Check the state of the Apache service,</li>
-<li>enable the Apache service to auto start on reboot,</li>
-<li>start the service,</li>
-<li>reload the service after editing its configuration files, and</li>
-<li>stop the service.</li>
-</ol>
-<p>In practice, these work out to:</p>
-<pre><code>systemctl status apache2
-sudo systemctl enable apache2
-sudo systemctl start apache2
-sudo systemctl reload apache2
-sudo systemctl stop apache2
+<pre><code>systemctl status ssh.service
 </code></pre>
-<p><code>systemctl</code> is a big piece of software, and there are other arguments the command will take.
-See <code>man systemctl</code> for details.</p>
-<p><strong>NOTE:</strong> Not all services support <code>systemctl reload [SERVICE]</code>.
-You can check if a service is reloadable by checking its service file.
-As an example:</p>
-<pre><code>grep "ExecReload" /lib/systemd/system/ssh.service
+<p>The output contains several useful pieces of information.
+For example, look for:</p>
+<pre><code>Loaded:
+Active:
+Main PID:
 </code></pre>
-<p>You can peruse other services in <code>/lib/systemd/system</code>.</p>
-<h2 id="examine-logs"><a class="header" href="#examine-logs">Examine Logs</a></h2>
-<p>As mentioned, the <code>journalctl</code> command is part of the <code>systemd</code> software suite, and it is used to monitor system logs.</p>
-<p>It’s important to monitor system logs.
-Log files help identify problems in the system or with various services.
-For example, by monitoring the log entries for <strong>ssh</strong>, I can see all the attempts to break into the server.
-Or if the Apache2 web server malfunctions for some reason, which might be because of a configuration error,
-the logs will indicated how to identify the problem.</p>
-<p>If we type <code>journalctl</code> at the command prompt, we are be presented with the logs for the entire system.
-These logs can be paged through by pressing the space bar, the page up/page down keys, or the up/down arrow keys.
-They can also be searched by pressing the forward slash <code>/</code> and then entering a search keyword.
-To exit out of the pager, press <strong>q</strong> to quit.</p>
+<p>The <code>Active</code> line tells us whether the service is currently running.</p>
+<p>For example:</p>
+<pre><code>Active: active (running)
+</code></pre>
+<p>The status output may also include:</p>
+<ul>
+<li>when the service started,</li>
+<li>the main process ID,</li>
+<li>tasks associated with the service,</li>
+<li>memory use,</li>
+<li>CPU use,</li>
+<li>and recent journal (log) entries.</li>
+</ul>
+<h3 id="starting-and-stopping-services"><a class="header" href="#starting-and-stopping-services">Starting and Stopping Services</a></h3>
+<p>We can stop a service:</p>
+<pre><code>sudo systemctl stop ssh
+</code></pre>
+<p><strong>But do not do this while connected remotely unless you understand the consequences.</strong></p>
+<p>If we stop the SSH server, we may lose our connection to the Droplet.</p>
+<p>A safer service for practice later in the semester will be Apache.</p>
+<p>For Apache, we might use:</p>
+<pre><code>sudo systemctl stop apache2
+</code></pre>
+<p>and:</p>
+<pre><code>sudo systemctl start apache2
+</code></pre>
+<p>We can restart it:</p>
+<pre><code>sudo systemctl restart apache2
+</code></pre>
+<p>Or, if the service supports it, reload its configuration:</p>
+<pre><code>sudo systemctl reload apache2
+</code></pre>
+<p>These operations are not identical.</p>
+<ul>
+<li>A <strong>restart</strong> stops and starts the service.</li>
+<li>A <strong>reload</strong> asks a running service to reread its configuration without completely stopping.</li>
+</ul>
+<p>Note that not every service supports reloading.</p>
+<p>We can check the unit definition itself rather than searching for a file manually:</p>
+<pre><code>systemctl cat apache2.service
+</code></pre>
+<p>Later, when Apache is installed, look for an <code>ExecReload=</code> directive.</p>
+<p>I find <code>systemctl cat ...</code> as particularly useful because unit configuration do not necessarily live in one predictable file.</p>
+<h3 id="active-is-not-the-same-as-enabled"><a class="header" href="#active-is-not-the-same-as-enabled">Active Is Not the Same as Enabled</a></h3>
+<p>This distinction causes a lot of confusion.
+A service can be <strong>active</strong> without being <strong>enabled</strong> and vice versa.
+<strong>Active</strong> describes what is happening <strong>right now</strong>.
+<strong>Enabled</strong> describes whether the unit has been configured to be activated automatically through systemd’s dependency structure, commonly during boot.</p>
+<p>We can ask whether a service is currently active:</p>
+<pre><code>systemctl is-active ssh
+</code></pre>
+<p>And whether it is enabled:</p>
+<pre><code>systemctl is-enabled ssh
+</code></pre>
+<p>Think of these as two separate questions:</p>
+<pre><code>Is it running now?             → active
+Should it normally start?      → enabled
+</code></pre>
+<p>For example:</p>
+<pre><code>sudo systemctl start apache2
+</code></pre>
+<p>starts Apache now but does not necessarily enable it for future boots.</p>
+<p>Likewise:</p>
+<pre><code>sudo systemctl enable apache2
+</code></pre>
+<p>configures it to start through the appropriate dependency relationships but does not necessarily start it immediately.</p>
+<p>A convenient command combines the two:</p>
+<pre><code>sudo systemctl enable --now apache2
+</code></pre>
+<p>Likewise, we can stop and disable it with:</p>
+<pre><code>sudo systemctl disable --now apache2
+</code></pre>
+<p>This <code>--now</code> option is useful because it makes explicit that:</p>
+<pre><code>enable ≠ start
+</code></pre>
+<p>and:</p>
+<pre><code>disable ≠ stop
+</code></pre>
+<h3 id="what-does-enabling-actually-do"><a class="header" href="#what-does-enabling-actually-do">What Does Enabling Actually Do?</a></h3>
+<p>The word <strong>enable</strong> can make systemd sound more mysterious than it is.
+In many cases, enabling a service creates symbolic links representing dependencies among units.
+We can inspect what would happen without actually changing anything:</p>
+<pre><code>systemctl enable --dry-run apache2
+</code></pre>
+<p>We can also examine the service:</p>
+<pre><code>systemctl cat apache2
+</code></pre>
+<p>Near the end of many service files we will find an <code>[Install]</code> section such as:</p>
+<pre><code>[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>This tells systemd where the unit should be linked when it is enabled.
+Thus enabling is largely about establishing relationships among units.</p>
+<h2 id="unit-files"><a class="header" href="#unit-files">Unit Files</a></h2>
+<p>System unit files can come from several locations.
+Common locations include:</p>
+<pre><code>/usr/lib/systemd/system/
+/etc/systemd/system/
+/run/systemd/system/
+</code></pre>
+<p>Depending on the distribution, <code>/lib/systemd/system/</code> may also appear or may be related to <code>/usr/lib/systemd/system/</code>.
+As a general rule:</p>
+<pre><code>/usr/lib/systemd/system/
+</code></pre>
+<p>contains unit files supplied by installed software packages, while:</p>
+<pre><code>/etc/systemd/system/
+</code></pre>
+<p>is the important location for administrator-created configuration and overrides.</p>
+<p>Rather than guessing where a unit file lives, use:</p>
+<pre><code>systemctl cat ssh.service
+</code></pre>
+<p>or:</p>
+<pre><code>systemctl show ssh.service
+</code></pre>
+<p>To see the path systemd loaded:</p>
+<pre><code>systemctl show -p FragmentPath ssh.service
+</code></pre>
+<p>For example:</p>
+<pre><code>systemctl show -p FragmentPath ssh
+</code></pre>
+<p>might return something like:</p>
+<pre><code>FragmentPath=/usr/lib/systemd/system/ssh.service
+</code></pre>
+<h3 id="dont-usually-edit-vendor-unit-files-directly"><a class="header" href="#dont-usually-edit-vendor-unit-files-directly">Don’t Usually Edit Vendor Unit Files Directly</a></h3>
+<p>Suppose we want to modify the configuration of an installed service.
+It is generally better not to edit its package-supplied unit file directly.
+A package upgrade could replace our changes.
+Instead, systemd supports <strong>drop-in configuration</strong>.</p>
+<p>For example:</p>
+<pre><code>sudo systemctl edit ssh.service
+</code></pre>
+<p>This creates an administrator override beneath:</p>
+<pre><code>/etc/systemd/system/ssh.service.d/
+</code></pre>
+<p>We can then see the complete effective configuration using:</p>
+<pre><code>systemctl cat ssh.service
+</code></pre>
+<p>This pattern reflects a common Linux configuration principle:</p>
+<pre><code>vendor defaults
+       +
+local administrator overrides
+       =
+effective configuration
+</code></pre>
+<h3 id="reloading-systemd-configuration"><a class="header" href="#reloading-systemd-configuration">Reloading systemd Configuration</a></h3>
+<p>Suppose we create or modify a unit file.
+Systemd does not necessarily reread every configuration file immediately.
+After adding or modifying unit files, we commonly run:</p>
+<pre><code>sudo systemctl daemon-reload
+</code></pre>
+<p>This tells the system manager to reload unit configuration.
+Notice that:</p>
+<pre><code>daemon-reload
+</code></pre>
+<p>does <strong>not</strong> mean “restart all daemons.”</p>
+<p>It means:</p>
+<blockquote>
+<p>Reload systemd’s own unit configuration.</p>
+</blockquote>
+<p>If we edit Apache’s application configuration, for example, that is a different matter from editing:</p>
+<pre><code>apache2.service
+</code></pre>
+<p>The distinction is important.</p>
+<h2 id="targets"><a class="header" href="#targets">Targets</a></h2>
+<p>Older Unix and Linux init systems commonly used <strong>runlevels</strong> to represent different operating states.
+Systemd instead uses <strong>targets</strong>.
+A target primarily groups other units together and establishes dependencies.
+We can see the default target with:</p>
+<pre><code>systemctl get-default
+</code></pre>
+<p>On a server, we may see:</p>
+<pre><code>multi-user.target
+</code></pre>
+<p>On a graphical workstation, we may instead see:</p>
+<pre><code>graphical.target
+</code></pre>
+<p>Targets themselves can depend on other targets and services.</p>
+<p>For example:</p>
+<pre><code>graphical.target
+        |
+        +-- multi-user.target
+                |
+                +-- networking
+                +-- SSH
+                +-- various system services
+</code></pre>
+<p>This is an oversimplification, but it illustrates the idea.</p>
+<p>One issue with the prior runlevel method was that the boot process was sequential and thus slow:</p>
+<pre><code>A → B → C → D → E
+</code></pre>
+<p>Instead, systemd describes dependencies among many units and can start independent units in parallel.
+This makes for quicker boot times.
+We can examine dependencies:</p>
+<pre><code>systemctl list-dependencies multi-user.target
+</code></pre>
+<p>Try:</p>
+<pre><code>systemctl list-dependencies ssh.service
+</code></pre>
+<p>We can also look in the opposite direction:</p>
+<pre><code>systemctl list-dependencies --reverse ssh.service
+</code></pre>
+<h2 id="the-journal"><a class="header" href="#the-journal">The Journal</a></h2>
+<p>Systemd also includes a logging system called the <strong>journal</strong>.
+The service responsible for collecting journal data is:</p>
+<pre><code>systemd-journald
+</code></pre>
+<p>We examine journal data using:</p>
 <pre><code>journalctl
 </code></pre>
-<p>It’s much more useful to specify the field and to declare an option when using <code>journalctl</code>, like above with <code>ssh</code>
-See the following man pages for details:</p>
-<pre><code>man systemd.journal-fields
-man journalctl
+<p>This command displays journal entries available to the current user.
+Depending on permissions, an ordinary user may not be able to read every system log entry.
+Thus, using the following provides access to the system journal.</p>
+<pre><code>sudo journalctl
 </code></pre>
-<p>There are many fields and options we can use, but as an example,
-we see that there is an option to view the more recent entries first:</p>
-<pre><code>journalctl -r
+<p>The output is normally presented using a pager.
+Useful pager controls include:</p>
+<pre><code>Space        next page
+↑ / ↓        move
+/            search
+n            next search result
+q            quit
 </code></pre>
-<p>Or we view log entries in reverse order, for users on the system, and since the last boot with the following options:</p>
-<pre><code>journalctl -r --user -b 0
+<h3 id="filtering-journal-entries"><a class="header" href="#filtering-journal-entries">Filtering Journal Entries</a></h3>
+<p>Dumping every available log entry is usually not very useful.
+The power of <code>journalctl</code> comes from filtering.</p>
+<h4 id="current-boot"><a class="header" href="#current-boot">Current Boot</a></h4>
+<p>To display messages from the current boot:</p>
+<pre><code>journalctl -b
 </code></pre>
-<p>Or for the system:</p>
-<pre><code>journalctl -r --system -b 0
+<p>To show the previous boot:</p>
+<pre><code>journalctl -b -1
 </code></pre>
-<p>I can more specifically look at the logs files for a service by using the <code>-u</code> option with <code>journalctl</code>:</p>
+<p>List recorded boots:</p>
+<pre><code>journalctl --list-boots
+</code></pre>
+<p>This can be extremely useful when diagnosing a problem that occurred during a previous startup.</p>
+<h4 id="a-specific-unit"><a class="header" href="#a-specific-unit">A Specific Unit</a></h4>
+<p>For SSH:</p>
+<pre><code>journalctl -u ssh
+</code></pre>
+<p>For Apache:</p>
 <pre><code>journalctl -u apache2
 </code></pre>
-<p>I can follow the logs in real-time (press <strong>ctrl-c</strong> to quit the real-time view):</p>
+<p>Current boot only:</p>
+<pre><code>journalctl -b -u ssh
+</code></pre>
+<h4 id="recent-entries"><a class="header" href="#recent-entries">Recent Entries</a></h4>
+<p>Show the most recent messages first:</p>
+<pre><code>journalctl -r
+</code></pre>
+<p>Or just the last 20 entries:</p>
+<pre><code>journalctl -n 20
+</code></pre>
+<p>For a particular unit:</p>
+<pre><code>journalctl -u ssh -n 20
+</code></pre>
+<h4 id="follow-logs-in-real-time"><a class="header" href="#follow-logs-in-real-time">Follow Logs in Real Time</a></h4>
+<p>Use:</p>
 <pre><code>journalctl -f
 </code></pre>
-<h2 id="timers-automation"><a class="header" href="#timers-automation">Timers (Automation)</a></h2>
-<p>Linux and Unix operating systems have long provided a way to automate processes.
-Historically, the <code>cron</code> service has been used to automate jobs, but I do not cover it here.
-Instead, we examine how to use <code>systemd</code> as a way to automate jobs using <strong>timers</strong>.</p>
-<p>The <code>/var/log/auth.log</code> file logs all authentication attempts to the system.
-We can create a script to look at the file and extract the invalid attempts to login to the system.</p>
-<p>What if we could have that script run at specific times?
-For example, what if we wanted to run that script every morning at 8AM and then log the output to a file for us to read?
-We can do that with systemd timers.</p>
-<p>First, let’s create a very simple <code>auth.sh</code> script to do this job.
-In the example below, I’ve set the location of the <code>auth.log</code> file and the output file,
-added a check to be sure the file exists and/or can be read,
-created two additional variables to record the start and end dates of the auth.log file, and
-used <code>grep</code> again to look for invalid IP addresses in the log file,
-wrote an <code>echo</code> statement to add some additional information, and
-save the output in a file called <code>brute.log</code> in our <code>$HOME</code> directory.
-The <code>${end_date}</code> and <code>${start_date}</code> variables were created after closely studying the <code>/var/log/auth.log</code> file.
-This is a very basic file, and programming languages like <code>awk</code>, <code>perl</code>, or <code>python</code> might be better suited for this job,
-but for <code>bash</code> sake:</p>
+<p>This behaves somewhat like:</p>
+<pre><code>tail -f
+</code></pre>
+<p>New entries appear as they are written.</p>
+<p>Press <strong>Ctrl-C</strong> to stop following them.</p>
+<p>For one service:</p>
+<pre><code>journalctl -f -u ssh
+</code></pre>
+<h4 id="filter-by-time"><a class="header" href="#filter-by-time">Filter by Time</a></h4>
+<p>We can ask for entries since a particular time:</p>
+<pre><code>journalctl --since today
+</code></pre>
+<p>Or:</p>
+<pre><code>journalctl --since "1 hour ago"
+</code></pre>
+<p>Or between two times:</p>
+<pre><code>journalctl --since "2026-10-06 14:00" --until "2026-10-06 15:00"
+</code></pre>
+<p>This becomes particularly useful when someone tells you:</p>
+<blockquote>
+<p>The server stopped working around 2:30 PM.</p>
+</blockquote>
+<p>Rather than reading thousands of lines, examine that time period.</p>
+<h4 id="filter-by-priority"><a class="header" href="#filter-by-priority">Filter by Priority</a></h4>
+<p>Journal messages have priorities.</p>
+<p>For example:</p>
+<pre><code>journalctl -p warning
+</code></pre>
+<p>shows messages at warning priority or more severe.</p>
+<p>For the current boot:</p>
+<pre><code>journalctl -b -p warning
+</code></pre>
+<p>This can be a useful first troubleshooting step.</p>
+<h4 id="service-status-and-logs-work-together"><a class="header" href="#service-status-and-logs-work-together">Service Status and Logs Work Together</a></h4>
+<p>Suppose Apache is not working.
+A useful troubleshooting workflow might begin with:</p>
+<pre><code>systemctl status apache2
+</code></pre>
+<p>Then:</p>
+<pre><code>journalctl -u apache2 -b
+</code></pre>
+<p>Perhaps:</p>
+<pre><code>journalctl -u apache2 -b -n 50
+</code></pre>
+<p>This illustrates a general workflow:</p>
+<pre><code>Something is broken
+        ↓
+systemctl status
+        ↓
+inspect journal
+        ↓
+inspect configuration
+        ↓
+correct problem
+        ↓
+restart/reload
+        ↓
+check status again
+</code></pre>
+<p>Knowing commands is useful.
+Knowing <strong>which question to ask next</strong> is more important.</p>
+<h4 id="failed-units"><a class="header" href="#failed-units">Failed Units</a></h4>
+<p>Systemd can show us units that have failed:</p>
+<pre><code>systemctl --failed
+</code></pre>
+<p>or:</p>
+<pre><code>systemctl --state=failed
+</code></pre>
+<p>If we correct the underlying problem, restart the unit:</p>
+<pre><code>sudo systemctl restart SERVICE
+</code></pre>
+<p>Sometimes we may also want to clear systemd’s recorded failed state:</p>
+<pre><code>sudo systemctl reset-failed SERVICE
+</code></pre>
+<p>Again, <code>reset-failed</code> does not fix the problem.
+It merely clears the recorded failure after we have addressed the actual cause.</p>
+<h2 id="timers"><a class="header" href="#timers">Timers</a></h2>
+<p>Unix systems have traditionally used <strong>cron</strong> to schedule recurring tasks.
+Cron remains widely used and is not made obsolete merely because systemd provides another scheduling mechanism.
+But systemd provides <strong>timer units</strong> as an alternative.</p>
+<p>A timer normally activates another unit, usually a <code>.service</code> unit, at a particular time or interval.</p>
+<p>Conceptually:</p>
+<pre><code>report.timer
+      |
+      | activates
+      v
+report.service
+      |
+      | executes
+      v
+/usr/local/bin/report
+</code></pre>
+<p>This illustrates the systemd unit model nicely:</p>
+<blockquote>
+<p>A timer does not need to contain the work itself.
+It defines <strong>when</strong> another unit should be activated.</p>
+</blockquote>
+<h3 id="creating-a-simple-timer"><a class="header" href="#creating-a-simple-timer">Creating a Simple Timer</a></h3>
+<p>Let’s make a small example that will also prepare us for the next section on storage.
+Suppose we want the server to record filesystem usage once per day.</p>
+<p>Create a script:</p>
+<pre><code>sudo nano /usr/local/bin/disk-report
+</code></pre>
+<p>Add:</p>
 <pre><code>#!/usr/bin/env bash
 
-LOG_FILE="${1:-/var/log/auth.log}"
-OUT_FILE="${HOME}/brute.log"
-
-if [[ ! -r "${LOG_FILE}" ]] ; then
-    echo "Error: cannot read '${LOG_FILE}' (permission or file missing)." &gt;&amp;2
-    echo "Try running with sudo or pass a readable log path." &gt;&amp;2
-    exit 2
-fi
-
-END_DATE=$(grep -Eo "^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}" "${LOG_FILE}" | tail -n1)
-START_DATE=$(grep -Eo "^[[:alpha:]]{3}[[:space:]]{1,2}[[:digit:]]{1,2}" "${LOG_FILE}" | head -n1)
-
-TOTAL_INVALID="$(grep -c "Invalid user" "${LOG_FILE}")"
-INVALID_IPS="$(grep "Invalid user" "${LOG_FILE}" | \
-    grep -Eo "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+" | \
-    sort | uniq | wc -l)"
-
-echo "
-Log entry created on $(date +%c).
-From ${START_DATE} to ${END_DATE}, there were ${TOTAL_INVALID} attempts to login to the system.
-These came from ${INVALID_IPS} unique IPs.
-" &gt;&gt; "${OUT_FILE}"
-
+{
+    echo "Disk report: $(date)"
+    df -hT
+    echo
+} &gt;&gt; /var/log/disk-report.log
 </code></pre>
-<p>Next, to automate the execution of this script, we need to create two additional files.
-First we create a <strong>service</strong> file.
-This file defines the <strong>service</strong> that we want to execute.
-Navigate to the systemd’s service directory:</p>
-<pre><code>cd /etc/systemd/system
+<p>Save it and make it executable:</p>
+<pre><code>sudo chmod 755 /usr/local/bin/disk-report
 </code></pre>
-<p>And use <code>sudo nano</code> to create a file called <code>brute.service</code>:</p>
-<pre><code>sudo nano brute.service
+<p>Test it manually:</p>
+<pre><code>sudo /usr/local/bin/disk-report
 </code></pre>
-<p>In the above file, we add the following information under two sections, a Unit section and a Service section.
-The Unit section includes a description of the service and a list of the service’s requirements.
-The Service section declares the type of service, the location of the script to run, and the user to run the script under.
-Feel free to use this but be sure to change your User information:</p>
+<p>Then examine:</p>
+<pre><code>cat /var/log/disk-report.log
+</code></pre>
+<p>Before automating something, it is generally wise to make sure the underlying command works manually.</p>
+<h3 id="creating-the-service-unit"><a class="header" href="#creating-the-service-unit">Creating the Service Unit</a></h3>
+<p>Create:</p>
+<pre><code>sudo nano /etc/systemd/system/disk-report.service
+</code></pre>
+<p>Add:</p>
 <pre><code>[Unit]
-Description="Summarize brute login attempts."
-Requires=brute.timer
+Description=Record filesystem usage
 
 [Service]
-Type=simple
-ExecStart=/usr/local/bin/auth.sh
-User=seanburns
+Type=oneshot
+ExecStart=/usr/local/bin/disk-report
 </code></pre>
-<p>See <code>man 5 systemd.service</code> for more details.</p>
-<p>Next we need to create the <strong>timer</strong> file.
-Using <code>sudo nano</code>, run the following command in the same directory as above:</p>
-<pre><code>sudo nano brute.timer
+<p>This is a <strong>oneshot</strong> service.
+Unlike a web server or SSH server, the script does not remain running.</p>
+<p>It:</p>
+<pre><code>starts
+  ↓
+performs one job
+  ↓
+exits
 </code></pre>
-<p>In this file, add the following:</p>
+<p>That is exactly what <code>Type=oneshot</code> represents.</p>
+<p>Now tell systemd about the new unit:</p>
+<pre><code>sudo systemctl daemon-reload
+</code></pre>
+<p>We can test the service without waiting for a timer:</p>
+<pre><code>sudo systemctl start disk-report.service
+</code></pre>
+<p>Then:</p>
+<pre><code>systemctl status disk-report.service
+</code></pre>
+<p>Do not be surprised if the service is not shown as:</p>
+<pre><code>active (running)
+</code></pre>
+<p>It already completed its job and exited.</p>
+<p>Check its journal:</p>
+<pre><code>journalctl -u disk-report.service
+</code></pre>
+<p>And check the output:</p>
+<pre><code>cat /var/log/disk-report.log
+</code></pre>
+<h3 id="creating-the-timer-unit"><a class="header" href="#creating-the-timer-unit">Creating the Timer Unit</a></h3>
+<p>Now create:</p>
+<pre><code>sudo nano /etc/systemd/system/disk-report.timer
+</code></pre>
+<p>Add:</p>
 <pre><code>[Unit]
-Description="Timer for the brute login service."
+Description=Run disk report each morning
 
 [Timer]
 OnCalendar=*-*-* 08:00:00
@@ -5601,62 +5768,908 @@ Persistent=true
 [Install]
 WantedBy=timers.target
 </code></pre>
-<p>See <code>man 5 systemd.timer</code> for more details.</p>
-<p>Next we need to enable and start the timer.
-To do that, we run two separate <code>systemctl</code> commands:</p>
+<p>The important line is:</p>
+<pre><code>OnCalendar=*-*-* 08:00:00
+</code></pre>
+<p>This means every day at 8:00 AM.
+We can ask systemd to interpret calendar expressions for us:</p>
+<pre><code>systemd-analyze calendar '*-*-* 08:00:00'
+</code></pre>
+<p>This is extremely useful when constructing a timer because it shows what systemd thinks the expression means and when it will next occur.</p>
+<p>We could also use convenient expressions such as:</p>
+<pre><code>systemd-analyze calendar daily
+</code></pre>
+<p>or:</p>
+<pre><code>systemd-analyze calendar weekly
+</code></pre>
+<h3 id="persistent-timers"><a class="header" href="#persistent-timers">Persistent Timers</a></h3>
+<p>Our timer also contains:</p>
+<pre><code>Persistent=true
+</code></pre>
+<p>Suppose the server is powered off at 8:00 AM.
+Without persistence, that occurrence would simply be missed.
+With <code>Persistent=true</code>, systemd records the timer’s previous activation and can trigger an overdue calendar event after the system becomes available again.
+This is useful for tasks where:</p>
+<blockquote>
+<p>sometime after 8:00 AM is better than not at all.</p>
+</blockquote>
+<h3 id="enable-and-start-the-timer"><a class="header" href="#enable-and-start-the-timer">Enable and Start the Timer</a></h3>
+<p>After creating the timer:</p>
 <pre><code>sudo systemctl daemon-reload
 </code></pre>
-<p>And then enable the timer:</p>
-<pre><code>sudo systemctl enable brute.timer
+<p>Then we can enable and start it in one command:</p>
+<pre><code>sudo systemctl enable --now disk-report.timer
 </code></pre>
-<p>Start the timer:</p>
-<pre><code>sudo systemctl start brute.timer
+<p>Check it:</p>
+<pre><code>systemctl status disk-report.timer
 </code></pre>
-<p>And finally, check the status of all timers:</p>
+<p>And list timers:</p>
 <pre><code>systemctl list-timers
 </code></pre>
-<p>Or check the status of our specific timer:</p>
-<pre><code>systemctl status brute.timer
-</code></pre>
-<p>You can now check that your script ran after the next time your system’s clock reaches 8AM.</p>
-<h2 id="useful-systemd-commands"><a class="header" href="#useful-systemd-commands">Useful Systemd Commands</a></h2>
-<p>You can see more of what <code>systemctl</code> or <code>journalctl</code> can do by reading through their documentation:</p>
-<pre><code>man systemctl
-man journalctl
-</code></pre>
-<p>You can check if a service if enabled:</p>
-<pre><code>systemctl is-enabled apache2
-</code></pre>
-<p>You can reboot, poweroff, or suspend a system (suspending a system mostly makes sense for laptops and not servers):</p>
-<pre><code>systemctl reboot
-systemctl poweroff
-systemctl suspend
-</code></pre>
-<p>To show configuration file changes to the system:</p>
-<pre><code>systemd-delta
-</code></pre>
-<p>To list real-time control group process, resource usage, and memory usage:</p>
-<pre><code>systemd-cgtop
-</code></pre>
+<p>The output includes useful information such as:</p>
 <ul>
-<li>to search failed processes/services:</li>
+<li>when the timer will next activate,</li>
+<li>when it last activated,</li>
+<li>and which service it triggers.</li>
 </ul>
-<pre><code>systemctl --state failed
+<p>Notice that we enable the <strong>timer</strong>, not the <code>disk-report.service</code>.</p>
+<p>The timer is what needs to remain scheduled.</p>
+<h3 id="relative-timers"><a class="header" href="#relative-timers">Relative Timers</a></h3>
+<p>Not every timer needs to use a calendar date.</p>
+<p>Systemd timers can also describe intervals relative to events.</p>
+<p>For example:</p>
+<pre><code>[Timer]
+OnBootSec=10min
+OnUnitActiveSec=1h
 </code></pre>
+<p>This could mean:</p>
 <ul>
-<li>to list services</li>
+<li>first activate 10 minutes after boot,</li>
+<li>then activate again one hour after the unit’s previous activation.</li>
 </ul>
-<pre><code>systemctl list-unit-files -t service
+<p>This is conceptually different from:</p>
+<pre><code>OnCalendar=hourly
 </code></pre>
+<p>One describes an interval relative to activity.
+The other describes a position on the calendar.</p>
+<h3 id="timer-accuracy-and-randomization"><a class="header" href="#timer-accuracy-and-randomization">Timer Accuracy and Randomization</a></h3>
+<p>Systemd timers are not necessarily designed to run at an exact microsecond.
+For many administrative tasks, exact timing does not matter.
+If thousands of servers are all configured to perform the same task at precisely midnight, having every one of them start simultaneously may be undesirable.
+Systemd therefore provides controls such as:</p>
+<pre><code>AccuracySec=
+</code></pre>
+<p>and:</p>
+<pre><code>RandomizedDelaySec=
+</code></pre>
+<p>These serve different purposes.</p>
 <ul>
-<li>to examine boot time:</li>
+<li><code>AccuracySec=</code> provides an allowed accuracy window in which systemd can coalesce timer wakeups.</li>
+<li><code>RandomizedDelaySec=</code> intentionally adds a randomized delay.</li>
 </ul>
+<p>For example:</p>
+<pre><code>[Timer]
+OnCalendar=daily
+RandomizedDelaySec=30min
+</code></pre>
+<p>can distribute a task over a period rather than causing many systems to perform it simultaneously.</p>
+<p>For our small class servers, we normally do not need this, but it illustrates that timers were designed for managing real systems at scale.</p>
+<h2 id="other-unit-types"><a class="header" href="#other-unit-types">Other Unit Types</a></h2>
+<p>Services and timers are only two kinds of units.
+Let’s look briefly at several others.</p>
+<h3 id="socket-units"><a class="header" href="#socket-units">Socket Units</a></h3>
+<p>A <code>.socket</code> unit can listen for incoming communication and activate a corresponding service when needed.</p>
+<p>Conceptually:</p>
+<pre><code>request arrives
+      ↓
+example.socket
+      ↓
+activates
+      ↓
+example.service
+</code></pre>
+<p>This is called <strong>socket activation</strong>.
+A service therefore does not necessarily need to be running continuously merely because something might eventually connect to it.</p>
+<p>List socket units:</p>
+<pre><code>systemctl list-units --type=socket
+</code></pre>
+<h3 id="path-units"><a class="header" href="#path-units">Path Units</a></h3>
+<p>A <code>.path</code> unit can watch for filesystem events and activate another unit.
+For example, a task could run when:</p>
+<ul>
+<li>a file appears,</li>
+<li>a directory changes,</li>
+<li>or a path is modified.</li>
+</ul>
+<p>List them:</p>
+<pre><code>systemctl list-units --type=path
+</code></pre>
+<h3 id="device-units"><a class="header" href="#device-units">Device Units</a></h3>
+<p>Systemd also represents kernel devices as units.</p>
+<p>Try:</p>
+<pre><code>systemctl list-units --type=device
+</code></pre>
+<p>These may look less familiar than services, but the principle is the same:</p>
+<blockquote>
+<p>systemd represents resources as units so that dependencies can be expressed between them.</p>
+</blockquote>
+<h2 id="boot-performance"><a class="header" href="#boot-performance">Boot Performance</a></h2>
+<p>Systemd records timing information about the boot process.
+We can see the overall boot time with:</p>
 <pre><code>systemd-analyze
 </code></pre>
+<p>A more detailed report is:</p>
+<pre><code>systemd-analyze blame
+</code></pre>
+<p>This lists units according to how long their startup took.
+However, be careful interpreting this output.
+A unit taking ten seconds to initialize does not necessarily mean it delayed the entire boot by ten seconds because many units can start concurrently.
+For dependency-aware analysis, try:</p>
+<pre><code>systemd-analyze critical-chain
+</code></pre>
+<p>This attempts to show the time-critical chain of units involved in reaching the system’s boot target.
+The distinction illustrates why simply sorting service startup times does not completely explain boot performance.</p>
+<h2 id="resource-management"><a class="header" href="#resource-management">Resource Management</a></h2>
+<p>Systemd also organizes processes using Linux <strong>control groups</strong>, or cgroups.
+We can see resource use grouped according to systemd’s hierarchy using:</p>
+<pre><code>systemd-cgtop
+</code></pre>
+<p>This provides a changing display somewhat analogous to the <code>top</code> command but organized by control groups.</p>
+<p>Services started by systemd are therefore not merely processes that systemd happened to launch.
+Systemd can also track and manage them as groups of related processes.</p>
+<h2 id="useful-systemd-commands"><a class="header" href="#useful-systemd-commands">Useful systemd Commands</a></h2>
+<p>Here are some commands worth remembering.</p>
+<p>Inspect a unit:</p>
+<pre><code>systemctl status UNIT
+</code></pre>
+<p>Display its unit configuration:</p>
+<pre><code>systemctl cat UNIT
+</code></pre>
+<p>Display systemd properties:</p>
+<pre><code>systemctl show UNIT
+</code></pre>
+<p>Check whether it is running:</p>
+<pre><code>systemctl is-active UNIT
+</code></pre>
+<p>Check whether it is enabled:</p>
+<pre><code>systemctl is-enabled UNIT
+</code></pre>
+<p>Start it:</p>
+<pre><code>sudo systemctl start UNIT
+</code></pre>
+<p>Stop it:</p>
+<pre><code>sudo systemctl stop UNIT
+</code></pre>
+<p>Restart it:</p>
+<pre><code>sudo systemctl restart UNIT
+</code></pre>
+<p>Reload its application configuration if supported:</p>
+<pre><code>sudo systemctl reload UNIT
+</code></pre>
+<p>Enable it:</p>
+<pre><code>sudo systemctl enable UNIT
+</code></pre>
+<p>Enable and start it:</p>
+<pre><code>sudo systemctl enable --now UNIT
+</code></pre>
+<p>Disable and stop it:</p>
+<pre><code>sudo systemctl disable --now UNIT
+</code></pre>
+<p>Reload systemd’s unit configuration:</p>
+<pre><code>sudo systemctl daemon-reload
+</code></pre>
+<p>List failed units:</p>
+<pre><code>systemctl --failed
+</code></pre>
+<p>Clear a recorded failure:</p>
+<pre><code>sudo systemctl reset-failed UNIT
+</code></pre>
+<p>List services:</p>
+<pre><code>systemctl list-units --type=service
+</code></pre>
+<p>List mount units:</p>
+<pre><code>systemctl list-units --type=mount
+</code></pre>
+<p>List timers:</p>
+<pre><code>systemctl list-timers
+</code></pre>
+<p>Examine unit dependencies:</p>
+<pre><code>systemctl list-dependencies UNIT
+</code></pre>
+<p>Examine logs for a unit:</p>
+<pre><code>journalctl -u UNIT
+</code></pre>
+<p>Examine its logs from the current boot:</p>
+<pre><code>journalctl -b -u UNIT
+</code></pre>
+<p>Follow its logs:</p>
+<pre><code>journalctl -f -u UNIT
+</code></pre>
+<p>Check boot time:</p>
+<pre><code>systemd-analyze
+</code></pre>
+<p>Examine the boot’s critical path:</p>
+<pre><code>systemd-analyze critical-chain
+</code></pre>
+<h2 id="reading-the-documentation"><a class="header" href="#reading-the-documentation">Reading the Documentation</a></h2>
+<p>Systemd is a large software suite.
+Nobody should attempt to memorize all of its commands and configuration directives.
+Use the manual.
+Some particularly useful manual pages include:</p>
+<pre><code>man systemctl
+man journalctl
+man systemd.unit
+man systemd.service
+man systemd.timer
+man systemd.mount
+man systemd.target
+</code></pre>
+<p>Notice the manual section numbers when you encounter references such as:</p>
+<pre><code>systemd.service(5)
+</code></pre>
+<p>or:</p>
+<pre><code>systemctl(1)
+</code></pre>
+<p>These identify both the manual page and its section.</p>
+<h2 id="conclusion-13"><a class="header" href="#conclusion-13">Conclusion</a></h2>
+<p>Systemd began as an <strong>init system</strong>, but describing it only as an init system understates its role on contemporary Linux systems.
+Its central abstraction is the <strong>unit</strong>.
+Units allow systemd to represent and establish relationships among resources such as:</p>
+<pre><code>services
+timers
+mounts
+automounts
+sockets
+paths
+devices
+targets
+</code></pre>
+<p>To examine and manage units and, we used:</p>
+<pre><code>systemctl
+</code></pre>
+<p>To examine logs associated with the system and its services, we used.</p>
+<pre><code>journalctl
+</code></pre>
+<p>We also saw an important distinction:</p>
+<pre><code>active  = what is happening now
+enabled = activation configured through systemd dependencies
+</code></pre>
+<p>And we learned that:</p>
+<pre><code>start ≠ enable
+stop  ≠ disable
+</code></pre>
+<p>We created a timer that activated a oneshot service:</p>
+<pre><code>disk-report.timer
+        |
+        v
+disk-report.service
+        |
+        v
+/usr/local/bin/disk-report
+</code></pre>
+<p>In the next section, we will add additional storage to our virtual machine.
+When we ask DigitalOcean to automatically format and mount that storage, we will discover that DigitalOcean creates systemd configuration on our behalf.
+That will give us an opportunity to investigate a practical example of the concepts introduced here rather than treating the cloud interface as a black box.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="expanding-storage-and-backing-up-systems"><a class="header" href="#expanding-storage-and-backing-up-systems">Expanding Storage and Backing Up Systems</a></h1>
+<p>By the end of this section, you will be able to:</p>
+<ol>
+<li><strong>Explain how Linux incorporates additional storage</strong> into its filesystem hierarchy.</li>
+<li><strong>Identify block devices, filesystems, and mount points</strong> using commands such as <code>lsblk</code>, <code>df</code>, <code>findmnt</code>, and <code>blkid</code>.</li>
+<li><strong>Explain what DigitalOcean does when it automatically formats and mounts a volume</strong>.</li>
+<li><strong>Understand how storage can be mounted automatically</strong>, including the use of <code>systemd</code> mount units and the traditional <code>/etc/fstab</code> file.</li>
+<li><strong>Manually mount and unmount storage</strong> when needed.</li>
+<li><strong>Distinguish between DigitalOcean volumes, snapshots, and backups</strong>.</li>
+<li><strong>Understand some basic principles of backup and recovery</strong>.</li>
+</ol>
+<h2 id="getting-started-8"><a class="header" href="#getting-started-8">Getting Started</a></h2>
+<p>At some point, nearly everyone has needed additional storage.
+You may have added an external USB drive to a desktop or laptop, inserted an SD card into another device, or perhaps even used optical disks or floppy disks(???).</p>
+<p>Servers may also need extra storage, too.
+Some of the reasons may include:</p>
+<ul>
+<li>users create more files,</li>
+<li>databases grow,</li>
+<li>logs accumulate,</li>
+<li>applications require additional space,</li>
+<li>backups need somewhere to go,</li>
+<li>or administrators may want to keep some data separate from the operating system.</li>
+</ul>
+<p>Our DigitalOcean Droplets already have 10GB of storage.
+We can see it with:</p>
+<pre><code>lsblk
+</code></pre>
+<p>On my Droplet, the primary storage device appears as something like:</p>
+<pre><code>vda
+└─vda1
+</code></pre>
+<p>The device <code>/dev/vda</code> represents the virtual disk provided with the Droplet.
+This device has partitions, and one of its partitions, <code>/dev/vda1</code>, contains the filesystem mounted at:</p>
+<pre><code>/
+</code></pre>
+<p>Recall that <code>/</code> is the top of the Linux filesystem hierarchy and is referred to as the root directory.</p>
+<p>Thus, although we interact with directories such as:</p>
+<pre><code>/etc
+/home
+/usr
+/var
+</code></pre>
+<p>those directories ultimately exist on some kind of storage device.
+This is an important distinction:</p>
+<blockquote>
+<p>A Linux <strong>filesystem hierarchy</strong> is not the same thing as a physical or virtual storage device.</p>
+</blockquote>
+<p>The directory tree is an abstraction that allows many storage devices to appear as parts of one unified hierarchy.
+We can add another storage device and attach it somewhere within that hierarchy.</p>
+<h2 id="digitalocean-volumes"><a class="header" href="#digitalocean-volumes">DigitalOcean Volumes</a></h2>
+<p>DigitalOcean calls its additional block storage devices <strong>Volumes</strong>.
+A Volume is storage that exists separately from the Droplet’s primary disk.
+If it helps, think of it as a second storage disk.</p>
+<p>DigitalOcean describes Volumes as network-attached block storage.
+A Volume can be attached to a Droplet, moved between Droplets in the same datacenter, resized, and independently snapshotted.
+This king of separation can be useful.</p>
+<p>For example, imagine that a server’s operating system is stored on one disk while a large collection of data is stored on another:</p>
+<pre><code>Droplet
+│
+├── Primary disk
+│      └── operating system
+│
+└── Volume
+       └── application data
+</code></pre>
+<p>If necessary, the Volume can later be detached from one Droplet and attached to another.
+This can keep all the data files we use separate from the OS files needed to run the system.</p>
+<h3 id="cost"><a class="header" href="#cost">Cost</a></h3>
+<p>Volumes are not free.
+As of this writing, DigitalOcean charges <strong>$0.10 per GiB per month</strong> for Volume storage, and charges continue for as long as the Volume exists, even if it is not attached to a Droplet.</p>
+<p>For our exercise, therefore, we will use a small Volume.</p>
+<h2 id="creating-a-volume"><a class="header" href="#creating-a-volume">Creating a Volume</a></h2>
+<p>Log into the DigitalOcean Control Panel.
+From your Droplet, locate the option to add or create a <strong>Volume</strong>.
+Create a small Volume.</p>
+<p>A few GB is sufficient for this exercise.</p>
+<p>Give the Volume a meaningful name.</p>
+<p>For example, I named mine:</p>
+<pre><code>enterprise_d_1
+</code></pre>
+<p>DigitalOcean provides two important choices when creating a Volume:</p>
+<ol>
+<li><strong>Automatically Format &amp; Mount</strong></li>
+<li><strong>Manually Format &amp; Mount</strong></li>
+</ol>
+<p>For this exercise, select:</p>
+<p><strong>Automatically Format &amp; Mount</strong></p>
+<p>Choose the <strong>Ext4</strong> filesystem.</p>
+<p>Ext4 is a mature, widely used general-purpose Linux filesystem and is DigitalOcean’s default recommendation for most workloads.
+DigitalOcean also supports XFS, which may be preferable for some large-file or write-heavy workloads.</p>
+<blockquote>
+<p>Different distributions default to different filesystems.
+Debian and Ubuntu default to ext4 while Red Hat defaults to XFS.
+See <a href="https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/managing_file_systems/overview-of-available-file-systems_managing-file-systems">Overview of available file systems</a>.</p>
+</blockquote>
+<p>Attach the Volume to your Droplet.
+Once DigitalOcean finishes creating it, return to your SSH session.
+You will find that something interesting has happened.
+We clicked a few buttons in a web interface, but those buttons caused several changes to our Linux system.</p>
+<p>Let’s investigate them.</p>
+<h2 id="investigating-the-new-storage"><a class="header" href="#investigating-the-new-storage">Investigating the New Storage</a></h2>
+<p>To examine your new storage device, run:</p>
+<pre><code>lsblk
+</code></pre>
+<p>You should now see an additional block device.
+On my system, for example, the original disk is:</p>
+<pre><code>vda
+</code></pre>
+<p>and the new Volume appears as:</p>
+<pre><code>sda
+</code></pre>
+<p>Your exact output may differ.</p>
+<h3 id="what-are-vda-and-sda"><a class="header" href="#what-are-vda-and-sda">What Are <code>vda</code> and <code>sda</code>?</a></h3>
+<p>Linux represents devices using special files located under
+(generally, everything is a file on Unix-like operating systems, including devices):</p>
+<pre><code>/dev
+</code></pre>
+<p>Thus our devices may be represented in the filesystem as:</p>
+<pre><code>/dev/vda
+/dev/sda
+</code></pre>
+<p>The name does not come from the name we gave the Volume in DigitalOcean.
+The Droplet’s primary virtual disk is presented to Linux using a VirtIO block interface and therefore commonly receives a <code>vd</code> device name such as:</p>
+<pre><code>/dev/vda
+</code></pre>
+<p>DigitalOcean Volumes are presented differently and commonly appear with <a href="https://en.wikipedia.org/wiki/SCSI">SCSI-style</a> device names such as:</p>
+<pre><code>/dev/sda
+</code></pre>
+<p>The exact letters should not be treated as permanent identifiers.
+A device that appears as <code>/dev/sda</code> today could potentially receive another device name under different circumstances.</p>
+<p>DigitalOcean therefore supplies a more stable identifier under:</p>
+<pre><code>/dev/disk/by-uuid/
+</code></pre>
+<p>Run:</p>
+<pre><code>ls -l /dev/disk/by-uuid/
+</code></pre>
+<p>Look for an entry containing your Volume’s name.</p>
+<p>Mine should resemble:</p>
+<pre><code>scsi-0DO_Volume_enterprise_d_1
+</code></pre>
+<p>DigitalOcean recommends these <code>/dev/disk/by-uuid/</code> identifiers when a persistent reference to a Volume is required because names such as <code>/dev/sda</code> are not guaranteed to remain the same.</p>
+<p>This is a useful general systems administration principle:</p>
+<blockquote>
+<p>Human-readable names such as <code>/dev/sda</code> may describe how the kernel currently sees a device, but we should not necessarily assume that name is permanent.</p>
+</blockquote>
+<h3 id="where-did-the-volume-go"><a class="header" href="#where-did-the-volume-go">Where Did the Volume Go?</a></h3>
+<p>Run again and examine the <strong>MOUNTPOINTS</strong> column.</p>
+<pre><code>lsblk
+</code></pre>
+<p>You should see that DigitalOcean mounted the Volume somewhere under:</p>
+<pre><code>/mnt
+</code></pre>
+<p>For my <code>enterprise_d_1</code> Volume, this is:</p>
+<pre><code>/mnt/enterprise_d_1
+</code></pre>
+<p>Now try:</p>
+<pre><code>ls /mnt
+</code></pre>
+<p>and:</p>
+<pre><code>cd /mnt/enterprise_d_1
+</code></pre>
+<p>The new storage device has become part of the existing Linux directory hierarchy.</p>
+<p>Conceptually:</p>
+<pre><code>/
+├── etc
+├── home
+├── usr
+├── var
+└── mnt
+     └── enterprise_d_1
+              │
+              └── separate storage device
+</code></pre>
+<p>This is quite different from the traditional Windows use of separate drive letters such as:</p>
+<pre><code>C:
+D:
+E:
+</code></pre>
+<p>Linux instead <strong>mounts</strong> the filesystem provided by another device onto a directory in the <strong>existing</strong> hierarchy.
+The directory where this occurs is called the <strong>mount point</strong>.</p>
+<h2 id="examining-the-filesystem"><a class="header" href="#examining-the-filesystem">Examining the Filesystem</a></h2>
+<p>Run:</p>
+<pre><code>df -hT
+</code></pre>
+<p>The <code>df</code> command reports information about mounted filesystems.
+The options here mean:</p>
+<pre><code>-h    human-readable sizes
+-T    display filesystem type
+</code></pre>
+<p>Locate your new Volume.
+You should see that its filesystem type is:</p>
+<pre><code>ext4
+</code></pre>
+<p>and that it is mounted somewhere under:</p>
+<pre><code>/mnt
+</code></pre>
+<p>You can get even more targeted information using:</p>
+<pre><code>findmnt /mnt/enterprise_d_1
+</code></pre>
+<p><code>findmnt</code> is designed specifically for examining mounted filesystems.
+Also try:</p>
+<pre><code>sudo blkid
+</code></pre>
+<p>The <code>blkid</code> command reports identifying information about block devices, including filesystem types and UUIDs.</p>
+<p>At this point we can distinguish several concepts:</p>
+<pre><code>DigitalOcean Volume
+        ↓
+Linux block device
+        ↓
+ext4 filesystem
+        ↓
+mount
+        ↓
+/mnt/enterprise_d_1
+        ↓
+files and directories
+</code></pre>
+<p>These are related concepts, but they are not the same thing.</p>
+<h2 id="what-did-digitalocean-do-for-us"><a class="header" href="#what-did-digitalocean-do-for-us">What Did DigitalOcean Do for Us?</a></h2>
+<p>When we selected <strong>Automatically Format &amp; Mount</strong>, DigitalOcean performed several operations that a system administrator could otherwise perform manually.</p>
+<p>At a high level, it:</p>
+<ol>
+<li>attached a new block device,</li>
+<li>created an Ext4 filesystem on it,</li>
+<li>created a mount point under <code>/mnt</code>,</li>
+<li>mounted the filesystem,</li>
+<li>configured the system so that it mounts again after a reboot.</li>
+</ol>
+<p>DigitalOcean currently mounts automatically configured Volumes using options including
+(see <code>man mount</code> for details):</p>
+<pre><code>defaults,nofail,discard,noatime
+</code></pre>
+<p>In other words, the easy button in the Control Panel did not eliminate Linux storage administration.
+Rather, it <strong>automated</strong> Linux storage administration.</p>
+<p>This distinction is important.
+Much of modern systems administration involves working with interfaces that perform lower-level operations for us.
+A useful question when using such an interface is:</p>
+<blockquote>
+<p>What did this interface just do to the underlying system?</p>
+</blockquote>
+<h2 id="persistent-mounting"><a class="header" href="#persistent-mounting">Persistent Mounting</a></h2>
+<p>Historically, one of the most common ways to specify filesystems that should be mounted when a Unix or Linux system starts is:</p>
+<pre><code>/etc/fstab
+</code></pre>
+<p>Let’s examine ours:</p>
+<pre><code>cat /etc/fstab
+</code></pre>
+<p>Interestingly, you may discover that your automatically mounted DigitalOcean Volume is <strong>not listed there</strong>.
+Yet if you reboot the system and reconnect, the Volume still appears:</p>
+<pre><code>sudo reboot
+</code></pre>
+<p>And after the system starts:</p>
+<pre><code>lsblk
+</code></pre>
+<p>And the Volume is still mounted.
+How?</p>
+<h3 id="systemd-mount-units"><a class="header" href="#systemd-mount-units">systemd Mount Units</a></h3>
+<p>On supported Linux distributions, DigitalOcean’s automatic mounting process currently uses a <strong>systemd mount unit</strong> rather than adding the Volume directly to <code>/etc/fstab</code>.
+For example, my mount point:</p>
+<pre><code>/mnt/enterprise_d_1
+</code></pre>
+<p>corresponds to a unit named approximately:</p>
+<pre><code>mnt-enterprise_d_1.mount
+</code></pre>
+<p>We can investigate it with:</p>
+<pre><code>systemctl status mnt-enterprise_d_1.mount
+</code></pre>
+<p>and:</p>
+<pre><code>systemctl cat mnt-enterprise_d_1.mount
+</code></pre>
+<p>DigitalOcean places automatically generated mount units under:</p>
+<pre><code>/etc/systemd/system/
+</code></pre>
+<p>You can inspect them:</p>
+<pre><code>ls /etc/systemd/system/*.mount
+</code></pre>
+<p>DigitalOcean also uses a udev rule associated with automatic Volume configuration
+(see <code>man udev</code>):</p>
+<pre><code>/etc/udev/rules.d/99-digitalocean-automount.rules
+</code></pre>
+<p>Thus:</p>
+<pre><code>Volume
+   ↓
+systemd mount unit
+   ↓
+mount filesystem during startup
+   ↓
+/mnt/enterprise_d_1
+</code></pre>
+<p>This is one reason simply inspecting <code>/etc/fstab</code> no longer necessarily tells us everything that will be mounted when a modern Linux system starts.</p>
+<h3 id="etcfstab-is-still-relevant"><a class="header" href="#etcfstab-is-still-relevant"><code>/etc/fstab</code> Is Still Relevant</a></h3>
+<p>However, <code>/etc/fstab</code> has not disappeared.
+It remains a standard mechanism for defining persistent mounts.
+A traditional entry might resemble (see <code>man fstab</code>):</p>
+<pre><code>/dev/disk/by-id/scsi-0DO_Volume_example /mnt/example ext4 defaults,nofail,discard,noatime 0 2
+</code></pre>
+<p>Notice that DigitalOcean recommends the stable:</p>
+<pre><code>/dev/disk/by-id/
+</code></pre>
+<p>name rather than something like:</p>
+<pre><code>/dev/sda
+</code></pre>
+<p>When manually modifying <code>/etc/fstab</code>,
+you can check the file afterward with the following command before depending on it during the next boot.</p>
+<pre><code>findmnt --verify --verbose
+</code></pre>
+<p>A malformed <code>/etc/fstab</code> can create serious boot problems.
+(Trust me on this!)</p>
+<h2 id="the-manual-workflow"><a class="header" href="#the-manual-workflow">The Manual Workflow</a></h2>
+<p>We selected DigitalOcean’s automatic option because it provides a useful opportunity to investigate what the cloud provider did for us.
+It is nevertheless worth understanding what the equivalent manual workflow looks like.
+If we created a Volume using <strong>Manually Format &amp; Mount</strong>, we would first identify the new device:</p>
+<pre><code>lsblk
+</code></pre>
+<p>Then we would create a filesystem.
+For example, to create an <code>ext4</code> filesystem on the device (replacing <strong>DEVICE</strong> with the relevant one, such as <code>sda</code> or <code>vda</code>):</p>
+<pre><code>sudo mkfs.ext4 /dev/DEVICE
+</code></pre>
+<p><strong>Do not run <code>mkfs</code> against an existing device unless you intend to erase its contents.</strong></p>
+<p>The <code>mkfs</code> command creates a filesystem.
+Running it against the wrong device can destroy data.</p>
+<p>Next, we would create a mount point:</p>
+<pre><code>sudo mkdir -p /mnt/example
+</code></pre>
+<p>Then mount the filesystem:</p>
+<pre><code>sudo mount /dev/DEVICE /mnt/example
+</code></pre>
+<p>We could inspect the result with:</p>
+<pre><code>findmnt /mnt/example
+</code></pre>
+<p>or:</p>
+<pre><code>lsblk
+</code></pre>
+<p>At this point the filesystem would be available, but the mount would normally disappear after a reboot unless we also configured persistent mounting.
+One option would be <code>/etc/fstab</code>.
+Another possibility on a systemd-based system would be a native <code>.mount</code> unit.
+Thus the manual workflow is approximately:</p>
+<pre><code>attach device
+     ↓
+identify device
+     ↓
+create filesystem
+     ↓
+create mount point
+     ↓
+mount filesystem
+     ↓
+configure persistent mounting
+</code></pre>
+<p>DigitalOcean’s automatic workflow performed those steps for us.</p>
+<h2 id="unmounting-storage"><a class="header" href="#unmounting-storage">Unmounting Storage</a></h2>
+<p>Mounting makes a filesystem accessible through the directory hierarchy.
+<strong>Unmounting</strong> disconnects it from that hierarchy.
+The command is:</p>
+<pre><code>umount
+</code></pre>
+<p>Notice that the command is <strong>not</strong> spelled <code>unmount</code>.
+(For years I would type <code>unmount</code> on accident. Every single time!)</p>
+<p>Before unmounting a filesystem, make sure nothing is actively using it.
+For example, if you are currently in a directory on the mounted system, you should leave that directory.
+It is also worth checking with something such as:</p>
+<pre><code>sudo lsof +f -- /mnt/enterprise_d_1
+</code></pre>
+<p>Then:</p>
+<pre><code>sudo umount /mnt/enterprise_d_1
+</code></pre>
+<p>You can verify the result with:</p>
+<pre><code>lsblk
+</code></pre>
+<p>or:</p>
+<pre><code>findmnt
+</code></pre>
+<p>And you’ll find that the mountpoint is empty.</p>
+<p>Note that unmounting the filesystem does <strong>not</strong> delete the Volume.
+Likewise:</p>
+<pre><code>mount ≠ attach
+umount ≠ detach
+delete ≠ either of those
+</code></pre>
+<p>These are separate operations.</p>
+<h2 id="storage-is-not-a-backup"><a class="header" href="#storage-is-not-a-backup">Storage Is Not a Backup</a></h2>
+<p>Adding another Volume to a server provides additional storage.
+But it does <strong>not</strong>, by itself, provide a backup.</p>
+<p>Suppose we stored valuable data on:</p>
+<pre><code>/mnt/enterprise_d_1
+</code></pre>
+<p>If we accidentally deleted those files, corrupted them, or deleted the Volume itself, simply having placed them on a separate device would not necessarily save us.
+This introduces an important distinction:</p>
+<pre><code>additional storage ≠ backup
+</code></pre>
+<p>A backup exists so that we can recover data after something goes wrong.</p>
+<p>DigitalOcean provides several related technologies.</p>
+<h3 id="snapshots"><a class="header" href="#snapshots">Snapshots</a></h3>
+<p>A <strong>snapshot</strong> is an on-demand image of a Droplet or Volume at a particular point in time.
+Like other virtual machine / hosting providers, DigitalOcean supports:</p>
+<ul>
+<li><strong>Droplet snapshots</strong></li>
+<li><strong>Volume snapshots</strong></li>
+</ul>
+<p>These are separate because the Droplet’s primary disk and an attached Volume are separate storage resources.</p>
+<h4 id="droplet-snapshots"><a class="header" href="#droplet-snapshots">Droplet Snapshots</a></h4>
+<p>A Droplet snapshot captures the contents of the Droplet’s disk.
+This can be useful before making a potentially disruptive change.
+For example, before:</p>
+<ul>
+<li>performing a major operating system upgrade,</li>
+<li>significantly changing server configuration,</li>
+<li>experimenting with unfamiliar software,</li>
+<li>or making some other change that may be difficult to reverse,</li>
+</ul>
+<p>an administrator might create a snapshot.</p>
+<p>If something goes badly wrong, the snapshot can be used to create another Droplet or restore the existing system to that earlier state.</p>
+<p>DigitalOcean recommends shutting down a Droplet before taking a snapshot when application consistency is important.</p>
+<p>For example:</p>
+<pre><code>sudo shutdown -h now
+</code></pre>
+<p>A snapshot can be taken on the DigitalOcean website while the Droplet is running, but applications may have data in memory that has not yet been written to disk.
+Databases are a particularly important example.</p>
+<h4 id="volume-snapshots"><a class="header" href="#volume-snapshots">Volume Snapshots</a></h4>
+<p>Volumes can be snapshotted independently.</p>
+<p>From the DigitalOcean Control Panel:</p>
+<ol>
+<li>Locate the <strong>Volumes</strong> page.</li>
+<li>Locate the Volume.</li>
+<li>Open its <strong>More</strong> menu.</li>
+<li>Select <strong>Take Snapshot</strong>.</li>
+</ol>
+<p>A Volume snapshot captures the Volume’s data and can later be used to create another Volume.</p>
+<p>DigitalOcean describes Volume snapshots as <strong>crash-consistent</strong>: writes are frozen at a particular point and all data written to the storage layer at that time is captured.
+However, that does not guarantee that every application has flushed all of its in-memory data or left its files in an application-consistent state.
+For particularly important or actively changing data, we may therefore want to stop the application or otherwise quiesce it before taking a snapshot.</p>
+<h4 id="snapshot-costs"><a class="header" href="#snapshot-costs">Snapshot Costs</a></h4>
+<p>Snapshots also incur storage charges.
+At the time this lecture was written, DigitalOcean charges approximately:</p>
+<pre><code>$0.06 per GB per month
+</code></pre>
+<p>for Droplet snapshots and:</p>
+<pre><code>$0.06 per GiB per month
+</code></pre>
+<p>for Volume snapshots.</p>
+<p>Snapshots are retained and incur costs until we delete them.</p>
+<h2 id="automated-droplet-backups"><a class="header" href="#automated-droplet-backups">Automated Droplet Backups</a></h2>
+<p>DigitalOcean also provides an automated <strong>Backups</strong> service.
+Unlike a snapshot, which we create when we choose, backups can be created automatically on a schedule.
+DigitalOcean currently offers schedules ranging from weekly and daily backups to more frequent usage-based backup intervals.</p>
+<p>This gives us an important distinction:</p>
+<pre><code>snapshot
+   └── administrator decides when to capture it
+
+backup
+   └── automatically captured according to a schedule
+</code></pre>
+<p>But there is a particularly important limitation:</p>
+<blockquote>
+<p><strong>DigitalOcean Droplet backups do not include attached Volumes.</strong></p>
+</blockquote>
+<p>If important information exists on an attached Volume, that Volume must be protected separately, for example by creating Volume snapshots.</p>
+<p>Suppose our server looks like this:</p>
+<pre><code>Droplet
+│
+├── /dev/vda
+│      └── operating system
+│
+└── /dev/sda
+       └── /mnt/enterprise_d_1
+</code></pre>
+<p>Enabling Droplet backups protects:</p>
+<pre><code>/dev/vda
+</code></pre>
+<p>but it does <strong>not</strong> automatically protect:</p>
+<pre><code>/dev/sda
+</code></pre>
+<p>That distinction is easy to miss.</p>
+<h2 id="backup-strategies"><a class="header" href="#backup-strategies">Backup Strategies</a></h2>
+<p>Professional backup strategies can become quite sophisticated.
+For our case, however, there are several useful principles to remember.</p>
+<h3 id="1-decide-what-needs-protection"><a class="header" href="#1-decide-what-needs-protection">1. Decide What Needs Protection</a></h3>
+<p>Not every file is equally important.</p>
+<p>For example, operating-system packages may be easy to reinstall.
+However, a unique database containing years of organizational data may be impossible to recreate.
+The first question is therefore:</p>
+<blockquote>
+<p>What data could we not easily replace?</p>
+</blockquote>
+<h3 id="2-decide-how-quickly-it-must-be-recovered"><a class="header" href="#2-decide-how-quickly-it-must-be-recovered">2. Decide How Quickly It Must Be Recovered</a></h3>
+<p>A snapshot of an entire server may be useful when we want to restore the entire system.
+But suppose only one configuration file was accidentally deleted.
+Restoring an entire server might be excessive.
+Traditional tools can also be used to make file-level backups.
+These include:</p>
+<pre><code>rsync
+tar
+scp
+sftp
+</code></pre>
+<p>Tools such as <code>rsync</code> and SFTP can be used when only part of a Droplet needs to be backed up.
+The main point is that different backup methods solve different problems.</p>
+<h3 id="3-automation-matters"><a class="header" href="#3-automation-matters">3. Automation Matters</a></h3>
+<p>A backup strategy that depends entirely on someone remembering to manually create a backup every week is likely eventually to fail.
+Thus, scheduled backups reduce this problem.</p>
+<h3 id="4-a-backup-should-be-recoverable"><a class="header" href="#4-a-backup-should-be-recoverable">4. A Backup Should Be Recoverable</a></h3>
+<p>Creating a backup is only half the task.
+A backup has little value if we cannot restore from it.
+Administrators should therefore understand and periodically test their recovery process.
+The important question is not simply:</p>
+<blockquote>
+<p>Do we have backups?</p>
+</blockquote>
+<p>It is:</p>
+<blockquote>
+<p>Could we restore the system or data if we needed to?</p>
+</blockquote>
+<h2 id="a-simple-example"><a class="header" href="#a-simple-example">A Simple Example</a></h2>
+<p>Imagine that we run a server whose application is stored on the Droplet’s primary disk but whose important data resides on a Volume.</p>
+<pre><code>Droplet
+│
+├── primary disk
+│      ├── Ubuntu
+│      ├── software
+│      └── configuration
+│
+└── Volume
+       └── organizational data
+</code></pre>
+<p>One possible protection strategy might be:</p>
+<pre><code>Primary disk
+    │
+    ├── scheduled Droplet backups
+    │
+    └── snapshot before major system changes
+
+Volume
+    │
+    ├── periodic Volume snapshots
+    │
+    └── perhaps file-level backups elsewhere
+</code></pre>
+<p>There is no single backup method that is appropriate for every system.
+The strategy depends on thinking through what is needed:
+Some considerations include:</p>
+<ul>
+<li>what data exists,</li>
+<li>how frequently it changes,</li>
+<li>how valuable it is,</li>
+<li>how quickly it needs to be restored,</li>
+<li>how much data loss is acceptable,</li>
+<li>and what the organization can afford.</li>
+</ul>
+<h2 id="cleaning-up"><a class="header" href="#cleaning-up">Cleaning Up</a></h2>
+<p>Our practice Volume costs money as long as it exists.
+When you no longer need it, you should remove it.
+First, make sure you do not need any data stored on it.
+Then unmount it if necessary:</p>
+<pre><code>sudo umount /mnt/enterprise_d_1
+</code></pre>
+<p>Verify that the Volume is not mounted:</p>
+<pre><code>lsblk
+</code></pre>
+<p>Then detach and delete the Volume through the DigitalOcean Control Panel.
+Remember that detaching and deleting are different:</p>
+<pre><code>unmount
+    ↓
+Linux stops using filesystem
+
+detach
+    ↓
+Volume is disconnected from Droplet
+
+delete
+    ↓
+Volume itself is destroyed
+</code></pre>
+<p>Because DigitalOcean bills Volumes while they exist, an unattached Volume can still incur charges.
+Likewise, snapshots remain stored—and billed—until you delete them.</p>
 <h2 id="conclusion-14"><a class="header" href="#conclusion-14">Conclusion</a></h2>
-<p>This is a basic introduction to <strong>systemd</strong>, which is composed of a suite of software to help manage booting a system,
-managing services, and monitoring logs.</p>
-<p>We’ll put what we’ve learned into practice when we set up our LAMP servers.</p>
+<p>In this section, we expanded the storage available to a DigitalOcean Droplet by attaching a Volume.
+DigitalOcean made this process deceptively simple.
+We selected a few options in the Control Panel and received a ready-to-use directory under <code>/mnt</code>.
+Underneath that interface, however, several traditional Linux concepts are still at work:</p>
+<pre><code>block device
+      ↓
+filesystem
+      ↓
+mount
+      ↓
+mount point
+      ↓
+files
+</code></pre>
+<p>We used commands including:</p>
+<pre><code>lsblk       examine block devices
+df          examine filesystem capacity and usage
+findmnt     examine mounted filesystems
+blkid       examine block-device filesystem metadata
+mount       mount a filesystem
+umount      unmount a filesystem
+lsof        identify processes using files or filesystems
+systemctl   inspect systemd units
+</code></pre>
+<p>We also learned that DigitalOcean’s automatic Volume configuration may use a <strong>systemd mount unit</strong> rather than a traditional <code>/etc/fstab</code> entry.
+However, <code>/etc/fstab</code> remains an important Linux configuration mechanism and can still be used for manually configured persistent mounts.</p>
+<p>Finally, we distinguished among several related concepts:</p>
+<pre><code>Volume
+    additional block storage
+
+Snapshot
+    on-demand point-in-time disk image
+
+Backup
+    automatically scheduled recovery image
+</code></pre>
+<p>Most importantly:</p>
+<pre><code>storage ≠ backup
+</code></pre>
+<p>and:</p>
+<pre><code>Droplet backup ≠ Volume backup
+</code></pre>
+<p>An administrator needs to know not only where data is stored, but also how that data can be recovered when something goes wrong.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="networking-and-security"><a class="header" href="#networking-and-security">Networking and Security</a></h1>
 <p>Even if we do not work as network administrators,
