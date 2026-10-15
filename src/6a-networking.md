@@ -1,305 +1,304 @@
 # Networking
 
-By the end of this section, you should know:
+By the end of this section, you should be able to:
 
-1. The role of a system administrator in setting up, configuring, and monitoring networks, from small LANs to larger networks that interface with external networks.
-2. The structure and layers of the Internet Protocol Suite, including the Link, Internet, Transport, and Application layers.
-3. How the Address Resolution Protocol (ARP) is used to map IP addresses to MAC addresses, and how to view network information using commands like `ip a` and `ip link`.
-4. The distinction between public and private IP addresses, the ranges for private IPs, and the concept of IP subnets.
-5. How the Transmission Control Protocol (TCP) and User Datagram Protocol (UDP) differ in handling data, including typical use cases for each.
-6. The basics of TCP and UDP headers, and how to examine network traffic using `tcpdump`.
-7. The significance of ports in networking, common port numbers, and how ports help direct traffic to specific services.
-8. The concept of subnetting, including how subnet masks and CIDR notation help define network boundaries and control the number of hosts on a network.
-9. How to convert between binary and decimal for IP addressing, as well as the importance of subnet masks and broadcast addresses.
-10. The process of calculating available hosts in a subnet, including examples for both /24 and /16 subnet masks.
+1. Describe the link, internet, transport, and application layers of the Internet Protocol Suite.
+2. Inspect a DigitalOcean Droplet's interfaces, IP addresses, neighbors, and routes.
+3. Distinguish loopback, public, and private addresses and explain the role of a VPC.
+4. Compare TCP and UDP, identify common ports, and inspect listening services.
+5. Observe a small amount of your own network traffic with `tcpdump`.
+6. Use binary notation, subnet masks, and CIDR prefixes to calculate IPv4 subnet boundaries and host counts.
 
 ## Getting Started
 
-An important function of a system administrator is to set up, configure, and monitor a network.
-This may involve planning, configuring, and connecting the devices on a local area network, to planning and implementing a large network that interfaces with an outside network,
-and to monitoring networks for various sorts of attacks, such as [denial of service attacks][DOS].
+System administrators configure and monitor networks, diagnose connectivity problems, and control access to services.
+On DigitalOcean, the provider manages the underlying network infrastructure, while you manage networking and services inside your **Droplet**, a virtual Linux server.
+A useful starting question is: *Which address, interface, route, and service does this connection use?*
 
-In order to prepare for this type of work, we need at least a basic understanding of how the internet works and how local devices interact with the internet.
-In this section, we will focus mostly on internet addressing, but we will also devote some space to TCP and UDP, two protocols for transmitting data.
+For this lesson, use your Droplet server with public IPv4 connectivity and an SSH connection.
+Run the Linux commands **inside the Droplet**, unless instructed otherwise.
+DigitalOcean also offers private-only Droplets; those require a different access setup and are outside this exercise.
+The addresses shown here are examples, not values to copy into your network configuration.
 
-Connecting two or more devices together nowadays involves the TCP/IP or the UDP/IP protocols, otherwise part of the [Internet protocol suite][wikiIPS].
-This suite is an expression of the more generalized [OSI communication model][osi].
-
-The internet protocol suite is framed as a series of layers beginning with a lower layer, called the **link layer**,
-that interfaces with internet capable hardware, to the highest layer, called the **application layer**, e.g., the web (`http`).
-
-The **link layer** describes the local area network.
-Devices connected locally, e.g., via Ethernet cables or local wifi, comprise the link layer.
-The link layer connects to the **internet layer**.
-Data going into or out of a local network must be negotiated between these two layers.
-
-The **internet layer** makes the internet possible since it provides functionality to transmit data among multiple networks possible.
-The internet is, in fact, a network of networks.
-The primary characteristic of the internet layer is the **IP address**, which currently comes in two versions: IPv4 (a 32 bit number) and IPv6 (a 128 bit number).
-IP addresses are used to locate hosts on a network.
-
-The **transport layer** makes the exchange of data on the internet possible.
-There are multiple protocols for the transport layer, but the two main ones are [UDP][udp] and [TCP][tcp].
-Very generally, the [UDP][udpCloudFlare] places priority on data reaching its destination over the integrity of data.
-For example, streaming video, Voice-over-IP (VOIP), and online gaming are often transported via UDP because the loss of some pixels or some audio is acceptable for end users.
-[TCP][tcpCloudFlare] is used when the integrity of the data is important.
-If the data cannot be transmitted without error, then the data won't reach its final destination until the error is corrected.
-As an example, purchases, bank exchanges, etc use TCP since financial transactions must be exact.
-
-The **application layer** provides the ability to use the internet in particular ways.
-For example, the [HTTP][http] protocol enables the **web**.
-The **web** can be thought of as an **application** of the internet.
-Likewise, the **SMTP**, **IMAP**, and **POP** protocols provide the basis for email exchange, **DNS** maps IP addresses to domain names, and we use **SSH** to connect to our virtual machines.
-
-> By **application**, we simply mean that these protocols provide the functionality for applications.
-> They are not themselves considered user applications, like a web browser.
+Keep your SSH session open. This lesson inspects networking; it does not require changing addresses, routes, interfaces, or firewall rules.
+Disabling the interface carrying SSH can disconnect you before you can re-enable it.
 
 ## The Internet Protocol Suite
 
+The Internet Protocol Suite, often called **TCP/IP**, describes how protocols work together in layers.
+The seven-layer OSI model is a related reference model, but its layers do not map one-to-one onto this four-layer model.
+
+ | Layer       | Main task                                         | Examples                              |
+ | -------     | -----------                                       | ----------                            |
+ | Application | Define communication for a particular service     | HTTP, DNS, SSH                        |
+ | Transport   | Carry communication between application endpoints | TCP, UDP                              |
+ | Internet    | Address and route packets between networks        | IPv4, IPv6                            |
+ | Link        | Carry frames across a local link                  | Ethernet, virtual Ethernet interfaces |
+
+For example, an SSH client creates application data, TCP carries it in segments, IP carries those segments in packets, and the local link carries those packets in frames.
+At the destination, these layers deliver the data to the SSH server.
+The web is one application of the internet; it is not the entire internet.
+DNS commonly resolves domain names to IP addresses, and SSH provides remote access to your Droplet.
+
 ### Link Layer
 
-#### ARP (Address Resolution Protocol)
+#### Interfaces and MAC Addresses
 
-**ARP** (Address Resolution Protocol) is a protocol at the link layer and is used to map network addresses, like an IP address, to ethernet addresses.
-An ethernet address is more commonly referred to as the MAC or Media Access Control address, or the hardware address.
-Routers use MAC addresses to enable communication inside networks (w/in subnets or local area networks)
-so that computers within a local network can talk to each other on these subnets.
-Networks are designed so that IP addresses are associated with MAC addresses before systems can communicate over a network.
-Each of your internet capable devices, your smartphone, your laptop, your internet connected toaster, has a MAC address.
+Inspect the interfaces on your Droplet:
 
-To get the MAC address for a specific computer, we can use the following commands:
-
-```
-ip a
-```
-
-Or:
-
-```
+```bash
+ip -brief link
 ip link
 ```
 
-> In the above command, `ip` is the command and `a` or `link` are considered objects (see `man ip` for details).
-> Note that `ip a` and `ip link` provide slightly different views of network interfaces.
+An **interface** is a system's connection to a network.
+On a Droplet, Ethernet interfaces are virtual rather than physical cards you install.
+The `link/ether` value is an Ethernet interface's **MAC address**, used for delivery on its local link.
 
-The MAC addresses are reported on the **link/ether** line.
+You will normally see:
 
-On my virtual server, the `ip link` command produces **numbered** sections of output.
-The first section refers to the `lo` or loopback device.
-This is a special device that allows the computer to communicate with itself, and it always has a MAC address of 00:00:00:00:00:00.
-The next two sections on the machine refer to the ethernet cards (e.g., `eth0` and `eth1`).
-These represent the hardware for system's wired connections to the internet.
-`eth0` refers to the connections to the outside world.
-`eth1` refers to the connections to the subnet.
-The MAC addresses are reported on the indented lines below.
-See `man systemd.net-naming-scheme` for more details.
+- `lo`: the **loopback interface**, used by the system to communicate with itself. It is not an Ethernet interface; its displayed all-zero link address is not a physical MAC address.
+- `eth0`: the public-facing interface on a standard Droplet.
+- `eth1`: the VPC interface for private communication with other resources in the VPC.
 
-We can get the IP information with the following command:
+Inspect your actual output rather than assuming the names or number of interfaces.
+DigitalOcean's [network troubleshooting guide][do_network] explains the usual interface arrangement.
 
-```
-ip a
-```
+#### ARP and Neighbors
 
-The `ip a` command reports both the MAC and IP addresses for the same devices.
-Here it reports that the `lo` device has the IP address of 127.0.0.1.
-It always has this IP.
-On my virtual machine, I get an IP address like `10.116.0.2/20` for the `eth1` device.
-This is a **private IP address**, which means it can only be used to locate the machine on the subnet.
+For IPv4 on Ethernet, **ARP** (Address Resolution Protocol) discovers the MAC address associated with an IP address on the local link.
+For a destination beyond that link, the host normally needs the next-hop router's MAC address, not the remote server's MAC address.
+IPv6 uses Neighbor Discovery instead of ARP.
 
-The following two commands help identify parts of the local network (or subnet) and the routing table.
-
-```
-ip neigh
-ip route
+```bash
+ip -4 neigh
 ```
 
-The `ip neigh` command produces the ARP cache.
-This represents the other machines yours sees on the local network.
-At the very least, it'll report the IP address for the router your machine uses.
+This displays cached IPv4 neighbor entries, often including a gateway.
+It is not an inventory of every device on the network, and it can be empty before relevant traffic has occurred.
+States such as `REACHABLE` and `STALE` describe the cache entry; `STALE` alone does not mean a device is offline.
 
-The `ip route` command is used to define how data is routed on the network but can also define the routing table.
-Both of these commands are more commonly used on Linux-based routers.
-
-These details enable the following scenario:
-A router gets configured to use a specific **network address** when it's brought online.
-It searches the sub network for connected MAC addresses.
-It then assigns each of those MAC addresses an available IP address based on the available network address.
-Those network addresses are private IP addresses and will fall within a specific range (as discussed below).
+ARP does **not** assign IP addresses.
+Address assignment is a separate task, handled through mechanisms such as DHCP or provider-supplied configuration.
+An Ethernet switch normally forwards frames using MAC addresses; a router forwards IP packets between networks.
 
 ### Internet Layer
 
-#### IP (Internet Protocol)
+#### Addresses on Your Droplet
 
-The Internet Protocol is used to uniquely identify a host on a network and place that host at a specific location (its IP **address**).
-If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address.
-This private IP address will not be directly exposed to the Internet.
+IP provides addressing and packet delivery across networks.
+IPv4 addresses contain 32 bits; IPv6 addresses contain 128 bits.
+An interface can have multiple IP addresses, and a machine can have several interfaces.
 
-Remember this: public IP addresses are distinct from private IP addresses.
-Public IP addresses are accessible on the internet.
-Private IP addresses are not, but they are accessible on subnets or local area networks.
-
-Private IP address ranges are **reserved** address ranges.
-This means no public internet device will have an IP address within these ranges.
-The private address ranges include:
-
-| Start Address | End Address     | Network Size |
-|---------------|-----------------|--------------|
-| 10.0.0.0      | 10.255.255.255  | Large        |
-| 172.16.0.0    | 172.31.255.255  | Medium       |
-| 192.168.0.0   | 192.168.255.255 | Small        |
-
-If you have a router at home, and examine the IP address for any of your devices connected to that router,
-like your phone or computer, you will see that it will have an address within one of the ranges above.
-For example, it might have an IP address like **192.168.0.4**.
-This is a common IP address number assigned by a home router.
-
-The difference between these ranges largely rests on the number of hosts they can accommodate.
-The **10.X.X.X** private range can assign more IP addresses (more hosts) on its network than the **172.X.X.X** range can, and the latter more than the **192.168.X.X** range.
-This is why you'll see the **10.0.0.0** IP range on bigger networks, like a university's network.
-We'll talk more about subnetwork sizes, shortly.
-
-#### Example Private IP Usage
-
-Let's say my campus desktop's IP address is **10.163.34.59/24** via a wired connection.
-And my office neighbor has an IP address of **10.163.34.65/24** via their wired connection.
-Both IP addresses are private because they fall within the **10.0.0.0 to 10.255.255.255** range.
-And it's likely they both exist on the same subnet since they share the first three **octets**: **10.163.34.XX**.
-
-However, if we both, using our respective wired connected computers, searched Google for *what's my IP address*,
-we will see that we share the same public IP address, which will be something like **128.163.8.25**.
-We know that is a public IP address because it does not fall within the ranges listed above.
-
-By entailment and without any additional information, we know that all traffic coming from our computers and going out to the internet looks like it's coming from the same IP address (**128.163.8.25**).
-And in reverse, all traffic coming from outside our network first goes to **128.163.8.25** before it's routed to our respective computers via the router.
-
-Let's say I switch my computer's network connection to the campus's wifi network.
-When I check with `ip a`, I find that the computer now has a private IP address of **10.47.34.150/16**.
-You can see the pattern is different with this IP address than it was when it was connected via wire.
-The reason it has a different pattern is because the laptop is now on an different subnet.
-This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc).
-When I searched Google for my IP address from this laptop, it reports **128.163.238.148**.
-Since this is a different public IP address from above, it indicates that the university owns a range of public IP address spaces.
-
-Here's a visual diagram of what this network looks like:
-
-<figure>
-<img src="images/18-network.png"
-alt="Network diagram"
-title="Network diagram">
-<figcaption>
-Fig. 1. This figure contains a network switch, which is used to route traffic within a subnet.
-The switch relies solely on MAC addresses and not IP addresses to determine the location of devices on its subnet.
-The router acts as the interface between the private network and the public network and
-is managing two subnets: a wired and a wireless one.
-</figcaption>
-</figure>
-
-#### Using the `ip` Command
-
-The `ip` command can do more than provide us information about our network.
-We can also use it to turn a connection to the network on or off (and more).
-The commands below show how we disable and then enable a connection on a machine.
-Note that **ens4** is the name of my network card/device.
-We probably have the same device names, but note that it might be different.
-
-```
-sudo ip link set ens4 down
-sudo ip link set ens4 up
+```bash
+ip -brief address
+ip -4 address show
 ```
 
-> Don't run those commands on your virtual machines otherwise your connection will be dropped and you'll have to reboot the system from the web console.
+`ip a` is a shorter form of `ip address`; `a` abbreviates the command's `address` object.
+Look for `inet` for IPv4 and `inet6` for IPv6.
+A suffix such as `/20` is the network prefix length, explained below.
+
+Compare this output with your Droplet's **Networking** information in the DigitalOcean control panel.
+Identify the public IPv4 address you use for SSH and the private address associated with its **Virtual Private Cloud (VPC)**.
+You may see additional addresses.
+Match the displayed values to the control panel rather than assuming every address on `eth0` is public.
+
+ | Address type                             | Purpose                                                                                          |
+ | --------------                           | ---------                                                                                        |
+ | Loopback, typically `127.0.0.1` or `::1` | Communication within the same machine                                                            |
+ | Public IPv4                              | Addressing on the public internet; reachability still depends on routes, firewalls, and services |
+ | Private IPv4                             | Communication over private networks, such as a VPC; not routed on the public internet            |
+
+`127.0.0.1` on your laptop refers to your laptop; the same address inside an SSH session refers to the Droplet.
+The entire `127.0.0.0/8` range is reserved for IPv4 loopback.
+
+The private IPv4 ranges are:
+
+ | CIDR block       | Start address   | End address       |
+ | ------------     | --------------- | -------------     |
+ | `10.0.0.0/8`     | `10.0.0.0`      | `10.255.255.255`  |
+ | `172.16.0.0/12`  | `172.16.0.0`    | `172.31.255.255`  |
+ | `192.168.0.0/16` | `192.168.0.0`   | `192.168.255.255` |
+
+Only `172.16` through `172.31` belong to that private block, not every address beginning with `172`.
+An address outside these three ranges is not necessarily public: loopback and other special-purpose ranges also exist.
+An organization's chosen subnet can be much smaller than the containing private block.
+A `10.x.x.x/24` subnet has the same address count as a `192.168.x.x/24` subnet.
+
+A VPC provides private networking for your cloud resources.
+Your laptop normally cannot reach a Droplet's VPC address directly over the internet; use the public address for the course SSH connection.
+A private address does not encrypt traffic or replace firewall rules.
+
+#### Public Addresses and NAT
+
+At home, your laptop might use `192.168.1.20/24`, while your router uses a public address for internet access.
+**Network Address Translation (NAT)** can let multiple devices share that public address by translating addresses and, commonly, port numbers.
+Replies are associated with the existing connections.
+Unsolicited incoming traffic does not automatically reach a particular private device.
+
+Do not assume that this home-network arrangement describes your Droplet.
+A standard publicly connected Droplet has public addressing as well as VPC addressing.
+Also, a private address can be routed between connected private networks; it is not limited to communication within one subnet.
+
+#### Routes: Where Does a Packet Go?
+
+```bash
+ip -4 route
+ip -4 route get 1.1.1.1
+```
+
+The first command displays the IPv4 routing table.
+The second asks Linux which route it would use for that destination; it does not send a probe or change a route.
+In the output, `dev` names the interface, `via` identifies a next-hop gateway when one is needed, and `src` identifies the selected source address.
+A `default` route handles destinations without a more specific matching route.
+Traffic to a local VPC destination normally uses the VPC interface, while public internet traffic normally uses the public interface.
+
+**Check your understanding:** Which interface and source address would your Droplet use for `1.1.1.1`?
+What evidence in the route output supports your answer?
 
 ### Transport Layer
 
-The internet (IP) layer does not transmit content, like web pages or video streams.
-This is the work of the transport layer.
-As discussed previously, the two most common transport layer protocols are **TCP** and **UDP**, but [there are more][TLP_wiki].
+IP carries packets between addresses.
+TCP and UDP add transport-layer communication using **ports**.
+A port number helps the operating system deliver traffic to the appropriate socket used by an application.
 
-#### TCP, Transmission Control Protocol
+#### TCP and UDP
 
-*TCP* or Transmission Control Protocol is responsible for the transmission of data and for making sure the data arrives at its destination w/o errors.
-If there are errors, the data is re-transmitted or halted in case of failure.
-Much of the data sent over the internet is sent using TCP.
+**TCP** provides a reliable, ordered byte stream using sequence numbers, acknowledgments, and retransmissions.
+If delivery cannot continue, a connection can fail; reliability does not mean every connection succeeds.
+SSH and HTTP/1.1 or HTTP/2 commonly use TCP.
 
-#### UDP, User Datagram Protocol
+**UDP** sends datagrams without built-in delivery guarantees, ordering, or retransmission.
+It does have a checksum field, although use of that checksum is optional in ordinary IPv4 UDP.
+Applications can add their own reliability when needed.
+DNS queries often use UDP, and real-time media applications may favor timely delivery over retransmitting old data.
+HTTP/3 uses QUIC over UDP; QUIC adds reliable streams and encryption.
+Thus, UDP does not necessarily mean unreliable application behavior, and TCP does not itself provide encryption.
+See the protocol specifications for [TCP][tcp] and [UDP][udp].
 
-The **UDP** or User Datagram Protocol performs a similar function as TCP, but it does not error check and data may get lost.
-UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube, which uses a type of UDP transmission called **QUIC** that has builtin encryption. 
- 
-#### TCP and UDP Headers
+#### Ports and Listening Services
 
-The above protocols send data **packets** for TCP **datagrams** for UDP, but [these terms may be used interchangeably][headers].
-Packets for both protocols include header information to help route the data across the internet.
-TCP includes [ten fields][tcpfields] of header data, and UDP includes [four fields][udpfields].
+The notation `10.0.5.33:80` means IPv4 address `10.0.5.33`, port `80`.
+Port 80 conventionally serves HTTP, but a port number alone does not prove which protocol an application actually speaks.
+TCP and UDP have separate port spaces: TCP port 53 and UDP port 53 are distinct endpoints.
 
-We can see this header data using the `tcpdump` command, which requires `sudo` or being **root** to use.
-The first part of the IP header contains the source address, then comes the destination address, and so forth.
-Aside from a few other parts, this is the primary information in an IP header.
+ | Port   | Common use                              | Transport           |
+ | ------ | ------------                            | -----------         |
+ | 21     | FTP control connection                  | TCP                 |
+ | 22     | SSH                                     | TCP                 |
+ | 25     | SMTP between mail servers               | TCP                 |
+ | 53     | DNS                                     | UDP and TCP         |
+ | 80     | HTTP                                    | TCP                 |
+ | 143    | IMAP, with optional STARTTLS            | TCP                 |
+ | 443    | HTTPS                                   | TCP; UDP for HTTP/3 |
+ | 587    | Mail submission, commonly with STARTTLS | TCP                 |
+ | 993    | IMAP over implicit TLS                  | TCP                 |
 
-If you want to use `tcpdump`, **you should use it on your local computer and not on your virtual machine**.
-I'm not sure how the hosting provider will respond to this kind of activity because it might be deemed malicious.
-But to use it, first we identify the IP number of a host, which we can do with the `ping` command, and then run `tcpdump`:
+To inspect services inside your Droplet:
 
+```bash
+sudo ss -lntup
 ```
-ping -c1 www.uky.edu
-sudo tcpdump host 128.163.35.46
-```
 
-While that's running, we can type that IP address in our web browser, or enter **www.uky.edu**, and watch the output of `tcpdump`.
+Here, `-l` selects listening or bound server sockets, `-n` shows numeric addresses and ports, `-t` selects TCP, `-u` selects UDP, and `-p` shows process information.
+For UDP, expect states such as `UNCONN` rather than TCP's `LISTEN`.
+In the **Local Address:Port** column, `127.0.0.1` means loopback only, `0.0.0.0` means all local IPv4 addresses, and `[::]` means all local IPv6 addresses.
+Whether an IPv6 socket also accepts IPv4 depends on its configuration.
 
-TCP headers include port information and other mandatory fields for both source and destination servers.
-The SYN, or synchronize, message is sent when a source or client requests a connection.
-The ACK, or acknowledgment, message is sent in response, along with a SYN message, to acknowledge the request for a connection.
-Then the client responds with an additional ACK message.
-This is referred to as the [TCP three-way handshake][tcphandshake].
-In addition to the header info, TCP and UDP packets include the data that's being sent (e.g., a webpage) and error checking if it's TCP.
+A service bound only to loopback is not directly reachable through the Droplet's public address.
+A service listening on a public-facing address may still be blocked by a firewall.
+DigitalOcean's **Cloud Firewall** and a firewall inside the Droplet, such as UFW, are separate controls; check both when diagnosing access.
+See [DigitalOcean's firewall troubleshooting guidance][do_firewall].
 
-#### Ports
-
-TCP and UDP connections use ports to bind internet traffic to specific IP addresses.
-Specifically, a **port** associates a process with an application (and is part of the **application layer** of the internet suite), such as a web service or outgoing email.
-That is, ports provide a way to distinguish and filter internet traffic (web, email, etc) through an IP address.
-For example, port 80 is the default port for unencrypted HTTP traffic.
-Thus, all traffic going to IP address 10.0.5.33:80 means that this is **HTTP** traffic for the HTTP web service.
-Note that the port info is attached to the end of the IP address via a colon. 
-
-Other common ports include:
-
-- 21: FTP
-- 22: SSH
-- 25: SMTP
-- 53: DNS
-- 143: IMAP
-- 443: HTTPS
-- 587: SMTP Secure
-- 993: IMAP Secure
-
-A list of the default ports/protocols on your Linux systems is contained in the following file:
-
-```
+```bash
 less /etc/services
 ```
 
-See also the Wikipedia page: [List of TCP and UDP port numbers][portnumbers]
+This file lists conventional service names and ports.
+It does not report which services are installed, running, or reachable.
+
+#### Observe TCP Headers with `tcpdump`
+
+An IP header contains source and destination IP addresses.
+Inside the IP packet, the TCP or UDP header contains source and destination ports.
+TCP also includes sequence numbers, acknowledgments, and flags.
+A typical TCP connection begins with **SYN**, **SYN-ACK**, and **ACK**, the three-way handshake.
+
+For a small exercise, capture only a local test connection on your own Droplet.
+This avoids depending on an external website's changing IP address and requires no public firewall changes.
+Use three SSH terminals connected to the same Droplet. Open all three before starting the exercise.
+The exercise assumes Python 3, `curl`, and `tcpdump` are installed. On the course Ubuntu system, if needed:
+
+```bash
+sudo apt update
+sudo apt install python3 curl tcpdump
+```
+
+> These may already be installed on your systems.
+> To check before installing, run the commands separately:
+>
+> - `which python3`
+> - `which curl`
+> - `which tcpdump`
+
+In **terminal 1**, start a temporary web server bound only to loopback, serving a new empty directory:
+
+```bash
+capture_dir=$(mktemp -d)
+python3 -m http.server 8000 --bind 127.0.0.1 --directory "$capture_dir"
+```
+
+Leave the server running. In **terminal 2**, start the capture in the foreground:
+
+```bash
+sudo tcpdump -i lo -nn 'tcp port 8000'
+```
+
+Enter your sudo password if prompted.
+Wait until tcpdump reports that it is listening on `lo`.
+This terminal now displays the capture; use **terminal 3** to request the page:
+
+```bash
+curl --noproxy '*' -v http://127.0.0.1:8000/
+```
+
+The page's HTML appears in terminal 3, the web server logs the request in terminal 1, and the packet capture appears in terminal 2.
+All three commands run on the same Droplet because `127.0.0.1` refers to the machine running the command.
+
+`-i lo` captures loopback traffic, and `-nn` keeps addresses and ports numeric.
+The filter `'tcp port 8000'` selects TCP traffic with source or destination port 8000.
+The capture continues until you stop it. After the request finishes, return to **terminal 2** and press **Ctrl-C**.
+Tcpdump prints a summary of the capture.
+
+The `-v` option makes curl show connection details as well as the page's HTML.
+Look for `Trying 127.0.0.1:8000` and a successful connection in terminal 3, and a new `GET /` request in terminal 1.
+If tcpdump reports zero packets captured, check that it was listening before you made the request.
+Also run `hostname` in all three terminals to check that they are connected to the same Droplet.
+Restart the capture and repeat the request if needed.
+
+Look for `Flags [S]`, `Flags [S.]`, and `Flags [.]` at the start of the connection.
+In tcpdump's notation, the dot indicates ACK. Subsequent ACK-only packets can also appear.
+One endpoint should use port 8000; the client's temporary source port will vary.
+This is a local HTTP exchange, so it demonstrates TCP without adding TLS encryption or external routing.
+
+When finished, press **Ctrl-C in terminal 1** to stop the server, then remove the empty directory:
+
+```bash
+rmdir "$capture_dir"
+```
+
+Capture only traffic you are authorized to inspect.
+For command details, consult `man tcpdump`.
 
 ## IP Subnetting
 
-Let's now return to the internet layer and discuss one of the major duties of a systems administrator: subnetting.
+A **subnet** is an address range defined by a network prefix.
+Subnetting divides a larger address block into smaller blocks; it applies to public as well as private addressing.
+Routers connect networks, but subnet calculations describe address boundaries rather than a particular router model.
 
-Subnets are used to carve out smaller and more manageable subnetworks out of a larger network.
-They are created using routers that have this capability (e.g., commercial use routers) and certain types of network switches.
-
-### Private IP Ranges
-
-When subnetting local area networks, recall that we work with the private IP ranges:
-
-| Start Address | End Address     |
-|---------------|-----------------|
-| 10.0.0.0      | 10.255.255.255  |
-| 172.16.0.0    | 172.31.255.255  |
-| 192.168.0.0   | 192.168.255.255 |
-
-It's important to be able to work with IP addresses like those listed above in order to subnet; and therefore, we will need to learn a bit of IP math along the way.
+On DigitalOcean, inspect the VPC range assigned to your resources rather than inventing addresses inside Linux.
+The following exercises teach IPv4 arithmetic; they are not instructions to reconfigure the Droplet.
 
 #### IP Meaning
 
@@ -315,11 +314,11 @@ Eight **bits** equals a single **byte**.
 By implication, 8 gigabits equals 1 gigabyte, and 8 megabits equals 1 megabyte.
 We use these symbols to note the terms:
 
-| Term  | Symbol |
-|-------|--------|
-| bit   | *b*    |
-| byte  | B      |
-| octet | *o*    |
+ | Term    | Symbol   |
+ | ------- | -------- |
+ | bit     | *b*      |
+ | byte    | B        |
+ | octet   | *o*      |
 
 Each bit is represented by either a 1 or a 0.
 For example, the first address above in binary is:
@@ -369,7 +368,7 @@ Then STOP.
 There are no values left, and so the rest are zeroes.
 Thus: 11000000
 
-Our everyday counting system is base-10, but binary is base-2, and thus another way to convert binary to decimal is to multiple each bit (1 or 0) by the power of base two of its placeholder:
+Our everyday counting system is base-10, but binary is base-2, and thus another way to convert binary to decimal is to multiply each bit (1 or 0) by the power of base two of its placeholder:
 
 ```
 (0 * 2^0) = 0 +
@@ -398,27 +397,21 @@ Subnetting involves dividing a network into two or more subnets.
 When we subnet, we first identify the number of hosts (i.e., the size of the subnet) we will require on the subnet.
 For starters, let's assume that we need a subnet that can assign at most 254 IP addresses to the devices attached to it via the router.
 
-In order to do this, we need two additional IP addresses:
-the **subnet mask** and the **network address/ID**.
-The **network address** identifies the network and the **subnet mask** marks the boundary between the network and the hosts.
-Knowing or determining the subnet mask allows us to determine how many hosts can exist on a network.
-Both the network address and the subnet mask can be written as IP addresses, but these IP addresses cannot be assigned to computers on a network.
+The **subnet mask** marks the boundary between network bits and host bits.
+It is a bit pattern, not an extra address that consumes a place in the subnet.
+The **network address** has all host bits set to zero; the **broadcast address** has all host bits set to one.
+In an ordinary IPv4 subnet, these two addresses are not assigned to individual hosts.
+A broadcast addresses all hosts on that local subnet; routers generally do not forward it to other subnets.
 
-When we have determined these IPs, we will know the **broadcast address**.
-This is the last IP address in a subnet range, and it also cannot be assigned to a connected device/host.
-The **broadcast address** is used by a router to communicate to all connected devices on the subnet.
-
-For our sake, let's work through this process backwards;
-that is, let's identify and describe a network that we are already connected to and for which we already know a device's private IP address.
+For our sake, let's work through this process backwards; that is, let's identify and describe a network that we are already connected to and for which we already know a device's private IP address.
 We'll work with example private IP addresses that exist on separate subnets.
 
 #### Example IP Address 1: 192.168.1.6/24
 
-Using the private IP address 192.168.1.6,
-let's derive the network mask and the network address (or ID) from this IP address.
+Using the private IP address 192.168.1.6, let's derive the network mask and the network address (or ID) from this IP address.
 First, convert the decimal notation to binary.
 State the mask, which is **/24**, or **255.255.255.0**.
-And then derive the network addressing using an **bitwise logical AND** operation:
+And then derive the network addressing using a **bitwise logical AND** operation:
 
 ```
 11000000.10101000.00000001.00000110 IP              192.168.1.6
@@ -467,7 +460,7 @@ For example 2, let's start off with a private IP address of 10.160.38.75 and a m
 For example 3, let's start off with a private IP address of 172.16.1.62 and a mask of /24:
 
 ```
-10101100 00010000 00000001 00100111 IP                172.16.1.62
+10101100 00010000 00000001 00111110 IP                172.16.1.62
 11111111 11111111 11111111 00000000 Mask            255.255.255.0
 -----------------------------------
 10101100 00010000 00000001 00000000 Network Address    172.16.1.0
@@ -491,7 +484,7 @@ Therefore, there are 254 maximum hosts allowed on these subnets because 1 to 254
 
 The first three examples show instances where the CIDR is set to /24.
 This only allows 254 maximum hosts on a subnet.
-If the CIDR is set to /16, then we can theoretically allow 65,534 hosts on a subnet. 
+If the CIDR is set to /16, then we can theoretically allow 65,534 hosts on a subnet.
 
 For example 4, let's start off then with a private IP address of 10.0.5.23 and a mask of /16:
 
@@ -511,54 +504,57 @@ For example 4, let's start off then with a private IP address of 10.0.5.23 and a
 | End Range    | 10.0.255.254  |
 | Broadcast    | 10.0.255.255  |
 
-Since the last two octets/bytes now vary, we count up by each octet.
-Therefore, the number of hosts is:
+A /16 leaves 16 host bits, so there are 2^16 = 65,536 total addresses.
+Subtract the network address and broadcast address to obtain 65,534 conventional usable host addresses.
+The intermediate addresses include values such as `10.0.1.0` and `10.0.1.255`: an address ending in `.0` or `.255` is not automatically a network or broadcast address.
+The prefix determines its role.
 
-| IPs          |         |
-|--------------|---------|
-| 10.0.0.1     |         |
-| 10.0.0.255   | = 256   |
-| 10.0.1.1     |         |
-| 10.0.255.255 | = 256   |
+For the ordinary IPv4 subnets in these examples:
 
-- Number of Hosts = 256 x 256 = 65536
-- Subtract Network ID (1) and Broadcast (1) = 2 IP addresses
-- Number of Usable Hosts = 256 x 256 - 2 = 65534
+```text
+Total addresses = 2^(32 - prefix length)
+Conventional usable host addresses = 2^(32 - prefix length) - 2
+```
 
-### IPv6 subnetting
+This host formula has exceptions, including /31 point-to-point links and /32 host routes.
+Cloud providers also reserve addresses for infrastructure, so the formula does not tell you how many Droplets a VPC can hold.
+Consult [DigitalOcean's VPC planning documentation][do_vpc] for provider reservations.
 
-We're not going to cover IPv6 subnetting, but if you're interested, this is a nice article: [IPv6 subnetting overview][ipv6subnetting]
+#### Try a /20 Prefix
 
-## Conclusion
+Suppose a Droplet has the VPC address `10.116.0.2/20`.
+Before calculating, predict whether its subnet contains more or fewer addresses than a /24.
+Then find its mask, network address, broadcast address, and conventional usable host count.
 
-As a systems administrator, it's important to have a basic understanding of how networking works, and the basic models used to describe the internet and its applications.
-System administrators have to know how to create subnets and defend against various network-based attacks.
+Hint: /20 leaves 12 host bits.
+Its mask is `255.255.240.0`, and the third octet advances in blocks of 16.
+Treat this as address arithmetic; do not assign these example addresses to your Droplet.
 
-In order to acquire a basic understanding, this section covered topics that included:
+### IPv6
 
-- the internet protocol suite
-  - link layer
-  - internet layer
-  - transport layer
-- IP subnetting
-  - private IP ranges
-  - IP math
+IPv6 also uses prefix lengths, but its 128-bit addresses use hexadecimal notation.
+IPv6 has no broadcast address, so do not apply the IPv4 “subtract two” rule to it.
+Detailed IPv6 subnetting is outside this lesson.
 
-In the next section, we extend upon this and discuss the domain name system (DNS) and domain names.
+## Practice and Review
 
-[wikiIPS]:https://en.wikipedia.org/wiki/Internet_protocol_suite
-[osi]:https://en.wikipedia.org/wiki/OSI_model
-[udp]:https://en.wikipedia.org/wiki/User_Datagram_Protocol
-[tcp]:https://en.wikipedia.org/wiki/Transmission_Control_Protocol
-[http]:https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
-[DOS]:https://en.wikipedia.org/wiki/Denial-of-service_attack
-[udpCloudFlare]:https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/
-[tcpCloudFlare]:https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/
-[headers]:https://www.cloudflare.com/learning/network-layer/what-is-a-packet/
-[tcpfields]:https://www.imperva.com/learn/ddos/tcp-transmission-control-protocol/
-[udpfields]:https://www.imperva.com/learn/ddos/udp-user-datagram-protocol/
-[tcphandshake]:https://www.geeksforgeeks.org/tcp-3-way-handshake-process/
-[portnumbers]:https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
-[cidr]:https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing
-[ipv6subnetting]:https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study
-[TLP_wiki]:https://en.wikipedia.org/wiki/Category:Transport_layer_protocols
+Record the following from your own Droplet, using your observed values rather than the examples:
+
+1. Its public IPv4 address, VPC IPv4 address and prefix, and loopback address.
+2. The interface and next hop selected for a public destination.
+3. A listening TCP service and the address to which it is bound.
+4. The server and client ports in your local packet capture.
+5. The network address and conventional host count for the example `10.116.0.2/20`.
+
+Then explain: if a service is running but you cannot connect from your laptop, what would you check?
+Hint: distinguish the destination address, the service's listening address and port, the route, and each firewall.
+A failed ping does not prove that a host is down: ICMP can be filtered while SSH or HTTP still works.
+
+In the next section, we extend this discussion to DNS and domain names.
+
+[do_network]:https://docs.digitalocean.com/support/how-do-i-debug-my-droplets-network-configuration/
+[do_vpc]:https://docs.digitalocean.com/products/networking/vpc/concepts/plan-your-network/
+[do_firewall]:https://docs.digitalocean.com/support/my-firewalls-are-not-working-correctly/
+[tcp]:https://www.rfc-editor.org/rfc/rfc9293.html
+[udp]:https://www.rfc-editor.org/rfc/rfc768.html
+[cidr]:https://www.rfc-editor.org/rfc/rfc4632.html
