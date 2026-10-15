@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-fa86cc46.js";
+            window.path_to_searchindex_js = "searchindex-99fb80de.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-b63f2cd2.js"></script>
@@ -6684,61 +6684,46 @@ of disaster.</p>
 <h1 id="networking"><a class="header" href="#networking">Networking</a></h1>
 <p>By the end of this section, you should know:</p>
 <ol>
-<li>The role of a system administrator in setting up, configuring, and monitoring networks,
-from small LANs to larger networks that interface with external networks.</li>
-<li>The structure and layers of the Internet Protocol Suite,
-including the Link, Internet, Transport, and Application layers.</li>
-<li>How the Address Resolution Protocol (ARP) is used to map IP addresses to MAC addresses, and
-how to view network information using commands like <code>ip a</code> and <code>ip link</code>.</li>
-<li>The distinction between public and private IP addresses, the ranges for private IPs, and
-the concept of IP subnets.</li>
-<li>How the Transmission Control Protocol (TCP) and User Datagram Protocol (UDP) differ in handling data,
-including typical use cases for each.</li>
+<li>The role of a system administrator in setting up, configuring, and monitoring networks, from small LANs to larger networks that interface with external networks.</li>
+<li>The structure and layers of the Internet Protocol Suite, including the Link, Internet, Transport, and Application layers.</li>
+<li>How the Address Resolution Protocol (ARP) is used to map IP addresses to MAC addresses, and how to view network information using commands like <code>ip a</code> and <code>ip link</code>.</li>
+<li>The distinction between public and private IP addresses, the ranges for private IPs, and the concept of IP subnets.</li>
+<li>How the Transmission Control Protocol (TCP) and User Datagram Protocol (UDP) differ in handling data, including typical use cases for each.</li>
 <li>The basics of TCP and UDP headers, and how to examine network traffic using <code>tcpdump</code>.</li>
-<li>The significance of ports in networking, common port numbers, and
-how ports help direct traffic to specific services.</li>
-<li>The concept of subnetting, including how subnet masks and
-CIDR notation help define network boundaries and control the number of hosts on a network.</li>
-<li>How to convert between binary and decimal for IP addressing,
-as well as the importance of subnet masks and broadcast addresses.</li>
+<li>The significance of ports in networking, common port numbers, and how ports help direct traffic to specific services.</li>
+<li>The concept of subnetting, including how subnet masks and CIDR notation help define network boundaries and control the number of hosts on a network.</li>
+<li>How to convert between binary and decimal for IP addressing, as well as the importance of subnet masks and broadcast addresses.</li>
 <li>The process of calculating available hosts in a subnet, including examples for both /24 and /16 subnet masks.</li>
 </ol>
 <h2 id="getting-started-9"><a class="header" href="#getting-started-9">Getting Started</a></h2>
 <p>An important function of a system administrator is to set up, configure, and monitor a network.
-This may involve planning, configuring, and connecting the devices on a local area network,
-to planning and implementing a large network that interfaces with an outside network,
+This may involve planning, configuring, and connecting the devices on a local area network, to planning and implementing a large network that interfaces with an outside network,
 and to monitoring networks for various sorts of attacks, such as <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">denial of service attacks</a>.</p>
-<p>In order to prepare for this type of work,
-we need at least a basic understanding of how the internet works and how local devices interact with the internet.
+<p>In order to prepare for this type of work, we need at least a basic understanding of how the internet works and how local devices interact with the internet.
 In this section, we will focus mostly on internet addressing, but we will also devote some space to TCP and UDP, two protocols for transmitting data.</p>
-<p>Connecting two or more devices together nowadays involves the TCP/IP or the UDP/IP protocols,
-otherwise part of the <a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite</a>.
+<p>Connecting two or more devices together nowadays involves the TCP/IP or the UDP/IP protocols, otherwise part of the <a href="https://en.wikipedia.org/wiki/Internet_protocol_suite">Internet protocol suite</a>.
 This suite is an expression of the more generalized <a href="https://en.wikipedia.org/wiki/OSI_model">OSI communication model</a>.</p>
 <p>The internet protocol suite is framed as a series of layers beginning with a lower layer, called the <strong>link layer</strong>,
-that interfaces with internet capable hardware, to the highest layer, called the <strong>application layer</strong>,
-e.g., the web (<code>http</code>).</p>
+that interfaces with internet capable hardware, to the highest layer, called the <strong>application layer</strong>, e.g., the web (<code>http</code>).</p>
 <p>The <strong>link layer</strong> describes the local area network.
 Devices connected locally, e.g., via Ethernet cables or local wifi, comprise the link layer.
 The link layer connects to the <strong>internet layer</strong>.
 Data going into or out of a local network must be negotiated between these two layers.</p>
 <p>The <strong>internet layer</strong> makes the internet possible since it provides functionality to transmit data among multiple networks possible.
 The internet is, in fact, a network of networks.
-The primary characteristic of the internet layer is the <strong>IP address</strong>, which currently comes in two versions:
-IPv4 (a 32 bit number) and IPv6 (a 128 bit number).
+The primary characteristic of the internet layer is the <strong>IP address</strong>, which currently comes in two versions: IPv4 (a 32 bit number) and IPv6 (a 128 bit number).
 IP addresses are used to locate hosts on a network.</p>
 <p>The <strong>transport layer</strong> makes the exchange of data on the internet possible.
 There are multiple protocols for the transport layer, but the two main ones are <a href="https://en.wikipedia.org/wiki/User_Datagram_Protocol">UDP</a> and <a href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">TCP</a>.
 Very generally, the <a href="https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/">UDP</a> places priority on data reaching its destination over the integrity of data.
-For example, streaming video, Voice-over-IP (VOIP), and online gaming are often transported via UDP
-because the loss of some pixels or some audio is acceptable for end users.
+For example, streaming video, Voice-over-IP (VOIP), and online gaming are often transported via UDP because the loss of some pixels or some audio is acceptable for end users.
 <a href="https://www.cloudflare.com/learning/ddos/glossary/tcp-ip/">TCP</a> is used when the integrity of the data is important.
 If the data cannot be transmitted without error, then the data won’t reach its final destination until the error is corrected.
 As an example, purchases, bank exchanges, etc use TCP since financial transactions must be exact.</p>
 <p>The <strong>application layer</strong> provides the ability to use the internet in particular ways.
 For example, the <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol">HTTP</a> protocol enables the <strong>web</strong>.
-The <strong>web</strong> is thus an <strong>application</strong> of the internet.
-Likewise, the <strong>SMTP</strong>, <strong>IMAP</strong>, and <strong>POP</strong> protocols provide the basis for email exchange,
-<strong>DNS</strong> maps IP addresses to domain names, and we use <strong>SSH</strong> to connect to our virtual machines.</p>
+The <strong>web</strong> can be thought of as an <strong>application</strong> of the internet.
+Likewise, the <strong>SMTP</strong>, <strong>IMAP</strong>, and <strong>POP</strong> protocols provide the basis for email exchange, <strong>DNS</strong> maps IP addresses to domain names, and we use <strong>SSH</strong> to connect to our virtual machines.</p>
 <blockquote>
 <p>By <strong>application</strong>, we simply mean that these protocols provide the functionality for applications.
 They are not themselves considered user applications, like a web browser.</p>
@@ -6746,8 +6731,7 @@ They are not themselves considered user applications, like a web browser.</p>
 <h2 id="the-internet-protocol-suite"><a class="header" href="#the-internet-protocol-suite">The Internet Protocol Suite</a></h2>
 <h3 id="link-layer"><a class="header" href="#link-layer">Link Layer</a></h3>
 <h4 id="arp-address-resolution-protocol"><a class="header" href="#arp-address-resolution-protocol">ARP (Address Resolution Protocol)</a></h4>
-<p><strong>ARP</strong> (Address Resolution Protocol) is a protocol at the link layer and is used to map network addresses,
-like an IP address, to ethernet addresses.
+<p><strong>ARP</strong> (Address Resolution Protocol) is a protocol at the link layer and is used to map network addresses, like an IP address, to ethernet addresses.
 An ethernet address is more commonly referred to as the MAC or Media Access Control address, or the hardware address.
 Routers use MAC addresses to enable communication inside networks (w/in subnets or local area networks)
 so that computers within a local network can talk to each other on these subnets.
@@ -6760,18 +6744,18 @@ Each of your internet capable devices, your smartphone, your laptop, your intern
 <pre><code>ip link
 </code></pre>
 <blockquote>
-<p>In the above command, <code>ip</code> is the command and <code>a</code> or <code>link</code> are considered objects
-(see <code>man ip</code> for details).
+<p>In the above command, <code>ip</code> is the command and <code>a</code> or <code>link</code> are considered objects (see <code>man ip</code> for details).
 Note that <code>ip a</code> and <code>ip link</code> provide slightly different views of network interfaces.</p>
 </blockquote>
 <p>The MAC addresses are reported on the <strong>link/ether</strong> line.</p>
-<p>On my virtual server, the <code>ip link</code> command produces two <strong>numbered</strong> sections of output.
+<p>On my virtual server, the <code>ip link</code> command produces <strong>numbered</strong> sections of output.
 The first section refers to the <code>lo</code> or loopback device.
-This is a special device that allows the computer to communicate with itself, and
-it always has a MAC address of 00:00:00:00:00:00.
-The next section on the machine refers to the ethernet card (e.g., <code>ens4</code>), and
-this represents the hardware for system’s wired connection to the internet.
-The MAC address is reported on the indented line below.
+This is a special device that allows the computer to communicate with itself, and it always has a MAC address of 00:00:00:00:00:00.
+The next two sections on the machine refer to the ethernet cards (e.g., <code>eth0</code> and <code>eth1</code>).
+These represent the hardware for system’s wired connections to the internet.
+<code>eth0</code> refers to the connections to the outside world.
+<code>eth1</code> refers to the connections to the subnet.
+The MAC addresses are reported on the indented lines below.
 See <code>man systemd.net-naming-scheme</code> for more details.</p>
 <p>We can get the IP information with the following command:</p>
 <pre><code>ip a
@@ -6779,7 +6763,7 @@ See <code>man systemd.net-naming-scheme</code> for more details.</p>
 <p>The <code>ip a</code> command reports both the MAC and IP addresses for the same devices.
 Here it reports that the <code>lo</code> device has the IP address of 127.0.0.1.
 It always has this IP.
-On my Google Cloud machine, I get an IP address like <code>10.128.0.2/32</code> for the <code>ens4</code> device.
+On my virtual machine, I get an IP address like <code>10.116.0.2/20</code> for the <code>eth1</code> device.
 This is a <strong>private IP address</strong>, which means it can only be used to locate the machine on the subnet.</p>
 <p>The following two commands help identify parts of the local network (or subnet) and the routing table.</p>
 <pre><code>ip neigh
@@ -6794,8 +6778,7 @@ Both of these commands are more commonly used on Linux-based routers.</p>
 A router gets configured to use a specific <strong>network address</strong> when it’s brought online.
 It searches the sub network for connected MAC addresses.
 It then assigns each of those MAC addresses an available IP address based on the available network address.
-Those network addresses are private IP addresses and will fall within a specific range
-(as discussed below).</p>
+Those network addresses are private IP addresses and will fall within a specific range (as discussed below).</p>
 <h3 id="internet-layer"><a class="header" href="#internet-layer">Internet Layer</a></h3>
 <h4 id="ip-internet-protocol"><a class="header" href="#ip-internet-protocol">IP (Internet Protocol)</a></h4>
 <p>The Internet Protocol is used to uniquely identify a host on a network and place that host at a specific location (its IP <strong>address</strong>).
@@ -6824,34 +6807,25 @@ like your phone or computer, you will see that it will have an address within on
 For example, it might have an IP address like <strong>192.168.0.4</strong>.
 This is a common IP address number assigned by a home router.</p>
 <p>The difference between these ranges largely rests on the number of hosts they can accommodate.
-The <strong>10.X.X.X</strong> private range can assign more IP addresses (more hosts) on its network
-than the <strong>172.X.X.X</strong> range can, and the latter more than the <strong>192.168.X.X</strong> range.
+The <strong>10.X.X.X</strong> private range can assign more IP addresses (more hosts) on its network than the <strong>172.X.X.X</strong> range can, and the latter more than the <strong>192.168.X.X</strong> range.
 This is why you’ll see the <strong>10.0.0.0</strong> IP range on bigger networks, like a university’s network.
 We’ll talk more about subnetwork sizes, shortly.</p>
 <h4 id="example-private-ip-usage"><a class="header" href="#example-private-ip-usage">Example Private IP Usage</a></h4>
 <p>Let’s say my campus desktop’s IP address is <strong>10.163.34.59/24</strong> via a wired connection.
 And my office neighbor has an IP address of <strong>10.163.34.65/24</strong> via their wired connection.
-Both IP addresses are private because they fall within the
-<strong>10.0.0.0 to 10.255.255.255</strong> range.
-And it’s likely they both exist on the same subnet since they share the first three <strong>octets</strong>:
-<strong>10.163.34.XX</strong>.</p>
-<p>However, if we both, using our respective wired connected computers,
-searched Google for <em>what’s my IP address</em>,
+Both IP addresses are private because they fall within the <strong>10.0.0.0 to 10.255.255.255</strong> range.
+And it’s likely they both exist on the same subnet since they share the first three <strong>octets</strong>: <strong>10.163.34.XX</strong>.</p>
+<p>However, if we both, using our respective wired connected computers, searched Google for <em>what’s my IP address</em>,
 we will see that we share the same public IP address, which will be something like <strong>128.163.8.25</strong>.
 We know that is a public IP address because it does not fall within the ranges listed above.</p>
-<p>By entailment and without any additional information,
-we know that all traffic coming from our computers and going out to the internet looks like it’s coming
-from the same IP address (<strong>128.163.8.25</strong>).
-And in reverse, all traffic coming from outside our network first goes to <strong>128.163.8.25</strong>
-before it’s routed to our respective computers via the router.</p>
+<p>By entailment and without any additional information, we know that all traffic coming from our computers and going out to the internet looks like it’s coming from the same IP address (<strong>128.163.8.25</strong>).
+And in reverse, all traffic coming from outside our network first goes to <strong>128.163.8.25</strong> before it’s routed to our respective computers via the router.</p>
 <p>Let’s say I switch my computer’s network connection to the campus’s wifi network.
 When I check with <code>ip a</code>, I find that the computer now has a private IP address of <strong>10.47.34.150/16</strong>.
 You can see the pattern is different with this IP address than it was when it was connected via wire.
 The reason it has a different pattern is because the laptop is now on an different subnet.
-This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices
-(i.e., laptops, phones, etc).
-When I searched Google for my IP address from this laptop,
-it reports <strong>128.163.238.148</strong>.
+This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc).
+When I searched Google for my IP address from this laptop, it reports <strong>128.163.238.148</strong>.
 Since this is a different public IP address from above, it indicates that the university owns a range of public IP address spaces.</p>
 <p>Here’s a visual diagram of what this network looks like:</p>
 <figure>
@@ -6873,55 +6847,42 @@ We probably have the same device names, but note that it might be different.</p>
 sudo ip link set ens4 up
 </code></pre>
 <blockquote>
-<p>Don’t run those commands on your Google Cloud servers otherwise your connection will be dropped and
-you’ll have to reboot the system from the web console.</p>
+<p>Don’t run those commands on your virtual machines otherwise your connection will be dropped and you’ll have to reboot the system from the web console.</p>
 </blockquote>
 <h3 id="transport-layer"><a class="header" href="#transport-layer">Transport Layer</a></h3>
 <p>The internet (IP) layer does not transmit content, like web pages or video streams.
 This is the work of the transport layer.
-As discussed previously, the two most common transport layer protocols are <strong>TCP</strong> and <strong>UDP</strong>,
-but <a href="https://en.wikipedia.org/wiki/Category:Transport_layer_protocols">there are more</a>.</p>
+As discussed previously, the two most common transport layer protocols are <strong>TCP</strong> and <strong>UDP</strong>, but <a href="https://en.wikipedia.org/wiki/Category:Transport_layer_protocols">there are more</a>.</p>
 <h4 id="tcp-transmission-control-protocol"><a class="header" href="#tcp-transmission-control-protocol">TCP, Transmission Control Protocol</a></h4>
-<p><em>TCP</em> or Transmission Control Protocol is responsible for the transmission of data and
-for making sure the data arrives at its destination w/o errors.
+<p><em>TCP</em> or Transmission Control Protocol is responsible for the transmission of data and for making sure the data arrives at its destination w/o errors.
 If there are errors, the data is re-transmitted or halted in case of failure.
 Much of the data sent over the internet is sent using TCP.</p>
 <h4 id="udp-user-datagram-protocol"><a class="header" href="#udp-user-datagram-protocol">UDP, User Datagram Protocol</a></h4>
-<p>The <strong>UDP</strong> or User Datagram Protocol performs a similar function as TCP, but
-it does not error check and data may get lost.
-UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube,
-which uses a type of UDP transmission called <strong>QUIC</strong> that has builtin encryption.</p>
+<p>The <strong>UDP</strong> or User Datagram Protocol performs a similar function as TCP, but it does not error check and data may get lost.
+UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube, which uses a type of UDP transmission called <strong>QUIC</strong> that has builtin encryption.</p>
 <h4 id="tcp-and-udp-headers"><a class="header" href="#tcp-and-udp-headers">TCP and UDP Headers</a></h4>
-<p>The above protocols send data <strong>packets</strong> for TCP <strong>datagrams</strong> for UDP, but
-<a href="https://www.cloudflare.com/learning/network-layer/what-is-a-packet/">these terms may be used interchangeably</a>.
+<p>The above protocols send data <strong>packets</strong> for TCP <strong>datagrams</strong> for UDP, but <a href="https://www.cloudflare.com/learning/network-layer/what-is-a-packet/">these terms may be used interchangeably</a>.
 Packets for both protocols include header information to help route the data across the internet.
 TCP includes <a href="https://www.imperva.com/learn/ddos/tcp-transmission-control-protocol/">ten fields</a> of header data, and UDP includes <a href="https://www.imperva.com/learn/ddos/udp-user-datagram-protocol/">four fields</a>.</p>
 <p>We can see this header data using the <code>tcpdump</code> command, which requires <code>sudo</code> or being <strong>root</strong> to use.
-The first part of the IP header contains the source address,
-then comes the destination address, and so forth.
+The first part of the IP header contains the source address, then comes the destination address, and so forth.
 Aside from a few other parts, this is the primary information in an IP header.</p>
-<p>If you want to use <code>tcpdump</code>, <strong>you should use it on your local computer and not on your Google Cloud instance</strong>.
-I’m not sure how Google will respond to this kind of activity because it might be deemed malicious.
-But to use it, first we identify the IP number of a host,
-which we can do with the <code>ping</code> command, and then run <code>tcpdump</code>:</p>
+<p>If you want to use <code>tcpdump</code>, <strong>you should use it on your local computer and not on your virtual machine</strong>.
+I’m not sure how the hosting provider will respond to this kind of activity because it might be deemed malicious.
+But to use it, first we identify the IP number of a host, which we can do with the <code>ping</code> command, and then run <code>tcpdump</code>:</p>
 <pre><code>ping -c1 www.uky.edu
 sudo tcpdump host 128.163.35.46
 </code></pre>
-<p>While that’s running, we can type that IP address in our web browser, or enter <strong>www.uky.edu</strong>, and
-watch the output of <code>tcpdump</code>.</p>
+<p>While that’s running, we can type that IP address in our web browser, or enter <strong>www.uky.edu</strong>, and watch the output of <code>tcpdump</code>.</p>
 <p>TCP headers include port information and other mandatory fields for both source and destination servers.
 The SYN, or synchronize, message is sent when a source or client requests a connection.
-The ACK, or acknowledgment, message is sent in response, along with a SYN message,
-to acknowledge the request for a connection.
+The ACK, or acknowledgment, message is sent in response, along with a SYN message, to acknowledge the request for a connection.
 Then the client responds with an additional ACK message.
 This is referred to as the <a href="https://www.geeksforgeeks.org/tcp-3-way-handshake-process/">TCP three-way handshake</a>.
-In addition to the header info,
-TCP and UDP packets include the data that’s being sent (e.g., a webpage) and error checking if it’s TCP.</p>
+In addition to the header info, TCP and UDP packets include the data that’s being sent (e.g., a webpage) and error checking if it’s TCP.</p>
 <h4 id="ports"><a class="header" href="#ports">Ports</a></h4>
 <p>TCP and UDP connections use ports to bind internet traffic to specific IP addresses.
-Specifically, a <strong>port</strong> associates a process with an application
-(and is part of the <strong>application layer</strong> of the internet suite),
-such as a web service or outgoing email.
+Specifically, a <strong>port</strong> associates a process with an application (and is part of the <strong>application layer</strong> of the internet suite), such as a web service or outgoing email.
 That is, ports provide a way to distinguish and filter internet traffic (web, email, etc) through an IP address.
 For example, port 80 is the default port for unencrypted HTTP traffic.
 Thus, all traffic going to IP address 10.0.5.33:80 means that this is <strong>HTTP</strong> traffic for the HTTP web service.
@@ -6944,8 +6905,7 @@ Note that the port info is attached to the end of the IP address via a colon.</p
 <h2 id="ip-subnetting"><a class="header" href="#ip-subnetting">IP Subnetting</a></h2>
 <p>Let’s now return to the internet layer and discuss one of the major duties of a systems administrator: subnetting.</p>
 <p>Subnets are used to carve out smaller and more manageable subnetworks out of a larger network.
-They are created using routers that have this capability (e.g., commercial use routers) and
-certain types of network switches.</p>
+They are created using routers that have this capability (e.g., commercial use routers) and certain types of network switches.</p>
 <h3 id="private-ip-ranges"><a class="header" href="#private-ip-ranges">Private IP Ranges</a></h3>
 <p>When subnetting local area networks, recall that we work with the private IP ranges:</p>
 <div class="table-wrapper">
@@ -6960,8 +6920,7 @@ certain types of network switches.</p>
 </tbody>
 </table>
 </div>
-<p>It’s important to be able to work with IP addresses like those listed above in order to subnet;
-and therefore, we will need to learn a bit of IP math along the way.</p>
+<p>It’s important to be able to work with IP addresses like those listed above in order to subnet; and therefore, we will need to learn a bit of IP math along the way.</p>
 <h4 id="ip-meaning"><a class="header" href="#ip-meaning">IP Meaning</a></h4>
 <p>An IPv4 address is 32 bits (8 x 4), or four bytes, in size.
 In human readable context, it’s usually expressed in the following, decimal-based, notation style:</p>
@@ -7006,8 +6965,7 @@ For example, the first address above in binary is:</p>
 </table>
 </div>
 <h3 id="ip-math"><a class="header" href="#ip-math">IP Math</a></h3>
-<p>When doing IP math, one easy way to do it is to simply remember that
-each bit in each of the above bytes is a placeholder for the following values:</p>
+<p>When doing IP math, one easy way to do it is to simply remember that each bit in each of the above bytes is a placeholder for the following values:</p>
 <pre><code>128 64 32 16 8 4 2 1
 </code></pre>
 <p>Alternatively, from low to high:</p>
@@ -7029,8 +6987,7 @@ each bit in each of the above bytes is a placeholder for the following values:</
 </table>
 </div>
 <p>It’s helpful to work backward.
-For IP addresses, all octets are 255 or less (256 total, from 0 to 255) and
-therefore do not exceed 8 bits or places.
+For IP addresses, all octets are 255 or less (256 total, from 0 to 255) and therefore do not exceed 8 bits or places.
 To convert the integer 192 to binary:</p>
 <pre><code>1 * 2^7 = 128
 1 * 2^6 =  64 (128 + 64 = 192)
@@ -7038,9 +6995,7 @@ To convert the integer 192 to binary:</p>
 <p>Then STOP.
 There are no values left, and so the rest are zeroes.
 Thus: 11000000</p>
-<p>Our everyday counting system is base-10, but binary is base-2, and
-thus another way to convert binary to decimal is to multiple each bit (1 or 0)
-by the power of base two of its placeholder:</p>
+<p>Our everyday counting system is base-10, but binary is base-2, and thus another way to convert binary to decimal is to multiple each bit (1 or 0) by the power of base two of its placeholder:</p>
 <pre><code>(0 * 2^0) = 0 +
 (0 * 2^1) = 0 +
 (0 * 2^2) = 0 +
@@ -7051,8 +7006,7 @@ by the power of base two of its placeholder:</p>
 (1 * 2^7) = 128 = 192
 </code></pre>
 <p>Another way to convert to binary: simply subtract the numbers from each value.
-As long as there is something remaining or the placeholder equals the remainder of the previous subtraction,
-then the bit equals 1.
+As long as there is something remaining or the placeholder equals the remainder of the previous subtraction, then the bit equals 1.
 So:</p>
 <ul>
 <li>192 - 128 = 64 – therefore the first bit is equal to 1.</li>
@@ -7063,21 +7017,17 @@ So:</p>
 <h3 id="subnetting-examples"><a class="header" href="#subnetting-examples">Subnetting Examples</a></h3>
 <p>Subnetting involves dividing a network into two or more subnets.
 When we subnet, we first identify the number of hosts (i.e., the size of the subnet) we will require on the subnet.
-For starters, let’s assume that we need a subnet that can assign at most 254 IP addresses
-to the devices attached to it via the router.</p>
+For starters, let’s assume that we need a subnet that can assign at most 254 IP addresses to the devices attached to it via the router.</p>
 <p>In order to do this, we need two additional IP addresses:
 the <strong>subnet mask</strong> and the <strong>network address/ID</strong>.
-The <strong>network address</strong> identifies the network and
-the <strong>subnet mask</strong> marks the boundary between the network and the hosts.
+The <strong>network address</strong> identifies the network and the <strong>subnet mask</strong> marks the boundary between the network and the hosts.
 Knowing or determining the subnet mask allows us to determine how many hosts can exist on a network.
-Both the network address and the subnet mask can be written as IP addresses, but
-these IP addresses cannot be assigned to computers on a network.</p>
+Both the network address and the subnet mask can be written as IP addresses, but these IP addresses cannot be assigned to computers on a network.</p>
 <p>When we have determined these IPs, we will know the <strong>broadcast address</strong>.
 This is the last IP address in a subnet range, and it also cannot be assigned to a connected device/host.
 The <strong>broadcast address</strong> is used by a router to communicate to all connected devices on the subnet.</p>
 <p>For our sake, let’s work through this process backwards;
-that is, let’s identify and describe a network that we are already connected to and
-for which we already know a device’s private IP address.
+that is, let’s identify and describe a network that we are already connected to and for which we already know a device’s private IP address.
 We’ll work with example private IP addresses that exist on separate subnets.</p>
 <h4 id="example-ip-address-1-1921681624"><a class="header" href="#example-ip-address-1-1921681624">Example IP Address 1: 192.168.1.6/24</a></h4>
 <p>Using the private IP address 192.168.1.6,
@@ -7203,11 +7153,9 @@ Therefore, the number of hosts is:</p>
 <li>Number of Usable Hosts = 256 x 256 - 2 = 65534</li>
 </ul>
 <h3 id="ipv6-subnetting"><a class="header" href="#ipv6-subnetting">IPv6 subnetting</a></h3>
-<p>We’re not going to cover IPv6 subnetting, but if you’re interested,
-this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
+<p>We’re not going to cover IPv6 subnetting, but if you’re interested, this is a nice article: <a href="https://supportforums.cisco.com/document/66991/ipv6-subnetting-overview-and-case-study">IPv6 subnetting overview</a></p>
 <h2 id="conclusion-15"><a class="header" href="#conclusion-15">Conclusion</a></h2>
-<p>As a systems administrator, it’s important to have a basic understanding of how networking works,
-and the basic models used to describe the internet and its applications.
+<p>As a systems administrator, it’s important to have a basic understanding of how networking works, and the basic models used to describe the internet and its applications.
 System administrators have to know how to create subnets and defend against various network-based attacks.</p>
 <p>In order to acquire a basic understanding, this section covered topics that included:</p>
 <ul>
