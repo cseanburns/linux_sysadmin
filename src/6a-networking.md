@@ -22,8 +22,8 @@ and to monitoring networks for various sorts of attacks, such as [denial of serv
 In order to prepare for this type of work, we need at least a basic understanding of how the internet works and how local devices interact with the internet.
 In this section, we will focus mostly on internet addressing, but we will also devote some space to TCP and UDP, two protocols for transmitting data.
 
-Connecting two or more devices together nowadays involves the TCP/IP or the UDP/IP protocols, otherwise part of the [Internet protocol suite][wikiIPS].
-This suite is an expression of the more generalized [OSI communication model][osi].
+Network communication commonly uses protocols from the [Internet protocol suite][wikiIPS], including TCP/IP and UDP/IP.
+Like the [OSI communication model][osi], this suite describes network communication in layers, although the two models organize those layers differently.
 
 The internet protocol suite is framed as a series of layers beginning with a lower layer, called the **link layer**,
 that interfaces with internet capable hardware, to the highest layer, called the **application layer**, e.g., the web (`http`).
@@ -40,11 +40,11 @@ IP addresses are used to locate hosts on a network.
 
 The **transport layer** makes the exchange of data on the internet possible.
 There are multiple protocols for the transport layer, but the two main ones are [UDP][udp] and [TCP][tcp].
-Very generally, the [UDP][udpCloudFlare] places priority on data reaching its destination over the integrity of data.
-For example, streaming video, Voice-over-IP (VOIP), and online gaming are often transported via UDP because the loss of some pixels or some audio is acceptable for end users.
-[TCP][tcpCloudFlare] is used when the integrity of the data is important.
-If the data cannot be transmitted without error, then the data won't reach its final destination until the error is corrected.
-As an example, purchases, bank exchanges, etc use TCP since financial transactions must be exact.
+Very generally, [UDP][udpCloudFlare] allows applications to send data without establishing a connection or waiting for retransmission of lost data.
+For example, Voice-over-IP (VOIP), online gaming, and some streaming applications use UDP because timely delivery can matter more than recovering every missing piece of data.
+[TCP][tcpCloudFlare] provides reliable, ordered delivery by detecting errors and retransmitting lost data.
+If delivery fails, the connection can terminate.
+Applications can also implement reliable delivery over UDP, as QUIC does.
 
 The **application layer** provides the ability to use the internet in particular ways.
 For example, the [HTTP][http] protocol enables the **web**.
@@ -62,10 +62,9 @@ Likewise, the **SMTP**, **IMAP**, and **POP** protocols provide the basis for em
 
 **ARP** (Address Resolution Protocol) is a protocol at the link layer and is used to map network addresses, like an IP address, to ethernet addresses.
 An ethernet address is more commonly referred to as the MAC or Media Access Control address, or the hardware address.
-Routers use MAC addresses to enable communication inside networks (w/in subnets or local area networks)
-so that computers within a local network can talk to each other on these subnets.
-Networks are designed so that IP addresses are associated with MAC addresses before systems can communicate over a network.
-Each of your internet capable devices, your smartphone, your laptop, your internet connected toaster, has a MAC address.
+Hosts and routers use ARP on IPv4 Ethernet networks to discover the MAC address associated with a local next-hop IP address.
+This allows them to address Ethernet frames to another host on the local network or to a router for delivery beyond that network.
+Your internet capable devices, such as smartphones and laptops, generally have a MAC address for each Ethernet or wifi interface.
 
 To get the MAC address for a specific computer, we can use the following commands:
 
@@ -86,11 +85,11 @@ The MAC addresses are reported on the **link/ether** line.
 
 On my virtual server, the `ip link` command produces **numbered** sections of output.
 The first section refers to the `lo` or loopback device.
-This is a special device that allows the computer to communicate with itself, and it always has a MAC address of 00:00:00:00:00:00.
+This is a special device that allows the computer to communicate with itself; Linux displays its link address as 00:00:00:00:00:00, but it is not an Ethernet interface.
 The next two sections on the machine refer to the ethernet cards (e.g., `eth0` and `eth1`).
 These represent the hardware for system's wired connections to the internet.
-`eth0` refers to the connections to the outside world.
-`eth1` refers to the connections to the subnet.
+On this virtual machine, `eth0` provides the connection to the outside world, and `eth1` provides the connection to the private subnet.
+These roles depend on the machine's configuration, not on the interface names.
 The MAC addresses are reported on the indented lines below.
 See `man systemd.net-naming-scheme` for more details.
 
@@ -102,9 +101,9 @@ ip a
 
 The `ip a` command reports both the MAC and IP addresses for the same devices.
 Here it reports that the `lo` device has the IP address of 127.0.0.1.
-It always has this IP.
+This is the conventional IPv4 loopback address.
 On my virtual machine, I get an IP address like `10.116.0.2/20` for the `eth1` device.
-This is a **private IP address**, which means it can only be used to locate the machine on the subnet.
+This is a **private IP address**, which can be used within a private network, including across its routed subnets, but is not globally routable on the public internet.
 
 The following two commands help identify parts of the local network (or subnet) and the routing table.
 
@@ -113,33 +112,33 @@ ip neigh
 ip route
 ```
 
-The `ip neigh` command produces the ARP cache.
-This represents the other machines yours sees on the local network.
-At the very least, it'll report the IP address for the router your machine uses.
+The `ip neigh` command displays the neighbor table, including cached IPv4 ARP entries and IPv6 neighbor entries.
+These entries identify neighbors on local links that the machine has learned about; they are not a complete inventory of the network.
+The router may appear here after the machine has communicated through it.
 
-The `ip route` command is used to define how data is routed on the network but can also define the routing table.
-Both of these commands are more commonly used on Linux-based routers.
+The `ip route` command displays the IPv4 routing table by default and can also be used to modify routes.
+Both commands are useful on ordinary Linux hosts as well as Linux-based routers.
 
 These details enable the following scenario:
-A router gets configured to use a specific **network address** when it's brought online.
-It searches the sub network for connected MAC addresses.
-It then assigns each of those MAC addresses an available IP address based on the available network address.
-Those network addresses are private IP addresses and will fall within a specific range (as discussed below).
+A router can be configured with an IP address and subnet prefix for its local network.
+If it also runs a DHCP server, it can assign addresses from a configured pool to clients that request them.
+The DHCP server identifies clients using a client identifier or their MAC address.
+On a typical home network, the assigned addresses are private IP addresses within one of the ranges discussed below.
 
 ### Internet Layer
 
 #### IP (Internet Protocol)
 
-The Internet Protocol is used to uniquely identify a host on a network and place that host at a specific location (its IP **address**).
-If that network is subnetted (i.e., routed), then a host's IP address will have a subnet or private IP address.
-This private IP address will not be directly exposed to the Internet.
+The Internet Protocol provides addressing and delivery of packets between hosts across interconnected networks.
+IP addresses are assigned to network interfaces, and subnet prefixes identify their network portions.
+Subnets can use either public or private IP addresses.
 
 Remember this: public IP addresses are distinct from private IP addresses.
-Public IP addresses are accessible on the internet.
-Private IP addresses are not, but they are accessible on subnets or local area networks.
+Public IP addresses can be globally routed on the internet, although access to a particular host may be restricted.
+Private IP addresses are used within private networks and are not globally routable on the public internet.
 
 Private IP address ranges are **reserved** address ranges.
-This means no public internet device will have an IP address within these ranges.
+These ranges are reserved for private networks rather than globally routable public addressing.
 The private address ranges include:
 
 | Start Address | End Address     | Network Size |
@@ -148,15 +147,14 @@ The private address ranges include:
 | 172.16.0.0    | 172.31.255.255  | Medium       |
 | 192.168.0.0   | 192.168.255.255 | Small        |
 
-If you have a router at home, and examine the IP address for any of your devices connected to that router,
-like your phone or computer, you will see that it will have an address within one of the ranges above.
+If you have a router at home and examine the IPv4 address of a connected phone or computer, you will typically see an address within one of the ranges above.
 For example, it might have an IP address like **192.168.0.4**.
 This is a common IP address number assigned by a home router.
 
-The difference between these ranges largely rests on the number of hosts they can accommodate.
-The **10.X.X.X** private range can assign more IP addresses (more hosts) on its network than the **172.X.X.X** range can, and the latter more than the **192.168.X.X** range.
-This is why you'll see the **10.0.0.0** IP range on bigger networks, like a university's network.
-We'll talk more about subnetwork sizes, shortly.
+These private address blocks differ in the total number of addresses they contain.
+The **10.X.X.X** block contains more addresses than the **172.16.0.0–172.31.255.255** block, which contains more than the **192.168.X.X** block.
+The larger block is useful for organizations that need many subnets.
+However, the number of addresses in an individual subnet depends on its prefix length, as discussed below.
 
 #### Example Private IP Usage
 
@@ -166,11 +164,10 @@ Both IP addresses are private because they fall within the **10.0.0.0 to 10.255.
 And it's likely they both exist on the same subnet since they share the first three **octets**: **10.163.34.XX**.
 
 However, if we both, using our respective wired connected computers, searched Google for *what's my IP address*,
-we will see that we share the same public IP address, which will be something like **128.163.8.25**.
-We know that is a public IP address because it does not fall within the ranges listed above.
-
-By entailment and without any additional information, we know that all traffic coming from our computers and going out to the internet looks like it's coming from the same IP address (**128.163.8.25**).
-And in reverse, all traffic coming from outside our network first goes to **128.163.8.25** before it's routed to our respective computers via the router.
+suppose we see that we share the same public IP address, which is **128.163.8.25**.
+This is a public IPv4 address, although being outside the private ranges alone is not sufficient to establish that an address is public.
+The result shows that these web requests appear to originate from the same public IP address, consistent with a shared network address translation (NAT) gateway.
+Replies to those requests are translated and forwarded to the respective computers; this does not mean unsolicited incoming traffic can reach them.
 
 Let's say I switch my computer's network connection to the campus's wifi network.
 When I check with `ip a`, I find that the computer now has a private IP address of **10.47.34.150/16**.
@@ -178,7 +175,7 @@ You can see the pattern is different with this IP address than it was when it wa
 The reason it has a different pattern is because the laptop is now on an different subnet.
 This wireless subnet was configured to allow more hosts to connect to it since it must allow for more devices (i.e., laptops, phones, etc).
 When I searched Google for my IP address from this laptop, it reports **128.163.238.148**.
-Since this is a different public IP address from above, it indicates that the university owns a range of public IP address spaces.
+This indicates that the wired and wireless requests use different public source addresses; it does not by itself establish who owns those addresses.
 
 Here's a visual diagram of what this network looks like:
 
@@ -187,8 +184,8 @@ Here's a visual diagram of what this network looks like:
 alt="Network diagram"
 title="Network diagram">
 <figcaption>
-Fig. 1. This figure contains a network switch, which is used to route traffic within a subnet.
-The switch relies solely on MAC addresses and not IP addresses to determine the location of devices on its subnet.
+Fig. 1. This figure contains a Layer 2 network switch, which forwards Ethernet frames within the local network.
+The switch uses destination MAC addresses rather than destination IP addresses to make these forwarding decisions.
 The router acts as the interface between the private network and the public network and
 is managing two subnets: a wired and a wireless one.
 </figcaption>
@@ -207,12 +204,12 @@ sudo ip link set ens4 down
 sudo ip link set ens4 up
 ```
 
-> Don't run those commands on your virtual machines otherwise your connection will be dropped and you'll have to reboot the system from the web console.
+> Don't run these commands on the interface used for your remote connection: disabling it will drop that connection, and you may need to use the web console to re-enable it.
 
 ### Transport Layer
 
-The internet (IP) layer does not transmit content, like web pages or video streams.
-This is the work of the transport layer.
+The internet (IP) layer carries packets containing application data encapsulated by transport protocols.
+The transport layer provides communication between application endpoints, with different delivery features depending on the protocol.
 As discussed previously, the two most common transport layer protocols are **TCP** and **UDP**, but [there are more][TLP_wiki].
 
 #### TCP, Transmission Control Protocol
@@ -223,18 +220,20 @@ Much of the data sent over the internet is sent using TCP.
 
 #### UDP, User Datagram Protocol
 
-The **UDP** or User Datagram Protocol performs a similar function as TCP, but it does not error check and data may get lost.
-UDP is useful for conducting voice over internet calls or for streaming video, such as through YouTube, which uses a type of UDP transmission called **QUIC** that has builtin encryption. 
+The **UDP** or User Datagram Protocol sends datagrams without guaranteeing delivery or ordering and without retransmitting lost data.
+It includes a checksum for detecting corruption, although this checksum can be omitted in IPv4.
+UDP is useful for voice over internet calls and streaming applications.
+QUIC runs over UDP and adds features including reliable streams and built-in encryption.
  
 #### TCP and UDP Headers
 
-The above protocols send data **packets** for TCP **datagrams** for UDP, but [these terms may be used interchangeably][headers].
-Packets for both protocols include header information to help route the data across the internet.
-TCP includes [ten fields][tcpfields] of header data, and UDP includes [four fields][udpfields].
+TCP sends **segments**, while UDP sends **datagrams**; **packet** is also used as a general term.
+Both protocols include headers with source and destination ports and other transport information.
+Their data is carried inside IP packets, whose headers provide the addresses used for routing.
 
 We can see this header data using the `tcpdump` command, which requires `sudo` or being **root** to use.
-The first part of the IP header contains the source address, then comes the destination address, and so forth.
-Aside from a few other parts, this is the primary information in an IP header.
+The IP header includes source and destination addresses along with other fields.
+In IPv4, these addresses follow fields including the version, header length, total length, fragmentation information, time to live, protocol, and header checksum.
 
 If you want to use `tcpdump`, **you should use it on your local computer and not on your virtual machine**.
 I'm not sure how the hosting provider will respond to this kind of activity because it might be deemed malicious.
@@ -252,15 +251,15 @@ The SYN, or synchronize, message is sent when a source or client requests a conn
 The ACK, or acknowledgment, message is sent in response, along with a SYN message, to acknowledge the request for a connection.
 Then the client responds with an additional ACK message.
 This is referred to as the [TCP three-way handshake][tcphandshake].
-In addition to the header info, TCP and UDP packets include the data that's being sent (e.g., a webpage) and error checking if it's TCP.
+In addition to their headers, TCP segments and UDP datagrams can carry application data, and both protocols provide checksum-based error detection.
 
 #### Ports
 
-TCP and UDP connections use ports to bind internet traffic to specific IP addresses.
-Specifically, a **port** associates a process with an application (and is part of the **application layer** of the internet suite), such as a web service or outgoing email.
-That is, ports provide a way to distinguish and filter internet traffic (web, email, etc) through an IP address.
+TCP and UDP use port numbers to distinguish communication endpoints used by applications on a host.
+Ports are part of the **transport layer** of the internet suite.
+Together, IP addresses, transport protocols, and port numbers help direct traffic to the appropriate service.
 For example, port 80 is the default port for unencrypted HTTP traffic.
-Thus, all traffic going to IP address 10.0.5.33:80 means that this is **HTTP** traffic for the HTTP web service.
+Thus, traffic sent to **10.0.5.33:80** would conventionally be intended for an HTTP service, although the port number alone does not establish which protocol the traffic contains.
 Note that the port info is attached to the end of the IP address via a colon. 
 
 Other common ports include:
@@ -271,7 +270,7 @@ Other common ports include:
 - 53: DNS
 - 143: IMAP
 - 443: HTTPS
-- 587: SMTP Secure
+- 587: Email submission, commonly secured using STARTTLS
 - 993: IMAP Secure
 
 A list of the default ports/protocols on your Linux systems is contained in the following file:
@@ -287,11 +286,12 @@ See also the Wikipedia page: [List of TCP and UDP port numbers][portnumbers]
 Let's now return to the internet layer and discuss one of the major duties of a systems administrator: subnetting.
 
 Subnets are used to carve out smaller and more manageable subnetworks out of a larger network.
-They are created using routers that have this capability (e.g., commercial use routers) and certain types of network switches.
+Subnetting divides an IP address block into smaller networks by assigning longer network prefixes.
+Routers, including Layer 3 switches, can route traffic between these subnets.
 
 ### Private IP Ranges
 
-When subnetting local area networks, recall that we work with the private IP ranges:
+For the following subnetting examples, we will work with the private IPv4 ranges:
 
 | Start Address | End Address     |
 |---------------|-----------------|
@@ -398,15 +398,14 @@ Subnetting involves dividing a network into two or more subnets.
 When we subnet, we first identify the number of hosts (i.e., the size of the subnet) we will require on the subnet.
 For starters, let's assume that we need a subnet that can assign at most 254 IP addresses to the devices attached to it via the router.
 
-In order to do this, we need two additional IP addresses:
-the **subnet mask** and the **network address/ID**.
-The **network address** identifies the network and the **subnet mask** marks the boundary between the network and the hosts.
-Knowing or determining the subnet mask allows us to determine how many hosts can exist on a network.
-Both the network address and the subnet mask can be written as IP addresses, but these IP addresses cannot be assigned to computers on a network.
+To describe the subnet, we need its **network address/ID** and **subnet mask**.
+The **network address** identifies the network, and the **subnet mask** marks the boundary between the network and host portions of an address.
+Knowing the subnet mask allows us to determine the subnet's address capacity.
+The mask is written in dotted-decimal notation, but it is a bitmask rather than an address assigned to a device.
 
-When we have determined these IPs, we will know the **broadcast address**.
-This is the last IP address in a subnet range, and it also cannot be assigned to a connected device/host.
-The **broadcast address** is used by a router to communicate to all connected devices on the subnet.
+From the network address and subnet mask, we can determine the **broadcast address**.
+For the subnets in these examples, the network address and broadcast address cannot be assigned to ordinary hosts.
+The broadcast address is the last address in the subnet and allows a host or router to address all hosts on that subnet.
 
 For our sake, let's work through this process backwards;
 that is, let's identify and describe a network that we are already connected to and for which we already know a device's private IP address.
@@ -414,8 +413,7 @@ We'll work with example private IP addresses that exist on separate subnets.
 
 #### Example IP Address 1: 192.168.1.6/24
 
-Using the private IP address 192.168.1.6,
-let's derive the network mask and the network address (or ID) from this IP address.
+Using the private IP address **192.168.1.6** and the supplied **/24** prefix, let's derive the subnet mask and network address (or ID).
 First, convert the decimal notation to binary.
 State the mask, which is **/24**, or **255.255.255.0**.
 And then derive the network addressing using an **bitwise logical AND** operation:
@@ -467,7 +465,7 @@ For example 2, let's start off with a private IP address of 10.160.38.75 and a m
 For example 3, let's start off with a private IP address of 172.16.1.62 and a mask of /24:
 
 ```
-10101100 00010000 00000001 00100111 IP                172.16.1.62
+10101100 00010000 00000001 00111110 IP                172.16.1.62
 11111111 11111111 11111111 00000000 Mask            255.255.255.0
 -----------------------------------
 10101100 00010000 00000001 00000000 Network Address    172.16.1.0
@@ -511,15 +509,8 @@ For example 4, let's start off then with a private IP address of 10.0.5.23 and a
 | End Range    | 10.0.255.254  |
 | Broadcast    | 10.0.255.255  |
 
-Since the last two octets/bytes now vary, we count up by each octet.
-Therefore, the number of hosts is:
-
-| IPs          |         |
-|--------------|---------|
-| 10.0.0.1     |         |
-| 10.0.0.255   | = 256   |
-| 10.0.1.1     |         |
-| 10.0.255.255 | = 256   |
+The last two octets contain the 16 host bits.
+Each octet has 256 possible values, from 0 through 255, giving 256 × 256 total addresses.
 
 - Number of Hosts = 256 x 256 = 65536
 - Subtract Network ID (1) and Broadcast (1) = 2 IP addresses
