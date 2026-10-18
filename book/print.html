@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-17d29e72.js";
+            window.path_to_searchindex_js = "searchindex-ea1f11cc.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-b63f2cd2.js"></script>
+        <script src="toc-a275cfd6.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -7918,7 +7918,7 @@ these create a layered approach to security for multi-user shell systems.
 Each tool has specific use cases, and
 together they help administrators establish a secure and controlled environment.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="firewalls-and-backups"><a class="header" href="#firewalls-and-backups">Firewalls and Backups</a></h1>
+<h1 id="firewalls"><a class="header" href="#firewalls">Firewalls</a></h1>
 <p>By the end of this section, you should know:</p>
 <ol>
 <li><strong>The Role of Firewalls in Network Security</strong>:
@@ -7929,14 +7929,8 @@ together they help administrators establish a secure and controlled environment.
 </li>
 <li><strong>Firewall Configuration in Cloud and Local Environments</strong>:
 <ul>
-<li>How to create, manage, and prioritize firewall rules in Google Cloud using the VPC network interface.</li>
-<li>How to use Google Cloud’s firewall capabilities to block specific types of traffic, such as ICMP (used by tools like <code>ping</code> and <code>traceroute</code>).</li>
-</ul>
-</li>
-<li><strong>Understanding Google Cloud Firewall Features</strong>:
-<ul>
-<li>The concept of default VPC firewall rules and how to override them with higher priority rules.</li>
-<li>How to configure firewall rules to enhance security at the network level.</li>
+<li>How to create, manage, and prioritize firewall rules using the VPC network interface.</li>
+<li>How to use the VPC’s firewall capabilities to block specific types of traffic, such as ICMP (used by tools like <code>ping</code> and <code>traceroute</code>).</li>
 </ul>
 </li>
 <li><strong>Configuring Local Firewalls with Ubuntu’s <code>ufw</code></strong>:
@@ -7946,30 +7940,10 @@ together they help administrators establish a secure and controlled environment.
 <li>The use of application profiles in <code>/etc/ufw/applications.d</code> to simplify firewall rule creation for services like Apache.</li>
 </ul>
 </li>
-<li><strong>Backup Strategies for Physical and Cloud Systems</strong>:
-<ul>
-<li>The difference between backing up virtual machines with Google Cloud snapshots and using local tools for bare metal systems.</li>
-<li>How to create and manage Google Cloud snapshots for disaster recovery and replication purposes.</li>
-</ul>
-</li>
-<li><strong>Using <code>rsync</code> for Backup and Synchronization</strong>:
-<ul>
-<li>How to use <code>rsync</code> to copy files and directories locally and to a remote server over SSH.</li>
-<li>The effect of the trailing slash in <code>rsync</code> commands, and how it changes the behavior of the copy operation.</li>
-<li>How to use the <code>--delete</code> option in <code>rsync</code> to synchronize directories by removing files that no longer exist in the source directory.</li>
-</ul>
-</li>
-<li><strong>Understanding the Utility of Different Backup and Security Options</strong>:
-<ul>
-<li>When to use Google Cloud firewall versus a local firewall (<code>ufw</code>) and when to use snapshots versus tools like <code>rsync</code> based on your needs.</li>
-<li>The advantages and limitations of each approach to both firewall management and backup strategies.</li>
-</ul>
-</li>
 </ol>
 <h2 id="getting-started-12"><a class="header" href="#getting-started-12">Getting Started</a></h2>
 <p>Most security challenges come from outside of a local network, and the attack vectors are fairly broad.
-To reduce our system’s vulnerabilities,
-a systems administrator must be able to handle the following kinds of tasks:</p>
+To reduce our system’s vulnerabilities, a systems administrator must be able to handle the following kinds of tasks:</p>
 <ul>
 <li>firewall configuration and management</li>
 <li>access control management</li>
@@ -7988,20 +7962,15 @@ a systems administrator must be able to handle the following kinds of tasks:</p>
 <li>endpoint security integration</li>
 </ul>
 <p>We have covered some of the tasks above.
-For example, we learned how to create user accounts and password policies, and
-both of these are a form of access control management.
+For example, we learned how to create user accounts and password policies, and both of these are a form of access control management.
 We learned about sub-networking, which is a form of network segmentation.
 We learned about the DNS system, which is a fundamental aspect of DNS security.
-We touched on <code>bash</code> scripts, which can be created to automate log file evaluation,
-which is helpful to understand logging and auditing.
+We touched on <code>bash</code> scripts, which can be created to automate log file evaluation, which is helpful to understand logging and auditing.
 We learned how to install software and keep our systems updated, which is a form of patch management.
-Although we can only cover so much and there is a lot more to learn,
-in this section we’ll begin to learn firewall configuration and management.
-We will also learn how to create systematic backups of our instances,
-which is an important part of disaster recovery planning.</p>
-<h2 id="firewalls"><a class="header" href="#firewalls">Firewalls</a></h2>
-<p>A firewall program allows or denies connections for incoming (aka, <strong>ingress</strong>) or
-outgoing (aka, <strong>egress</strong>) traffic.
+Although we can only cover so much and there is a lot more to learn, in this section we’ll begin to learn firewall configuration and management.
+We will also learn how to create systematic backups of our instances, which is an important part of disaster recovery planning.</p>
+<h2 id="firewalls-1"><a class="header" href="#firewalls-1">Firewalls</a></h2>
+<p>A firewall program allows or denies connections for incoming (aka, <strong>ingress</strong>) or outgoing (aka, <strong>egress</strong>) traffic.
 Traffic can be controlled through the:</p>
 <ul>
 <li>link layer: a network interface such as an ethernet or wireless card,</li>
@@ -8018,18 +7987,14 @@ For example, they can be used to:</p>
 </ul>
 <blockquote>
 <p>As a side note, bare metal servers may have multiple ethernet network interface cards (NICs).
-Each NIC would, of course, have its own MAC address, and therefore would be assigned different IP addresses.
-Thus, at the link layer, incoming connections can be completely blocked on one card and
-outgoing connections can be completely blocked on the other.</p>
+Each NIC would, of course, have its own MAC address and can be assigned different IP addresses.
+Thus, incoming connections can be completely blocked on one card and outgoing connections can be completely blocked on the other.</p>
 </blockquote>
 <p>To manage these connections, firewalls apply <strong>rules</strong>.
-A rule may block all incoming connections, but
-then allow SSH traffic through port 22, either via TCP or UDP, and
-then further restrict SSH connections to a specific IP range.
-And/or, another rule may block all incoming, unencrypted HTTP connections through port 80,
-but allow all incoming, encrypted HTTPS connections through port 443.</p>
-<h3 id="firewalls-on-google-cloud"><a class="header" href="#firewalls-on-google-cloud">Firewalls on Google Cloud</a></h3>
-<p>Let’s cover using Google Cloud to create a basic firewall rule.
+A rule may block all incoming connections, but then allow SSH traffic through port 22, either via TCP or UDP, and then further restrict SSH connections to a specific IP range.
+And/or, another rule may block all incoming, unencrypted HTTP connections through port 80, but allow all incoming, encrypted HTTPS connections through port 443.</p>
+<h3 id="firewalls-on-digital-ocean"><a class="header" href="#firewalls-on-digital-ocean">Firewalls on Digital Ocean</a></h3>
+<p>Let’s cover using DigitalOcean to create a basic firewall rule.
 This will prepare us for setting up new rules when we configure our <strong>LAMP</strong> servers in the next section.</p>
 <blockquote>
 <p>LAMP originally referred to <strong>Linux</strong>, <strong>Apache</strong>, <strong>MySQL</strong>, and <strong>PHP</strong>.
@@ -8041,19 +8006,16 @@ The <strong>M</strong> in LAMP may also refer to MariaDB, which is a fully open 
 Other relational databases are usable, such as <a href="https://www.postgresql.org/">PostgreSQL</a> or <a href="https://www.sqlite.org/">SQLite</a>.
 We’ll use MariaDB later in this course.</p>
 </blockquote>
-<p>First review how our Google Cloud instances are <a href="https://cloud.google.com/vpc/docs/firewalls#more_rules_default_vpc">pre-populated with default firewall rules</a> at the network level.
-Follow that with a review of the firewall <a href="https://cloud.google.com/vpc/docs/firewalls">documentation</a>, which provides an overview of the rules we’ll use.</p>
-<h4 id="block-the-ping-application"><a class="header" href="#block-the-ping-application">Block the <code>ping</code> application</a></h4>
+<h4 id="block-ping-application-from-the-cloud-provider"><a class="header" href="#block-ping-application-from-the-cloud-provider">Block <code>ping</code> Application from the Cloud Provider</a></h4>
 <p>We’ll begin by implementing a basic firewall rule where we block incoming <a href="https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol">ICMP traffic</a>.
 ICMP traffic is used by several applications, such as <code>ping</code> and <code>traceroute</code>.
 The <code>ping</code> command is a simple tool used to test whether a server at an IP address or domain is running.
 It’s therefore useful for error reporting and network diagnostics.
 The <code>traceroute</code> command is used to display the path between two internet devices.
-While both have their uses,
-we may want to block that traffic to prevent others from gaining information about our servers.</p>
+While both have their uses, we may want to block that traffic to prevent others from gaining information about our servers.</p>
 <blockquote>
 <p>To see how this works, let’s test <code>ping</code> first on your machines.
-First, identify the public/external IP address of your Google Cloud virtual machine.
+First, identify the public/external IP address of your virtual machine.
 Let’s say it’s <code>34.345.345.222</code>.
 Open your macOS <code>Terminal.app</code> or Windows Command or Powershell.
 Then run the command: <code>ping 34.345.345.222</code> (of course, use your VM’s external IP).
@@ -8062,52 +8024,36 @@ To end the <code>ping</code> session, press <code>ctrl-c</code>.</p>
 </blockquote>
 <p>Now let’s block ICMP traffic:</p>
 <ol>
-<li>In the Google Cloud Console, click on <strong>VPC network</strong> and select <strong>Firewall</strong>.</li>
-<li>The default VPC firewall rules are listed that allow for HTTP, ICMP, RDP, and SSH traffic.</li>
-<li>Priority settings are set for each rule. Lower numbers mean the rules have a higher priority.</li>
-<li>The predefined rules allow for incoming ICMP traffic set at a priority level of 65534.</li>
-<li>We could delete that, but we should leave these rules in place and create a higher priority rule that will supersede that.</li>
-<li>Click on <strong>Create Firewall Rule</strong>.</li>
-<li>For name, enter <strong>new-deny-icmp</strong>.</li>
-<li>Keep priority at 1000.</li>
-<li>Under <strong>Direction of traffic</strong>, keep as <strong>Ingress</strong>.</li>
-<li>Under <strong>Action on match</strong>, select <strong>Deny</strong>.</li>
-<li>Under <strong>Targets</strong>, select “Specified service account**.</li>
-<li>In the <strong>Source IPv4</strong> ranges, enter <strong>0.0.0.0/0</strong> for all network traffic.</li>
-<li>Under <strong>Protocols and ports</strong>, select <strong>Other</strong>, and type in <strong>icmp</strong> (use lowercase).</li>
-<li>Click the <strong>Create</strong> button to create the rule.</li>
+<li>Open your project in the DigitalOcean Console.</li>
+<li>Click on the name of your server.</li>
+<li>Click on <strong>Networking</strong>.</li>
+<li>Click on <strong>Manage Cloud Firewalls</strong>.</li>
+<li>Click on <strong>Create Firewall</strong>.</li>
+<li>Click on <strong>+Add another</strong> under the <strong>Add inbound rules</strong> section.</li>
+<li>Click on <strong>Deny</strong>.</li>
+<li>Select <strong>ICMP</strong> under <strong>Type</strong>.</li>
+<li>In the Sources field, deselect <strong>All IPv4</strong> and <strong>All IPv6</strong>.</li>
+<li>Put your cursor in the Sources field and select your droplet’s name.</li>
+<li>Select <strong>Add inbound rule.</strong></li>
+<li>In the <strong>Choose a name</strong> section, add a name for your firewall rule: e.g., <strong>block-icmp</strong>.</li>
+<li>Click on <strong>Create Firewall</strong>.</li>
 </ol>
-<blockquote>
 <p>Once the rule has been created, re-run the <code>ping</code> command.
 You should not see any responses this time.</p>
-</blockquote>
-<p>Once you have tested this rule, feel free to keep or delete it.
-To delete it, select the check box next to the rule, and then click the <strong>Delete</strong> button.
+<p>Once you have tested this rule, delete the rule.
+To delete it, select the triple dots next to the rule, and then click the <strong>Destroy</strong> button.
 Once the rule is deleted, you can re-run the <code>ping</code> command to test if your server is responding again.</p>
-<blockquote>
-<p>Note: Google’s Firewall rules, at extra cost, now offer the ability to block
-specific domains (FQDN-based firewalls) and to block geographical regions.</p>
-</blockquote>
 <h3 id="os-firewall-applications"><a class="header" href="#os-firewall-applications">OS Firewall Applications</a></h3>
-<p>In case you are working on firewalls on a specific machine instead of on the cloud,
-then you would want to become familiar with Linux-based firewall applications.</p>
+<p>In case you are working on firewalls on a specific machine instead of on the cloud, then you would want to become familiar with Linux-based firewall applications.</p>
 <p>On Ubuntu, the main firewall application is <a href="https://help.ubuntu.com/community/UFW">ufw</a>.
 On RedHat-based distributions, the main firewall application is <a href="https://docs.fedoraproject.org/en-US/quick-docs/firewalld/">firewalld</a>.
-Both of these firewall applications are user-friendly front-ends of the
-<a href="https://www.netfilter.org/">iptables</a> firewall application, which is built into the Linux kernel.
-Although we are using an Ubuntu distribution as our virtual machines,
-Ubuntu’s <code>ufw</code> firewall is disabled by default.
-This is likely because it may be overkill to use both Google Cloud’s firewall and Ubuntu’s <code>ufw</code>.</p>
-<blockquote>
-<p>FreeBSD and OpenBSD, two non-Linux but Unix-like operating systems, offer <code>pf</code>:
-<a href="https://docs.freebsd.org/en/books/handbook/firewalls/"><code>pf</code> on FreeBSD</a> and <a href="https://www.openbsd.org/faq/pf/"><code>pf</code> on OpenBSD</a>.
+These firewall applications are user-friendly front-ends of the <a href="https://www.netfilter.org/">iptables</a> firewall application, which is built into the Linux kernel.
+FreeBSD and OpenBSD, two non-Linux but Unix-like operating systems, offer <code>pf</code>: <a href="https://docs.freebsd.org/en/books/handbook/firewalls/"><code>pf</code> on FreeBSD</a> and <a href="https://www.openbsd.org/faq/pf/"><code>pf</code> on OpenBSD</a>.
 These BSD OSes are often used to build firewall servers.</p>
-</blockquote>
 <p><code>ufw</code> (Uncomplicated Firewall) is a user-friendly command-line firewall utility.
-It simplifies firewall configuration on Debian-based Linux operating systems, such as Ubuntu.
-It is designed to provide a more user friendly interface to the underlying <code>iptables</code> application.
-However, it is still powerful enough to secure a system effectively.</p>
+Although we are using an Ubuntu distribution as our virtual machines, Ubuntu’s <code>ufw</code> firewall is disabled by default.</p>
 <h4 id="basic-features"><a class="header" href="#basic-features">Basic Features</a></h4>
+<p>Reminder that <code>sudo</code> is not needed if you are logged in as the root user.</p>
 <ul>
 <li><strong>Enable/Disable Firewall</strong>:
 <ul>
@@ -8115,14 +8061,14 @@ However, it is still powerful enough to secure a system effectively.</p>
 <li>Disable: <code>sudo ufw disable</code></li>
 </ul>
 </li>
-<li>Allow/Deny Access:
+<li><strong>Allow/Deny Access</strong>:
 <ul>
 <li>Allow access to port 22 (<code>ssh</code>): <code>sudo ufw allow 22</code></li>
 <li>Deny access to port 80 (<code>http</code>): <code>sudo ufw deny 80</code></li>
 <li>Other services can be set based on the contents of the <code>/etc/services</code> file.</li>
 </ul>
 </li>
-<li>Status and Logging:
+<li><strong>Status and Logging</strong>:
 <ul>
 <li>Check <code>ufw</code> status: <code>sudo ufw status</code></li>
 <li>Log firewall entries: <code>sudo ufw logging on</code></li>
@@ -8133,9 +8079,9 @@ However, it is still powerful enough to secure a system effectively.</p>
 </ul>
 <p><code>ufw</code> can also control the firewall based on a list of profiles and predefined rules.
 These profiles and predefined rules are contained in the <code>/etc/ufw/applications.d</code> directory.
-For example, there are three protocols for the <code>apache2</code> web server:
-<strong>Apache</strong>, <strong>Apache Secure</strong>, and <strong>Apache Full</strong>.
-These are defined in <code>/etc/ufw/applications.d/apache2-utils.ufw.profile</code> file:</p>
+Currently, there is only a profile for the OpenSSH server, but later in the semester, we’ll find protocols for the <code>apache</code> server, such as <strong>Apache</strong>, <strong>Apache Secure</strong>, and <strong>Apache Full</strong>.
+These profiles are defined in <code>/etc/ufw/applications.d/</code>.
+For example, the Apache profiles will be defined in the <code>/etc/ufw/applications.d/apache2-utils.ufw.profile</code> file:</p>
 <pre><code>[Apache]
 title=Web Server
 description=Apache v2 is the next generation of the omnipresent Apache web server.
@@ -8151,139 +8097,68 @@ title=Web Server (HTTP,HTTPS)
 description=Apache v2 is the next generation of the omnipresent Apache web server.
 ports=80,443/tcp
 </code></pre>
-<p>Based on the above profile, we can set <code>ufw</code> for Apache like so:</p>
+<p>Based on the above profiles, we can set <code>ufw</code> for Apache like so:</p>
 <pre><code>sudo ufw allow 'Apache Full'
 </code></pre>
 <p>To see other examples, read: <a href="https://ubuntu.com/server/docs/firewalls">ufw documentation</a>.
-If you are using a RedHat distribution of Linux,
-then checkout <a href="https://www.redhat.com/en/blog/beginners-guide-firewalld">A Beginner’s Guide to firewalld in Linux</a>.</p>
-<h2 id="backups"><a class="header" href="#backups">Backups</a></h2>
-<p>Catastrophes (natural, physical, criminal, or out of negligence) happen.
-As a systems administrator, you may be required to have backup strategies to mitigate data loss.</p>
-<p>How you backup depends on the machine.
-If I am managing bare metal, and I want to backup a physical disk to another physical disk,
-then that requires a specific tool, like <code>rsync</code>.
-However, if I am managing virtual machines, like our Google Cloud instance,
-then that requires a different tool.
-Therefore, in this section, I will briefly cover both scenarios.</p>
-<h3 id="google-cloud-snapshots"><a class="header" href="#google-cloud-snapshots">Google Cloud Snapshots</a></h3>
-<p>Since our instance on Google Cloud is a virtual machine,
-we can use the Google Cloud console to create <strong>snapshots</strong> of our instance.
-A <strong>snapshot</strong> is a copy of a virtual machine at the time the snapshot was taken.
-What’s great about taking a snapshot is that the result is basically a file of a complete operating system.
-Since it’s a file, it can itself be used in other projects or
-used to restore a machine to the time the snapshot was taken.</p>
-<p>Snapshots may also be used to document or reproduce work.
-For example, if I worked with programmers, as a systems administrator,
-I might help a programmer share snapshots of a virtual machine with other programmers.
-Those other programmers could then restore the snapshot in their own instances, and
-see and run the original work in the environment it was created in.</p>
-<p>Taking snapshots in Google Cloud is very straightforward, but
-since it does take up extra storage, it will accrue extra costs.
-Since we want avoid that for now,
-please see the following documentation for how to take a snapshot in Google Cloud:</p>
-<p><a href="https://cloud.google.com/compute/docs/disks/create-snapshots">Create and manage disk snapshots</a></p>
-<ol>
-<li>Click on <strong>Compute Engine</strong>.</li>
-<li>Click on <strong>Snapshots</strong>.</li>
-<li>Click on <strong>Create Snapshot</strong>.</li>
-<li>Enter a name for your snapshot.</li>
-<li>Select the <strong>Source disk</strong>.</li>
-<li>Select <strong>Snapshot</strong> under the <strong>Type</strong> section.</li>
-<li>Select <strong>Regional</strong> under <strong>Location</strong>.
-<ul>
-<li>If we were concerned about a robust backup solution, we would choose <strong>Multi-regional</strong>.</li>
-</ul>
-</li>
-<li>We don’t need to add a label, but this would be prudent if we were managing multiple VMs.</li>
-<li>Click on <strong>Create</strong>, if necessary:
-<ul>
-<li>Creating and storing snaphosts will incur additional charges.</li>
-<li>If it’s important to you to create a snapshot to store your progress before we start our projects, go ahead.</li>
-<li>Otherwise, download any content that you want to keep.</li>
-</ul>
-</li>
-</ol>
-<h3 id="rsync"><a class="header" href="#rsync"><code>rsync</code></a></h3>
-<p>If we were managing bare metal machines,
-then we might use a program like <code>rsync</code> to backup physical disk drives.
-<code>rsync</code> is a powerful program tha can copy disks, directories, and files.
-It can copy files from one location, and send the copies, encrypted, to a remote server.</p>
-<p>For example, let’s say I mount an external hard drive to my filesystem at <code>/mnt/backup</code>.
-To copy my home directory to <code>/mnt/backup</code>, I’d use:</p>
-<pre><code>rsync -av /home/me/ /mnt/backup/
+When you use a RedHat or like distribution of Linux, then checkout <a href="https://www.redhat.com/en/blog/beginners-guide-firewalld">A Beginner’s Guide to firewalld in Linux</a>.</p>
+<h4 id="block-ping-from-the-os"><a class="header" href="#block-ping-from-the-os">Block <code>ping</code> from the OS</a></h4>
+<p>Although the <code>ufw</code> command offers some quick and easy options for allowing and denying some types of traffic, it doesn’t offer this for all kinds of traffic.
+There is no built-in <code>ufw deny icmp</code> command or application profile for blocking <code>ping</code>.
+Application profiles describe TCP or UDP ports, while ICMP does not use ports.
+Instead, we can edit the rules that <code>ufw</code> loads before its ordinary service rules.</p>
+<p>For this exercise, we will block incoming ICMP <strong>echo requests</strong>, which are used by <code>ping</code>, rather than all ICMP traffic.
+Other ICMP messages support error reporting and normal network operation, especially with IPv6.
+The default incoming policy alone does not block <code>ping</code> because <code>ufw</code> explicitly allows echo requests in its earlier rules.
+See the <a href="https://manpages.ubuntu.com/manpages/jammy/man8/ufw.8.html">ufw manual</a> for details about these rules.</p>
+<p>On our servers, <code>ufw</code> is already installed but is not enabled.
+First, set the default policies and allow SSH before enabling the firewall:</p>
+<pre><code>sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
 </code></pre>
-<p>where <code>/home/me/</code> is the <strong>source directory</strong>, and <code>/mnt/backup/</code> is the <strong>destination directory</strong>.</p>
-<p>Syntax matters here.
-If I include the trailing slash on the source directory, then
-<code>rsync</code> copies everything in <code>/home/me/</code> to <code>/mnt/backup/</code>.
-However, if I leave the trailing slash off, like so:</p>
-<pre><code>rsync -av /home/me /mnt/backup/
+<p>If your SSH server uses a different port, allow that port instead.
+Also allow any other services that need to remain accessible before enabling the firewall.
+Keep your current SSH session open while completing this exercise.</p>
+<p>Back up and open the IPv4 rules file:</p>
+<pre><code>sudo cp -a /etc/ufw/before.rules /etc/ufw/before.rules.bak
+sudo nano /etc/ufw/before.rules
 </code></pre>
-<p>then the result will be that the directory <code>me/</code> will be copied to <code>/mnt/backup/me/</code>.</p>
-<p>Let’s see this in action.
-Say I have two directories.
-In the <code>tmp1/</code> directory, there are two files: <code>file1</code> and <code>file2</code>.
-The <code>tmp2/</code> directory is empty.
-To copy <code>file1</code> and <code>file2</code> to <code>tmp2</code>, then:</p>
-<pre><code>ls tmp1/
-file1 file2
-rsync -av tmp1/ tmp2/
-ls tmp2
-file1 file2
+<p>Find this incoming echo-request rule:</p>
+<pre><code>-A ufw-before-input -p icmp --icmp-type echo-request -j ACCEPT
 </code></pre>
-<p>However, if I leave that trailing slash off the source directory, then the <code>tmp1/</code> will get copied to <code>tmp2/</code>:</p>
-<pre><code>ls tmp1
-file1 file2
-rsync -av tmp1 tmp2/
-ls tmp2/
-tmp1/
-ls tmp2/tmp1/
-file1 file2
+<p>Change only that rule’s <code>ACCEPT</code> action to <code>DROP</code>:</p>
+<pre><code>-A ufw-before-input -p icmp --icmp-type echo-request -j DROP
 </code></pre>
-<p><code>rsync</code> can also send a source directory to a directory on a remote server, and
-the directory and files being copied will be encrypted on the way.
-To do this, we use <code>ssh</code> style syntax:</p>
-<pre><code>rsync -av tmp1/ USER@REMOTE:~/tmp2/
+<p>Save the file and exit the editor.
+If IPv6 is enabled, back up and open its rules file as well:</p>
+<pre><code>sudo cp -a /etc/ufw/before6.rules /etc/ufw/before6.rules.bak
+sudo nano /etc/ufw/before6.rules
 </code></pre>
-<p>For example:</p>
-<pre><code>rsync -av tmp1 linus@222.22.33.333:~/tmp2/
+<p>Find the incoming IPv6 echo-request rule and change its action from <code>ACCEPT</code> to <code>DROP</code>, so that it reads:</p>
+<pre><code>-A ufw6-before-input -p icmpv6 --icmpv6-type echo-request -j DROP
 </code></pre>
-<h3 id="delete-option"><a class="header" href="#delete-option">Delete Option</a></h3>
-<p><code>rsync</code> has a <code>--delete</code> option.
-Adding this option means that <code>rsync</code> synchronizes the source directory with the destination directory.
-This means that if I had already created a backup of <code>tmp1</code> to <code>tmp2</code>, and then delete <code>file1</code> in <code>tmp1</code> later,
-then run <code>rsync</code> with the delete option, then <code>rsync</code> will also delete <code>file1</code> from <code>tmp2/</code>.
-This is how that looks:</p>
-<pre><code>ls tmp1/
-file1 file2
-rsync -av tmp1/ tmp2/
-ls tmp2/
-file1 file2
-rm tmp1/file1
-ls tmp1/
-file2
-rsync -av --delete tmp1/ tmp2/
-ls tmp2
-file2
+<p>Leave the other ICMP and ICMPv6 rules intact.
+Save the file, then enable the firewall and load the changes:</p>
+<pre><code>sudo ufw enable
+sudo ufw reload
+sudo ufw status verbose
 </code></pre>
-<p>Backups are no good if we don’t know how to restore a backup to a disk.
-To restore with <code>rsync</code>, we just reverse the destination directory with the source directory:</p>
-<pre><code>rsync -av tmp2/ tmp1/
+<p>Verify that you can open a second SSH connection before closing your original session.
+From your own computer, test your server’s public IPv4 address with <code>ping</code> again.
+New incoming ping requests should time out, while SSH should still work.
+If the server has a public IPv6 address, test that address separately with your computer’s IPv6 ping option.
+Make sure any cloud firewall permits the test traffic; otherwise, a timeout does not establish that the OS firewall blocked it.</p>
+<p>The <code>ufw status</code> command does not display these custom rules from the <code>before.rules</code> files, so use the external ping test to check their effect.
+The server can still initiate outgoing pings because we have blocked incoming echo requests, not outgoing requests or incoming echo replies.</p>
+<p>To allow incoming pings again, change the edited echo-request actions from <code>DROP</code> back to <code>ACCEPT</code> and reload the firewall:</p>
+<pre><code>sudo ufw reload
 </code></pre>
+<p>Repeat the external ping test to verify that the server responds again.</p>
 <h2 id="conclusion-18"><a class="header" href="#conclusion-18">Conclusion</a></h2>
-<p>System security involves a multi-vectored approach that includes many tasks,
-from password management to log audits.
-In this section, we covered firewalls and backups, and have thus addressed new vectors to protect:
-firewall configuration and management and disaster recovery.</p>
-<p>Since we’re running an Ubuntu server on Google Cloud,
-we have Google Cloud options for creating firewall rules at the network level and
-for backing up disks as snapshots.
-We also have Ubuntu options for creating firewall rules at the OS level using <code>ufw</code> and
-for backing up disks using commands like <code>rsync</code>.
-How we go about either depends entirely on our needs or on our organization’s needs.
-But knowing these options exist and the different reasons why we have these options,
-provides quite a bit of utility.</p>
+<p>System security involves a multi-vectored approach that includes many tasks, from password management to log audits.
+In this section, we covered firewalls.
+Since we’re running an Ubuntu server on DigitalOcean, we have that platform’s options for creating firewall rules at the network level or the OS’s own methods for doing so.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="creating-a-lamp-server"><a class="header" href="#creating-a-lamp-server">Creating a LAMP Server</a></h1>
 <p>In this section, we learn how to set up a LAMP (Linux, Apache, MariaDB, PHP) stack.
