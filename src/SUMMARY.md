@@ -27,7 +27,7 @@
     - [Networking](6a-networking.md)
     - [DNS and Domain Names](6b-dns-domain-names.md)
     - [Local Security](6c-local-security.md)
-    - [Firewalls and Backups](6d-firewall-backups.md)
+    - [Firewalls](6d-firewalls.md)
 - [Creating a LAMP Server](p7-creating-a-lamp-server.md)
     - [Installing the Apache Web Server](7a-installing-the-apache-web-server.md)
     - [Installing and Configuring PHP](7b-installing-configuring-php.md)
