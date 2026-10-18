@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-ea1f11cc.js";
+            window.path_to_searchindex_js = "searchindex-cbd7c6f5.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a275cfd6.js"></script>
@@ -7751,18 +7751,9 @@ See <code>man rbash</code> for more details.</p>
 <li><a href="https://www.linode.com/docs/guides/use-chroot-for-testing-on-ubuntu/">How to Use chroot for Testing on Ubuntu</a></li>
 <li><a href="https://linuxhint.com/setup-linux-chroot-jails/">How To Setup Linux Chroot Jails</a></li>
 </ul>
-<h2 id="appendix-a-non-google-cloud-systems"><a class="header" href="#appendix-a-non-google-cloud-systems">Appendix A: Non-Google Cloud Systems</a></h2>
-<p>Our user accounts and connections to our Google Cloud virtual instances are managed on the Google Cloud console,
-and we reach these instances using the <code>gcloud compute ssh</code> command or through the web interface.
-The <code>gcloud</code> command is special software that we installed on our personal systems and
-authentication happens via our Google accounts.
-However, on traditional remote systems,
-we use <code>ssh</code> with its standard syntax, which is: <code>ssh user@domain.com</code> or <code>ssh user@&lt;ip_address&gt;</code>,
-where <code>user</code> is the account name managed directly on the server and <code>domain.com</code> is the host name of the server.</p>
-<p>On those traditional types of systems,
-we can take advantage of <code>chroot</code> to isolate user accounts to a chrooted environment.
-There are a number of ways to do this, but
-below I demonstrate how to isolate users to a chrooted environment based on their group membership.</p>
+<h2 id="appendix-a-chroot-and-ssh"><a class="header" href="#appendix-a-chroot-and-ssh">Appendix A: <code>chroot</code> and SSH</a></h2>
+<p>We can take advantage of <code>chroot</code> to isolate user accounts to a chrooted environment.
+There are a number of ways to do this, but below I demonstrate how to isolate users to a chrooted environment based on their group membership.</p>
 <ol>
 <li>
 <p>Let’s create a new user. After we create the new user, we will <code>chroot</code> that user going forward.</p>
