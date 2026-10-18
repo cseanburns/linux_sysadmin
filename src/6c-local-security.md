@@ -278,20 +278,10 @@ In summary, if a stricter environment is needed, you know how to create a basic 
 - [How to Use chroot for Testing on Ubuntu][linode]
 - [How To Setup Linux Chroot Jails][linuxhint]
 
-## Appendix A: Non-Google Cloud Systems
+## Appendix A: `chroot` and SSH
 
-Our user accounts and connections to our Google Cloud virtual instances are managed on the Google Cloud console,
-and we reach these instances using the `gcloud compute ssh` command or through the web interface.
-The `gcloud` command is special software that we installed on our personal systems and
-authentication happens via our Google accounts.
-However, on traditional remote systems,
-we use `ssh` with its standard syntax, which is: `ssh user@domain.com` or `ssh user@<ip_address>`,
-where `user` is the account name managed directly on the server and `domain.com` is the host name of the server.
-
-On those traditional types of systems,
-we can take advantage of `chroot` to isolate user accounts to a chrooted environment.
-There are a number of ways to do this, but
-below I demonstrate how to isolate users to a chrooted environment based on their group membership.
+We can take advantage of `chroot` to isolate user accounts to a chrooted environment.
+There are a number of ways to do this, but below I demonstrate how to isolate users to a chrooted environment based on their group membership.
 
 1. Let's create a new user. After we create the new user, we will `chroot` that user going forward.
 
