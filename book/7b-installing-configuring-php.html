@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-cbd7c6f5.js";
+            window.path_to_searchindex_js = "searchindex-95930da9.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a275cfd6.js"></script>
@@ -186,13 +186,17 @@
 </ol>
 <h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
 <p>Client-side programming languages, like JavaScript, are handled by the browser.
-Major browsers like Firefox, Chrome, Safari, Edge, etc. include <a href="https://en.wikipedia.org/wiki/JavaScript_engine">JavaScript engines</a> that use just-in-time compilers
-to execute the JavaScript code (Mozilla has a <a href="https://blog.mozilla.org/javascript/">nice description</a> of the process.)
+Major browsers like Firefox, Chrome, Safari, Edge, etc. include <a href="https://en.wikipedia.org/wiki/JavaScript_engine">JavaScript engines</a> that use just-in-time compilers to execute the JavaScript code
+(Mozilla has a <a href="https://blog.mozilla.org/javascript/">nice description</a> of the process.)
 From an end user’s perspective, you basically install JavaScript when you install a web browser.</p>
 <p><a href="https://www.php.net/">PHP</a>, on the other hand, is a server-side programming language.
 This means it must be installed on the server in order to be used by the browser.
-From a system administrator’s perspective, this means that not only does PHP have be installed on a server,
-but it must also be configured to work with the HTTP server, which in our case is Apache2.</p>
+From a system administrator’s perspective, this means that not only does PHP have be installed on a server, but it must also be configured to work with the HTTP server, which in our case is Apache2.</p>
+<blockquote>
+<p><a href="https://www.nytimes.com/wirecutter/news/php-security-flaw-20261023/">Major security flaws</a> were identified in PHP recently (as of October 2026).
+With recent advances in AI, more such flaws will be identified and patched and with increasingly frequency.
+It is therefore imperative to keep your system updated, perhaps even daily updated.</p>
+</blockquote>
 <p>The main use of PHP is to interact with databases, like MySQL, MariaDB, PostgreSQL, etc., in order to create dynamic page content.
 This is our end goal.
 To accomplish this, we have to:</p>
@@ -237,8 +241,7 @@ Your image should show a newer version number than 7.4.3 (e.g., 8.1.2 as of Nove
 </figcaption>
 </figure>
 <h2 id="basic-configurations"><a class="header" href="#basic-configurations">Basic Configurations</a></h2>
-<p>By default, Apache2 is set up to serve <a href="https://httpd.apache.org/docs/current/mod/mod_dir.html"><code>index.html</code> files first</a>, but since we are adding PHP to our setup,
-we want Apache2 to prioritize PHP files to allow for dynamic content creation.</p>
+<p>By default, Apache2 is set up to serve <a href="https://httpd.apache.org/docs/current/mod/mod_dir.html"><code>index.html</code> files first</a>, but since we are adding PHP to our setup, we want Apache2 to prioritize PHP files to allow for dynamic content creation.</p>
 <p>To prioritize PHP files, we need to edit the <code>dir.conf</code> file in the <code>/etc/apache2/mods-enabled/</code> directory.
 In that file there is a line that starts with <code>DirectoryIndex</code>.
 The first file in that line is <code>index.html</code>, and then there are a series of other files that Apache2 will look for in the order listed.
@@ -257,8 +260,7 @@ sudo nano dir.conf
 <pre><code>sudo systemctl reload apache2
 sudo systemctl restart apache2
 </code></pre>
-<p>If the configuration test does not return <strong>Synax Ok</strong>, check the error message for guidance, and
-ensure all modifications to <code>dir.conf</code> were made correctly.</p>
+<p>If the configuration test does not return <strong>Synax Ok</strong>, check the error message for guidance, and ensure all modifications to <code>dir.conf</code> were made correctly.</p>
 <p>Now create a basic PHP page.
 <code>cd</code> back to the document root directory and use <code>nano</code> to create and open and <code>index.php</code> file:</p>
 <pre><code>cd /var/www/html/
