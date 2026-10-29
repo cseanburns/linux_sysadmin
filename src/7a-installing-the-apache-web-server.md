@@ -9,8 +9,7 @@ By the end of this section, you will be able to:
 ## Getting Started
 
 [Apache][apache] is an HTTP server, otherwise called web server software.
-An HTTP server makes files on a computer available to others who are able to establish a connection to the computer and
-view the files with a web browser.
+An HTTP server makes files on a computer available to others who are able to establish a connection to the computer and view the files with a web browser.
 Other HTTP server software exists and another major product is [nginx][nginx].
 
 It's important to understand the basics of an HTTP server.
@@ -62,16 +61,14 @@ To start, we use `systemctl` to ensure `apache2` is enabled (starts automaticall
 systemctl status apache2
 ```
 
-The output shows that `apache2` is enabled, which means that it will start running automatically if the computer gets rebooted, and
-that it is currently running (active).
+The output shows that `apache2` is enabled, which means that it will start running automatically if the computer gets rebooted, and that it is currently running (active).
 
 Since `apache2` is up and running, let's look at the default web page.
 The **default web page** is the landing page of your server, and it is stored in the **document root**.
-By default on Ubuntu, the path to the **document root** is located at `/var/www/html`, and
-the default file being served is titled `index.html`.
+By default on Ubuntu, the path to the **document root** is located at `/var/www/html`, and the default file being served is titled `index.html`.
 
 There are two ways we can look at the default web page.
-We can use a command line web browser or your regular graphical browser..
+We can use a command line web browser or your regular graphical browser.
 There are a number command line browsers available, such as `elinks`, `links2`, `lynx`, and `w3m`.
 
 To check with `w3m`, we have to install it first:
@@ -110,11 +107,13 @@ It works!
 To exit `w3m`, press **q** and then **y** to confirm exit.
 
 To view the default web page using a regular web browser, like Firefox, Chrome, Safari, Edge, or etc., you need to get the server's public IP address.
-To do that, log into the [Google Cloud Console][gcloudConsole].
-In the left hand navigation panel, hover your cursor over the **Compute Engine** link, and then click on **VM instances**.
-You should see your **External IP** address in the table on that page.
-You can copy that external IP address or simply click on it to open it in a new browser tab.
+To do that, log into the DigitalOcean website and locate your virtual machine or droplet.
+From there, you can copy that external IP address and paste it into your broswer's URL bar.
 Then you should see the graphical version of the **Apache2 Ubuntu Default Page**.
+
+> Note: We do not have a security certificate installed on our droplets, which means we can only access our sites using `http` and not `https`.
+> Browsers do not like to connect to `http` only sites and depending on how they're configured, may try to force an `https` connection.
+> Be sure you're using `http` only.
 
 Please take a moment to read through the text on the default page.
 It provides information about where Ubuntu stores configuration files and document roots, which is where website files go.

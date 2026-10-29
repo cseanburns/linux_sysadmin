@@ -9,14 +9,17 @@ By the end of this section, you will be able to:
 ## Getting Started
 
 Client-side programming languages, like JavaScript, are handled by the browser.
-Major browsers like Firefox, Chrome, Safari, Edge, etc. include [JavaScript engines][jsEngine] that use just-in-time compilers
-to execute the JavaScript code (Mozilla has a [nice description][mozillaJS] of the process.)
+Major browsers like Firefox, Chrome, Safari, Edge, etc. include [JavaScript engines][jsEngine] that use just-in-time compilers to execute the JavaScript code
+(Mozilla has a [nice description][mozillaJS] of the process.)
 From an end user's perspective, you basically install JavaScript when you install a web browser.
 
 [PHP][php], on the other hand, is a server-side programming language.
 This means it must be installed on the server in order to be used by the browser.
-From a system administrator's perspective, this means that not only does PHP have be installed on a server,
-but it must also be configured to work with the HTTP server, which in our case is Apache2.
+From a system administrator's perspective, this means that not only does PHP have be installed on a server, but it must also be configured to work with the HTTP server, which in our case is Apache2.
+
+> [Major security flaws][php_flaw_nytimes] were identified in PHP recently (as of October 2026).
+> With recent advances in AI, more such flaws will be identified and patched and with increasingly frequency.
+> It is therefore imperative to keep your system updated, perhaps even daily updated.
 
 The main use of PHP is to interact with databases, like MySQL, MariaDB, PostgreSQL, etc., in order to create dynamic page content.
 This is our end goal.
@@ -84,8 +87,7 @@ Your image should show a newer version number than 7.4.3 (e.g., 8.1.2 as of Nove
 
 ## Basic Configurations
 
-By default, Apache2 is set up to serve [`index.html` files first][modDirDocs], but since we are adding PHP to our setup,
-we want Apache2 to prioritize PHP files to allow for dynamic content creation.
+By default, Apache2 is set up to serve [`index.html` files first][modDirDocs], but since we are adding PHP to our setup, we want Apache2 to prioritize PHP files to allow for dynamic content creation.
 
 To prioritize PHP files, we need to edit the `dir.conf` file in the `/etc/apache2/mods-enabled/` directory.
 In that file there is a line that starts with `DirectoryIndex`.
@@ -104,7 +106,7 @@ And change the line to this:
 DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm
 ```
 
-Whenever we make a configuration change, we can use the ``apachectl`` command to check our configuration:
+Whenever we make a configuration change, we can use the `apachectl` command to check our configuration:
 
 ```
 apachectl configtest
@@ -117,11 +119,10 @@ sudo systemctl reload apache2
 sudo systemctl restart apache2
 ```
 
-If the configuration test does not return **Synax Ok**, check the error message for guidance, and
-ensure all modifications to `dir.conf` were made correctly.
+If the configuration test does not return **Synax Ok**, check the error message for guidance, and ensure all modifications to `dir.conf` were made correctly.
 
 Now create a basic PHP page.
-``cd`` back to the document root directory and use `nano` to create and open and `index.php` file:
+`cd` back to the document root directory and use `nano` to create and open and `index.php` file:
 
 ```
 cd /var/www/html/
@@ -180,4 +181,5 @@ By adding a relational database, we will be able to pull data from the database 
 [jsEngine]:https://en.wikipedia.org/wiki/JavaScript_engine
 [modDirDocs]:https://httpd.apache.org/docs/current/mod/mod_dir.html
 [mozillaJS]:https://blog.mozilla.org/javascript/
+[php_flaw_nytimes]:https://www.nytimes.com/wirecutter/news/php-security-flaw-20261023/
 [php]:https://www.php.net/
