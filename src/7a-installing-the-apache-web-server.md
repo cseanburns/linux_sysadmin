@@ -159,6 +159,12 @@ For example, if your **external IP address** is **55.222.55.222**, then you'd sp
 http://55.222.55.222/index.html.original
 ```
 
+## Firewall
+
+You will need to open the firewall on DigitalOcean to allow inbound traffic to port 80.
+You will also need to use `ufw` to open inbound traffic to port 80.
+See our prior lesson on Firewalls to make that happen.
+
 ## Conclusion
 
 In this section, we learned about the Apache2 HTTP server.
