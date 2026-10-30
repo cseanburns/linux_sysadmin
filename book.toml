@@ -8,7 +8,6 @@ src = "src"
 [output.html]
 git-repository-url = "https://github.com/cseanburns/linux_sysadmin"
 site-url = "https://cseanburns.net/"
-additional-js = ["theme/no_copy.js"]
 
 [output.html.print]
 enable = true
