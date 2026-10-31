@@ -161,8 +161,8 @@ http://55.222.55.222/index.html.original
 
 ## Firewall
 
-You will need to open the firewall on DigitalOcean to allow inbound traffic to port 80.
-You will also need to use `ufw` to open inbound traffic to port 80.
+You will need to open the firewall in the DigitalOcean dashboard to allow inbound traffic to port 80 for your droplet.
+You will also need to use the `ufw` command on your Ubuntu server to open inbound traffic to port 80.
 See our prior lesson on Firewalls to make that happen.
 
 ## Conclusion
