@@ -387,6 +387,7 @@ mysqli_close($conn);
 ```
 
 Save the file and exit out of `nano`.
+Then use `chmod` to make the file permissions: `rw-r-r`.
 
 ### Test Syntax
 
