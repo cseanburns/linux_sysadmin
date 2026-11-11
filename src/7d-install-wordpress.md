@@ -9,13 +9,10 @@ By the end of this section, you will be able to:
 ## Introduction
 
 [WordPress][wpwiki] is a free and open source content management system (CMS).
-Originally, its focus was on providing a platform for blogging,
-but throughout its lifespan it has become a general purpose CMS that functions as a website builder.
-Two sites exist to provide access to WordPress:
-[WordPress.com][wpcom] and [Wordpress.org][wporg].
+Originally, its focus was on providing a platform for blogging, but throughout its lifespan it has become a general purpose CMS that functions as a website builder.
+Two sites exist to provide access to WordPress: [WordPress.com][wpcom] and [Wordpress.org][wporg].
 WordPress.com is a hosted service where WordPress handles everything, from updates to security.
-Customers are mainly responsible for content and the appearance of their sites.
-Various paid plans can extend the functionality offered to WordPress.com customers.
+Customers are mainly responsible for content and the appearance of their sites, and various paid plans can extend the functionality offered to their customers.
 
 WordPress.org is maintained by the [WordPress Foundation][wpfoundation], which oversees its development and provides access to the WordPress software.
 When we download the WordPress software, we download it from WordPress.org.
@@ -31,8 +28,7 @@ Currently, there are over [60 thousand plugins][sixtyKplugins] available for Wor
 In addition to the thousands of available plugins, there are over [10 thousand free themes][tenKthemes] for WordPress sites.
 Plus, many businesses offer paid themes or can offer customized themes based on customer needs.
 These themes can drastically alter the appearance and usability of a WordPress site.
-I encourage you to explore plugins, develop, and add content to your WordPress sites, but the main goal
-as a systems administrator is to set up the sites and not build out content.
+I encourage you to explore plugins, develop, and add content to your WordPress sites, but the main goal as a systems administrator is to set up the sites and not build out content.
 
 ## Installation
 
@@ -42,18 +38,15 @@ So far I have shown you how to install software using two methods:
 - downloading from GitHub
 
 In this lesson, we are going to install WordPress by downloading the most recent version from WordPress.org and installing it manually.
-The WordPress application is available via the `apt` command,
-but the `apt` installation method often requires additional manual configuration that can be inconsistent or more difficult to troubleshoot
-compared to the manual process we're using here.
+The WordPress application is available via the `apt` command, but
+the `apt` installation method often requires additional manual configuration that can be inconsistent or more difficult to troubleshoot compared to the manual process we're using here.
 
 We are going to *kind of* follow the documentation provided by WordPress.org.
-You should read through the documentation **before** following my instructions, but then follow the process I outline here instead
-because the documentation uses some different tools than we'll use.
+You should read through the documentation **before** following my instructions, but then follow the process I outline here instead because the documentation uses some different tools than we'll use.
 
 Another reason we do this manually is because it builds on what we have learned when we created the `login.php` and `distros.php` pages.
 That is, the two processes are similar.
-In both cases, we create a specific database for our platform, we create a specific user for that database,
-and we provide login credentials in a specific file.
+In both cases, we create a specific database for our platform, we create a specific user for that database, and we provide login credentials in a specific file.
 
 First, read through **but do not follow the following instructions**:
 
@@ -68,10 +61,8 @@ After you have read through the WordPress.org documentation, follow the steps be
 All major software have dependencies, other software or code that it needs to run.
 We used the `ldd` command to discover the dependencies of simple commands like `ls` when we created our `chroot` environments.
 When we install software via `apt`, the `apt` program installs the needed dependencies for us.
-Since our plan is to install WordPress outside of the `apt` ecosystem, we need to make sure that our systems
-meet the requirements for our installation.
-The [WordPress.org Requirements][wprequirements] page states that the WordPress installation requires
-at least PHP version 7.4 or greater and MariaDB version 10.5 or greater.
+Since our plan is to install WordPress outside of the `apt` ecosystem, we need to make sure that our systems meet the requirements for our installation.
+The [WordPress.org Requirements][wprequirements] page states that the WordPress installation requires at least PHP version 8.3 or greater and MariaDB version 10.11 or greater.
 We can check that our systems meet these requirements with the following commands:
 
 ```
@@ -79,8 +70,8 @@ php --version
 mariadb --version
 ```
 
-The output from `php --version` shows that our systems have PHP 8.1, which is greater than PHP 7.4.
-The output from `mariadb --version` show that our systems have MariaDB 10.6.18, which is greater than MariaDB 10.5.
+The output from `php --version` shows that our systems have PHP 8.3.6, which is greater than PHP 7.4.
+The output from `mariadb --version` show that our systems have MariaDB 10.11.14, which is greater than MariaDB 10.5.
 If your versions are below the required numbers, you will need to update PHP or MariaDB before proceeding.
 
 Next, we need to add some additional PHP modules to our system to let WordPress operate at full functionality.
@@ -100,8 +91,7 @@ sudo systemctl restart mariadb
 ### Step 2: Download and Extract
 
 The next step is to download and extract the WordPress software, which is comes as a **zip** file.
-Although we only download one file, when we extract it with the `zip` command, the extraction will result in a new directory
-that contains multiple files and subdirectories.
+Although we only download one file, when we extract it with the `zip` command, the extraction will create a new directory that contains multiple files and subdirectories.
 The general instructions include:
 
 1. Change to the `/var/www/html` directory.
@@ -109,7 +99,7 @@ The general instructions include:
 3. Extract the package using the `unzip` program.
 4. Delete the zip file to prevent clutter in the directory. You can wait to delete this file until you've successfully installed WordPress.
 
-Specifically, this means we do the following on the command line:
+Specifically, this means we do the following on the command line (use `sudo` if not logged in as the root user):
 
 ```
 cd /var/www/html
@@ -120,14 +110,14 @@ sudo rm latest.zip
 ```
 
 Using the `sudo unzip latest.zip` command creates a directory called **wordpress**, as noted in the documentation.
-If we leave that alone, then the full path of our installations will located at `/var/www/html/wordpress`.
+If we leave that alone, then the full path of our installations will located at `/var/www/html/wordpress` or `http://[IP_ADDRESS]/wordpress`.
+Rename the `wordpress` directory if you want.
 
 ### Step 3: Create the Database and a User
 
 The WordPress documentation describes how to use [phpMyAdmin][phpmyadmin] to create the WordPress database and user.
 `phpMyAdmin` is a graphical front end to the MySQL/MariaDB relational database that you would access through the browser.
-However, we are going to create the WordPress database and a database user using the same process we used
-to create a database and user for our `login.php` and `distros.php` pages.
+However, we are going to create the WordPress database and a database user using the same process we used to create a database and user for our `login.php` and `distros.php` pages.
 
 The general instructions are:
 
@@ -161,7 +151,7 @@ show databases;
 \q
 ```
 
-Then exit out of the Linux root account:
+Then exit out of the Linux root account, if you want to use `sudo` going forward:
 
 ```
 exit
@@ -172,8 +162,8 @@ This improves security by reducing privileges for this account.
 
 ### Step 4: Set up wp-config.php
 
-When we created the `login.php` file that contained the name of the database (e.g. linuxdb), the name of the database user (e.g., webapp),
-and the user's password, we followed the same general process that WordPress follows.
+When we created the `login.php` file that contained the name of the database (e.g. linuxdb), the name of the database user (e.g., webapp), and the user's password,
+we followed the same general process that WordPress follows.
 Instead of `login.php`, WordPress uses a file called `wp-config.php`.
 We have to edit that file.
 
@@ -221,8 +211,7 @@ Be sure to keep the directory name lowercase (no spaces and only alphanumeric ch
 For example, if I want to change mine to **blog**, then:
 
 ```
-cd /var/www/html
-sudo mv wordpress blog
+sudo mv /var/www/html/wordpress /var/www/html/blog
 ```
 
 ### Step 6: Change File Ownership
@@ -240,8 +229,7 @@ Without this, WordPress might face permission errors during installation or when
 ### Step 7: Run the Install Script
 
 The next part of the process takes place in the browser.
-The location (URL) that you visit in the browser depends on your specific IP address and the name of the directory in **/var/www/html** that
-we extracted WordPress to or that you renamed if you followed **Step 5**.
+The location (URL) that you visit in the browser depends on your specific IP address and the name of the directory in **/var/www/html** that we extracted WordPress to or that you renamed if you followed **Step 5**.
 Thus, if my IP address is 11.111.111.11 and I renamed by directory to **blog**, then I need to visit the following URL:
 
 ```
@@ -253,6 +241,8 @@ http://11.111.111.11/blog/wp-admin/install.php
 ```
 http://11.111.111.11/wordpress/wp-admin/install.php
 ```
+
+You get the point.
 
 ### Finishing installation
 
@@ -272,9 +262,7 @@ So know that you probably should enter an email when setting up the user account
 Second, when visiting your site, your browser may throw an authenticaion error.
 Ensure the URL starts with `http` and not `https` because some browsers try to force `https` connections.
 We have not set up SSL certificates for secure connections, which would require a domain name and further configuration.
-Note that `http` connections are less secure and
-if you want to eventually set up a live site, you could acquire a domain name for your server and configure SSL using tools like
-[Let's Encrypt][letsencrypt].
+Note that `http` connections are less secure and if you want to eventually set up a live site, you could acquire a domain name for your server and configure SSL using tools like [Let's Encrypt][letsencrypt].
 
 ## Conclusion
 
