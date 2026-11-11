@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-223d156d.js";
+            window.path_to_searchindex_js = "searchindex-30f20c66.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a275cfd6.js"></script>
@@ -8753,13 +8753,10 @@ In the next section, we will apply what we learned in the PHP and MariaDB sectio
 </ol>
 <h2 id="introduction-2"><a class="header" href="#introduction-2">Introduction</a></h2>
 <p><a href="https://en.wikipedia.org/wiki/WordPress">WordPress</a> is a free and open source content management system (CMS).
-Originally, its focus was on providing a platform for blogging,
-but throughout its lifespan it has become a general purpose CMS that functions as a website builder.
-Two sites exist to provide access to WordPress:
-<a href="https://wordpress.com">WordPress.com</a> and <a href="https://wordpress.org">Wordpress.org</a>.
+Originally, its focus was on providing a platform for blogging, but throughout its lifespan it has become a general purpose CMS that functions as a website builder.
+Two sites exist to provide access to WordPress: <a href="https://wordpress.com">WordPress.com</a> and <a href="https://wordpress.org">Wordpress.org</a>.
 WordPress.com is a hosted service where WordPress handles everything, from updates to security.
-Customers are mainly responsible for content and the appearance of their sites.
-Various paid plans can extend the functionality offered to WordPress.com customers.</p>
+Customers are mainly responsible for content and the appearance of their sites, and various paid plans can extend the functionality offered to their customers.</p>
 <p>WordPress.org is maintained by the <a href="https://wordpressfoundation.org/">WordPress Foundation</a>, which oversees its development and provides access to the WordPress software.
 When we download the WordPress software, we download it from WordPress.org.
 Unlike the hosted solution, WordPress.org is for users who want full control and responsibility over their website installation and maintenance.</p>
@@ -8772,8 +8769,7 @@ Currently, there are over <a href="https://wordpress.org/plugins/">60 thousand p
 In addition to the thousands of available plugins, there are over <a href="https://wordpress.org/themes/">10 thousand free themes</a> for WordPress sites.
 Plus, many businesses offer paid themes or can offer customized themes based on customer needs.
 These themes can drastically alter the appearance and usability of a WordPress site.
-I encourage you to explore plugins, develop, and add content to your WordPress sites, but the main goal
-as a systems administrator is to set up the sites and not build out content.</p>
+I encourage you to explore plugins, develop, and add content to your WordPress sites, but the main goal as a systems administrator is to set up the sites and not build out content.</p>
 <h2 id="installation-1"><a class="header" href="#installation-1">Installation</a></h2>
 <p>So far I have shown you how to install software using two methods:</p>
 <ul>
@@ -8781,16 +8777,13 @@ as a systems administrator is to set up the sites and not build out content.</p>
 <li>downloading from GitHub</li>
 </ul>
 <p>In this lesson, we are going to install WordPress by downloading the most recent version from WordPress.org and installing it manually.
-The WordPress application is available via the <code>apt</code> command,
-but the <code>apt</code> installation method often requires additional manual configuration that can be inconsistent or more difficult to troubleshoot
-compared to the manual process we’re using here.</p>
+The WordPress application is available via the <code>apt</code> command, but
+the <code>apt</code> installation method often requires additional manual configuration that can be inconsistent or more difficult to troubleshoot compared to the manual process we’re using here.</p>
 <p>We are going to <em>kind of</em> follow the documentation provided by WordPress.org.
-You should read through the documentation <strong>before</strong> following my instructions, but then follow the process I outline here instead
-because the documentation uses some different tools than we’ll use.</p>
+You should read through the documentation <strong>before</strong> following my instructions, but then follow the process I outline here instead because the documentation uses some different tools than we’ll use.</p>
 <p>Another reason we do this manually is because it builds on what we have learned when we created the <code>login.php</code> and <code>distros.php</code> pages.
 That is, the two processes are similar.
-In both cases, we create a specific database for our platform, we create a specific user for that database,
-and we provide login credentials in a specific file.</p>
+In both cases, we create a specific database for our platform, we create a specific user for that database, and we provide login credentials in a specific file.</p>
 <p>First, read through <strong>but do not follow the following instructions</strong>:</p>
 <p><a href="https://wordpress.org/documentation/article/how-to-install-wordpress/">How to install WordPress</a></p>
 <h2 id="customized-installation-process"><a class="header" href="#customized-installation-process">Customized Installation Process</a></h2>
@@ -8799,16 +8792,14 @@ and we provide login credentials in a specific file.</p>
 <p>All major software have dependencies, other software or code that it needs to run.
 We used the <code>ldd</code> command to discover the dependencies of simple commands like <code>ls</code> when we created our <code>chroot</code> environments.
 When we install software via <code>apt</code>, the <code>apt</code> program installs the needed dependencies for us.
-Since our plan is to install WordPress outside of the <code>apt</code> ecosystem, we need to make sure that our systems
-meet the requirements for our installation.
-The <a href="https://wordpress.org/about/requirements/">WordPress.org Requirements</a> page states that the WordPress installation requires
-at least PHP version 7.4 or greater and MariaDB version 10.5 or greater.
+Since our plan is to install WordPress outside of the <code>apt</code> ecosystem, we need to make sure that our systems meet the requirements for our installation.
+The <a href="https://wordpress.org/about/requirements/">WordPress.org Requirements</a> page states that the WordPress installation requires at least PHP version 8.3 or greater and MariaDB version 10.11 or greater.
 We can check that our systems meet these requirements with the following commands:</p>
 <pre><code>php --version
 mariadb --version
 </code></pre>
-<p>The output from <code>php --version</code> shows that our systems have PHP 8.1, which is greater than PHP 7.4.
-The output from <code>mariadb --version</code> show that our systems have MariaDB 10.6.18, which is greater than MariaDB 10.5.
+<p>The output from <code>php --version</code> shows that our systems have PHP 8.3.6, which is greater than PHP 7.4.
+The output from <code>mariadb --version</code> show that our systems have MariaDB 10.11.14, which is greater than MariaDB 10.5.
 If your versions are below the required numbers, you will need to update PHP or MariaDB before proceeding.</p>
 <p>Next, we need to add some additional PHP modules to our system to let WordPress operate at full functionality.
 We can install these using the <code>apt</code> command:</p>
@@ -8820,8 +8811,7 @@ sudo systemctl restart mariadb
 </code></pre>
 <h3 id="step-2-download-and-extract"><a class="header" href="#step-2-download-and-extract">Step 2: Download and Extract</a></h3>
 <p>The next step is to download and extract the WordPress software, which is comes as a <strong>zip</strong> file.
-Although we only download one file, when we extract it with the <code>zip</code> command, the extraction will result in a new directory
-that contains multiple files and subdirectories.
+Although we only download one file, when we extract it with the <code>zip</code> command, the extraction will create a new directory that contains multiple files and subdirectories.
 The general instructions include:</p>
 <ol>
 <li>Change to the <code>/var/www/html</code> directory.</li>
@@ -8829,7 +8819,7 @@ The general instructions include:</p>
 <li>Extract the package using the <code>unzip</code> program.</li>
 <li>Delete the zip file to prevent clutter in the directory. You can wait to delete this file until you’ve successfully installed WordPress.</li>
 </ol>
-<p>Specifically, this means we do the following on the command line:</p>
+<p>Specifically, this means we do the following on the command line (use <code>sudo</code> if not logged in as the root user):</p>
 <pre><code>cd /var/www/html
 sudo wget https://wordpress.org/latest.zip
 sudo apt install unzip
@@ -8837,12 +8827,12 @@ sudo unzip latest.zip
 sudo rm latest.zip
 </code></pre>
 <p>Using the <code>sudo unzip latest.zip</code> command creates a directory called <strong>wordpress</strong>, as noted in the documentation.
-If we leave that alone, then the full path of our installations will located at <code>/var/www/html/wordpress</code>.</p>
+If we leave that alone, then the full path of our installations will located at <code>/var/www/html/wordpress</code> or <code>http://[IP_ADDRESS]/wordpress</code>.
+Rename the <code>wordpress</code> directory if you want.</p>
 <h3 id="step-3-create-the-database-and-a-user"><a class="header" href="#step-3-create-the-database-and-a-user">Step 3: Create the Database and a User</a></h3>
 <p>The WordPress documentation describes how to use <a href="https://www.phpmyadmin.net/">phpMyAdmin</a> to create the WordPress database and user.
 <code>phpMyAdmin</code> is a graphical front end to the MySQL/MariaDB relational database that you would access through the browser.
-However, we are going to create the WordPress database and a database user using the same process we used
-to create a database and user for our <code>login.php</code> and <code>distros.php</code> pages.</p>
+However, we are going to create the WordPress database and a database user using the same process we used to create a database and user for our <code>login.php</code> and <code>distros.php</code> pages.</p>
 <p>The general instructions are:</p>
 <ol>
 <li>Login as the root Linux user, and then</li>
@@ -8869,14 +8859,14 @@ grant all privileges on wordpress.* to 'wordpress'@'localhost';
 show databases;
 \q
 </code></pre>
-<p>Then exit out of the Linux root account:</p>
+<p>Then exit out of the Linux root account, if you want to use <code>sudo</code> going forward:</p>
 <pre><code>exit
 </code></pre>
 <p>By creating a dedicated database user for WordPress, we can limit access to only what’s necessary for WordPress to function.
 This improves security by reducing privileges for this account.</p>
 <h3 id="step-4-set-up-wp-configphp"><a class="header" href="#step-4-set-up-wp-configphp">Step 4: Set up wp-config.php</a></h3>
-<p>When we created the <code>login.php</code> file that contained the name of the database (e.g. linuxdb), the name of the database user (e.g., webapp),
-and the user’s password, we followed the same general process that WordPress follows.
+<p>When we created the <code>login.php</code> file that contained the name of the database (e.g. linuxdb), the name of the database user (e.g., webapp), and the user’s password,
+we followed the same general process that WordPress follows.
 Instead of <code>login.php</code>, WordPress uses a file called <code>wp-config.php</code>.
 We have to edit that file.</p>
 <p>Follow these general steps:</p>
@@ -8909,8 +8899,7 @@ The WordPress documentation uses <strong>blog</strong> as an example.
 But it could be something different, as long as it contains no spaces or special characters.
 Be sure to keep the directory name lowercase (no spaces and only alphanumeric characters).
 For example, if I want to change mine to <strong>blog</strong>, then:</p>
-<pre><code>cd /var/www/html
-sudo mv wordpress blog
+<pre><code>sudo mv /var/www/html/wordpress /var/www/html/blog
 </code></pre>
 <h3 id="step-6-change-file-ownership"><a class="header" href="#step-6-change-file-ownership">Step 6: Change File Ownership</a></h3>
 <p>WordPress will need to write to files in the base directory.
@@ -8921,14 +8910,14 @@ Assuming you are still in your base directory, whether that is <code>/var/www/ht
 Without this, WordPress might face permission errors during installation or when uploading files.</p>
 <h3 id="step-7-run-the-install-script"><a class="header" href="#step-7-run-the-install-script">Step 7: Run the Install Script</a></h3>
 <p>The next part of the process takes place in the browser.
-The location (URL) that you visit in the browser depends on your specific IP address and the name of the directory in <strong>/var/www/html</strong> that
-we extracted WordPress to or that you renamed if you followed <strong>Step 5</strong>.
+The location (URL) that you visit in the browser depends on your specific IP address and the name of the directory in <strong>/var/www/html</strong> that we extracted WordPress to or that you renamed if you followed <strong>Step 5</strong>.
 Thus, if my IP address is 11.111.111.11 and I renamed by directory to <strong>blog</strong>, then I need to visit the following URL:</p>
 <pre><code>http://11.111.111.11/blog/wp-admin/install.php
 </code></pre>
 <p><strong>IF</strong> I kept the directory named <strong>wordpress</strong>, then this is the URL that I use:</p>
 <pre><code>http://11.111.111.11/wordpress/wp-admin/install.php
 </code></pre>
+<p>You get the point.</p>
 <h3 id="finishing-installation"><a class="header" href="#finishing-installation">Finishing installation</a></h3>
 <p>From this point forward, the steps to complete the installation are exactly the steps you follow using WordPress’s documentation.</p>
 <p>Most importantly, you should see a <strong>Welcome</strong> screen where you enter your site’s information.
@@ -8942,44 +8931,22 @@ So know that you probably should enter an email when setting up the user account
 <p>Second, when visiting your site, your browser may throw an authenticaion error.
 Ensure the URL starts with <code>http</code> and not <code>https</code> because some browsers try to force <code>https</code> connections.
 We have not set up SSL certificates for secure connections, which would require a domain name and further configuration.
-Note that <code>http</code> connections are less secure and
-if you want to eventually set up a live site, you could acquire a domain name for your server and configure SSL using tools like
-<a href="https://letsencrypt.org/">Let’s Encrypt</a>.</p>
+Note that <code>http</code> connections are less secure and if you want to eventually set up a live site, you could acquire a domain name for your server and configure SSL using tools like <a href="https://letsencrypt.org/">Let’s Encrypt</a>.</p>
 <h2 id="conclusion-22"><a class="header" href="#conclusion-22">Conclusion</a></h2>
 <p>Congrats on setting up your WordPress library site.
 Feel free to take a moment to modify your site’s design or to add content.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="conclusion-23"><a class="header" href="#conclusion-23">Conclusion</a></h1>
 <p>I consider this book to be a live document.
-Perhaps, then, this is version 0.8, or
-something like that.
-In any case,
-it will be continually updated throughout the year but
-probably more often before and during the fall semesters
-when I teach my Linux Systems Administration course.</p>
-<p>This book in no way is meant to provide a comprehensive
-overview of systems administration nor of Linux.
-It’s meant to act as a starting point for those
-interested in systems administration, and
-it’s meant to get students,
-many of whom grew up using only graphical user interfaces,
-familiar with command line environments.
-In that respect,
-this book, and the course that I teach,
-is aimed at empowering students to know their technology
-and become comfortable and more experienced with it,
-especially the behind the scenes stuff.
-That said, I’m proud that some of my students
-have gone on to become systems administrators.
-Other courses in our program and their own work and internships
-have probabably contributed more to that motivation, but
-I know that this course has been a factor.</p>
-<p>If you’re not a student in our program but
-have stumbled upon this book,
-I hope it’s helpful to you, too.
-This is, in fact, why I’ve made it available on my website and
-not simply dropped it in my course shell.</p>
-<p>C. Sean Burns, PhD<br>August 13, 2022</p>
+It will be continually updated throughout the year but probably more often before and during the fall semesters when I teach my Linux Systems Administration course.</p>
+<p>This book in no way is meant to provide a comprehensive overview of systems administration nor of Linux.
+It’s meant to act as a starting point for those interested in systems administration, and it’s meant to get students, many of whom grew up using only graphical user interfaces, familiar with command line environments.
+In that respect, this book, and the course that I teach, is aimed at empowering students to know their technology and become comfortable and more experienced with it, especially the behind the scenes stuff.
+That said, I’m proud that some of my students have gone on to become systems administrators.
+Other courses in our program and their own work and internships have probabably contributed more to that motivation, but I know that this course has been a factor.</p>
+<p>If you’re not a student in our program but have stumbled upon this book, I hope it’s helpful to you, too.
+This is, in fact, why I’ve made it available on my website and not simply dropped it in my course shell.</p>
+<p>C. Sean Burns, PhD<br>November 11, 2026</p>
 
                     </main>
 
