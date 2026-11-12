@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-30f20c66.js";
+            window.path_to_searchindex_js = "searchindex-cfae04f0.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-a275cfd6.js"></script>
@@ -8883,12 +8883,16 @@ sudo nano wp-config.php
 <p>In <code>nano</code>, add your database name, user, and password in the appropriate fields, just like we did with our <code>login.php</code> file.
 Double-check your entries in <code>wp-config.php</code>.
 Incorrect details will prevent WordPress from connecting to the database and will result in errors during setup.</p>
-<p>Additionally, we want to disable FTP uploads to the site.
-To do that, navigate to the end of the <code>wp-config.php</code> file and add the following line:</p>
+<p>Additionally, we want to WordPress to be able to modify its own files.
+For example, WordPress needs to write to its directories when installing themes, plugins, or updates.</p>
+<p>To do that, navigate to the end of the <code>wp-config.php</code> file and add the following line:</p>
 <pre><code>define('FS_METHOD','direct');
 </code></pre>
-<p>Disabling FTP uploads with the above statement allows WordPress to directly write to your filesystem.
-This makes it easier to manage themes and plugins without needing FTP credentials every time.</p>
+<p>This tells WordPress to make changes directly to the filesystem rather than using FTP or SSH to transfer files.</p>
+<p>Because this gives WordPress permission to modify files through the web server,
+we need to be careful about file ownership and permissions.
+We’ll keep this configuration simple for this exercise , but
+on a production server, we would want to consider a more restrictive approach for security.</p>
 <h3 id="step-5-optional"><a class="header" href="#step-5-optional">Step 5: <strong>Optional</strong></a></h3>
 <p>The WordPress files were installed at <code>/var/www/html/wordpress</code>.
 This means that when our WordPress websites become public, they’ll be available at the following URL:</p>
@@ -8905,6 +8909,9 @@ For example, if I want to change mine to <strong>blog</strong>, then:</p>
 <p>WordPress will need to write to files in the base directory.
 Assuming you are still in your base directory, whether that is <code>/var/www/html/wordpress</code>, <code>/var/www/html/blog</code>, or like, run the following command:</p>
 <pre><code>sudo chown -R www-data:www-data *
+</code></pre>
+<p>Or more specifically:</p>
+<pre><code>sudo chown -R www-data:www-data /var/www/html/wordpress
 </code></pre>
 <p>Changing the file ownership ensures that the web server (<code>www-data</code>) can read and write to files as needed.
 Without this, WordPress might face permission errors during installation or when uploading files.</p>
