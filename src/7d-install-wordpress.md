@@ -185,15 +185,21 @@ In `nano`, add your database name, user, and password in the appropriate fields,
 Double-check your entries in `wp-config.php`.
 Incorrect details will prevent WordPress from connecting to the database and will result in errors during setup.
 
-Additionally, we want to disable FTP uploads to the site.
+Additionally, we want to WordPress to be able to modify its own files.
+For example, WordPress needs to write to its directories when installing themes, plugins, or updates.
+
 To do that, navigate to the end of the `wp-config.php` file and add the following line:
 
 ```
 define('FS_METHOD','direct');
 ```
 
-Disabling FTP uploads with the above statement allows WordPress to directly write to your filesystem.
-This makes it easier to manage themes and plugins without needing FTP credentials every time.
+This tells WordPress to make changes directly to the filesystem rather than using FTP or SSH to transfer files.
+
+Because this gives WordPress permission to modify files through the web server,
+we need to be careful about file ownership and permissions.
+We'll keep this configuration simple for this exercise , but
+on a production server, we would want to consider a more restrictive approach for security.
 
 ### Step 5: **Optional**
 
@@ -221,6 +227,12 @@ Assuming you are still in your base directory, whether that is `/var/www/html/wo
 
 ```
 sudo chown -R www-data:www-data *
+```
+
+Or more specifically:
+
+```
+sudo chown -R www-data:www-data /var/www/html/wordpress
 ```
 
 Changing the file ownership ensures that the web server (`www-data`) can read and write to files as needed.
